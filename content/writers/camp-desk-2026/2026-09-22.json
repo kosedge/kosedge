@@ -1,0 +1,275 @@
+{
+  "desk_date": "2026-09-22",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Tuesday, Sep 22",
+    "bottom_line": "MNF drop: LAR 28–6 NYG (Stafford 4 TD / Adams 8-195-2; Dart knee MRI Tue). IR/availability amend: CHI Williams week-to-week (MRI); WAS Mariota starts W3 (Daniels specialists); LAC Njoku+Kolar IR ≥4; MIN Murray cleared / starts @ TB. All Pass. DEN Over 2/5 KEEP unchanged. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "MNF FINAL: LAR 28–6 vs NYG at SoFi. Stafford 327/4; Adams 195/2. Dart exited Q1 knee (MRI Tue; X-rays negative). NYG/LAR were held off Mon package — filed here.",
+      "CHI: Ben Johnson — Williams MRI somewhat encouraging; week-to-week; not ruled out for W3 MNF vs PHI. Rapoport: Bagent in concussion protocol (Keenum contingency). Pass.",
+      "WAS: Daniels left-elbow dislocation — imaging no fracture; specialists Tue/Wed; Mariota starts vs SEA. Pass — do not invent IR/timeline.",
+      "LAC: Harbaugh — Njoku (fibula) + Kolar (forearm) → IR ≥4; Gadsden lone TE on 53. Awosika/Tomlinson miss time. Under already DROPPED→Pass Mon — hold Pass.",
+      "MIN: O'Connell — Murray cleared concussion protocol; starts @ TB. Reverses Mon protocol flag. Pass.",
+      "Quiet skip: BUF Oliver / GB Reed / DAL Durant-Locke (no IR yet) / DEN Cooper exempt (Over KEEP stands) / PHI Barkley-Goedert. No 32-card dump. No Riley leans — Coming soon ON."
+    ],
+    "what_to_watch": "Dart MRI (Tue). Williams practice path into MNF vs PHI. Daniels specialist read (Thu/Fri Quinn). LAC TE corresponding moves. TNF ATL@GB Thu. Do not restamp street or mint KEI.",
+    "sources": [
+      {
+        "label": "AP / Madison Courier — LAR 28 NYG 6 box",
+        "href": "https://www.madisoncourier.com/ap/sports/l-a-rams-28-n-y-giants-6/article_d38cfa79-0863-5958-9039-4ca73f932637.html"
+      },
+      {
+        "label": "CBS — Rams roll; Dart MRI Tue",
+        "href": "https://www.cbssports.com/nfl/news/rams-giants-jaxson-dart-mri-knee-cfb-power-rankings/"
+      },
+      {
+        "label": "NFL.com — Giants at Rams REG2",
+        "href": "https://www.nfl.com/games/giants-at-rams-2026-reg-2"
+      },
+      {
+        "label": "LA Times — Williams week-to-week; Daniels/Mariota",
+        "href": "https://www.latimes.com/sports/story/2026-09-21/no-timeline-yet-on-jayden-daniels-caleb-williams-is-week-to-week"
+      },
+      {
+        "label": "ESPN — Njoku + Kolar IR (Rhim)",
+        "href": "https://www.espn.com/nfl/story/_/id/50000682/chargers-placing-tes-david-njoku-charlie-kolar-ir"
+      },
+      {
+        "label": "ESPN — Murray clears protocol (Seifert)",
+        "href": "https://www.espn.com/nfl/story/_/id/49999840/vikings-murray-clears-concussion-protocol-start-vs-bucs"
+      },
+      {
+        "label": "vikings.com — Murray starts Week 3",
+        "href": "https://www.vikings.com/news/kyler-murray-starting-quarterback-week-3-buccaneers-injury"
+      },
+      {
+        "label": "FOX — Catchup Williams/Daniels/Dart/Murray",
+        "href": "https://www.foxsports.com/stories/nfl/nfl-catchup-caleb-williams-jaxson-dart-jayden-daniels-kyler-murray-injury-updates"
+      },
+      {
+        "label": "ESPN — Daniels dislocated elbow (Keim)",
+        "href": "https://www.espn.com/nfl/story/_/id/49993422/commanders-qb-jayden-daniels-suffers-elbow-injury-cowboys"
+      },
+      {
+        "label": "therams.com — Week 3 @ Broncos",
+        "href": "https://www.therams.com/game-day/2026/reg-week-3/rams-at-broncos/"
+      },
+      {
+        "label": "ESPN — Titans at Giants Week 3",
+        "href": "https://www.espn.com/nfl/game/_/gameId/401872956/titans-giants"
+      }
+    ]
+  },
+  "preview_delta": [
+    {
+      "team_id": "NYG",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "MNF FINAL L 6–28; Dart knee MRI Tue; W3 vs TEN; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "LAR",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "MNF FINAL W 28–6; Stafford 4 TD / Adams 195; W3 @ DEN SNF; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Williams MRI week-to-week; not ruled out W3 MNF vs PHI; Bagent protocol. Pass."
+    },
+    {
+      "team_id": "WAS",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Daniels specialists; Mariota starts W3 vs SEA. Pass — no IR invent."
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Njoku+Kolar → IR ≥4. Under already Pass. Hold Pass."
+    },
+    {
+      "team_id": "MIN",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Murray cleared protocol; starts @ TB. Pass."
+    }
+  ],
+  "team_notes": [
+    {
+      "team_id": "NYG",
+      "title": "Giants — Sep 22",
+      "bottom_line": "MNF FINAL: Rams 28, Giants 6 at SoFi. Dart exited Q1 with a left-knee injury (MRI Tuesday; X-rays negative; GM Schoen said he would be OK). Winston finished. Fall to 1–1 after a W1 win over Dallas. Week 3 hosts Tennessee. Pass — Coming soon ON.",
+      "key_points": [
+        "AP box: LAR 28–6. Quarters NYG 0-3-3-0 / LAR 7-7-7-7. Giants 182 total yards; Zvada FGs 24 and 52 only scoring.",
+        "CBS / ESPN path: Dart left early after a hit to the left knee; believed MCL sprain pending MRI; Winston 11/27 for 111 yards and 1 INT. Nabers 1 catch for 1 yard in the box.",
+        "W3: vs TEN Sun Sep 27 (ESPN game center). Do not invent a Dart return week or a win-total lean."
+      ],
+      "what_to_watch": "Dart MRI results and any brace/return window before TEN. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "MNF L 6–28 locked. Dart knee / MRI Tue. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP box — LAR 28 NYG 6",
+          "href": "https://www.madisoncourier.com/ap/sports/l-a-rams-28-n-y-giants-6/article_d38cfa79-0863-5958-9039-4ca73f932637.html"
+        },
+        {
+          "label": "CBS — Dart MRI Tue; Rams roll",
+          "href": "https://www.cbssports.com/nfl/news/rams-giants-jaxson-dart-mri-knee-cfb-power-rankings/"
+        },
+        {
+          "label": "NFL.com — Giants at Rams REG2",
+          "href": "https://www.nfl.com/games/giants-at-rams-2026-reg-2"
+        },
+        {
+          "label": "ESPN — Titans at Giants Week 3",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872956/titans-giants"
+        },
+        {
+          "label": "FOX — Dart walk-off; Schoen OK",
+          "href": "https://www.foxsports.com/stories/nfl/nfl-catchup-caleb-williams-jaxson-dart-jayden-daniels-kyler-murray-injury-updates"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams — Sep 22",
+      "bottom_line": "MNF FINAL: Rams 28, Giants 6 at SoFi. Stafford 22/31, 327, 4 TD; Adams 8-195-2 TD. Wire-to-wire home win — improve to 1–1 after a W1 loss. Week 3 at Denver (SNF). Pass — Coming soon ON. Do not invent a lean into the Broncos Over KEEP.",
+      "key_points": [
+        "AP box: Stafford four TD passes (Adams 31, Williams 10, Adams 11, Ferguson 5). Kyren Williams 12-85; Corum 12-79. Rams 481 total yards.",
+        "CBS: Stafford moved into sixth all-time in career passing TDs; Adams dominated. Get-right home win after W1.",
+        "W3: @ DEN Sun Sep 27, 8:20p ET NBC (therams.com game center / Mon DEN card). Pass on LAR win-total — Coming soon ON."
+      ],
+      "what_to_watch": "Any post-MNF designations before SNF at Denver. Pass — no mint; DEN Over 2/5 KEEP is Broncos-side only.",
+      "is_material_depth": true,
+      "sot_flag": "MNF W 28–6 locked. Stafford 4 TD / Adams 195. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP box — LAR 28 NYG 6",
+          "href": "https://www.madisoncourier.com/ap/sports/l-a-rams-28-n-y-giants-6/article_d38cfa79-0863-5958-9039-4ca73f932637.html"
+        },
+        {
+          "label": "CBS — Rams roll past Giants",
+          "href": "https://www.cbssports.com/nfl/news/rams-giants-jaxson-dart-mri-knee-cfb-power-rankings/"
+        },
+        {
+          "label": "NFL.com — Giants at Rams REG2",
+          "href": "https://www.nfl.com/games/giants-at-rams-2026-reg-2"
+        },
+        {
+          "label": "therams.com — Week 3 at Broncos",
+          "href": "https://www.therams.com/game-day/2026/reg-week-3/rams-at-broncos/"
+        },
+        {
+          "label": "rams.com video — Adams 31 TD",
+          "href": "https://www.therams.com/video/highlights-wide-receiver-davante-adams-electrifies-31-yard-touchdown-catch-quarterback-matthew-stafford"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears — Sep 22",
+      "bottom_line": "Monday MRI: Williams avoided a major hamstring injury and is week-to-week; Johnson has not ruled him out for Week 3 MNF vs Philadelphia (likely no practice). Rapoport (Tue): Bagent placed in concussion protocol — Keenum is the emergency path if both are unavailable. Pass — do not invent QB1 or mint KEI.",
+      "key_points": [
+        "LA Times / Johnson Mon: MRI news somewhat encouraging; week-to-week; not putting a firm timeline; not ruling out Eagles MNF.",
+        "FOX Catchup: avoided major injury; could still miss time; Bagent is the listed backup path if Williams sits.",
+        "LA Times update: Ian Rapoport — Bagent in concussion protocol; Case Keenum is QB3. Do not invent a starter for MNF."
+      ],
+      "what_to_watch": "Wed–Fri practice / any designation before PHI MNF. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Williams week-to-week post-MRI; Bagent protocol. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "LA Times — Williams week-to-week; Bagent protocol",
+          "href": "https://www.latimes.com/sports/story/2026-09-21/no-timeline-yet-on-jayden-daniels-caleb-williams-is-week-to-week"
+        },
+        {
+          "label": "FOX — Williams avoids major injury",
+          "href": "https://www.foxsports.com/stories/nfl/nfl-catchup-caleb-williams-jaxson-dart-jayden-daniels-kyler-murray-injury-updates"
+        },
+        {
+          "label": "ESPN — Williams hamstring exit (Cronin)",
+          "href": "https://www.espn.com/nfl/story/_/id/49991729/bears-caleb-williams-leaves-cart-falling-scramble"
+        }
+      ]
+    },
+    {
+      "team_id": "WAS",
+      "title": "Commanders — Sep 22",
+      "bottom_line": "Daniels (left elbow dislocation, no fracture on X-ray) is seeing specialists; Quinn has no timeline yet. Mariota will start Week 3 vs Seattle. Not on IR. Pass — Coming soon ON.",
+      "key_points": [
+        "ESPN Keim (Sun/Mon path): dislocation, no fracture; more imaging Monday; Mariota starts until Daniels returns; Quinn anticipates return this season but no firm date.",
+        "LA Times / FOX: specialists over the next days; Mariota confirmed starter vs SEA; do not invent IR or a return week.",
+        "Mon shelf already flagged the elbow exit — this card is the Monday designation reverse (starter named for W3)."
+      ],
+      "what_to_watch": "Quinn Thu/Fri specialist update. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Mariota starts W3; Daniels specialists / no IR. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN — Daniels dislocated elbow (Keim)",
+          "href": "https://www.espn.com/nfl/story/_/id/49993422/commanders-qb-jayden-daniels-suffers-elbow-injury-cowboys"
+        },
+        {
+          "label": "LA Times — no timeline; Mariota starts",
+          "href": "https://www.latimes.com/sports/story/2026-09-21/no-timeline-yet-on-jayden-daniels-caleb-williams-is-week-to-week"
+        },
+        {
+          "label": "FOX — Daniels specialists; Mariota",
+          "href": "https://www.foxsports.com/stories/nfl/nfl-catchup-caleb-williams-jaxson-dart-jayden-daniels-kyler-murray-injury-updates"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers — Sep 22",
+      "bottom_line": "Harbaugh Monday: David Njoku (fibula) and Charlie Kolar (forearm) placed on IR — miss ≥4. Oronde Gadsden is the only TE on the active roster. Awosika (fibula) and Tomlinson (hamstring) will miss some time (not IR). 0–2 into @ BUF. Under already DROPPED→Pass on Mon shelf — hold Pass. Coming soon ON.",
+      "key_points": [
+        "ESPN Kris Rhim: both TEs ≥4; practice-squad TEs Svoboda / Patrick Herbert available as fills. Blow to a run-block TE identity.",
+        "Mon Club Desk already dropped LAC Under to Pass (gap ~0.02). Do not reopen a lean off TE IR.",
+        "W3: at Buffalo. Interior OL continuity still the OL watch (Pipkins/Penning path)."
+      ],
+      "what_to_watch": "Corresponding TE promotions; Awosika/Tomlinson designations into BUF. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Njoku+Kolar IR ≥4. Under Pass holds. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN — Njoku + Kolar IR (Rhim)",
+          "href": "https://www.espn.com/nfl/story/_/id/50000682/chargers-placing-tes-david-njoku-charlie-kolar-ir"
+        },
+        {
+          "label": "Yahoo — Chargers TE IR writeup",
+          "href": "https://sports.yahoo.com/articles/chargers-place-david-njoku-charlie-220805056.html"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Sep 22",
+      "bottom_line": "O'Connell Monday: Kyler Murray cleared concussion protocol and will start Week 3 at Tampa Bay. Reverses Mon shelf protocol flag (Wentz started W2). 2–0. Pass — Coming soon ON.",
+      "key_points": [
+        "vikings.com / ESPN Seifert: Murray cleared Mon; starts @ TB (3:05p CT). Wentz guided 2–0 while Murray was limited.",
+        "Mason remains on IR (thumb) — already filed Sep 16. Jones workload watch only; do not invent RB1.",
+        "Pass on MIN win-total — no restamp / no minted KEI."
+      ],
+      "what_to_watch": "Murray snap care in first start back; Jones soreness. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Murray cleared; starts @ TB. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "vikings.com — Murray starts Week 3",
+          "href": "https://www.vikings.com/news/kyler-murray-starting-quarterback-week-3-buccaneers-injury"
+        },
+        {
+          "label": "ESPN — Murray clears protocol (Seifert)",
+          "href": "https://www.espn.com/nfl/story/_/id/49999840/vikings-murray-clears-concussion-protocol-start-vs-bucs"
+        }
+      ]
+    }
+  ]
+}
