@@ -65,55 +65,37 @@
   "preview_delta": [
     {
       "team_id": "NYG",
-      "fields": [
-        "bottom_line",
-        "key_points",
-        "what_to_watch",
-        "sot_flag"
-      ],
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
       "status": "touched",
       "reason": "MNF FINAL L 6–28; Dart knee MRI Tue; W3 vs TEN; Pass; Coming soon ON."
     },
     {
       "team_id": "LAR",
-      "fields": [
-        "bottom_line",
-        "key_points",
-        "what_to_watch",
-        "sot_flag"
-      ],
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
       "status": "touched",
       "reason": "MNF FINAL W 28–6; Stafford 4 TD / Adams 195; W3 @ DEN SNF; Pass; Coming soon ON."
     },
     {
       "team_id": "CHI",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Williams MRI week-to-week; not ruled out W3 MNF vs PHI; Bagent protocol. Pass."
     },
     {
       "team_id": "WAS",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Daniels specialists; Mariota starts W3 vs SEA. Pass — no IR invent."
     },
     {
       "team_id": "LAC",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Njoku+Kolar → IR ≥4. Under already Pass. Hold Pass."
     },
     {
       "team_id": "MIN",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Murray cleared protocol; starts @ TB. Pass."
     }
