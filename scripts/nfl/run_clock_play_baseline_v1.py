@@ -202,6 +202,7 @@ def run(
 ) -> dict[str, Any]:
     config_payload = _load_json_object(config_path)
     inputs_payload = _load_json_object(inputs_path)
+    artifact_id = str(config_payload.get("artifact_id") or ARTIFACT_ID)
     config = ClockPlayConfig.from_mapping(
         config_payload.get("engine_config")
         if isinstance(config_payload.get("engine_config"), Mapping)
@@ -292,7 +293,7 @@ def run(
     }
 
     metric_packet = {
-        "artifact_id": ARTIFACT_ID,
+        "artifact_id": artifact_id,
         "model_version": config.model_version,
         "experiment_scope": "isolated_train_only_structural_baseline",
         "games_simulated": games_simulated,
@@ -314,13 +315,13 @@ def run(
         "case_summaries": case_summaries,
     }
     seed_manifest = {
-        "artifact_id": ARTIFACT_ID,
+        "artifact_id": artifact_id,
         "derivation": "sha256(root_seed|case_id|replicate_index) first 8 bytes unsigned big-endian",
         "cases": seed_manifest_cases,
         "overtime_probe_seed": probe_seed,
     }
     command_receipt = {
-        "artifact_id": ARTIFACT_ID,
+        "artifact_id": artifact_id,
         "runner_version": RUNNER_VERSION,
         "source_sha": source_sha,
         "canonical_command": (
@@ -350,7 +351,7 @@ def run(
     _write_json(output_dir / "metric-packet.json", metric_packet)
     _write_json(output_dir / "command-receipt.json", command_receipt)
     receipt = {
-        "artifact_id": ARTIFACT_ID,
+        "artifact_id": artifact_id,
         "model_version": config.model_version,
         "source_sha": source_sha,
         "runner_version": RUNNER_VERSION,
@@ -385,7 +386,7 @@ def run(
     _write_json(output_dir / "receipt.json", receipt)
     checksums = _write_checksum_files(output_dir)
     return {
-        "artifact_id": ARTIFACT_ID,
+        "artifact_id": artifact_id,
         "output_dir": output_dir.as_posix(),
         "source_sha": source_sha,
         "games_simulated": games_simulated,

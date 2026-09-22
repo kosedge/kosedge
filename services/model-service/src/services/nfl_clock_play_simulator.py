@@ -27,7 +27,7 @@ from src.services.nfl_season_engine.kicker_layer import (
 
 TeamSide = Literal["home", "away"]
 
-DEFAULT_CLOCK_PLAY_MODEL_VERSION = "nfl-clock-play-baseline-v1"
+DEFAULT_CLOCK_PLAY_MODEL_VERSION = "nfl-clock-play-v1.1-late-game-fourth-down-policy"
 _OTHER_SIDE: dict[TeamSide, TeamSide] = {"home": "away", "away": "home"}
 
 
@@ -74,7 +74,9 @@ class ClockPlayConfig:
     fourth_down_go_distance: int = 2
     field_goal_max_distance: int = 62
     endgame_window_seconds: int = 180
-    timeout_window_seconds: int = 130
+    timeout_window_seconds: int = 100
+    late_trailing_timeout_max_deficit: int = 8
+    late_field_goal_window_seconds: int = 10
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -311,7 +313,7 @@ class ClockPlaySimulator:
             return True
         return False
 
-    def _attempt_field_goal(self, offense: TeamSide) -> None:
+    def _attempt_field_goal(self, offense: TeamSide, *, source: str = "fourth_down") -> None:
         distance = int(117 - self.state.yardline)
         band = self._field_goal_band(distance)
         make_rate = LEAGUE_FG_MAKE_RATE_BY_BAND[band]
@@ -326,7 +328,10 @@ class ClockPlaySimulator:
                 field_goal_distance=distance,
                 band=band,
                 points=3,
+                source=source,
             )
+            if source == "late_tied_non_fourth":
+                self.state.event_counts["late_tied_non_fourth_field_goal_made"] += 1
             # A made field goal gets an explicit post-score transition unless
             # the already-satisfied overtime equal-possession rule ends it.
             # Regulation period/game termination stays in the main clock loop.
@@ -339,6 +344,7 @@ class ClockPlaySimulator:
             offense=offense,
             field_goal_distance=distance,
             band=band,
+            source=source,
         )
         self._start_possession(
             _OTHER_SIDE[offense],
@@ -369,28 +375,55 @@ class ClockPlaySimulator:
         score_gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         yards_to_go = self.state.distance
         fg_distance = 117 - self.state.yardline
-        needs_aggression = (
-            self._is_endgame()
-            and (score_gap < 0 or (score_gap == 0 and self.state.quarter == "OT"))
-        )
-        if needs_aggression and (yards_to_go <= 5 or fg_distance > self.config.field_goal_max_distance):
+        if self._is_endgame() and score_gap < 0:
+            if score_gap >= -3 and fg_distance <= self.config.field_goal_max_distance:
+                return "field_goal"
+            return "go"
+        if self._is_endgame() and score_gap == 0 and self.state.quarter == "OT":
+            if fg_distance <= self.config.field_goal_max_distance:
+                return "field_goal"
+            return "go"
+        # This conventional short-yardage decision must precede the
+        # field-goal-range branch; otherwise reachable attempts are masked
+        # whenever the ball is already in field-goal territory.
+        if (
+            yards_to_go <= self.config.fourth_down_go_distance
+            and self.state.yardline >= 45
+        ):
             return "go"
         if fg_distance <= self.config.field_goal_max_distance and (
             self.state.yardline >= 55 or self._is_endgame()
         ):
             return "field_goal"
-        if yards_to_go <= self.config.fourth_down_go_distance and self.state.yardline >= 45:
-            return "go"
         return "punt"
 
     def _maybe_timeout_after_in_bounds_play(self, offense: TeamSide) -> None:
-        if not self._is_endgame() or self.state.clock_seconds > self.config.timeout_window_seconds:
+        if (
+            self.state.quarter != 4
+            or self.state.clock_seconds > self.config.timeout_window_seconds
+        ):
             return
         defense = _OTHER_SIDE[offense]
-        if not self._is_trailing(defense) or self.state.timeouts_for(defense) <= 0:
+        deficit = self.state.score[offense] - self.state.score[defense]
+        if (
+            deficit < 1
+            or deficit > self.config.late_trailing_timeout_max_deficit
+            or self.state.timeouts_for(defense) <= 0
+        ):
             return
         self.state.use_timeout(defense)
-        self._event("timeout", team=defense, reason="endgame_clock_stop")
+        self._event("timeout", team=defense, reason="late_trailing_clock_stop")
+
+    def _should_take_late_tied_non_fourth_field_goal(self, offense: TeamSide) -> bool:
+        """Allow the reachable, regulation-ending FG state seen in train PBP."""
+
+        return (
+            self.state.quarter == 4
+            and 0 < self.state.clock_seconds <= self.config.late_field_goal_window_seconds
+            and self.state.down < 4
+            and self.state.score[offense] == self.state.score[_OTHER_SIDE[offense]]
+            and (117 - self.state.yardline) <= self.config.field_goal_max_distance
+        )
 
     def _turnover(self, offense: TeamSide, *, kind: str) -> None:
         receiving_yardline = int(_clamp(float(100 - self.state.yardline), 5.0, 95.0))
@@ -416,9 +449,20 @@ class ClockPlaySimulator:
         state = self.state
         clock_before = state.clock_seconds
         fourth_down_attempt = state.down == 4
+        if self._should_take_late_tied_non_fourth_field_goal(offense):
+            self.state.event_counts["late_tied_non_fourth_field_goal_attempt"] += 1
+            self._event(
+                "late_field_goal_decision",
+                offense=offense,
+                decision="field_goal",
+                down=state.down,
+            )
+            self._attempt_field_goal(offense, source="late_tied_non_fourth")
+            return
         if fourth_down_attempt:
             decision = self._fourth_down_decision(offense)
             self._event("fourth_down_decision", offense=offense, decision=decision)
+            self.state.event_counts[f"fourth_down_{decision}"] += 1
             if decision == "field_goal":
                 self._attempt_field_goal(offense)
                 return
@@ -432,6 +476,8 @@ class ClockPlaySimulator:
         )
         if self.rng.random() < turnover_probability:
             self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+            if state.down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
             self._turnover(offense, kind="turnover")
             return
 
@@ -450,6 +496,8 @@ class ClockPlaySimulator:
                 clock_before_seconds=round(clock_before, 3),
                 clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
             )
+            if state.down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
             if fourth_down_attempt:
                 self._turnover(offense, kind="turnover_on_downs")
                 return
@@ -473,6 +521,9 @@ class ClockPlaySimulator:
                 clock_before_seconds=round(clock_before, 3),
                 clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
             )
+            if state.down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+                self.state.event_counts["third_down_conversion"] += 1
             self._score_touchdown(offense, source="scrimmage_play")
             return
 
@@ -495,6 +546,10 @@ class ClockPlaySimulator:
             )
             return
 
+        if state.down == 3:
+            self.state.event_counts["third_down_attempt"] += 1
+            if gained_first_down:
+                self.state.event_counts["third_down_conversion"] += 1
         self._advance_down(yards)
         self._event(
             "scrimmage_play",
