@@ -282,10 +282,14 @@ class ClockPlaySimulator:
             made = self.rng.random() < _clamp(0.47 * self._attack_factor(offense), 0.32, 0.62)
             self._add_points(offense, 2 if made else 0)
             self._event("two_point_try", offense=offense, made=made, points=2 if made else 0)
+            if made:
+                self.state.event_counts["two_point_made"] += 1
         else:
             made = self.rng.random() < LEAGUE_XP_MAKE_RATE
             self._add_points(offense, 1 if made else 0)
             self._event("pat_try", offense=offense, made=made, points=1 if made else 0)
+            if made:
+                self.state.event_counts["pat_made"] += 1
         self.state.transition_counts["touchdown_to_try"] += 1
         if not self._maybe_finish_overtime_after_score():
             self._kickoff(_OTHER_SIDE[offense], reason="after_try")
