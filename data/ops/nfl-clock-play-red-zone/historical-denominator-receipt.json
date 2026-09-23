@@ -1,0 +1,50 @@
+{
+  "artifact_id": "Clock-Play Red-Zone Historical Denominator Receipt",
+  "counts": {
+    "core_drives": 64601,
+    "end_half_or_game_core_drives": 38627,
+    "games": 2863,
+    "goal_to_go_entry_drives": 9663,
+    "goal_to_go_td_drives": 6928,
+    "offensive_touchdowns": 13801,
+    "ot_core_drives": 429,
+    "red_zone_entry_drives": 19175,
+    "red_zone_td_drives": 10732
+  },
+  "historical_source": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+  "metric_definitions": {
+    "drive": "unique (game_id, fixed_drive) with pass/run/qb kneel/qb spike/field_goal/punt core play",
+    "end_half_game": "core drive whose final observed core quarter is 2 or 4 remains counted",
+    "games": "unique game_id in train REG PBP",
+    "goal_to_go_entry": "unique fixed_drive with an in-drive core or nullified pass/rush state where goal_to_go == 1",
+    "kickoff_first_snap": "kickoff rows are excluded; a drive is counted only upon its first core snap",
+    "offensive_td": "every PBP row where touchdown == 1 and td_team == posteam",
+    "ot": "core drive with qtr > 4; included in all drive state denominators",
+    "red_zone_entry": "unique fixed_drive with an in-drive core or nullified pass/rush state at yardline_100 <= 20",
+    "td_per_entry": "offensive TD on any PBP row in a drive that entered the named state"
+  },
+  "rates": {
+    "drives_per_game": 22.564093608103388,
+    "end_half_or_game_core_drives_per_game": 13.491791826755152,
+    "goal_to_go_entries_per_game": 3.3751309814879495,
+    "offensive_td_per_game": 4.82046804051694,
+    "ot_core_drives_per_game": 0.14984282221446035,
+    "red_zone_entries_per_game": 6.697520083828152,
+    "td_per_goal_to_go_entry": 0.7169616061264618,
+    "td_per_red_zone_entry": 0.5596870925684485
+  },
+  "season_type": "REG",
+  "train_seasons": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ]
+}
