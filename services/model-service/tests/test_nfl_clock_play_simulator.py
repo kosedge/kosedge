@@ -313,11 +313,11 @@ def test_red_zone_transition_first_down_preserves_possession() -> None:
     assert simulator.invariant_failures == []
 
 
-def test_red_zone_transition_turnover_on_downs_flips_at_actual_spot() -> None:
+def test_red_zone_transition_turnover_flips_at_actual_spot() -> None:
     simulator = ClockPlaySimulator(
         _inputs(),
         seed=4,
-        config=_red_zone_config(outcome="turnover_on_downs", yards=-1.0),
+        config=_red_zone_config(outcome="turnover", yards=-1.0),
         collect_events=True,
     )
     simulator.state = ClockPlayState(
@@ -325,14 +325,14 @@ def test_red_zone_transition_turnover_on_downs_flips_at_actual_spot() -> None:
         clock_seconds=300.0,
         possession="home",
         yardline=85,
-        down=4,
+        down=2,
         distance=2,
     )
     simulator._resolve_scrimmage_play("home")
 
     assert simulator.state.possession == "away"
     assert simulator.state.yardline == 16
-    assert simulator.state.event_counts["turnover_on_downs"] == 1
+    assert simulator.state.event_counts["turnover"] == 1
     assert simulator.invariant_failures == []
 
 
