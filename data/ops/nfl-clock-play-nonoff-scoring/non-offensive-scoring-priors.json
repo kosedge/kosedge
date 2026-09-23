@@ -4,7 +4,7 @@
     "blocked_return": "blocked kick opportunity branches to ordinary recovery or return TD",
     "kickoff_return": "kickoff branches to ordinary receiving possession or return TD",
     "punt_return": "punt branches to ordinary receiving possession or return TD",
-    "safety": "backed-up offensive state can score safety only after crossing own goal line",
+    "safety": "backed-up play with yards_gained crossing the offense's goal line can score safety",
     "turnover_return": "interception or lost fumble branches to ordinary turnover or return TD"
   },
   "historical_games": 2863,
@@ -35,20 +35,20 @@
     "safety": {
       "buckets": {
         "own_1_5": {
-          "opportunities": 4205,
-          "rate": 0.02211652794292509,
-          "scores": 93
+          "opportunities": 77,
+          "rate": 0.948051948051948,
+          "scores": 73
         },
         "own_6_10": {
-          "opportunities": 8695,
-          "rate": 0.005750431282346176,
-          "scores": 50
+          "opportunities": 34,
+          "rate": 0.8235294117647058,
+          "scores": 28
         }
       },
       "default": {
-        "opportunities": 12900,
-        "rate": 0.011085271317829458,
-        "scores": 143
+        "opportunities": 111,
+        "rate": 0.9099099099099099,
+        "scores": 101
       }
     },
     "turnover_return": {
