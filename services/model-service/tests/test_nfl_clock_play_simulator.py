@@ -365,7 +365,7 @@ def test_turnover_return_td_uses_existing_try_and_kickoff_path() -> None:
     simulator._turnover("home", kind="turnover")
 
     assert simulator.state.event_counts["defensive_return_touchdown"] == 1
-    assert simulator.state.event_counts["touchdown_to_try"] == 1
+    assert simulator.state.transition_counts["touchdown_to_try"] == 1
     assert simulator.state.possession == "home"
     assert simulator.invariant_failures == []
 
