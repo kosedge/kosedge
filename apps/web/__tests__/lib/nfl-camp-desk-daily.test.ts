@@ -684,6 +684,103 @@ describe("Sep 22 live Club Desk day", () => {
   });
 });
 
+describe("Sep 23 live Club Desk day", () => {
+  const live = JSON.parse(
+    readFileSync(
+      path.join(
+        __dirname,
+        "../../../../content/writers/camp-desk-2026/2026-09-23.json",
+      ),
+      "utf8",
+    ),
+  ) as CampDeskDayFile;
+
+  it("is a weekday daily package with five real-news clubs, singular preview_delta, and no X profile sources", () => {
+    expect(live.desk_date).toBe("2026-09-23");
+    expect(live.package).toBe("daily");
+    expect(live.pinned).toBe(false);
+    expect(live.source_type).toBe("kosedge-desk");
+    expect(live.league_wrap.title).toBe("Club Desk — Wednesday, Sep 23");
+    expect(live.league_wrap.storylines.length).toBeGreaterThanOrEqual(5);
+    expect(live.league_wrap.storylines.length).toBeLessThanOrEqual(8);
+    expect(live.team_notes.map((note) => note.team_id)).toEqual([
+      "NYG",
+      "CHI",
+      "LAC",
+      "ATL",
+      "ARI",
+    ]);
+    expect(live.team_notes.every((note) => note.key_points.length === 3)).toBe(
+      true,
+    );
+    expect(live.preview_delta?.map((row) => row.team_id)).toEqual([
+      "NYG",
+      "CHI",
+      "LAC",
+      "ATL",
+      "ARI",
+    ]);
+    expect(
+      live.preview_delta
+        ?.filter((row) => ["NYG", "CHI", "LAC"].includes(row.team_id))
+        .every((row) => row.status === "touched"),
+    ).toBe(true);
+    expect(
+      live.preview_delta
+        ?.filter((row) => row.team_id === "ATL" || row.team_id === "ARI")
+        .every((row) => row.status === "flagged"),
+    ).toBe(true);
+    expect(live.league_wrap.bottom_line.toLowerCase()).toContain("pass");
+    expect(live.league_wrap.bottom_line).toContain("Over 2/5");
+    expect(live.league_wrap.bottom_line).toContain("KEEP");
+    expect(live.league_wrap.bottom_line).toContain("Coming soon ON");
+    const blob = JSON.stringify(live);
+    expect(blob).not.toMatch(/\bPLAY\b/);
+    expect(blob).not.toMatch(/\bLEAN\b/);
+    expect(blob).not.toMatch(/https?:\/\/(www\.)?(x|twitter)\.com/i);
+    expect(blob).not.toContain("preview_deltas");
+    expect(blob).toContain("≥");
+    expect(blob).toContain("—");
+    expect(
+      live.team_notes.every(
+        (note) =>
+          note.is_material_depth === true &&
+          typeof note.sot_flag === "string" &&
+          note.sot_flag.length > 0,
+      ),
+    ).toBe(true);
+  });
+
+  it("surfaces as the newest live package over the Sep 22 daily", () => {
+    const tuesday = JSON.parse(
+      readFileSync(
+        path.join(
+          __dirname,
+          "../../../../content/writers/camp-desk-2026/2026-09-22.json",
+        ),
+        "utf8",
+      ),
+    ) as CampDeskDayFile;
+    const now = new Date("2026-09-23T21:00:00Z");
+    const shelf = partitionCampDeskShelf(
+      [...cardsFromDayFile(tuesday), ...cardsFromDayFile(live)],
+      { now, inCamp: true },
+    );
+    expect(shelf.live[0]?.desk_date).toBe("2026-09-23");
+    expect(shelf.live.every((card) => card.desk_date === "2026-09-23")).toBe(
+      true,
+    );
+    expect(shelf.activeDeskDate).toBe("2026-09-23");
+    expect(shelf.archive.some((card) => card.desk_date === "2026-09-22")).toBe(
+      true,
+    );
+    expect(shelf.deskStale).toBe(false);
+    expect(displayClubDeskTitle(live.league_wrap.title)).toBe(
+      "Club Desk — Wednesday, Sep 23",
+    );
+  });
+});
+
 describe("Aug 21 live Camp Desk day", () => {
   const live = JSON.parse(
     readFileSync(
