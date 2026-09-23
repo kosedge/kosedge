@@ -101,7 +101,7 @@ def main() -> None:
         "metric_definitions": {
             "games": "unique game_id in train REG PBP",
             "offensive_td": "every PBP row where touchdown == 1 and td_team == posteam",
-            "drive": "unique (game_id, fixed_drive) with pass/run/field_goal/punt core play",
+            "drive": "unique (game_id, fixed_drive) with pass/run/qb kneel/qb spike/field_goal/punt core play",
             "red_zone_entry": "unique fixed_drive with an in-drive core or nullified pass/rush state at yardline_100 <= 20",
             "goal_to_go_entry": "unique fixed_drive with an in-drive core or nullified pass/rush state where goal_to_go == 1",
             "td_per_entry": "offensive TD on any PBP row in a drive that entered the named state",
