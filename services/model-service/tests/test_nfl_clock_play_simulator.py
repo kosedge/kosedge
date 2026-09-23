@@ -113,6 +113,29 @@ def _rz_fourth_decision_config() -> ClockPlayConfig:
     )
 
 
+def _non_offensive_config(
+    *, turnover_return: float = 0.0, safety: float = 0.0
+) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        non_offensive_scoring_enabled=True,
+        non_offensive_scoring_priors={
+            "turnover_return": {
+                "default": {"rate": turnover_return},
+            },
+            "kickoff_return": {"default": {"rate": 0.0}},
+            "punt_return": {"default": {"rate": 0.0}},
+            "blocked_return": {"default": {"rate": 0.0}},
+            "safety": {
+                "default": {"rate": safety},
+                "buckets": {
+                    "own_1_5": {"rate": safety},
+                    "own_6_10": {"rate": safety},
+                },
+            },
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -324,6 +347,47 @@ def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
 
     assert simulator.state.event_counts["fourth_down_field_goal"] == 1
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+
+
+def test_turnover_return_td_uses_existing_try_and_kickoff_path() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_non_offensive_config(turnover_return=1.0),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=60,
+    )
+    simulator._turnover("home", kind="turnover")
+
+    assert simulator.state.event_counts["defensive_return_touchdown"] == 1
+    assert simulator.state.event_counts["touchdown_to_try"] == 1
+    assert simulator.state.possession == "home"
+    assert simulator.invariant_failures == []
+
+
+def test_backed_up_safety_uses_kickoff_transition() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_non_offensive_config(safety=1.0),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=1,
+    )
+
+    assert simulator._maybe_safety("home", target_yardline=0) is True
+    assert simulator.state.event_counts["safety"] == 1
+    assert simulator.state.possession == "away"
+    assert simulator.invariant_failures == []
 
 
 def test_non_fourth_red_zone_pass_bypasses_rush_transition() -> None:

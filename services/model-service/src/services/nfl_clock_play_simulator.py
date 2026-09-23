@@ -203,6 +203,8 @@ class ClockPlayConfig:
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
+    non_offensive_scoring_enabled: bool = False
+    non_offensive_scoring_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -404,6 +406,12 @@ class ClockPlaySimulator:
             self.state.transition_counts["field_goal_to_kickoff"] += 1
         elif reason == "after_try":
             self.state.transition_counts["try_to_kickoff"] += 1
+        if self._maybe_non_offensive_touchdown(
+            receiving_team,
+            family="kickoff_return",
+            event_type="kickoff_return_touchdown",
+        ):
+            return
         self._start_possession(
             receiving_team,
             yardline=yardline,
@@ -416,6 +424,49 @@ class ClockPlaySimulator:
             self.state.home_score += int(points)
         else:
             self.state.away_score += int(points)
+
+    def _non_offensive_rate(self, family: str, *, yardline: int | None = None) -> float:
+        priors = self.config.non_offensive_scoring_priors
+        if not isinstance(priors, Mapping):
+            return 0.0
+        family_prior = priors.get(family)
+        if not isinstance(family_prior, Mapping):
+            return 0.0
+        if yardline is not None:
+            buckets = family_prior.get("buckets")
+            if isinstance(buckets, Mapping):
+                bucket = "own_1_5" if yardline <= 5 else "own_6_10"
+                payload = buckets.get(bucket)
+                if isinstance(payload, Mapping):
+                    return float(payload.get("rate", 0.0))
+        default = family_prior.get("default")
+        return float(default.get("rate", 0.0)) if isinstance(default, Mapping) else 0.0
+
+    def _maybe_non_offensive_touchdown(
+        self, scoring_team: TeamSide, *, family: str, event_type: str
+    ) -> bool:
+        if not self.config.non_offensive_scoring_enabled:
+            return False
+        if self.rng.random() >= self._non_offensive_rate(family):
+            return False
+        self._add_points(scoring_team, 6)
+        self._event(event_type, scoring_team=scoring_team, family=family, points=6)
+        self._resolve_try(scoring_team)
+        return True
+
+    def _maybe_safety(self, offense: TeamSide, *, target_yardline: int) -> bool:
+        if (
+            not self.config.non_offensive_scoring_enabled
+            or target_yardline > 0
+            or self.rng.random()
+            >= self._non_offensive_rate("safety", yardline=self.state.yardline)
+        ):
+            return False
+        scoring_team = _OTHER_SIDE[offense]
+        self._add_points(scoring_team, 2)
+        self._event("safety", scoring_team=scoring_team, points=2)
+        self._kickoff(scoring_team, reason="after_safety")
+        return True
 
     def _try_two_point(self, offense: TeamSide) -> bool:
         if not self._is_endgame():
@@ -518,8 +569,15 @@ class ClockPlaySimulator:
             net_yards=net_yards,
             receiving_yardline=receiving_yardline,
         )
+        receiving_team = _OTHER_SIDE[offense]
+        if self._maybe_non_offensive_touchdown(
+            receiving_team,
+            family="punt_return",
+            event_type="punt_return_touchdown",
+        ):
+            return
         self._start_possession(
-            _OTHER_SIDE[offense],
+            receiving_team,
             yardline=receiving_yardline,
             reason="punt",
             overtime_possession=self.state.quarter == "OT",
@@ -862,8 +920,15 @@ class ClockPlaySimulator:
     def _turnover(self, offense: TeamSide, *, kind: str) -> None:
         receiving_yardline = int(_clamp(float(100 - self.state.yardline), 5.0, 95.0))
         self._event(kind, offense=offense, receiving_yardline=receiving_yardline)
+        receiving_team = _OTHER_SIDE[offense]
+        if self._maybe_non_offensive_touchdown(
+            receiving_team,
+            family="turnover_return",
+            event_type="defensive_return_touchdown",
+        ):
+            return
         self._start_possession(
-            _OTHER_SIDE[offense],
+            receiving_team,
             yardline=receiving_yardline,
             reason=kind,
             overtime_possession=self.state.quarter == "OT",
@@ -993,6 +1058,8 @@ class ClockPlaySimulator:
                 kind=clock_kind,
             )
         )
+        if self._maybe_safety(offense, target_yardline=target_yardline):
+            return
         if target_yardline >= 100:
             self._event(
                 "scrimmage_play",

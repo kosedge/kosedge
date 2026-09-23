@@ -88,6 +88,11 @@ def _load_clock_play_priors(
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",
         ),
+        (
+            "non_offensive_scoring_priors_path",
+            "non_offensive_scoring_priors",
+            "non_offensive_scoring",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
