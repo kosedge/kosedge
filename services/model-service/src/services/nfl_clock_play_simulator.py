@@ -198,6 +198,7 @@ class ClockPlayConfig:
     fourth_down_continuation_priors: Mapping[str, Any] = field(default_factory=dict)
     clock_flow_enabled: bool = False
     clock_flow_priors: Mapping[str, Any] = field(default_factory=dict)
+    clock_flow_runtime_scale: float = 1.0
     red_zone_rush_transition_enabled: bool = False
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
@@ -349,7 +350,11 @@ class ClockPlaySimulator:
             )
             if not isinstance(prior, Mapping):
                 raise ValueError("Clock-flow calibration requires train-only priors")
-            mean = float(prior["mean_seconds"]) / self._pace_factor(offense)
+            mean = (
+                float(prior["mean_seconds"])
+                * self.config.clock_flow_runtime_scale
+                / self._pace_factor(offense)
+            )
             spread = max(0.0, float(prior["stddev_seconds"]))
             return _clamp(self.rng.gauss(mean, spread), 1.0, 80.0)
         if stopped_clock:
