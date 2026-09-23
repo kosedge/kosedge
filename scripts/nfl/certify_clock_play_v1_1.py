@@ -54,14 +54,26 @@ def _as_game(raw: Mapping[str, Any]) -> ClockPlayGameInputs:
 
 def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
     engine = dict(config_payload.get("engine_config") or {})
-    raw_path = config_payload.get("fourth_down_continuation_priors_path")
-    if raw_path is None:
-        return engine
-    priors_payload = json.loads((ROOT / str(raw_path)).read_text(encoding="utf-8"))
-    priors = priors_payload.get("priors")
-    if not isinstance(priors, Mapping):
-        raise SystemExit("Fourth-down continuation priors need a priors object")
-    engine["fourth_down_continuation_priors"] = dict(priors)
+    for config_key, engine_key, label in (
+        (
+            "fourth_down_continuation_priors_path",
+            "fourth_down_continuation_priors",
+            "Fourth-down continuation",
+        ),
+        (
+            "red_zone_transition_priors_path",
+            "red_zone_transition_priors",
+            "Red-zone transition",
+        ),
+    ):
+        raw_path = config_payload.get(config_key)
+        if raw_path is None:
+            continue
+        priors_payload = json.loads((ROOT / str(raw_path)).read_text(encoding="utf-8"))
+        priors = priors_payload.get("priors")
+        if not isinstance(priors, Mapping):
+            raise SystemExit(f"{label} priors need a priors object")
+        engine[engine_key] = dict(priors)
     return engine
 
 

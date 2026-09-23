@@ -103,6 +103,50 @@ def _odds_adjust(probability: float, factor: float, *, exponent: float) -> float
     return _clamp(adjusted_odds / (1.0 + adjusted_odds), 0.001, 0.999)
 
 
+def red_zone_field_bucket(yardline: int) -> str:
+    if yardline >= 99:
+        return "1"
+    if yardline >= 95:
+        return "5-2"
+    if yardline >= 90:
+        return "10-6"
+    return "20-11"
+
+
+def red_zone_distance_bucket(distance: int) -> str:
+    if distance <= 1:
+        return "1"
+    if distance == 2:
+        return "2"
+    if distance <= 5:
+        return "3-5"
+    return "6+"
+
+
+def red_zone_situation_key(
+    *,
+    yardline: int,
+    down: int,
+    distance: int,
+    goal_to_go: bool,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Key a train-only transition prior after the offense enters the red zone."""
+
+    late_trailing = quarter in {4, "OT"} and clock_seconds <= 180 and score_gap < 0
+    return "|".join(
+        (
+            "late_trailing" if late_trailing else "standard",
+            red_zone_field_bucket(int(yardline)),
+            "goal_to_go" if goal_to_go else "not_goal_to_go",
+            str(int(down)),
+            red_zone_distance_bucket(int(distance)),
+        )
+    )
+
+
 @dataclass(frozen=True)
 class ClockPlayTeamInput:
     """Synthetic or train-only team-strength inputs for one game path."""
@@ -147,6 +191,8 @@ class ClockPlayConfig:
     late_field_goal_window_seconds: int = 10
     fourth_down_continuation_enabled: bool = False
     fourth_down_continuation_priors: Mapping[str, Any] = field(default_factory=dict)
+    red_zone_transition_enabled: bool = False
+    red_zone_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -530,6 +576,11 @@ class ClockPlaySimulator:
         distance = state.distance
         distance_to_goal = 100 - start_yardline
 
+        self._event(
+            "fourth_down_continuation",
+            offense=offense,
+            continuation_bucket=bucket,
+        )
         self._consume_clock(self._play_seconds(offense, stopped_clock=False))
         converted = self.rng.random() < conversion_probability
         touchdown = converted and (
@@ -610,6 +661,209 @@ class ClockPlaySimulator:
             overtime_possession=state.quarter == "OT",
         )
 
+    def _red_zone_transition_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.red_zone_transition_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = red_zone_situation_key(
+            yardline=state.yardline,
+            down=state.down,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Red-zone transition model requires train-only priors")
+
+    def _sample_red_zone_outcome(
+        self, prior: Mapping[str, Any], attack: float, *, fourth_down: bool
+    ) -> str:
+        raw = prior.get("outcome_probabilities")
+        if not isinstance(raw, Mapping):
+            raise ValueError("Red-zone transition prior needs outcome probabilities")
+        weights = {
+            str(outcome): max(0.0, float(probability))
+            for outcome, probability in raw.items()
+        }
+        for outcome in ("touchdown", "first_down"):
+            if outcome in weights:
+                weights[outcome] *= attack
+        for outcome in ("turnover", "turnover_on_downs"):
+            if outcome in weights:
+                weights[outcome] /= attack
+        if fourth_down and weights.get("continue", 0.0) > 0.0:
+            weights["turnover_on_downs"] = (
+                weights.get("turnover_on_downs", 0.0) + weights["continue"]
+            )
+            weights["continue"] = 0.0
+        total = sum(weights.values())
+        if total <= 0.0:
+            raise ValueError("Red-zone transition prior has no positive outcome weight")
+        draw = self.rng.random() * total
+        cumulative = 0.0
+        for outcome in sorted(weights):
+            cumulative += weights[outcome]
+            if draw <= cumulative:
+                return outcome
+        return sorted(weights)[-1]
+
+    def _sample_red_zone_yards(
+        self,
+        prior: Mapping[str, Any],
+        *,
+        outcome: str,
+        minimum: int,
+        maximum: int,
+        attack: float,
+    ) -> int:
+        yard_payload = prior.get("yards_by_outcome")
+        payload = (
+            yard_payload.get(outcome)
+            if isinstance(yard_payload, Mapping)
+            and isinstance(yard_payload.get(outcome), Mapping)
+            else {}
+        )
+        mean = float(payload.get("mean", minimum)) * attack
+        stddev = max(0.25, float(payload.get("stddev", 1.0)))
+        return int(
+            _clamp(
+                round(self.rng.gauss(mean, stddev)),
+                float(minimum),
+                float(maximum),
+            )
+        )
+
+    def _resolve_red_zone_transition(self, offense: TeamSide) -> None:
+        """Resolve an in-red-zone scrimmage state from train-only transitions."""
+
+        state = self.state
+        prior = self._red_zone_transition_prior(offense)
+        attack = self._attack_factor(offense)
+        fourth_down = state.down == 4
+        outcome = self._sample_red_zone_outcome(
+            prior, attack, fourth_down=fourth_down
+        )
+        bucket = str(prior.get("bucket", "default"))
+        clock_before = state.clock_seconds
+        start_yardline = state.yardline
+        distance = state.distance
+        distance_to_goal = 100 - start_yardline
+        self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+        self._event(
+            "red_zone_transition",
+            offense=offense,
+            outcome=outcome,
+            transition_bucket=bucket,
+        )
+
+        if outcome == "touchdown" or (
+            outcome == "first_down" and distance >= distance_to_goal
+        ):
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type="red_zone_transition",
+                yards=distance_to_goal,
+                touchdown=True,
+                transition_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._score_touchdown(offense, source="red_zone_transition")
+            return
+
+        if outcome == "turnover":
+            yards = self._sample_red_zone_yards(
+                prior,
+                outcome=outcome,
+                minimum=-20,
+                maximum=max(-20, distance - 1),
+                attack=attack,
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            self._turnover(offense, kind="turnover")
+            return
+
+        if outcome == "turnover_on_downs":
+            yards = self._sample_red_zone_yards(
+                prior,
+                outcome=outcome,
+                minimum=-20,
+                maximum=max(-20, distance - 1),
+                attack=attack,
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            receiving_yardline = int(
+                _clamp(float(100 - state.yardline), 5.0, 95.0)
+            )
+            self._event(
+                "turnover_on_downs",
+                offense=offense,
+                play_type="red_zone_transition",
+                yards=yards,
+                transition_bucket=bucket,
+                receiving_yardline=receiving_yardline,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._start_possession(
+                _OTHER_SIDE[offense],
+                yardline=receiving_yardline,
+                reason="turnover_on_downs",
+                overtime_possession=state.quarter == "OT",
+            )
+            return
+
+        if outcome == "first_down":
+            yards = self._sample_red_zone_yards(
+                prior,
+                outcome=outcome,
+                minimum=distance,
+                maximum=max(distance, 99 - start_yardline),
+                attack=attack,
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            state.down = 1
+            state.distance = min(10, 100 - state.yardline)
+        else:
+            yards = self._sample_red_zone_yards(
+                prior,
+                outcome="continue",
+                minimum=-20,
+                maximum=max(-20, distance - 1),
+                attack=attack,
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            state.down += 1
+            state.distance = max(1, distance - max(0, yards))
+        self._event(
+            "scrimmage_play",
+            offense=offense,
+            play_type="red_zone_transition",
+            yards=yards,
+            touchdown=False,
+            transition_bucket=bucket,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+        )
+        self._maybe_timeout_after_in_bounds_play(offense)
+        self._validate_state()
+
     def _maybe_timeout_after_in_bounds_play(self, offense: TeamSide) -> None:
         if (
             self.state.quarter != 4
@@ -682,9 +936,18 @@ class ClockPlaySimulator:
             if decision == "punt":
                 self._punt(offense)
                 return
-            if self.config.fourth_down_continuation_enabled:
-                self._resolve_fourth_down_continuation(offense)
-                return
+            if decision == "go":
+                if self.config.fourth_down_continuation_enabled:
+                    self._resolve_fourth_down_continuation(offense)
+                    return
+                if self.config.red_zone_transition_enabled:
+                    raise ValueError(
+                        "Red-zone transition requires fourth-down GO continuation"
+                    )
+
+        if self.config.red_zone_transition_enabled and state.yardline >= 80:
+            self._resolve_red_zone_transition(offense)
+            return
 
         attack = self._attack_factor(offense)
         turnover_probability = _clamp(
