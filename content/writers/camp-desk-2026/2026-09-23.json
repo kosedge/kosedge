@@ -1,0 +1,198 @@
+{
+  "desk_date": "2026-09-23",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Wednesday, Sep 23",
+    "bottom_line": "Week 3 REG live. Afternoon IR/availability only: NYG Dart season-ending knee surgery (Winston starts vs TEN); CHI Wed DNP Williams+Bagent — Keenum lone healthy QB practicing (starter TBD for PHI MNF); LAC Kolar IR reverse (still OUT vs BUF; Njoku IR holds; Rucci signed); ATL Terrell IR (≥4) into TNF @ GB; ARI Will Johnson IR (season expected over) / Starling Thomas V up. All Pass. DEN Over 2/5 KEEP unchanged. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "NYG: Sources — Dart elected season-ending surgery (ACL intact; meniscus + MCL; ~6-month recovery). Reverse of Tue MRI watch. Winston starts W3 vs TEN. Pass.",
+      "CHI: Wed path — Williams (hamstring) + Bagent (concussion protocol) not practicing; Keenum lone healthy QB on the active roster / preparing for PHI MNF. Johnson has not named a starter. Pass — do not invent QB1.",
+      "LAC: Rhim Wed — Kolar will NOT go on IR after forearm surgery changed the prognosis (still won't play or practice Wed; OUT vs BUF). Njoku IR holds. Hayden Rucci signed from JAX PS Tue. Under Pass holds.",
+      "ATL: Club — Terrell (groin) to IR ≥4 ahead of TNF @ GB; Penix starts. Quiet-skipped Tue — filed here.",
+      "ARI: Club Wed — Will Johnson (neck) to IR; season expected over. Starling Thomas V promoted; Jay Toia to PS.",
+      "Quiet skip: WAS (Quinn Wed — another specialist today; Mariota already named W3 starter / no timeline invent) / SEA Bradford (source conflict) / DEN Cooper exempt (Over KEEP stands) / MIN Jones DNP thin / GB Reed. No 32-card dump. No Riley leans — Coming soon ON."
+    ],
+    "what_to_watch": "CHI Fri designations into PHI MNF. LAC TE depth (Gadsden/Rucci) vs BUF. TNF ATL@GB Thu 8:15p ET. WAS Daniels specialist read (Thu/Fri). Do not restamp street or mint KEI.",
+    "sources": [
+      {
+        "label": "ESPN — Dart season-ending knee surgery (Rapoport/Garafolo/Schefter)",
+        "href": "https://www.espn.com/nfl/story/_/id/50013861/sources-jaxson-dart-season-ending-knee-surgery"
+      },
+      {
+        "label": "ESPN — Dart extended period / Winston path (Rapoport/Garafolo)",
+        "href": "https://www.espn.com/nfl/story/_/id/50007211/sources-giants-qb-jaxson-dart-extended-period"
+      },
+      {
+        "label": "ESPN — Bagent concussion; Keenum contingency (Cronin/Rapoport)",
+        "href": "https://www.espn.com/nfl/story/_/id/50007133/bagent-concussion-leaving-bears-qb-situation-muddled"
+      },
+      {
+        "label": "104.3 The Score — Keenum preparing; Williams+Bagent sidelined Wed (Emma)",
+        "href": "https://www.audacy.com/thescorechicago/sports/chicago-bears/bears-are-preparing-case-keenum-to-start-against-eagles-amid-quarterback-health-woes"
+      },
+      {
+        "label": "ESPN — Kolar IR reverse (Rhim)",
+        "href": "https://www.espn.com/nfl/story/_/id/50014963/in-reversal-chargers-not-placing-tight-end-charlie-kolar-injured-reserve"
+      },
+      {
+        "label": "atlantafalcons.com — Terrell IR; Tagovailoa full Tue",
+        "href": "https://www.atlantafalcons.com/news/falcons-injury-report-qb-tua-tagovailoa-returns-to-full-participation"
+      },
+      {
+        "label": "azcardinals.com — Will Johnson IR; Starling Thomas V up (Urban)",
+        "href": "https://www.azcardinals.com/news/as-will-johnson-goes-to-ir-cardinals-promote-starling-thomas-v"
+      },
+      {
+        "label": "NBC / PFT — Cardinals put Will Johnson on IR (Alper)",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/cardinals-put-cb-will-johnson-on-injured-reserve"
+      }
+    ]
+  },
+  "preview_delta": [
+    {
+      "team_id": "NYG",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Dart season-ending surgery; Winston starts vs TEN. Pass."
+    },
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Wed DNP Williams+Bagent; Keenum preparing; starter TBD PHI MNF. Pass."
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Kolar IR reverse; still OUT vs BUF; Njoku IR holds; Rucci signed. Pass."
+    },
+    {
+      "team_id": "ATL",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Terrell IR ≥4 into TNF @ GB; Penix starts. Pass."
+    },
+    {
+      "team_id": "ARI",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Will Johnson IR (season expected over); Starling Thomas V up. Pass."
+    }
+  ],
+  "team_notes": [
+    {
+      "team_id": "NYG",
+      "title": "Giants — Sep 23",
+      "bottom_line": "Sources: Dart elected season-ending left-knee surgery after MRI showed damage beyond the initial MCL read — ACL intact; meniscus + MCL requiring surgery (~6-month recovery). Winston starts Week 3 vs Tennessee. 1–1. Pass — Coming soon ON.",
+      "key_points": [
+        "ESPN (Rapoport/Garafolo/Schefter, Wed): Dart is expected to have season-ending knee surgery; ACL intact; meniscus and MCL damage requires the procedure; ~6 months recovery vs ≥9 months for ACL.",
+        "Tue Club Desk held MRI watch / do-not-invent return — this card is the designation reverse. Harbaugh Tue: evaluations ongoing / prepare for the range of possibilities; confidence in Winston.",
+        "W3: vs TEN Sun Sep 27. Do not invent a win-total lean off the starter change."
+      ],
+      "what_to_watch": "Any corresponding roster move (Haener) and Winston first-team path into TEN. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Dart season-ending surgery. Winston starts vs TEN. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN — Dart season-ending knee surgery",
+          "href": "https://www.espn.com/nfl/story/_/id/50013861/sources-jaxson-dart-season-ending-knee-surgery"
+        },
+        {
+          "label": "ESPN — Dart extended period / Winston",
+          "href": "https://www.espn.com/nfl/story/_/id/50007211/sources-giants-qb-jaxson-dart-extended-period"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears — Sep 23",
+      "bottom_line": "Wednesday path: Williams (right hamstring, week-to-week) and Bagent (concussion protocol) are not practicing; Keenum is the lone healthy quarterback on the active roster and is preparing for PHI MNF. Johnson has not named a starter. Pass — do not invent QB1. Coming soon ON.",
+      "key_points": [
+        "ESPN Cronin/Rapoport (Tue): Bagent in concussion protocol; Williams week-to-week; Johnson does not expect Williams to practice this week but has not ruled him out of MNF.",
+        "104.3 The Score / Chris Emma (Wed): Keenum lone healthy QB on the active roster as of Wednesday afternoon; Williams and Bagent both sidelined; Keenum in line for his first regular-season start since 2023 if neither clears.",
+        "Tue Club Desk: MRI week-to-week / not ruled out — this card is the Wed practice reverse. Pass on CHI win-total — no mint."
+      ],
+      "what_to_watch": "Thu–Fri designations / any Bagent protocol clear before PHI MNF. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Wed DNP Williams+Bagent; Keenum preparing. Starter TBD. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN — Bagent concussion; Keenum contingency",
+          "href": "https://www.espn.com/nfl/story/_/id/50007133/bagent-concussion-leaving-bears-qb-situation-muddled"
+        },
+        {
+          "label": "104.3 The Score — Keenum preparing Wed (Emma)",
+          "href": "https://www.audacy.com/thescorechicago/sports/chicago-bears/bears-are-preparing-case-keenum-to-start-against-eagles-amid-quarterback-health-woes"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers — Sep 23",
+      "bottom_line": "Rhim Wednesday: in a reversal, Kolar (forearm) will NOT be placed on IR — Monday surgery changed the prognosis. Still will not play Sunday at Buffalo and did not practice Wednesday. Njoku IR holds. Hayden Rucci signed from Jacksonville's practice squad Tuesday. Under already Pass — hold Pass. Coming soon ON.",
+      "key_points": [
+        "ESPN Kris Rhim (Wed ~3:30p ET): Harbaugh Mon said Kolar + Njoku → IR; Kolar surgery Mon changed the outlook — remains on the active roster but OUT this week.",
+        "With Gadsden the only healthy TE on the 53 until Kolar returns, LA signed Rucci (familiar with McDaniel's system from Miami) off Jacksonville's PS Tue.",
+        "Tue Club Desk filed both TEs IR ≥4 — this card reverses Kolar only. Do not reopen a lean off TE depth."
+      ],
+      "what_to_watch": "Rucci readiness vs BUF; Kolar return window short of IR minimum. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Kolar IR reverse; still OUT vs BUF. Njoku IR holds. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN — Kolar IR reverse (Rhim)",
+          "href": "https://www.espn.com/nfl/story/_/id/50014963/in-reversal-chargers-not-placing-tight-end-charlie-kolar-injured-reserve"
+        },
+        {
+          "label": "ESPN — Njoku + Kolar IR Mon path (Rhim)",
+          "href": "https://www.espn.com/nfl/story/_/id/50000682/chargers-placing-tes-david-njoku-charlie-kolar-ir"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons — Sep 23",
+      "bottom_line": "Club Tuesday: A.J. Terrell (groin) placed on IR — miss ≥4. Quiet-skipped on Tue Club Desk — filed here ahead of TNF at Green Bay. Penix starts. Pass — Coming soon ON.",
+      "key_points": [
+        "atlantafalcons.com (Tue): Terrell to IR early Tuesday afternoon; Tagovailoa / Taylor / Dorlus / Robinson full participants on the short-week report.",
+        "TNF: ATL @ GB Thu Sep 24, 8:15p ET. Penix named starter for the return from last season's knee.",
+        "Pass on ATL win-total — no mint / Coming soon ON."
+      ],
+      "what_to_watch": "Final TNF inactives (Ebukam hamstring DNP Tue). Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Terrell IR ≥4 into TNF @ GB. Penix starts. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "atlantafalcons.com — Terrell IR; Tue injury report",
+          "href": "https://www.atlantafalcons.com/news/falcons-injury-report-qb-tua-tagovailoa-returns-to-full-participation"
+        }
+      ]
+    },
+    {
+      "team_id": "ARI",
+      "title": "Cardinals — Sep 23",
+      "bottom_line": "Club Wednesday: Will Johnson (neck) placed on IR — season expected over. Starling Thomas V promoted from the practice squad; Jay Toia signed to the PS. Pass — Coming soon ON.",
+      "key_points": [
+        "azcardinals.com / Darren Urban (Wed): Johnson officially to IR; season expected over after the neck injury vs SEA. Thomas V (22 starts 2023–24; missed 2025 ACL) replaces him on the 53.",
+        "NBC/PFT Alper: LaFleur said this week the neck injury could cost Johnson the rest of the season.",
+        "Pass on ARI win-total — no mint."
+      ],
+      "what_to_watch": "Garrett Williams rehab path (slot) + Thomas V snap share. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Will Johnson IR (season expected over). Thomas V up. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "azcardinals.com — Will Johnson IR; Starling Thomas V",
+          "href": "https://www.azcardinals.com/news/as-will-johnson-goes-to-ir-cardinals-promote-starling-thomas-v"
+        },
+        {
+          "label": "NBC / PFT — Cardinals put Will Johnson on IR",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/cardinals-put-cb-will-johnson-on-injured-reserve"
+        }
+      ]
+    }
+  ]
+}
