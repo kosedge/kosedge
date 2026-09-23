@@ -88,6 +88,11 @@ def _load_clock_play_priors(
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",
         ),
+        (
+            "non_offensive_scoring_priors_path",
+            "non_offensive_scoring_priors",
+            "non_offensive_scoring",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
@@ -325,7 +330,13 @@ def run(
                 for trace in trace_samples.values()
             ),
             "touchdown_to_try": aggregate_transitions["touchdown_to_try"]
-            == aggregate_events["touchdown"],
+            == (
+                aggregate_events["touchdown"]
+                + aggregate_events["defensive_return_touchdown"]
+                + aggregate_events["kickoff_return_touchdown"]
+                + aggregate_events["punt_return_touchdown"]
+                + aggregate_events["blocked_return_touchdown"]
+            ),
             "post_score_kickoff": aggregate_transitions["field_goal_to_kickoff"] > 0
             and aggregate_transitions["try_to_kickoff"] > 0,
             "timeout_endgame_logic": aggregate_events["timeout"] > 0,
