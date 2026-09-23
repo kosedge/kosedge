@@ -18,6 +18,33 @@ def _inputs() -> ClockPlayGameInputs:
     )
 
 
+def _continuation_config(
+    *,
+    conversion_rate: float,
+    td_given_conversion: float,
+    converted_yards: float = 4.0,
+    failure_yards: float = 0.0,
+) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        fourth_down_continuation_enabled=True,
+        fourth_down_continuation_priors={
+            "default": {
+                "bucket": "unit_test",
+                "conversion_rate": conversion_rate,
+                "td_given_conversion": td_given_conversion,
+                "converted_non_td_yards": {
+                    "mean": converted_yards,
+                    "stddev": 0.0,
+                },
+                "failure_yards": {
+                    "mean": failure_yards,
+                    "stddev": 0.0,
+                },
+            }
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -137,6 +164,90 @@ def test_conventional_short_fourth_down_is_not_masked_by_field_goal_range() -> N
     )
 
     assert simulator._fourth_down_decision("home") == "go"
+
+
+def test_fourth_down_continuation_conversion_resets_first_down() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_continuation_config(
+            conversion_rate=1.0,
+            td_given_conversion=0.0,
+            converted_yards=4.0,
+        ),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=300.0,
+        possession="home",
+        yardline=70,
+        down=4,
+        distance=2,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.possession == "home"
+    assert simulator.state.yardline >= 72
+    assert simulator.state.down == 1
+    assert simulator.state.event_counts["fourth_down_conversion"] == 1
+    assert simulator.state.event_counts["touchdown"] == 0
+    assert simulator.invariant_failures == []
+
+
+def test_fourth_down_continuation_failure_uses_short_of_line_field_position() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_continuation_config(
+            conversion_rate=0.0,
+            td_given_conversion=0.0,
+            failure_yards=-1.0,
+        ),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=300.0,
+        possession="home",
+        yardline=60,
+        down=4,
+        distance=2,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.possession == "away"
+    assert simulator.state.yardline == 41
+    assert simulator.state.down == 1
+    assert simulator.state.event_counts["turnover_on_downs"] == 1
+    assert simulator.invariant_failures == []
+
+
+def test_goal_line_fourth_down_conversion_is_a_touchdown() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_continuation_config(
+            conversion_rate=1.0,
+            td_given_conversion=0.0,
+        ),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=40.0,
+        possession="home",
+        yardline=99,
+        down=4,
+        distance=1,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_conversion"] == 1
+    assert simulator.state.event_counts["fourth_down_continuation_touchdown"] == 1
+    assert simulator.state.event_counts["touchdown"] == 1
+    assert simulator.state.transition_counts["touchdown_to_try"] == 1
+    assert simulator.invariant_failures == []
 
 
 def test_tied_non_fourth_late_field_goal_state_is_reachable() -> None:

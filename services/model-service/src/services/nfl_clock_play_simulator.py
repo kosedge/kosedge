@@ -27,12 +27,80 @@ from src.services.nfl_season_engine.kicker_layer import (
 
 TeamSide = Literal["home", "away"]
 
-DEFAULT_CLOCK_PLAY_MODEL_VERSION = "nfl-clock-play-v1.1-late-game-fourth-down-policy"
+DEFAULT_CLOCK_PLAY_MODEL_VERSION = "nfl-clock-play-v1.2-fourth-down-continuation"
 _OTHER_SIDE: dict[TeamSide, TeamSide] = {"home": "away", "away": "home"}
 
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
+
+
+def fourth_down_distance_bucket(distance: int) -> str:
+    if distance <= 1:
+        return "1"
+    if distance == 2:
+        return "2"
+    if distance <= 5:
+        return "3-5"
+    return "6+"
+
+
+def fourth_down_field_bucket(
+    yardline: int,
+    distance: int,
+    *,
+    goal_to_go: bool | None = None,
+) -> str:
+    """Return one mutually-exclusive field-position bucket for GO outcomes."""
+
+    distance_to_goal = max(1, 100 - int(yardline))
+    is_goal_to_go = bool(goal_to_go) if goal_to_go is not None else distance >= distance_to_goal
+    if distance_to_goal <= 1:
+        return "at_1"
+    if distance_to_goal <= 5:
+        return "inside_5"
+    if is_goal_to_go:
+        return "goal_to_go"
+    if yardline >= 80:
+        return "red_zone"
+    if yardline >= 50:
+        return "opponent_territory"
+    return "own_territory"
+
+
+def fourth_down_situation_key(
+    *,
+    yardline: int,
+    distance: int,
+    goal_to_go: bool | None,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Key a continuation prior by urgency, distance, and field position."""
+
+    late_trailing = quarter in {4, "OT"} and clock_seconds <= 180 and score_gap < 0
+    urgency = "late_trailing" if late_trailing else "standard"
+    return "|".join(
+        (
+            urgency,
+            fourth_down_distance_bucket(int(distance)),
+            fourth_down_field_bucket(
+                int(yardline), int(distance), goal_to_go=goal_to_go
+            ),
+        )
+    )
+
+
+def _odds_adjust(probability: float, factor: float, *, exponent: float) -> float:
+    if probability <= 0.0:
+        return 0.0
+    if probability >= 1.0:
+        return 1.0
+    probability = _clamp(probability, 0.001, 0.999)
+    odds = probability / (1.0 - probability)
+    adjusted_odds = odds * max(0.5, float(factor)) ** exponent
+    return _clamp(adjusted_odds / (1.0 + adjusted_odds), 0.001, 0.999)
 
 
 @dataclass(frozen=True)
@@ -77,6 +145,8 @@ class ClockPlayConfig:
     timeout_window_seconds: int = 100
     late_trailing_timeout_max_deficit: int = 8
     late_field_goal_window_seconds: int = 10
+    fourth_down_continuation_enabled: bool = False
+    fourth_down_continuation_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -401,6 +471,145 @@ class ClockPlaySimulator:
             return "field_goal"
         return "punt"
 
+    def _fourth_down_continuation_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.fourth_down_continuation_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = fourth_down_situation_key(
+            yardline=state.yardline,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Fourth-down continuation model requires train-only priors")
+
+    def _sample_continuation_yards(
+        self,
+        prior: Mapping[str, Any],
+        *,
+        key: str,
+        minimum: int,
+        maximum: int,
+    ) -> int:
+        payload = prior.get(key)
+        if not isinstance(payload, Mapping):
+            return minimum
+        mean = float(payload.get("mean", minimum))
+        spread = max(0.25, float(payload.get("stddev", 1.0)))
+        return int(
+            _clamp(
+                round(self.rng.gauss(mean, spread)),
+                float(minimum),
+                float(maximum),
+            )
+        )
+
+    def _resolve_fourth_down_continuation(self, offense: TeamSide) -> None:
+        """Resolve a GO attempt from train-only fourth-down outcome priors."""
+
+        state = self.state
+        prior = self._fourth_down_continuation_prior(offense)
+        attack = self._attack_factor(offense)
+        conversion_probability = _odds_adjust(
+            float(prior["conversion_rate"]), attack, exponent=1.0
+        )
+        touchdown_given_conversion = _odds_adjust(
+            float(prior["td_given_conversion"]), attack, exponent=0.5
+        )
+        bucket = str(prior.get("bucket", "default"))
+        clock_before = state.clock_seconds
+        start_yardline = state.yardline
+        distance = state.distance
+        distance_to_goal = 100 - start_yardline
+
+        self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+        converted = self.rng.random() < conversion_probability
+        touchdown = converted and (
+            distance >= distance_to_goal
+            or self.rng.random() < touchdown_given_conversion
+        )
+
+        if touchdown:
+            yards = distance_to_goal
+            self.state.event_counts["fourth_down_conversion"] += 1
+            self.state.event_counts["fourth_down_continuation_touchdown"] += 1
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type="fourth_down_go",
+                yards=yards,
+                touchdown=True,
+                continuation_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._score_touchdown(offense, source="fourth_down_continuation")
+            return
+
+        if converted:
+            yards = self._sample_continuation_yards(
+                prior,
+                key="converted_non_td_yards",
+                minimum=distance,
+                maximum=max(distance, 99 - start_yardline),
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            state.down = 1
+            state.distance = min(10, 100 - state.yardline)
+            self.state.event_counts["fourth_down_conversion"] += 1
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type="fourth_down_go",
+                yards=yards,
+                touchdown=False,
+                continuation_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._maybe_timeout_after_in_bounds_play(offense)
+            self._validate_state()
+            return
+
+        yards = self._sample_continuation_yards(
+            prior,
+            key="failure_yards",
+            minimum=-20,
+            maximum=max(-20, distance - 1),
+        )
+        state.yardline = int(
+            _clamp(float(start_yardline + yards), 1.0, 99.0)
+        )
+        receiving_yardline = int(
+            _clamp(float(100 - state.yardline), 5.0, 95.0)
+        )
+        self._event(
+            "turnover_on_downs",
+            offense=offense,
+            play_type="fourth_down_go",
+            yards=yards,
+            continuation_bucket=bucket,
+            receiving_yardline=receiving_yardline,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+        )
+        self._start_possession(
+            _OTHER_SIDE[offense],
+            yardline=receiving_yardline,
+            reason="turnover_on_downs",
+            overtime_possession=state.quarter == "OT",
+        )
+
     def _maybe_timeout_after_in_bounds_play(self, offense: TeamSide) -> None:
         if (
             self.state.quarter != 4
@@ -472,6 +681,9 @@ class ClockPlaySimulator:
                 return
             if decision == "punt":
                 self._punt(offense)
+                return
+            if self.config.fourth_down_continuation_enabled:
+                self._resolve_fourth_down_continuation(offense)
                 return
 
         attack = self._attack_factor(offense)
