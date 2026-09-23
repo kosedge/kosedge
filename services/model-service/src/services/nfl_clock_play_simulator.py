@@ -147,6 +147,8 @@ class ClockPlayConfig:
     late_field_goal_window_seconds: int = 10
     fourth_down_continuation_enabled: bool = False
     fourth_down_continuation_priors: Mapping[str, Any] = field(default_factory=dict)
+    clock_flow_enabled: bool = False
+    clock_flow_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -280,7 +282,23 @@ class ClockPlaySimulator:
     def _consume_clock(self, seconds: float) -> None:
         self.state.clock_seconds = max(0.0, self.state.clock_seconds - max(0.0, seconds))
 
-    def _play_seconds(self, offense: TeamSide, *, stopped_clock: bool) -> float:
+    def _play_seconds(
+        self, offense: TeamSide, *, stopped_clock: bool, kind: str = "inbounds"
+    ) -> float:
+        if self.config.clock_flow_enabled:
+            priors = self.config.clock_flow_priors
+            kinds = priors.get("kinds") if isinstance(priors, Mapping) else None
+            fallback = priors.get("default") if isinstance(priors, Mapping) else None
+            prior = (
+                kinds.get(kind)
+                if isinstance(kinds, Mapping) and isinstance(kinds.get(kind), Mapping)
+                else fallback
+            )
+            if not isinstance(prior, Mapping):
+                raise ValueError("Clock-flow calibration requires train-only priors")
+            mean = float(prior["mean_seconds"]) / self._pace_factor(offense)
+            spread = max(0.0, float(prior["stddev_seconds"]))
+            return _clamp(self.rng.gauss(mean, spread), 1.0, 80.0)
         if stopped_clock:
             return _clamp(self.rng.uniform(5.0, 12.0), 1.0, 15.0)
         hurry = self._is_endgame() and self._is_trailing(offense)
@@ -392,7 +410,9 @@ class ClockPlaySimulator:
         band = self._field_goal_band(distance)
         make_rate = LEAGUE_FG_MAKE_RATE_BY_BAND[band]
         make_rate = _clamp(make_rate * (0.96 + 0.04 * self._attack_factor(offense)), 0.30, 0.99)
-        self._consume_clock(self._play_seconds(offense, stopped_clock=True))
+        self._consume_clock(
+            self._play_seconds(offense, stopped_clock=True, kind="field_goal")
+        )
         made = self.rng.random() < make_rate
         if made:
             self._add_points(offense, 3)
@@ -431,7 +451,9 @@ class ClockPlaySimulator:
         net_yards = int(round(_clamp(self.rng.gauss(41.0, 8.0), 24.0, 58.0)))
         landing = self.state.yardline + net_yards
         receiving_yardline = max(10, min(45, 100 - landing))
-        self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+        self._consume_clock(
+            self._play_seconds(offense, stopped_clock=False, kind="punt")
+        )
         self._event(
             "punt",
             offense=offense,
@@ -530,7 +552,9 @@ class ClockPlaySimulator:
         distance = state.distance
         distance_to_goal = 100 - start_yardline
 
-        self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+        self._consume_clock(
+            self._play_seconds(offense, stopped_clock=False, kind="fourth_down_go")
+        )
         converted = self.rng.random() < conversion_probability
         touchdown = converted and (
             distance >= distance_to_goal
@@ -691,7 +715,9 @@ class ClockPlaySimulator:
             self.config.turnover_probability / attack, 0.012, 0.065
         )
         if self.rng.random() < turnover_probability:
-            self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+            self._consume_clock(
+                self._play_seconds(offense, stopped_clock=False, kind="turnover")
+            )
             if state.down == 3:
                 self.state.event_counts["third_down_attempt"] += 1
             self._turnover(offense, kind="turnover")
@@ -705,7 +731,11 @@ class ClockPlaySimulator:
             self.config.incompletion_probability / attack, 0.16, 0.48
         )
         if incomplete:
-            self._consume_clock(self._play_seconds(offense, stopped_clock=True))
+            self._consume_clock(
+                self._play_seconds(
+                    offense, stopped_clock=True, kind="incomplete_pass"
+                )
+            )
             self._event(
                 "incomplete_pass",
                 offense=offense,
@@ -726,7 +756,13 @@ class ClockPlaySimulator:
             yards += int(round(self.rng.uniform(12.0, 34.0)))
         yards = max(-12, yards)
         target_yardline = state.yardline + yards
-        self._consume_clock(self._play_seconds(offense, stopped_clock=False))
+        self._consume_clock(
+            self._play_seconds(
+                offense,
+                stopped_clock=False,
+                kind="pass" if is_pass else "run",
+            )
+        )
         if target_yardline >= 100:
             self._event(
                 "scrimmage_play",
