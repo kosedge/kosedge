@@ -97,6 +97,22 @@ def _exclusive_rz_rush_config() -> ClockPlayConfig:
     )
 
 
+def _rz_fourth_decision_config() -> ClockPlayConfig:
+    return ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 1.0,
+                    "go": 0.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -274,6 +290,27 @@ def test_fourth_down_go_bypasses_rush_transition() -> None:
     simulator._resolve_scrimmage_play("home")
 
     assert simulator.state.event_counts["fourth_down_go"] == 1
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+
+
+def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=1,
+        config=_rz_fourth_decision_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=2,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_field_goal"] == 1
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
 
 

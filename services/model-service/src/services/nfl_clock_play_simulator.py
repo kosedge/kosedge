@@ -140,6 +140,18 @@ def rz_rush_state_key(
     )
 
 
+def rz_fourth_decision_state_key(
+    *, yardline: int, distance: int, goal_to_go: bool
+) -> str:
+    return "|".join(
+        (
+            rz_rush_field_bucket(yardline),
+            rz_rush_distance_bucket(distance),
+            "gtg" if goal_to_go else "non_gtg",
+        )
+    )
+
+
 @dataclass(frozen=True)
 class ClockPlayTeamInput:
     """Synthetic or train-only team-strength inputs for one game path."""
@@ -188,6 +200,8 @@ class ClockPlayConfig:
     clock_flow_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_rush_transition_enabled: bool = False
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
+    red_zone_fourth_decision_enabled: bool = False
+    red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -510,6 +524,27 @@ class ClockPlaySimulator:
         score_gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         yards_to_go = self.state.distance
         fg_distance = 117 - self.state.yardline
+        if (
+            self.config.red_zone_fourth_decision_enabled
+            and self.state.yardline >= 80
+        ):
+            priors = self.config.red_zone_fourth_decision_priors
+            buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+            fallback = priors.get("default") if isinstance(priors, Mapping) else None
+            state_key = rz_fourth_decision_state_key(
+                yardline=self.state.yardline,
+                distance=yards_to_go,
+                goal_to_go=yards_to_go >= 100 - self.state.yardline,
+            )
+            prior = (
+                buckets.get(state_key)
+                if isinstance(buckets, Mapping)
+                and isinstance(buckets.get(state_key), Mapping)
+                else fallback
+            )
+            if not isinstance(prior, Mapping):
+                raise ValueError("Red-zone fourth-down decision requires train-only priors")
+            return self._sample_weighted(prior["action_probabilities"])
         if self._is_endgame() and score_gap < 0:
             if score_gap >= -3 and fg_distance <= self.config.field_goal_max_distance:
                 return "field_goal"
