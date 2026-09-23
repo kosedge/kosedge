@@ -85,7 +85,13 @@ def main() -> None:
                 scores["blocked_return"] += int(td)
 
             yardline_100 = _number(p.get("yardline_100"))
-            if yardline_100 is not None and yardline_100 >= 90:
+            yards_gained = _number(p.get("yards_gained"))
+            if (
+                yardline_100 is not None
+                and yards_gained is not None
+                and yardline_100 >= 90
+                and yards_gained <= -(100 - yardline_100)
+            ):
                 bucket = "own_1_5" if yardline_100 >= 95 else "own_6_10"
                 safety_buckets[bucket]["opportunities"] += 1
                 safety_buckets[bucket]["scores"] += int(_is_one(p.get("safety")))
@@ -120,7 +126,7 @@ def main() -> None:
             "kickoff_return": "kickoff branches to ordinary receiving possession or return TD",
             "punt_return": "punt branches to ordinary receiving possession or return TD",
             "blocked_return": "blocked kick opportunity branches to ordinary recovery or return TD",
-            "safety": "backed-up offensive state can score safety only after crossing own goal line",
+            "safety": "backed-up play with yards_gained crossing the offense's goal line can score safety",
         },
         "priors": priors,
     }
