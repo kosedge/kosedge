@@ -1,0 +1,27 @@
+{
+  "packet_id": "nfl-r11-r13-provenance-20260920",
+  "lane": "provenance_reproducibility_only",
+  "as_of": "2026-09-20",
+  "model_behavior_edited": false,
+  "deploy_push_merge_promotion": false,
+  "holdout_executed": false,
+  "verdict": "FAIL_CLOSED",
+  "exact_reproduction_established": false,
+  "reason": "R11 and R13 are not bound to a git commit, worktree, runner, config, data hash, seed, command, calibration artifact, or key-3/key-7/OT/MAE/total metric set in any source this agent could read. Exact reproduction cannot be established without inventing facts.",
+  "slots": {
+    "R11": "UNBOUND",
+    "R13": "UNBOUND",
+    "R14": "UNBOUND"
+  },
+  "frozen_gate_set": "UNBOUND_DIMENSIONS_ONLY",
+  "cert_runner": "scripts/nfl/certify_r11_vs_r14.py",
+  "cert_runner_default": "prepare_only_fail_closed",
+  "holdout_execution": "refused",
+  "do_not_alias": [
+    "pe_drive_poss_v1",
+    "pe_drive_poss_v2",
+    "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    "153b6a884a8e8a66336fcfc3fa9907742ae978c3",
+    "docs/NFL_ENTERPRISE_GATES.md floors"
+  ]
+}
