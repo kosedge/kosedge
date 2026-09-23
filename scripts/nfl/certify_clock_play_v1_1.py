@@ -61,6 +61,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "Fourth-down continuation",
         ),
         ("clock_flow_priors_path", "clock_flow_priors", "Clock-flow"),
+        (
+            "red_zone_rush_transition_priors_path",
+            "red_zone_rush_transition_priors",
+            "Red-zone rush transition",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
