@@ -15,6 +15,7 @@ This document provides essential guidance for AI coding agents working within th
 - **Running the Application**: Use `npm run dev` to start the development server. Ensure that the backend service is also running for full functionality.
 - **Testing**: Implement tests in the `model-service` directory. Use pytest for Python tests and Jest for JavaScript tests.
 - **Debugging**: Utilize console logs and the built-in debugging tools in VS Code. For backend issues, check FastAPI logs.
+- **Isolated NFL Experiments**: For the bounded R14 NFL experiment, start from a clean isolated NFL worktree/branch based on the frozen R11 baseline. Reuse an existing clean NFL worktree if present; otherwise create a new isolated one. Do not write the experiment onto unrelated branches such as `feat/cfb-p0-p1-warehouse-spine`, and confirm the exact R11 baseline plus simulator surface before resuming implementation.
 
 ## Project-Specific Conventions
 
