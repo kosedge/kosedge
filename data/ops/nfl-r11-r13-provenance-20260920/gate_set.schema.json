@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kosedge://nfl-r11-r13-provenance/gate_set.schema.json",
+  "title": "Frozen R11 vs R14 certification gate set",
+  "description": "Comparison dimensions requested for R11 vs R14. Thresholds must be filed from a frozen source — they are not invented here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gate_set_id",
+    "status",
+    "execute_holdout",
+    "dimensions",
+    "thresholds_source",
+    "notes"
+  ],
+  "properties": {
+    "gate_set_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["BOUND", "UNBOUND_DIMENSIONS_ONLY"]
+    },
+    "execute_holdout": { "type": "boolean" },
+    "dimensions": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "requested", "threshold", "threshold_source"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": ["key_3", "key_7", "ot", "mae", "total"]
+          },
+          "requested": { "type": "boolean" },
+          "threshold": { "type": ["number", "null"] },
+          "threshold_source": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "thresholds_source": { "type": ["string", "null"] },
+    "notes": { "type": "string" }
+  }
+}
