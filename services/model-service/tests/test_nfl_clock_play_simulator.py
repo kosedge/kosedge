@@ -245,6 +245,18 @@ def test_clock_flow_uses_train_prior_by_play_kind() -> None:
     assert simulator._play_seconds("home", stopped_clock=False, kind="punt") == 30.0
 
 
+def test_clock_flow_runtime_scale_changes_elapsed_time_only() -> None:
+    config = _clock_flow_config()
+    scaled = ClockPlayConfig(
+        clock_flow_enabled=True,
+        clock_flow_runtime_scale=0.5,
+        clock_flow_priors=config.clock_flow_priors,
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=4, config=scaled)
+
+    assert simulator._play_seconds("home", stopped_clock=False, kind="pass") == 13.5
+
+
 def test_non_fourth_red_zone_rush_uses_rush_transition_only() -> None:
     for seed in range(1, 100):
         simulator = ClockPlaySimulator(
