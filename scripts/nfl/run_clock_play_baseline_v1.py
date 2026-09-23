@@ -62,27 +62,41 @@ def _load_json_object(path: Path) -> dict[str, Any]:
     return payload
 
 
-def _load_continuation_priors(
+def _load_transition_priors(
     config_payload: Mapping[str, Any],
-) -> tuple[dict[str, Any], dict[str, str] | None]:
+) -> tuple[dict[str, Any], dict[str, dict[str, str]]]:
     engine_config = dict(
         config_payload.get("engine_config")
         if isinstance(config_payload.get("engine_config"), Mapping)
         else {}
     )
-    raw_path = config_payload.get("fourth_down_continuation_priors_path")
-    if raw_path is None:
-        return engine_config, None
-    path = (ROOT / str(raw_path)).resolve()
-    priors_payload = _load_json_object(path)
-    priors = priors_payload.get("priors")
-    if not isinstance(priors, Mapping):
-        raise SystemExit("Fourth-down continuation priors need a priors object")
-    engine_config["fourth_down_continuation_priors"] = dict(priors)
-    return engine_config, {
-        "path": path.relative_to(ROOT).as_posix(),
-        "sha256": _sha256_file(path),
-    }
+    receipts: dict[str, dict[str, str]] = {}
+    for config_key, engine_key, label in (
+        (
+            "fourth_down_continuation_priors_path",
+            "fourth_down_continuation_priors",
+            "fourth_down_continuation",
+        ),
+        (
+            "red_zone_transition_priors_path",
+            "red_zone_transition_priors",
+            "red_zone_transition",
+        ),
+    ):
+        raw_path = config_payload.get(config_key)
+        if raw_path is None:
+            continue
+        path = (ROOT / str(raw_path)).resolve()
+        priors_payload = _load_json_object(path)
+        priors = priors_payload.get("priors")
+        if not isinstance(priors, Mapping):
+            raise SystemExit(f"{label} priors need a priors object")
+        engine_config[engine_key] = dict(priors)
+        receipts[label] = {
+            "path": path.relative_to(ROOT).as_posix(),
+            "sha256": _sha256_file(path),
+        }
+    return engine_config, receipts
 
 
 def _as_team(raw: Mapping[str, Any]) -> ClockPlayTeamInput:
@@ -226,7 +240,7 @@ def run(
     config_payload = _load_json_object(config_path)
     inputs_payload = _load_json_object(inputs_path)
     artifact_id = str(config_payload.get("artifact_id") or ARTIFACT_ID)
-    engine_config, continuation_priors_receipt = _load_continuation_priors(
+    engine_config, transition_priors_receipt = _load_transition_priors(
         config_payload
     )
     config = ClockPlayConfig.from_mapping(engine_config)
@@ -405,8 +419,8 @@ def run(
             "timestamp_in_artifacts": False,
         },
     }
-    if continuation_priors_receipt is not None:
-        receipt["fourth_down_continuation_priors"] = continuation_priors_receipt
+    for label, prior_receipt in transition_priors_receipt.items():
+        receipt[f"{label}_priors"] = prior_receipt
     _write_json(output_dir / "receipt.json", receipt)
     checksums = _write_checksum_files(output_dir)
     return {
