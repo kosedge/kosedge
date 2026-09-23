@@ -78,6 +78,16 @@ def _load_clock_play_priors(
             "fourth_down_continuation",
         ),
         ("clock_flow_priors_path", "clock_flow_priors", "clock_flow"),
+        (
+            "red_zone_rush_transition_priors_path",
+            "red_zone_rush_transition_priors",
+            "red_zone_rush_transition",
+        ),
+        (
+            "red_zone_fourth_decision_priors_path",
+            "red_zone_fourth_decision_priors",
+            "red_zone_fourth_decision",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:

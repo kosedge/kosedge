@@ -58,6 +58,61 @@ def _clock_flow_config() -> ClockPlayConfig:
     )
 
 
+def _rz_rush_transition_config(*, outcome: str, yards: int = 1) -> ClockPlayConfig:
+    probabilities = {
+        "touchdown": 0.0,
+        "turnover": 0.0,
+        "loss": 0.0,
+        "zero": 0.0,
+        "one_two": 0.0,
+        "short_gain": 0.0,
+        "first_down": 0.0,
+    }
+    probabilities[outcome] = 1.0
+    return ClockPlayConfig(
+        red_zone_rush_transition_enabled=True,
+        red_zone_rush_transition_priors={
+            "default": {
+                "bucket": "unit_test",
+                "outcome_probabilities": probabilities,
+                "yard_value_weights": {
+                    name: {str(yards): 1.0} for name in probabilities
+                },
+            }
+        },
+    )
+
+
+def _exclusive_rz_rush_config() -> ClockPlayConfig:
+    continuation = _continuation_config(
+        conversion_rate=1.0,
+        td_given_conversion=1.0,
+    ).fourth_down_continuation_priors
+    rush = _rz_rush_transition_config(outcome="first_down").red_zone_rush_transition_priors
+    return ClockPlayConfig(
+        fourth_down_continuation_enabled=True,
+        fourth_down_continuation_priors=continuation,
+        red_zone_rush_transition_enabled=True,
+        red_zone_rush_transition_priors=rush,
+    )
+
+
+def _rz_fourth_decision_config() -> ClockPlayConfig:
+    return ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 1.0,
+                    "go": 0.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -188,6 +243,129 @@ def test_clock_flow_uses_train_prior_by_play_kind() -> None:
         == 24.0
     )
     assert simulator._play_seconds("home", stopped_clock=False, kind="punt") == 30.0
+
+
+def test_non_fourth_red_zone_rush_uses_rush_transition_only() -> None:
+    for seed in range(1, 100):
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=seed,
+            config=_rz_rush_transition_config(outcome="first_down", yards=4),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=85,
+            down=1,
+            distance=3,
+        )
+        simulator._resolve_scrimmage_play("home")
+        if simulator.state.event_counts["red_zone_rush_transition"]:
+            break
+    else:  # pragma: no cover - protects the route selection receipt
+        raise AssertionError("No deterministic red-zone rush route found")
+
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 1
+    assert simulator.state.event_counts["fourth_down_decision"] == 0
+    assert simulator.state.down == 1
+
+
+def test_fourth_down_go_bypasses_rush_transition() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=1,
+        config=_exclusive_rz_rush_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=99,
+        down=4,
+        distance=1,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_go"] == 1
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+
+
+def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=1,
+        config=_rz_fourth_decision_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=2,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_field_goal"] == 1
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+
+
+def test_non_fourth_red_zone_pass_bypasses_rush_transition() -> None:
+    for seed in range(1, 100):
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=seed,
+            config=_rz_rush_transition_config(outcome="touchdown"),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=85,
+            down=1,
+            distance=10,
+        )
+        simulator._resolve_scrimmage_play("home")
+        scrimmage = next(
+            (
+                event
+                for event in simulator.events
+                if event["event_type"] == "scrimmage_play"
+            ),
+            None,
+        )
+        if scrimmage is not None and scrimmage.get("play_type") == "pass":
+            break
+    else:  # pragma: no cover - protects the route selection receipt
+        raise AssertionError("No deterministic red-zone pass route found")
+
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+    assert simulator.state.event_counts["fourth_down_decision"] == 0
+
+
+def test_outside_red_zone_rush_bypasses_rush_transition() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=1,
+        config=_rz_rush_transition_config(outcome="touchdown"),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=40,
+        down=1,
+        distance=10,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
 
 
 def test_fourth_down_continuation_conversion_resets_first_down() -> None:
