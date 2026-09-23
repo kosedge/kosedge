@@ -38,6 +38,19 @@ def _game_seconds(payload: Mapping[str, Any]) -> float | None:
     return (4 - int(quarter)) * 900 + seconds
 
 
+def _drive_top_seconds(value: Any) -> float | None:
+    numeric = _number(value)
+    if numeric is not None:
+        return numeric
+    if isinstance(value, str) and ":" in value:
+        left, right = value.split(":", 1)
+        try:
+            return float(int(left) * 60 + int(right))
+        except ValueError:
+            return None
+    return None
+
+
 def _kind(payload: Mapping[str, Any]) -> str:
     if _is_one(payload.get("incomplete_pass")):
         return "incomplete_pass"
@@ -105,6 +118,8 @@ def main() -> None:
     moments: defaultdict[str, Moments] = defaultdict(Moments)
     observed_kinds: defaultdict[str, int] = defaultdict(int)
     prior_core: dict[tuple[str, int], tuple[str, float]] = {}
+    drive_core_counts: defaultdict[tuple[str, int], int] = defaultdict(int)
+    drive_top_seconds: dict[tuple[str, int], float] = {}
     games: set[str] = set()
     rows_examined = 0
 
@@ -134,6 +149,10 @@ def main() -> None:
             if seconds is None:
                 continue
             key = (game, int(drive))
+            drive_core_counts[key] += 1
+            top = _drive_top_seconds(payload.get("drive_time_of_possession"))
+            if top is not None:
+                drive_top_seconds[key] = max(drive_top_seconds.get(key, 0.0), top)
             previous = prior_core.get(key)
             if previous is not None:
                 kind, previous_seconds = previous
@@ -150,6 +169,14 @@ def main() -> None:
         all_samples.total += sample.total
         all_samples.squares += sample.squares
     default = all_samples.summary(28.0, 8.0)
+    default_raw_mean = float(default["mean_seconds"])
+    locked_seconds_per_snap = (
+        sum(drive_top_seconds.get(key, 0.0) for key in drive_core_counts)
+        / sum(drive_core_counts.values())
+    )
+    interval_scale = locked_seconds_per_snap / default_raw_mean
+    default["raw_mean_seconds"] = default["mean_seconds"]
+    default["mean_seconds"] = default_raw_mean * interval_scale
     kinds: dict[str, dict[str, float | int]] = {}
     for kind, moment in sorted(moments.items()):
         raw = moment.summary(
@@ -158,13 +185,13 @@ def main() -> None:
         sample_size = int(raw["sample_size"])
         raw_mean = float(raw["mean_seconds"])
         shrunk_mean = (
-            (moment.total + KIND_PARENT_PSEUDO_INTERVALS * float(default["mean_seconds"]))
+            (moment.total + KIND_PARENT_PSEUDO_INTERVALS * default_raw_mean)
             / (sample_size + KIND_PARENT_PSEUDO_INTERVALS)
         )
         kinds[kind] = {
             **raw,
             "raw_mean_seconds": raw_mean,
-            "mean_seconds": shrunk_mean,
+            "mean_seconds": shrunk_mean * interval_scale,
         }
     payload = {
         "artifact_id": "Clock-Play Clock-Flow Priors",
@@ -176,6 +203,8 @@ def main() -> None:
             "elapsed game seconds from a core snap to the next core snap in the "
             "same fixed drive; 0 < elapsed <= 90 seconds"
         ),
+        "locked_seconds_per_core_snap": locked_seconds_per_snap,
+        "within_drive_interval_scale": interval_scale,
         "runtime_mapping": {
             "pass": "pass",
             "run": "run",

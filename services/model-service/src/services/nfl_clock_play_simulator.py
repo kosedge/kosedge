@@ -756,11 +756,21 @@ class ClockPlaySimulator:
             yards += int(round(self.rng.uniform(12.0, 34.0)))
         yards = max(-12, yards)
         target_yardline = state.yardline + yards
+        gained_first_down = yards >= state.distance
+        clock_kind = (
+            "post_touchdown"
+            if target_yardline >= 100
+            else "first_down"
+            if gained_first_down
+            else "pass"
+            if is_pass
+            else "run"
+        )
         self._consume_clock(
             self._play_seconds(
                 offense,
                 stopped_clock=False,
-                kind="pass" if is_pass else "run",
+                kind=clock_kind,
             )
         )
         if target_yardline >= 100:
@@ -779,7 +789,6 @@ class ClockPlaySimulator:
             self._score_touchdown(offense, source="scrimmage_play")
             return
 
-        gained_first_down = yards >= state.distance
         if fourth_down_attempt and not gained_first_down:
             state.yardline = int(_clamp(float(state.yardline + yards), 1.0, 99.0))
             self._event(
