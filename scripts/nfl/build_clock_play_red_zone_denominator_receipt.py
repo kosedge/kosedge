@@ -10,7 +10,9 @@ from pathlib import Path
 from typing import Any, Mapping
 
 TRAIN_SEASONS = tuple(range(2013, 2024))
-CORE_PLAY_TYPES = frozenset({"pass", "run", "field_goal", "punt"})
+CORE_PLAY_TYPES = frozenset(
+    {"pass", "run", "qb_kneel", "qb_spike", "field_goal", "punt"}
+)
 
 
 def _number(value: Any) -> float | None:
