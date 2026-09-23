@@ -576,6 +576,11 @@ class ClockPlaySimulator:
         distance = state.distance
         distance_to_goal = 100 - start_yardline
 
+        self._event(
+            "fourth_down_continuation",
+            offense=offense,
+            continuation_bucket=bucket,
+        )
         self._consume_clock(self._play_seconds(offense, stopped_clock=False))
         converted = self.rng.random() < conversion_probability
         touchdown = converted and (
@@ -931,15 +936,14 @@ class ClockPlaySimulator:
             if decision == "punt":
                 self._punt(offense)
                 return
-            if (
-                self.config.red_zone_transition_enabled
-                and state.yardline >= 80
-            ):
-                self._resolve_red_zone_transition(offense)
-                return
-            if self.config.fourth_down_continuation_enabled:
-                self._resolve_fourth_down_continuation(offense)
-                return
+            if decision == "go":
+                if self.config.fourth_down_continuation_enabled:
+                    self._resolve_fourth_down_continuation(offense)
+                    return
+                if self.config.red_zone_transition_enabled:
+                    raise ValueError(
+                        "Red-zone transition requires fourth-down GO continuation"
+                    )
 
         if self.config.red_zone_transition_enabled and state.yardline >= 80:
             self._resolve_red_zone_transition(offense)

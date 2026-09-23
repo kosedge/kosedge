@@ -70,6 +70,20 @@ def _red_zone_config(*, outcome: str, yards: float = 3.0) -> ClockPlayConfig:
     )
 
 
+def _exclusive_routing_config() -> ClockPlayConfig:
+    continuation = _continuation_config(
+        conversion_rate=1.0,
+        td_given_conversion=1.0,
+    ).fourth_down_continuation_priors
+    red_zone = _red_zone_config(outcome="touchdown").red_zone_transition_priors
+    return ClockPlayConfig(
+        fourth_down_continuation_enabled=True,
+        fourth_down_continuation_priors=continuation,
+        red_zone_transition_enabled=True,
+        red_zone_transition_priors=red_zone,
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -339,6 +353,71 @@ def test_red_zone_transition_does_not_run_outside_red_zone() -> None:
     )
     simulator._resolve_scrimmage_play("home")
 
+    assert simulator.state.event_counts["red_zone_transition"] == 0
+
+
+def test_exclusive_routing_fourth_and_one_at_one_uses_fourth_go_only() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_exclusive_routing_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=40.0,
+        possession="home",
+        yardline=99,
+        down=4,
+        distance=1,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_continuation"] == 1
+    assert simulator.state.event_counts["red_zone_transition"] == 0
+    assert simulator.state.event_counts["touchdown"] == 1
+
+
+def test_exclusive_routing_opponent_fifteen_uses_red_zone_only() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_exclusive_routing_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=400.0,
+        possession="home",
+        yardline=85,
+        down=1,
+        distance=10,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_continuation"] == 0
+    assert simulator.state.event_counts["red_zone_transition"] == 1
+    assert simulator.state.event_counts["touchdown"] == 1
+
+
+def test_exclusive_routing_own_forty_uses_generic_only() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_exclusive_routing_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=400.0,
+        possession="home",
+        yardline=40,
+        down=1,
+        distance=10,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["fourth_down_continuation"] == 0
     assert simulator.state.event_counts["red_zone_transition"] == 0
 
 
