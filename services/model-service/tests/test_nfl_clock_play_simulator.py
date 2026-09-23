@@ -45,6 +45,19 @@ def _continuation_config(
     )
 
 
+def _clock_flow_config() -> ClockPlayConfig:
+    return ClockPlayConfig(
+        clock_flow_enabled=True,
+        clock_flow_priors={
+            "default": {"mean_seconds": 30.0, "stddev_seconds": 0.0},
+            "kinds": {
+                "pass": {"mean_seconds": 27.0, "stddev_seconds": 0.0},
+                "incomplete_pass": {"mean_seconds": 24.0, "stddev_seconds": 0.0},
+            },
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -164,6 +177,17 @@ def test_conventional_short_fourth_down_is_not_masked_by_field_goal_range() -> N
     )
 
     assert simulator._fourth_down_decision("home") == "go"
+
+
+def test_clock_flow_uses_train_prior_by_play_kind() -> None:
+    simulator = ClockPlaySimulator(_inputs(), seed=4, config=_clock_flow_config())
+
+    assert simulator._play_seconds("home", stopped_clock=False, kind="pass") == 27.0
+    assert (
+        simulator._play_seconds("home", stopped_clock=True, kind="incomplete_pass")
+        == 24.0
+    )
+    assert simulator._play_seconds("home", stopped_clock=False, kind="punt") == 30.0
 
 
 def test_fourth_down_continuation_conversion_resets_first_down() -> None:
