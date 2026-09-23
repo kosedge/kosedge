@@ -52,6 +52,19 @@ def _as_game(raw: Mapping[str, Any]) -> ClockPlayGameInputs:
     )
 
 
+def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
+    engine = dict(config_payload.get("engine_config") or {})
+    raw_path = config_payload.get("fourth_down_continuation_priors_path")
+    if raw_path is None:
+        return engine
+    priors_payload = json.loads((ROOT / str(raw_path)).read_text(encoding="utf-8"))
+    priors = priors_payload.get("priors")
+    if not isinstance(priors, Mapping):
+        raise SystemExit("Fourth-down continuation priors need a priors object")
+    engine["fourth_down_continuation_priors"] = dict(priors)
+    return engine
+
+
 def _per_game(count: float, games: int) -> float:
     return count / games if games else 0.0
 
@@ -354,7 +367,7 @@ def main() -> None:
     inputs_payload = json.loads(args.inputs.read_text(encoding="utf-8"))
     run_spec = config_payload["freeze_run"]
     candidate, games_simulated = _simulation_metrics(
-        config=ClockPlayConfig.from_mapping(config_payload["engine_config"]),
+        config=ClockPlayConfig.from_mapping(_engine_config(config_payload)),
         cases=inputs_payload["cases"],
         root_seeds=run_spec["root_seeds"],
         replicates=int(run_spec["replicates_per_case"]),

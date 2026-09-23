@@ -62,6 +62,29 @@ def _load_json_object(path: Path) -> dict[str, Any]:
     return payload
 
 
+def _load_continuation_priors(
+    config_payload: Mapping[str, Any],
+) -> tuple[dict[str, Any], dict[str, str] | None]:
+    engine_config = dict(
+        config_payload.get("engine_config")
+        if isinstance(config_payload.get("engine_config"), Mapping)
+        else {}
+    )
+    raw_path = config_payload.get("fourth_down_continuation_priors_path")
+    if raw_path is None:
+        return engine_config, None
+    path = (ROOT / str(raw_path)).resolve()
+    priors_payload = _load_json_object(path)
+    priors = priors_payload.get("priors")
+    if not isinstance(priors, Mapping):
+        raise SystemExit("Fourth-down continuation priors need a priors object")
+    engine_config["fourth_down_continuation_priors"] = dict(priors)
+    return engine_config, {
+        "path": path.relative_to(ROOT).as_posix(),
+        "sha256": _sha256_file(path),
+    }
+
+
 def _as_team(raw: Mapping[str, Any]) -> ClockPlayTeamInput:
     return ClockPlayTeamInput(
         offense_rating=float(raw.get("offense_rating", 1.0)),
@@ -203,11 +226,10 @@ def run(
     config_payload = _load_json_object(config_path)
     inputs_payload = _load_json_object(inputs_path)
     artifact_id = str(config_payload.get("artifact_id") or ARTIFACT_ID)
-    config = ClockPlayConfig.from_mapping(
-        config_payload.get("engine_config")
-        if isinstance(config_payload.get("engine_config"), Mapping)
-        else {}
+    engine_config, continuation_priors_receipt = _load_continuation_priors(
+        config_payload
     )
+    config = ClockPlayConfig.from_mapping(engine_config)
     run_spec = config_payload.get("freeze_run")
     if not isinstance(run_spec, Mapping):
         raise SystemExit("Config needs a freeze_run object")
@@ -383,6 +405,8 @@ def run(
             "timestamp_in_artifacts": False,
         },
     }
+    if continuation_priors_receipt is not None:
+        receipt["fourth_down_continuation_priors"] = continuation_priors_receipt
     _write_json(output_dir / "receipt.json", receipt)
     checksums = _write_checksum_files(output_dir)
     return {
