@@ -14,6 +14,7 @@ from typing import Any, Mapping
 TRAIN_SEASONS = frozenset(range(2013, 2024))
 CORE_TYPES = frozenset({"pass", "run", "qb_kneel", "qb_spike", "field_goal", "punt"})
 MAX_INTERVAL_SECONDS = 90.0
+KIND_PARENT_PSEUDO_INTERVALS = 100.0
 
 
 def _number(value: Any) -> float | None:
@@ -149,12 +150,22 @@ def main() -> None:
         all_samples.total += sample.total
         all_samples.squares += sample.squares
     default = all_samples.summary(28.0, 8.0)
-    kinds = {
-        kind: moment.summary(
+    kinds: dict[str, dict[str, float | int]] = {}
+    for kind, moment in sorted(moments.items()):
+        raw = moment.summary(
             float(default["mean_seconds"]), float(default["stddev_seconds"])
         )
-        for kind, moment in sorted(moments.items())
-    }
+        sample_size = int(raw["sample_size"])
+        raw_mean = float(raw["mean_seconds"])
+        shrunk_mean = (
+            (moment.total + KIND_PARENT_PSEUDO_INTERVALS * float(default["mean_seconds"]))
+            / (sample_size + KIND_PARENT_PSEUDO_INTERVALS)
+        )
+        kinds[kind] = {
+            **raw,
+            "raw_mean_seconds": raw_mean,
+            "mean_seconds": shrunk_mean,
+        }
     payload = {
         "artifact_id": "Clock-Play Clock-Flow Priors",
         "train_window": "2013-2023 regular season",
@@ -174,6 +185,10 @@ def main() -> None:
             "field_goal": "field_goal",
             "fourth_down_go": "fourth_down_go",
             "fallback": "default",
+        },
+        "shrinkage": {
+            "method": "conditional clock-interval mean shrinkage to all within-drive core intervals",
+            "kind_parent_pseudo_intervals": KIND_PARENT_PSEUDO_INTERVALS,
         },
         "observed_kind_rows": dict(sorted(observed_kinds.items())),
         "priors": {"default": default, "kinds": kinds},
