@@ -357,6 +357,10 @@ def documentation() -> Dict[str, Any]:
     return {
         "engine_version": ENGINE_VERSION,
         "calibration_tag": CALIBRATION_TAG,
+        "qb_feature_contract_version": __import__(
+            "src.services.cfb_season_engine.qb_feature_contract",
+            fromlist=["QB_FEATURE_CONTRACT_VERSION"],
+        ).QB_FEATURE_CONTRACT_VERSION,
         "fidelity": "approximate",
         "assumptions": [
             "Historical team ratings alone are insufficient for CFB 2026.",

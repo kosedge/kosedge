@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-09-11T23:50:00Z",
+  "decision": "STOP",
+  "train0_n_lake": 0,
+  "gate": 700,
+  "deficit": 700,
+  "reason_codes": ["LAKE_NOT_MOUNTED", "NO_LAKE_MATCH"],
+  "checksum_in_repo": null,
+  "authoritative_path": "/Volumes/KosEdgeData/clean/odds/cfb/snapshots-2022.parquet",
+  "sidecar_inventory": "/Volumes/KosEdgeData/clean/odds/cfb/inventory.json",
+  "export_as_of": "2026-08-13",
+  "export_source": "odds_snapshots postgres (the-odds-api-historical-enterprise)",
+  "created_on": "developer-mac",
+  "created_by": [
+    "scripts/odds/enterprise_training_pull.py → 127.0.0.1/kosedge (cfb:mainlines 2026-07-28)",
+    "export_odds_lake() via scripts/cfb/ingest_historical_warehouse.py (2026-08-13)"
+  ],
+  "dsn_provenance": "postgresql://ryankos:postgres@127.0.0.1:5432/kosedge (LOCAL_DSN; Mac /Users/ryankos/kosedge)",
+  "not_railway": true,
+  "pr_that_omitted_parquet": 215,
+  "documented_counts": {
+    "snaps_2022": 28322,
+    "close_spread": 838,
+    "lake_primary": 717,
+    "games": 900,
+    "fcs_flagged": 119
+  },
+  "funnel": {
+    "raw_snaps": 0,
+    "valid_pregame_closes": 0,
+    "matched_games": 0,
+    "fbs_fbs": 0,
+    "actual_available": 0,
+    "train0_close_actual_w1_14": 0
+  },
+  "scored_frozen_140": false,
+  "recalibrated": false,
+  "opened_2025": false,
+  "play": false
+}
