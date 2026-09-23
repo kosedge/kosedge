@@ -330,7 +330,13 @@ def run(
                 for trace in trace_samples.values()
             ),
             "touchdown_to_try": aggregate_transitions["touchdown_to_try"]
-            == aggregate_events["touchdown"],
+            == (
+                aggregate_events["touchdown"]
+                + aggregate_events["defensive_return_touchdown"]
+                + aggregate_events["kickoff_return_touchdown"]
+                + aggregate_events["punt_return_touchdown"]
+                + aggregate_events["blocked_return_touchdown"]
+            ),
             "post_score_kickoff": aggregate_transitions["field_goal_to_kickoff"] > 0
             and aggregate_transitions["try_to_kickoff"] > 0,
             "timeout_endgame_logic": aggregate_events["timeout"] > 0,
