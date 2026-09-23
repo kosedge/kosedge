@@ -1,0 +1,5832 @@
+{
+  "artifact_id": "Clock-Play Red-Zone Transition Priors",
+  "eligible_red_zone_scrimmage_plays": 52365,
+  "historical_games_with_red_zone_scrimmage": 2863,
+  "historical_rows_examined": 507116,
+  "historical_source": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+  "marginal_samples": {
+    "down:1": {
+      "outcome_probabilities": {
+        "continue": 0.7606172140430351,
+        "first_down": 0.04374292185730464,
+        "touchdown": 0.1826632691581729,
+        "turnover": 0.012976594941487354,
+        "turnover_on_downs": 0.0
+      },
+      "outcomes": {
+        "continue": 16119,
+        "first_down": 927,
+        "touchdown": 3871,
+        "turnover": 275,
+        "turnover_on_downs": 0
+      },
+      "plays": 21192
+    },
+    "down:2": {
+      "outcome_probabilities": {
+        "continue": 0.6532276330690827,
+        "first_down": 0.1369762174405436,
+        "touchdown": 0.19343148357870896,
+        "turnover": 0.01636466591166478,
+        "turnover_on_downs": 0.0
+      },
+      "outcomes": {
+        "continue": 11536,
+        "first_down": 2419,
+        "touchdown": 3416,
+        "turnover": 289,
+        "turnover_on_downs": 0
+      },
+      "plays": 17660
+    },
+    "down:3": {
+      "outcome_probabilities": {
+        "continue": 0.5698300521622076,
+        "first_down": 0.1755847215211173,
+        "touchdown": 0.2260642773010264,
+        "turnover": 0.028520949015648663,
+        "turnover_on_downs": 0.0
+      },
+      "outcomes": {
+        "continue": 6773,
+        "first_down": 2087,
+        "touchdown": 2687,
+        "turnover": 339,
+        "turnover_on_downs": 0
+      },
+      "plays": 11886
+    },
+    "down:4": {
+      "outcome_probabilities": {
+        "continue": 0.0006146281499692685,
+        "first_down": 0.23355869698832207,
+        "touchdown": 0.26920712968653965,
+        "turnover": 0.0430239704978488,
+        "turnover_on_downs": 0.4535955746773202
+      },
+      "outcomes": {
+        "continue": 1,
+        "first_down": 380,
+        "touchdown": 438,
+        "turnover": 70,
+        "turnover_on_downs": 738
+      },
+      "plays": 1627
+    },
+    "field:1": {
+      "outcome_probabilities": {
+        "continue": 0.3939393939393939,
+        "first_down": 0.0015278838808250573,
+        "touchdown": 0.5530939648586708,
+        "turnover": 0.0142602495543672,
+        "turnover_on_downs": 0.03717850776674306
+      },
+      "outcomes": {
+        "continue": 1547,
+        "first_down": 6,
+        "touchdown": 2172,
+        "turnover": 56,
+        "turnover_on_downs": 146
+      },
+      "plays": 3927
+    },
+    "field:10-6": {
+      "outcome_probabilities": {
+        "continue": 0.6967351060249074,
+        "first_down": 0.07648939750925614,
+        "touchdown": 0.19530461124200607,
+        "turnover": 0.019606193200942444,
+        "turnover_on_downs": 0.011864692022887917
+      },
+      "outcomes": {
+        "continue": 8280,
+        "first_down": 909,
+        "touchdown": 2321,
+        "turnover": 233,
+        "turnover_on_downs": 141
+      },
+      "plays": 11884
+    },
+    "field:20-11": {
+      "outcome_probabilities": {
+        "continue": 0.7075503045966403,
+        "first_down": 0.17160790105224294,
+        "touchdown": 0.09204356654975078,
+        "turnover": 0.01857116485139376,
+        "turnover_on_downs": 0.01022706294997231
+      },
+      "outcomes": {
+        "continue": 19164,
+        "first_down": 4648,
+        "touchdown": 2493,
+        "turnover": 503,
+        "turnover_on_downs": 277
+      },
+      "plays": 27085
+    },
+    "field:5-2": {
+      "outcome_probabilities": {
+        "continue": 0.5742950681170134,
+        "first_down": 0.02640194318301827,
+        "touchdown": 0.3618122293800824,
+        "turnover": 0.019115006864505228,
+        "turnover_on_downs": 0.018375752455380714
+      },
+      "outcomes": {
+        "continue": 5438,
+        "first_down": 250,
+        "touchdown": 3426,
+        "turnover": 181,
+        "turnover_on_downs": 174
+      },
+      "plays": 9469
+    },
+    "goal_to_go:no": {
+      "outcome_probabilities": {
+        "continue": 0.6688197870682939,
+        "first_down": 0.185633601661906,
+        "touchdown": 0.11334718254998702,
+        "turnover": 0.018534146974811736,
+        "turnover_on_downs": 0.013665281745001298
+      },
+      "outcomes": {
+        "continue": 20605,
+        "first_down": 5719,
+        "touchdown": 3492,
+        "turnover": 571,
+        "turnover_on_downs": 421
+      },
+      "plays": 30808
+    },
+    "goal_to_go:yes": {
+      "outcome_probabilities": {
+        "continue": 0.6412766154845294,
+        "first_down": 0.004360532541633808,
+        "touchdown": 0.32100941689474416,
+        "turnover": 0.01864823491209352,
+        "turnover_on_downs": 0.01470520016699912
+      },
+      "outcomes": {
+        "continue": 13824,
+        "first_down": 94,
+        "touchdown": 6920,
+        "turnover": 402,
+        "turnover_on_downs": 317
+      },
+      "plays": 21557
+    }
+  },
+  "outcome_definition": {
+    "continue": "all remaining valid red-zone scrimmage transitions",
+    "first_down": "first_down flag after TD/turnover outcomes are removed",
+    "population": "pass/run/qb kneel/qb spike at yardline_100 <= 20",
+    "touchdown": "offensive touchdown",
+    "turnover": "interception or lost fumble",
+    "turnover_on_downs": "fourth_down_failed on fourth down"
+  },
+  "priors": {
+    "buckets": {
+      "late_trailing|10-6|goal_to_go|1|6+": {
+        "bucket": "late_trailing|10-6|goal_to_go|1|6+",
+        "outcome_probabilities": {
+          "continue": 0.7387731459670869,
+          "first_down": 0.008617159847405045,
+          "touchdown": 0.20745707083944095,
+          "turnover": 0.04500687161166511,
+          "turnover_on_downs": 0.0001457517344020258
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7396226415094339,
+            "first_down": 0.007547169811320755,
+            "touchdown": 0.20754716981132076,
+            "turnover": 0.045283018867924525,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 196,
+            "first_down": 2,
+            "touchdown": 55,
+            "turnover": 12,
+            "turnover_on_downs": 0
+          },
+          "plays": 265
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.8847713919776002,
+            "stddev": 3.307614144457161
+          },
+          "first_down": {
+            "mean": 5.825104452078238,
+            "stddev": 0.25
+          },
+          "touchdown": {
+            "mean": 7.764894509474938,
+            "stddev": 1.2517755984042531
+          },
+          "turnover": {
+            "mean": -0.04758098283278139,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|goal_to_go|2|6+": {
+        "bucket": "late_trailing|10-6|goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.762618687041679,
+          "first_down": 0.0034167208960166878,
+          "touchdown": 0.21233718374208643,
+          "turnover": 0.0211936322972934,
+          "turnover_on_downs": 0.00043377602292453383
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7659574468085106,
+            "first_down": 0.0,
+            "touchdown": 0.2127659574468085,
+            "turnover": 0.02127659574468085,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 108,
+            "first_down": 0,
+            "touchdown": 30,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 141
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.639626356152736,
+            "stddev": 3.7505372271789836
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 7.347152146383801,
+            "stddev": 1.406729856400613
+          },
+          "turnover": {
+            "mean": 0.504053899737353,
+            "stddev": 2.8284271247461903
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|goal_to_go|3|6+": {
+        "bucket": "late_trailing|10-6|goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.6186328041654436,
+          "first_down": 0.008565529468486278,
+          "touchdown": 0.29929283177317806,
+          "turnover": 0.07242138220208814,
+          "turnover_on_downs": 0.0010874523908038659
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6153846153846154,
+            "first_down": 0.0,
+            "touchdown": 0.3076923076923077,
+            "turnover": 0.07692307692307693,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 48,
+            "first_down": 0,
+            "touchdown": 24,
+            "turnover": 6,
+            "turnover_on_downs": 0
+          },
+          "plays": 78
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.3096263900818201,
+            "stddev": 3.442988043352266
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 7.552914593311768,
+            "stddev": 1.3686723088047383
+          },
+          "turnover": {
+            "mean": -0.486817543050108,
+            "stddev": 1.8633899812498247
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|goal_to_go|4|6+": {
+        "bucket": "late_trailing|10-6|goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.17590161349159777,
+          "first_down": 0.029699267455536256,
+          "touchdown": 0.34094874845491935,
+          "turnover": 0.05728983412757316,
+          "turnover_on_downs": 0.39616053647037347
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.39285714285714285,
+            "turnover": 0.07142857142857142,
+            "turnover_on_downs": 0.5357142857142857
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 11,
+            "turnover": 2,
+            "turnover_on_downs": 15
+          },
+          "plays": 28
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 7.189324107140828,
+            "stddev": 1.4993111365882437
+          },
+          "turnover": {
+            "mean": -1.8916489151733478,
+            "stddev": 8.0
+          },
+          "turnover_on_downs": {
+            "mean": -0.6539972899728996,
+            "stddev": 3.2345358588555206
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|1|3-5": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|1|3-5",
+        "outcome_probabilities": {
+          "continue": 0.6779697472194938,
+          "first_down": 0.1417892177512318,
+          "touchdown": 0.1548024133238312,
+          "turnover": 0.014466264710342661,
+          "turnover_on_downs": 0.0109723569951006
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.75,
+            "first_down": 0.25,
+            "touchdown": 0.0,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 3,
+            "first_down": 1,
+            "touchdown": 0,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 4
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.4132936488726664,
+            "stddev": 2.054804667656325
+          },
+          "first_down": {
+            "mean": 7.6658405728539485,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 6.657702650787553,
+            "stddev": 5.494068783923129
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|2|1": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.4946359477864135,
+          "first_down": 0.19759247031839608,
+          "touchdown": 0.26899902515524954,
+          "turnover": 0.03596883333447306,
+          "turnover_on_downs": 0.0028037234054677927
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.1111111111111111,
+            "first_down": 0.4444444444444444,
+            "touchdown": 0.3333333333333333,
+            "turnover": 0.1111111111111111,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 1,
+            "first_down": 4,
+            "touchdown": 3,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 9
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.0586241877222955,
+            "stddev": 2.3249974678873158
+          },
+          "first_down": {
+            "mean": 6.011042887956703,
+            "stddev": 2.23606797749979
+          },
+          "touchdown": {
+            "mean": 7.391788152671343,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.13549428314491263,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|2|2": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.6072700490917532,
+          "first_down": 0.11765265856043619,
+          "touchdown": 0.2622740495263683,
+          "turnover": 0.010069612501111231,
+          "turnover_on_downs": 0.002733630320331098
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6,
+            "first_down": 0.1,
+            "touchdown": 0.3,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 6,
+            "first_down": 1,
+            "touchdown": 3,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 10
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.8065708096931775,
+            "stddev": 0.5773502691896257
+          },
+          "first_down": {
+            "mean": 6.388113429448584,
+            "stddev": 1.958241748048911
+          },
+          "touchdown": {
+            "mean": 7.6140103748935655,
+            "stddev": 0.4714045207910233
+          },
+          "turnover": {
+            "mean": -0.14452723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|2|3-5": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5953151812677292,
+          "first_down": 0.14706221730935526,
+          "touchdown": 0.24986306031901107,
+          "turnover": 0.006102795455218927,
+          "turnover_on_downs": 0.0016567456486855138
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5833333333333334,
+            "first_down": 0.16666666666666666,
+            "touchdown": 0.25,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 21,
+            "first_down": 6,
+            "touchdown": 9,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 36
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.581610750098798,
+            "stddev": 1.6509462688914014
+          },
+          "first_down": {
+            "mean": 6.486181660532255,
+            "stddev": 1.105541596785136
+          },
+          "touchdown": {
+            "mean": 7.4605077811701745,
+            "stddev": 1.165343164633502
+          },
+          "turnover": {
+            "mean": -0.14452723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|2|6+": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.6768983928470513,
+          "first_down": 0.060755841678974555,
+          "touchdown": 0.25395019641073335,
+          "turnover": 0.006603024590892611,
+          "turnover_on_downs": 0.001792544472348261
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7419354838709677,
+            "first_down": 0.0,
+            "touchdown": 0.25806451612903225,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 23,
+            "first_down": 0,
+            "touchdown": 8,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 31
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.787841763251493,
+            "stddev": 2.6532428351986708
+          },
+          "first_down": {
+            "mean": 6.547320991411823,
+            "stddev": 1.958241748048911
+          },
+          "touchdown": {
+            "mean": 7.958790728177573,
+            "stddev": 0.9270248108869579
+          },
+          "turnover": {
+            "mean": -0.14452723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|3|1": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.5689143324012573,
+          "first_down": 0.21641900711629924,
+          "touchdown": 0.18404418729295938,
+          "turnover": 0.028022750974616956,
+          "turnover_on_downs": 0.0025997222148670413
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5454545454545454,
+            "first_down": 0.36363636363636365,
+            "touchdown": 0.09090909090909091,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 6,
+            "first_down": 4,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 11
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.4412893286943869,
+            "stddev": 1.4907119849998598
+          },
+          "first_down": {
+            "mean": 5.842878075807489,
+            "stddev": 2.29128784747792
+          },
+          "touchdown": {
+            "mean": 7.585684100762856,
+            "stddev": 1.7320508075688772
+          },
+          "turnover": {
+            "mean": 0.08881917022772759,
+            "stddev": 3.6742346141747673
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|3|2": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.4964385230296235,
+          "first_down": 0.28312610799527077,
+          "touchdown": 0.1948124832451293,
+          "turnover": 0.023447607958352962,
+          "turnover_on_downs": 0.002175277771623443
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.3684210526315789,
+            "first_down": 0.47368421052631576,
+            "touchdown": 0.15789473684210525,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 7,
+            "first_down": 9,
+            "touchdown": 3,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 19
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.37577617739009656,
+            "stddev": 1.049781318335648
+          },
+          "first_down": {
+            "mean": 5.66727847668093,
+            "stddev": 1.5475986974649028
+          },
+          "touchdown": {
+            "mean": 7.409496978455873,
+            "stddev": 1.885618083164129
+          },
+          "turnover": {
+            "mean": 0.08881917022772759,
+            "stddev": 3.6742346141747673
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|3|3-5": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5961336285697402,
+          "first_down": 0.11088984917983477,
+          "touchdown": 0.2612086151973428,
+          "turnover": 0.0302666590135112,
+          "turnover_on_downs": 0.0015012480395711083
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6097560975609756,
+            "first_down": 0.07317073170731707,
+            "touchdown": 0.2926829268292683,
+            "turnover": 0.024390243902439025,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 25,
+            "first_down": 3,
+            "touchdown": 12,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 41
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.9066768975645532,
+            "stddev": 4.23584702273347
+          },
+          "first_down": {
+            "mean": 6.223037968907906,
+            "stddev": 0.4714045207910384
+          },
+          "touchdown": {
+            "mean": 7.384109096748359,
+            "stddev": 1.3743685418725549
+          },
+          "turnover": {
+            "mean": 0.5207679720884946,
+            "stddev": 3.6742346141747673
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|3|6+": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.5901143255927407,
+          "first_down": 0.1015245685785056,
+          "touchdown": 0.2197044099794028,
+          "turnover": 0.08643609979081864,
+          "turnover_on_downs": 0.0022205960585322646
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6111111111111112,
+            "first_down": 0.0,
+            "touchdown": 0.2222222222222222,
+            "turnover": 0.16666666666666666,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 11,
+            "first_down": 0,
+            "touchdown": 4,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 18
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.35642599625315863,
+            "stddev": 4.4573275171386415
+          },
+          "first_down": {
+            "mean": 6.20097889602282,
+            "stddev": 1.7677669529663689
+          },
+          "touchdown": {
+            "mean": 7.966891874326616,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.09265069147689368,
+            "stddev": 1.4142135623730951
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|4|1": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.23869827663805357,
+          "first_down": 0.2181961822188076,
+          "touchdown": 0.22023057273188737,
+          "turnover": 0.018847519969808837,
+          "turnover_on_downs": 0.30402744844144264
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.42857142857142855,
+            "touchdown": 0.14285714285714285,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.42857142857142855
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 3,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 3
+          },
+          "plays": 7
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 5.341679194808239,
+            "stddev": 1.4142135623730951
+          },
+          "touchdown": {
+            "mean": 7.107457741067998,
+            "stddev": 1.1661903789690629
+          },
+          "turnover": {
+            "mean": -0.01952723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.15757165147409047,
+            "stddev": 0.25
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|4|2": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.2523381781602281,
+          "first_down": 0.23066453548845373,
+          "touchdown": 0.23281517688799522,
+          "turnover": 0.01992452111094077,
+          "turnover_on_downs": 0.2642575883523822
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.6,
+            "touchdown": 0.2,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.2
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 3,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 1
+          },
+          "plays": 5
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 5.563901417030461,
+            "stddev": 0.47140452079103085
+          },
+          "touchdown": {
+            "mean": 7.107457741067998,
+            "stddev": 1.1661903789690629
+          },
+          "turnover": {
+            "mean": -0.01952723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.1772681079083518,
+            "stddev": 0.25
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|4|3-5": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.18791140926825495,
+          "first_down": 0.15049486685310381,
+          "touchdown": 0.3010325785336135,
+          "turnover": 0.03611400508261547,
+          "turnover_on_downs": 0.3244471402624123
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.11764705882352941,
+            "touchdown": 0.4117647058823529,
+            "turnover": 0.058823529411764705,
+            "turnover_on_downs": 0.4117647058823529
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 2,
+            "touchdown": 7,
+            "turnover": 1,
+            "turnover_on_downs": 7
+          },
+          "plays": 17
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 5.891189735679312,
+            "stddev": 0.25
+          },
+          "touchdown": {
+            "mean": 7.441787448049453,
+            "stddev": 1.2453996981544848
+          },
+          "turnover": {
+            "mean": 0.10669321685508736,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.12892226029698312,
+            "stddev": 0.25
+          }
+        }
+      },
+      "late_trailing|10-6|not_goal_to_go|4|6+": {
+        "bucket": "late_trailing|10-6|not_goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.23241674304231533,
+          "first_down": 0.13350680900252315,
+          "touchdown": 0.21443503134420613,
+          "turnover": 0.01835153260218229,
+          "turnover_on_downs": 0.4012898840087731
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.125,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.875
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 7
+          },
+          "plays": 8
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 6.0100150337698865,
+            "stddev": 1.479019945774904
+          },
+          "touchdown": {
+            "mean": 7.107457741067998,
+            "stddev": 1.1661903789690629
+          },
+          "turnover": {
+            "mean": -0.01952723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.12892226029698312,
+            "stddev": 0.25
+          }
+        }
+      },
+      "late_trailing|1|goal_to_go|1|1": {
+        "bucket": "late_trailing|1|goal_to_go|1|1",
+        "outcome_probabilities": {
+          "continue": 0.45263890738576623,
+          "first_down": 0.013075307287535027,
+          "touchdown": 0.5328871148538573,
+          "turnover": 0.0007953865400787688,
+          "turnover_on_downs": 0.000603283932762725
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4434782608695652,
+            "first_down": 0.008695652173913044,
+            "touchdown": 0.5478260869565217,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 51,
+            "first_down": 1,
+            "touchdown": 63,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 115
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.47201397102049036,
+            "stddev": 1.2407287858475589
+          },
+          "first_down": {
+            "mean": 6.5759968228539485,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 1.2092345654877055,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|1|goal_to_go|2|1": {
+        "bucket": "late_trailing|1|goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.5802025422027877,
+          "first_down": 0.00906198056421079,
+          "touchdown": 0.39582327345146023,
+          "turnover": 0.01376172353788264,
+          "turnover_on_downs": 0.0011504802436586208
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5733333333333334,
+            "first_down": 0.0,
+            "touchdown": 0.41333333333333333,
+            "turnover": 0.013333333333333334,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 43,
+            "first_down": 0,
+            "touchdown": 31,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 75
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.021970018500221154,
+            "stddev": 0.3337837231257517
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 1.601598816837051,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.13549428314491263,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|1|goal_to_go|3|1": {
+        "bucket": "late_trailing|1|goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.4446754522431161,
+          "first_down": 0.011803914900806236,
+          "touchdown": 0.5112182880201264,
+          "turnover": 0.030803757325750965,
+          "turnover_on_downs": 0.0014985875102004127
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.41935483870967744,
+            "first_down": 0.0,
+            "touchdown": 0.5483870967741935,
+            "turnover": 0.03225806451612903,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 26,
+            "first_down": 0,
+            "touchdown": 34,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 62
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.7918458404314431,
+            "stddev": 2.7220880429569996
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 1.5301887115481878,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.12002261759549357,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|1|goal_to_go|4|1": {
+        "bucket": "late_trailing|1|goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.2029262783901697,
+          "first_down": 0.03426211787394511,
+          "touchdown": 0.4934676233890085,
+          "turnover": 0.005734911524401959,
+          "turnover_on_downs": 0.2636090688224747
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.625,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.375
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 15,
+            "turnover": 0,
+            "turnover_on_downs": 9
+          },
+          "plays": 24
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 2.414425662696888,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.1624957655826558,
+            "stddev": 0.25
+          }
+        }
+      },
+      "late_trailing|20-11|goal_to_go|1|6+": {
+        "bucket": "late_trailing|20-11|goal_to_go|1|6+",
+        "outcome_probabilities": {
+          "continue": 0.706596336479773,
+          "first_down": 0.0656859537938356,
+          "touchdown": 0.1630187967142333,
+          "turnover": 0.056359633139484624,
+          "turnover_on_downs": 0.008339279872673433
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7777777777777778,
+            "first_down": 0.0,
+            "touchdown": 0.1111111111111111,
+            "turnover": 0.1111111111111111,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 7,
+            "first_down": 0,
+            "touchdown": 1,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 9
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.9047668227990577,
+            "stddev": 7.306692487168241
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 8.031183970418748,
+            "stddev": 5.494068783923129
+          },
+          "turnover": {
+            "mean": -0.13549428314491263,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|goal_to_go|2|6+": {
+        "bucket": "late_trailing|20-11|goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.8366711343572478,
+          "first_down": 0.03426211787394511,
+          "touchdown": 0.11898202668118961,
+          "turnover": 0.005734911524401959,
+          "turnover_on_downs": 0.0043498095632154635
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.9166666666666666,
+            "first_down": 0.0,
+            "touchdown": 0.08333333333333333,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 22,
+            "first_down": 0,
+            "touchdown": 2,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 24
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 3.6325106955695716,
+            "stddev": 5.2475889780588405
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 7.6193186727584745,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|goal_to_go|3|6+": {
+        "bucket": "late_trailing|20-11|goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.8126932111142939,
+          "first_down": 0.03996333428816959,
+          "touchdown": 0.07158063592093955,
+          "turnover": 0.07068920080206244,
+          "turnover_on_downs": 0.005073617874534518
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.9,
+            "first_down": 0.0,
+            "touchdown": 0.0,
+            "turnover": 0.1,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 18,
+            "first_down": 0,
+            "touchdown": 0,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 20
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.4149744189483415,
+            "stddev": 5.717635702341603
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 6.657702650787553,
+            "stddev": 5.494068783923129
+          },
+          "turnover": {
+            "mean": -0.12002261759549357,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|goal_to_go|4|6+": {
+        "bucket": "late_trailing|20-11|goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.30564722509593745,
+          "first_down": 0.05160554531013635,
+          "touchdown": 0.13065681291443643,
+          "turnover": 0.12330733574646494,
+          "turnover_on_downs": 0.38878308093302494
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.07142857142857142,
+            "turnover": 0.21428571428571427,
+            "turnover_on_downs": 0.7142857142857143
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 1,
+            "turnover": 3,
+            "turnover_on_downs": 10
+          },
+          "plays": 14
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 7.5468089704187475,
+            "stddev": 5.494068783923129
+          },
+          "turnover": {
+            "mean": -0.005205359521906285,
+            "stddev": 0.4714045207910317
+          },
+          "turnover_on_downs": {
+            "mean": -0.1497560975609756,
+            "stddev": 5.079370039680118
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|1|3-5": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|1|3-5",
+        "outcome_probabilities": {
+          "continue": 0.774805404171282,
+          "first_down": 0.10265014497159615,
+          "touchdown": 0.100021216340256,
+          "turnover": 0.021927319802920186,
+          "turnover_on_downs": 0.0005959147139457971
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6666666666666666,
+            "first_down": 0.3333333333333333,
+            "touchdown": 0.0,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 2,
+            "first_down": 1,
+            "touchdown": 0,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 3
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3314866583354517,
+            "stddev": 0.25
+          },
+          "first_down": {
+            "mean": 11.327832526439098,
+            "stddev": 2.193642170505983
+          },
+          "touchdown": {
+            "mean": 13.448319247022669,
+            "stddev": 2.847359412034555
+          },
+          "turnover": {
+            "mean": 0.056252141144227476,
+            "stddev": 2.2939534045447005
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|1|6+": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|1|6+",
+        "outcome_probabilities": {
+          "continue": 0.792162894606935,
+          "first_down": 0.07692749966364903,
+          "touchdown": 0.10638738339443685,
+          "turnover": 0.024491591204823,
+          "turnover_on_downs": 3.063113015609238e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7924836601307189,
+            "first_down": 0.07679738562091504,
+            "touchdown": 0.10620915032679738,
+            "turnover": 0.024509803921568627,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 485,
+            "first_down": 47,
+            "touchdown": 65,
+            "turnover": 15,
+            "turnover_on_downs": 0
+          },
+          "plays": 612
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.5212705463834053,
+            "stddev": 3.450092686761039
+          },
+          "first_down": {
+            "mean": 12.391053555210089,
+            "stddev": 2.182277685950308
+          },
+          "touchdown": {
+            "mean": 14.72155985881675,
+            "stddev": 2.847359412034555
+          },
+          "turnover": {
+            "mean": 0.16145940390544708,
+            "stddev": 2.2939534045447005
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|2|1": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.5984252291700276,
+          "first_down": 0.30090787389146434,
+          "touchdown": 0.07985026442910764,
+          "turnover": 0.020265870690627706,
+          "turnover_on_downs": 0.0005507618187727439
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.47058823529411764,
+            "first_down": 0.47058823529411764,
+            "touchdown": 0.058823529411764705,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 8,
+            "first_down": 8,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 17
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.47851679310718515,
+            "stddev": 2.29128784747792
+          },
+          "first_down": {
+            "mean": 7.177971733948219,
+            "stddev": 1.899835519196333
+          },
+          "touchdown": {
+            "mean": 12.42822117642037,
+            "stddev": 2.9239764697740376
+          },
+          "turnover": {
+            "mean": -0.6770811921891059,
+            "stddev": 4.261455150532504
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|2|2": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.580093527671739,
+          "first_down": 0.3147292198890442,
+          "touchdown": 0.07426503794012594,
+          "turnover": 0.030507748788429725,
+          "turnover_on_downs": 0.00040446571066123386
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5,
+            "first_down": 0.4117647058823529,
+            "touchdown": 0.058823529411764705,
+            "turnover": 0.029411764705882353,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 17,
+            "first_down": 14,
+            "touchdown": 2,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 34
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.09393394504578934,
+            "stddev": 2.2614567984401277
+          },
+          "first_down": {
+            "mean": 7.589425857958932,
+            "stddev": 3.5427419336106407
+          },
+          "touchdown": {
+            "mean": 12.579502283689761,
+            "stddev": 2.0
+          },
+          "turnover": {
+            "mean": -0.6347636176772867,
+            "stddev": 4.261455150532504
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|2|3-5": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.6052077799108049,
+          "first_down": 0.2885412878504834,
+          "touchdown": 0.07676200423928772,
+          "turnover": 0.029232632895638638,
+          "turnover_on_downs": 0.00025629510378533625
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5774647887323944,
+            "first_down": 0.323943661971831,
+            "touchdown": 0.07042253521126761,
+            "turnover": 0.028169014084507043,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 41,
+            "first_down": 23,
+            "touchdown": 5,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 71
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.7143908257404511,
+            "stddev": 2.1989127160165163
+          },
+          "first_down": {
+            "mean": 8.212982891600237,
+            "stddev": 3.3778999303573976
+          },
+          "touchdown": {
+            "mean": 12.792576941136296,
+            "stddev": 2.6532998322843184
+          },
+          "turnover": {
+            "mean": -0.5974245813433287,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|2|6+": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.7150162656820416,
+          "first_down": 0.15799638606765984,
+          "touchdown": 0.09172000659828278,
+          "turnover": 0.035196999789292124,
+          "turnover_on_downs": 7.034186272369284e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7189349112426036,
+            "first_down": 0.15384615384615385,
+            "touchdown": 0.09171597633136094,
+            "turnover": 0.03550295857988166,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 243,
+            "first_down": 52,
+            "touchdown": 31,
+            "turnover": 12,
+            "turnover_on_downs": 0
+          },
+          "plays": 338
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.6007980086878497,
+            "stddev": 3.8517639186614496
+          },
+          "first_down": {
+            "mean": 10.867064923594164,
+            "stddev": 3.4100877151258233
+          },
+          "touchdown": {
+            "mean": 13.670685626581,
+            "stddev": 3.053801302203573
+          },
+          "turnover": {
+            "mean": -1.0428228845495031,
+            "stddev": 4.716990566028302
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|3|1": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.435316001674608,
+          "first_down": 0.41556863894001494,
+          "touchdown": 0.06806551761247294,
+          "turnover": 0.0803815922240744,
+          "turnover_on_downs": 0.0006682495488296871
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.25925925925925924,
+            "first_down": 0.5925925925925926,
+            "touchdown": 0.037037037037037035,
+            "turnover": 0.1111111111111111,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 7,
+            "first_down": 16,
+            "touchdown": 1,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 27
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.14811755587252567,
+            "stddev": 1.049781318335648
+          },
+          "first_down": {
+            "mean": 5.638994076039444,
+            "stddev": 2.8442650632456883
+          },
+          "touchdown": {
+            "mean": 12.394791305529267,
+            "stddev": 2.7502017139576598
+          },
+          "turnover": {
+            "mean": -0.2720252369532945,
+            "stddev": 8.576453553512405
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|3|2": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.5048155706992716,
+          "first_down": 0.3951909603012439,
+          "touchdown": 0.07507283852170706,
+          "turnover": 0.024334627027265236,
+          "turnover_on_downs": 0.0005860034505121872
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.42857142857142855,
+            "first_down": 0.5142857142857142,
+            "touchdown": 0.05714285714285714,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 15,
+            "first_down": 18,
+            "touchdown": 2,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 35
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.15804712569348117,
+            "stddev": 1.948218559493661
+          },
+          "first_down": {
+            "mean": 6.0851156471885695,
+            "stddev": 3.768370640469249
+          },
+          "touchdown": {
+            "mean": 11.90098005226284,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.25976361767728673,
+            "stddev": 3.7876141251777056
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|3|3-5": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5427030900539866,
+          "first_down": 0.3236377467285233,
+          "touchdown": 0.09781915350406889,
+          "turnover": 0.03546287877992317,
+          "turnover_on_downs": 0.00037713093349794224
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5211267605633803,
+            "first_down": 0.352112676056338,
+            "touchdown": 0.09859154929577464,
+            "turnover": 0.028169014084507043,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 37,
+            "first_down": 25,
+            "touchdown": 7,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 71
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.3219502648231622,
+            "stddev": 3.589408980570865
+          },
+          "first_down": {
+            "mean": 6.79522040893057,
+            "stddev": 2.447529366524537
+          },
+          "touchdown": {
+            "mean": 12.741666404021286,
+            "stddev": 1.6659862556700842
+          },
+          "turnover": {
+            "mean": -0.22920319206819417,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|3|6+": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.6840650604772633,
+          "first_down": 0.15343706209790428,
+          "touchdown": 0.09439867251955479,
+          "turnover": 0.06790875378386121,
+          "turnover_on_downs": 0.00019045112141646085
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7,
+            "first_down": 0.13529411764705881,
+            "touchdown": 0.09411764705882353,
+            "turnover": 0.07058823529411765,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 119,
+            "first_down": 23,
+            "touchdown": 16,
+            "turnover": 12,
+            "turnover_on_downs": 0
+          },
+          "plays": 170
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.7780491509641461,
+            "stddev": 3.530532035092674
+          },
+          "first_down": {
+            "mean": 9.152863588347968,
+            "stddev": 2.9172584690810863
+          },
+          "touchdown": {
+            "mean": 13.977956802853816,
+            "stddev": 2.766286997041341
+          },
+          "turnover": {
+            "mean": -0.32949830611701114,
+            "stddev": 1.3819269959814167
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|4|1": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.08443679049453978,
+          "first_down": 0.35586591548522034,
+          "touchdown": 0.06834354877316622,
+          "turnover": 0.06602782562858962,
+          "turnover_on_downs": 0.42532591961848404
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.5,
+            "touchdown": 0.0,
+            "turnover": 0.05555555555555555,
+            "turnover_on_downs": 0.4444444444444444
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 9,
+            "touchdown": 0,
+            "turnover": 1,
+            "turnover_on_downs": 8
+          },
+          "plays": 18
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 6.375371884518472,
+            "stddev": 3.562493231529199
+          },
+          "touchdown": {
+            "mean": 9.954621590472533,
+            "stddev": 2.467792535850608
+          },
+          "turnover": {
+            "mean": 0.10078365878725591,
+            "stddev": 4.801041553663121
+          },
+          "turnover_on_downs": {
+            "mean": -0.5933898904206434,
+            "stddev": 2.947456530637899
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|4|2": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.0964991891366169,
+          "first_down": 0.31146580817358516,
+          "touchdown": 0.14953548431218996,
+          "turnover": 0.09926989595648339,
+          "turnover_on_downs": 0.34322962242112465
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.4166666666666667,
+            "touchdown": 0.25,
+            "turnover": 0.16666666666666666,
+            "turnover_on_downs": 0.16666666666666666
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 5,
+            "touchdown": 3,
+            "turnover": 2,
+            "turnover_on_downs": 2
+          },
+          "plays": 12
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 6.750446261422167,
+            "stddev": 1.496662954709576
+          },
+          "touchdown": {
+            "mean": 10.851073547616,
+            "stddev": 3.299831645537217
+          },
+          "turnover": {
+            "mean": -0.3757330270237591,
+            "stddev": 4.0
+          },
+          "turnover_on_downs": {
+            "mean": -0.8616451458632234,
+            "stddev": 5.5
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|4|3-5": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.07237439185246267,
+          "first_down": 0.28717078470161744,
+          "touchdown": 0.11215161323414247,
+          "turnover": 0.09230956482450539,
+          "turnover_on_downs": 0.43599364538727203
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.3076923076923077,
+            "touchdown": 0.11538461538461539,
+            "turnover": 0.11538461538461539,
+            "turnover_on_downs": 0.46153846153846156
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 8,
+            "touchdown": 3,
+            "turnover": 3,
+            "turnover_on_downs": 12
+          },
+          "plays": 26
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.304735879497536,
+            "stddev": 1.4523687548277813
+          },
+          "touchdown": {
+            "mean": 10.906629103171555,
+            "stddev": 1.6996731711976023
+          },
+          "turnover": {
+            "mean": 0.811807696699783,
+            "stddev": 6.128258770283412
+          },
+          "turnover_on_downs": {
+            "mean": -0.06103583258054801,
+            "stddev": 0.5527707983925666
+          }
+        }
+      },
+      "late_trailing|20-11|not_goal_to_go|4|6+": {
+        "bucket": "late_trailing|20-11|not_goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.04503295493042122,
+          "first_down": 0.2453507104810064,
+          "touchdown": 0.08089433712346643,
+          "turnover": 0.06854817366858114,
+          "turnover_on_downs": 0.5601738237965249
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.23333333333333334,
+            "touchdown": 0.06666666666666667,
+            "turnover": 0.06666666666666667,
+            "turnover_on_downs": 0.6333333333333333
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 14,
+            "touchdown": 4,
+            "turnover": 4,
+            "turnover_on_downs": 38
+          },
+          "plays": 60
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 9.241687076842874,
+            "stddev": 2.963209787527364
+          },
+          "touchdown": {
+            "mean": 10.806280203004631,
+            "stddev": 1.8708286933869707
+          },
+          "turnover": {
+            "mean": 0.08487044950505761,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": 0.06324589660990951,
+            "stddev": 2.789597812531167
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|1|2": {
+        "bucket": "late_trailing|5-2|goal_to_go|1|2",
+        "outcome_probabilities": {
+          "continue": 0.6590962805500398,
+          "first_down": 0.004494908702048137,
+          "touchdown": 0.3283372290368628,
+          "turnover": 0.007500922391917763,
+          "turnover_on_downs": 0.0005706593191315199
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6666666666666666,
+            "first_down": 0.0,
+            "touchdown": 0.3333333333333333,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 42,
+            "first_down": 0,
+            "touchdown": 21,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 63
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.049110191659632166,
+            "stddev": 1.460748728588378
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 2.788556567459869,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.46562178828365874,
+            "stddev": 1.7435595774162693
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|1|3-5": {
+        "bucket": "late_trailing|5-2|goal_to_go|1|3-5",
+        "outcome_probabilities": {
+          "continue": 0.6323633755179188,
+          "first_down": 0.002375150620968618,
+          "touchdown": 0.3325872857978877,
+          "turnover": 0.032372646491183814,
+          "turnover_on_downs": 0.00030154157204108725
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6301369863013698,
+            "first_down": 0.0,
+            "touchdown": 0.3356164383561644,
+            "turnover": 0.03424657534246575,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 92,
+            "first_down": 0,
+            "touchdown": 49,
+            "turnover": 5,
+            "turnover_on_downs": 0
+          },
+          "plays": 146
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.646735692293467,
+            "stddev": 1.5749996249286917
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 3.8654380691961765,
+            "stddev": 0.8329931278350421
+          },
+          "turnover": {
+            "mean": -0.6992163412127441,
+            "stddev": 1.7435595774162693
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|2|2": {
+        "bucket": "late_trailing|5-2|goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.6095671332517235,
+          "first_down": 0.02189648241504935,
+          "touchdown": 0.34098645923782883,
+          "turnover": 0.026647916512953784,
+          "turnover_on_downs": 0.0009020085824446234
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6122448979591837,
+            "first_down": 0.02040816326530612,
+            "touchdown": 0.3469387755102041,
+            "turnover": 0.02040816326530612,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 30,
+            "first_down": 1,
+            "touchdown": 17,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 49
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.05434889800102351,
+            "stddev": 0.8919392106839769
+          },
+          "first_down": {
+            "mean": 6.5759968228539485,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 2.9365731141669116,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.10323373953898107,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|2|3-5": {
+        "bucket": "late_trailing|5-2|goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5903550660998926,
+          "first_down": 0.005657535742549602,
+          "touchdown": 0.3561079866650269,
+          "turnover": 0.04732701863971588,
+          "turnover_on_downs": 0.0005523928528149243
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5858585858585859,
+            "first_down": 0.0,
+            "touchdown": 0.36363636363636365,
+            "turnover": 0.050505050505050504,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 58,
+            "first_down": 0,
+            "touchdown": 36,
+            "turnover": 5,
+            "turnover_on_downs": 0
+          },
+          "plays": 99
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.2389821973978912,
+            "stddev": 1.8292932821200412
+          },
+          "first_down": {
+            "mean": 7.014396611044211,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 3.8817713657517876,
+            "stddev": 0.7993052538854524
+          },
+          "turnover": {
+            "mean": -0.08258699163118485,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|3|2": {
+        "bucket": "late_trailing|5-2|goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.5005932974866075,
+          "first_down": 0.02064658863960965,
+          "touchdown": 0.4165530180868323,
+          "turnover": 0.06019119548715132,
+          "turnover_on_downs": 0.0020159002997991566
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.36363636363636365,
+            "first_down": 0.0,
+            "touchdown": 0.5454545454545454,
+            "turnover": 0.09090909090909091,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 8,
+            "first_down": 0,
+            "touchdown": 12,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 22
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.07167062516960104,
+            "stddev": 0.5
+          },
+          "first_down": {
+            "mean": 7.201896611044211,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 3.294740043539506,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.10738865784859951,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|3|3-5": {
+        "bucket": "late_trailing|5-2|goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.636675267366703,
+          "first_down": 0.02094568292181517,
+          "touchdown": 0.3097046155607604,
+          "turnover": 0.03161557742759463,
+          "turnover_on_downs": 0.0010588567231268296
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6521739130434783,
+            "first_down": 0.014492753623188406,
+            "touchdown": 0.30434782608695654,
+            "turnover": 0.028985507246376812,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 45,
+            "first_down": 1,
+            "touchdown": 21,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 69
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.47747373964834705,
+            "stddev": 2.6948510575210314
+          },
+          "first_down": {
+            "mean": 6.9392780728539485,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 4.137721699321296,
+            "stddev": 0.87287156094397
+          },
+          "turnover": {
+            "mean": -0.10738865784859951,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|4|2": {
+        "bucket": "late_trailing|5-2|goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.20045156767809444,
+          "first_down": 0.0338442871681653,
+          "touchdown": 0.300457855624102,
+          "turnover": 0.05647798170906373,
+          "turnover_on_downs": 0.4087683078205746
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.36363636363636365,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.6363636363636364
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 4,
+            "turnover": 0,
+            "turnover_on_downs": 7
+          },
+          "plays": 11
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 4.364760610575679,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -1.5156217882836587,
+            "stddev": 11.200000000000001
+          },
+          "turnover_on_downs": {
+            "mean": -0.2279875131287198,
+            "stddev": 0.3499271061118826
+          }
+        }
+      },
+      "late_trailing|5-2|goal_to_go|4|3-5": {
+        "bucket": "late_trailing|5-2|goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.13472974220986678,
+          "first_down": 0.02274779957204553,
+          "touchdown": 0.30030773902603575,
+          "turnover": 0.11992782377166579,
+          "turnover_on_downs": 0.4222868954203862
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.3225806451612903,
+            "turnover": 0.16129032258064516,
+            "turnover_on_downs": 0.5161290322580645
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 10,
+            "turnover": 5,
+            "turnover_on_downs": 16
+          },
+          "plays": 31
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 4.477218064037516,
+            "stddev": 0.7810249675906651
+          },
+          "turnover": {
+            "mean": -2.536716341212744,
+            "stddev": 11.200000000000001
+          },
+          "turnover_on_downs": {
+            "mean": -0.5166362996397366,
+            "stddev": 3.4072532926097527
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|2|1": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.604965830502926,
+          "first_down": 0.08158588557164488,
+          "touchdown": 0.29844468867466784,
+          "turnover": 0.008532143880181694,
+          "turnover_on_downs": 0.006471451370579742
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6,
+            "first_down": 0.0,
+            "touchdown": 0.4,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 6,
+            "first_down": 0,
+            "touchdown": 4,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 10
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.5579183661614171,
+            "stddev": 0.25
+          },
+          "first_down": {
+            "mean": 7.072373280982787,
+            "stddev": 0.25
+          },
+          "touchdown": {
+            "mean": 5.040629417289951,
+            "stddev": 0.7071067811865476
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|2|2": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.5940774476505011,
+          "first_down": 0.1253951594960528,
+          "touchdown": 0.26287610432313857,
+          "turnover": 0.01003781632962552,
+          "turnover_on_downs": 0.007613472200682048
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5,
+            "first_down": 0.25,
+            "touchdown": 0.25,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 2,
+            "first_down": 1,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 4
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.6303697464346917,
+            "stddev": 0.5
+          },
+          "first_down": {
+            "mean": 6.880349950921363,
+            "stddev": 0.25
+          },
+          "touchdown": {
+            "mean": 5.4232474330318166,
+            "stddev": 0.6998542122237669
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|2|3-5": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5771038062890581,
+          "first_down": 0.12181244065330843,
+          "touchdown": 0.28393678705676323,
+          "turnover": 0.009751021577350505,
+          "turnover_on_downs": 0.0073959444235197035
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4,
+            "first_down": 0.2,
+            "touchdown": 0.4,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 2,
+            "first_down": 1,
+            "touchdown": 2,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 5
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.7480168052582211,
+            "stddev": 0.5
+          },
+          "first_down": {
+            "mean": 6.880349950921363,
+            "stddev": 0.25
+          },
+          "touchdown": {
+            "mean": 5.398350525206416,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|3|1": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.4758027524027138,
+          "first_down": 0.22172273078090696,
+          "touchdown": 0.25454800240961334,
+          "turnover": 0.042659053988852204,
+          "turnover_on_downs": 0.0052674604179137425
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.3076923076923077,
+            "first_down": 0.3076923076923077,
+            "touchdown": 0.3076923076923077,
+            "turnover": 0.07692307692307693,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 4,
+            "first_down": 4,
+            "touchdown": 4,
+            "turnover": 1,
+            "turnover_on_downs": 0
+          },
+          "plays": 13
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.6010266037140566,
+            "stddev": 0.4330127018922193
+          },
+          "first_down": {
+            "mean": 5.448457384331605,
+            "stddev": 0.7071067811865476
+          },
+          "touchdown": {
+            "mean": 5.342064823988515,
+            "stddev": 1.0897247358851685
+          },
+          "turnover": {
+            "mean": -0.13549428314491263,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|3|2": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.4857767987714919,
+          "first_down": 0.2245809848310263,
+          "touchdown": 0.2617253711477203,
+          "turnover": 0.021956297934753812,
+          "turnover_on_downs": 0.005960547315007656
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.25,
+            "first_down": 0.375,
+            "touchdown": 0.375,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 2,
+            "first_down": 3,
+            "touchdown": 3,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 8
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.730559145327475,
+            "stddev": 0.25
+          },
+          "first_down": {
+            "mean": 5.6400383501278055,
+            "stddev": 0.47140452079103085
+          },
+          "touchdown": {
+            "mean": 5.472179536432321,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.14452723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|3|3-5": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.6131290958090484,
+          "first_down": 0.1581164978165428,
+          "touchdown": 0.1984446886746678,
+          "turnover": 0.023838266329161282,
+          "turnover_on_downs": 0.006471451370579741
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 1.0,
+            "first_down": 0.0,
+            "touchdown": 0.0,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 5,
+            "first_down": 0,
+            "touchdown": 0,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 5
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.7709752735283538,
+            "stddev": 1.2
+          },
+          "first_down": {
+            "mean": 6.1013793534867,
+            "stddev": 0.6388765649999409
+          },
+          "touchdown": {
+            "mean": 5.766615443718786,
+            "stddev": 0.8329931278350421
+          },
+          "turnover": {
+            "mean": -0.14452723535457349,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|4|1": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.3822564778977615,
+          "first_down": 0.17823535899252194,
+          "touchdown": 0.22929689263717623,
+          "turnover": 0.010802972871547878,
+          "turnover_on_downs": 0.19940829760099243
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.3333333333333333,
+            "touchdown": 0.3333333333333333,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.3333333333333333
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 2,
+            "touchdown": 2,
+            "turnover": 0,
+            "turnover_on_downs": 2
+          },
+          "plays": 6
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 5.972075773368009,
+            "stddev": 0.5
+          },
+          "touchdown": {
+            "mean": 5.895369596167319,
+            "stddev": 0.5
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.8919720881700793,
+            "stddev": 0.25
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|4|2": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.4300385376349817,
+          "first_down": 0.16926477886658717,
+          "touchdown": 0.1954590042168233,
+          "turnover": 0.012153344480491364,
+          "turnover_on_downs": 0.1930843348011165
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.5,
+            "touchdown": 0.0,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.5
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 1,
+            "touchdown": 0,
+            "turnover": 0,
+            "turnover_on_downs": 1
+          },
+          "plays": 2
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 6.345330509203509,
+            "stddev": 0.8164965809277263
+          },
+          "touchdown": {
+            "mean": 6.214752208989627,
+            "stddev": 0.8164965809277268
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.9477203436807093,
+            "stddev": 5.598833697790122
+          }
+        }
+      },
+      "late_trailing|5-2|not_goal_to_go|4|3-5": {
+        "bucket": "late_trailing|5-2|not_goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.39317809155198324,
+          "first_down": 0.12618494067802255,
+          "touchdown": 0.2072768038553813,
+          "turnover": 0.01111162923930639,
+          "turnover_on_downs": 0.26224853467530657
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.2,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.8
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 4
+          },
+          "plays": 5
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 6.56835254315041,
+            "stddev": 0.8164965809277263
+          },
+          "touchdown": {
+            "mean": 6.138830195927776,
+            "stddev": 0.8164965809277268
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -1.640185552573229,
+            "stddev": 6.928203230275509
+          }
+        }
+      },
+      "standard|10-6|goal_to_go|1|6+": {
+        "bucket": "standard|10-6|goal_to_go|1|6+",
+        "outcome_probabilities": {
+          "continue": 0.8243198068580438,
+          "first_down": 0.006561376620505661,
+          "touchdown": 0.15826546341761805,
+          "turnover": 0.010852713439149547,
+          "turnover_on_downs": 6.39664682859326e-07
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.8243273796066019,
+            "first_down": 0.006556635767578567,
+            "touchdown": 0.15826362197603436,
+            "turnover": 0.010852362649785214,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 3646,
+            "first_down": 29,
+            "touchdown": 700,
+            "turnover": 48,
+            "turnover_on_downs": 0
+          },
+          "plays": 4423
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.8167768732757759,
+            "stddev": 2.917103587870758
+          },
+          "first_down": {
+            "mean": 4.0389747864930845,
+            "stddev": 2.723046485848225
+          },
+          "touchdown": {
+            "mean": 7.793785482119277,
+            "stddev": 1.394057358349126
+          },
+          "turnover": {
+            "mean": 0.48256826997100083,
+            "stddev": 2.753706466847103
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|goal_to_go|2|6+": {
+        "bucket": "standard|10-6|goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.7599379534255875,
+          "first_down": 0.007990455230820597,
+          "touchdown": 0.21065480877792078,
+          "turnover": 0.0214137287036987,
+          "turnover_on_downs": 3.0538619724585894e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7599601593625498,
+            "first_down": 0.00796812749003984,
+            "touchdown": 0.2106573705179283,
+            "turnover": 0.02141434262948207,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 1526,
+            "first_down": 16,
+            "touchdown": 423,
+            "turnover": 43,
+            "turnover_on_downs": 0
+          },
+          "plays": 2008
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3650005651884338,
+            "stddev": 3.156230326742416
+          },
+          "first_down": {
+            "mean": 4.671649517846629,
+            "stddev": 3.8765118018651767
+          },
+          "touchdown": {
+            "mean": 7.445883025251908,
+            "stddev": 1.4263255967739905
+          },
+          "turnover": {
+            "mean": -0.4226178764818958,
+            "stddev": 3.3362165284519625
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|goal_to_go|3|6+": {
+        "bucket": "standard|10-6|goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.6867346246769885,
+          "first_down": 0.005028632682351251,
+          "touchdown": 0.267729406749351,
+          "turnover": 0.040495653753490776,
+          "turnover_on_downs": 1.1682137818472793e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6867588932806324,
+            "first_down": 0.004940711462450593,
+            "touchdown": 0.26778656126482214,
+            "turnover": 0.040513833992094864,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 695,
+            "first_down": 5,
+            "touchdown": 271,
+            "turnover": 41,
+            "turnover_on_downs": 0
+          },
+          "plays": 1012
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.3845822399171489,
+            "stddev": 3.4989054607727383
+          },
+          "first_down": {
+            "mean": 5.958637966626528,
+            "stddev": 0.8944271909999163
+          },
+          "touchdown": {
+            "mean": 7.551041409071681,
+            "stddev": 1.332220865499114
+          },
+          "turnover": {
+            "mean": -0.011060757807747972,
+            "stddev": 2.305877960936291
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|goal_to_go|4|6+": {
+        "bucket": "standard|10-6|goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.14446607123675165,
+          "first_down": 0.024391683525494128,
+          "touchdown": 0.20433388422908907,
+          "turnover": 0.049981201661415064,
+          "turnover_on_downs": 0.57682715934725
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.20588235294117646,
+            "turnover": 0.058823529411764705,
+            "turnover_on_downs": 0.7352941176470589
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 7,
+            "turnover": 2,
+            "turnover_on_downs": 25
+          },
+          "plays": 34
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 6.8408741661719,
+            "stddev": 0.9258200997725499
+          },
+          "turnover": {
+            "mean": -0.12002261759549357,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.2647484756097561,
+            "stddev": 3.3499850745936164
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|1|3-5": {
+        "bucket": "standard|10-6|not_goal_to_go|1|3-5",
+        "outcome_probabilities": {
+          "continue": 0.700201779365427,
+          "first_down": 0.1911566469983616,
+          "touchdown": 0.10228191820985053,
+          "turnover": 0.0036165661775856652,
+          "turnover_on_downs": 0.00274308924877515
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7105263157894737,
+            "first_down": 0.21052631578947367,
+            "touchdown": 0.07894736842105263,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 27,
+            "first_down": 8,
+            "touchdown": 3,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 38
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.7153668606772925,
+            "stddev": 2.021150170317371
+          },
+          "first_down": {
+            "mean": 7.27685290482157,
+            "stddev": 1.2686114456365274
+          },
+          "touchdown": {
+            "mean": 7.57710832230617,
+            "stddev": 0.47140452079105344
+          },
+          "turnover": {
+            "mean": -0.15416238437821173,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|2|1": {
+        "bucket": "standard|10-6|not_goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.3222587407375277,
+          "first_down": 0.5426015250863293,
+          "touchdown": 0.11906449088906838,
+          "turnover": 0.016042673662978905,
+          "turnover_on_downs": 3.256962409572697e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.27472527472527475,
+            "first_down": 0.5989010989010989,
+            "touchdown": 0.10989010989010989,
+            "turnover": 0.016483516483516484,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 50,
+            "first_down": 109,
+            "touchdown": 20,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 182
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.543324741515946,
+            "stddev": 1.7315888657530691
+          },
+          "first_down": {
+            "mean": 3.823288781361667,
+            "stddev": 1.9452137614486353
+          },
+          "touchdown": {
+            "mean": 8.132292908781576,
+            "stddev": 1.5644487847161987
+          },
+          "turnover": {
+            "mean": 1.2454607742377526,
+            "stddev": 2.867441755680876
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|2|2": {
+        "bucket": "standard|10-6|not_goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.3935620755595773,
+          "first_down": 0.4021684588859387,
+          "touchdown": 0.19216920637428392,
+          "turnover": 0.012065561892218732,
+          "turnover_on_downs": 3.469728798137747e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.35502958579881655,
+            "first_down": 0.4378698224852071,
+            "touchdown": 0.1952662721893491,
+            "turnover": 0.011834319526627219,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 60,
+            "first_down": 74,
+            "touchdown": 33,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 169
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.15088144264715317,
+            "stddev": 1.9849433241279206
+          },
+          "first_down": {
+            "mean": 4.349301223470188,
+            "stddev": 1.6706550768135793
+          },
+          "touchdown": {
+            "mean": 7.596463579319899,
+            "stddev": 1.527224626467171
+          },
+          "turnover": {
+            "mean": 0.4363702315458558,
+            "stddev": 2.0
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|2|3-5": {
+        "bucket": "standard|10-6|not_goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.6216498729178975,
+          "first_down": 0.1940124814132396,
+          "touchdown": 0.17462866588267695,
+          "turnover": 0.009699930296922055,
+          "turnover_on_downs": 9.049489263819288e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6221009549795361,
+            "first_down": 0.1937244201909959,
+            "touchdown": 0.17462482946793997,
+            "turnover": 0.009549795361527967,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 456,
+            "first_down": 142,
+            "touchdown": 128,
+            "turnover": 7,
+            "turnover_on_downs": 0
+          },
+          "plays": 733
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.6596260972430223,
+            "stddev": 2.183096136488525
+          },
+          "first_down": {
+            "mean": 5.46552744515189,
+            "stddev": 1.3928181761205551
+          },
+          "touchdown": {
+            "mean": 7.941470292359126,
+            "stddev": 1.3488276159317023
+          },
+          "turnover": {
+            "mean": 1.2008315425581613,
+            "stddev": 4.085814184592883
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|2|6+": {
+        "bucket": "standard|10-6|not_goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.7361472151877236,
+          "first_down": 0.062458862308501735,
+          "touchdown": 0.18491589916133133,
+          "turnover": 0.016468853674039212,
+          "turnover_on_downs": 9.169668404109054e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7413554633471646,
+            "first_down": 0.056708160442600276,
+            "touchdown": 0.18533886583679116,
+            "turnover": 0.016597510373443983,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 536,
+            "first_down": 41,
+            "touchdown": 134,
+            "turnover": 12,
+            "turnover_on_downs": 0
+          },
+          "plays": 723
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.2916223081696252,
+            "stddev": 2.8577699041219753
+          },
+          "first_down": {
+            "mean": 6.715853730157977,
+            "stddev": 2.1139462126849216
+          },
+          "touchdown": {
+            "mean": 8.923692965150034,
+            "stddev": 1.0294180358519636
+          },
+          "turnover": {
+            "mean": 0.7932701457881314,
+            "stddev": 2.3746344747958346
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|3|1": {
+        "bucket": "standard|10-6|not_goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.2891083556561901,
+          "first_down": 0.5391554964014615,
+          "touchdown": 0.15965312745616983,
+          "turnover": 0.012057764834965049,
+          "turnover_on_downs": 2.5255651213470214e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.2647058823529412,
+            "first_down": 0.5735294117647058,
+            "touchdown": 0.15073529411764705,
+            "turnover": 0.011029411764705883,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 72,
+            "first_down": 156,
+            "touchdown": 41,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 272
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.43636069153136753,
+            "stddev": 1.4907119849998598
+          },
+          "first_down": {
+            "mean": 3.17279135082697,
+            "stddev": 1.7204822497188494
+          },
+          "touchdown": {
+            "mean": 7.821646135890115,
+            "stddev": 1.4690946679390842
+          },
+          "turnover": {
+            "mean": -0.6107628183167751,
+            "stddev": 0.4714045207910317
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|3|2": {
+        "bucket": "standard|10-6|not_goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.44216820239436777,
+          "first_down": 0.2867124406033125,
+          "touchdown": 0.2567529310699342,
+          "turnover": 0.014336397559682853,
+          "turnover_on_downs": 3.0028372702629942e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4330357142857143,
+            "first_down": 0.29464285714285715,
+            "touchdown": 0.25892857142857145,
+            "turnover": 0.013392857142857142,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 97,
+            "first_down": 66,
+            "touchdown": 58,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 224
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.6782444657431158,
+            "stddev": 2.689319064071254
+          },
+          "first_down": {
+            "mean": 4.3524360616223685,
+            "stddev": 1.714198257421934
+          },
+          "touchdown": {
+            "mean": 7.89057785766913,
+            "stddev": 1.3279220354461867
+          },
+          "turnover": {
+            "mean": -0.9440961516501084,
+            "stddev": 2.6246692913372702
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|3|3-5": {
+        "bucket": "standard|10-6|not_goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.542811756226228,
+          "first_down": 0.18195615806955004,
+          "touchdown": 0.2545413057793267,
+          "turnover": 0.020680007034123513,
+          "turnover_on_downs": 1.0772890771847466e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5442477876106194,
+            "first_down": 0.17994100294985252,
+            "touchdown": 0.2551622418879056,
+            "turnover": 0.02064896755162242,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 369,
+            "first_down": 122,
+            "touchdown": 173,
+            "turnover": 14,
+            "turnover_on_downs": 0
+          },
+          "plays": 678
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.3592796358417421,
+            "stddev": 2.7722371870047287
+          },
+          "first_down": {
+            "mean": 5.573338109426364,
+            "stddev": 1.5197570139167296
+          },
+          "touchdown": {
+            "mean": 7.861766934094928,
+            "stddev": 1.3200722700755636
+          },
+          "turnover": {
+            "mean": -0.654956232058688,
+            "stddev": 2.3178543913697074
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|3|6+": {
+        "bucket": "standard|10-6|not_goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.6264022973582196,
+          "first_down": 0.07735165626429731,
+          "touchdown": 0.2642438537663871,
+          "turnover": 0.03198659505145081,
+          "turnover_on_downs": 1.5597559645128843e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6339869281045751,
+            "first_down": 0.06753812636165578,
+            "touchdown": 0.2657952069716776,
+            "turnover": 0.032679738562091505,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 291,
+            "first_down": 31,
+            "touchdown": 122,
+            "turnover": 15,
+            "turnover_on_downs": 0
+          },
+          "plays": 459
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.3726686922770295,
+            "stddev": 3.4510616177127647
+          },
+          "first_down": {
+            "mean": 6.207550456335039,
+            "stddev": 1.7038855027411952
+          },
+          "touchdown": {
+            "mean": 8.927096230728807,
+            "stddev": 1.0516428580496544
+          },
+          "turnover": {
+            "mean": -0.7997910243233984,
+            "stddev": 2.4890872936792623
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|4|1": {
+        "bucket": "standard|10-6|not_goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.01940617302196428,
+          "first_down": 0.46047843157944457,
+          "touchdown": 0.14636467236659942,
+          "turnover": 0.04924973770186135,
+          "turnover_on_downs": 0.3245009853301304
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.5,
+            "touchdown": 0.13725490196078433,
+            "turnover": 0.049019607843137254,
+            "turnover_on_downs": 0.3137254901960784
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 51,
+            "touchdown": 14,
+            "turnover": 5,
+            "turnover_on_downs": 32
+          },
+          "plays": 102
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 2.484405291997668,
+            "stddev": 1.117475046962745
+          },
+          "touchdown": {
+            "mean": 7.802057307880828,
+            "stddev": 1.5665508713900969
+          },
+          "turnover": {
+            "mean": -0.216704877855957,
+            "stddev": 3.32264954516723
+          },
+          "turnover_on_downs": {
+            "mean": -0.762830560350762,
+            "stddev": 1.5194057226429023
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|4|2": {
+        "bucket": "standard|10-6|not_goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.03557798387360118,
+          "first_down": 0.26087712456231504,
+          "touchdown": 0.22666856600543225,
+          "turnover": 0.04862451912007913,
+          "turnover_on_downs": 0.4282518064385724
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.21428571428571427,
+            "touchdown": 0.2619047619047619,
+            "turnover": 0.047619047619047616,
+            "turnover_on_downs": 0.47619047619047616
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 9,
+            "touchdown": 11,
+            "turnover": 2,
+            "turnover_on_downs": 20
+          },
+          "plays": 42
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 4.415447886326921,
+            "stddev": 2.160246899469288
+          },
+          "touchdown": {
+            "mean": 7.433063920328616,
+            "stddev": 1.3047909176733965
+          },
+          "turnover": {
+            "mean": -0.07847632688936117,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.3386581810424518,
+            "stddev": 1.4866068747318506
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|4|3-5": {
+        "bucket": "standard|10-6|not_goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.03202018548624106,
+          "first_down": 0.27228941210608354,
+          "touchdown": 0.17900170940488902,
+          "turnover": 0.06876206720807122,
+          "turnover_on_downs": 0.44792662579471515
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.24,
+            "touchdown": 0.18,
+            "turnover": 0.08,
+            "turnover_on_downs": 0.5
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 12,
+            "touchdown": 9,
+            "turnover": 4,
+            "turnover_on_downs": 25
+          },
+          "plays": 50
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 4.739657380438745,
+            "stddev": 1.5723301886761027
+          },
+          "touchdown": {
+            "mean": 7.385819247022667,
+            "stddev": 1.2472191289246506
+          },
+          "turnover": {
+            "mean": 0.0876790759410979,
+            "stddev": 1.299038105676658
+          },
+          "turnover_on_downs": {
+            "mean": -0.24632590841214536,
+            "stddev": 2.4113066996962456
+          }
+        }
+      },
+      "standard|10-6|not_goal_to_go|4|6+": {
+        "bucket": "standard|10-6|not_goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.06923283348376445,
+          "first_down": 0.2644095396888293,
+          "touchdown": 0.17081450682138166,
+          "turnover": 0.04056663180123506,
+          "turnover_on_downs": 0.45497648820478953
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.14285714285714285,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.8571428571428571
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 1,
+            "turnover": 0,
+            "turnover_on_downs": 6
+          },
+          "plays": 7
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 3.8647166181230737,
+            "stddev": 2.118408440548624
+          },
+          "touchdown": {
+            "mean": 7.4537288705339995,
+            "stddev": 1.441088024333543
+          },
+          "turnover": {
+            "mean": -0.08893983714127598,
+            "stddev": 2.449489742783178
+          },
+          "turnover_on_downs": {
+            "mean": 0.10223636492924693,
+            "stddev": 1.9720265943665387
+          }
+        }
+      },
+      "standard|1|goal_to_go|1|1": {
+        "bucket": "standard|1|goal_to_go|1|1",
+        "outcome_probabilities": {
+          "continue": 0.4427972022506532,
+          "first_down": 0.0013995025819672736,
+          "touchdown": 0.5408809843554938,
+          "turnover": 0.01491671085396636,
+          "turnover_on_downs": 5.599957919376736e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4427118644067797,
+            "first_down": 0.0013559322033898306,
+            "touchdown": 0.5410169491525424,
+            "turnover": 0.014915254237288136,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 653,
+            "first_down": 2,
+            "touchdown": 798,
+            "turnover": 22,
+            "turnover_on_downs": 0
+          },
+          "plays": 1475
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.5534285310914816,
+            "stddev": 1.358609358633161
+          },
+          "first_down": {
+            "mean": 5.603651164881007,
+            "stddev": 1.0
+          },
+          "touchdown": {
+            "mean": 1.0006732283910853,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.5191282224142423,
+            "stddev": 1.1544022817454813
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|1|goal_to_go|2|1": {
+        "bucket": "standard|1|goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.42349245267005264,
+          "first_down": 0.001915015988934669,
+          "touchdown": 0.5672281372681327,
+          "turnover": 0.0073542643493968865,
+          "turnover_on_downs": 1.0129723483111432e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4233241505968779,
+            "first_down": 0.0018365472910927456,
+            "touchdown": 0.5674931129476584,
+            "turnover": 0.0073461891643709825,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 461,
+            "first_down": 2,
+            "touchdown": 618,
+            "turnover": 8,
+            "turnover_on_downs": 0
+          },
+          "plays": 1089
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.4711226822689308,
+            "stddev": 1.288116099800621
+          },
+          "first_down": {
+            "mean": 5.49292452128239,
+            "stddev": 1.5
+          },
+          "touchdown": {
+            "mean": 0.9999425566871744,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.49657190261833195,
+            "stddev": 1.0897247358851685
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|1|goal_to_go|3|1": {
+        "bucket": "standard|1|goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.40631908776293324,
+          "first_down": 0.0014509147207071435,
+          "touchdown": 0.5740513989064892,
+          "turnover": 0.018158829244351485,
+          "turnover_on_downs": 1.976936551896941e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4059662775616083,
+            "first_down": 0.0012970168612191958,
+            "touchdown": 0.5745784695201037,
+            "turnover": 0.018158236057068743,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 313,
+            "first_down": 1,
+            "touchdown": 443,
+            "turnover": 14,
+            "turnover_on_downs": 0
+          },
+          "plays": 771
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.4786965799539453,
+            "stddev": 1.4301113192362436
+          },
+          "first_down": {
+            "mean": 6.5759968228539485,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 1.006068644268927,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -1.0876177603865609,
+            "stddev": 2.351725376164904
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|1|goal_to_go|4|1": {
+        "bucket": "standard|1|goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.00495713351583928,
+          "first_down": 0.0008369635228317329,
+          "touchdown": 0.5369770594772753,
+          "turnover": 0.028488925207381725,
+          "turnover_on_downs": 0.428739918276672
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.5396825396825397,
+            "turnover": 0.02857142857142857,
+            "turnover_on_downs": 0.43174603174603177
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 170,
+            "turnover": 9,
+            "turnover_on_downs": 136
+          },
+          "plays": 315
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 1.0371945389752286,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.19563634806440558,
+            "stddev": 0.41573970964154905
+          },
+          "turnover_on_downs": {
+            "mean": -0.6589228634095333,
+            "stddev": 2.0008108218011715
+          }
+        }
+      },
+      "standard|1|goal_to_go|4|6+": {
+        "bucket": "standard|1|goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.05516809880530811,
+          "first_down": 0.009314594044417672,
+          "touchdown": 0.4921640490212893,
+          "turnover": 0.026731586985377226,
+          "turnover_on_downs": 0.4166216711436077
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.0,
+            "turnover": 0.0,
+            "turnover_on_downs": 1.0
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 0,
+            "turnover": 0,
+            "turnover_on_downs": 1
+          },
+          "plays": 1
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 1.458732647361153,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.17968482356971563,
+            "stddev": 0.41573970964154905
+          },
+          "turnover_on_downs": {
+            "mean": -0.593584523427471,
+            "stddev": 1.9942909619561153
+          }
+        }
+      },
+      "standard|20-11|goal_to_go|1|6+": {
+        "bucket": "standard|20-11|goal_to_go|1|6+",
+        "outcome_probabilities": {
+          "continue": 0.9230077924741027,
+          "first_down": 0.0053799927502853635,
+          "touchdown": 0.059072827398933735,
+          "turnover": 0.01237043798291273,
+          "turnover_on_downs": 0.00016894939376546825
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.9262295081967213,
+            "first_down": 0.004098360655737705,
+            "touchdown": 0.05737704918032787,
+            "turnover": 0.012295081967213115,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 226,
+            "first_down": 1,
+            "touchdown": 14,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 244
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 2.940529728176766,
+            "stddev": 4.721145631112214
+          },
+          "first_down": {
+            "mean": 7.0603718228539485,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 12.506519734158381,
+            "stddev": 2.1582778471054516
+          },
+          "turnover": {
+            "mean": -0.4126127669293137,
+            "stddev": 10.23067283548187
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|goal_to_go|2|6+": {
+        "bucket": "standard|20-11|goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.8518883737969551,
+          "first_down": 0.014457717317806526,
+          "touchdown": 0.10938395134622168,
+          "turnover": 0.024223938329270406,
+          "turnover_on_downs": 4.601920974634483e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.8525252525252526,
+            "first_down": 0.014141414141414142,
+            "touchdown": 0.10909090909090909,
+            "turnover": 0.024242424242424242,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 422,
+            "first_down": 7,
+            "touchdown": 54,
+            "turnover": 12,
+            "turnover_on_downs": 0
+          },
+          "plays": 495
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 2.6974058990843264,
+            "stddev": 4.63726396822806
+          },
+          "first_down": {
+            "mean": 5.618709063327708,
+            "stddev": 5.264435935053794
+          },
+          "touchdown": {
+            "mean": 12.788486262639612,
+            "stddev": 2.3195507109537115
+          },
+          "turnover": {
+            "mean": -0.2204204890056209,
+            "stddev": 3.6543353248801163
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|goal_to_go|3|6+": {
+        "bucket": "standard|20-11|goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.8243241428386949,
+          "first_down": 0.01696274693468817,
+          "touchdown": 0.1326791300079546,
+          "turnover": 0.025972169846376895,
+          "turnover_on_downs": 6.181037228550549e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.8250591016548463,
+            "first_down": 0.016548463356973995,
+            "touchdown": 0.13238770685579196,
+            "turnover": 0.026004728132387706,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 349,
+            "first_down": 7,
+            "touchdown": 56,
+            "turnover": 11,
+            "turnover_on_downs": 0
+          },
+          "plays": 423
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 2.467930406519704,
+            "stddev": 4.785045381700347
+          },
+          "first_down": {
+            "mean": 6.306725592253328,
+            "stddev": 4.060762972443399
+          },
+          "touchdown": {
+            "mean": 13.109300356363262,
+            "stddev": 2.258134388907655
+          },
+          "turnover": {
+            "mean": 0.3125938809392047,
+            "stddev": 5.662695091780886
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|goal_to_go|4|6+": {
+        "bucket": "standard|20-11|goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.2366932111142939,
+          "first_down": 0.03996333428816959,
+          "touchdown": 0.23158063592093953,
+          "turnover": 0.038689200802062444,
+          "turnover_on_downs": 0.45307361787453454
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.25,
+            "turnover": 0.05,
+            "turnover_on_downs": 0.7
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 5,
+            "turnover": 1,
+            "turnover_on_downs": 14
+          },
+          "plays": 20
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 10.219957741067997,
+            "stddev": 3.3105890714493666
+          },
+          "turnover": {
+            "mean": -0.13549428314491263,
+            "stddev": 3.6956233165995855
+          },
+          "turnover_on_downs": {
+            "mean": 0.7258055160813202,
+            "stddev": 3.313546715640915
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|1|2": {
+        "bucket": "standard|20-11|not_goal_to_go|1|2",
+        "outcome_probabilities": {
+          "continue": 0.7941188194491815,
+          "first_down": 0.10909354263666163,
+          "touchdown": 0.08438963716556656,
+          "turnover": 0.01235887637186274,
+          "turnover_on_downs": 3.912437672760565e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 1.0,
+            "touchdown": 0.0,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 1,
+            "touchdown": 0,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 1
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 2.345520245169132,
+            "stddev": 3.3872016981798203
+          },
+          "first_down": {
+            "mean": 11.00574934580245,
+            "stddev": 3.5764544669163505
+          },
+          "touchdown": {
+            "mean": 15.020483756527485,
+            "stddev": 2.9965234791550355
+          },
+          "turnover": {
+            "mean": 0.7951862448265327,
+            "stddev": 4.763370042334793
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|1|3-5": {
+        "bucket": "standard|20-11|not_goal_to_go|1|3-5",
+        "outcome_probabilities": {
+          "continue": 0.7179665380071677,
+          "first_down": 0.2122627893157869,
+          "touchdown": 0.06679130815606638,
+          "turnover": 0.0029699625389747668,
+          "turnover_on_downs": 9.401982004308331e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6868686868686869,
+            "first_down": 0.25252525252525254,
+            "touchdown": 0.06060606060606061,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 68,
+            "first_down": 25,
+            "touchdown": 6,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 99
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.5082265503317709,
+            "stddev": 1.9661935192186197
+          },
+          "first_down": {
+            "mean": 10.05229973832098,
+            "stddev": 3.2456740440161256
+          },
+          "touchdown": {
+            "mean": 14.538440778472012,
+            "stddev": 0.9428090415820466
+          },
+          "turnover": {
+            "mean": 0.7951862448265327,
+            "stddev": 4.763370042334793
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|1|6+": {
+        "bucket": "standard|20-11|not_goal_to_go|1|6+",
+        "outcome_probabilities": {
+          "continue": 0.8224191623289172,
+          "first_down": 0.07756148868717286,
+          "touchdown": 0.08714192689246308,
+          "turnover": 0.012877304997830444,
+          "turnover_on_downs": 1.1709361638885643e-07
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.8224244771494965,
+            "first_down": 0.07755615801704105,
+            "touchdown": 0.087141750580945,
+            "turnover": 0.012877614252517428,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 8494,
+            "first_down": 801,
+            "touchdown": 900,
+            "turnover": 133,
+            "turnover_on_downs": 0
+          },
+          "plays": 10328
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 2.3555274184601642,
+            "stddev": 3.394934068322801
+          },
+          "first_down": {
+            "mean": 11.697416653839264,
+            "stddev": 3.548151017079259
+          },
+          "touchdown": {
+            "mean": 15.168641810216299,
+            "stddev": 3.00178629946476
+          },
+          "turnover": {
+            "mean": 0.8914040112999865,
+            "stddev": 4.763370042334793
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|2|1": {
+        "bucket": "standard|20-11|not_goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.311785148822163,
+          "first_down": 0.6112985709692887,
+          "touchdown": 0.07165026898748311,
+          "turnover": 0.00526272788108707,
+          "turnover_on_downs": 3.2833399780791217e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.2870159453302961,
+            "first_down": 0.6378132118451025,
+            "touchdown": 0.07061503416856492,
+            "turnover": 0.004555808656036446,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 126,
+            "first_down": 280,
+            "touchdown": 31,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 439
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.3696533307487072,
+            "stddev": 1.3857106492797608
+          },
+          "first_down": {
+            "mean": 4.796935152206595,
+            "stddev": 3.2358877279280116
+          },
+          "touchdown": {
+            "mean": 15.263751594295796,
+            "stddev": 3.10918213161845
+          },
+          "turnover": {
+            "mean": 0.08445638153636462,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|2|2": {
+        "bucket": "standard|20-11|not_goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.384790536509772,
+          "first_down": 0.541047803781853,
+          "touchdown": 0.06588061134875796,
+          "turnover": 0.008277373212959037,
+          "turnover_on_downs": 3.6751466580408315e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.36246786632390743,
+            "first_down": 0.5655526992287918,
+            "touchdown": 0.06426735218508997,
+            "turnover": 0.007712082262210797,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 141,
+            "first_down": 220,
+            "touchdown": 25,
+            "turnover": 3,
+            "turnover_on_downs": 0
+          },
+          "plays": 389
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.08896718182328388,
+            "stddev": 1.697185496558311
+          },
+          "first_down": {
+            "mean": 5.830195191067854,
+            "stddev": 3.2080058685876116
+          },
+          "touchdown": {
+            "mean": 14.853314333440164,
+            "stddev": 2.823898015155647
+          },
+          "turnover": {
+            "mean": 0.35754213811767765,
+            "stddev": 2.3570226039551585
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|2|3-5": {
+        "bucket": "standard|20-11|not_goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5535359434451423,
+          "first_down": 0.36146785787900265,
+          "touchdown": 0.07378882048248153,
+          "turnover": 0.011206443796255969,
+          "turnover_on_downs": 9.343971175480025e-07
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5512978986402967,
+            "first_down": 0.36402966625463534,
+            "touchdown": 0.07354758961681088,
+            "turnover": 0.011124845488257108,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 892,
+            "first_down": 589,
+            "touchdown": 119,
+            "turnover": 18,
+            "turnover_on_downs": 0
+          },
+          "plays": 1618
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.7154122164988227,
+            "stddev": 2.2653264300723928
+          },
+          "first_down": {
+            "mean": 7.453801109107527,
+            "stddev": 3.2389260506709032
+          },
+          "touchdown": {
+            "mean": 15.314422189086617,
+            "stddev": 3.0647509288313906
+          },
+          "turnover": {
+            "mean": 0.013204802609642378,
+            "stddev": 3.503525561206125
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|2|6+": {
+        "bucket": "standard|20-11|not_goal_to_go|2|6+",
+        "outcome_probabilities": {
+          "continue": 0.7589755197371084,
+          "first_down": 0.1301500655818678,
+          "touchdown": 0.09266171233899666,
+          "turnover": 0.018212436431744063,
+          "turnover_on_downs": 2.6591028314956113e-07
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.7594167679222357,
+            "first_down": 0.12966498871723658,
+            "touchdown": 0.09269224093039403,
+            "turnover": 0.018226002430133656,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 4375,
+            "first_down": 747,
+            "touchdown": 534,
+            "turnover": 105,
+            "turnover_on_downs": 0
+          },
+          "plays": 5761
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.9755988337959984,
+            "stddev": 3.5610470993910814
+          },
+          "first_down": {
+            "mean": 10.535558884384443,
+            "stddev": 3.3231475045962964
+          },
+          "touchdown": {
+            "mean": 14.961990115369048,
+            "stddev": 2.9043180979882957
+          },
+          "turnover": {
+            "mean": 0.11196465405098498,
+            "stddev": 3.3871305054905236
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|3|1": {
+        "bucket": "standard|20-11|not_goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.3146032684311876,
+          "first_down": 0.625620651867755,
+          "touchdown": 0.05244992563164252,
+          "turnover": 0.007322475231450751,
+          "turnover_on_downs": 3.6788379641561945e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.3017656500802568,
+            "first_down": 0.6420545746388443,
+            "touchdown": 0.04975922953451043,
+            "turnover": 0.006420545746388443,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 188,
+            "first_down": 400,
+            "touchdown": 31,
+            "turnover": 4,
+            "turnover_on_downs": 0
+          },
+          "plays": 623
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.8217213289845613,
+            "stddev": 2.4492760453284985
+          },
+          "first_down": {
+            "mean": 4.149538466123556,
+            "stddev": 3.090161808061189
+          },
+          "touchdown": {
+            "mean": 14.737071881180395,
+            "stddev": 2.71658106728094
+          },
+          "turnover": {
+            "mean": -0.36138730487711135,
+            "stddev": 0.8660254037844386
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|3|2": {
+        "bucket": "standard|20-11|not_goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.3931066106439335,
+          "first_down": 0.49135138490118524,
+          "touchdown": 0.10294074387246746,
+          "turnover": 0.012596026854329718,
+          "turnover_on_downs": 5.233728084082778e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.37995337995337997,
+            "first_down": 0.5058275058275058,
+            "touchdown": 0.10256410256410256,
+            "turnover": 0.011655011655011656,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 163,
+            "first_down": 217,
+            "touchdown": 44,
+            "turnover": 5,
+            "turnover_on_downs": 0
+          },
+          "plays": 429
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.6056709538419436,
+            "stddev": 2.4846398544746076
+          },
+          "first_down": {
+            "mean": 6.142493376902052,
+            "stddev": 3.6520439313209354
+          },
+          "touchdown": {
+            "mean": 15.388225534479629,
+            "stddev": 3.070369590373051
+          },
+          "turnover": {
+            "mean": -0.7933179396332558,
+            "stddev": 4.445222154178574
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|3|3-5": {
+        "bucket": "standard|20-11|not_goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5430695175982359,
+          "first_down": 0.3213987577316261,
+          "touchdown": 0.11032594307062504,
+          "turnover": 0.02520404081604155,
+          "turnover_on_downs": 1.740783471444924e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5422222222222223,
+            "first_down": 0.32222222222222224,
+            "touchdown": 0.11037037037037037,
+            "turnover": 0.025185185185185185,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 732,
+            "first_down": 435,
+            "touchdown": 149,
+            "turnover": 34,
+            "turnover_on_downs": 0
+          },
+          "plays": 1350
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.35048116436929844,
+            "stddev": 2.8767676394038615
+          },
+          "first_down": {
+            "mean": 7.7467965854250584,
+            "stddev": 3.2153138000211863
+          },
+          "touchdown": {
+            "mean": 14.901861625209136,
+            "stddev": 2.9018445461792974
+          },
+          "turnover": {
+            "mean": 0.49252328994560984,
+            "stddev": 5.5948103733895085
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|3|6+": {
+        "bucket": "standard|20-11|not_goal_to_go|3|6+",
+        "outcome_probabilities": {
+          "continue": 0.6891716241436989,
+          "first_down": 0.15793269133761084,
+          "touchdown": 0.11996171001996614,
+          "turnover": 0.03293313979365439,
+          "turnover_on_downs": 8.347050696990948e-07
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6903089887640449,
+            "first_down": 0.15660112359550563,
+            "touchdown": 0.12008426966292135,
+            "turnover": 0.03300561797752809,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 1966,
+            "first_down": 446,
+            "touchdown": 342,
+            "turnover": 94,
+            "turnover_on_downs": 0
+          },
+          "plays": 2848
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.9117569763837123,
+            "stddev": 4.220160866991191
+          },
+          "first_down": {
+            "mean": 10.403597534579776,
+            "stddev": 3.291339301261183
+          },
+          "touchdown": {
+            "mean": 15.114580690572263,
+            "stddev": 2.991016553147626
+          },
+          "turnover": {
+            "mean": -0.6226271448868359,
+            "stddev": 3.275922146843153
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|4|1": {
+        "bucket": "standard|20-11|not_goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.008790189940663704,
+          "first_down": 0.5871810575798595,
+          "touchdown": 0.0454437109226162,
+          "turnover": 0.019144260439418363,
+          "turnover_on_downs": 0.3394407811174422
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.004366812227074236,
+            "first_down": 0.6069868995633187,
+            "touchdown": 0.039301310043668124,
+            "turnover": 0.017467248908296942,
+            "turnover_on_downs": 0.3318777292576419
+          },
+          "outcomes": {
+            "continue": 1,
+            "first_down": 139,
+            "touchdown": 9,
+            "turnover": 4,
+            "turnover_on_downs": 76
+          },
+          "plays": 229
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.2652622743544686,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 3.8157309597243336,
+            "stddev": 2.9703954811131954
+          },
+          "touchdown": {
+            "mean": 13.595665969465434,
+            "stddev": 3.010270485365347
+          },
+          "turnover": {
+            "mean": -0.3503272569913993,
+            "stddev": 0.8660254037844386
+          },
+          "turnover_on_downs": {
+            "mean": -0.5981930241428366,
+            "stddev": 1.6767928760077886
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|4|2": {
+        "bucket": "standard|20-11|not_goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.014507490848089761,
+          "first_down": 0.4440897035589048,
+          "touchdown": 0.11102183101088176,
+          "turnover": 0.010890493793288129,
+          "turnover_on_downs": 0.4194904807888356
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.4482758620689655,
+            "touchdown": 0.1206896551724138,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.43103448275862066
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 26,
+            "touchdown": 7,
+            "turnover": 0,
+            "turnover_on_downs": 25
+          },
+          "plays": 58
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.2829464259780998,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 5.307867507257253,
+            "stddev": 3.341730055422432
+          },
+          "touchdown": {
+            "mean": 14.058908330325927,
+            "stddev": 3.2888184094918085
+          },
+          "turnover": {
+            "mean": -0.3104145255224392,
+            "stddev": 3.2427697352040825
+          },
+          "turnover_on_downs": {
+            "mean": -0.7858891299249531,
+            "stddev": 2.9664793948382653
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|4|3-5": {
+        "bucket": "standard|20-11|not_goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.010132215830411897,
+          "first_down": 0.3577769358189177,
+          "touchdown": 0.17277715181712378,
+          "turnover": 0.031415582966740914,
+          "turnover_on_downs": 0.4278981135668058
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.3333333333333333,
+            "touchdown": 0.19791666666666666,
+            "turnover": 0.03125,
+            "turnover_on_downs": 0.4375
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 32,
+            "touchdown": 19,
+            "turnover": 3,
+            "turnover_on_downs": 42
+          },
+          "plays": 96
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.2829464259780998,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.183458889309519,
+            "stddev": 3.3921727458223585
+          },
+          "touchdown": {
+            "mean": 14.185175978446189,
+            "stddev": 2.6473213347282702
+          },
+          "turnover": {
+            "mean": -0.2586787712686993,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.8497467578420724,
+            "stddev": 3.625307868699863
+          }
+        }
+      },
+      "standard|20-11|not_goal_to_go|4|6+": {
+        "bucket": "standard|20-11|not_goal_to_go|4|6+",
+        "outcome_probabilities": {
+          "continue": 0.012275569179152875,
+          "first_down": 0.24115282608830405,
+          "touchdown": 0.06509539547074611,
+          "turnover": 0.08613811013278226,
+          "turnover_on_downs": 0.5953380991290147
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.16216216216216217,
+            "touchdown": 0.05405405405405406,
+            "turnover": 0.10810810810810811,
+            "turnover_on_downs": 0.6756756756756757
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 12,
+            "touchdown": 4,
+            "turnover": 8,
+            "turnover_on_downs": 50
+          },
+          "plays": 74
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.2829464259780998,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.2452802887980505,
+            "stddev": 3.2521360501813112
+          },
+          "touchdown": {
+            "mean": 13.226104382482651,
+            "stddev": 2.0615528128088303
+          },
+          "turnover": {
+            "mean": -0.4198355601233299,
+            "stddev": 4.3857011982122085
+          },
+          "turnover_on_downs": {
+            "mean": 0.39329899696925963,
+            "stddev": 3.767014733180639
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|1|2": {
+        "bucket": "standard|5-2|goal_to_go|1|2",
+        "outcome_probabilities": {
+          "continue": 0.5571444209067279,
+          "first_down": 0.00012307666583763908,
+          "touchdown": 0.43126068895527253,
+          "turnover": 0.011467220734163874,
+          "turnover_on_downs": 4.592737998087559e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5542784163473818,
+            "first_down": 0.0,
+            "touchdown": 0.4342273307790549,
+            "turnover": 0.011494252873563218,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 434,
+            "first_down": 0,
+            "touchdown": 340,
+            "turnover": 9,
+            "turnover_on_downs": 0
+          },
+          "plays": 783
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.09430656449726986,
+            "stddev": 1.4039671753087508
+          },
+          "first_down": {
+            "mean": 4.575232425074234,
+            "stddev": 2.1469455046647083
+          },
+          "touchdown": {
+            "mean": 2.059624761508769,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.6729465167361909,
+            "stddev": 3.2317865716108862
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|1|3-5": {
+        "bucket": "standard|5-2|goal_to_go|1|3-5",
+        "outcome_probabilities": {
+          "continue": 0.654919056693638,
+          "first_down": 0.0030987227732693196,
+          "touchdown": 0.33152828619764213,
+          "turnover": 0.010452505913112177,
+          "turnover_on_downs": 1.428422338349344e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6551857585139319,
+            "first_down": 0.0030959752321981426,
+            "touchdown": 0.33126934984520123,
+            "turnover": 0.01044891640866873,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 1693,
+            "first_down": 8,
+            "touchdown": 856,
+            "turnover": 27,
+            "turnover_on_downs": 0
+          },
+          "plays": 2584
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.5776676537123687,
+            "stddev": 1.9667530422543542
+          },
+          "first_down": {
+            "mean": 2.6794994076571093,
+            "stddev": 2.1469455046647083
+          },
+          "touchdown": {
+            "mean": 3.906046831613792,
+            "stddev": 0.8293495739331145
+          },
+          "turnover": {
+            "mean": -0.47977896194449005,
+            "stddev": 2.061469637048259
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|2|2": {
+        "bucket": "standard|5-2|goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.5232599344532668,
+          "first_down": 0.003031147315701127,
+          "touchdown": 0.45596948418769867,
+          "turnover": 0.01773291083227999,
+          "turnover_on_downs": 6.5232110533870244e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5192878338278932,
+            "first_down": 0.002967359050445104,
+            "touchdown": 0.4599406528189911,
+            "turnover": 0.017804154302670624,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 350,
+            "first_down": 2,
+            "touchdown": 310,
+            "turnover": 12,
+            "turnover_on_downs": 0
+          },
+          "plays": 674
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.2455361188423403,
+            "stddev": 1.8005985399418762
+          },
+          "first_down": {
+            "mean": 4.479056830026007,
+            "stddev": 0.5
+          },
+          "touchdown": {
+            "mean": 2.064076420582349,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.7505879073980525,
+            "stddev": 1.963203164898291
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|2|3-5": {
+        "bucket": "standard|5-2|goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.6419420468654693,
+          "first_down": 0.0034166320451406097,
+          "touchdown": 0.33908166516673366,
+          "turnover": 0.015557456525826201,
+          "turnover_on_downs": 2.199396830260759e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.6423712342079689,
+            "first_down": 0.003401360544217687,
+            "touchdown": 0.33867832847424684,
+            "turnover": 0.015549076773566569,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 1322,
+            "first_down": 7,
+            "touchdown": 697,
+            "turnover": 32,
+            "turnover_on_downs": 0
+          },
+          "plays": 2058
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.4273592495307,
+            "stddev": 2.0555478576658657
+          },
+          "first_down": {
+            "mean": 3.733816641383733,
+            "stddev": 2.0
+          },
+          "touchdown": {
+            "mean": 3.9239112874849207,
+            "stddev": 0.8195028513024828
+          },
+          "turnover": {
+            "mean": -0.9418270957393067,
+            "stddev": 3.4953931735213994
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|3|2": {
+        "bucket": "standard|5-2|goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.5224952645483827,
+          "first_down": 0.0002006209461945156,
+          "touchdown": 0.45655503438205614,
+          "turnover": 0.02073316672501202,
+          "turnover_on_downs": 1.591339835463806e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5190156599552572,
+            "first_down": 0.0,
+            "touchdown": 0.4608501118568233,
+            "turnover": 0.020134228187919462,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 232,
+            "first_down": 0,
+            "touchdown": 206,
+            "turnover": 9,
+            "turnover_on_downs": 0
+          },
+          "plays": 447
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.3182571713240149,
+            "stddev": 1.8317089153397375
+          },
+          "first_down": {
+            "mean": 6.1311968103945516,
+            "stddev": 4.0
+          },
+          "touchdown": {
+            "mean": 2.0935799890887434,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.7504469638574854,
+            "stddev": 0.6285393610547089
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|3|3-5": {
+        "bucket": "standard|5-2|goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5925083669849498,
+          "first_down": 0.0017121700909597908,
+          "touchdown": 0.372366626960981,
+          "turnover": 0.03340663441816236,
+          "turnover_on_downs": 6.201544947028067e-06
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.592964824120603,
+            "first_down": 0.0016750418760469012,
+            "touchdown": 0.37185929648241206,
+            "turnover": 0.03350083752093802,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 708,
+            "first_down": 2,
+            "touchdown": 444,
+            "turnover": 40,
+            "turnover_on_downs": 0
+          },
+          "plays": 1194
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.33694262976076306,
+            "stddev": 2.634602592666263
+          },
+          "first_down": {
+            "mean": 4.93929130328931,
+            "stddev": 4.0
+          },
+          "touchdown": {
+            "mean": 3.890372935922903,
+            "stddev": 0.831819296639108
+          },
+          "turnover": {
+            "mean": -1.45474049331963,
+            "stddev": 3.9862262855989496
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|4|2": {
+        "bucket": "standard|5-2|goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.02703458643026932,
+          "first_down": 0.004564525572022294,
+          "touchdown": 0.5089981537738646,
+          "turnover": 0.04544604358576188,
+          "turnover_on_downs": 0.4139566906380819
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.5476190476190477,
+            "turnover": 0.047619047619047616,
+            "turnover_on_downs": 0.40476190476190477
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 46,
+            "turnover": 4,
+            "turnover_on_downs": 34
+          },
+          "plays": 84
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 2.3198595303902403,
+            "stddev": 0.25
+          },
+          "turnover": {
+            "mean": -0.011211809772960853,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.17946764810876312,
+            "stddev": 1.172419495764397
+          }
+        }
+      },
+      "standard|5-2|goal_to_go|4|3-5": {
+        "bucket": "standard|5-2|goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.028536507898617613,
+          "first_down": 0.004818110326023532,
+          "touchdown": 0.3428313845390793,
+          "turnover": 0.03871156452571162,
+          "turnover_on_downs": 0.5851024327105679
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.32051282051282054,
+            "turnover": 0.038461538461538464,
+            "turnover_on_downs": 0.6410256410256411
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 25,
+            "turnover": 3,
+            "turnover_on_downs": 50
+          },
+          "plays": 78
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 7.482023051780492,
+            "stddev": 4.361352472705784
+          },
+          "touchdown": {
+            "mean": 3.5377857838451163,
+            "stddev": 0.733212111192934
+          },
+          "turnover": {
+            "mean": 0.09927642301743021,
+            "stddev": 0.9428090415820634
+          },
+          "turnover_on_downs": {
+            "mean": -0.535290996266606,
+            "stddev": 2.706215069058629
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|2|1": {
+        "bucket": "standard|5-2|not_goal_to_go|2|1",
+        "outcome_probabilities": {
+          "continue": 0.44557388646593327,
+          "first_down": 0.29002552380497393,
+          "touchdown": 0.248982058877752,
+          "turnover": 0.015212104970301668,
+          "turnover_on_downs": 0.00020642588103922624
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.4274193548387097,
+            "first_down": 0.31451612903225806,
+            "touchdown": 0.24193548387096775,
+            "turnover": 0.016129032258064516,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 53,
+            "first_down": 39,
+            "touchdown": 30,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 124
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.5828812559957445,
+            "stddev": 1.8939486930308838
+          },
+          "first_down": {
+            "mean": 2.284260363271735,
+            "stddev": 0.8999963474248333
+          },
+          "touchdown": {
+            "mean": 3.5385153882272595,
+            "stddev": 1.0561986345169907
+          },
+          "turnover": {
+            "mean": -0.271475345155101,
+            "stddev": 2.0
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|2|2": {
+        "bucket": "standard|5-2|not_goal_to_go|2|2",
+        "outcome_probabilities": {
+          "continue": 0.5093981387878465,
+          "first_down": 0.16524311484005022,
+          "touchdown": 0.3222120761947379,
+          "turnover": 0.0028795308019029953,
+          "turnover_on_downs": 0.0002671393754625281
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5056179775280899,
+            "first_down": 0.15730337078651685,
+            "touchdown": 0.33707865168539325,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 45,
+            "first_down": 14,
+            "touchdown": 30,
+            "turnover": 0,
+            "turnover_on_downs": 0
+          },
+          "plays": 89
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.0060679098714896485,
+            "stddev": 1.5832456116050557
+          },
+          "first_down": {
+            "mean": 2.943105504023231,
+            "stddev": 0.494871659305392
+          },
+          "touchdown": {
+            "mean": 4.160737610449481,
+            "stddev": 0.7272474743090482
+          },
+          "turnover": {
+            "mean": -0.1743387245091145,
+            "stddev": 1.6393596310755
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|2|3-5": {
+        "bucket": "standard|5-2|not_goal_to_go|2|3-5",
+        "outcome_probabilities": {
+          "continue": 0.5678407447083533,
+          "first_down": 0.1326017777740106,
+          "touchdown": 0.286791597135343,
+          "turnover": 0.012594968631325035,
+          "turnover_on_downs": 0.0001709117509679615
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5769230769230769,
+            "first_down": 0.12179487179487179,
+            "touchdown": 0.28846153846153844,
+            "turnover": 0.01282051282051282,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 90,
+            "first_down": 19,
+            "touchdown": 45,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 156
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 0.717753091355137,
+            "stddev": 1.6812693617224654
+          },
+          "first_down": {
+            "mean": 3.333825282843344,
+            "stddev": 0.9296590385608273
+          },
+          "touchdown": {
+            "mean": 4.520553207837111,
+            "stddev": 0.49391357268651126
+          },
+          "turnover": {
+            "mean": -0.09500475691980691,
+            "stddev": 0.5
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|3|1": {
+        "bucket": "standard|5-2|not_goal_to_go|3|1",
+        "outcome_probabilities": {
+          "continue": 0.3936305377471278,
+          "first_down": 0.27657163174424737,
+          "touchdown": 0.3177602763290256,
+          "turnover": 0.011938627020068917,
+          "turnover_on_downs": 9.892715953029491e-05
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.3853211009174312,
+            "first_down": 0.2889908256880734,
+            "touchdown": 0.3165137614678899,
+            "turnover": 0.009174311926605505,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 84,
+            "first_down": 63,
+            "touchdown": 69,
+            "turnover": 2,
+            "turnover_on_downs": 0
+          },
+          "plays": 218
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.4184054834328176,
+            "stddev": 0.9661944659496586
+          },
+          "first_down": {
+            "mean": 2.121136655585305,
+            "stddev": 0.867660340870886
+          },
+          "touchdown": {
+            "mean": 3.350253016079936,
+            "stddev": 1.0254071276121002
+          },
+          "turnover": {
+            "mean": -0.37891183393756667,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|3|2": {
+        "bucket": "standard|5-2|not_goal_to_go|3|2",
+        "outcome_probabilities": {
+          "continue": 0.5040283984499201,
+          "first_down": 0.17915431605567111,
+          "touchdown": 0.28444512032206726,
+          "turnover": 0.03221285390244864,
+          "turnover_on_downs": 0.00015931126989294245
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.5161290322580645,
+            "first_down": 0.1774193548387097,
+            "touchdown": 0.27419354838709675,
+            "turnover": 0.03225806451612903,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 64,
+            "first_down": 22,
+            "touchdown": 34,
+            "turnover": 4,
+            "turnover_on_downs": 0
+          },
+          "plays": 124
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.8787613020234044,
+            "stddev": 2.7299964943887747
+          },
+          "first_down": {
+            "mean": 3.0121259225852377,
+            "stddev": 0.7977240352174658
+          },
+          "touchdown": {
+            "mean": 3.7841072112390735,
+            "stddev": 0.8000865005138506
+          },
+          "turnover": {
+            "mean": -0.6548158514178228,
+            "stddev": 2.598076211353316
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|3|3-5": {
+        "bucket": "standard|5-2|not_goal_to_go|3|3-5",
+        "outcome_probabilities": {
+          "continue": 0.4606878477787868,
+          "first_down": 0.0776557981289906,
+          "touchdown": 0.3988831344548477,
+          "turnover": 0.06263302571986909,
+          "turnover_on_downs": 0.00014019391750578935
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.46206896551724136,
+            "first_down": 0.05517241379310345,
+            "touchdown": 0.41379310344827586,
+            "turnover": 0.06896551724137931,
+            "turnover_on_downs": 0.0
+          },
+          "outcomes": {
+            "continue": 67,
+            "first_down": 8,
+            "touchdown": 60,
+            "turnover": 10,
+            "turnover_on_downs": 0
+          },
+          "plays": 145
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": -0.3222212543884017,
+            "stddev": 2.205927735742366
+          },
+          "first_down": {
+            "mean": 3.2368982232892956,
+            "stddev": 0.6959705453537527
+          },
+          "touchdown": {
+            "mean": 4.618950044676195,
+            "stddev": 0.4330127018922193
+          },
+          "turnover": {
+            "mean": -0.4576600470775453,
+            "stddev": 3.0740852297878796
+          },
+          "turnover_on_downs": {
+            "mean": -0.4159891598915989,
+            "stddev": 2.6353062815761037
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|4|1": {
+        "bucket": "standard|5-2|not_goal_to_go|4|1",
+        "outcome_probabilities": {
+          "continue": 0.019908923618388228,
+          "first_down": 0.380523125486859,
+          "touchdown": 0.2612526609852079,
+          "turnover": 0.02408058010918364,
+          "turnover_on_downs": 0.3142347098003612
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.4032258064516129,
+            "touchdown": 0.25806451612903225,
+            "turnover": 0.024193548387096774,
+            "turnover_on_downs": 0.31451612903225806
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 50,
+            "touchdown": 32,
+            "turnover": 3,
+            "turnover_on_downs": 39
+          },
+          "plays": 124
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 2.3123892506660417,
+            "stddev": 0.8364209466530595
+          },
+          "touchdown": {
+            "mean": 3.513034693351819,
+            "stddev": 1.2358574958303243
+          },
+          "turnover": {
+            "mean": -0.10142262130145509,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.6231105088828666,
+            "stddev": 1.9126211486124631
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|4|2": {
+        "bucket": "standard|5-2|not_goal_to_go|4|2",
+        "outcome_probabilities": {
+          "continue": 0.051965665037826896,
+          "first_down": 0.17967053093180152,
+          "touchdown": 0.34293067443596637,
+          "turnover": 0.02895609045447933,
+          "turnover_on_downs": 0.3964770391399259
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.06896551724137931,
+            "touchdown": 0.41379310344827586,
+            "turnover": 0.034482758620689655,
+            "turnover_on_downs": 0.4827586206896552
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 2,
+            "touchdown": 12,
+            "turnover": 1,
+            "turnover_on_downs": 14
+          },
+          "plays": 29
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 3.3120765466642763,
+            "stddev": 0.5
+          },
+          "touchdown": {
+            "mean": 4.041208540279092,
+            "stddev": 0.6871842709362749
+          },
+          "turnover": {
+            "mean": -0.11410044896413697,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.5395850855060275,
+            "stddev": 2.3819045715047236
+          }
+        }
+      },
+      "standard|5-2|not_goal_to_go|4|3-5": {
+        "bucket": "standard|5-2|not_goal_to_go|4|3-5",
+        "outcome_probabilities": {
+          "continue": 0.07664935593079467,
+          "first_down": 0.21501403312440726,
+          "touchdown": 0.28082274479305036,
+          "turnover": 0.017710233420357012,
+          "turnover_on_downs": 0.4098036327313907
+        },
+        "sample": {
+          "outcome_probabilities": {
+            "continue": 0.0,
+            "first_down": 0.0,
+            "touchdown": 0.3,
+            "turnover": 0.0,
+            "turnover_on_downs": 0.7
+          },
+          "outcomes": {
+            "continue": 0,
+            "first_down": 0,
+            "touchdown": 3,
+            "turnover": 0,
+            "turnover_on_downs": 7
+          },
+          "plays": 10
+        },
+        "yards_by_outcome": {
+          "continue": {
+            "mean": 1.3018095210433065,
+            "stddev": 3.2909178369149035
+          },
+          "first_down": {
+            "mean": 3.2870200862195134,
+            "stddev": 0.8736782070461953
+          },
+          "touchdown": {
+            "mean": 4.228479477085305,
+            "stddev": 0.4714045207910346
+          },
+          "turnover": {
+            "mean": -0.1217071455617461,
+            "stddev": 0.25
+          },
+          "turnover_on_downs": {
+            "mean": -0.2567257945306726,
+            "stddev": 0.6998542122237652
+          }
+        }
+      }
+    },
+    "default": {
+      "bucket": "default",
+      "outcome_probabilities": {
+        "continue": 0.6574811419841498,
+        "first_down": 0.11100926191158217,
+        "touchdown": 0.1988350997803877,
+        "turnover": 0.018581113339062354,
+        "turnover_on_downs": 0.014093382984818105
+      },
+      "sample": {
+        "outcome_probabilities": {
+          "continue": 0.6574811419841498,
+          "first_down": 0.11100926191158217,
+          "touchdown": 0.19883509978038766,
+          "turnover": 0.01858111333906235,
+          "turnover_on_downs": 0.014093382984818104
+        },
+        "outcomes": {
+          "continue": 34429,
+          "first_down": 5813,
+          "touchdown": 10412,
+          "turnover": 973,
+          "turnover_on_downs": 738
+        },
+        "plays": 52365
+      },
+      "yards_by_outcome": {
+        "continue": {
+          "mean": 1.3018095210433065,
+          "stddev": 3.2909178369149035
+        },
+        "first_down": {
+          "mean": 7.482023051780492,
+          "stddev": 4.361352472705784
+        },
+        "touchdown": {
+          "mean": 6.657702650787553,
+          "stddev": 5.494068783923129
+        },
+        "turnover": {
+          "mean": -0.15416238437821173,
+          "stddev": 3.6956233165995855
+        },
+        "turnover_on_downs": {
+          "mean": -0.4159891598915989,
+          "stddev": 2.6353062815761037
+        }
+      }
+    }
+  },
+  "shrinkage": {
+    "method": "hierarchical Dirichlet-style outcome pooling plus normal-mean yards pooling",
+    "parent_to_bucket_outcome_pseudo_plays": 30.0,
+    "parent_to_bucket_yards_pseudo_observations": 15.0
+  },
+  "train_window": "2013-2023 regular season"
+}
