@@ -1,5 +1,6 @@
 {
   "artifact_id": "Clock-Play Coherent Designed-Rush States",
+  "called_play_state_priors_path": "data/ops/nfl-clock-play-coherent-rush-states/called-play-state-priors.json",
   "clock_flow_priors_path": "data/ops/nfl-clock-play-clock-flow/clock-flow-priors.json",
   "designed_rush_state_priors_path": "data/ops/nfl-clock-play-coherent-rush-states/designed-rush-state-priors.json",
   "fourth_down_continuation_priors_path": "data/ops/nfl-clock-play-v1.2-fourth-down/continuation-priors.json",
@@ -12,6 +13,7 @@
   },
   "engine_config": {
     "base_play_seconds": 28.0,
+    "called_play_state_enabled": true,
     "clock_flow_enabled": true,
     "clock_flow_runtime_scale": 0.956024,
     "designed_rush_state_enabled": true,
@@ -46,9 +48,9 @@
     }
   },
   "scope": {
-    "calibration": "train_only_exclusive_non_red_zone_designed_rush_states",
+    "calibration": "train_only_exclusive_pass_rush_call_selection_and_non_red_zone_designed_rush_states",
     "held_out_data": false,
     "market_data": false,
-    "purpose": "replace inherited Gaussian/explosive and independent turnover rush path"
+    "purpose": "select one train-only pass-or-rush family before resolving exclusive pass or rush outcomes"
   }
 }

@@ -244,6 +244,29 @@ def designed_rush_state_key(
     )
 
 
+def called_play_state_key(
+    *,
+    yardline: int,
+    down: int,
+    distance: int,
+    goal_to_go: bool,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Return the train-only conditional key for a pass-or-rush call."""
+
+    return pass_state_key(
+        yardline=yardline,
+        down=down,
+        distance=distance,
+        goal_to_go=goal_to_go,
+        quarter=quarter,
+        clock_seconds=clock_seconds,
+        score_gap=score_gap,
+    )
+
+
 def special_teams_field_bucket(yardline: int) -> str:
     if yardline <= 20:
         return "own_20"
@@ -307,6 +330,8 @@ class ClockPlayConfig:
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     pass_state_enabled: bool = False
     pass_state_priors: Mapping[str, Any] = field(default_factory=dict)
+    called_play_state_enabled: bool = False
+    called_play_state_priors: Mapping[str, Any] = field(default_factory=dict)
     designed_rush_state_enabled: bool = False
     designed_rush_state_priors: Mapping[str, Any] = field(default_factory=dict)
     special_teams_state_enabled: bool = False
@@ -1303,6 +1328,48 @@ class ClockPlaySimulator:
             return fallback
         raise ValueError("Pass-state model requires train-only priors")
 
+    def _called_play_state_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.called_play_state_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = called_play_state_key(
+            yardline=state.yardline,
+            down=state.down,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Called-play state model requires train-only priors")
+
+    def _select_called_play(self, offense: TeamSide) -> str:
+        """Select exactly one offensive family before resolving its outcome."""
+
+        if self.config.called_play_state_enabled:
+            prior = self._called_play_state_prior(offense)
+            call = self._sample_weighted(prior["call_probabilities"])
+            if call not in {"pass", "rush"}:
+                raise ValueError(f"Unknown called-play family {call!r}")
+        else:
+            pass_probability = 0.52
+            if self._is_endgame():
+                pass_probability += 0.17 if self._is_trailing(offense) else -0.12
+            call = (
+                "pass"
+                if self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
+                else "rush"
+            )
+        self._event("play_call", offense=offense, family=call)
+        self.state.event_counts[f"play_call_{call}"] += 1
+        return call
+
     def _designed_rush_state_prior(self, offense: TeamSide) -> Mapping[str, Any]:
         state = self.state
         priors = self.config.designed_rush_state_priors
@@ -1741,16 +1808,12 @@ class ClockPlaySimulator:
                 return
 
         if self.config.pass_state_enabled:
-            pass_probability = 0.52
-            if self._is_endgame():
-                pass_probability += 0.17 if self._is_trailing(offense) else -0.12
             rush_transition = (
                 self.config.red_zone_rush_transition_enabled
                 and state.yardline >= 80
                 and state.down < 4
             )
-            is_pass = self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
-            if is_pass:
+            if self._select_called_play(offense) == "pass":
                 self._resolve_pass_attempt(offense)
                 return
             if rush_transition:

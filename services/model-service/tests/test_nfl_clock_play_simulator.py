@@ -239,6 +239,20 @@ def _designed_rush_state_config(
     )
 
 
+def _called_play_state_config(*, family: str) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        called_play_state_enabled=True,
+        called_play_state_priors={
+            "default": {
+                "call_probabilities": {
+                    name: 1.0 if name == family else 0.0
+                    for name in ("pass", "rush")
+                }
+            }
+        },
+    )
+
+
 def _coherent_rush_config(
     *,
     rush_outcome: str,
@@ -689,6 +703,43 @@ def test_pass_state_routes_each_primary_outcome_exclusively() -> None:
         assert simulator.state.event_counts["route_rush"] == 0
         assert simulator.state.event_counts["route_red_zone_rush"] == 0
         assert simulator.state.event_counts["turnover"] == 0
+
+
+def test_called_play_state_selects_one_pass_or_rush_family_before_outcome() -> None:
+    pass_config = _coherent_state_config(pass_outcome="completion")
+    rush_config = _designed_rush_state_config(outcome="short_gain", yards=3)
+    for family, expected_route in (("pass", "pass"), ("rush", "designed_rush")):
+        selector = _called_play_state_config(family=family)
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=19,
+            config=ClockPlayConfig(
+                pass_state_enabled=True,
+                pass_state_priors=pass_config.pass_state_priors,
+                called_play_state_enabled=True,
+                called_play_state_priors=selector.called_play_state_priors,
+                designed_rush_state_enabled=True,
+                designed_rush_state_priors=rush_config.designed_rush_state_priors,
+            ),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=50,
+            down=1,
+            distance=10,
+        )
+
+        simulator._resolve_scrimmage_play("home")
+
+        assert simulator.state.event_counts["play_call"] == 1
+        assert simulator.state.event_counts[f"play_call_{family}"] == 1
+        assert simulator.state.event_counts[f"route_{expected_route}"] == 1
+        assert simulator.state.event_counts["route_pass"] + simulator.state.event_counts[
+            "route_designed_rush"
+        ] == 1
 
 
 def test_designed_rush_state_routes_each_primary_outcome_exclusively() -> None:

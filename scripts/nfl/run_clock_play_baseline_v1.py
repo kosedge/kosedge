@@ -37,6 +37,7 @@ SOURCE_FILES = (
     "services/model-service/src/services/nfl_season_engine/kicker_layer.py",
     "scripts/nfl/run_clock_play_baseline_v1.py",
     "scripts/nfl/build_clock_play_coherent_state_priors.py",
+    "scripts/nfl/build_clock_play_called_play_state_priors.py",
     "scripts/nfl/build_clock_play_designed_rush_state_priors.py",
 )
 
@@ -92,6 +93,11 @@ def _load_clock_play_priors(
         ),
         ("pass_state_priors_path", "pass_state_priors", "pass_state"),
         (
+            "called_play_state_priors_path",
+            "called_play_state_priors",
+            "called_play_state",
+        ),
+        (
             "designed_rush_state_priors_path",
             "designed_rush_state_priors",
             "designed_rush_state",
@@ -112,6 +118,8 @@ def _load_clock_play_priors(
             raise SystemExit(f"{label} priors need a priors object")
         if label == "pass_state":
             priors = priors.get("pass")
+        elif label == "called_play_state":
+            priors = priors.get("called_play")
         elif label == "designed_rush_state":
             priors = priors.get("designed_rush")
         elif label == "special_teams_state":
@@ -369,6 +377,14 @@ def run(
                     "interception",
                     "fumble",
                 )
+            ),
+            "called_play_selection_exclusive": (
+                aggregate_events["play_call"]
+                == aggregate_events["play_call_pass"] + aggregate_events["play_call_rush"]
+                == aggregate_events["pass_attempt"]
+                + aggregate_events["route_designed_rush"]
+                + aggregate_events["route_red_zone_rush"]
+                + aggregate_events["route_rush"]
             ),
             "designed_rush_primary_outcomes_exclusive": (
                 aggregate_events["designed_rush_attempt"]

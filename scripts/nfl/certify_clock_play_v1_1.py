@@ -85,6 +85,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
         ),
         ("pass_state_priors_path", "pass_state_priors", "Pass state"),
         (
+            "called_play_state_priors_path",
+            "called_play_state_priors",
+            "Called-play state",
+        ),
+        (
             "designed_rush_state_priors_path",
             "designed_rush_state_priors",
             "Designed rush state",
@@ -104,6 +109,8 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             raise SystemExit(f"{label} priors need a priors object")
         if label == "Pass state":
             priors = priors.get("pass")
+        elif label == "Called-play state":
+            priors = priors.get("called_play")
         elif label == "Designed rush state":
             priors = priors.get("designed_rush")
         elif label == "Special-teams state":
@@ -143,6 +150,7 @@ def _summary(
     third_attempts = counts["third_down_attempt"]
     pass_attempts = counts["pass_attempt"]
     completions = counts["pass_completion"]
+    called_plays = counts["play_call_pass"] + counts["play_call_rush"]
     designed_rush_attempts = counts["designed_rush_attempt"]
     return {
         "plays_per_game": _per_game(sum(plays), games),
@@ -181,6 +189,7 @@ def _summary(
             counts["non_offensive_touchdown"], games
         ),
         "pass_attempts_per_game": _per_game(pass_attempts, games),
+        "called_pass_share": _rate(counts["play_call_pass"], called_plays),
         "completion_rate": _rate(completions, pass_attempts),
         "yards_per_completion": _rate(counts["pass_completion_yards"], completions),
         "yards_per_pass_attempt": _rate(counts["pass_completion_yards"], pass_attempts),
@@ -293,6 +302,8 @@ def _simulation_metrics(
                 "non_offensive_touchdown"
             ]
             counts["pass_attempt"] += event_counts["pass_attempt"]
+            counts["play_call_pass"] += event_counts["play_call_pass"]
+            counts["play_call_rush"] += event_counts["play_call_rush"]
             counts["pass_completion"] += event_counts["pass_outcome_completion"]
             counts["pass_completion_yards"] += event_counts[
                 "pass_completion_yards"
@@ -529,6 +540,15 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 counts["third_down_attempt"] += 1
 
             down = _number(payload.get("down"))
+            if (
+                down in {1.0, 2.0, 3.0}
+                and not _is_one(payload.get("two_point_attempt"))
+                and not _is_one(payload.get("qb_spike"))
+            ):
+                if is_called_pass:
+                    counts["play_call_pass"] += 1
+                elif play_type == "run" and not _is_one(payload.get("qb_kneel")):
+                    counts["play_call_rush"] += 1
             if down == 4:
                 counts["fourth_down_decision"] += 1
                 if play_type == "field_goal":
