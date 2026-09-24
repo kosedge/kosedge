@@ -253,6 +253,9 @@ class ClockPlayConfig:
     )
     # When > 0, bound trail−3 RZ FG/GO mix applies only at or below this game clock.
     q4_trail3_fg_range_precedence_max_clock_seconds: float = 0.0
+    # When > max clock, trail−3 FG-range fourths may still sample the bound mix up to
+    # this clock; above it, regulation defers field goals (go/continuation).
+    q4_trail3_fg_range_precedence_soft_max_clock_seconds: float = 0.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -603,13 +606,17 @@ class ClockPlaySimulator:
             )
         )
         max_clock = self.config.q4_trail3_fg_range_precedence_max_clock_seconds
-        regulation_clock_gate = (
-            max_clock <= 0.0 or self.state.clock_seconds <= max_clock
+        clock = self.state.clock_seconds
+        soft_max = self.config.q4_trail3_fg_range_precedence_soft_max_clock_seconds
+        soft_ceiling = soft_max if soft_max > max_clock else max_clock
+        regulation_clock_gate = max_clock <= 0.0 or clock <= max_clock
+        soft_regulation_mix_window = (
+            max_clock > 0.0 and max_clock < clock <= soft_ceiling
         )
         if (
             trail3_fg_range
             and trail3_precedence_window
-            and regulation_clock_gate
+            and (regulation_clock_gate or soft_regulation_mix_window)
             and self.state.yardline >= 80
         ):
             probs = self.config.q4_trail3_fg_range_action_probabilities
@@ -656,19 +663,24 @@ class ClockPlaySimulator:
         if fg_distance <= self.config.field_goal_max_distance and (
             self.state.yardline >= 55 or self._is_endgame()
         ):
-            if (
-                trail3_fg_range
-                and max_clock > 0.0
-                and self.state.clock_seconds > max_clock
-            ):
-                if (
-                    yards_to_go <= self.config.fourth_down_go_distance
-                    and self.state.yardline >= 45
-                ):
+            if trail3_fg_range and max_clock > 0.0:
+                clock = self.state.clock_seconds
+                soft_max = self.config.q4_trail3_fg_range_precedence_soft_max_clock_seconds
+                soft_ceiling = soft_max if soft_max > max_clock else max_clock
+                if max_clock < clock <= soft_ceiling:
+                    probs = self.config.q4_trail3_fg_range_action_probabilities
+                    if isinstance(probs, Mapping) and probs:
+                        return self._sample_weighted(dict(probs))
                     return "go"
-                if self.config.fourth_down_continuation_enabled:
-                    return "go"
-                return "punt"
+                if clock > soft_ceiling:
+                    if (
+                        yards_to_go <= self.config.fourth_down_go_distance
+                        and self.state.yardline >= 45
+                    ):
+                        return "go"
+                    if self.config.fourth_down_continuation_enabled:
+                        return "go"
+                    return "punt"
             return "field_goal"
         return "punt"
 
