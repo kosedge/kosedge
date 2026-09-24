@@ -575,6 +575,12 @@ def main() -> None:
     config_payload = json.loads(args.config.read_text(encoding="utf-8"))
     inputs_payload = json.loads(args.inputs.read_text(encoding="utf-8"))
     run_spec = config_payload["freeze_run"]
+    lineage = config_payload.get("lineage")
+    parent_source_sha = (
+        str(lineage.get("parent_commit") or "").strip()
+        if isinstance(lineage, Mapping)
+        else ""
+    )
     candidate, games_simulated = _simulation_metrics(
         config=ClockPlayConfig.from_mapping(_engine_config(config_payload)),
         cases=inputs_payload["cases"],
@@ -593,6 +599,7 @@ def main() -> None:
     }
     output = {
         "artifact_id": config_payload["artifact_id"],
+        "parent_source_sha": parent_source_sha or None,
         "train_window": "2013-2023 regular season",
         "historical_source": args.historical_pbp.as_posix(),
         "historical_games": historical_games,

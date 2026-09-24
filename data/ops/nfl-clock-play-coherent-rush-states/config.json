@@ -7,6 +7,9 @@
   "red_zone_fourth_decision_priors_path": "data/ops/nfl-clock-play-joint-rz-state/rz-fourth-decision-priors.json",
   "red_zone_rush_transition_priors_path": "data/ops/nfl-clock-play-rz-rush-transition/rush-transition-priors.json",
   "special_teams_state_priors_path": "data/ops/nfl-clock-play-coherent-pass-states/coherent-state-priors.json",
+  "lineage": {
+    "parent_commit": "aba4e3a935c3716886577f28dd1a47abd6efbfbc"
+  },
   "engine_config": {
     "base_play_seconds": 28.0,
     "clock_flow_enabled": true,

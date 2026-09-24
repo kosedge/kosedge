@@ -267,6 +267,12 @@ def run(
     config_payload = _load_json_object(config_path)
     inputs_payload = _load_json_object(inputs_path)
     artifact_id = str(config_payload.get("artifact_id") or ARTIFACT_ID)
+    lineage = config_payload.get("lineage")
+    parent_source_sha = (
+        str(lineage.get("parent_commit") or "").strip()
+        if isinstance(lineage, Mapping)
+        else ""
+    )
     engine_config, clock_play_priors_receipt = _load_clock_play_priors(
         config_payload
     )
@@ -396,6 +402,7 @@ def run(
         "experiment_scope": "isolated_train_only_structural_baseline",
         "games_simulated": games_simulated,
         "case_count": len(case_summaries),
+        "parent_source_sha": parent_source_sha or None,
         "held_out_data": False,
         "market_data": False,
         "calibration": "none",
@@ -452,6 +459,7 @@ def run(
         "artifact_id": artifact_id,
         "model_version": config.model_version,
         "source_sha": source_sha,
+        "parent_source_sha": parent_source_sha or None,
         "runner_version": RUNNER_VERSION,
         "config": {
             "path": config_path.as_posix(),
