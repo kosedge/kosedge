@@ -72,6 +72,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "Red-zone pass transition",
         ),
         (
+            "red_zone_generic_pass_incompletion_priors_path",
+            "red_zone_generic_pass_incompletion_priors",
+            "RZ generic pass incompletion",
+        ),
+        (
             "red_zone_fourth_decision_priors_path",
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",

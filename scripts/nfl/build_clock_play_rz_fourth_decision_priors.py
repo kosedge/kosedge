@@ -124,7 +124,7 @@ def main() -> None:
             key = rz_fourth_decision_state_key(
                 yardline=yardline,
                 distance=distance,
-                goal_to_go=_is_one(p.get("goal_to_go")),
+                goal_to_go=distance >= 100 - yardline,
             )
             action = (
                 "field_goal"

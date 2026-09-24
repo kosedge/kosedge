@@ -89,6 +89,11 @@ def _load_clock_play_priors(
             "red_zone_pass_transition",
         ),
         (
+            "red_zone_generic_pass_incompletion_priors_path",
+            "red_zone_generic_pass_incompletion_priors",
+            "red_zone_generic_pass_incompletion",
+        ),
+        (
             "red_zone_fourth_decision_priors_path",
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",

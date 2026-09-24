@@ -117,6 +117,12 @@ def rz_rush_field_bucket(yardline: int) -> str:
     return "20-16"
 
 
+def rz_goal_to_go(yardline: int, distance: int) -> bool:
+    """Match train-only RZ prior builders (yards-to-go vs distance to goal)."""
+
+    return distance >= 100 - yardline
+
+
 def rz_rush_distance_bucket(distance: int) -> str:
     if distance <= 1:
         return "1"
@@ -232,6 +238,10 @@ class ClockPlayConfig:
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_pass_transition_enabled: bool = False
     red_zone_pass_transition_priors: Mapping[str, Any] = field(default_factory=dict)
+    red_zone_generic_pass_incompletion_enabled: bool = False
+    red_zone_generic_pass_incompletion_priors: Mapping[str, Any] = field(
+        default_factory=dict
+    )
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     pre_entry_pass_rz_enabled: bool = False
@@ -574,7 +584,7 @@ class ClockPlaySimulator:
             state_key = rz_fourth_decision_state_key(
                 yardline=self.state.yardline,
                 distance=yards_to_go,
-                goal_to_go=yards_to_go >= 100 - self.state.yardline,
+                goal_to_go=rz_goal_to_go(self.state.yardline, yards_to_go),
             )
             prior = (
                 buckets.get(state_key)
@@ -616,7 +626,7 @@ class ClockPlaySimulator:
         key = fourth_down_situation_key(
             yardline=state.yardline,
             distance=state.distance,
-            goal_to_go=state.distance >= 100 - state.yardline,
+            goal_to_go=rz_goal_to_go(state.yardline, state.distance),
             quarter=state.quarter,
             clock_seconds=state.clock_seconds,
             score_gap=score_gap,
@@ -756,7 +766,7 @@ class ClockPlaySimulator:
             yardline=state.yardline,
             down=state.down,
             distance=state.distance,
-            goal_to_go=state.distance >= 100 - state.yardline,
+            goal_to_go=rz_goal_to_go(state.yardline, state.distance),
         )
         if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
             return buckets[key]
@@ -769,6 +779,22 @@ class ClockPlaySimulator:
 
     def _rz_pass_transition_prior(self) -> Mapping[str, Any]:
         return self._rz_transition_prior(self.config.red_zone_pass_transition_priors)
+
+    def _rz_generic_pass_incompletion_prior(self) -> Mapping[str, Any]:
+        priors = self.config.red_zone_generic_pass_incompletion_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        key = rz_rush_state_key(
+            yardline=self.state.yardline,
+            down=self.state.down,
+            distance=self.state.distance,
+            goal_to_go=rz_goal_to_go(self.state.yardline, self.state.distance),
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("RZ generic pass incompletion requires train-only priors")
 
     def _sample_weighted(self, weights: Mapping[str, Any]) -> str:
         values = {
@@ -1301,9 +1327,20 @@ class ClockPlaySimulator:
                 return
             is_pass = self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
 
-        incomplete = is_pass and self.rng.random() < _clamp(
-            self.config.incompletion_probability / attack, 0.16, 0.48
-        )
+        if (
+            is_pass
+            and rush_transition
+            and self.config.red_zone_generic_pass_incompletion_enabled
+        ):
+            prior = self._rz_generic_pass_incompletion_prior()
+            incomplete_probability = float(prior["incomplete_probability"])
+            incomplete = self.rng.random() < _clamp(
+                incomplete_probability / attack, 0.16, 0.55
+            )
+        else:
+            incomplete = is_pass and self.rng.random() < _clamp(
+                self.config.incompletion_probability / attack, 0.16, 0.48
+            )
         if incomplete:
             self._consume_clock(
                 self._play_seconds(
@@ -1406,7 +1443,7 @@ class ClockPlaySimulator:
                 yardline=state.yardline,
                 down=state.down,
                 distance=state.distance,
-                goal_to_go=state.distance >= 100 - state.yardline,
+                goal_to_go=rz_goal_to_go(state.yardline, state.distance),
             )
             self._event(
                 "pre_entry_pass_rz_handoff",

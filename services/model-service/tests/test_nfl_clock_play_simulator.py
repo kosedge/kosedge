@@ -414,6 +414,43 @@ def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
 
 
+def test_non_fourth_red_zone_generic_pass_uses_train_incompletion_prior() -> None:
+    config = ClockPlayConfig(
+        red_zone_rush_transition_enabled=True,
+        red_zone_generic_pass_incompletion_enabled=True,
+        red_zone_generic_pass_incompletion_priors={
+            "default": {
+                "bucket": "unit_test",
+                "incomplete_probability": 1.0,
+            }
+        },
+        red_zone_rush_transition_priors={
+            "default": {
+                "bucket": "unit_test",
+                "outcome_probabilities": {"first_down": 1.0},
+                "yard_value_weights": {"first_down": {"5": 1.0}},
+            }
+        },
+    )
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=3,
+        config=config,
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=88,
+        down=2,
+        distance=7,
+    )
+    simulator._resolve_scrimmage_play("home")
+    assert simulator.state.event_counts["incomplete_pass"] == 1
+    assert simulator.state.down == 3
+
+
 def test_non_fourth_red_zone_pass_uses_pass_transition_when_enabled() -> None:
     simulator = ClockPlaySimulator(
         _inputs(),

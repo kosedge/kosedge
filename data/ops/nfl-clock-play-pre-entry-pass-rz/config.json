@@ -3,7 +3,8 @@
   "clock_flow_priors_path": "data/ops/nfl-clock-play-clock-flow/clock-flow-priors.json",
   "fourth_down_continuation_priors_path": "data/ops/nfl-clock-play-v1.2-fourth-down/continuation-priors.json",
   "pre_entry_pass_rz_priors_path": "data/ops/nfl-clock-play-pre-entry-pass-rz/pre-entry-pass-rz-priors.json",
-  "red_zone_fourth_decision_priors_path": "data/ops/nfl-clock-play-joint-rz-state/rz-fourth-decision-priors.json",
+  "red_zone_fourth_decision_priors_path": "data/ops/nfl-clock-play-pre-entry-pass-rz/rz-fourth-decision-priors.json",
+  "red_zone_generic_pass_incompletion_priors_path": "data/ops/nfl-clock-play-pre-entry-pass-rz/rz-generic-pass-incompletion-priors.json",
   "red_zone_rush_transition_priors_path": "data/ops/nfl-clock-play-rz-rush-transition/rush-transition-priors.json",
   "engine_config": {
     "base_play_seconds": 28.0,
@@ -28,6 +29,7 @@
     "red_zone_fourth_decision_enabled": true,
     "red_zone_rush_transition_enabled": true,
     "red_zone_pass_transition_enabled": false,
+    "red_zone_generic_pass_incompletion_enabled": true,
     "regulation_quarter_seconds": 900,
     "timeout_window_seconds": 100,
     "timeouts_per_team": 3,
