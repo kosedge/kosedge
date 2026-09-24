@@ -452,6 +452,7 @@ class ClockPlaySimulator:
             "yardline": state.yardline,
             "down": state.down,
             "distance": state.distance,
+            "play_count": state.play_count,
             "score": state.score,
             "timeouts": {"home": state.home_timeouts, "away": state.away_timeouts},
         }
