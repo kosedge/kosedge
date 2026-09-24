@@ -3,7 +3,7 @@
   "contract": {
     "hypothesis": "When the pass route immediately before a drive's first red-zone snap starts at the opponent 30-21, that first non-fourth red-zone route and its continuation should be sampled from one train-only joint state process rather than from an unrelated generic route.",
     "state_owner": "The process owns the handoff from an eligible 70-79 pass entry origin to exactly one first non-fourth red-zone continuation. It does not own the crossing probability, later red-zone snaps, fourth-down decisions, clock priors, possession semantics, or scoring priors outside its observed continuation.",
-    "eligible_pre_entry_pass": "pass route at offensive yardline 70-79 immediately before the same drive's first red-zone route",
+    "eligible_pre_entry_pass": "pass route at offensive yardline 70-79 immediately before the same drive's first red-zone route, provided the drive did not start inside the red zone",
     "eligible_continuation": "first same-drive red-zone play_type in {pass,run} at offensive yardline 80-99 and down<4",
     "state_key": "pre-entry start bucket (70-74 or 75-79) × continuation red-zone field bucket × continuation down × distance bucket × goal-to-go",
     "continuation_outcomes": [

@@ -111,6 +111,19 @@ def _route(payload: Mapping[str, Any]) -> str | None:
     return None
 
 
+def _drive_started_inside_red_zone(payload: Mapping[str, Any]) -> bool:
+    start = str(payload.get("drive_start_yard_line") or "").strip()
+    posteam = str(payload.get("posteam") or "").strip()
+    parts = start.split()
+    if len(parts) != 2 or not posteam:
+        return False
+    try:
+        marker = int(parts[1])
+    except ValueError:
+        return False
+    return parts[0] != posteam and marker <= 20
+
+
 def _outcome(payload: Mapping[str, Any], *, route: str, yards: int, distance: int) -> str:
     if _offensive_touchdown(payload):
         return "touchdown"
@@ -338,6 +351,7 @@ def main() -> None:
     buckets: defaultdict[str, Samples] = defaultdict(Samples)
     active_crossings: dict[tuple[str, int, str], Crossing | None] = {}
     drive_seen_rz: dict[tuple[str, int, str], bool] = {}
+    drive_started_inside: dict[tuple[str, int, str], bool] = {}
     games: set[str] = set()
     historical_games_with_crossing: set[str] = set()
     rows_examined = 0
@@ -364,6 +378,9 @@ def main() -> None:
             drive_key = (game_id, int(fixed_drive), posteam)
             drive_seen_rz.setdefault(drive_key, False)
             active_crossings.setdefault(drive_key, None)
+            drive_started_inside.setdefault(
+                drive_key, _drive_started_inside_red_zone(payload)
+            )
             route = _route(payload)
             yardline = _offensive_yardline(payload)
 
@@ -375,7 +392,7 @@ def main() -> None:
             ):
                 drive_seen_rz[drive_key] = True
                 crossing = active_crossings[drive_key]
-                if crossing is not None:
+                if crossing is not None and not drive_started_inside[drive_key]:
                     accounting["pass_crossings_to_rz"] += 1
                     historical_games_with_crossing.add(game_id)
                     down = _number(payload.get("down"))
@@ -423,7 +440,8 @@ def main() -> None:
         "population_definition": {
             "pre_entry": (
                 "pass route at offensive yardline 70-79 immediately before "
-                "the drive's first red-zone route"
+                "the drive's first red-zone route; drive did not start inside "
+                "the red zone"
             ),
             "continuation": (
                 "first same-drive red-zone route; play_type in {pass,run}; "
