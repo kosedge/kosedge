@@ -1,0 +1,36 @@
+{
+  "artifact_id": "Clock-Play RZ opportunity-volume pre-code receipt",
+  "candidate_config": {
+    "path": "data/ops/nfl-clock-play-rz-opportunity-trace/config.json",
+    "sha256": "b8039fe591b14ee7d22a15a8fb6cdbe8eb11e1992815be38b26d6c3b9eccb664"
+  },
+  "historical_pbp": {
+    "path": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+    "seasons": "2013-2023 regular season",
+    "sha256": "823304baa68961187307c1d08774bee80a58d9757ee57be01f6879b34c5bca2c"
+  },
+  "parent_source_sha": "426c9ac491cffdfb385607689dd51f659f295bfc",
+  "scope": {
+    "held_out_data": false,
+    "market_data": false,
+    "production_data": false
+  },
+  "seed_schedule": {
+    "case_count": 4,
+    "replicates_per_case": 512,
+    "root_seeds": {
+      "away-defense-edge": 336182,
+      "home-offense-edge": 228451,
+      "neutral-structural": 114729,
+      "tempo-contrast": 443917
+    },
+    "simulated_games": 2048
+  },
+  "source_sha": "a68ed73c436e8a332175a740d3220ce58f572856",
+  "synthetic_inputs": {
+    "held_out_data": false,
+    "market_data": false,
+    "path": "data/ops/nfl-clock-play-baseline-v1/inputs.json",
+    "sha256": "982a5a03e4e519cbdc8f9a344000f8391f3a17a8a71e61dc8e4a8ce21afacf30"
+  }
+}
