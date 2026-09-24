@@ -935,6 +935,22 @@ def test_goal_line_fourth_down_conversion_is_a_touchdown() -> None:
     assert simulator.invariant_failures == []
 
 
+def test_endgame_trail3_mid_fg_band_hold_caps_exit() -> None:
+    config = ClockPlayConfig(q4_endgame_trail3_mid_fg_band_hold_max_yardline=79)
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=120.0,
+        possession="home",
+        yardline=70,
+        down=2,
+        distance=10,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._cap_yards_for_endgame_trail3_mid_fg_band_hold("home", 40) == 9
+
+
 def test_q4_trail3_margin_preservation_skips_fg_band_inside_endgame() -> None:
     config = ClockPlayConfig(
         q4_trail3_margin_preservation_field_goal_enabled=True,
