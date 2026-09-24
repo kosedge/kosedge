@@ -259,6 +259,8 @@ class ClockPlayConfig:
     q4_endgame_trail3_non_fourth_field_goal_enabled: bool = False
     q4_endgame_trail3_non_fourth_field_goal_attempt_probability: float = 0.0
     q4_endgame_trail3_fg_range_approach_extra_yards: float = 0.0
+    q4_trail3_margin_preservation_field_goal_enabled: bool = False
+    q4_trail3_margin_preservation_field_goal_probability: float = 0.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -509,7 +511,48 @@ class ClockPlaySimulator:
         if not self._maybe_finish_overtime_after_score():
             self._kickoff(_OTHER_SIDE[offense], reason="after_try")
 
+    def _q4_trail3_margin_preservation_field_goal_eligible(
+        self, offense: TeamSide
+    ) -> bool:
+        if self.state.quarter != 4:
+            return False
+        gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
+        fg_distance = 117 - self.state.yardline
+        if fg_distance > self.config.field_goal_max_distance:
+            return False
+        if gap == 0:
+            return True
+        if gap in (-7, -6):
+            return True
+        if 1 <= gap <= 7:
+            return gap + 7 >= 10
+        return False
+
+    def _try_q4_trail3_margin_preservation_field_goal(
+        self, offense: TeamSide, *, source: str
+    ) -> bool:
+        if not self.config.q4_trail3_margin_preservation_field_goal_enabled:
+            return False
+        prob = self.config.q4_trail3_margin_preservation_field_goal_probability
+        if prob <= 0.0:
+            return False
+        if not self._q4_trail3_margin_preservation_field_goal_eligible(offense):
+            return False
+        if self.rng.random() >= prob:
+            return False
+        self._event(
+            "q4_trail3_margin_preservation_field_goal",
+            offense=offense,
+            source=source,
+            score_gap=self.state.score[offense]
+            - self.state.score[_OTHER_SIDE[offense]],
+        )
+        self._attempt_field_goal(offense, source=f"{source}_trail3_margin_preservation")
+        return True
+
     def _score_touchdown(self, offense: TeamSide, *, source: str) -> None:
+        if self._try_q4_trail3_margin_preservation_field_goal(offense, source=source):
+            return
         self._add_points(offense, 6)
         self._event("touchdown", offense=offense, source=source, points=6)
         self._resolve_try(offense)
