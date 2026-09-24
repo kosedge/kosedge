@@ -236,6 +236,7 @@ class ClockPlayConfig:
     clock_flow_runtime_scale: float = 1.0
     q4_trailing_clock_flow_scale: float = 1.0
     q4_close_leading_clock_flow_scale: float = 1.0
+    q4_endgame_trail3_clock_flow_scale: float = 1.0
     red_zone_rush_transition_enabled: bool = False
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_pass_transition_enabled: bool = False
@@ -425,6 +426,12 @@ class ClockPlaySimulator:
                     seconds *= self.config.q4_trailing_clock_flow_scale
                 elif 0 < gap <= 8:
                     seconds *= self.config.q4_close_leading_clock_flow_scale
+                if (
+                    gap == -3
+                    and self._is_endgame()
+                    and self.config.q4_endgame_trail3_clock_flow_scale > 0.0
+                ):
+                    seconds *= self.config.q4_endgame_trail3_clock_flow_scale
             return seconds
         if stopped_clock:
             return _clamp(self.rng.uniform(5.0, 12.0), 1.0, 15.0)
