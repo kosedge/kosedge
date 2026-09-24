@@ -953,6 +953,26 @@ def test_endgame_trail3_fg_range_approach_extra_yards() -> None:
     assert simulator._endgame_trail3_fg_range_approach_extra_yards("home") == 0.0
 
 
+def test_endgame_trail3_spike_only_on_first_down_in_red_zone() -> None:
+    config = ClockPlayConfig(
+        q4_endgame_trail3_non_fourth_field_goal_enabled=True,
+        q4_endgame_trail3_non_fourth_field_goal_attempt_probability=1.0,
+        q4_trail3_fg_range_action_probabilities={"field_goal": 1.0, "go": 0.0},
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=120.0,
+        possession="home",
+        yardline=85,
+        down=2,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert not simulator._should_take_endgame_trail3_non_fourth_field_goal("home")
+
+
 def test_endgame_trail3_non_fourth_field_goal_state_is_reachable() -> None:
     config = ClockPlayConfig(
         q4_endgame_trail3_non_fourth_field_goal_enabled=True,
@@ -968,7 +988,7 @@ def test_endgame_trail3_non_fourth_field_goal_state_is_reachable() -> None:
             clock_seconds=120.0,
             possession="home",
             yardline=85,
-            down=2,
+            down=1,
             distance=5,
             home_score=17,
             away_score=20,
