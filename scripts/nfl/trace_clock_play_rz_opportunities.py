@@ -226,6 +226,7 @@ class RzTraceCounts:
     state_routes: Counter[str] = field(default_factory=Counter)
     entry_origin_routes: Counter[str] = field(default_factory=Counter)
     entry_origin_route_transitions: Counter[str] = field(default_factory=Counter)
+    entry_crossing_starts: Counter[str] = field(default_factory=Counter)
     field_goal_exit_types: Counter[str] = field(default_factory=Counter)
 
     def add_opportunity(
@@ -275,6 +276,9 @@ class RzTraceCounts:
                 self.entry_origin_route_transitions,
                 games=games,
                 denominator=self.opportunities,
+            ),
+            "entry_crossing_start_mix": _count_table(
+                self.entry_crossing_starts, games=games, denominator=self.entries
             ),
             "first_downs": {
                 "count": self.first_downs,
@@ -406,6 +410,7 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
     possession_start_yardline = 25
     possession_origin = "unknown"
     entry_origin = "unknown"
+    last_route_start_yardline: int | None = None
     seen_rz_in_possession = False
     last_route: str | None = None
     active: dict[str, Any] | None = None
@@ -429,6 +434,9 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
                 entry_origin = f"possession_start:{possession_origin}"
             else:
                 entry_origin = f"crossed_by:{last_route or 'unknown'}"
+                counts.entry_crossing_starts[
+                    f"{entry_origin}|{last_route_start_yardline or 'unknown'}"
+                ] += 1
             counts.entry_origins[entry_origin] += 1
             seen_rz_in_possession = True
         if down == 4:
@@ -447,7 +455,7 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             )
 
     def set_active_route(route: str) -> None:
-        nonlocal last_route
+        nonlocal last_route, last_route_start_yardline
         last_route = route
         if active is None or active.get("route") is not None:
             return
@@ -480,6 +488,7 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             possession_origin = str(event.get("reason") or "unknown")
             seen_rz_in_possession = False
             entry_origin = "unknown"
+            last_route_start_yardline = None
             last_route = None
             active = None
             continue
@@ -487,10 +496,13 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
         if event_type == "play_call":
             family = str(event.get("family") or "")
             start_opportunity(event, route="pass" if family == "pass" else None)
+            start_yardline = int(_number(state.get("yardline")) or 0)
             if family == "pass":
                 last_route = "pass"
+                last_route_start_yardline = start_yardline
             elif family == "rush":
                 last_route = "designed_rush"
+                last_route_start_yardline = start_yardline
             continue
 
         if event_type == "fourth_down_decision":
@@ -503,22 +515,26 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             start_opportunity(event, route=route)
             if route is not None:
                 last_route = route
+                last_route_start_yardline = int(_number(state.get("yardline")) or 0)
             continue
 
         if event_type == "late_field_goal_decision":
             start_opportunity(event, route="field_goal")
             last_route = "field_goal"
+            last_route_start_yardline = int(_number(state.get("yardline")) or 0)
             continue
 
         if event_type == "red_zone_rush_transition":
             set_active_route("red_zone_rush")
             last_route = "red_zone_rush"
+            last_route_start_yardline = int(_number(state.get("yardline")) or 0)
             set_active_transition(str(event.get("outcome") or "unknown"))
             continue
 
         if event_type == "designed_rush_attempt":
             set_active_route("designed_rush")
             last_route = "designed_rush"
+            last_route_start_yardline = int(_number(state.get("yardline")) or 0)
             set_active_transition(str(event.get("outcome") or "unknown"))
             continue
 
@@ -630,6 +646,7 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
     drive_started_inside: dict[tuple[str, str, str], bool] = {}
     drive_start_origin: dict[tuple[str, str, str], str] = {}
     drive_last_route: dict[tuple[str, str, str], str | None] = {}
+    drive_last_route_start_yardline: dict[tuple[str, str, str], int | None] = {}
     drive_entry_origin: dict[tuple[str, str, str], str] = {}
     digest = hashlib.sha256()
 
@@ -663,6 +680,7 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
                     payload.get("drive_start_transition") or "unknown"
                 ).lower()
                 drive_last_route[drive_key] = None
+                drive_last_route_start_yardline[drive_key] = None
                 drive_entry_origin[drive_key] = "unknown"
 
             yardline_100 = _number(payload.get("yardline_100"))
@@ -688,6 +706,10 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
                         origin = f"possession_start:{drive_start_origin[drive_key]}"
                     else:
                         origin = f"crossed_by:{drive_last_route[drive_key] or 'unknown'}"
+                        counts.entry_crossing_starts[
+                            f"{origin}|"
+                            f"{drive_last_route_start_yardline[drive_key] or 'unknown'}"
+                        ] += 1
                     counts.entry_origins[origin] += 1
                     drive_entry_origin[drive_key] = origin
                     drive_seen_rz[drive_key] = True
@@ -724,6 +746,7 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
             last_route = _historical_last_route(payload)
             if last_route is not None:
                 drive_last_route[drive_key] = last_route
+                drive_last_route_start_yardline[drive_key] = yardline
 
     counts.games = len(games)
     return counts, digest.hexdigest()

@@ -13,7 +13,8 @@
 - **Historical denominator:** 2013–2023 regular-season PBP only. Held-out,
   R14, market, and production data are prohibited.
 - **Change:** add read-only accounting of RZ routes and their resolved
-  transition outcome, jointly keyed by entry origin and play family.
+  transition outcome, jointly keyed by entry origin and play family, plus the
+  pre-entry yard line for a route that crosses into the RZ.
 - **Frozen:** simulation policy, all train priors, state routing, timing,
   possession semantics, seed schedule, and certification thresholds.
 
