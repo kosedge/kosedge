@@ -214,7 +214,7 @@ def test_historical_trace_uses_prior_play_for_entry_and_counts_only_train_season
     )
     assert (
         summary["entry_origin_route_transition_mix"][
-            "crossed_by:pass|red_zone_rush|first_down"
+            "crossed_by:pass|red_zone_rush|short_gain"
         ]["count"]
         == 1
     )
