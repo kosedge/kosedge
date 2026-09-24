@@ -935,6 +935,24 @@ def test_goal_line_fourth_down_conversion_is_a_touchdown() -> None:
     assert simulator.invariant_failures == []
 
 
+def test_endgame_trail3_fg_range_approach_extra_yards() -> None:
+    config = ClockPlayConfig(q4_endgame_trail3_fg_range_approach_extra_yards=2.5)
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=120.0,
+        possession="home",
+        yardline=48,
+        down=2,
+        distance=8,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._endgame_trail3_fg_range_approach_extra_yards("home") == 2.5
+    simulator.state.yardline = 85
+    assert simulator._endgame_trail3_fg_range_approach_extra_yards("home") == 0.0
+
+
 def test_endgame_trail3_non_fourth_field_goal_state_is_reachable() -> None:
     config = ClockPlayConfig(
         q4_endgame_trail3_non_fourth_field_goal_enabled=True,

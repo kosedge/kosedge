@@ -258,6 +258,7 @@ class ClockPlayConfig:
     q4_trail3_fg_range_precedence_soft_max_clock_seconds: float = 0.0
     q4_endgame_trail3_non_fourth_field_goal_enabled: bool = False
     q4_endgame_trail3_non_fourth_field_goal_attempt_probability: float = 0.0
+    q4_endgame_trail3_fg_range_approach_extra_yards: float = 0.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -1290,6 +1291,20 @@ class ClockPlaySimulator:
         self.state.use_timeout(defense)
         self._event("timeout", team=defense, reason="late_trailing_clock_stop")
 
+    def _endgame_trail3_fg_range_approach_extra_yards(self, offense: TeamSide) -> float:
+        extra = self.config.q4_endgame_trail3_fg_range_approach_extra_yards
+        if extra <= 0.0:
+            return 0.0
+        if self.state.quarter != 4 or not self._is_endgame():
+            return 0.0
+        gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
+        if gap != -3 or self.state.down >= 4:
+            return 0.0
+        yl = self.state.yardline
+        if not ((40 <= yl < 55) or (70 <= yl < 80)):
+            return 0.0
+        return extra
+
     def _should_take_endgame_trail3_non_fourth_field_goal(self, offense: TeamSide) -> bool:
         if not self.config.q4_endgame_trail3_non_fourth_field_goal_enabled:
             return False
@@ -1472,6 +1487,7 @@ class ClockPlaySimulator:
         yards = int(round(self.rng.gauss(self.config.base_yards * attack, self.config.yards_spread)))
         if self.rng.random() < self.config.explosive_play_probability * attack:
             yards += int(round(self.rng.uniform(12.0, 34.0)))
+        yards += int(round(self._endgame_trail3_fg_range_approach_extra_yards(offense)))
         yards = max(-12, yards)
         target_yardline = state.yardline + yards
         gained_first_down = yards >= state.distance
