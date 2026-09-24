@@ -259,6 +259,7 @@ class ClockPlayConfig:
     q4_endgame_trail3_non_fourth_field_goal_enabled: bool = False
     q4_endgame_trail3_non_fourth_field_goal_attempt_probability: float = 0.0
     q4_endgame_trail3_fg_range_approach_extra_yards: float = 0.0
+    q4_endgame_trail3_fg_chase_incompletion_runtime_scale: float = 1.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -1291,6 +1292,18 @@ class ClockPlaySimulator:
         self.state.use_timeout(defense)
         self._event("timeout", team=defense, reason="late_trailing_clock_stop")
 
+    def _endgame_trail3_fg_chase_active(self, offense: TeamSide) -> bool:
+        if self.state.quarter != 4 or not self._is_endgame():
+            return False
+        gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
+        if gap != -3 or self.state.down >= 4:
+            return False
+        fg_distance = 117 - self.state.yardline
+        return (
+            self.state.yardline >= 55
+            and fg_distance <= self.config.field_goal_max_distance
+        )
+
     def _endgame_trail3_fg_range_approach_extra_yards(self, offense: TeamSide) -> float:
         extra = self.config.q4_endgame_trail3_fg_range_approach_extra_yards
         if extra <= 0.0:
@@ -1449,6 +1462,11 @@ class ClockPlaySimulator:
                 return
             is_pass = self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
 
+        chase_incomplete_scale = (
+            self.config.q4_endgame_trail3_fg_chase_incompletion_runtime_scale
+            if self._endgame_trail3_fg_chase_active(offense)
+            else 1.0
+        )
         if (
             is_pass
             and rush_transition
@@ -1457,11 +1475,16 @@ class ClockPlaySimulator:
             prior = self._rz_generic_pass_incompletion_prior()
             incomplete_probability = float(prior["incomplete_probability"])
             incomplete = self.rng.random() < _clamp(
-                incomplete_probability / attack, 0.16, 0.55
+                incomplete_probability / attack * chase_incomplete_scale,
+                0.10,
+                0.55,
             )
         else:
-            incomplete = is_pass and self.rng.random() < _clamp(
+            incomplete_probability = _clamp(
                 self.config.incompletion_probability / attack, 0.16, 0.48
+            ) * chase_incomplete_scale
+            incomplete = is_pass and self.rng.random() < _clamp(
+                incomplete_probability, 0.10, 0.48
             )
         if incomplete:
             self._consume_clock(
