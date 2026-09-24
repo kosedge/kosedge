@@ -41,6 +41,18 @@ def _is_one(value: Any) -> bool:
     return numeric is not None and numeric == 1.0
 
 
+def _is_non_red_zone_designed_rush(payload: Mapping[str, Any]) -> bool:
+    yardline_100 = _number(payload.get("yardline_100"))
+    return (
+        payload.get("play_type") == "run"
+        and yardline_100 is not None
+        and yardline_100 > 20
+        and not _is_one(payload.get("qb_scramble"))
+        and not _is_one(payload.get("qb_kneel"))
+        and not _is_one(payload.get("two_point_attempt"))
+    )
+
+
 def _as_game(raw: Mapping[str, Any]) -> ClockPlayGameInputs:
     return ClockPlayGameInputs(
         game_id=str(raw["case_id"]),
@@ -73,6 +85,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
         ),
         ("pass_state_priors_path", "pass_state_priors", "Pass state"),
         (
+            "designed_rush_state_priors_path",
+            "designed_rush_state_priors",
+            "Designed rush state",
+        ),
+        (
             "special_teams_state_priors_path",
             "special_teams_state_priors",
             "Special-teams state",
@@ -87,6 +104,8 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             raise SystemExit(f"{label} priors need a priors object")
         if label == "Pass state":
             priors = priors.get("pass")
+        elif label == "Designed rush state":
+            priors = priors.get("designed_rush")
         elif label == "Special-teams state":
             priors = priors.get("special_teams")
         if not isinstance(priors, Mapping):
@@ -124,6 +143,7 @@ def _summary(
     third_attempts = counts["third_down_attempt"]
     pass_attempts = counts["pass_attempt"]
     completions = counts["pass_completion"]
+    designed_rush_attempts = counts["designed_rush_attempt"]
     return {
         "plays_per_game": _per_game(sum(plays), games),
         "drives_per_game": _per_game(counts["drive"], games),
@@ -172,6 +192,21 @@ def _summary(
         "interceptions_per_game": _per_game(counts["interception"], games),
         "fumbles_per_game": _per_game(counts["fumble"], games),
         "pass_touchdowns_per_game": _per_game(counts["pass_touchdown"], games),
+        "non_red_zone_designed_rush_attempts_per_game": _per_game(
+            designed_rush_attempts, games
+        ),
+        "non_red_zone_designed_rush_yards_per_attempt": _rate(
+            counts["designed_rush_yards"], designed_rush_attempts
+        ),
+        "non_red_zone_designed_rush_first_down_rate": _rate(
+            counts["designed_rush_first_down"], designed_rush_attempts
+        ),
+        "non_red_zone_designed_rush_fumble_rate": _rate(
+            counts["designed_rush_fumble"], designed_rush_attempts
+        ),
+        "non_red_zone_designed_rush_touchdowns_per_game": _per_game(
+            counts["designed_rush_touchdown"], games
+        ),
         "turnovers_excluding_downs_per_game": _per_game(
             counts["turnover"], games
         ),
@@ -269,6 +304,17 @@ def _simulation_metrics(
             counts["interception"] += event_counts["pass_outcome_interception"]
             counts["fumble"] += event_counts["pass_outcome_fumble"]
             counts["pass_touchdown"] += event_counts["pass_touchdown"]
+            counts["designed_rush_attempt"] += event_counts["designed_rush_attempt"]
+            counts["designed_rush_yards"] += event_counts["designed_rush_yards"]
+            counts["designed_rush_first_down"] += event_counts[
+                "designed_rush_outcome_first_down"
+            ]
+            counts["designed_rush_fumble"] += event_counts[
+                "designed_rush_outcome_fumble"
+            ]
+            counts["designed_rush_touchdown"] += event_counts[
+                "designed_rush_outcome_touchdown"
+            ]
             counts["turnover"] += event_counts["turnover"]
             counts["turnover_on_downs"] += event_counts["turnover_on_downs"]
             counts["third_down_attempt"] += event_counts["third_down_attempt"]
@@ -411,6 +457,20 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 drives.add((game_id, int(fixed_drive)))
             if _is_one(payload.get("touchdown")) and payload.get("td_team") == payload.get("posteam"):
                 counts["touchdown"] += 1
+            if _is_non_red_zone_designed_rush(payload):
+                yards = int(round(_number(payload.get("yards_gained")) or 0.0))
+                distance = int(round(_number(payload.get("ydstogo")) or 1.0))
+                counts["designed_rush_attempt"] += 1
+                counts["designed_rush_yards"] += yards
+                if _is_one(payload.get("fumble_lost")):
+                    counts["designed_rush_fumble"] += 1
+                elif (
+                    _is_one(payload.get("touchdown"))
+                    and payload.get("td_team") == payload.get("posteam")
+                ):
+                    counts["designed_rush_touchdown"] += 1
+                elif _is_one(payload.get("first_down")) or yards >= distance:
+                    counts["designed_rush_first_down"] += 1
             is_called_pass = play_type == "pass" or _is_one(
                 payload.get("qb_scramble")
             )
