@@ -117,6 +117,9 @@ class SnapRecord:
     incomplete: bool
     transition_bucket: str | None = None
     sim_outcome: str | None = None
+    post_yardline: int | None = None
+    post_down: int | None = None
+    post_distance: int | None = None
 
 
 @dataclass
@@ -158,6 +161,52 @@ def _pre_state_from_scrimmage(event: Mapping[str, Any]) -> tuple[int, int, int]:
     return pre_yardline, max(1, pre_down), max(1, pre_distance)
 
 
+def _post_state_from_event(state: Mapping[str, Any]) -> tuple[int, int, int]:
+    return (
+        int(state.get("yardline") or 1),
+        int(state.get("down") or 1),
+        int(state.get("distance") or 10),
+    )
+
+
+@dataclass
+class EventChainWalkResult:
+    reached_fourth: bool = False
+    td_before_fourth: bool = False
+    terminal: str = "open"
+
+
+def walk_parent_event_chain(drive: RzDrive) -> EventChainWalkResult:
+    """Follow parent post-states on frozen snaps; fourth from parser events.
+
+    Snap ``post_*`` fields thread state for counterfactual edits. Reach-fourth
+    follows ``drive.reached_fourth`` (``fourth_down_decision``), not
+    ``post_down >= 4`` alone, so parent walk matches the event parser.
+    """
+
+    result = EventChainWalkResult()
+    if not drive.snaps:
+        result.terminal = "empty"
+        return result
+
+    for snap in drive.snaps:
+        if snap.touchdown:
+            result.reached_fourth = bool(drive.reached_fourth)
+            result.td_before_fourth = not drive.reached_fourth
+            result.terminal = "touchdown"
+            return result
+
+    result.reached_fourth = bool(drive.reached_fourth)
+    if drive.reached_fourth:
+        result.terminal = str(drive.terminal or "fourth_down")
+        return result
+    if drive.terminal and drive.terminal != "open":
+        result.terminal = str(drive.terminal)
+        return result
+    result.terminal = "drive_end"
+    return result
+
+
 def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
     drives: list[RzDrive] = []
     current: RzDrive | None = None
@@ -184,17 +233,22 @@ def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
                 current = RzDrive()
                 drives.append(current)
             if current is not None:
-                down = int(state.get("down") or 1)
-                pre_down = max(1, down - 1)
+                pre_down = int(state.get("down") or 1)
+                pre_distance = int(state.get("distance") or 10)
+                pre_yardline = int(state.get("yardline") or yardline)
+                post_down = min(4, pre_down + 1)
                 current.snaps.append(
                     SnapRecord(
-                        pre_yardline=yardline,
+                        pre_yardline=pre_yardline,
                         pre_down=pre_down,
-                        pre_distance=int(state.get("distance") or 10),
+                        pre_distance=pre_distance,
                         route="generic_pass_rz",
                         touchdown=False,
                         yards=0,
                         incomplete=True,
+                        post_yardline=pre_yardline,
+                        post_down=post_down,
+                        post_distance=pre_distance,
                     )
                 )
             continue
@@ -231,6 +285,7 @@ def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
                     current = RzDrive()
                     drives.append(current)
                 route = _classify_snap(play_type)
+                post_y, post_d, post_dist = _post_state_from_event(state)
                 snap = SnapRecord(
                     pre_yardline=pre_y if pre_y >= 80 else yardline,
                     pre_down=pre_d,
@@ -243,6 +298,9 @@ def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
                         str(transition_bucket) if transition_bucket is not None else None
                     ),
                     sim_outcome=str(sim_outcome) if sim_outcome is not None else None,
+                    post_yardline=post_y,
+                    post_down=post_d,
+                    post_distance=post_dist,
                 )
                 current.snaps.append(snap)
                 if snap.touchdown:
