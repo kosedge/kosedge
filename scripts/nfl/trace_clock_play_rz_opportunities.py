@@ -684,6 +684,11 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
                 drive_entry_origin[drive_key] = "unknown"
 
             yardline_100 = _number(payload.get("yardline_100"))
+            play_yardline = (
+                max(1, min(99, int(round(100 - yardline_100))))
+                if yardline_100 is not None
+                else None
+            )
             down = _number(payload.get("down"))
             distance = _number(payload.get("ydstogo"))
             route = _route_for_historical_play(payload)
@@ -746,7 +751,7 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
             last_route = _historical_last_route(payload)
             if last_route is not None:
                 drive_last_route[drive_key] = last_route
-                drive_last_route_start_yardline[drive_key] = yardline
+                drive_last_route_start_yardline[drive_key] = play_yardline
 
     counts.games = len(games)
     return counts, digest.hexdigest()
