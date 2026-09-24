@@ -84,6 +84,22 @@ def test_simulated_trace_keeps_entry_route_first_down_and_exit_chain_separate() 
     assert summary["entry_origins"]["crossed_by:pass"]["count"] == 1
     assert summary["route_mix"]["red_zone_rush"]["count"] == 1
     assert summary["route_mix"]["field_goal"]["count"] == 1
+    assert (
+        summary["entry_origin_route_mix"]["crossed_by:pass|red_zone_rush"]["count"]
+        == 1
+    )
+    assert (
+        summary["entry_origin_route_transition_mix"][
+            "crossed_by:pass|red_zone_rush|unknown"
+        ]["count"]
+        == 1
+    )
+    assert (
+        summary["entry_origin_route_transition_mix"][
+            "crossed_by:pass|field_goal|made"
+        ]["count"]
+        == 1
+    )
     assert summary["first_downs"]["count"] == 1
     assert summary["fourth_down_arrivals"]["count"] == 1
     assert summary["field_goal_exits"]["by_result"]["made"]["count"] == 1
@@ -192,4 +208,66 @@ def test_historical_trace_uses_prior_play_for_entry_and_counts_only_train_season
     assert summary["entry_origins"]["crossed_by:pass"]["count"] == 1
     assert summary["route_mix"]["red_zone_rush"]["count"] == 1
     assert summary["route_mix"]["field_goal"]["count"] == 1
+    assert (
+        summary["entry_origin_route_mix"]["crossed_by:pass|red_zone_rush"]["count"]
+        == 1
+    )
+    assert (
+        summary["entry_origin_route_transition_mix"][
+            "crossed_by:pass|red_zone_rush|first_down"
+        ]["count"]
+        == 1
+    )
+    assert (
+        summary["entry_origin_route_transition_mix"][
+            "crossed_by:pass|field_goal|made"
+        ]["count"]
+        == 1
+    )
     assert summary["field_goal_exits"]["by_result"]["made"]["count"] == 1
+
+
+def test_simulated_trace_groups_pass_transition_by_possession_start_origin() -> None:
+    trace = _trace_module()
+    counts = trace.RzTraceCounts()
+    trace._trace_simulated_game(
+        [
+            {
+                "event_type": "possession_start",
+                "reason": "interception_return",
+                "state": _state(yardline=88, down=1, distance=10, play_count=0),
+            },
+            {
+                "event_type": "play_call",
+                "family": "pass",
+                "state": _state(yardline=88, down=1, distance=10, play_count=1),
+            },
+            {
+                "event_type": "pass_attempt",
+                "outcome": "completion",
+                "state": _state(yardline=88, down=1, distance=10, play_count=1),
+            },
+            {
+                "event_type": "scrimmage_play",
+                "route": "pass",
+                "touchdown": False,
+                "state": _state(yardline=92, down=2, distance=6, play_count=1),
+            },
+        ],
+        counts,
+    )
+    counts.games = 1
+    summary = counts.summary()
+
+    assert (
+        summary["entry_origin_route_mix"][
+            "possession_start:interception_return|pass"
+        ]["count"]
+        == 1
+    )
+    assert (
+        summary["entry_origin_route_transition_mix"][
+            "possession_start:interception_return|pass|completion"
+        ]["count"]
+        == 1
+    )

@@ -117,6 +117,68 @@ def _field_goal_exit(payload: Mapping[str, Any]) -> str:
     return "missed_or_other"
 
 
+def _historical_transition(
+    payload: Mapping[str, Any], *, route: str, distance: int
+) -> str:
+    """Classify one resolved RZ route without following later drive rows."""
+
+    if route == "pass":
+        if _is_one(payload.get("interception")):
+            return "interception"
+        if _is_one(payload.get("fumble_lost")):
+            return "fumble"
+        if _is_one(payload.get("sack")):
+            return "sack"
+        if _is_one(payload.get("qb_scramble")):
+            return "scramble"
+        if _is_one(payload.get("incomplete_pass")):
+            return "incompletion"
+        if _is_offensive_touchdown(payload):
+            return "touchdown"
+        if _is_one(payload.get("first_down")) or (
+            (_number(payload.get("yards_gained")) or 0.0) >= distance
+        ):
+            return "first_down"
+        return "advance"
+    if route == "red_zone_rush":
+        if _is_offensive_touchdown(payload):
+            return "touchdown"
+        if _is_one(payload.get("fumble_lost")) or _is_one(payload.get("interception")):
+            return "turnover"
+        yards = int(round(_number(payload.get("yards_gained")) or 0.0))
+        if _is_one(payload.get("first_down")) or yards >= distance:
+            return "first_down"
+        if yards < 0:
+            return "loss"
+        if yards == 0:
+            return "zero"
+        if yards <= 2:
+            return "one_two"
+        return "short_gain"
+    if route == "field_goal":
+        return _field_goal_exit(payload)
+    if route == "punt":
+        if _is_one(payload.get("touchback")):
+            return "touchback"
+        if _is_one(payload.get("punt_fair_catch")) or _is_one(payload.get("fair_catch")):
+            return "fair_catch"
+        if any(
+            _is_one(payload.get(field))
+            for field in ("punt_downed", "punt_out_of_bounds", "punt_in_endzone")
+        ):
+            return "dead_ball"
+        return "return"
+    if route == "fourth_down_go":
+        if _is_offensive_touchdown(payload):
+            return "touchdown"
+        if _is_one(payload.get("first_down")) or (
+            (_number(payload.get("yards_gained")) or 0.0) >= distance
+        ):
+            return "converted"
+        return "not_converted"
+    return "unknown"
+
+
 def _state_key(*, yardline: int, down: int, distance: int) -> str:
     return rz_rush_state_key(
         yardline=yardline,
@@ -162,13 +224,25 @@ class RzTraceCounts:
     routes: Counter[str] = field(default_factory=Counter)
     states: Counter[str] = field(default_factory=Counter)
     state_routes: Counter[str] = field(default_factory=Counter)
+    entry_origin_routes: Counter[str] = field(default_factory=Counter)
+    entry_origin_route_transitions: Counter[str] = field(default_factory=Counter)
     field_goal_exit_types: Counter[str] = field(default_factory=Counter)
 
-    def add_opportunity(self, *, state_key: str, route: str) -> None:
+    def add_opportunity(
+        self, *, entry_origin: str, state_key: str, route: str
+    ) -> None:
         self.opportunities += 1
         self.routes[route] += 1
         self.states[state_key] += 1
         self.state_routes[f"{state_key}|{route}"] += 1
+        self.entry_origin_routes[f"{entry_origin}|{route}"] += 1
+
+    def add_transition(
+        self, *, entry_origin: str, route: str, transition: str
+    ) -> None:
+        self.entry_origin_route_transitions[
+            f"{entry_origin}|{route}|{transition}"
+        ] += 1
 
     def summary(self) -> dict[str, Any]:
         games = self.games
@@ -193,6 +267,14 @@ class RzTraceCounts:
             ),
             "state_route_mix": _count_table(
                 self.state_routes, games=games, denominator=self.opportunities
+            ),
+            "entry_origin_route_mix": _count_table(
+                self.entry_origin_routes, games=games, denominator=self.opportunities
+            ),
+            "entry_origin_route_transition_mix": _count_table(
+                self.entry_origin_route_transitions,
+                games=games,
+                denominator=self.opportunities,
             ),
             "first_downs": {
                 "count": self.first_downs,
@@ -323,6 +405,7 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
 
     possession_start_yardline = 25
     possession_origin = "unknown"
+    entry_origin = "unknown"
     seen_rz_in_possession = False
     last_route: str | None = None
     active: dict[str, Any] | None = None
@@ -332,7 +415,7 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
         return state if isinstance(state, Mapping) else {}
 
     def start_opportunity(event: Mapping[str, Any], *, route: str | None) -> None:
-        nonlocal active, seen_rz_in_possession
+        nonlocal active, entry_origin, seen_rz_in_possession
         state = event_state(event)
         yardline = int(_number(state.get("yardline")) or 0)
         down = int(_number(state.get("down")) or 0)
@@ -343,9 +426,10 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
         if not seen_rz_in_possession:
             counts.entries += 1
             if possession_start_yardline >= 80:
-                counts.entry_origins[f"possession_start:{possession_origin}"] += 1
+                entry_origin = f"possession_start:{possession_origin}"
             else:
-                counts.entry_origins[f"crossed_by:{last_route or 'unknown'}"] += 1
+                entry_origin = f"crossed_by:{last_route or 'unknown'}"
+            counts.entry_origins[entry_origin] += 1
             seen_rz_in_possession = True
         if down == 4:
             counts.fourth_down_arrivals += 1
@@ -355,9 +439,12 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             "route": route,
             "first_down_recorded": False,
             "exit_recorded": False,
+            "transition_recorded": False,
         }
         if route is not None:
-            counts.add_opportunity(state_key=key, route=route)
+            counts.add_opportunity(
+                entry_origin=entry_origin, state_key=key, route=route
+            )
 
     def set_active_route(route: str) -> None:
         nonlocal last_route
@@ -365,7 +452,25 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
         if active is None or active.get("route") is not None:
             return
         active["route"] = route
-        counts.add_opportunity(state_key=str(active["state_key"]), route=route)
+        counts.add_opportunity(
+            entry_origin=entry_origin,
+            state_key=str(active["state_key"]),
+            route=route,
+        )
+
+    def set_active_transition(transition: str) -> None:
+        if (
+            active is None
+            or active.get("route") is None
+            or bool(active.get("transition_recorded"))
+        ):
+            return
+        counts.add_transition(
+            entry_origin=entry_origin,
+            route=str(active["route"]),
+            transition=transition,
+        )
+        active["transition_recorded"] = True
 
     for event in events:
         event_type = str(event.get("event_type") or "")
@@ -374,6 +479,7 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             possession_start_yardline = int(_number(state.get("yardline")) or 25)
             possession_origin = str(event.get("reason") or "unknown")
             seen_rz_in_possession = False
+            entry_origin = "unknown"
             last_route = None
             active = None
             continue
@@ -407,11 +513,13 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
         if event_type == "red_zone_rush_transition":
             set_active_route("red_zone_rush")
             last_route = "red_zone_rush"
+            set_active_transition(str(event.get("outcome") or "unknown"))
             continue
 
         if event_type == "designed_rush_attempt":
             set_active_route("designed_rush")
             last_route = "designed_rush"
+            set_active_transition(str(event.get("outcome") or "unknown"))
             continue
 
         if active is None:
@@ -420,11 +528,28 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
         if current_play_count != active["play_count"]:
             continue
 
+        if event_type == "pass_attempt":
+            set_active_transition(str(event.get("outcome") or "unknown"))
+            continue
+
+        if event_type == "punt":
+            set_active_transition(str(event.get("outcome") or "unknown"))
+            continue
+
         if event_type == "scrimmage_play":
             if active.get("route") is None:
                 inferred = str(event.get("route") or event.get("play_type") or "")
                 if inferred:
                     set_active_route(inferred)
+            if active.get("route") == "fourth_down_go":
+                if bool(event.get("touchdown")):
+                    set_active_transition("touchdown")
+                elif int(_number(event.get("yards")) or 0) >= int(
+                    _number(state.get("distance")) or 1
+                ):
+                    set_active_transition("converted")
+                else:
+                    set_active_transition("advance")
             if (
                 not bool(event.get("touchdown"))
                 and int(_number(state.get("down")) or 0) == 1
@@ -440,6 +565,13 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             continue
 
         if event_type in {"field_goal_made", "field_goal_missed", "field_goal_blocked"}:
+            set_active_transition(
+                {
+                    "field_goal_made": "made",
+                    "field_goal_missed": "missed_or_other",
+                    "field_goal_blocked": "blocked",
+                }[event_type]
+            )
             if not active["exit_recorded"]:
                 counts.field_goal_exits += 1
                 exit_type = {
@@ -498,6 +630,7 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
     drive_started_inside: dict[tuple[str, str, str], bool] = {}
     drive_start_origin: dict[tuple[str, str, str], str] = {}
     drive_last_route: dict[tuple[str, str, str], str | None] = {}
+    drive_entry_origin: dict[tuple[str, str, str], str] = {}
     digest = hashlib.sha256()
 
     with pbp_path.open("rb") as handle:
@@ -530,6 +663,7 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
                     payload.get("drive_start_transition") or "unknown"
                 ).lower()
                 drive_last_route[drive_key] = None
+                drive_entry_origin[drive_key] = "unknown"
 
             yardline_100 = _number(payload.get("yardline_100"))
             down = _number(payload.get("down"))
@@ -551,17 +685,23 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
                 if not drive_seen_rz[drive_key]:
                     counts.entries += 1
                     if drive_started_inside[drive_key]:
-                        origin = (
-                            f"possession_start:{drive_start_origin[drive_key]}"
-                        )
+                        origin = f"possession_start:{drive_start_origin[drive_key]}"
                     else:
-                        origin = (
-                            "crossed_by:"
-                            f"{drive_last_route[drive_key] or 'unknown'}"
-                        )
+                        origin = f"crossed_by:{drive_last_route[drive_key] or 'unknown'}"
                     counts.entry_origins[origin] += 1
+                    drive_entry_origin[drive_key] = origin
                     drive_seen_rz[drive_key] = True
-                counts.add_opportunity(state_key=key, route=route)
+                entry_origin = drive_entry_origin[drive_key]
+                counts.add_opportunity(
+                    entry_origin=entry_origin, state_key=key, route=route
+                )
+                counts.add_transition(
+                    entry_origin=entry_origin,
+                    route=route,
+                    transition=_historical_transition(
+                        payload, route=route, distance=distance_int
+                    ),
+                )
                 if down_int == 4:
                     counts.fourth_down_arrivals += 1
                 if (
