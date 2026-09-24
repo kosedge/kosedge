@@ -414,6 +414,64 @@ def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
 
 
+def test_rz_endgame_trail3_precedence_overrides_go_prior() -> None:
+    config = ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_endgame_trailing_fg_precedence_enabled=True,
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 0.0,
+                    "go": 1.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config, collect_events=True)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=120.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._fourth_down_decision("home") == "field_goal"
+
+
+def test_rz_endgame_trail3_precedence_disabled_uses_rz_prior() -> None:
+    config = ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_endgame_trailing_fg_precedence_enabled=False,
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 0.0,
+                    "go": 1.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=120.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._fourth_down_decision("home") == "go"
+
+
 def test_non_fourth_red_zone_generic_pass_uses_train_incompletion_prior() -> None:
     config = ClockPlayConfig(
         red_zone_rush_transition_enabled=True,

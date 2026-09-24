@@ -244,6 +244,7 @@ class ClockPlayConfig:
     )
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
+    red_zone_endgame_trailing_fg_precedence_enabled: bool = False
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -574,6 +575,14 @@ class ClockPlaySimulator:
         score_gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         yards_to_go = self.state.distance
         fg_distance = 117 - self.state.yardline
+        if (
+            self.config.red_zone_endgame_trailing_fg_precedence_enabled
+            and self.state.quarter == 4
+            and self._is_endgame()
+            and score_gap == -3
+            and fg_distance <= self.config.field_goal_max_distance
+        ):
+            return "field_goal"
         if (
             self.config.red_zone_fourth_decision_enabled
             and self.state.yardline >= 80
