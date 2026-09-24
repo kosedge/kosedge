@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Build train-only joint priors for 70-79 pass entries into the red zone.
 
-The modeled handoff begins only after an eligible pass has crossed from the
-opponent 30-21 into the red zone.  It owns exactly the first later non-fourth
-red-zone pass or run in that same drive.  It intentionally does not estimate
-the pre-entry pass crossing rate, later red-zone snaps, or fourth-down routes.
+The modeled handoff begins when the PBP route immediately preceding a drive's
+first red-zone snap is a pass from the opponent 30-21. It owns that first
+non-fourth red-zone pass or run. It intentionally does not estimate the
+pre-entry pass crossing rate, later red-zone snaps, or fourth-down routes.
 """
 
 from __future__ import annotations
@@ -36,9 +36,6 @@ OUTCOMES = (
     "short_gain",
     "first_down",
 )
-CORE_PLAY_TYPES = frozenset(
-    {"pass", "run", "qb_kneel", "qb_spike", "field_goal", "punt"}
-)
 ROUTE_PARENT_PSEUDO_CONTINUATIONS = 40.0
 OUTCOME_PARENT_PSEUDO_CONTINUATIONS = 30.0
 YARD_PARENT_PSEUDO_CONTINUATIONS = 12.0
@@ -61,7 +58,7 @@ def _offensive_yardline(payload: Mapping[str, Any]) -> int | None:
     yardline_100 = _number(payload.get("yardline_100"))
     if yardline_100 is None:
         return None
-    return int(round(100 - yardline_100))
+    return max(1, min(99, int(round(100 - yardline_100))))
 
 
 def _offensive_touchdown(payload: Mapping[str, Any]) -> bool:
@@ -76,19 +73,42 @@ def _turnover(payload: Mapping[str, Any]) -> bool:
     )
 
 
-def _is_eligible_crossing(payload: Mapping[str, Any]) -> bool:
-    if payload.get("play_type") != "pass":
-        return False
-    start_yardline = _offensive_yardline(payload)
-    yards = _number(payload.get("yards_gained"))
+def _is_pass_call(payload: Mapping[str, Any]) -> bool:
     return (
-        start_yardline is not None
-        and 70 <= start_yardline <= 79
-        and yards is not None
-        and not _turnover(payload)
-        and not _offensive_touchdown(payload)
-        and 80 <= start_yardline + int(round(yards)) <= 99
+        not _is_one(payload.get("two_point_attempt"))
+        and not _is_one(payload.get("qb_spike"))
+        and (
+            payload.get("play_type") == "pass" or _is_one(payload.get("qb_scramble"))
+        )
     )
+
+
+def _is_rush_call(payload: Mapping[str, Any]) -> bool:
+    return (
+        payload.get("play_type") == "run"
+        and not _is_one(payload.get("two_point_attempt"))
+        and not _is_one(payload.get("qb_scramble"))
+        and not _is_one(payload.get("qb_kneel"))
+        and not _is_one(payload.get("qb_spike"))
+    )
+
+
+def _route(payload: Mapping[str, Any]) -> str | None:
+    down = _number(payload.get("down"))
+    if down == 4:
+        play_type = str(payload.get("play_type") or "")
+        if play_type == "field_goal":
+            return "field_goal"
+        if play_type == "punt":
+            return "punt"
+        if play_type in {"pass", "run"}:
+            return "fourth_down_go"
+        return None
+    if _is_pass_call(payload):
+        return "pass"
+    if _is_rush_call(payload):
+        return "run"
+    return None
 
 
 def _outcome(payload: Mapping[str, Any], *, route: str, yards: int, distance: int) -> str:
@@ -266,12 +286,11 @@ def _add_continuation(
     *,
     crossing: Crossing,
     payload: Mapping[str, Any],
+    route: str,
     global_samples: Samples,
     parents: defaultdict[str, Samples],
     buckets: defaultdict[str, Samples],
 ) -> bool:
-    play_type = str(payload.get("play_type") or "")
-    route = play_type if play_type in ROUTES else ""
     yardline = _offensive_yardline(payload)
     down = _number(payload.get("down"))
     distance = _number(payload.get("ydstogo"))
@@ -317,7 +336,8 @@ def main() -> None:
     global_samples = Samples()
     parents: defaultdict[str, Samples] = defaultdict(Samples)
     buckets: defaultdict[str, Samples] = defaultdict(Samples)
-    active_crossings: dict[tuple[str, int], Crossing] = {}
+    active_crossings: dict[tuple[str, int, str], Crossing | None] = {}
+    drive_seen_rz: dict[tuple[str, int, str], bool] = {}
     games: set[str] = set()
     historical_games_with_crossing: set[str] = set()
     rows_examined = 0
@@ -337,44 +357,52 @@ def main() -> None:
             rows_examined += 1
             game_id = str(payload.get("game_id") or "")
             fixed_drive = _number(payload.get("fixed_drive"))
-            if not game_id or fixed_drive is None:
+            posteam = str(payload.get("posteam") or "")
+            if not game_id or fixed_drive is None or not posteam:
                 continue
             games.add(game_id)
-            drive_key = (game_id, int(fixed_drive))
-            play_type = str(payload.get("play_type") or "")
+            drive_key = (game_id, int(fixed_drive), posteam)
+            drive_seen_rz.setdefault(drive_key, False)
+            active_crossings.setdefault(drive_key, None)
+            route = _route(payload)
+            yardline = _offensive_yardline(payload)
 
-            crossing = active_crossings.get(drive_key)
-            if crossing is not None and play_type in CORE_PLAY_TYPES:
-                active_crossings.pop(drive_key, None)
-                down = _number(payload.get("down"))
-                yardline = _offensive_yardline(payload)
-                if down is None or int(down) >= 4:
-                    accounting["excluded_fourth_down_continuation"] += 1
-                elif yardline is None or not 80 <= yardline <= 99:
-                    accounting["excluded_non_red_zone_continuation"] += 1
-                elif _add_continuation(
-                    crossing=crossing,
-                    payload=payload,
-                    global_samples=global_samples,
-                    parents=parents,
-                    buckets=buckets,
-                ):
-                    accounting["eligible_joint_continuations"] += 1
-                else:
-                    accounting["excluded_non_pass_run_continuation"] += 1
-
-            if payload.get("play_type") == "pass":
-                start_yardline = _offensive_yardline(payload)
-                if start_yardline is not None and 70 <= start_yardline <= 79:
-                    accounting["eligible_pass_starts_70_79"] += 1
-                if _is_eligible_crossing(payload):
-                    active_crossings[drive_key] = Crossing(
-                        pre_entry_yardline=int(start_yardline)
-                    )
-                    historical_games_with_crossing.add(game_id)
+            if (
+                route is not None
+                and yardline is not None
+                and yardline >= 80
+                and not drive_seen_rz[drive_key]
+            ):
+                drive_seen_rz[drive_key] = True
+                crossing = active_crossings[drive_key]
+                if crossing is not None:
                     accounting["pass_crossings_to_rz"] += 1
+                    historical_games_with_crossing.add(game_id)
+                    down = _number(payload.get("down"))
+                    if down is None or int(down) >= 4:
+                        accounting["excluded_fourth_down_continuation"] += 1
+                    elif route not in ROUTES:
+                        accounting["excluded_non_pass_run_continuation"] += 1
+                    elif _add_continuation(
+                        crossing=crossing,
+                        payload=payload,
+                        route=route,
+                        global_samples=global_samples,
+                        parents=parents,
+                        buckets=buckets,
+                    ):
+                        accounting["eligible_joint_continuations"] += 1
+                    else:
+                        accounting["excluded_non_red_zone_continuation"] += 1
 
-    accounting["crossings_without_followup"] = len(active_crossings)
+            if route is not None:
+                if route == "pass" and yardline is not None and 70 <= yardline <= 79:
+                    accounting["eligible_pass_starts_70_79"] += 1
+                    active_crossings[drive_key] = Crossing(
+                        pre_entry_yardline=yardline
+                    )
+                else:
+                    active_crossings[drive_key] = None
     if not global_samples.n:
         raise SystemExit("No eligible joint pre-entry pass/RZ continuations found")
 
@@ -394,11 +422,11 @@ def main() -> None:
         "accounting": dict(sorted(accounting.items())),
         "population_definition": {
             "pre_entry": (
-                "play_type=pass; offensive yardline 70-79; non-turnover, "
-                "non-touchdown; ending at offensive yardline 80-99"
+                "pass route at offensive yardline 70-79 immediately before "
+                "the drive's first red-zone route"
             ),
             "continuation": (
-                "first later same-drive core play; play_type in {pass,run}; "
+                "first same-drive red-zone route; play_type in {pass,run}; "
                 "offensive yardline 80-99; down<4"
             ),
             "exclusions": (

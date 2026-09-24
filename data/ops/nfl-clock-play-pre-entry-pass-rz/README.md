@@ -1,11 +1,12 @@
 # Clock-Play joint pre-entry pass/RZ continuation
 
-This artifact owns exactly one handoff: after a non-terminal pass from
-offensive yardline 70–79 crosses into the red zone, the first later,
+This artifact owns exactly one handoff: when the pass route immediately before
+a drive's first red-zone snap starts at offensive yardline 70–79, that first
 non-fourth red-zone pass or rush is drawn from its joint train-only route and
-continuation prior. It does not change the generic pre-entry pass crossing
-rate, later red-zone snaps, fourth-down decisions, possession transitions,
-clock priors, seeds, or certification thresholds.
+continuation prior. The simulator applies it after an eligible generic pass
+crosses from 70–79. It does not change the generic pass crossing rate, later
+red-zone snaps, fourth-down decisions, possession transitions, clock priors,
+seeds, or certification thresholds.
 
 Build the 2013–2023 regular-season prior from the locked owned PBP source:
 
