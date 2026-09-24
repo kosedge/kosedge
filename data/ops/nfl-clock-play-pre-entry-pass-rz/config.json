@@ -17,6 +17,7 @@
     "q4_endgame_trail3_non_fourth_field_goal_enabled": true,
     "q4_endgame_trail3_non_fourth_field_goal_attempt_probability": 0.12,
     "q4_endgame_trail3_fg_range_approach_extra_yards": 2.5,
+    "q4_endgame_trail3_fg_range_third_down_line_probability": 0.34,
     "endgame_window_seconds": 180,
     "explosive_play_probability": 0.105,
     "field_goal_max_distance": 62,
