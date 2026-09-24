@@ -1,0 +1,108 @@
+{
+  "artifact_id": "Clock-Play Clock-Flow Priors",
+  "historical_games": 2863,
+  "historical_rows_examined": 507116,
+  "historical_source": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+  "interval_definition": "elapsed game seconds from a core snap to the next core snap in the same fixed drive; 0 < elapsed <= 90 seconds",
+  "locked_seconds_per_core_snap": 25.826287128464863,
+  "observed_kind_rows": {
+    "field_goal": 10872,
+    "first_down": 71423,
+    "incomplete_pass": 67215,
+    "no_play_rows": 47559,
+    "out_of_bounds": 38238,
+    "pass": 46734,
+    "post_touchdown": 14401,
+    "punt": 22290,
+    "run": 108081,
+    "sack": 13560,
+    "turnover": 5417,
+    "turnover_on_downs": 991
+  },
+  "priors": {
+    "default": {
+      "mean_seconds": 25.826287128464863,
+      "raw_mean_seconds": 28.852183956959177,
+      "sample_size": 328990,
+      "stddev_seconds": 15.91908967399185
+    },
+    "kinds": {
+      "field_goal": {
+        "mean_seconds": 26.049162553074087,
+        "raw_mean_seconds": 54.0,
+        "sample_size": 1,
+        "stddev_seconds": 15.91908967399185
+      },
+      "first_down": {
+        "mean_seconds": 31.22033796508695,
+        "raw_mean_seconds": 34.886868541905855,
+        "sample_size": 69680,
+        "stddev_seconds": 11.773704126173998
+      },
+      "incomplete_pass": {
+        "mean_seconds": 5.171745050726397,
+        "raw_mean_seconds": 5.741790464338493,
+        "sample_size": 64285,
+        "stddev_seconds": 3.766744483338628
+      },
+      "out_of_bounds": {
+        "mean_seconds": 24.358981181656343,
+        "raw_mean_seconds": 27.208215051271655,
+        "sample_size": 34522,
+        "stddev_seconds": 13.16003749312025
+      },
+      "pass": {
+        "mean_seconds": 31.460096652491593,
+        "raw_mean_seconds": 35.16010885082084,
+        "sample_size": 44832,
+        "stddev_seconds": 11.636277023062794
+      },
+      "post_touchdown": {
+        "mean_seconds": 7.108541540506264,
+        "raw_mean_seconds": 6.082666666666666,
+        "sample_size": 1125,
+        "stddev_seconds": 3.1296875243384923
+      },
+      "run": {
+        "mean_seconds": 32.66599833436391,
+        "raw_mean_seconds": 36.500701234952665,
+        "sample_size": 102676,
+        "stddev_seconds": 11.213263569781024
+      },
+      "sack": {
+        "mean_seconds": 31.772547040429753,
+        "raw_mean_seconds": 35.551125347719804,
+        "sample_size": 11863,
+        "stddev_seconds": 12.844424531577234
+      },
+      "turnover": {
+        "mean_seconds": 25.477852429913252,
+        "raw_mean_seconds": 9.0,
+        "sample_size": 2,
+        "stddev_seconds": 1.0
+      },
+      "turnover_on_downs": {
+        "mean_seconds": 25.418241886513893,
+        "raw_mean_seconds": 17.0,
+        "sample_size": 4,
+        "stddev_seconds": 8.573214099741124
+      }
+    }
+  },
+  "runtime_mapping": {
+    "fallback": "default",
+    "field_goal": "field_goal",
+    "fourth_down_go": "fourth_down_go",
+    "incomplete_pass": "incomplete_pass",
+    "pass": "pass",
+    "punt": "punt",
+    "run": "run",
+    "turnover": "turnover"
+  },
+  "shrinkage": {
+    "kind_parent_pseudo_intervals": 100.0,
+    "method": "conditional clock-interval mean shrinkage to all within-drive core intervals"
+  },
+  "train_window": "2013-2023 regular season",
+  "within_drive_interval_scale": 0.895124166925864
+}

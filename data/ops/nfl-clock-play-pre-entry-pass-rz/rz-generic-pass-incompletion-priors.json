@@ -1,0 +1,528 @@
+{
+  "accounting": {
+    "eligible_non_handoff_rz_passes": 25256,
+    "excluded_pre_entry_owned_first_rz": 2658
+  },
+  "artifact_id": "Clock-Play RZ Generic Pass Incompletion Priors",
+  "historical_rows_examined": 507116,
+  "historical_source": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+  "population": "non-fourth red-zone pass routes excluding the joint pre-entry first-RZ continuation",
+  "priors": {
+    "buckets": {
+      "10-6|1|3-5|non_gtg": {
+        "bucket": "10-6|1|3-5|non_gtg",
+        "incomplete_probability": 0.40205079076723754,
+        "sample": {
+          "incomplete": 8,
+          "incomplete_probability": 0.42105263157894735,
+          "passes": 19
+        }
+      },
+      "10-6|1|6+|gtg": {
+        "bucket": "10-6|1|6+|gtg",
+        "incomplete_probability": 0.4002521623074867,
+        "sample": {
+          "incomplete": 602,
+          "incomplete_probability": 0.4002659574468085,
+          "passes": 1504
+        }
+      },
+      "10-6|2|1|non_gtg": {
+        "bucket": "10-6|2|1|non_gtg",
+        "incomplete_probability": 0.30562171219893186,
+        "sample": {
+          "incomplete": 10,
+          "incomplete_probability": 0.23255813953488372,
+          "passes": 43
+        }
+      },
+      "10-6|2|2|non_gtg": {
+        "bucket": "10-6|2|2|non_gtg",
+        "incomplete_probability": 0.3336989243133115,
+        "sample": {
+          "incomplete": 15,
+          "incomplete_probability": 0.29411764705882354,
+          "passes": 51
+        }
+      },
+      "10-6|2|3-5|non_gtg": {
+        "bucket": "10-6|2|3-5|non_gtg",
+        "incomplete_probability": 0.41049192789000377,
+        "sample": {
+          "incomplete": 132,
+          "incomplete_probability": 0.41379310344827586,
+          "passes": 319
+        }
+      },
+      "10-6|2|6+|gtg": {
+        "bucket": "10-6|2|6+|gtg",
+        "incomplete_probability": 0.3972942924171613,
+        "sample": {
+          "incomplete": 590,
+          "incomplete_probability": 0.39730639730639733,
+          "passes": 1485
+        }
+      },
+      "10-6|2|6+|non_gtg": {
+        "bucket": "10-6|2|6+|non_gtg",
+        "incomplete_probability": 0.3876011254439464,
+        "sample": {
+          "incomplete": 192,
+          "incomplete_probability": 0.3878787878787879,
+          "passes": 495
+        }
+      },
+      "10-6|3|1|non_gtg": {
+        "bucket": "10-6|3|1|non_gtg",
+        "incomplete_probability": 0.3455677737951964,
+        "sample": {
+          "incomplete": 25,
+          "incomplete_probability": 0.33783783783783783,
+          "passes": 74
+        }
+      },
+      "10-6|3|2|non_gtg": {
+        "bucket": "10-6|3|2|non_gtg",
+        "incomplete_probability": 0.3210525741224453,
+        "sample": {
+          "incomplete": 45,
+          "incomplete_probability": 0.3103448275862069,
+          "passes": 145
+        }
+      },
+      "10-6|3|3-5|non_gtg": {
+        "bucket": "10-6|3|3-5|non_gtg",
+        "incomplete_probability": 0.3655197611997708,
+        "sample": {
+          "incomplete": 221,
+          "incomplete_probability": 0.3658940397350993,
+          "passes": 604
+        }
+      },
+      "10-6|3|6+|gtg": {
+        "bucket": "10-6|3|6+|gtg",
+        "incomplete_probability": 0.4330859892204353,
+        "sample": {
+          "incomplete": 431,
+          "incomplete_probability": 0.43316582914572865,
+          "passes": 995
+        }
+      },
+      "10-6|3|6+|non_gtg": {
+        "bucket": "10-6|3|6+|non_gtg",
+        "incomplete_probability": 0.3690266238758418,
+        "sample": {
+          "incomplete": 162,
+          "incomplete_probability": 0.3698630136986301,
+          "passes": 438
+        }
+      },
+      "15-11|1|2|non_gtg": {
+        "bucket": "15-11|1|2|non_gtg",
+        "incomplete_probability": 0.3456837094113891,
+        "sample": {
+          "incomplete": 0,
+          "incomplete_probability": 0.0,
+          "passes": 1
+        }
+      },
+      "15-11|1|3-5|non_gtg": {
+        "bucket": "15-11|1|3-5|non_gtg",
+        "incomplete_probability": 0.3464536263416711,
+        "sample": {
+          "incomplete": 8,
+          "incomplete_probability": 0.3333333333333333,
+          "passes": 24
+        }
+      },
+      "15-11|1|6+|gtg": {
+        "bucket": "15-11|1|6+|gtg",
+        "incomplete_probability": 0.3375283397965263,
+        "sample": {
+          "incomplete": 31,
+          "incomplete_probability": 0.3333333333333333,
+          "passes": 93
+        }
+      },
+      "15-11|1|6+|non_gtg": {
+        "bucket": "15-11|1|6+|non_gtg",
+        "incomplete_probability": 0.35423234229700945,
+        "sample": {
+          "incomplete": 582,
+          "incomplete_probability": 0.3542300669506999,
+          "passes": 1643
+        }
+      },
+      "15-11|2|1|non_gtg": {
+        "bucket": "15-11|2|1|non_gtg",
+        "incomplete_probability": 0.33371561781326264,
+        "sample": {
+          "incomplete": 8,
+          "incomplete_probability": 0.32,
+          "passes": 25
+        }
+      },
+      "15-11|2|2|non_gtg": {
+        "bucket": "15-11|2|2|non_gtg",
+        "incomplete_probability": 0.3558868687714943,
+        "sample": {
+          "incomplete": 13,
+          "incomplete_probability": 0.37142857142857144,
+          "passes": 35
+        }
+      },
+      "15-11|2|3-5|non_gtg": {
+        "bucket": "15-11|2|3-5|non_gtg",
+        "incomplete_probability": 0.3625451233821368,
+        "sample": {
+          "incomplete": 119,
+          "incomplete_probability": 0.36503067484662577,
+          "passes": 326
+        }
+      },
+      "15-11|2|6+|gtg": {
+        "bucket": "15-11|2|6+|gtg",
+        "incomplete_probability": 0.3767088131718059,
+        "sample": {
+          "incomplete": 113,
+          "incomplete_probability": 0.37666666666666665,
+          "passes": 300
+        }
+      },
+      "15-11|2|6+|non_gtg": {
+        "bucket": "15-11|2|6+|non_gtg",
+        "incomplete_probability": 0.33746346637049,
+        "sample": {
+          "incomplete": 642,
+          "incomplete_probability": 0.3373620599054125,
+          "passes": 1903
+        }
+      },
+      "15-11|3|1|non_gtg": {
+        "bucket": "15-11|3|1|non_gtg",
+        "incomplete_probability": 0.39068904558753664,
+        "sample": {
+          "incomplete": 21,
+          "incomplete_probability": 0.40384615384615385,
+          "passes": 52
+        }
+      },
+      "15-11|3|2|non_gtg": {
+        "bucket": "15-11|3|2|non_gtg",
+        "incomplete_probability": 0.31811077830607243,
+        "sample": {
+          "incomplete": 35,
+          "incomplete_probability": 0.29914529914529914,
+          "passes": 117
+        }
+      },
+      "15-11|3|3-5|non_gtg": {
+        "bucket": "15-11|3|3-5|non_gtg",
+        "incomplete_probability": 0.38584905030320843,
+        "sample": {
+          "incomplete": 232,
+          "incomplete_probability": 0.38666666666666666,
+          "passes": 600
+        }
+      },
+      "15-11|3|6+|gtg": {
+        "bucket": "15-11|3|6+|gtg",
+        "incomplete_probability": 0.44128096025906943,
+        "sample": {
+          "incomplete": 130,
+          "incomplete_probability": 0.4421768707482993,
+          "passes": 294
+        }
+      },
+      "15-11|3|6+|non_gtg": {
+        "bucket": "15-11|3|6+|non_gtg",
+        "incomplete_probability": 0.3728509894288311,
+        "sample": {
+          "incomplete": 472,
+          "incomplete_probability": 0.37282780410742494,
+          "passes": 1266
+        }
+      },
+      "1|1|1|gtg": {
+        "bucket": "1|1|1|gtg",
+        "incomplete_probability": 0.3722377316916178,
+        "sample": {
+          "incomplete": 131,
+          "incomplete_probability": 0.3721590909090909,
+          "passes": 352
+        }
+      },
+      "1|2|1|gtg": {
+        "bucket": "1|2|1|gtg",
+        "incomplete_probability": 0.42103613287791897,
+        "sample": {
+          "incomplete": 137,
+          "incomplete_probability": 0.42153846153846153,
+          "passes": 325
+        }
+      },
+      "1|3|1|gtg": {
+        "bucket": "1|3|1|gtg",
+        "incomplete_probability": 0.3733809225092607,
+        "sample": {
+          "incomplete": 109,
+          "incomplete_probability": 0.3732876712328767,
+          "passes": 292
+        }
+      },
+      "20-16|1|3-5|non_gtg": {
+        "bucket": "20-16|1|3-5|non_gtg",
+        "incomplete_probability": 0.3504604232778813,
+        "sample": {
+          "incomplete": 6,
+          "incomplete_probability": 0.375,
+          "passes": 16
+        }
+      },
+      "20-16|1|6+|gtg": {
+        "bucket": "20-16|1|6+|gtg",
+        "incomplete_probability": 0.26004453698528424,
+        "sample": {
+          "incomplete": 18,
+          "incomplete_probability": 0.24324324324324326,
+          "passes": 74
+        }
+      },
+      "20-16|1|6+|non_gtg": {
+        "bucket": "20-16|1|6+|non_gtg",
+        "incomplete_probability": 0.33964204257406805,
+        "sample": {
+          "incomplete": 702,
+          "incomplete_probability": 0.33962264150943394,
+          "passes": 2067
+        }
+      },
+      "20-16|2|1|non_gtg": {
+        "bucket": "20-16|2|1|non_gtg",
+        "incomplete_probability": 0.31161590415535895,
+        "sample": {
+          "incomplete": 8,
+          "incomplete_probability": 0.2857142857142857,
+          "passes": 28
+        }
+      },
+      "20-16|2|2|non_gtg": {
+        "bucket": "20-16|2|2|non_gtg",
+        "incomplete_probability": 0.31161590415535895,
+        "sample": {
+          "incomplete": 8,
+          "incomplete_probability": 0.2857142857142857,
+          "passes": 28
+        }
+      },
+      "20-16|2|3-5|non_gtg": {
+        "bucket": "20-16|2|3-5|non_gtg",
+        "incomplete_probability": 0.2658707631915318,
+        "sample": {
+          "incomplete": 57,
+          "incomplete_probability": 0.2544642857142857,
+          "passes": 224
+        }
+      },
+      "20-16|2|6+|gtg": {
+        "bucket": "20-16|2|6+|gtg",
+        "incomplete_probability": 0.3016665304475983,
+        "sample": {
+          "incomplete": 31,
+          "incomplete_probability": 0.29523809523809524,
+          "passes": 105
+        }
+      },
+      "20-16|2|6+|non_gtg": {
+        "bucket": "20-16|2|6+|non_gtg",
+        "incomplete_probability": 0.33770780040540394,
+        "sample": {
+          "incomplete": 722,
+          "incomplete_probability": 0.33785680861020123,
+          "passes": 2137
+        }
+      },
+      "20-16|3|1|non_gtg": {
+        "bucket": "20-16|3|1|non_gtg",
+        "incomplete_probability": 0.3395215538989608,
+        "sample": {
+          "incomplete": 16,
+          "incomplete_probability": 0.3137254901960784,
+          "passes": 51
+        }
+      },
+      "20-16|3|2|non_gtg": {
+        "bucket": "20-16|3|2|non_gtg",
+        "incomplete_probability": 0.30070927503533407,
+        "sample": {
+          "incomplete": 26,
+          "incomplete_probability": 0.2708333333333333,
+          "passes": 96
+        }
+      },
+      "20-16|3|3-5|non_gtg": {
+        "bucket": "20-16|3|3-5|non_gtg",
+        "incomplete_probability": 0.36930367725429114,
+        "sample": {
+          "incomplete": 162,
+          "incomplete_probability": 0.3690205011389522,
+          "passes": 439
+        }
+      },
+      "20-16|3|6+|gtg": {
+        "bucket": "20-16|3|6+|gtg",
+        "incomplete_probability": 0.3868487699074933,
+        "sample": {
+          "incomplete": 43,
+          "incomplete_probability": 0.38738738738738737,
+          "passes": 111
+        }
+      },
+      "20-16|3|6+|non_gtg": {
+        "bucket": "20-16|3|6+|non_gtg",
+        "incomplete_probability": 0.3819211878613953,
+        "sample": {
+          "incomplete": 545,
+          "incomplete_probability": 0.38218793828892006,
+          "passes": 1426
+        }
+      },
+      "2|1|2|gtg": {
+        "bucket": "2|1|2|gtg",
+        "incomplete_probability": 0.46069445553433114,
+        "sample": {
+          "incomplete": 122,
+          "incomplete_probability": 0.4621212121212121,
+          "passes": 264
+        }
+      },
+      "2|2|1|non_gtg": {
+        "bucket": "2|2|1|non_gtg",
+        "incomplete_probability": 0.45901552106430155,
+        "sample": {
+          "incomplete": 6,
+          "incomplete_probability": 0.6,
+          "passes": 10
+        }
+      },
+      "2|2|2|gtg": {
+        "bucket": "2|2|2|gtg",
+        "incomplete_probability": 0.4164859220919694,
+        "sample": {
+          "incomplete": 138,
+          "incomplete_probability": 0.4169184290030212,
+          "passes": 331
+        }
+      },
+      "2|3|1|non_gtg": {
+        "bucket": "2|3|1|non_gtg",
+        "incomplete_probability": 0.4968708589721723,
+        "sample": {
+          "incomplete": 8,
+          "incomplete_probability": 0.6666666666666666,
+          "passes": 12
+        }
+      },
+      "2|3|2|gtg": {
+        "bucket": "2|3|2|gtg",
+        "incomplete_probability": 0.40518326738732247,
+        "sample": {
+          "incomplete": 133,
+          "incomplete_probability": 0.4054878048780488,
+          "passes": 328
+        }
+      },
+      "5-3|1|3-5|gtg": {
+        "bucket": "5-3|1|3-5|gtg",
+        "incomplete_probability": 0.4331662544144491,
+        "sample": {
+          "incomplete": 396,
+          "incomplete_probability": 0.43326039387308535,
+          "passes": 914
+        }
+      },
+      "5-3|2|1|non_gtg": {
+        "bucket": "5-3|2|1|non_gtg",
+        "incomplete_probability": 0.4951068106613436,
+        "sample": {
+          "incomplete": 17,
+          "incomplete_probability": 0.5666666666666667,
+          "passes": 30
+        }
+      },
+      "5-3|2|2|non_gtg": {
+        "bucket": "5-3|2|2|non_gtg",
+        "incomplete_probability": 0.43796395351848644,
+        "sample": {
+          "incomplete": 13,
+          "incomplete_probability": 0.43333333333333335,
+          "passes": 30
+        }
+      },
+      "5-3|2|3-5|gtg": {
+        "bucket": "5-3|2|3-5|gtg",
+        "incomplete_probability": 0.45617971694367576,
+        "sample": {
+          "incomplete": 584,
+          "incomplete_probability": 0.45625,
+          "passes": 1280
+        }
+      },
+      "5-3|2|3-5|non_gtg": {
+        "bucket": "5-3|2|3-5|non_gtg",
+        "incomplete_probability": 0.4308836034979197,
+        "sample": {
+          "incomplete": 25,
+          "incomplete_probability": 0.423728813559322,
+          "passes": 59
+        }
+      },
+      "5-3|3|1|non_gtg": {
+        "bucket": "5-3|3|1|non_gtg",
+        "incomplete_probability": 0.3666333798183656,
+        "sample": {
+          "incomplete": 17,
+          "incomplete_probability": 0.3541666666666667,
+          "passes": 48
+        }
+      },
+      "5-3|3|2|non_gtg": {
+        "bucket": "5-3|3|2|non_gtg",
+        "incomplete_probability": 0.4296045933676596,
+        "sample": {
+          "incomplete": 35,
+          "incomplete_probability": 0.45454545454545453,
+          "passes": 77
+        }
+      },
+      "5-3|3|3-5|gtg": {
+        "bucket": "5-3|3|3-5|gtg",
+        "incomplete_probability": 0.43754279878500535,
+        "sample": {
+          "incomplete": 491,
+          "incomplete_probability": 0.4376114081996435,
+          "passes": 1122
+        }
+      },
+      "5-3|3|3-5|non_gtg": {
+        "bucket": "5-3|3|3-5|non_gtg",
+        "incomplete_probability": 0.356590162272285,
+        "sample": {
+          "incomplete": 45,
+          "incomplete_probability": 0.3488372093023256,
+          "passes": 129
+        }
+      }
+    },
+    "default": {
+      "bucket": "default",
+      "incomplete_probability": 0.3797117516629712,
+      "sample": {
+        "incomplete": 9590,
+        "incomplete_probability": 0.37971175166297116,
+        "passes": 25256
+      }
+    }
+  },
+  "train_window": "2013-2023 regular season"
+}

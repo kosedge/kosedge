@@ -1,0 +1,56 @@
+{
+  "artifact_id": "Clock-Play Baseline v1",
+  "command_receipt_sha256": "a48ed48c139fcac4a6cae75b520942845f8009cf420d58b0e2a3421ed9ef5c10",
+  "config": {
+    "effective_engine_config": {
+      "base_play_seconds": 28.0,
+      "base_yards": 4.2,
+      "endgame_window_seconds": 180,
+      "explosive_play_probability": 0.105,
+      "field_goal_max_distance": 62,
+      "fourth_down_go_distance": 2,
+      "hurry_play_seconds": 15.0,
+      "incompletion_probability": 0.305,
+      "kickoff_touchback_yardline": 25,
+      "max_plays_per_game": 360,
+      "model_version": "nfl-clock-play-baseline-v1",
+      "overtime_seconds": 600,
+      "play_seconds_spread": 8.0,
+      "regulation_quarter_seconds": 900,
+      "timeout_window_seconds": 130,
+      "timeouts_per_team": 3,
+      "turnover_probability": 0.027,
+      "yards_spread": 6.8
+    },
+    "path": "data/ops/nfl-clock-play-baseline-v1/config.json",
+    "sha256": "b87e49a2b3601dd2252a6f85ffa9cd312a54de85e0858e64828d867bf2db4111"
+  },
+  "data": {
+    "held_out_data": false,
+    "market_data": false,
+    "path": "data/ops/nfl-clock-play-baseline-v1/inputs.json",
+    "sha256": "982a5a03e4e519cbdc8f9a344000f8391f3a17a8a71e61dc8e4a8ce21afacf30"
+  },
+  "metric_packet_sha256": "2e095f461c9d147ac639e5fe863417d614e953d28acd88a5ea77d1f7132f6b2f",
+  "model_version": "nfl-clock-play-baseline-v1",
+  "replay_contract": {
+    "deterministic": true,
+    "required_inputs": [
+      "source_sha",
+      "source_files_sha256",
+      "config_sha256",
+      "data_sha256",
+      "seed_manifest",
+      "canonical_command"
+    ],
+    "timestamp_in_artifacts": false
+  },
+  "runner_version": "clock-play-baseline-freeze-runner-v1",
+  "seed_manifest_sha256": "ce7d2c52e339ed08653df78b7c1a1bf9f1c02406104e1ce1f1c2e095e23b0737",
+  "source_files_sha256": {
+    "scripts/nfl/run_clock_play_baseline_v1.py": "738ca3b347659a4129b3a800824aee26f444644972db1a36ec778b6ef2b425fd",
+    "services/model-service/src/services/nfl_clock_play_simulator.py": "9efc2d8f57b493e446bd3e688efb21e9acb2da2bfea38f7d5df3ba59354d23b0",
+    "services/model-service/src/services/nfl_season_engine/kicker_layer.py": "08aa729249f047419ce97cd5a5fb758c0675a161945d377d09314c5554977f6d"
+  },
+  "source_sha": "3b5ff512350b020ddb80e1c1aea536650407e1b5"
+}

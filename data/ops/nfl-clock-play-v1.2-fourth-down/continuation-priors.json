@@ -1,0 +1,911 @@
+{
+  "artifact_id": "Clock-Play v1.2 Fourth-Down Continuation Priors",
+  "eligible_fourth_down_go_attempts": 6483,
+  "historical_games": 2544,
+  "historical_rows_examined": 507116,
+  "historical_source": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+  "marginal_samples": {
+    "field:at_1": {
+      "attempts": 340,
+      "conversion_rate": 0.5441176470588235,
+      "conversions": 185,
+      "converted_non_td_count": 0,
+      "failures": 155,
+      "td_given_conversion": 1.0,
+      "touchdown_conversions": 185
+    },
+    "field:goal_to_go": {
+      "attempts": 642,
+      "conversion_rate": 0.45794392523364486,
+      "conversions": 294,
+      "converted_non_td_count": 0,
+      "failures": 348,
+      "td_given_conversion": 1.0,
+      "touchdown_conversions": 294
+    },
+    "field:inside_5": {
+      "attempts": 720,
+      "conversion_rate": 0.5208333333333334,
+      "conversions": 375,
+      "converted_non_td_count": 55,
+      "failures": 345,
+      "td_given_conversion": 0.8533333333333334,
+      "touchdown_conversions": 320
+    },
+    "field:opponent_territory": {
+      "attempts": 4710,
+      "conversion_rate": 0.5114649681528662,
+      "conversions": 2409,
+      "converted_non_td_count": 1868,
+      "failures": 2301,
+      "td_given_conversion": 0.22457451224574512,
+      "touchdown_conversions": 541
+    },
+    "field:own_territory": {
+      "attempts": 1773,
+      "conversion_rate": 0.4952058657642414,
+      "conversions": 878,
+      "converted_non_td_count": 867,
+      "failures": 895,
+      "td_given_conversion": 0.012528473804100227,
+      "touchdown_conversions": 11
+    },
+    "field:red_zone": {
+      "attempts": 1626,
+      "conversion_rate": 0.5030750307503075,
+      "conversions": 818,
+      "converted_non_td_count": 380,
+      "failures": 808,
+      "td_given_conversion": 0.5354523227383863,
+      "touchdown_conversions": 438
+    },
+    "yards:1": {
+      "attempts": 2507,
+      "conversion_rate": 0.6597526924611089,
+      "conversions": 1654,
+      "converted_non_td_count": 1382,
+      "failures": 853,
+      "td_given_conversion": 0.16444981862152358,
+      "touchdown_conversions": 272
+    },
+    "yards:2": {
+      "attempts": 848,
+      "conversion_rate": 0.5672169811320755,
+      "conversions": 481,
+      "converted_non_td_count": 386,
+      "failures": 367,
+      "td_given_conversion": 0.19750519750519752,
+      "touchdown_conversions": 95
+    },
+    "yards:3-5": {
+      "attempts": 1390,
+      "conversion_rate": 0.4618705035971223,
+      "conversions": 642,
+      "converted_non_td_count": 531,
+      "failures": 748,
+      "td_given_conversion": 0.17289719626168223,
+      "touchdown_conversions": 111
+    },
+    "yards:6+": {
+      "attempts": 1738,
+      "conversion_rate": 0.29344073647871116,
+      "conversions": 510,
+      "converted_non_td_count": 436,
+      "failures": 1228,
+      "td_given_conversion": 0.1450980392156863,
+      "touchdown_conversions": 74
+    }
+  },
+  "outcome_definition": {
+    "conversion": "fourth_down_converted or offensive touchdown",
+    "failure": "fourth_down_failed",
+    "failure_field_position": "recorded yards_gained applied to the pre-play line of scrimmage",
+    "go_attempt": "fourth-down pass/run/qb kneel/qb spike with a recorded conversion or failure",
+    "touchdown": "touchdown with td_team == posteam"
+  },
+  "priors": {
+    "buckets": {
+      "late_trailing|1|at_1": {
+        "bucket": "late_trailing|1|at_1",
+        "conversion_rate": 0.6340276505238583,
+        "converted_non_td_yards": {
+          "mean": 6.5829181901279705,
+          "stddev": 6.105959228101519
+        },
+        "failure_yards": {
+          "mean": -0.14159457563712882,
+          "stddev": 0.5
+        },
+        "sample": {
+          "attempts": 24,
+          "conversion_rate": 0.625,
+          "conversions": 15,
+          "converted_non_td_count": 0,
+          "failures": 9,
+          "td_given_conversion": 1.0,
+          "touchdown_conversions": 15
+        },
+        "td_given_conversion": 0.6399050246705061
+      },
+      "late_trailing|1|inside_5": {
+        "bucket": "late_trailing|1|inside_5",
+        "conversion_rate": 0.6498929470403757,
+        "converted_non_td_yards": {
+          "mean": 5.85678702010969,
+          "stddev": 0.5
+        },
+        "failure_yards": {
+          "mean": -0.21239186345569322,
+          "stddev": 0.5
+        },
+        "sample": {
+          "attempts": 6,
+          "conversion_rate": 0.6666666666666666,
+          "conversions": 4,
+          "converted_non_td_count": 2,
+          "failures": 2,
+          "td_given_conversion": 0.5,
+          "touchdown_conversions": 2
+        },
+        "td_given_conversion": 0.2673397291314793
+      },
+      "late_trailing|1|opponent_territory": {
+        "bucket": "late_trailing|1|opponent_territory",
+        "conversion_rate": 0.6907264095853811,
+        "converted_non_td_yards": {
+          "mean": 7.74988677912581,
+          "stddev": 7.638052353185333
+        },
+        "failure_yards": {
+          "mean": -0.1589394435351882,
+          "stddev": 0.5
+        },
+        "sample": {
+          "attempts": 45,
+          "conversion_rate": 0.7111111111111111,
+          "conversions": 32,
+          "converted_non_td_count": 32,
+          "failures": 13,
+          "td_given_conversion": 0.0,
+          "touchdown_conversions": 0
+        },
+        "td_given_conversion": 0.0517599015023561
+      },
+      "late_trailing|1|own_territory": {
+        "bucket": "late_trailing|1|own_territory",
+        "conversion_rate": 0.6869768392603867,
+        "converted_non_td_yards": {
+          "mean": 5.859900365630713,
+          "stddev": 4.814567000433377
+        },
+        "failure_yards": {
+          "mean": -0.10253400304757604,
+          "stddev": 1.909727421264462
+        },
+        "sample": {
+          "attempts": 57,
+          "conversion_rate": 0.7017543859649122,
+          "conversions": 40,
+          "converted_non_td_count": 38,
+          "failures": 17,
+          "td_given_conversion": 0.05,
+          "touchdown_conversions": 2
+        },
+        "td_given_conversion": 0.08225837819430132
+      },
+      "late_trailing|1|red_zone": {
+        "bucket": "late_trailing|1|red_zone",
+        "conversion_rate": 0.5754937027344393,
+        "converted_non_td_yards": {
+          "mean": 5.208125761730652,
+          "stddev": 3.337497399083464
+        },
+        "failure_yards": {
+          "mean": -0.5405619203491544,
+          "stddev": 2.4776781245530843
+        },
+        "sample": {
+          "attempts": 25,
+          "conversion_rate": 0.52,
+          "conversions": 13,
+          "converted_non_td_count": 12,
+          "failures": 12,
+          "td_given_conversion": 0.07692307692307693,
+          "touchdown_conversions": 1
+        },
+        "td_given_conversion": 0.13109742664414673
+      },
+      "late_trailing|2|inside_5": {
+        "bucket": "late_trailing|2|inside_5",
+        "conversion_rate": 0.4984751292503552,
+        "converted_non_td_yards": {
+          "mean": 8.67170764217104,
+          "stddev": 7.868298811857279
+        },
+        "failure_yards": {
+          "mean": -0.2765055896141363,
+          "stddev": 0.5
+        },
+        "sample": {
+          "attempts": 13,
+          "conversion_rate": 0.38461538461538464,
+          "conversions": 5,
+          "converted_non_td_count": 1,
+          "failures": 8,
+          "td_given_conversion": 0.8,
+          "touchdown_conversions": 4
+        },
+        "td_given_conversion": 0.33497928904074326
+      },
+      "late_trailing|2|opponent_territory": {
+        "bucket": "late_trailing|2|opponent_territory",
+        "conversion_rate": 0.6467160535288807,
+        "converted_non_td_yards": {
+          "mean": 9.300825624313424,
+          "stddev": 6.532812610473879
+        },
+        "failure_yards": {
+          "mean": -0.22120447169130905,
+          "stddev": 0.5
+        },
+        "sample": {
+          "attempts": 41,
+          "conversion_rate": 0.6829268292682927,
+          "conversions": 28,
+          "converted_non_td_count": 27,
+          "failures": 13,
+          "td_given_conversion": 0.03571428571428571,
+          "touchdown_conversions": 1
+        },
+        "td_given_conversion": 0.06736619784231587
+      },
+      "late_trailing|2|own_territory": {
+        "bucket": "late_trailing|2|own_territory",
+        "conversion_rate": 0.5233819236332535,
+        "converted_non_td_yards": {
+          "mean": 10.47673331358253,
+          "stddev": 9.80721193284267
+        },
+        "failure_yards": {
+          "mean": -0.500912478554022,
+          "stddev": 2.0381842437174
+        },
+        "sample": {
+          "attempts": 42,
+          "conversion_rate": 0.5,
+          "conversions": 21,
+          "converted_non_td_count": 21,
+          "failures": 21,
+          "td_given_conversion": 0.0,
+          "touchdown_conversions": 0
+        },
+        "td_given_conversion": 0.05135296708159501
+      },
+      "late_trailing|2|red_zone": {
+        "bucket": "late_trailing|2|red_zone",
+        "conversion_rate": 0.6337751152773439,
+        "converted_non_td_yards": {
+          "mean": 7.086609967411175,
+          "stddev": 1.3228756555322954
+        },
+        "failure_yards": {
+          "mean": -1.501771281898984,
+          "stddev": 4.749736834815167
+        },
+        "sample": {
+          "attempts": 17,
+          "conversion_rate": 0.7058823529411765,
+          "conversions": 12,
+          "converted_non_td_count": 8,
+          "failures": 5,
+          "td_given_conversion": 0.3333333333333333,
+          "touchdown_conversions": 4
+        },
+        "td_given_conversion": 0.2372769964038598
+      },
+      "late_trailing|3-5|inside_5": {
+        "bucket": "late_trailing|3-5|inside_5",
+        "conversion_rate": 0.35176484599701363,
+        "converted_non_td_yards": {
+          "mean": 10.606230706985944,
+          "stddev": 6.866381148949178
+        },
+        "failure_yards": {
+          "mean": -1.6353148361127083,
+          "stddev": 6.679401170763739
+        },
+        "sample": {
+          "attempts": 36,
+          "conversion_rate": 0.3055555555555556,
+          "conversions": 11,
+          "converted_non_td_count": 0,
+          "failures": 25,
+          "td_given_conversion": 1.0,
+          "touchdown_conversions": 11
+        },
+        "td_given_conversion": 0.5770218969647548
+      },
+      "late_trailing|3-5|opponent_territory": {
+        "bucket": "late_trailing|3-5|opponent_territory",
+        "conversion_rate": 0.42159065100666215,
+        "converted_non_td_yards": {
+          "mean": 11.307071103468514,
+          "stddev": 7.7714987449278565
+        },
+        "failure_yards": {
+          "mean": -0.4589951909064412,
+          "stddev": 3.211274146615197
+        },
+        "sample": {
+          "attempts": 105,
+          "conversion_rate": 0.41904761904761906,
+          "conversions": 44,
+          "converted_non_td_count": 41,
+          "failures": 61,
+          "td_given_conversion": 0.06818181818181818,
+          "touchdown_conversions": 3
+        },
+        "td_given_conversion": 0.0941339933962386
+      },
+      "late_trailing|3-5|own_territory": {
+        "bucket": "late_trailing|3-5|own_territory",
+        "conversion_rate": 0.4585449432620577,
+        "converted_non_td_yards": {
+          "mean": 10.947531950476497,
+          "stddev": 6.482026062796296
+        },
+        "failure_yards": {
+          "mean": -0.5000801076647013,
+          "stddev": 3.262562888872557
+        },
+        "sample": {
+          "attempts": 132,
+          "conversion_rate": 0.4621212121212121,
+          "conversions": 61,
+          "converted_non_td_count": 59,
+          "failures": 71,
+          "td_given_conversion": 0.03278688524590164,
+          "touchdown_conversions": 2
+        },
+        "td_given_conversion": 0.058513748358758375
+      },
+      "late_trailing|3-5|red_zone": {
+        "bucket": "late_trailing|3-5|red_zone",
+        "conversion_rate": 0.45553700596559943,
+        "converted_non_td_yards": {
+          "mean": 8.739762203810516,
+          "stddev": 1.5
+        },
+        "failure_yards": {
+          "mean": 0.2998100303951368,
+          "stddev": 2.6738246715690086
+        },
+        "sample": {
+          "attempts": 43,
+          "conversion_rate": 0.46511627906976744,
+          "conversions": 20,
+          "converted_non_td_count": 10,
+          "failures": 23,
+          "td_given_conversion": 0.5,
+          "touchdown_conversions": 10
+        },
+        "td_given_conversion": 0.38348448844341754
+      },
+      "late_trailing|6+|goal_to_go": {
+        "bucket": "late_trailing|6+|goal_to_go",
+        "conversion_rate": 0.27603779243645044,
+        "converted_non_td_yards": {
+          "mean": 19.025567764187038,
+          "stddev": 11.489309228264682
+        },
+        "failure_yards": {
+          "mean": -0.7687541305799594,
+          "stddev": 4.867682809869599
+        },
+        "sample": {
+          "attempts": 44,
+          "conversion_rate": 0.2727272727272727,
+          "conversions": 12,
+          "converted_non_td_count": 0,
+          "failures": 32,
+          "td_given_conversion": 1.0,
+          "touchdown_conversions": 12
+        },
+        "td_given_conversion": 0.5676018275653201
+      },
+      "late_trailing|6+|opponent_territory": {
+        "bucket": "late_trailing|6+|opponent_territory",
+        "conversion_rate": 0.276542291540492,
+        "converted_non_td_yards": {
+          "mean": 17.22967342493302,
+          "stddev": 6.5236405223647
+        },
+        "failure_yards": {
+          "mean": 0.44650164898695227,
+          "stddev": 4.228905548184536
+        },
+        "sample": {
+          "attempts": 250,
+          "conversion_rate": 0.276,
+          "conversions": 69,
+          "converted_non_td_count": 59,
+          "failures": 181,
+          "td_given_conversion": 0.14492753623188406,
+          "touchdown_conversions": 10
+        },
+        "td_given_conversion": 0.143486961253922
+      },
+      "late_trailing|6+|own_territory": {
+        "bucket": "late_trailing|6+|own_territory",
+        "conversion_rate": 0.2787142619661032,
+        "converted_non_td_yards": {
+          "mean": 22.002535646035078,
+          "stddev": 13.244389531144467
+        },
+        "failure_yards": {
+          "mean": 0.34738996045280063,
+          "stddev": 5.622296552902389
+        },
+        "sample": {
+          "attempts": 395,
+          "conversion_rate": 0.27848101265822783,
+          "conversions": 110,
+          "converted_non_td_count": 109,
+          "failures": 285,
+          "td_given_conversion": 0.00909090909090909,
+          "touchdown_conversions": 1
+        },
+        "td_given_conversion": 0.021495441488259694
+      },
+      "late_trailing|6+|red_zone": {
+        "bucket": "late_trailing|6+|red_zone",
+        "conversion_rate": 0.28030021268105487,
+        "converted_non_td_yards": {
+          "mean": 14.742569737317096,
+          "stddev": 2.963209787527364
+        },
+        "failure_yards": {
+          "mean": 0.16680029925379977,
+          "stddev": 2.457807219155036
+        },
+        "sample": {
+          "attempts": 68,
+          "conversion_rate": 0.27941176470588236,
+          "conversions": 19,
+          "converted_non_td_count": 14,
+          "failures": 49,
+          "td_given_conversion": 0.2631578947368421,
+          "touchdown_conversions": 5
+        },
+        "td_given_conversion": 0.213627221340893
+      },
+      "standard|1|at_1": {
+        "bucket": "standard|1|at_1",
+        "conversion_rate": 0.5467634074466652,
+        "converted_non_td_yards": {
+          "mean": 4.932030645994111,
+          "stddev": 6.147753819909063
+        },
+        "failure_yards": {
+          "mean": -0.6376743481201145,
+          "stddev": 1.9433841549834314
+        },
+        "sample": {
+          "attempts": 315,
+          "conversion_rate": 0.5396825396825397,
+          "conversions": 170,
+          "converted_non_td_count": 0,
+          "failures": 145,
+          "td_given_conversion": 1.0,
+          "touchdown_conversions": 170
+        },
+        "td_given_conversion": 0.9447882488542022
+      },
+      "standard|1|inside_5": {
+        "bucket": "standard|1|inside_5",
+        "conversion_rate": 0.660873204823839,
+        "converted_non_td_yards": {
+          "mean": 2.5836188347085374,
+          "stddev": 0.8364209466530595
+        },
+        "failure_yards": {
+          "mean": -0.6317569010158886,
+          "stddev": 1.8510277833882676
+        },
+        "sample": {
+          "attempts": 124,
+          "conversion_rate": 0.6612903225806451,
+          "conversions": 82,
+          "converted_non_td_count": 50,
+          "failures": 42,
+          "td_given_conversion": 0.3902439024390244,
+          "touchdown_conversions": 32
+        },
+        "td_given_conversion": 0.3611857584198383
+      },
+      "standard|1|opponent_territory": {
+        "bucket": "standard|1|opponent_territory",
+        "conversion_rate": 0.678761302068457,
+        "converted_non_td_yards": {
+          "mean": 5.095229306117884,
+          "stddev": 5.6143024225614955
+        },
+        "failure_yards": {
+          "mean": -0.6650718862857167,
+          "stddev": 1.906844835549982
+        },
+        "sample": {
+          "attempts": 1041,
+          "conversion_rate": 0.6791546589817483,
+          "conversions": 707,
+          "converted_non_td_count": 683,
+          "failures": 334,
+          "td_given_conversion": 0.033946251768033946,
+          "touchdown_conversions": 24
+        },
+        "td_given_conversion": 0.03609382655280224
+      },
+      "standard|1|own_territory": {
+        "bucket": "standard|1|own_territory",
+        "conversion_rate": 0.6985102526689871,
+        "converted_non_td_yards": {
+          "mean": 5.718822655689739,
+          "stddev": 8.145579414627298
+        },
+        "failure_yards": {
+          "mean": -0.7420394980164251,
+          "stddev": 1.963593733580426
+        },
+        "sample": {
+          "attempts": 540,
+          "conversion_rate": 0.7,
+          "conversions": 378,
+          "converted_non_td_count": 375,
+          "failures": 162,
+          "td_given_conversion": 0.007936507936507936,
+          "touchdown_conversions": 3
+        },
+        "td_given_conversion": 0.012696054593499501
+      },
+      "standard|1|red_zone": {
+        "bucket": "standard|1|red_zone",
+        "conversion_rate": 0.6461878328418081,
+        "converted_non_td_yards": {
+          "mean": 3.347447365108561,
+          "stddev": 2.700266735567673
+        },
+        "failure_yards": {
+          "mean": -0.7063168422857208,
+          "stddev": 1.7249294748859767
+        },
+        "sample": {
+          "attempts": 330,
+          "conversion_rate": 0.6454545454545455,
+          "conversions": 213,
+          "converted_non_td_count": 190,
+          "failures": 117,
+          "td_given_conversion": 0.107981220657277,
+          "touchdown_conversions": 23
+        },
+        "td_given_conversion": 0.11089538351762136
+      },
+      "standard|2|inside_5": {
+        "bucket": "standard|2|inside_5",
+        "conversion_rate": 0.5358044848108331,
+        "converted_non_td_yards": {
+          "mean": 8.822480468166615,
+          "stddev": 0.5
+        },
+        "failure_yards": {
+          "mean": -0.265490111016899,
+          "stddev": 1.5584037620305138
+        },
+        "sample": {
+          "attempts": 113,
+          "conversion_rate": 0.5309734513274337,
+          "conversions": 60,
+          "converted_non_td_count": 2,
+          "failures": 53,
+          "td_given_conversion": 0.9666666666666667,
+          "touchdown_conversions": 58
+        },
+        "td_given_conversion": 0.8399096583810833
+      },
+      "standard|2|opponent_territory": {
+        "bucket": "standard|2|opponent_territory",
+        "conversion_rate": 0.568597078834565,
+        "converted_non_td_yards": {
+          "mean": 9.30006545135259,
+          "stddev": 6.459210142629253
+        },
+        "failure_yards": {
+          "mean": -0.5373307028513726,
+          "stddev": 2.872023800399149
+        },
+        "sample": {
+          "attempts": 392,
+          "conversion_rate": 0.5688775510204082,
+          "conversions": 223,
+          "converted_non_td_count": 213,
+          "failures": 169,
+          "td_given_conversion": 0.04484304932735426,
+          "touchdown_conversions": 10
+        },
+        "td_given_conversion": 0.05307870384441702
+      },
+      "standard|2|own_territory": {
+        "bucket": "standard|2|own_territory",
+        "conversion_rate": 0.6017466431989387,
+        "converted_non_td_yards": {
+          "mean": 12.621040951146512,
+          "stddev": 10.780129132116711
+        },
+        "failure_yards": {
+          "mean": -0.65487074946188,
+          "stddev": 3.9679608833383413
+        },
+        "sample": {
+          "attempts": 130,
+          "conversion_rate": 0.6076923076923076,
+          "conversions": 79,
+          "converted_non_td_count": 79,
+          "failures": 51,
+          "td_given_conversion": 0.0,
+          "touchdown_conversions": 0
+        },
+        "td_given_conversion": 0.027181268169648342
+      },
+      "standard|2|red_zone": {
+        "bucket": "standard|2|red_zone",
+        "conversion_rate": 0.5355166373320067,
+        "converted_non_td_yards": {
+          "mean": 6.500313330943246,
+          "stddev": 3.0817434768557317
+        },
+        "failure_yards": {
+          "mean": -0.6314721562050583,
+          "stddev": 2.3992604866400766
+        },
+        "sample": {
+          "attempts": 100,
+          "conversion_rate": 0.53,
+          "conversions": 53,
+          "converted_non_td_count": 35,
+          "failures": 47,
+          "td_given_conversion": 0.33962264150943394,
+          "touchdown_conversions": 18
+        },
+        "td_given_conversion": 0.31497685236058465
+      },
+      "standard|3-5|inside_5": {
+        "bucket": "standard|3-5|inside_5",
+        "conversion_rate": 0.346628134456292,
+        "converted_non_td_yards": {
+          "mean": 11.565727820444076,
+          "stddev": 7.756208279613077
+        },
+        "failure_yards": {
+          "mean": -0.4713907230781772,
+          "stddev": 2.5185423473818256
+        },
+        "sample": {
+          "attempts": 88,
+          "conversion_rate": 0.3181818181818182,
+          "conversions": 28,
+          "converted_non_td_count": 0,
+          "failures": 60,
+          "td_given_conversion": 1.0,
+          "touchdown_conversions": 28
+        },
+        "td_given_conversion": 0.7503949100998082
+      },
+      "standard|3-5|opponent_territory": {
+        "bucket": "standard|3-5|opponent_territory",
+        "conversion_rate": 0.48268838101987954,
+        "converted_non_td_yards": {
+          "mean": 12.046583560288273,
+          "stddev": 7.591166306417491
+        },
+        "failure_yards": {
+          "mean": -0.7519888532035411,
+          "stddev": 3.094740758267509
+        },
+        "sample": {
+          "attempts": 648,
+          "conversion_rate": 0.48302469135802467,
+          "conversions": 313,
+          "converted_non_td_count": 284,
+          "failures": 335,
+          "td_given_conversion": 0.0926517571884984,
+          "touchdown_conversions": 29
+        },
+        "td_given_conversion": 0.09543321970459177
+      },
+      "standard|3-5|own_territory": {
+        "bucket": "standard|3-5|own_territory",
+        "conversion_rate": 0.48318791755320534,
+        "converted_non_td_yards": {
+          "mean": 12.207511750907893,
+          "stddev": 9.086893131189678
+        },
+        "failure_yards": {
+          "mean": -1.0445056942489077,
+          "stddev": 3.4397461959365483
+        },
+        "sample": {
+          "attempts": 192,
+          "conversion_rate": 0.484375,
+          "conversions": 93,
+          "converted_non_td_count": 93,
+          "failures": 99,
+          "td_given_conversion": 0.0,
+          "touchdown_conversions": 0
+        },
+        "td_given_conversion": 0.019198060990403117
+      },
+      "standard|3-5|red_zone": {
+        "bucket": "standard|3-5|red_zone",
+        "conversion_rate": 0.49057734048963575,
+        "converted_non_td_yards": {
+          "mean": 8.389084532952301,
+          "stddev": 3.1801131795442035
+        },
+        "failure_yards": {
+          "mean": -0.6039550239724274,
+          "stddev": 3.1279332471827566
+        },
+        "sample": {
+          "attempts": 146,
+          "conversion_rate": 0.4931506849315068,
+          "conversions": 72,
+          "converted_non_td_count": 44,
+          "failures": 74,
+          "td_given_conversion": 0.3888888888888889,
+          "touchdown_conversions": 28
+        },
+        "td_given_conversion": 0.35733090957133723
+      },
+      "standard|6+|at_1": {
+        "bucket": "standard|6+|at_1",
+        "conversion_rate": 0.29507670150229814,
+        "converted_non_td_yards": {
+          "mean": 15.811880249068741,
+          "stddev": 8.800093316737312
+        },
+        "failure_yards": {
+          "mean": -0.32248602461368425,
+          "stddev": 4.907143617054353
+        },
+        "sample": {
+          "attempts": 1,
+          "conversion_rate": 0.0,
+          "conversions": 0,
+          "converted_non_td_count": 0,
+          "failures": 1,
+          "td_given_conversion": 0.0,
+          "touchdown_conversions": 0
+        },
+        "td_given_conversion": 0.15389490845834017
+      },
+      "standard|6+|goal_to_go": {
+        "bucket": "standard|6+|goal_to_go",
+        "conversion_rate": 0.24590014502092244,
+        "converted_non_td_yards": {
+          "mean": 15.811880249068741,
+          "stddev": 8.800093316737312
+        },
+        "failure_yards": {
+          "mean": 0.10754966074115009,
+          "stddev": 3.2791514858451083
+        },
+        "sample": {
+          "attempts": 54,
+          "conversion_rate": 0.2222222222222222,
+          "conversions": 12,
+          "converted_non_td_count": 0,
+          "failures": 42,
+          "td_given_conversion": 1.0,
+          "touchdown_conversions": 12
+        },
+        "td_given_conversion": 0.57694745422917
+      },
+      "standard|6+|opponent_territory": {
+        "bucket": "standard|6+|opponent_territory",
+        "conversion_rate": 0.3124079495371522,
+        "converted_non_td_yards": {
+          "mean": 14.582251944029968,
+          "stddev": 6.427295011566938
+        },
+        "failure_yards": {
+          "mean": -0.3506103736019594,
+          "stddev": 4.703594187389303
+        },
+        "sample": {
+          "attempts": 560,
+          "conversion_rate": 0.3125,
+          "conversions": 175,
+          "converted_non_td_count": 149,
+          "failures": 385,
+          "td_given_conversion": 0.14857142857142858,
+          "touchdown_conversions": 26
+        },
+        "td_given_conversion": 0.14891304225401114
+      },
+      "standard|6+|own_territory": {
+        "bucket": "standard|6+|own_territory",
+        "conversion_rate": 0.3350708548575353,
+        "converted_non_td_yards": {
+          "mean": 19.159452980845952,
+          "stddev": 11.074757269739656
+        },
+        "failure_yards": {
+          "mean": -0.7522005886566064,
+          "stddev": 5.831254353641305
+        },
+        "sample": {
+          "attempts": 285,
+          "conversion_rate": 0.3368421052631579,
+          "conversions": 96,
+          "converted_non_td_count": 93,
+          "failures": 189,
+          "td_given_conversion": 0.03125,
+          "touchdown_conversions": 3
+        },
+        "td_given_conversion": 0.044877212050926686
+      },
+      "standard|6+|red_zone": {
+        "bucket": "standard|6+|red_zone",
+        "conversion_rate": 0.22966941318364614,
+        "converted_non_td_yards": {
+          "mean": 12.864273457867704,
+          "stddev": 3.2521360501813112
+        },
+        "failure_yards": {
+          "mean": 0.4053642326318698,
+          "stddev": 3.753871699242663
+        },
+        "sample": {
+          "attempts": 81,
+          "conversion_rate": 0.20987654320987653,
+          "conversions": 17,
+          "converted_non_td_count": 12,
+          "failures": 64,
+          "td_given_conversion": 0.29411764705882354,
+          "touchdown_conversions": 5
+        },
+        "td_given_conversion": 0.23609444487931316
+      }
+    },
+    "default": {
+      "bucket": "default",
+      "conversion_rate": 0.5070183556995218,
+      "converted_non_td_yards": {
+        "mean": 8.913345521023766,
+        "stddev": 8.756015699400454
+      },
+      "failure_yards": {
+        "mean": -0.425531914893617,
+        "stddev": 3.724444696399839
+      },
+      "sample": {
+        "attempts": 6483,
+        "conversion_rate": 0.5070183556995218,
+        "conversions": 3287,
+        "converted_non_td_count": 2735,
+        "failures": 3196,
+        "td_given_conversion": 0.1679342865835108,
+        "touchdown_conversions": 552
+      },
+      "td_given_conversion": 0.16793428658351078
+    }
+  },
+  "shrinkage": {
+    "global_to_parent_conversion_pseudo_attempts": 20.0,
+    "global_to_parent_td_pseudo_conversions": 12.0,
+    "method": "hierarchical beta-binomial for rates and normal-mean pooling for yards",
+    "parent_to_bucket_conversion_pseudo_attempts": 20.0,
+    "parent_to_bucket_td_pseudo_conversions": 12.0,
+    "parent_to_bucket_yards_pseudo_observations": 12.0
+  },
+  "train_window": "2013-2023 regular season"
+}

@@ -1,0 +1,51 @@
+{
+  "artifact_id": "Clock-Play Joint Pre-Entry Pass-to-RZ Continuation",
+  "contract": {
+    "hypothesis": "When the pass route immediately before a drive's first red-zone snap starts at the opponent 30-21, that first non-fourth red-zone route and its continuation should be sampled from one train-only joint state process rather than from an unrelated generic route.",
+    "state_owner": "The process owns the handoff from an eligible 70-79 pass entry origin to exactly one first non-fourth red-zone continuation. It does not own the crossing probability, later red-zone snaps, fourth-down decisions, clock priors, possession semantics, or scoring priors outside its observed continuation.",
+    "eligible_pre_entry_pass": "pass route at offensive yardline 70-79 immediately before the same drive's first red-zone route, provided the drive did not start inside the red zone",
+    "eligible_continuation": "first same-drive red-zone play_type in {pass,run} at offensive yardline 80-99 and down<4",
+    "state_key": "pre-entry start bucket (70-74 or 75-79) × continuation red-zone field bucket × continuation down × distance bucket × goal-to-go",
+    "continuation_outcomes": [
+      "touchdown",
+      "turnover",
+      "incomplete",
+      "loss",
+      "zero",
+      "one_two",
+      "short_gain",
+      "first_down"
+    ]
+  },
+  "lineage": {
+    "parent_commit": "e18b6125fb602b99ee6e94e60f4614afbfe33927",
+    "rejected_branches_excluded": [
+      "cursor/nfl-clock-play-rz-route-transition-trace-cfdf",
+      "cursor/nfl-clock-play-rz-pass-approach-fix-cfdf",
+      "cursor/nfl-clock-play-coherent-pass-states-1c24",
+      "cursor/nfl-clock-play-coherent-rush-states-1c24"
+    ]
+  },
+  "governance": {
+    "train_window": "2013-2023 regular season only",
+    "historical_sha256": "823304baa68961187307c1d08774bee80a58d9757ee57be01f6879b34c5bca2c",
+    "held_out_data": false,
+    "market_data": false,
+    "production_data": false,
+    "frozen": [
+      "root seeds",
+      "certification thresholds",
+      "clock-flow priors and runtime scale",
+      "fourth-down continuation priors",
+      "red-zone fourth-down decision priors",
+      "red-zone rush transition priors",
+      "generic play routing outside the owned handoff"
+    ]
+  },
+  "acceptance": [
+    "Every eligible crossing can route to at most one joint continuation.",
+    "The joint process is never selected for a non-crossing pass, a later red-zone snap, or a fourth-down continuation.",
+    "The PBP prior builder is deterministic and records its sample/exclusion accounting.",
+    "The fixed 2,048-game train-only certification preserves state invariants and structural checks."
+  ]
+}
