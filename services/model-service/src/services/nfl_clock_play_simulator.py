@@ -234,6 +234,8 @@ class ClockPlayConfig:
     clock_flow_enabled: bool = False
     clock_flow_priors: Mapping[str, Any] = field(default_factory=dict)
     clock_flow_runtime_scale: float = 1.0
+    q4_trailing_clock_flow_scale: float = 1.0
+    q4_close_leading_clock_flow_scale: float = 1.0
     red_zone_rush_transition_enabled: bool = False
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_pass_transition_enabled: bool = False
@@ -405,7 +407,14 @@ class ClockPlaySimulator:
                 / self._pace_factor(offense)
             )
             spread = max(0.0, float(prior["stddev_seconds"]))
-            return _clamp(self.rng.gauss(mean, spread), 1.0, 80.0)
+            seconds = _clamp(self.rng.gauss(mean, spread), 1.0, 80.0)
+            if self.state.quarter == 4:
+                gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
+                if gap < 0:
+                    seconds *= self.config.q4_trailing_clock_flow_scale
+                elif 0 < gap <= 8:
+                    seconds *= self.config.q4_close_leading_clock_flow_scale
+            return seconds
         if stopped_clock:
             return _clamp(self.rng.uniform(5.0, 12.0), 1.0, 15.0)
         hurry = self._is_endgame() and self._is_trailing(offense)

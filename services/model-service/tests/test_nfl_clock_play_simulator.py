@@ -414,6 +414,34 @@ def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
 
 
+def test_q4_trailing_clock_flow_scale_increases_play_runoff() -> None:
+    config = _clock_flow_config()
+    config = ClockPlayConfig(
+        clock_flow_enabled=config.clock_flow_enabled,
+        clock_flow_priors=config.clock_flow_priors,
+        q4_trailing_clock_flow_scale=1.25,
+    )
+    slow = ClockPlaySimulator(_inputs(), seed=3, config=config)
+    slow.state = ClockPlayState(quarter=4, clock_seconds=500.0, possession="home")
+    slow.state.home_score = 10
+    slow.state.away_score = 13
+    fast = ClockPlaySimulator(
+        _inputs(),
+        seed=3,
+        config=ClockPlayConfig(
+            clock_flow_enabled=config.clock_flow_enabled,
+            clock_flow_priors=config.clock_flow_priors,
+            q4_trailing_clock_flow_scale=1.0,
+        ),
+    )
+    fast.state = ClockPlayState(quarter=4, clock_seconds=500.0, possession="home")
+    fast.state.home_score = 10
+    fast.state.away_score = 13
+    assert slow._play_seconds("home", stopped_clock=False) > fast._play_seconds(
+        "home", stopped_clock=False
+    )
+
+
 def test_rz_endgame_trail3_precedence_overrides_go_prior() -> None:
     config = ClockPlayConfig(
         red_zone_fourth_decision_enabled=True,
