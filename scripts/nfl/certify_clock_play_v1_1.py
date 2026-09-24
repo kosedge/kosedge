@@ -41,6 +41,18 @@ def _is_one(value: Any) -> bool:
     return numeric is not None and numeric == 1.0
 
 
+def _is_non_red_zone_designed_rush(payload: Mapping[str, Any]) -> bool:
+    yardline_100 = _number(payload.get("yardline_100"))
+    return (
+        payload.get("play_type") == "run"
+        and yardline_100 is not None
+        and yardline_100 > 20
+        and not _is_one(payload.get("qb_scramble"))
+        and not _is_one(payload.get("qb_kneel"))
+        and not _is_one(payload.get("two_point_attempt"))
+    )
+
+
 def _as_game(raw: Mapping[str, Any]) -> ClockPlayGameInputs:
     return ClockPlayGameInputs(
         game_id=str(raw["case_id"]),
@@ -71,7 +83,22 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",
         ),
+        (
+            "fourth_down_decision_priors_path",
+            "fourth_down_decision_priors",
+            "Fourth-down decision",
+        ),
         ("pass_state_priors_path", "pass_state_priors", "Pass state"),
+        (
+            "called_play_state_priors_path",
+            "called_play_state_priors",
+            "Called-play state",
+        ),
+        (
+            "designed_rush_state_priors_path",
+            "designed_rush_state_priors",
+            "Designed rush state",
+        ),
         (
             "special_teams_state_priors_path",
             "special_teams_state_priors",
@@ -87,6 +114,12 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             raise SystemExit(f"{label} priors need a priors object")
         if label == "Pass state":
             priors = priors.get("pass")
+        elif label == "Fourth-down decision":
+            priors = priors.get("fourth_down_decision")
+        elif label == "Called-play state":
+            priors = priors.get("called_play")
+        elif label == "Designed rush state":
+            priors = priors.get("designed_rush")
         elif label == "Special-teams state":
             priors = priors.get("special_teams")
         if not isinstance(priors, Mapping):
@@ -124,6 +157,8 @@ def _summary(
     third_attempts = counts["third_down_attempt"]
     pass_attempts = counts["pass_attempt"]
     completions = counts["pass_completion"]
+    called_plays = counts["play_call_pass"] + counts["play_call_rush"]
+    designed_rush_attempts = counts["designed_rush_attempt"]
     return {
         "plays_per_game": _per_game(sum(plays), games),
         "drives_per_game": _per_game(counts["drive"], games),
@@ -161,6 +196,7 @@ def _summary(
             counts["non_offensive_touchdown"], games
         ),
         "pass_attempts_per_game": _per_game(pass_attempts, games),
+        "called_pass_share": _rate(counts["play_call_pass"], called_plays),
         "completion_rate": _rate(completions, pass_attempts),
         "yards_per_completion": _rate(counts["pass_completion_yards"], completions),
         "yards_per_pass_attempt": _rate(counts["pass_completion_yards"], pass_attempts),
@@ -172,6 +208,21 @@ def _summary(
         "interceptions_per_game": _per_game(counts["interception"], games),
         "fumbles_per_game": _per_game(counts["fumble"], games),
         "pass_touchdowns_per_game": _per_game(counts["pass_touchdown"], games),
+        "non_red_zone_designed_rush_attempts_per_game": _per_game(
+            designed_rush_attempts, games
+        ),
+        "non_red_zone_designed_rush_yards_per_attempt": _rate(
+            counts["designed_rush_yards"], designed_rush_attempts
+        ),
+        "non_red_zone_designed_rush_first_down_rate": _rate(
+            counts["designed_rush_first_down"], designed_rush_attempts
+        ),
+        "non_red_zone_designed_rush_fumble_rate": _rate(
+            counts["designed_rush_fumble"], designed_rush_attempts
+        ),
+        "non_red_zone_designed_rush_touchdowns_per_game": _per_game(
+            counts["designed_rush_touchdown"], games
+        ),
         "turnovers_excluding_downs_per_game": _per_game(
             counts["turnover"], games
         ),
@@ -258,6 +309,8 @@ def _simulation_metrics(
                 "non_offensive_touchdown"
             ]
             counts["pass_attempt"] += event_counts["pass_attempt"]
+            counts["play_call_pass"] += event_counts["play_call_pass"]
+            counts["play_call_rush"] += event_counts["play_call_rush"]
             counts["pass_completion"] += event_counts["pass_outcome_completion"]
             counts["pass_completion_yards"] += event_counts[
                 "pass_completion_yards"
@@ -269,6 +322,17 @@ def _simulation_metrics(
             counts["interception"] += event_counts["pass_outcome_interception"]
             counts["fumble"] += event_counts["pass_outcome_fumble"]
             counts["pass_touchdown"] += event_counts["pass_touchdown"]
+            counts["designed_rush_attempt"] += event_counts["designed_rush_attempt"]
+            counts["designed_rush_yards"] += event_counts["designed_rush_yards"]
+            counts["designed_rush_first_down"] += event_counts[
+                "designed_rush_outcome_first_down"
+            ]
+            counts["designed_rush_fumble"] += event_counts[
+                "designed_rush_outcome_fumble"
+            ]
+            counts["designed_rush_touchdown"] += event_counts[
+                "designed_rush_outcome_touchdown"
+            ]
             counts["turnover"] += event_counts["turnover"]
             counts["turnover_on_downs"] += event_counts["turnover_on_downs"]
             counts["third_down_attempt"] += event_counts["third_down_attempt"]
@@ -411,6 +475,20 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 drives.add((game_id, int(fixed_drive)))
             if _is_one(payload.get("touchdown")) and payload.get("td_team") == payload.get("posteam"):
                 counts["touchdown"] += 1
+            if _is_non_red_zone_designed_rush(payload):
+                yards = int(round(_number(payload.get("yards_gained")) or 0.0))
+                distance = int(round(_number(payload.get("ydstogo")) or 1.0))
+                counts["designed_rush_attempt"] += 1
+                counts["designed_rush_yards"] += yards
+                if _is_one(payload.get("fumble_lost")):
+                    counts["designed_rush_fumble"] += 1
+                elif (
+                    _is_one(payload.get("touchdown"))
+                    and payload.get("td_team") == payload.get("posteam")
+                ):
+                    counts["designed_rush_touchdown"] += 1
+                elif _is_one(payload.get("first_down")) or yards >= distance:
+                    counts["designed_rush_first_down"] += 1
             is_called_pass = play_type == "pass" or _is_one(
                 payload.get("qb_scramble")
             )
@@ -469,6 +547,15 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 counts["third_down_attempt"] += 1
 
             down = _number(payload.get("down"))
+            if (
+                down in {1.0, 2.0, 3.0}
+                and not _is_one(payload.get("two_point_attempt"))
+                and not _is_one(payload.get("qb_spike"))
+            ):
+                if is_called_pass:
+                    counts["play_call_pass"] += 1
+                elif play_type == "run" and not _is_one(payload.get("qb_kneel")):
+                    counts["play_call_rush"] += 1
             if down == 4:
                 counts["fourth_down_decision"] += 1
                 if play_type == "field_goal":
@@ -515,6 +602,12 @@ def main() -> None:
     config_payload = json.loads(args.config.read_text(encoding="utf-8"))
     inputs_payload = json.loads(args.inputs.read_text(encoding="utf-8"))
     run_spec = config_payload["freeze_run"]
+    lineage = config_payload.get("lineage")
+    parent_source_sha = (
+        str(lineage.get("parent_commit") or "").strip()
+        if isinstance(lineage, Mapping)
+        else ""
+    )
     candidate, games_simulated = _simulation_metrics(
         config=ClockPlayConfig.from_mapping(_engine_config(config_payload)),
         cases=inputs_payload["cases"],
@@ -533,6 +626,7 @@ def main() -> None:
     }
     output = {
         "artifact_id": config_payload["artifact_id"],
+        "parent_source_sha": parent_source_sha or None,
         "train_window": "2013-2023 regular season",
         "historical_source": args.historical_pbp.as_posix(),
         "historical_games": historical_games,

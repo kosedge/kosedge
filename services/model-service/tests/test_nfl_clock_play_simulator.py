@@ -113,6 +113,20 @@ def _rz_fourth_decision_config() -> ClockPlayConfig:
     )
 
 
+def _fourth_down_decision_config(*, action: str) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        fourth_down_decision_enabled=True,
+        fourth_down_decision_priors={
+            "default": {
+                "action_probabilities": {
+                    name: 1.0 if name == action else 0.0
+                    for name in ("field_goal", "go", "punt")
+                }
+            }
+        },
+    )
+
+
 def _coherent_state_config(
     *,
     pass_outcome: str = "completion",
@@ -201,6 +215,75 @@ def _coherent_state_config(
                 }
             },
         },
+    )
+
+
+def _designed_rush_state_config(
+    *,
+    outcome: str,
+    yards: int = 4,
+    fumble_return_yards: int = 7,
+) -> ClockPlayConfig:
+    outcomes = (
+        "touchdown",
+        "fumble",
+        "first_down",
+        "loss",
+        "zero",
+        "short_gain",
+    )
+    return ClockPlayConfig(
+        designed_rush_state_enabled=True,
+        designed_rush_state_priors={
+            "default": {
+                "outcome_probabilities": {
+                    name: 1.0 if name == outcome else 0.0 for name in outcomes
+                },
+                "yard_value_weights": {
+                    name: {str(yards): 1.0} for name in outcomes
+                },
+                "turnover_returns": {
+                    "fumble": {
+                        "touchdown_rate": 0.0,
+                        "return_yard_weights": {str(fumble_return_yards): 1.0},
+                    }
+                },
+            }
+        },
+    )
+
+
+def _called_play_state_config(*, family: str) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        called_play_state_enabled=True,
+        called_play_state_priors={
+            "default": {
+                "call_probabilities": {
+                    name: 1.0 if name == family else 0.0
+                    for name in ("pass", "rush")
+                }
+            }
+        },
+    )
+
+
+def _coherent_rush_config(
+    *,
+    rush_outcome: str,
+    rz_outcome: str = "first_down",
+) -> ClockPlayConfig:
+    pass_config = _coherent_state_config()
+    rush_config = _designed_rush_state_config(outcome=rush_outcome)
+    rz_config = _rz_rush_transition_config(outcome=rz_outcome)
+    return ClockPlayConfig(
+        pass_state_enabled=True,
+        pass_state_priors=pass_config.pass_state_priors,
+        special_teams_state_enabled=True,
+        special_teams_state_priors=pass_config.special_teams_state_priors,
+        designed_rush_state_enabled=True,
+        designed_rush_state_priors=rush_config.designed_rush_state_priors,
+        red_zone_rush_transition_enabled=True,
+        red_zone_rush_transition_priors=rz_config.red_zone_rush_transition_priors,
     )
 
 
@@ -323,6 +406,24 @@ def test_conventional_short_fourth_down_is_not_masked_by_field_goal_range() -> N
     )
 
     assert simulator._fourth_down_decision("home") == "go"
+
+
+def test_non_red_zone_fourth_down_uses_train_decision_prior() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_fourth_down_decision_config(action="punt"),
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=300.0,
+        possession="home",
+        yardline=65,
+        down=4,
+        distance=2,
+    )
+
+    assert simulator._fourth_down_decision("home") == "punt"
 
 
 def test_clock_flow_uses_train_prior_by_play_kind() -> None:
@@ -634,6 +735,162 @@ def test_pass_state_routes_each_primary_outcome_exclusively() -> None:
         assert simulator.state.event_counts["route_rush"] == 0
         assert simulator.state.event_counts["route_red_zone_rush"] == 0
         assert simulator.state.event_counts["turnover"] == 0
+
+
+def test_called_play_state_selects_one_pass_or_rush_family_before_outcome() -> None:
+    pass_config = _coherent_state_config(pass_outcome="completion")
+    rush_config = _designed_rush_state_config(outcome="short_gain", yards=3)
+    for family, expected_route in (("pass", "pass"), ("rush", "designed_rush")):
+        selector = _called_play_state_config(family=family)
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=19,
+            config=ClockPlayConfig(
+                pass_state_enabled=True,
+                pass_state_priors=pass_config.pass_state_priors,
+                called_play_state_enabled=True,
+                called_play_state_priors=selector.called_play_state_priors,
+                designed_rush_state_enabled=True,
+                designed_rush_state_priors=rush_config.designed_rush_state_priors,
+            ),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=50,
+            down=1,
+            distance=10,
+        )
+
+        simulator._resolve_scrimmage_play("home")
+
+        assert simulator.state.event_counts["play_call"] == 1
+        assert simulator.state.event_counts[f"play_call_{family}"] == 1
+        assert simulator.state.event_counts[f"route_{expected_route}"] == 1
+        assert simulator.state.event_counts["route_pass"] + simulator.state.event_counts[
+            "route_designed_rush"
+        ] == 1
+
+
+def test_designed_rush_state_routes_each_primary_outcome_exclusively() -> None:
+    for outcome in (
+        "touchdown",
+        "fumble",
+        "first_down",
+        "loss",
+        "zero",
+        "short_gain",
+    ):
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=19,
+            config=_designed_rush_state_config(outcome=outcome),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=50,
+            down=1,
+            distance=10,
+        )
+
+        simulator._resolve_designed_rush("home")
+
+        assert simulator.state.event_counts["route_designed_rush"] == 1
+        assert simulator.state.event_counts["designed_rush_attempt"] == 1
+        assert simulator.state.event_counts[f"designed_rush_outcome_{outcome}"] == 1
+        assert simulator.state.event_counts["route_rush"] == 0
+        assert simulator.state.event_counts["route_pass"] == 0
+        assert simulator.state.event_counts["route_red_zone_rush"] == 0
+
+
+def test_designed_rush_fumble_owns_direct_return_transition() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=20,
+        config=_designed_rush_state_config(outcome="fumble", yards=2),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=50,
+        down=2,
+        distance=8,
+    )
+
+    simulator._resolve_designed_rush("home")
+
+    assert simulator.state.event_counts["route_designed_rush"] == 1
+    assert simulator.state.event_counts["fumble"] == 1
+    assert simulator.state.event_counts["turnover"] == 0
+    assert simulator.state.possession == "away"
+    assert simulator.state.yardline == 55
+
+
+def test_red_zone_rush_transition_precedes_designed_rush_state() -> None:
+    for seed in range(1, 100):
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=seed,
+            config=_coherent_rush_config(rush_outcome="touchdown"),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=85,
+            down=1,
+            distance=3,
+        )
+        simulator._resolve_scrimmage_play("home")
+        if simulator.state.event_counts["route_red_zone_rush"]:
+            break
+    else:  # pragma: no cover - protects the routing priority
+        raise AssertionError("No deterministic red-zone rush route found")
+
+    assert simulator.state.event_counts["route_red_zone_rush"] == 1
+    assert simulator.state.event_counts["route_designed_rush"] == 0
+    assert simulator.state.event_counts["route_pass"] == 0
+
+
+def test_fourth_down_continuation_precedes_designed_rush_state() -> None:
+    continuation = _continuation_config(
+        conversion_rate=1.0,
+        td_given_conversion=0.0,
+        converted_yards=4.0,
+    )
+    rush = _designed_rush_state_config(outcome="touchdown")
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=21,
+        config=ClockPlayConfig(
+            fourth_down_continuation_enabled=True,
+            fourth_down_continuation_priors=continuation.fourth_down_continuation_priors,
+            designed_rush_state_enabled=True,
+            designed_rush_state_priors=rush.designed_rush_state_priors,
+        ),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=300.0,
+        possession="home",
+        yardline=70,
+        down=4,
+        distance=2,
+    )
+
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["route_fourth_down_go"] == 1
+    assert simulator.state.event_counts["route_designed_rush"] == 0
 
 
 def test_sack_in_end_zone_is_a_state_derived_safety() -> None:

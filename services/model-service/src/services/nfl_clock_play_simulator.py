@@ -92,6 +92,38 @@ def fourth_down_situation_key(
     )
 
 
+def fourth_down_decision_state_key(
+    *,
+    yardline: int,
+    distance: int,
+    goal_to_go: bool | None,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Key a non-red-zone fourth-down action by situation and urgency."""
+
+    if quarter in {4, "OT"} and clock_seconds <= 180:
+        urgency = (
+            "late_trailing"
+            if score_gap < 0
+            else "late_tied"
+            if score_gap == 0
+            else "late_leading"
+        )
+    else:
+        urgency = "standard"
+    return "|".join(
+        (
+            urgency,
+            fourth_down_distance_bucket(int(distance)),
+            fourth_down_field_bucket(
+                int(yardline), int(distance), goal_to_go=goal_to_go
+            ),
+        )
+    )
+
+
 def _odds_adjust(probability: float, factor: float, *, exponent: float) -> float:
     if probability <= 0.0:
         return 0.0
@@ -220,6 +252,53 @@ def pass_state_key(
     )
 
 
+def designed_rush_state_key(
+    *,
+    yardline: int,
+    down: int,
+    distance: int,
+    goal_to_go: bool,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Return the train-only conditional key for a designed-rush outcome."""
+
+    return "|".join(
+        (
+            pass_field_bucket(yardline),
+            str(max(1, min(4, int(down)))),
+            pass_distance_bucket(distance),
+            "gtg" if goal_to_go else "non_gtg",
+            pass_time_bucket(quarter, clock_seconds),
+            pass_score_bucket(score_gap),
+        )
+    )
+
+
+def called_play_state_key(
+    *,
+    yardline: int,
+    down: int,
+    distance: int,
+    goal_to_go: bool,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Return the train-only conditional key for a pass-or-rush call."""
+
+    return pass_state_key(
+        yardline=yardline,
+        down=down,
+        distance=distance,
+        goal_to_go=goal_to_go,
+        quarter=quarter,
+        clock_seconds=clock_seconds,
+        score_gap=score_gap,
+    )
+
+
 def special_teams_field_bucket(yardline: int) -> str:
     if yardline <= 20:
         return "own_20"
@@ -281,8 +360,14 @@ class ClockPlayConfig:
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
+    fourth_down_decision_enabled: bool = False
+    fourth_down_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     pass_state_enabled: bool = False
     pass_state_priors: Mapping[str, Any] = field(default_factory=dict)
+    called_play_state_enabled: bool = False
+    called_play_state_priors: Mapping[str, Any] = field(default_factory=dict)
+    designed_rush_state_enabled: bool = False
+    designed_rush_state_priors: Mapping[str, Any] = field(default_factory=dict)
     special_teams_state_enabled: bool = False
     special_teams_state_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -910,10 +995,39 @@ class ClockPlaySimulator:
             overtime_possession=self.state.quarter == "OT",
         )
 
+    def _fourth_down_decision_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.fourth_down_decision_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = fourth_down_decision_state_key(
+            yardline=state.yardline,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Fourth-down decision model requires train-only priors")
+
     def _fourth_down_decision(self, offense: TeamSide) -> str:
         score_gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         yards_to_go = self.state.distance
         fg_distance = 117 - self.state.yardline
+        if (
+            self.config.fourth_down_decision_enabled
+            and self.state.yardline < 80
+        ):
+            prior = self._fourth_down_decision_prior(offense)
+            decision = self._sample_weighted(prior["action_probabilities"])
+            if decision not in {"field_goal", "go", "punt"}:
+                raise ValueError(f"Unknown fourth-down decision {decision!r}")
+            return decision
         if (
             self.config.red_zone_fourth_decision_enabled
             and self.state.yardline >= 80
@@ -1277,6 +1391,69 @@ class ClockPlaySimulator:
             return fallback
         raise ValueError("Pass-state model requires train-only priors")
 
+    def _called_play_state_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.called_play_state_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = called_play_state_key(
+            yardline=state.yardline,
+            down=state.down,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Called-play state model requires train-only priors")
+
+    def _select_called_play(self, offense: TeamSide) -> str:
+        """Select exactly one offensive family before resolving its outcome."""
+
+        if self.config.called_play_state_enabled:
+            prior = self._called_play_state_prior(offense)
+            call = self._sample_weighted(prior["call_probabilities"])
+            if call not in {"pass", "rush"}:
+                raise ValueError(f"Unknown called-play family {call!r}")
+        else:
+            pass_probability = 0.52
+            if self._is_endgame():
+                pass_probability += 0.17 if self._is_trailing(offense) else -0.12
+            call = (
+                "pass"
+                if self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
+                else "rush"
+            )
+        self._event("play_call", offense=offense, family=call)
+        self.state.event_counts[f"play_call_{call}"] += 1
+        return call
+
+    def _designed_rush_state_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.designed_rush_state_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = designed_rush_state_key(
+            yardline=state.yardline,
+            down=state.down,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Designed-rush state model requires train-only priors")
+
     def _record_third_down(self, *, converted: bool) -> None:
         if self.state.down != 3:
             return
@@ -1502,7 +1679,115 @@ class ClockPlaySimulator:
         )
 
     def _resolve_designed_rush(self, offense: TeamSide) -> None:
-        """Keep the inherited non-red-zone rush family independent of passes."""
+        """Resolve one exclusive non-red-zone designed-rush primary outcome."""
+
+        if not self.config.designed_rush_state_enabled:
+            self._resolve_inherited_designed_rush(offense)
+            return
+
+        state = self.state
+        clock_before = state.clock_seconds
+        prior = self._designed_rush_state_prior(offense)
+        outcome = self._sample_weighted(prior["outcome_probabilities"])
+        if outcome not in {
+            "touchdown",
+            "fumble",
+            "first_down",
+            "loss",
+            "zero",
+            "short_gain",
+        }:
+            raise ValueError(f"Unknown designed-rush outcome {outcome!r}")
+        self._route("designed_rush", offense=offense, outcome=outcome)
+        self.state.event_counts[f"designed_rush_outcome_{outcome}"] += 1
+        self._event("designed_rush_attempt", offense=offense, outcome=outcome)
+
+        yards = self._sample_prior_yards(
+            prior, "yard_value_weights", outcome=outcome, fallback=0
+        )
+        if outcome == "touchdown":
+            yards = 100 - state.yardline
+        elif outcome == "first_down":
+            yards = max(state.distance, yards)
+        else:
+            yards = min(yards, state.distance - 1)
+        self.state.event_counts["designed_rush_yards"] += yards
+        if outcome == "fumble":
+            self._consume_clock(
+                self._play_seconds(offense, stopped_clock=False, kind="turnover")
+            )
+            self._resolve_designed_rush_fumble(
+                offense,
+                yards=yards,
+                prior=prior,
+                clock_before=clock_before,
+            )
+            return
+
+        if outcome == "touchdown":
+            self.state.event_counts["designed_rush_touchdown"] += 1
+        target_yardline = state.yardline + yards
+        clock_kind = (
+            "post_touchdown"
+            if outcome == "touchdown" or target_yardline >= 100
+            else "first_down"
+            if outcome == "first_down"
+            else "run"
+        )
+        self._consume_clock(
+            self._play_seconds(offense, stopped_clock=False, kind=clock_kind)
+        )
+        self._resolve_advance_or_score(
+            offense,
+            yards=yards,
+            play_type="designed_rush",
+            route="designed_rush",
+            clock_before=clock_before,
+            details={"designed_rush_outcome": outcome},
+        )
+
+    def _resolve_designed_rush_fumble(
+        self,
+        offense: TeamSide,
+        *,
+        yards: int,
+        prior: Mapping[str, Any],
+        clock_before: float,
+    ) -> None:
+        """Transition a selected lost rush fumble directly through its return."""
+
+        defense = _OTHER_SIDE[offense]
+        turnover_spot = int(
+            _clamp(float(self.state.yardline + yards), 1.0, 99.0)
+        )
+        return_priors = prior.get("turnover_returns")
+        return_prior = (
+            return_priors.get("fumble")
+            if isinstance(return_priors, Mapping)
+            and isinstance(return_priors.get("fumble"), Mapping)
+            else {}
+        )
+        self._event(
+            "fumble",
+            offense=offense,
+            defense=defense,
+            play_type="designed_rush",
+            yards=yards,
+            turnover_spot=turnover_spot,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - self.state.clock_seconds, 3),
+        )
+        self._record_third_down(converted=False)
+        self._special_return(
+            scoring_team=defense,
+            receiving_team=defense,
+            base_yardline=100 - turnover_spot,
+            return_prior=return_prior,
+            source="rush_fumble_return",
+        )
+
+    def _resolve_inherited_designed_rush(self, offense: TeamSide) -> None:
+        """Run the pre-state-family rush mechanism for compatibility."""
 
         state = self.state
         clock_before = state.clock_seconds
@@ -1586,16 +1871,12 @@ class ClockPlaySimulator:
                 return
 
         if self.config.pass_state_enabled:
-            pass_probability = 0.52
-            if self._is_endgame():
-                pass_probability += 0.17 if self._is_trailing(offense) else -0.12
             rush_transition = (
                 self.config.red_zone_rush_transition_enabled
                 and state.yardline >= 80
                 and state.down < 4
             )
-            is_pass = self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
-            if is_pass:
+            if self._select_called_play(offense) == "pass":
                 self._resolve_pass_attempt(offense)
                 return
             if rush_transition:

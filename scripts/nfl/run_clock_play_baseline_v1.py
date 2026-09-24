@@ -37,6 +37,9 @@ SOURCE_FILES = (
     "services/model-service/src/services/nfl_season_engine/kicker_layer.py",
     "scripts/nfl/run_clock_play_baseline_v1.py",
     "scripts/nfl/build_clock_play_coherent_state_priors.py",
+    "scripts/nfl/build_clock_play_called_play_state_priors.py",
+    "scripts/nfl/build_clock_play_designed_rush_state_priors.py",
+    "scripts/nfl/build_clock_play_fourth_down_decision_priors.py",
 )
 
 
@@ -89,7 +92,22 @@ def _load_clock_play_priors(
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",
         ),
+        (
+            "fourth_down_decision_priors_path",
+            "fourth_down_decision_priors",
+            "fourth_down_decision",
+        ),
         ("pass_state_priors_path", "pass_state_priors", "pass_state"),
+        (
+            "called_play_state_priors_path",
+            "called_play_state_priors",
+            "called_play_state",
+        ),
+        (
+            "designed_rush_state_priors_path",
+            "designed_rush_state_priors",
+            "designed_rush_state",
+        ),
         (
             "special_teams_state_priors_path",
             "special_teams_state_priors",
@@ -106,6 +124,12 @@ def _load_clock_play_priors(
             raise SystemExit(f"{label} priors need a priors object")
         if label == "pass_state":
             priors = priors.get("pass")
+        elif label == "fourth_down_decision":
+            priors = priors.get("fourth_down_decision")
+        elif label == "called_play_state":
+            priors = priors.get("called_play")
+        elif label == "designed_rush_state":
+            priors = priors.get("designed_rush")
         elif label == "special_teams_state":
             priors = priors.get("special_teams")
         if not isinstance(priors, Mapping):
@@ -259,6 +283,12 @@ def run(
     config_payload = _load_json_object(config_path)
     inputs_payload = _load_json_object(inputs_path)
     artifact_id = str(config_payload.get("artifact_id") or ARTIFACT_ID)
+    lineage = config_payload.get("lineage")
+    parent_source_sha = (
+        str(lineage.get("parent_commit") or "").strip()
+        if isinstance(lineage, Mapping)
+        else ""
+    )
     engine_config, clock_play_priors_receipt = _load_clock_play_priors(
         config_payload
     )
@@ -356,6 +386,29 @@ def run(
                     "fumble",
                 )
             ),
+            "called_play_selection_exclusive": (
+                aggregate_events["play_call"]
+                == aggregate_events["play_call_pass"] + aggregate_events["play_call_rush"]
+                == aggregate_events["pass_attempt"]
+                + aggregate_events["route_designed_rush"]
+                + aggregate_events["route_red_zone_rush"]
+                + aggregate_events["route_rush"]
+            ),
+            "designed_rush_primary_outcomes_exclusive": (
+                aggregate_events["designed_rush_attempt"]
+                == aggregate_events["route_designed_rush"]
+                == sum(
+                    aggregate_events[f"designed_rush_outcome_{outcome}"]
+                    for outcome in (
+                        "touchdown",
+                        "fumble",
+                        "first_down",
+                        "loss",
+                        "zero",
+                        "short_gain",
+                    )
+                )
+            ),
             "special_teams_routes_exclusive": (
                 aggregate_events["route_punt"] == aggregate_events["punt"]
                 and aggregate_events["route_kickoff"] == aggregate_events["kickoff"]
@@ -373,6 +426,7 @@ def run(
         "experiment_scope": "isolated_train_only_structural_baseline",
         "games_simulated": games_simulated,
         "case_count": len(case_summaries),
+        "parent_source_sha": parent_source_sha or None,
         "held_out_data": False,
         "market_data": False,
         "calibration": "none",
@@ -429,6 +483,7 @@ def run(
         "artifact_id": artifact_id,
         "model_version": config.model_version,
         "source_sha": source_sha,
+        "parent_source_sha": parent_source_sha or None,
         "runner_version": RUNNER_VERSION,
         "config": {
             "path": config_path.as_posix(),
