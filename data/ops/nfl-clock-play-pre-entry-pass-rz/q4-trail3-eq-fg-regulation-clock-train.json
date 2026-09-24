@@ -1,0 +1,15 @@
+{
+  "clock_quantiles_seconds": {
+    "p25": 24.0,
+    "p50": 155.0,
+    "p60": 265.0,
+    "p65": 327.0,
+    "p70": 411.0,
+    "p75": 468.0
+  },
+  "component": "q4_trail3_eq_fg_regulation_clock",
+  "equalizing_fg_count": 181,
+  "mean_clock_seconds": 273.58011049723757,
+  "precedence_max_quantile": 0.6,
+  "q4_trail3_fg_range_precedence_max_clock_seconds": 265.0
+}
