@@ -262,6 +262,7 @@ class ClockPlayConfig:
     q4_endgame_trail3_fg_range_approach_extra_yards: float = 0.0
     q4_trail3_margin_preservation_field_goal_enabled: bool = False
     q4_trail3_margin_preservation_field_goal_probability: float = 0.0
+    q4_endgame_trail3_fg_range_block_goal_line_touchdown: bool = False
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -973,6 +974,29 @@ class ClockPlaySimulator:
         )
 
         if outcome == "touchdown":
+            if self._endgame_trail3_fg_range_blocks_goal_line_touchdown(offense):
+                gain = max(0, min(99 - start_yardline, distance_to_goal - 1))
+                state.yardline = int(_clamp(float(start_yardline + gain), 1.0, 99.0))
+                if gain >= distance:
+                    state.down = 1
+                    state.distance = min(10, 100 - state.yardline)
+                else:
+                    state.down += 1
+                    state.distance = max(1, distance - gain)
+                if start_down == 3:
+                    self.state.event_counts["third_down_attempt"] += 1
+                self._event(
+                    "scrimmage_play",
+                    offense=offense,
+                    play_type="red_zone_rush_transition",
+                    yards=gain,
+                    touchdown=False,
+                    transition_bucket=bucket,
+                    clock_before_seconds=round(clock_before, 3),
+                    clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+                )
+                self._validate_state()
+                return
             if start_down == 3:
                 self.state.event_counts["third_down_attempt"] += 1
                 self.state.event_counts["third_down_conversion"] += 1
@@ -1346,6 +1370,29 @@ class ClockPlaySimulator:
         self.state.use_timeout(defense)
         self._event("timeout", team=defense, reason="late_trailing_clock_stop")
 
+    def _endgame_trail3_fg_range_blocks_goal_line_touchdown(
+        self, offense: TeamSide
+    ) -> bool:
+        if not self.config.q4_endgame_trail3_fg_range_block_goal_line_touchdown:
+            return False
+        if self.state.quarter != 4 or not self._is_endgame() or self.state.down >= 4:
+            return False
+        gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
+        if gap != -3:
+            return False
+        fg_distance = 117 - self.state.yardline
+        return (
+            self.state.yardline >= 55
+            and fg_distance <= self.config.field_goal_max_distance
+        )
+
+    def _cap_yards_for_endgame_trail3_goal_line_block(
+        self, offense: TeamSide, yards: int
+    ) -> int:
+        if not self._endgame_trail3_fg_range_blocks_goal_line_touchdown(offense):
+            return yards
+        return min(yards, max(0, 99 - self.state.yardline))
+
     def _endgame_trail3_fg_range_approach_extra_yards(self, offense: TeamSide) -> float:
         extra = self.config.q4_endgame_trail3_fg_range_approach_extra_yards
         if extra <= 0.0:
@@ -1544,6 +1591,7 @@ class ClockPlaySimulator:
             yards += int(round(self.rng.uniform(12.0, 34.0)))
         yards += int(round(self._endgame_trail3_fg_range_approach_extra_yards(offense)))
         yards = max(-12, yards)
+        yards = self._cap_yards_for_endgame_trail3_goal_line_block(offense, yards)
         target_yardline = state.yardline + yards
         gained_first_down = yards >= state.distance
         clock_kind = (
