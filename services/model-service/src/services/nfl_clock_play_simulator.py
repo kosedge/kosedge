@@ -92,6 +92,38 @@ def fourth_down_situation_key(
     )
 
 
+def fourth_down_decision_state_key(
+    *,
+    yardline: int,
+    distance: int,
+    goal_to_go: bool | None,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Key a non-red-zone fourth-down action by situation and urgency."""
+
+    if quarter in {4, "OT"} and clock_seconds <= 180:
+        urgency = (
+            "late_trailing"
+            if score_gap < 0
+            else "late_tied"
+            if score_gap == 0
+            else "late_leading"
+        )
+    else:
+        urgency = "standard"
+    return "|".join(
+        (
+            urgency,
+            fourth_down_distance_bucket(int(distance)),
+            fourth_down_field_bucket(
+                int(yardline), int(distance), goal_to_go=goal_to_go
+            ),
+        )
+    )
+
+
 def _odds_adjust(probability: float, factor: float, *, exponent: float) -> float:
     if probability <= 0.0:
         return 0.0
@@ -328,6 +360,8 @@ class ClockPlayConfig:
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
+    fourth_down_decision_enabled: bool = False
+    fourth_down_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     pass_state_enabled: bool = False
     pass_state_priors: Mapping[str, Any] = field(default_factory=dict)
     called_play_state_enabled: bool = False
@@ -961,10 +995,39 @@ class ClockPlaySimulator:
             overtime_possession=self.state.quarter == "OT",
         )
 
+    def _fourth_down_decision_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.fourth_down_decision_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = fourth_down_decision_state_key(
+            yardline=state.yardline,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Fourth-down decision model requires train-only priors")
+
     def _fourth_down_decision(self, offense: TeamSide) -> str:
         score_gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         yards_to_go = self.state.distance
         fg_distance = 117 - self.state.yardline
+        if (
+            self.config.fourth_down_decision_enabled
+            and self.state.yardline < 80
+        ):
+            prior = self._fourth_down_decision_prior(offense)
+            decision = self._sample_weighted(prior["action_probabilities"])
+            if decision not in {"field_goal", "go", "punt"}:
+                raise ValueError(f"Unknown fourth-down decision {decision!r}")
+            return decision
         if (
             self.config.red_zone_fourth_decision_enabled
             and self.state.yardline >= 80

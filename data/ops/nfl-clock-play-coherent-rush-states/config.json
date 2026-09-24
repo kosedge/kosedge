@@ -3,6 +3,7 @@
   "called_play_state_priors_path": "data/ops/nfl-clock-play-coherent-rush-states/called-play-state-priors.json",
   "clock_flow_priors_path": "data/ops/nfl-clock-play-clock-flow/clock-flow-priors.json",
   "designed_rush_state_priors_path": "data/ops/nfl-clock-play-coherent-rush-states/designed-rush-state-priors.json",
+  "fourth_down_decision_priors_path": "data/ops/nfl-clock-play-coherent-rush-states/fourth-down-decision-priors.json",
   "fourth_down_continuation_priors_path": "data/ops/nfl-clock-play-v1.2-fourth-down/continuation-priors.json",
   "pass_state_priors_path": "data/ops/nfl-clock-play-coherent-pass-states/coherent-state-priors.json",
   "red_zone_fourth_decision_priors_path": "data/ops/nfl-clock-play-joint-rz-state/rz-fourth-decision-priors.json",
@@ -19,6 +20,7 @@
     "designed_rush_state_enabled": true,
     "endgame_window_seconds": 180,
     "field_goal_max_distance": 62,
+    "fourth_down_decision_enabled": true,
     "fourth_down_continuation_enabled": true,
     "fourth_down_go_distance": 2,
     "hurry_play_seconds": 15.0,
@@ -48,9 +50,9 @@
     }
   },
   "scope": {
-    "calibration": "train_only_exclusive_pass_rush_call_selection_and_non_red_zone_designed_rush_states",
+    "calibration": "train_only_exclusive_pass_rush_and_non_red_zone_fourth_down_call_selection",
     "held_out_data": false,
     "market_data": false,
-    "purpose": "select one train-only pass-or-rush family before resolving exclusive pass or rush outcomes"
+    "purpose": "replace hard-coded pass/rush and non-red-zone fourth-down decision branches with train-only exclusive state priors"
   }
 }

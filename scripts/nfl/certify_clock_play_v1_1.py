@@ -83,6 +83,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",
         ),
+        (
+            "fourth_down_decision_priors_path",
+            "fourth_down_decision_priors",
+            "Fourth-down decision",
+        ),
         ("pass_state_priors_path", "pass_state_priors", "Pass state"),
         (
             "called_play_state_priors_path",
@@ -109,6 +114,8 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             raise SystemExit(f"{label} priors need a priors object")
         if label == "Pass state":
             priors = priors.get("pass")
+        elif label == "Fourth-down decision":
+            priors = priors.get("fourth_down_decision")
         elif label == "Called-play state":
             priors = priors.get("called_play")
         elif label == "Designed rush state":

@@ -113,6 +113,20 @@ def _rz_fourth_decision_config() -> ClockPlayConfig:
     )
 
 
+def _fourth_down_decision_config(*, action: str) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        fourth_down_decision_enabled=True,
+        fourth_down_decision_priors={
+            "default": {
+                "action_probabilities": {
+                    name: 1.0 if name == action else 0.0
+                    for name in ("field_goal", "go", "punt")
+                }
+            }
+        },
+    )
+
+
 def _coherent_state_config(
     *,
     pass_outcome: str = "completion",
@@ -392,6 +406,24 @@ def test_conventional_short_fourth_down_is_not_masked_by_field_goal_range() -> N
     )
 
     assert simulator._fourth_down_decision("home") == "go"
+
+
+def test_non_red_zone_fourth_down_uses_train_decision_prior() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_fourth_down_decision_config(action="punt"),
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=300.0,
+        possession="home",
+        yardline=65,
+        down=4,
+        distance=2,
+    )
+
+    assert simulator._fourth_down_decision("home") == "punt"
 
 
 def test_clock_flow_uses_train_prior_by_play_kind() -> None:

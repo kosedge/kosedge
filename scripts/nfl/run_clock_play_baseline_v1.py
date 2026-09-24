@@ -39,6 +39,7 @@ SOURCE_FILES = (
     "scripts/nfl/build_clock_play_coherent_state_priors.py",
     "scripts/nfl/build_clock_play_called_play_state_priors.py",
     "scripts/nfl/build_clock_play_designed_rush_state_priors.py",
+    "scripts/nfl/build_clock_play_fourth_down_decision_priors.py",
 )
 
 
@@ -91,6 +92,11 @@ def _load_clock_play_priors(
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",
         ),
+        (
+            "fourth_down_decision_priors_path",
+            "fourth_down_decision_priors",
+            "fourth_down_decision",
+        ),
         ("pass_state_priors_path", "pass_state_priors", "pass_state"),
         (
             "called_play_state_priors_path",
@@ -118,6 +124,8 @@ def _load_clock_play_priors(
             raise SystemExit(f"{label} priors need a priors object")
         if label == "pass_state":
             priors = priors.get("pass")
+        elif label == "fourth_down_decision":
+            priors = priors.get("fourth_down_decision")
         elif label == "called_play_state":
             priors = priors.get("called_play")
         elif label == "designed_rush_state":
