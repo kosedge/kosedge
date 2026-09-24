@@ -1431,7 +1431,6 @@ class ClockPlaySimulator:
         }:
             raise ValueError(f"Unknown pass outcome {outcome!r}")
         self._route("pass", offense=offense, outcome=outcome)
-        self.state.event_counts["pass_attempt"] += 1
         self.state.event_counts[f"pass_outcome_{outcome}"] += 1
         self._event("pass_attempt", offense=offense, outcome=outcome)
 
