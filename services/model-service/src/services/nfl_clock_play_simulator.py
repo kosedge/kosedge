@@ -152,6 +152,84 @@ def rz_fourth_decision_state_key(
     )
 
 
+def pass_field_bucket(yardline: int) -> str:
+    if yardline <= 10:
+        return "own_10"
+    if yardline <= 35:
+        return "own_35"
+    if yardline < 50:
+        return "own_territory"
+    if yardline < 80:
+        return "opponent_territory"
+    if yardline < 95:
+        return "red_zone"
+    return "goal_to_go"
+
+
+def pass_distance_bucket(distance: int) -> str:
+    if distance <= 2:
+        return "short"
+    if distance <= 6:
+        return "medium"
+    return "long"
+
+
+def pass_score_bucket(score_gap: int) -> str:
+    if score_gap <= -9:
+        return "trailing_9_plus"
+    if score_gap < 0:
+        return "trailing_one_score"
+    if score_gap == 0:
+        return "tied"
+    if score_gap < 9:
+        return "leading_one_score"
+    return "leading_9_plus"
+
+
+def pass_time_bucket(quarter: int | str, clock_seconds: float) -> str:
+    if quarter == "OT":
+        return "overtime"
+    if quarter == 4 and clock_seconds <= 180:
+        return "late_q4"
+    if quarter in {1, 2}:
+        return "first_half"
+    return "second_half"
+
+
+def pass_state_key(
+    *,
+    yardline: int,
+    down: int,
+    distance: int,
+    goal_to_go: bool,
+    quarter: int | str,
+    clock_seconds: float,
+    score_gap: int,
+) -> str:
+    """Return the train-only conditional key for called-pass outcomes."""
+
+    return "|".join(
+        (
+            pass_field_bucket(yardline),
+            str(max(1, min(4, int(down)))),
+            pass_distance_bucket(distance),
+            "gtg" if goal_to_go else "non_gtg",
+            pass_time_bucket(quarter, clock_seconds),
+            pass_score_bucket(score_gap),
+        )
+    )
+
+
+def special_teams_field_bucket(yardline: int) -> str:
+    if yardline <= 20:
+        return "own_20"
+    if yardline < 50:
+        return "own_territory"
+    if yardline < 80:
+        return "opponent_territory"
+    return "red_zone"
+
+
 @dataclass(frozen=True)
 class ClockPlayTeamInput:
     """Synthetic or train-only team-strength inputs for one game path."""
@@ -203,6 +281,10 @@ class ClockPlayConfig:
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
+    pass_state_enabled: bool = False
+    pass_state_priors: Mapping[str, Any] = field(default_factory=dict)
+    special_teams_state_enabled: bool = False
+    special_teams_state_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -385,7 +467,147 @@ class ClockPlaySimulator:
         )
         self._validate_state()
 
+    def _route(self, owner: str, **details: Any) -> None:
+        """Record the one state family allowed to own a resolved snap."""
+
+        self.state.event_counts[f"route_{owner}"] += 1
+        self.state.transition_counts[f"route_{owner}"] += 1
+
+    def _special_teams_prior(
+        self, family: str, *, yardline: int | None = None
+    ) -> Mapping[str, Any]:
+        priors = self.config.special_teams_state_priors
+        raw_family = priors.get(family) if isinstance(priors, Mapping) else None
+        if not isinstance(raw_family, Mapping):
+            raise ValueError(f"Special-teams calibration requires {family!r} priors")
+        if yardline is not None:
+            buckets = raw_family.get("buckets")
+            bucket = special_teams_field_bucket(yardline)
+            if isinstance(buckets, Mapping) and isinstance(buckets.get(bucket), Mapping):
+                return buckets[bucket]
+        default = raw_family.get("default")
+        if isinstance(default, Mapping):
+            return default
+        return raw_family
+
+    def _sample_prior_yards(
+        self,
+        prior: Mapping[str, Any],
+        key: str,
+        *,
+        outcome: str | None = None,
+        fallback: int = 0,
+    ) -> int:
+        payload = prior.get(key)
+        if outcome is not None and isinstance(payload, Mapping):
+            payload = payload.get(outcome)
+        if not isinstance(payload, Mapping):
+            return fallback
+        return int(round(float(self._sample_weighted(payload))))
+
+    def _special_return(
+        self,
+        *,
+        scoring_team: TeamSide,
+        receiving_team: TeamSide,
+        base_yardline: int,
+        return_prior: Mapping[str, Any],
+        source: str,
+    ) -> bool:
+        """Resolve one selected special/turnover return with no global overlay."""
+
+        touchdown_rate = _clamp(
+            float(return_prior.get("touchdown_rate", 0.0)), 0.0, 1.0
+        )
+        return_yards = self._sample_prior_yards(
+            return_prior, "return_yard_weights", fallback=0
+        )
+        touchdown = self.rng.random() < touchdown_rate
+        if touchdown:
+            self._event(
+                "return_touchdown",
+                scoring_team=scoring_team,
+                source=source,
+                return_yards=return_yards,
+            )
+            self._score_touchdown(scoring_team, source=source)
+            return True
+        self._start_possession(
+            receiving_team,
+            yardline=int(
+                _clamp(float(base_yardline + return_yards), 1.0, 99.0)
+            ),
+            reason=source,
+            overtime_possession=self.state.quarter == "OT",
+        )
+        return False
+
     def _kickoff(self, receiving_team: TeamSide, *, reason: str) -> None:
+        kicking_team = _OTHER_SIDE[receiving_team]
+        self._route("kickoff", receiving_team=receiving_team, reason=reason)
+        if self.config.special_teams_state_enabled:
+            prior = self._special_teams_prior("kickoff")
+            outcome = self._sample_weighted(prior["outcome_probabilities"])
+            self._event(
+                "kickoff",
+                receiving_team=receiving_team,
+                kicking_team=kicking_team,
+                reason=reason,
+                outcome=outcome,
+            )
+            if reason == "after_field_goal":
+                self.state.transition_counts["field_goal_to_kickoff"] += 1
+            elif reason == "after_try":
+                self.state.transition_counts["try_to_kickoff"] += 1
+            if outcome == "safety":
+                self._score_safety(
+                    kicking_team,
+                    receiving_team=receiving_team,
+                    source="kickoff_safety",
+                )
+                return
+            if outcome == "return_touchdown":
+                self._event(
+                    "return_touchdown",
+                    scoring_team=receiving_team,
+                    source="kickoff_return",
+                )
+                self._score_touchdown(receiving_team, source="kickoff_return")
+                return
+            if outcome == "touchback":
+                yardline = int(
+                    _clamp(
+                        float(
+                            prior.get(
+                                "touchback_yardline",
+                                self.config.kickoff_touchback_yardline,
+                            )
+                        ),
+                        1.0,
+                        99.0,
+                    )
+                )
+            elif outcome == "return":
+                return_yards = self._sample_prior_yards(
+                    prior, "return_yard_weights", outcome="return", fallback=0
+                )
+                yardline = int(
+                    _clamp(
+                        float(self.config.kickoff_touchback_yardline + return_yards),
+                        1.0,
+                        99.0,
+                    )
+                )
+            else:
+                raise ValueError(f"Unknown kickoff outcome {outcome!r}")
+            self._start_possession(
+                receiving_team,
+                yardline=yardline,
+                reason=f"kickoff_{outcome}",
+                overtime_possession=self.state.quarter == "OT",
+            )
+            return
+
         return_yards = int(round(self.rng.uniform(-5.0, 8.0)))
         yardline = int(
             _clamp(
@@ -417,6 +639,23 @@ class ClockPlaySimulator:
         else:
             self.state.away_score += int(points)
 
+    def _score_safety(
+        self, scoring_team: TeamSide, *, receiving_team: TeamSide, source: str
+    ) -> None:
+        """Award a safety only after an end-zone state transition selected it."""
+
+        self._add_points(scoring_team, 2)
+        self._event(
+            "safety",
+            scoring_team=scoring_team,
+            receiving_team=receiving_team,
+            source=source,
+            points=2,
+        )
+        self.state.transition_counts["safety_to_kickoff"] += 1
+        if not self._maybe_finish_overtime_after_score():
+            self._kickoff(receiving_team, reason="after_safety")
+
     def _try_two_point(self, offense: TeamSide) -> bool:
         if not self._is_endgame():
             return self.rng.random() < TWO_POINT_ATTEMPT_RATE
@@ -443,6 +682,10 @@ class ClockPlaySimulator:
     def _score_touchdown(self, offense: TeamSide, *, source: str) -> None:
         self._add_points(offense, 6)
         self._event("touchdown", offense=offense, source=source, points=6)
+        if source.endswith("_return"):
+            self.state.event_counts["non_offensive_touchdown"] += 1
+        else:
+            self.state.event_counts["offensive_touchdown"] += 1
         self._resolve_try(offense)
 
     def _field_goal_band(self, distance: int) -> str:
@@ -464,6 +707,7 @@ class ClockPlaySimulator:
         return False
 
     def _attempt_field_goal(self, offense: TeamSide, *, source: str = "fourth_down") -> None:
+        self._route("field_goal", offense=offense, source=source)
         distance = int(117 - self.state.yardline)
         band = self._field_goal_band(distance)
         make_rate = LEAGUE_FG_MAKE_RATE_BY_BAND[band]
@@ -471,6 +715,33 @@ class ClockPlaySimulator:
         self._consume_clock(
             self._play_seconds(offense, stopped_clock=True, kind="field_goal")
         )
+        special_prior = (
+            self._special_teams_prior("field_goal", yardline=self.state.yardline)
+            if self.config.special_teams_state_enabled
+            else None
+        )
+        if special_prior is not None and self.rng.random() < _clamp(
+            float(special_prior.get("block_rate", 0.0)), 0.0, 1.0
+        ):
+            self._event(
+                "field_goal_blocked",
+                offense=offense,
+                field_goal_distance=distance,
+                band=band,
+                source=source,
+            )
+            block_prior = special_prior.get("block")
+            if not isinstance(block_prior, Mapping):
+                block_prior = {}
+            if self._special_return(
+                scoring_team=_OTHER_SIDE[offense],
+                receiving_team=_OTHER_SIDE[offense],
+                base_yardline=max(1, 100 - self.state.yardline),
+                return_prior=block_prior,
+                source="blocked_field_goal_return",
+            ):
+                return
+            return
         made = self.rng.random() < make_rate
         if made:
             self._add_points(offense, 3)
@@ -490,7 +761,6 @@ class ClockPlaySimulator:
             if not self._maybe_finish_overtime_after_score():
                 self._kickoff(_OTHER_SIDE[offense], reason="after_field_goal")
             return
-        next_yardline = max(20, 100 - self.state.yardline)
         self._event(
             "field_goal_missed",
             offense=offense,
@@ -498,6 +768,19 @@ class ClockPlaySimulator:
             band=band,
             source=source,
         )
+        if special_prior is not None:
+            miss_prior = special_prior.get("miss")
+            if not isinstance(miss_prior, Mapping):
+                miss_prior = {}
+            self._special_return(
+                scoring_team=_OTHER_SIDE[offense],
+                receiving_team=_OTHER_SIDE[offense],
+                base_yardline=max(20, 100 - self.state.yardline),
+                return_prior=miss_prior,
+                source="missed_field_goal_return",
+            )
+            return
+        next_yardline = max(20, 100 - self.state.yardline)
         self._start_possession(
             _OTHER_SIDE[offense],
             yardline=next_yardline,
@@ -506,6 +789,105 @@ class ClockPlaySimulator:
         )
 
     def _punt(self, offense: TeamSide) -> None:
+        self._route("punt", offense=offense)
+        if self.config.special_teams_state_enabled:
+            prior = self._special_teams_prior("punt", yardline=self.state.yardline)
+            outcome = self._sample_weighted(prior["outcome_probabilities"])
+            punt_yards = max(
+                0,
+                self._sample_prior_yards(
+                    prior, "punt_yard_weights", outcome=outcome, fallback=41
+                ),
+            )
+            self._consume_clock(
+                self._play_seconds(offense, stopped_clock=False, kind="punt")
+            )
+            receiving_team = _OTHER_SIDE[offense]
+            landing = int(
+                _clamp(float(self.state.yardline + punt_yards), 1.0, 100.0)
+            )
+            receiving_yardline = int(
+                _clamp(float(100 - landing), 1.0, 99.0)
+            )
+            self._event(
+                "punt",
+                offense=offense,
+                receiving_team=receiving_team,
+                outcome=outcome,
+                punt_yards=punt_yards,
+                receiving_yardline=receiving_yardline,
+            )
+            if outcome == "safety":
+                self._score_safety(
+                    receiving_team,
+                    receiving_team=offense,
+                    source="punt_safety",
+                )
+                return
+            if outcome in {"block", "block_return_touchdown"}:
+                block_weights = prior.get("return_yard_weights")
+                block_prior: Mapping[str, Any] = {
+                    "touchdown_rate": 0.0,
+                    "return_yard_weights": (
+                        block_weights.get("block")
+                        if isinstance(block_weights, Mapping)
+                        and isinstance(block_weights.get("block"), Mapping)
+                        else {"0": 1.0}
+                    ),
+                }
+                if outcome == "block_return_touchdown":
+                    block_prior = {
+                        **block_prior,
+                        "touchdown_rate": 1.0,
+                    }
+                self._event(
+                    "blocked_punt",
+                    offense=offense,
+                    receiving_team=receiving_team,
+                )
+                self._special_return(
+                    scoring_team=receiving_team,
+                    receiving_team=receiving_team,
+                    base_yardline=max(1, 100 - self.state.yardline),
+                    return_prior=block_prior,
+                    source="blocked_punt_return",
+                )
+                return
+            if outcome == "return_touchdown":
+                self._event(
+                    "return_touchdown",
+                    scoring_team=receiving_team,
+                    source="punt_return",
+                )
+                self._score_touchdown(receiving_team, source="punt_return")
+                return
+            if outcome == "touchback":
+                receiving_yardline = int(
+                    _clamp(
+                        float(prior.get("touchback_yardline", 20)),
+                        1.0,
+                        99.0,
+                    )
+                )
+            elif outcome == "return":
+                return_yards = self._sample_prior_yards(
+                    prior, "return_yard_weights", outcome="return", fallback=0
+                )
+                receiving_yardline = int(
+                    _clamp(
+                        float(receiving_yardline + return_yards), 1.0, 99.0
+                    )
+                )
+            elif outcome != "fair_catch":
+                raise ValueError(f"Unknown punt outcome {outcome!r}")
+            self._start_possession(
+                receiving_team,
+                yardline=receiving_yardline,
+                reason=f"punt_{outcome}",
+                overtime_possession=self.state.quarter == "OT",
+            )
+            return
+
         net_yards = int(round(_clamp(self.rng.gauss(41.0, 8.0), 24.0, 58.0)))
         landing = self.state.yardline + net_yards
         receiving_yardline = max(10, min(45, 100 - landing))
@@ -616,6 +998,7 @@ class ClockPlaySimulator:
     def _resolve_fourth_down_continuation(self, offense: TeamSide) -> None:
         """Resolve a GO attempt from train-only fourth-down outcome priors."""
 
+        self._route("fourth_down_go", offense=offense)
         state = self.state
         prior = self._fourth_down_continuation_prior(offense)
         attack = self._attack_factor(offense)
@@ -761,6 +1144,7 @@ class ClockPlaySimulator:
     def _resolve_red_zone_rush_transition(self, offense: TeamSide) -> None:
         """Resolve a non-fourth RZ rush through train-only next-state priors."""
 
+        self._route("red_zone_rush", offense=offense)
         state = self.state
         prior = self._rz_rush_transition_prior()
         outcome = self._sample_weighted(prior["outcome_probabilities"])
@@ -869,6 +1253,290 @@ class ClockPlaySimulator:
             overtime_possession=self.state.quarter == "OT",
         )
 
+    def _pass_state_prior(self, offense: TeamSide) -> Mapping[str, Any]:
+        state = self.state
+        priors = self.config.pass_state_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        score_gap = state.score[offense] - state.score[_OTHER_SIDE[offense]]
+        key = pass_state_key(
+            yardline=state.yardline,
+            down=state.down,
+            distance=state.distance,
+            goal_to_go=state.distance >= 100 - state.yardline,
+            quarter=state.quarter,
+            clock_seconds=state.clock_seconds,
+            score_gap=score_gap,
+        )
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(key), Mapping):
+            return buckets[key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Pass-state model requires train-only priors")
+
+    def _record_third_down(self, *, converted: bool) -> None:
+        if self.state.down != 3:
+            return
+        self.state.event_counts["third_down_attempt"] += 1
+        if converted:
+            self.state.event_counts["third_down_conversion"] += 1
+
+    def _resolve_advance_or_score(
+        self,
+        offense: TeamSide,
+        *,
+        yards: int,
+        play_type: str,
+        route: str,
+        clock_before: float,
+        details: Mapping[str, Any] | None = None,
+    ) -> None:
+        """Apply the one selected non-turnover scrimmage outcome to state."""
+
+        state = self.state
+        start_yardline = state.yardline
+        start_down = state.down
+        target_yardline = start_yardline + yards
+        distance_to_goal = 100 - start_yardline
+        gained_first_down = yards >= state.distance
+        event_details = dict(details or {})
+
+        if target_yardline <= 0:
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type=play_type,
+                route=route,
+                yards=yards,
+                touchdown=False,
+                safety=True,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+                **event_details,
+            )
+            self._record_third_down(converted=False)
+            self._score_safety(
+                _OTHER_SIDE[offense],
+                receiving_team=offense,
+                source=f"{play_type}_loss_end_zone",
+            )
+            return
+
+        if target_yardline >= 100:
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type=play_type,
+                route=route,
+                yards=max(0, distance_to_goal),
+                touchdown=True,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+                **event_details,
+            )
+            self._record_third_down(converted=True)
+            self._score_touchdown(offense, source="scrimmage_play")
+            return
+
+        if start_down == 4 and not gained_first_down:
+            state.yardline = int(_clamp(float(target_yardline), 1.0, 99.0))
+            self._event(
+                "turnover_on_downs",
+                offense=offense,
+                play_type=play_type,
+                route=route,
+                yards=yards,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+                **event_details,
+            )
+            self._start_possession(
+                _OTHER_SIDE[offense],
+                yardline=int(_clamp(float(100 - state.yardline), 5.0, 95.0)),
+                reason="turnover_on_downs",
+                overtime_possession=state.quarter == "OT",
+            )
+            return
+
+        self._record_third_down(converted=gained_first_down)
+        self._advance_down(yards)
+        self._event(
+            "scrimmage_play",
+            offense=offense,
+            play_type=play_type,
+            route=route,
+            yards=yards,
+            touchdown=False,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            **event_details,
+        )
+        self._maybe_timeout_after_in_bounds_play(offense)
+        self._validate_state()
+
+    def _resolve_pass_turnover(
+        self,
+        offense: TeamSide,
+        *,
+        outcome: str,
+        yards: int,
+        prior: Mapping[str, Any],
+        clock_before: float,
+    ) -> None:
+        """Transition a selected interception/fumble directly into its return."""
+
+        defense = _OTHER_SIDE[offense]
+        turnover_spot = int(
+            _clamp(float(self.state.yardline + yards), 1.0, 99.0)
+        )
+        return_priors = prior.get("turnover_returns")
+        return_prior = (
+            return_priors.get(outcome)
+            if isinstance(return_priors, Mapping)
+            and isinstance(return_priors.get(outcome), Mapping)
+            else {}
+        )
+        self._event(
+            outcome,
+            offense=offense,
+            defense=defense,
+            yards=yards,
+            turnover_spot=turnover_spot,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - self.state.clock_seconds, 3),
+        )
+        self._record_third_down(converted=False)
+        self._special_return(
+            scoring_team=defense,
+            receiving_team=defense,
+            base_yardline=100 - turnover_spot,
+            return_prior=return_prior,
+            source=f"{outcome}_return",
+        )
+
+    def _resolve_pass_attempt(self, offense: TeamSide) -> None:
+        """Resolve exactly one exclusive called-pass primary outcome."""
+
+        state = self.state
+        clock_before = state.clock_seconds
+        prior = self._pass_state_prior(offense)
+        outcome = self._sample_weighted(prior["outcome_probabilities"])
+        if outcome not in {
+            "completion",
+            "incompletion",
+            "sack",
+            "scramble",
+            "interception",
+            "fumble",
+        }:
+            raise ValueError(f"Unknown pass outcome {outcome!r}")
+        self._route("pass", offense=offense, outcome=outcome)
+        self.state.event_counts["pass_attempt"] += 1
+        self.state.event_counts[f"pass_outcome_{outcome}"] += 1
+        self._event("pass_attempt", offense=offense, outcome=outcome)
+
+        if outcome == "incompletion":
+            self._consume_clock(
+                self._play_seconds(
+                    offense, stopped_clock=True, kind="incomplete_pass"
+                )
+            )
+            self._event(
+                "incomplete_pass",
+                offense=offense,
+                route="pass",
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._record_third_down(converted=False)
+            if state.down == 4:
+                self._turnover(offense, kind="turnover_on_downs")
+                return
+            state.down += 1
+            self._validate_state()
+            return
+
+        yards = self._sample_prior_yards(
+            prior, "yard_value_weights", outcome=outcome, fallback=0
+        )
+        if outcome in {"interception", "fumble"}:
+            self._consume_clock(
+                self._play_seconds(offense, stopped_clock=False, kind="turnover")
+            )
+            self._resolve_pass_turnover(
+                offense,
+                outcome=outcome,
+                yards=yards,
+                prior=prior,
+                clock_before=clock_before,
+            )
+            return
+
+        clock_kind = (
+            "sack"
+            if outcome == "sack"
+            else "run"
+            if outcome == "scramble"
+            else "pass"
+        )
+        self._consume_clock(
+            self._play_seconds(offense, stopped_clock=False, kind=clock_kind)
+        )
+        self._resolve_advance_or_score(
+            offense,
+            yards=yards,
+            play_type="pass" if outcome == "completion" else outcome,
+            route="pass",
+            clock_before=clock_before,
+            details={"pass_outcome": outcome},
+        )
+
+    def _resolve_designed_rush(self, offense: TeamSide) -> None:
+        """Keep the inherited non-red-zone rush family independent of passes."""
+
+        state = self.state
+        clock_before = state.clock_seconds
+        self._route("rush", offense=offense)
+        attack = self._attack_factor(offense)
+        turnover_probability = _clamp(
+            self.config.turnover_probability / attack, 0.012, 0.065
+        )
+        if self.rng.random() < turnover_probability:
+            self._consume_clock(
+                self._play_seconds(offense, stopped_clock=False, kind="turnover")
+            )
+            self._record_third_down(converted=False)
+            self._turnover(offense, kind="turnover")
+            return
+        yards = int(
+            round(
+                self.rng.gauss(
+                    self.config.base_yards * attack, self.config.yards_spread
+                )
+            )
+        )
+        if self.rng.random() < self.config.explosive_play_probability * attack:
+            yards += int(round(self.rng.uniform(12.0, 34.0)))
+        yards = max(-12, yards)
+        target_yardline = state.yardline + yards
+        clock_kind = (
+            "post_touchdown"
+            if target_yardline >= 100
+            else "first_down"
+            if yards >= state.distance
+            else "run"
+        )
+        self._consume_clock(
+            self._play_seconds(offense, stopped_clock=False, kind=clock_kind)
+        )
+        self._resolve_advance_or_score(
+            offense,
+            yards=yards,
+            play_type="run",
+            route="rush",
+            clock_before=clock_before,
+        )
+
     def _advance_down(self, yards: int) -> None:
         state = self.state
         state.yardline = int(_clamp(float(state.yardline + yards), 1.0, 99.0))
@@ -906,6 +1574,25 @@ class ClockPlaySimulator:
             if self.config.fourth_down_continuation_enabled:
                 self._resolve_fourth_down_continuation(offense)
                 return
+
+        if self.config.pass_state_enabled:
+            pass_probability = 0.52
+            if self._is_endgame():
+                pass_probability += 0.17 if self._is_trailing(offense) else -0.12
+            rush_transition = (
+                self.config.red_zone_rush_transition_enabled
+                and state.yardline >= 80
+                and state.down < 4
+            )
+            is_pass = self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
+            if is_pass:
+                self._resolve_pass_attempt(offense)
+                return
+            if rush_transition:
+                self._resolve_red_zone_rush_transition(offense)
+                return
+            self._resolve_designed_rush(offense)
+            return
 
         attack = self._attack_factor(offense)
         pass_probability = 0.52

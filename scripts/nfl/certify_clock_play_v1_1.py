@@ -71,6 +71,12 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",
         ),
+        ("pass_state_priors_path", "pass_state_priors", "Pass state"),
+        (
+            "special_teams_state_priors_path",
+            "special_teams_state_priors",
+            "Special-teams state",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
@@ -79,6 +85,12 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
         priors = priors_payload.get("priors")
         if not isinstance(priors, Mapping):
             raise SystemExit(f"{label} priors need a priors object")
+        if label == "Pass state":
+            priors = priors.get("pass")
+        elif label == "Special-teams state":
+            priors = priors.get("special_teams")
+        if not isinstance(priors, Mapping):
+            raise SystemExit(f"{label} priors need the expected state family")
         engine[engine_key] = dict(priors)
     return engine
 
