@@ -251,6 +251,8 @@ class ClockPlayConfig:
     q4_trail3_fg_range_action_probabilities: Mapping[str, Any] = field(
         default_factory=dict
     )
+    # When > 0, bound trail−3 RZ FG/GO mix applies only at or below this game clock.
+    q4_trail3_fg_range_precedence_max_clock_seconds: float = 0.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -600,9 +602,14 @@ class ClockPlaySimulator:
                 and self._is_endgame()
             )
         )
+        max_clock = self.config.q4_trail3_fg_range_precedence_max_clock_seconds
+        regulation_clock_gate = (
+            max_clock <= 0.0 or self.state.clock_seconds <= max_clock
+        )
         if (
             trail3_fg_range
             and trail3_precedence_window
+            and regulation_clock_gate
             and self.state.yardline >= 80
         ):
             probs = self.config.q4_trail3_fg_range_action_probabilities
