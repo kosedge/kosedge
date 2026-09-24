@@ -941,10 +941,33 @@ def test_special_teams_punt_block_has_one_punt_owner_and_changes_possession() ->
     assert simulator.state.event_counts["route_pass"] == 0
 
 
-def test_punt_return_touchdown_transitions_to_try_and_kickoff() -> None:
+def test_dead_ball_punt_starts_receiving_possession_at_landing_spot() -> None:
     simulator = ClockPlaySimulator(
         _inputs(),
         seed=22,
+        config=_coherent_state_config(punt_outcome="dead_ball"),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=500.0,
+        possession="home",
+        yardline=40,
+        down=4,
+        distance=8,
+    )
+
+    simulator._punt("home")
+
+    assert simulator.state.possession == "away"
+    assert simulator.state.yardline == 20
+    assert simulator.state.event_counts["punt_dead_ball"] == 1
+
+
+def test_punt_return_touchdown_transitions_to_try_and_kickoff() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=23,
         config=_coherent_state_config(punt_outcome="return_touchdown"),
         collect_events=True,
     )

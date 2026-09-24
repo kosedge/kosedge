@@ -330,8 +330,15 @@ def _punt_outcome(payload: Mapping[str, Any]) -> str:
         return "touchback"
     if return_touchdown:
         return "return_touchdown"
-    if _is_one(payload.get("fair_catch")):
+    if _is_one(payload.get("fair_catch")) or _is_one(
+        payload.get("punt_fair_catch")
+    ):
         return "fair_catch"
+    if any(
+        _is_one(payload.get(field))
+        for field in ("punt_downed", "punt_out_of_bounds", "punt_in_endzone")
+    ):
+        return "dead_ball"
     if _number(payload.get("return_yards")) is not None:
         return "return"
     return "dead_ball"
@@ -437,7 +444,17 @@ def main() -> None:
 
             if play_type == "punt" and yardline is not None:
                 outcome = _punt_outcome(payload)
-                punt_yards = int(round(_number(payload.get("punt_yards")) or 0.0))
+                # nflfastR exports punt distance as kick_distance. The legacy
+                # punt_yards field is absent in the train PBP, and treating
+                # that null as zero makes every simulated punt land at its
+                # line of scrimmage.
+                punt_yards = int(
+                    round(
+                        _number(payload.get("kick_distance"))
+                        or _number(payload.get("punt_yards"))
+                        or 0.0
+                    )
+                )
                 for samples in (
                     punt_global,
                     punt_buckets[special_teams_field_bucket(yardline)],

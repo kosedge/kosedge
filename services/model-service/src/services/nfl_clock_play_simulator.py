@@ -452,6 +452,7 @@ class ClockPlaySimulator:
             "yardline": state.yardline,
             "down": state.down,
             "distance": state.distance,
+            "play_count": state.play_count,
             "score": state.score,
             "timeouts": {"home": state.home_timeouts, "away": state.away_timeouts},
         }
@@ -966,7 +967,7 @@ class ClockPlaySimulator:
                         float(receiving_yardline + return_yards), 1.0, 99.0
                     )
                 )
-            elif outcome != "fair_catch":
+            elif outcome not in {"fair_catch", "dead_ball"}:
                 raise ValueError(f"Unknown punt outcome {outcome!r}")
             self._start_possession(
                 receiving_team,
