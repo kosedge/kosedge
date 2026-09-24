@@ -306,14 +306,15 @@ def called_play_state_key(
 ) -> str:
     """Return the train-only conditional key for a pass-or-rush call."""
 
-    return pass_state_key(
-        yardline=yardline,
-        down=down,
-        distance=distance,
-        goal_to_go=goal_to_go,
-        quarter=quarter,
-        clock_seconds=clock_seconds,
-        score_gap=score_gap,
+    return "|".join(
+        (
+            pass_field_bucket(yardline),
+            str(max(1, min(4, int(down)))),
+            pass_distance_bucket(distance),
+            "gtg" if goal_to_go else "non_gtg",
+            pass_time_bucket(quarter, clock_seconds),
+            pass_score_bucket(score_gap),
+        )
     )
 
 
