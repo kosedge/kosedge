@@ -230,6 +230,8 @@ class ClockPlayConfig:
     clock_flow_runtime_scale: float = 1.0
     red_zone_rush_transition_enabled: bool = False
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
+    red_zone_pass_transition_enabled: bool = False
+    red_zone_pass_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     pre_entry_pass_rz_enabled: bool = False
@@ -746,9 +748,8 @@ class ClockPlaySimulator:
             overtime_possession=state.quarter == "OT",
         )
 
-    def _rz_rush_transition_prior(self) -> Mapping[str, Any]:
+    def _rz_transition_prior(self, priors: Mapping[str, Any]) -> Mapping[str, Any]:
         state = self.state
-        priors = self.config.red_zone_rush_transition_priors
         buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
         fallback = priors.get("default") if isinstance(priors, Mapping) else None
         key = rz_rush_state_key(
@@ -761,7 +762,13 @@ class ClockPlaySimulator:
             return buckets[key]
         if isinstance(fallback, Mapping):
             return fallback
-        raise ValueError("Red-zone rush transition requires train-only priors")
+        raise ValueError("Red-zone transition requires train-only priors")
+
+    def _rz_rush_transition_prior(self) -> Mapping[str, Any]:
+        return self._rz_transition_prior(self.config.red_zone_rush_transition_priors)
+
+    def _rz_pass_transition_prior(self) -> Mapping[str, Any]:
+        return self._rz_transition_prior(self.config.red_zone_pass_transition_priors)
 
     def _sample_weighted(self, weights: Mapping[str, Any]) -> str:
         values = {
@@ -855,6 +862,140 @@ class ClockPlaySimulator:
             "scrimmage_play",
             offense=offense,
             play_type="red_zone_rush_transition",
+            yards=yards,
+            touchdown=False,
+            transition_bucket=bucket,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+        )
+        self._maybe_timeout_after_in_bounds_play(offense)
+        self._validate_state()
+
+    def _resolve_red_zone_pass_transition(self, offense: TeamSide) -> None:
+        """Resolve a non-handoff non-fourth RZ pass through train-only priors."""
+
+        state = self.state
+        prior = self._rz_pass_transition_prior()
+        outcome = self._sample_weighted(prior["outcome_probabilities"])
+        bucket = str(prior.get("bucket", "default"))
+        clock_before = state.clock_seconds
+        start_yardline = state.yardline
+        start_down = state.down
+        distance = state.distance
+        distance_to_goal = 100 - start_yardline
+        yards = (
+            0
+            if outcome == "incomplete"
+            else self._sample_empirical_yards(prior, outcome)
+        )
+        clock_kind = (
+            "incomplete_pass"
+            if outcome == "incomplete"
+            else "first_down"
+            if outcome == "first_down"
+            else "pass"
+        )
+        self._consume_clock(
+            self._play_seconds(
+                offense,
+                stopped_clock=outcome == "incomplete",
+                kind=clock_kind,
+            )
+        )
+        self._event(
+            "red_zone_pass_transition",
+            offense=offense,
+            outcome=outcome,
+            transition_bucket=bucket,
+        )
+
+        if outcome == "touchdown":
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+                self.state.event_counts["third_down_conversion"] += 1
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type="red_zone_pass_transition",
+                yards=distance_to_goal,
+                touchdown=True,
+                transition_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._score_touchdown(offense, source="red_zone_pass_transition")
+            return
+
+        if outcome == "incomplete":
+            self._event(
+                "incomplete_pass",
+                offense=offense,
+                transition_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+            state.down += 1
+            self._validate_state()
+            return
+
+        max_non_touchdown_yards = max(0, 99 - start_yardline)
+        if outcome == "turnover":
+            yards = min(max_non_touchdown_yards, yards)
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+            self._turnover(offense, kind="turnover")
+            return
+
+        if outcome == "first_down":
+            yards = min(
+                max_non_touchdown_yards,
+                max(distance, yards),
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            state.down = 1
+            state.distance = min(10, 100 - state.yardline)
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+                self.state.event_counts["third_down_conversion"] += 1
+        else:
+            maximum_without_first_down = min(distance - 1, max_non_touchdown_yards)
+            if outcome == "loss":
+                yards = min(-1, yards)
+            elif outcome == "zero":
+                yards = 0
+            elif outcome == "one_two":
+                yards = (
+                    min(maximum_without_first_down, max(1, yards))
+                    if maximum_without_first_down >= 1
+                    else 0
+                )
+            elif outcome == "short_gain":
+                yards = (
+                    min(maximum_without_first_down, max(3, yards))
+                    if maximum_without_first_down >= 3
+                    else max(0, maximum_without_first_down)
+                )
+            else:
+                raise ValueError(f"Unknown red-zone pass transition outcome: {outcome}")
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            state.down += 1
+            state.distance = max(1, distance - max(0, yards))
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+
+        self._event(
+            "scrimmage_play",
+            offense=offense,
+            play_type="red_zone_pass_transition",
             yards=yards,
             touchdown=False,
             transition_bucket=bucket,
@@ -1143,6 +1284,9 @@ class ClockPlaySimulator:
             if not is_pass:
                 self._resolve_red_zone_rush_transition(offense)
                 return
+            if self.config.red_zone_pass_transition_enabled:
+                self._resolve_red_zone_pass_transition(offense)
+                return
         else:
             turnover_probability = _clamp(
                 self.config.turnover_probability / attack, 0.012, 0.065
@@ -1156,18 +1300,6 @@ class ClockPlaySimulator:
                 self._turnover(offense, kind="turnover")
                 return
             is_pass = self.rng.random() < _clamp(pass_probability, 0.25, 0.80)
-
-        turnover_probability = _clamp(
-            self.config.turnover_probability / attack, 0.012, 0.065
-        )
-        if rush_transition and self.rng.random() < turnover_probability:
-            self._consume_clock(
-                self._play_seconds(offense, stopped_clock=False, kind="turnover")
-            )
-            if state.down == 3:
-                self.state.event_counts["third_down_attempt"] += 1
-            self._turnover(offense, kind="turnover")
-            return
 
         incomplete = is_pass and self.rng.random() < _clamp(
             self.config.incompletion_probability / attack, 0.16, 0.48

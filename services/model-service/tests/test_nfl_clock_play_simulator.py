@@ -59,6 +59,52 @@ def _clock_flow_config() -> ClockPlayConfig:
     )
 
 
+def _rz_pass_transition_config(*, outcome: str, yards: int = 1) -> ClockPlayConfig:
+    probabilities = {
+        "touchdown": 0.0,
+        "turnover": 0.0,
+        "incomplete": 0.0,
+        "loss": 0.0,
+        "zero": 0.0,
+        "one_two": 0.0,
+        "short_gain": 0.0,
+        "first_down": 0.0,
+    }
+    probabilities[outcome] = 1.0
+    yard_weights = {
+        name: {"0": 1.0} if name == "incomplete" else {str(yards): 1.0}
+        for name in probabilities
+    }
+    return ClockPlayConfig(
+        red_zone_rush_transition_enabled=True,
+        red_zone_pass_transition_enabled=True,
+        red_zone_pass_transition_priors={
+            "default": {
+                "bucket": "unit_test",
+                "outcome_probabilities": probabilities,
+                "yard_value_weights": yard_weights,
+            }
+        },
+        red_zone_rush_transition_priors={
+            "default": {
+                "bucket": "unit_test",
+                "outcome_probabilities": {
+                    "touchdown": 0.0,
+                    "turnover": 0.0,
+                    "loss": 0.0,
+                    "zero": 0.0,
+                    "one_two": 0.0,
+                    "short_gain": 0.0,
+                    "first_down": 1.0,
+                },
+                "yard_value_weights": {
+                    "first_down": {str(yards): 1.0},
+                },
+            }
+        },
+    )
+
+
 def _rz_rush_transition_config(*, outcome: str, yards: int = 1) -> ClockPlayConfig:
     probabilities = {
         "touchdown": 0.0,
@@ -366,6 +412,28 @@ def test_red_zone_fourth_decision_uses_train_action_prior() -> None:
 
     assert simulator.state.event_counts["fourth_down_field_goal"] == 1
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+
+
+def test_non_fourth_red_zone_pass_uses_pass_transition_when_enabled() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=7,
+        config=_rz_pass_transition_config(outcome="incomplete"),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=85,
+        down=2,
+        distance=6,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["red_zone_pass_transition"] == 1
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+    assert simulator.state.down == 3
 
 
 def test_non_fourth_red_zone_pass_bypasses_rush_transition() -> None:

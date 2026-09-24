@@ -67,6 +67,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "Red-zone rush transition",
         ),
         (
+            "red_zone_pass_transition_priors_path",
+            "red_zone_pass_transition_priors",
+            "Red-zone pass transition",
+        ),
+        (
             "red_zone_fourth_decision_priors_path",
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",
