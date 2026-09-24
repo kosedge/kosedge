@@ -28,6 +28,10 @@
     "red_zone_fourth_decision_enabled": true,
     "red_zone_endgame_trailing_fg_precedence_enabled": true,
     "red_zone_q4_trail3_fg_precedence_full_quarter_enabled": true,
+    "q4_trail3_fg_range_action_probabilities": {
+      "field_goal": 0.831858407079646,
+      "go": 0.16814159292035398
+    },
     "red_zone_rush_transition_enabled": true,
     "red_zone_pass_transition_enabled": false,
     "red_zone_generic_pass_incompletion_enabled": false,

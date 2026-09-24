@@ -246,6 +246,9 @@ class ClockPlayConfig:
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_endgame_trailing_fg_precedence_enabled: bool = False
     red_zone_q4_trail3_fg_precedence_full_quarter_enabled: bool = False
+    q4_trail3_fg_range_action_probabilities: Mapping[str, Any] = field(
+        default_factory=dict
+    )
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -576,18 +579,26 @@ class ClockPlaySimulator:
         score_gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         yards_to_go = self.state.distance
         fg_distance = 117 - self.state.yardline
-        if (
+        trail3_fg_range = (
             self.state.quarter == 4
             and score_gap == -3
             and fg_distance <= self.config.field_goal_max_distance
-            and (
-                self.config.red_zone_q4_trail3_fg_precedence_full_quarter_enabled
-                or (
-                    self.config.red_zone_endgame_trailing_fg_precedence_enabled
-                    and self._is_endgame()
-                )
+        )
+        trail3_precedence_window = (
+            self.config.red_zone_q4_trail3_fg_precedence_full_quarter_enabled
+            or (
+                self.config.red_zone_endgame_trailing_fg_precedence_enabled
+                and self._is_endgame()
             )
+        )
+        if (
+            trail3_fg_range
+            and trail3_precedence_window
+            and self.state.yardline >= 80
         ):
+            probs = self.config.q4_trail3_fg_range_action_probabilities
+            if isinstance(probs, Mapping) and probs:
+                return self._sample_weighted(dict(probs))
             return "field_goal"
         if (
             self.config.red_zone_fourth_decision_enabled
