@@ -113,6 +113,97 @@ def _rz_fourth_decision_config() -> ClockPlayConfig:
     )
 
 
+def _coherent_state_config(
+    *,
+    pass_outcome: str = "completion",
+    pass_yards: int = 4,
+    punt_outcome: str = "fair_catch",
+    kickoff_outcome: str = "touchback",
+    field_goal_block_rate: float = 0.0,
+) -> ClockPlayConfig:
+    pass_outcomes = (
+        "completion",
+        "incompletion",
+        "sack",
+        "scramble",
+        "interception",
+        "fumble",
+    )
+    punt_outcomes = (
+        "touchback",
+        "fair_catch",
+        "dead_ball",
+        "return",
+        "return_touchdown",
+        "block",
+        "block_return_touchdown",
+        "safety",
+    )
+    kickoff_outcomes = ("touchback", "return", "return_touchdown", "safety")
+    return ClockPlayConfig(
+        pass_state_enabled=True,
+        pass_state_priors={
+            "default": {
+                "outcome_probabilities": {
+                    outcome: 1.0 if outcome == pass_outcome else 0.0
+                    for outcome in pass_outcomes
+                },
+                "yard_value_weights": {
+                    outcome: {str(pass_yards): 1.0} for outcome in pass_outcomes
+                },
+                "turnover_returns": {
+                    outcome: {
+                        "touchdown_rate": 0.0,
+                        "return_yard_weights": {"7": 1.0},
+                    }
+                    for outcome in ("interception", "fumble")
+                },
+            }
+        },
+        special_teams_state_enabled=True,
+        special_teams_state_priors={
+            "punt": {
+                "default": {
+                    "outcome_probabilities": {
+                        outcome: 1.0 if outcome == punt_outcome else 0.0
+                        for outcome in punt_outcomes
+                    },
+                    "punt_yard_weights": {
+                        outcome: {"40": 1.0} for outcome in punt_outcomes
+                    },
+                    "return_yard_weights": {
+                        outcome: {"7": 1.0} for outcome in punt_outcomes
+                    },
+                }
+            },
+            "kickoff": {
+                "default": {
+                    "outcome_probabilities": {
+                        outcome: 1.0 if outcome == kickoff_outcome else 0.0
+                        for outcome in kickoff_outcomes
+                    },
+                    "return_yard_weights": {
+                        outcome: {"7": 1.0} for outcome in kickoff_outcomes
+                    },
+                }
+            },
+            "field_goal": {
+                "default": {
+                    "block_rate": field_goal_block_rate,
+                    "block": {
+                        "touchdown_rate": 0.0,
+                        "return_yard_weights": {"7": 1.0},
+                    },
+                    "miss": {
+                        "touchdown_rate": 0.0,
+                        "return_yard_weights": {"7": 1.0},
+                    },
+                }
+            },
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -509,3 +600,147 @@ def test_scrimmage_play_decrements_clock() -> None:
     simulator._resolve_scrimmage_play("home")
 
     assert simulator.state.clock_seconds < 400.0
+
+
+def test_pass_state_routes_each_primary_outcome_exclusively() -> None:
+    for outcome in (
+        "completion",
+        "incompletion",
+        "sack",
+        "scramble",
+        "interception",
+        "fumble",
+    ):
+        simulator = ClockPlaySimulator(
+            _inputs(),
+            seed=19,
+            config=_coherent_state_config(pass_outcome=outcome),
+            collect_events=True,
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=50,
+            down=1,
+            distance=10,
+        )
+
+        simulator._resolve_pass_attempt("home")
+
+        assert simulator.state.event_counts["route_pass"] == 1
+        assert simulator.state.event_counts[f"pass_outcome_{outcome}"] == 1
+        assert simulator.state.event_counts["pass_attempt"] == 1
+        assert simulator.state.event_counts["route_rush"] == 0
+        assert simulator.state.event_counts["route_red_zone_rush"] == 0
+        assert simulator.state.event_counts["turnover"] == 0
+
+
+def test_sack_in_end_zone_is_a_state_derived_safety() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=20,
+        config=_coherent_state_config(pass_outcome="sack", pass_yards=-6),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=5,
+        down=2,
+        distance=8,
+    )
+
+    simulator._resolve_pass_attempt("home")
+
+    assert simulator.state.away_score == 2
+    assert simulator.state.event_counts["safety"] == 1
+    assert simulator.state.event_counts["route_pass"] == 1
+    assert simulator.state.event_counts["route_kickoff"] == 1
+
+
+def test_special_teams_punt_block_has_one_punt_owner_and_changes_possession() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=21,
+        config=_coherent_state_config(punt_outcome="block"),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=500.0,
+        possession="home",
+        yardline=40,
+        down=4,
+        distance=8,
+    )
+
+    simulator._punt("home")
+
+    assert simulator.state.event_counts["route_punt"] == 1
+    assert simulator.state.event_counts["blocked_punt"] == 1
+    assert simulator.state.possession == "away"
+    assert simulator.state.event_counts["route_pass"] == 0
+
+
+def test_punt_return_touchdown_transitions_to_try_and_kickoff() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=22,
+        config=_coherent_state_config(punt_outcome="return_touchdown"),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=500.0,
+        possession="home",
+        yardline=40,
+        down=4,
+        distance=8,
+    )
+
+    simulator._punt("home")
+
+    assert simulator.state.event_counts["return_touchdown"] == 1
+    assert simulator.state.event_counts["non_offensive_touchdown"] == 1
+    assert simulator.state.transition_counts["touchdown_to_try"] == 1
+    assert simulator.state.event_counts["route_punt"] == 1
+    assert simulator.state.event_counts["route_kickoff"] == 1
+
+
+def test_kickoff_return_and_return_touchdown_are_direct_special_transitions() -> None:
+    returned = ClockPlaySimulator(
+        _inputs(),
+        seed=23,
+        config=_coherent_state_config(kickoff_outcome="return"),
+        collect_events=True,
+    )
+    returned._kickoff("away", reason="unit_test")
+
+    assert returned.state.possession == "away"
+    assert returned.state.yardline == 32
+    assert returned.state.event_counts["route_kickoff"] == 1
+
+    touchdown_config = _coherent_state_config(kickoff_outcome="return_touchdown")
+    touchdown_config.special_teams_state_priors["kickoff"]["default"][
+        "outcome_probabilities"
+    ] = {
+        "return": 0.0,
+        "return_touchdown": 0.5,
+        "safety": 0.0,
+        "touchback": 0.5,
+    }
+    touchdown = ClockPlaySimulator(
+        _inputs(),
+        seed=24,
+        config=touchdown_config,
+        collect_events=True,
+    )
+    touchdown.rng.random = iter((0.25, 0.9, 0.5, 0.75)).__next__  # type: ignore[method-assign]
+    touchdown._kickoff("away", reason="unit_test")
+
+    assert touchdown.state.event_counts["return_touchdown"] == 1
+    assert touchdown.state.event_counts["non_offensive_touchdown"] == 1
+    assert touchdown.state.transition_counts["touchdown_to_try"] == 1
+    assert touchdown.state.event_counts["route_kickoff"] == 2

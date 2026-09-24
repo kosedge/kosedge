@@ -71,6 +71,12 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",
         ),
+        ("pass_state_priors_path", "pass_state_priors", "Pass state"),
+        (
+            "special_teams_state_priors_path",
+            "special_teams_state_priors",
+            "Special-teams state",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
@@ -79,6 +85,12 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
         priors = priors_payload.get("priors")
         if not isinstance(priors, Mapping):
             raise SystemExit(f"{label} priors need a priors object")
+        if label == "Pass state":
+            priors = priors.get("pass")
+        elif label == "Special-teams state":
+            priors = priors.get("special_teams")
+        if not isinstance(priors, Mapping):
+            raise SystemExit(f"{label} priors need the expected state family")
         engine[engine_key] = dict(priors)
     return engine
 
@@ -110,6 +122,8 @@ def _summary(
     touchdown_count = counts["touchdown"]
     fourth_decisions = counts["fourth_down_decision"]
     third_attempts = counts["third_down_attempt"]
+    pass_attempts = counts["pass_attempt"]
+    completions = counts["pass_completion"]
     return {
         "plays_per_game": _per_game(sum(plays), games),
         "drives_per_game": _per_game(counts["drive"], games),
@@ -124,7 +138,40 @@ def _summary(
         "field_goal_attempts_per_game": _per_game(field_goal_attempts, games),
         "field_goal_makes_per_game": _per_game(counts["field_goal_made"], games),
         "field_goal_make_rate": _rate(counts["field_goal_made"], field_goal_attempts),
+        "blocked_field_goals_per_game": _per_game(
+            counts["field_goal_blocked"], games
+        ),
         "punts_per_game": _per_game(counts["punt"], games),
+        "punt_return_opportunities_per_game": _per_game(
+            counts["punt_return"] + counts["punt_return_touchdown"], games
+        ),
+        "punt_return_touchdowns_per_game": _per_game(
+            counts["punt_return_touchdown"], games
+        ),
+        "blocked_punts_per_game": _per_game(counts["blocked_punt"], games),
+        "kickoffs_per_game": _per_game(counts["kickoff"], games),
+        "kickoff_return_opportunities_per_game": _per_game(
+            counts["kickoff_return"] + counts["kickoff_return_touchdown"], games
+        ),
+        "kickoff_return_touchdowns_per_game": _per_game(
+            counts["kickoff_return_touchdown"], games
+        ),
+        "safeties_per_game": _per_game(counts["safety"], games),
+        "non_offensive_touchdowns_per_game": _per_game(
+            counts["non_offensive_touchdown"], games
+        ),
+        "pass_attempts_per_game": _per_game(pass_attempts, games),
+        "completion_rate": _rate(completions, pass_attempts),
+        "yards_per_completion": _rate(counts["pass_completion_yards"], completions),
+        "yards_per_pass_attempt": _rate(counts["pass_completion_yards"], pass_attempts),
+        "sacks_per_game": _per_game(counts["sack"], games),
+        "sack_rate": _rate(counts["sack"], pass_attempts),
+        "sack_yards_lost_per_game": _per_game(counts["sack_yards_lost"], games),
+        "scrambles_per_game": _per_game(counts["scramble"], games),
+        "scramble_yards_per_game": _per_game(counts["scramble_yards"], games),
+        "interceptions_per_game": _per_game(counts["interception"], games),
+        "fumbles_per_game": _per_game(counts["fumble"], games),
+        "pass_touchdowns_per_game": _per_game(counts["pass_touchdown"], games),
         "turnovers_excluding_downs_per_game": _per_game(
             counts["turnover"], games
         ),
@@ -194,7 +241,34 @@ def _simulation_metrics(
                 event_counts["field_goal_made"] + event_counts["field_goal_missed"]
             )
             counts["field_goal_made"] += event_counts["field_goal_made"]
+            counts["field_goal_blocked"] += event_counts["field_goal_blocked"]
             counts["punt"] += event_counts["punt"]
+            counts["punt_return"] += event_counts["punt_return"]
+            counts["punt_return_touchdown"] += event_counts[
+                "punt_return_touchdown"
+            ]
+            counts["blocked_punt"] += event_counts["blocked_punt"]
+            counts["kickoff"] += event_counts["kickoff"]
+            counts["kickoff_return"] += event_counts["kickoff_return"]
+            counts["kickoff_return_touchdown"] += event_counts[
+                "kickoff_return_touchdown"
+            ]
+            counts["safety"] += event_counts["safety"]
+            counts["non_offensive_touchdown"] += event_counts[
+                "non_offensive_touchdown"
+            ]
+            counts["pass_attempt"] += event_counts["pass_attempt"]
+            counts["pass_completion"] += event_counts["pass_outcome_completion"]
+            counts["pass_completion_yards"] += event_counts[
+                "pass_completion_yards"
+            ]
+            counts["sack"] += event_counts["pass_outcome_sack"]
+            counts["sack_yards_lost"] += event_counts["sack_yards_lost"]
+            counts["scramble"] += event_counts["pass_outcome_scramble"]
+            counts["scramble_yards"] += event_counts["scramble_yards"]
+            counts["interception"] += event_counts["pass_outcome_interception"]
+            counts["fumble"] += event_counts["pass_outcome_fumble"]
+            counts["pass_touchdown"] += event_counts["pass_touchdown"]
             counts["turnover"] += event_counts["turnover"]
             counts["turnover_on_downs"] += event_counts["turnover_on_downs"]
             counts["third_down_attempt"] += event_counts["third_down_attempt"]
@@ -312,6 +386,22 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 counts["two_point_try"] += 1
                 if payload.get("two_point_conv_result") == "success":
                     counts["two_point_make"] += 1
+            if _is_one(payload.get("safety")):
+                counts["safety"] += 1
+            if (
+                _is_one(payload.get("touchdown"))
+                and payload.get("td_team") != payload.get("posteam")
+            ):
+                counts["non_offensive_touchdown"] += 1
+            if play_type == "kickoff":
+                counts["kickoff"] += 1
+                returned_for_touchdown = _is_one(payload.get("touchdown")) and (
+                    payload.get("td_team") == payload.get("defteam")
+                )
+                if returned_for_touchdown:
+                    counts["kickoff_return_touchdown"] += 1
+                elif not _is_one(payload.get("touchback")):
+                    counts["kickoff_return"] += 1
             if not is_core_play:
                 continue
             pbp_rows += 1
@@ -321,12 +411,53 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 drives.add((game_id, int(fixed_drive)))
             if _is_one(payload.get("touchdown")) and payload.get("td_team") == payload.get("posteam"):
                 counts["touchdown"] += 1
+            is_called_pass = play_type == "pass" or _is_one(
+                payload.get("qb_scramble")
+            )
+            if is_called_pass:
+                counts["pass_attempt"] += 1
+                yards = int(round(_number(payload.get("yards_gained")) or 0.0))
+                if _is_one(payload.get("interception")):
+                    counts["interception"] += 1
+                elif _is_one(payload.get("fumble_lost")):
+                    counts["fumble"] += 1
+                elif _is_one(payload.get("sack")):
+                    counts["sack"] += 1
+                    counts["sack_yards_lost"] += max(0, -yards)
+                elif _is_one(payload.get("qb_scramble")):
+                    counts["scramble"] += 1
+                    counts["scramble_yards"] += yards
+                elif not _is_one(payload.get("incomplete_pass")):
+                    counts["pass_completion"] += 1
+                    counts["pass_completion_yards"] += yards
+                if (
+                    _is_one(payload.get("touchdown"))
+                    and payload.get("td_team") == payload.get("posteam")
+                ):
+                    counts["pass_touchdown"] += 1
             if play_type == "field_goal":
                 counts["field_goal_attempt"] += 1
                 if payload.get("field_goal_result") == "made":
                     counts["field_goal_made"] += 1
+                if (
+                    payload.get("field_goal_result") == "blocked"
+                    or _is_one(payload.get("blocked_field_goal"))
+                ):
+                    counts["field_goal_blocked"] += 1
             if play_type == "punt":
                 counts["punt"] += 1
+                blocked = _is_one(payload.get("punt_blocked")) or _is_one(
+                    payload.get("blocked_punt")
+                )
+                returned_for_touchdown = _is_one(payload.get("touchdown")) and (
+                    payload.get("td_team") == payload.get("defteam")
+                )
+                if blocked:
+                    counts["blocked_punt"] += 1
+                if returned_for_touchdown:
+                    counts["punt_return_touchdown"] += 1
+                elif not blocked and _number(payload.get("return_yards")) is not None:
+                    counts["punt_return"] += 1
             if _is_one(payload.get("interception")) or _is_one(payload.get("fumble_lost")):
                 counts["turnover"] += 1
             if _is_one(payload.get("fourth_down_failed")):

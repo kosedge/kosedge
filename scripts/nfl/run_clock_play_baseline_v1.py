@@ -36,6 +36,7 @@ SOURCE_FILES = (
     "services/model-service/src/services/nfl_clock_play_simulator.py",
     "services/model-service/src/services/nfl_season_engine/kicker_layer.py",
     "scripts/nfl/run_clock_play_baseline_v1.py",
+    "scripts/nfl/build_clock_play_coherent_state_priors.py",
 )
 
 
@@ -88,6 +89,12 @@ def _load_clock_play_priors(
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",
         ),
+        ("pass_state_priors_path", "pass_state_priors", "pass_state"),
+        (
+            "special_teams_state_priors_path",
+            "special_teams_state_priors",
+            "special_teams_state",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
@@ -97,6 +104,12 @@ def _load_clock_play_priors(
         priors = priors_payload.get("priors")
         if not isinstance(priors, Mapping):
             raise SystemExit(f"{label} priors need a priors object")
+        if label == "pass_state":
+            priors = priors.get("pass")
+        elif label == "special_teams_state":
+            priors = priors.get("special_teams")
+        if not isinstance(priors, Mapping):
+            raise SystemExit(f"{label} priors need the expected state family")
         engine_config[engine_key] = dict(priors)
         receipts[label] = {
             "path": path.relative_to(ROOT).as_posix(),
@@ -331,6 +344,26 @@ def run(
             "timeout_endgame_logic": aggregate_events["timeout"] > 0,
             "overtime_path": aggregate_events["overtime_start"] > 0
             or overtime_probe["event_counts"].get("overtime_start", 0) == 1,
+            "pass_primary_outcomes_exclusive": aggregate_events["pass_attempt"]
+            == sum(
+                aggregate_events[f"pass_outcome_{outcome}"]
+                for outcome in (
+                    "completion",
+                    "incompletion",
+                    "sack",
+                    "scramble",
+                    "interception",
+                    "fumble",
+                )
+            ),
+            "special_teams_routes_exclusive": (
+                aggregate_events["route_punt"] == aggregate_events["punt"]
+                and aggregate_events["route_kickoff"] == aggregate_events["kickoff"]
+                and aggregate_events["route_field_goal"]
+                == aggregate_events["field_goal_made"]
+                + aggregate_events["field_goal_missed"]
+                + aggregate_events["field_goal_blocked"]
+            ),
         },
     }
 
