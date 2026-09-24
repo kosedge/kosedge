@@ -136,6 +136,19 @@ def _non_offensive_config(
     )
 
 
+def _special_state_config(*, sack_rate: float = 0.0, blocked_punt_rate: float = 0.0) -> ClockPlayConfig:
+    return ClockPlayConfig(
+        special_teams_state_enabled=True,
+        special_teams_state_priors={
+            "sack": {
+                "rate": sack_rate,
+                "yard_loss_weights": {"-5": 1.0},
+            },
+            "blocked_punt": {"rate": blocked_punt_rate},
+        },
+    )
+
+
 def test_seeded_full_game_replays_exactly() -> None:
     first = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
     replay = simulate_clock_play_game(_inputs(), seed=101, collect_events=True)
@@ -386,6 +399,51 @@ def test_backed_up_safety_uses_kickoff_transition() -> None:
 
     assert simulator._maybe_safety("home", target_yardline=0) is True
     assert simulator.state.event_counts["safety"] == 1
+    assert simulator.state.possession == "away"
+    assert simulator.invariant_failures == []
+
+
+def test_explicit_sack_updates_field_position_and_down() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_special_state_config(sack_rate=1.0),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=40,
+        down=2,
+        distance=8,
+    )
+    simulator._resolve_sack("home", clock_before=600.0)
+
+    assert simulator.state.yardline == 35
+    assert simulator.state.down == 3
+    assert simulator.state.event_counts["sack"] == 1
+    assert simulator.invariant_failures == []
+
+
+def test_blocked_punt_uses_special_possession_transition() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=4,
+        config=_special_state_config(blocked_punt_rate=1.0),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=40,
+        down=4,
+        distance=10,
+    )
+    simulator._punt("home")
+
+    assert simulator.state.event_counts["blocked_punt"] == 1
     assert simulator.state.possession == "away"
     assert simulator.invariant_failures == []
 
