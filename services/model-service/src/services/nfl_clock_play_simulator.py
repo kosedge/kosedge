@@ -256,6 +256,8 @@ class ClockPlayConfig:
     # When > max clock, trail−3 FG-range fourths may still sample the bound mix up to
     # this clock; above it, regulation defers field goals (go/continuation).
     q4_trail3_fg_range_precedence_soft_max_clock_seconds: float = 0.0
+    q4_endgame_trail3_non_fourth_field_goal_enabled: bool = False
+    q4_endgame_trail3_non_fourth_field_goal_attempt_probability: float = 0.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -331,6 +333,7 @@ class ClockPlaySimulator:
         self.events: list[dict[str, Any]] = []
         self.invariant_failures: list[str] = []
         self._pending_pre_entry_pass_rz_state: str | None = None
+        self._endgame_trail3_non_fourth_fg_spike_used = False
 
     def _snapshot(self) -> dict[str, Any]:
         state = self.state
@@ -436,6 +439,7 @@ class ClockPlaySimulator:
         overtime_possession: bool = False,
     ) -> None:
         self._pending_pre_entry_pass_rz_state = None
+        self._endgame_trail3_non_fourth_fg_spike_used = False
         self.state.possession = offense
         self.state.yardline = int(_clamp(float(yardline), 1.0, 99.0))
         self.state.down = 1
@@ -1286,6 +1290,34 @@ class ClockPlaySimulator:
         self.state.use_timeout(defense)
         self._event("timeout", team=defense, reason="late_trailing_clock_stop")
 
+    def _should_take_endgame_trail3_non_fourth_field_goal(self, offense: TeamSide) -> bool:
+        if not self.config.q4_endgame_trail3_non_fourth_field_goal_enabled:
+            return False
+        if self._endgame_trail3_non_fourth_fg_spike_used:
+            return False
+        if self.state.quarter != 4 or not self._is_endgame():
+            return False
+        gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
+        if gap != -3 or self.state.down >= 4:
+            return False
+        fg_distance = 117 - self.state.yardline
+        if (
+            self.state.yardline < 55
+            or fg_distance > self.config.field_goal_max_distance
+        ):
+            return False
+        attempt_prob = self.config.q4_endgame_trail3_non_fourth_field_goal_attempt_probability
+        if attempt_prob <= 0.0:
+            return False
+        self._endgame_trail3_non_fourth_fg_spike_used = True
+        probs = self.config.q4_trail3_fg_range_action_probabilities
+        fg_weight = (
+            float(probs["field_goal"])
+            if isinstance(probs, Mapping) and probs.get("field_goal") is not None
+            else 1.0
+        )
+        return self.rng.random() < attempt_prob * fg_weight
+
     def _should_take_late_tied_non_fourth_field_goal(self, offense: TeamSide) -> bool:
         """Allow the reachable, regulation-ending FG state seen in train PBP."""
 
@@ -1322,6 +1354,16 @@ class ClockPlaySimulator:
         clock_before = state.clock_seconds
         start_yardline = state.yardline
         fourth_down_attempt = state.down == 4
+        if self._should_take_endgame_trail3_non_fourth_field_goal(offense):
+            self.state.event_counts["endgame_trail3_non_fourth_field_goal_attempt"] += 1
+            self._event(
+                "endgame_trail3_field_goal_decision",
+                offense=offense,
+                decision="field_goal",
+                down=state.down,
+            )
+            self._attempt_field_goal(offense, source="endgame_trail3_non_fourth")
+            return
         if self._should_take_late_tied_non_fourth_field_goal(offense):
             self.state.event_counts["late_tied_non_fourth_field_goal_attempt"] += 1
             self._event(

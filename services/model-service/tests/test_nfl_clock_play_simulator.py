@@ -935,6 +935,36 @@ def test_goal_line_fourth_down_conversion_is_a_touchdown() -> None:
     assert simulator.invariant_failures == []
 
 
+def test_endgame_trail3_non_fourth_field_goal_state_is_reachable() -> None:
+    config = ClockPlayConfig(
+        q4_endgame_trail3_non_fourth_field_goal_enabled=True,
+        q4_endgame_trail3_non_fourth_field_goal_attempt_probability=1.0,
+        q4_trail3_fg_range_action_probabilities={"field_goal": 1.0, "go": 0.0},
+    )
+    for seed in range(1, 50):
+        simulator = ClockPlaySimulator(
+            _inputs(), seed=seed, config=config, collect_events=True
+        )
+        simulator.state = ClockPlayState(
+            quarter=4,
+            clock_seconds=120.0,
+            possession="home",
+            yardline=65,
+            down=3,
+            distance=5,
+            home_score=17,
+            away_score=20,
+        )
+        simulator._resolve_scrimmage_play("home")
+        if simulator.state.event_counts.get(
+            "endgame_trail3_non_fourth_field_goal_attempt"
+        ):
+            assert simulator.events[0]["event_type"] == "endgame_trail3_field_goal_decision"
+            break
+    else:  # pragma: no cover
+        raise AssertionError("No endgame trail-3 non-fourth field goal attempt in seed range")
+
+
 def test_tied_non_fourth_late_field_goal_state_is_reachable() -> None:
     for seed in range(1, 50):
         simulator = ClockPlaySimulator(_inputs(), seed=seed, collect_events=True)
