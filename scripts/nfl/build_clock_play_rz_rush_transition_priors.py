@@ -43,6 +43,18 @@ def _is_one(value: Any) -> bool:
     return _number(value) == 1.0
 
 
+def _is_designed_rush(payload: Mapping[str, Any]) -> bool:
+    """Match the non-pass rush family that consumes this transition prior."""
+
+    return (
+        payload.get("play_type") == "run"
+        and not _is_one(payload.get("qb_scramble"))
+        and not _is_one(payload.get("qb_kneel"))
+        and not _is_one(payload.get("qb_spike"))
+        and not _is_one(payload.get("two_point_attempt"))
+    )
+
+
 def _outcome(payload: Mapping[str, Any], yards: int, distance: int) -> str:
     if _is_one(payload.get("touchdown")) and payload.get("td_team") == payload.get("posteam"):
         return "touchdown"
@@ -165,7 +177,7 @@ def main() -> None:
             if payload.get("season_type") != "REG":
                 continue
             rows_examined += 1
-            if payload.get("play_type") != "run":
+            if not _is_designed_rush(payload):
                 continue
             down = _number(payload.get("down"))
             yardline_100 = _number(payload.get("yardline_100"))
@@ -180,7 +192,7 @@ def main() -> None:
                 games.add(game)
             yardline = max(80, min(99, int(round(100 - yardline_100))))
             distance_int = max(1, int(round(distance)))
-            goal_to_go = _is_one(payload.get("goal_to_go"))
+            goal_to_go = distance_int >= 100 - yardline
             key = rz_rush_state_key(
                 yardline=yardline,
                 down=int(down),
@@ -208,7 +220,10 @@ def main() -> None:
         "historical_rows_examined": rows_examined,
         "eligible_non_fourth_red_zone_rushes": rushes,
         "outcome_definition": {
-            "population": "play_type=run, down<4, yardline_100<=20",
+            "population": (
+                "designed play_type=run, down<4, yardline_100<=20, excluding "
+                "qb_scramble, qb_kneel, qb_spike, and two_point_attempt"
+            ),
             "touchdown": "offensive touchdown",
             "turnover": "lost fumble or interception",
             "first_down": "first_down flag or yards_gained >= ydstogo after TD/turnover removal",

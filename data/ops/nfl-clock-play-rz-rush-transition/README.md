@@ -1,9 +1,11 @@
 # Non-fourth red-zone rush transition experiment
 
-This train-only candidate replaces only non-fourth `run` transitions at the
-opponent 20-yard line and closer. It preserves clock flow, pass outcomes,
-fourth-down decisions and continuation, FG decisions, timeout policy, OT,
-scoring outside this rush state, and all non-red-zone behavior.
+This train-only candidate replaces only non-fourth designed-rush transitions
+at the opponent 20-yard line and closer. It excludes QB scrambles, kneels,
+spikes, and conversion tries because those paths are owned by other state
+families. It preserves clock flow, pass outcomes, fourth-down decisions and
+continuation, FG decisions, timeout policy, OT, scoring outside this rush
+state, and all non-red-zone behavior.
 
 The implementation branch was created only after the locked historical
 denominator, exclusive-routing, parent receipt, and train-window receipts
