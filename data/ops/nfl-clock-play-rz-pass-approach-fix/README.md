@@ -32,3 +32,17 @@ PYTHONPATH=services/model-service python3 \
   --pbp /path/to/nfl-pbp-audit-input-2013-2025.ndjson \
   --output data/ops/nfl-clock-play-rz-pass-approach-fix/pass-approach-state-priors.json
 ```
+
+## Result
+
+**REJECTED.** The exact same 2,048-seed trace raised the opponent 30–21
+pass-to-RZ crossing rate from the repaired 37.20% to 37.45%, farther from the
+34.48% train rate. It also raised RZ entries from 7.588 to 7.647/game,
+opportunities from 25.176 to 25.210/game, RZ rush routes from 10.000 to
+10.157/game, and offensive TD from 5.565 to 5.661/game.
+
+The deterministic freeze keeps state invariants and exclusive routing green,
+so this is a mechanism rejection rather than an implementation defect. The
+coarse bucket is a real diagnostic interface, but splitting it alone does not
+produce an isolatable correction. No PR, merge, deployment, R14, or
+production action is authorized.

@@ -1,0 +1,62 @@
+{
+  "artifact_id": "Clock-Play RZ Pass-Approach Transition Fix",
+  "candidate_source_sha": "1cc7ff88d",
+  "decision": "rejected",
+  "frozen_receipts": {
+    "historical_pbp_sha256": "823304baa68961187307c1d08774bee80a58d9757ee57be01f6879b34c5bca2c",
+    "simulated_games": 2048,
+    "train_window": "2013-2023 regular season"
+  },
+  "hypothesis_result": {
+    "historical_pass_crossing_rate_70_to_79": 0.3447709642715588,
+    "repaired_pass_crossing_rate_70_to_79": 0.37202121232462915,
+    "candidate_pass_crossing_rate_70_to_79": 0.3745054075441836,
+    "result": "The isolated approach key increased rather than reduced the crossing-rate error."
+  },
+  "mechanism_result": {
+    "rz_entries_per_game": {
+      "historical": 6.454418442193504,
+      "repaired": 7.58837890625,
+      "candidate": 7.64697265625
+    },
+    "rz_opportunities_per_game": {
+      "historical": 19.891372685993712,
+      "repaired": 25.17626953125,
+      "candidate": 25.21044921875
+    },
+    "rz_pass_routes_per_game": {
+      "historical": 9.749912679008034,
+      "repaired": 12.1064453125,
+      "candidate": 12.0263671875
+    },
+    "rz_rush_routes_per_game": {
+      "historical": 7.7418791477471185,
+      "repaired": 9.99951171875,
+      "candidate": 10.1572265625
+    },
+    "offensive_touchdowns_per_game": {
+      "historical": 4.795319594830597,
+      "repaired": 5.565,
+      "candidate": 5.6611328125
+    }
+  },
+  "certification": {
+    "final_total_mean": {
+      "historical": 45.59517988124345,
+      "candidate": 49.47998046875
+    },
+    "state_invariants_ok": true,
+    "all_structural_checks_ok": true,
+    "freeze_receipt_sha256": "0ccd17391e584891dbfb1ad6224bab1c90640f25c33923694b8efc2d72a18a8a"
+  },
+  "next_interface": {
+    "status": "not authorized",
+    "reason": "The existing pass-state bucket boundary is train-supported, but the bounded split fails its own local and full-trace acceptance checks. Further correction requires a new jointly conditioned approach-transition experiment rather than another isolated bucket refinement."
+  },
+  "scope": {
+    "held_out_data": false,
+    "market_data": false,
+    "production_data": false,
+    "r14": false
+  }
+}
