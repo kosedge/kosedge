@@ -656,6 +656,17 @@ class ClockPlaySimulator:
         if fg_distance <= self.config.field_goal_max_distance and (
             self.state.yardline >= 55 or self._is_endgame()
         ):
+            if (
+                trail3_fg_range
+                and max_clock > 0.0
+                and self.state.clock_seconds > max_clock
+            ):
+                if (
+                    yards_to_go <= self.config.fourth_down_go_distance
+                    and self.state.yardline >= 45
+                ):
+                    return "go"
+                return "punt"
             return "field_goal"
         return "punt"
 

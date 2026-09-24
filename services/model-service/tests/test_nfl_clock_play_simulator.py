@@ -535,6 +535,26 @@ def test_rz_q4_trail3_precedence_respects_regulation_max_clock() -> None:
     assert simulator._fourth_down_decision("home") == "field_goal"
 
 
+def test_rz_q4_trail3_regulation_clock_blocks_early_fg_range_field_goal() -> None:
+    config = ClockPlayConfig(
+        q4_trail3_fg_range_precedence_max_clock_seconds=265.0,
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=350.0,
+        possession="home",
+        yardline=65,
+        down=4,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._fourth_down_decision("home") == "punt"
+    simulator.state.clock_seconds = 240.0
+    assert simulator._fourth_down_decision("home") == "field_goal"
+
+
 def test_rz_q4_trail3_precedence_samples_train_go_branch() -> None:
     config = ClockPlayConfig(
         red_zone_fourth_decision_enabled=True,
