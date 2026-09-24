@@ -89,6 +89,12 @@ def test_simulated_trace_keeps_entry_route_first_down_and_exit_chain_separate() 
         == 1
     )
     assert summary["entry_crossing_start_mix"]["crossed_by:pass|79"]["count"] == 1
+    assert summary["pre_entry_route_start_mix"]["pass|79"]["count"] == 1
+    assert summary["entry_crossing_rates"]["crossed_by:pass|79"] == {
+        "crossings": 1,
+        "starts": 1,
+        "crossing_rate": 1.0,
+    }
     assert (
         summary["entry_origin_route_transition_mix"][
             "crossed_by:pass|red_zone_rush|unknown"
@@ -214,6 +220,12 @@ def test_historical_trace_uses_prior_play_for_entry_and_counts_only_train_season
         == 1
     )
     assert summary["entry_crossing_start_mix"]["crossed_by:pass|79"]["count"] == 1
+    assert summary["pre_entry_route_start_mix"]["pass|79"]["count"] == 1
+    assert summary["entry_crossing_rates"]["crossed_by:pass|79"] == {
+        "crossings": 1,
+        "starts": 1,
+        "crossing_rate": 1.0,
+    }
     assert (
         summary["entry_origin_route_transition_mix"][
             "crossed_by:pass|red_zone_rush|short_gain"

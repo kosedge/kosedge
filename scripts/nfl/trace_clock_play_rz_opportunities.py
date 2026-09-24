@@ -227,6 +227,7 @@ class RzTraceCounts:
     entry_origin_routes: Counter[str] = field(default_factory=Counter)
     entry_origin_route_transitions: Counter[str] = field(default_factory=Counter)
     entry_crossing_starts: Counter[str] = field(default_factory=Counter)
+    pre_entry_route_starts: Counter[str] = field(default_factory=Counter)
     field_goal_exit_types: Counter[str] = field(default_factory=Counter)
 
     def add_opportunity(
@@ -280,6 +281,10 @@ class RzTraceCounts:
             "entry_crossing_start_mix": _count_table(
                 self.entry_crossing_starts, games=games, denominator=self.entries
             ),
+            "pre_entry_route_start_mix": _count_table(
+                self.pre_entry_route_starts, games=games, denominator=games
+            ),
+            "entry_crossing_rates": self._crossing_rates(),
             "first_downs": {
                 "count": self.first_downs,
                 "per_game": _per_game(self.first_downs, games),
@@ -320,6 +325,21 @@ class RzTraceCounts:
                 ),
             },
         }
+
+    def _crossing_rates(self) -> dict[str, Any]:
+        rates: dict[str, Any] = {}
+        for crossing_key, crossings in sorted(self.entry_crossing_starts.items()):
+            origin, start_yardline = crossing_key.rsplit("|", 1)
+            if not origin.startswith("crossed_by:"):
+                continue
+            route = origin.removeprefix("crossed_by:")
+            starts = self.pre_entry_route_starts[f"{route}|{start_yardline}"]
+            rates[crossing_key] = {
+                "crossings": int(crossings),
+                "starts": int(starts),
+                "crossing_rate": float(crossings) / starts if starts else None,
+            }
+        return rates
 
 
 def _as_game(raw: Mapping[str, Any]) -> ClockPlayGameInputs:
@@ -497,6 +517,9 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             family = str(event.get("family") or "")
             start_opportunity(event, route="pass" if family == "pass" else None)
             start_yardline = int(_number(state.get("yardline")) or 0)
+            route = "pass" if family == "pass" else "designed_rush"
+            if 1 <= start_yardline < 80:
+                counts.pre_entry_route_starts[f"{route}|{start_yardline}"] += 1
             if family == "pass":
                 last_route = "pass"
                 last_route_start_yardline = start_yardline
@@ -515,7 +538,10 @@ def _trace_simulated_game(events: Iterable[Mapping[str, Any]], counts: RzTraceCo
             start_opportunity(event, route=route)
             if route is not None:
                 last_route = route
-                last_route_start_yardline = int(_number(state.get("yardline")) or 0)
+                start_yardline = int(_number(state.get("yardline")) or 0)
+                last_route_start_yardline = start_yardline
+                if 1 <= start_yardline < 80:
+                    counts.pre_entry_route_starts[f"{route}|{start_yardline}"] += 1
             continue
 
         if event_type == "late_field_goal_decision":
@@ -752,6 +778,10 @@ def _historical_trace(pbp_path: Path) -> tuple[RzTraceCounts, str]:
             if last_route is not None:
                 drive_last_route[drive_key] = last_route
                 drive_last_route_start_yardline[drive_key] = play_yardline
+                if play_yardline is not None and play_yardline < 80:
+                    counts.pre_entry_route_starts[
+                        f"{last_route}|{play_yardline}"
+                    ] += 1
 
     counts.games = len(games)
     return counts, digest.hexdigest()
