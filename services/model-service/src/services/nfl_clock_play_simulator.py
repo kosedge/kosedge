@@ -205,6 +205,8 @@ class ClockPlayConfig:
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
     non_offensive_scoring_enabled: bool = False
     non_offensive_scoring_priors: Mapping[str, Any] = field(default_factory=dict)
+    special_teams_state_enabled: bool = False
+    special_teams_state_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -468,6 +470,48 @@ class ClockPlaySimulator:
         self._kickoff(scoring_team, reason="after_safety")
         return True
 
+    def _special_state_prior(self, family: str) -> Mapping[str, Any] | None:
+        priors = self.config.special_teams_state_priors
+        value = priors.get(family) if isinstance(priors, Mapping) else None
+        return value if isinstance(value, Mapping) else None
+
+    def _special_rate(self, family: str) -> float:
+        prior = self._special_state_prior(family)
+        return float(prior.get("rate", 0.0)) if prior else 0.0
+
+    def _sample_special_loss(self, family: str) -> int:
+        prior = self._special_state_prior(family)
+        weights = prior.get("yard_loss_weights") if prior else None
+        if not isinstance(weights, Mapping):
+            return -6
+        return int(round(float(self._sample_weighted(weights))))
+
+    def _resolve_sack(self, offense: TeamSide, *, clock_before: float) -> None:
+        state = self.state
+        start_down = state.down
+        loss = self._sample_special_loss("sack")
+        target_yardline = state.yardline + loss
+        self._consume_clock(self._play_seconds(offense, stopped_clock=False, kind="sack"))
+        self._event("sack", offense=offense, yards=loss)
+        if self._maybe_safety(offense, target_yardline=target_yardline):
+            return
+        state.yardline = int(_clamp(float(target_yardline), 1.0, 99.0))
+        if start_down == 3:
+            self.state.event_counts["third_down_attempt"] += 1
+        state.down += 1
+        state.distance = min(99, state.distance + abs(loss))
+        self._event(
+            "scrimmage_play",
+            offense=offense,
+            play_type="sack",
+            yards=loss,
+            touchdown=False,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+        )
+        self._maybe_timeout_after_in_bounds_play(offense)
+        self._validate_state()
+
     def _try_two_point(self, offense: TeamSide) -> bool:
         if not self._is_endgame():
             return self.rng.random() < TWO_POINT_ATTEMPT_RATE
@@ -557,6 +601,28 @@ class ClockPlaySimulator:
         )
 
     def _punt(self, offense: TeamSide) -> None:
+        if (
+            self.config.special_teams_state_enabled
+            and self.rng.random() < self._special_rate("blocked_punt")
+        ):
+            self._consume_clock(
+                self._play_seconds(offense, stopped_clock=False, kind="punt")
+            )
+            self._event("blocked_punt", offense=offense)
+            receiving_team = _OTHER_SIDE[offense]
+            if self._maybe_non_offensive_touchdown(
+                receiving_team,
+                family="blocked_return",
+                event_type="blocked_return_touchdown",
+            ):
+                return
+            self._start_possession(
+                receiving_team,
+                yardline=int(_clamp(float(100 - self.state.yardline), 5.0, 95.0)),
+                reason="blocked_punt",
+                overtime_possession=self.state.quarter == "OT",
+            )
+            return
         net_yards = int(round(_clamp(self.rng.gauss(41.0, 8.0), 24.0, 58.0)))
         landing = self.state.yardline + net_yards
         receiving_yardline = max(10, min(45, 100 - landing))
@@ -1010,6 +1076,14 @@ class ClockPlaySimulator:
             if state.down == 3:
                 self.state.event_counts["third_down_attempt"] += 1
             self._turnover(offense, kind="turnover")
+            return
+
+        if (
+            self.config.special_teams_state_enabled
+            and is_pass
+            and self.rng.random() < self._special_rate("sack")
+        ):
+            self._resolve_sack(offense, clock_before=clock_before)
             return
 
         incomplete = is_pass and self.rng.random() < _clamp(

@@ -93,6 +93,11 @@ def _load_clock_play_priors(
             "non_offensive_scoring_priors",
             "non_offensive_scoring",
         ),
+        (
+            "special_teams_state_priors_path",
+            "special_teams_state_priors",
+            "special_teams_state",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:
