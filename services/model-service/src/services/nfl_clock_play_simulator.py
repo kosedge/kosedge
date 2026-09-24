@@ -555,6 +555,7 @@ class ClockPlaySimulator:
                 reason=reason,
                 outcome=outcome,
             )
+            self.state.event_counts[f"kickoff_{outcome}"] += 1
             if reason == "after_field_goal":
                 self.state.transition_counts["field_goal_to_kickoff"] += 1
             elif reason == "after_try":
@@ -684,6 +685,7 @@ class ClockPlaySimulator:
         self._event("touchdown", offense=offense, source=source, points=6)
         if source.endswith("_return"):
             self.state.event_counts["non_offensive_touchdown"] += 1
+            self.state.event_counts[f"{source}_touchdown"] += 1
         else:
             self.state.event_counts["offensive_touchdown"] += 1
         self._resolve_try(offense)
@@ -817,6 +819,7 @@ class ClockPlaySimulator:
                 punt_yards=punt_yards,
                 receiving_yardline=receiving_yardline,
             )
+            self.state.event_counts[f"punt_{outcome}"] += 1
             if outcome == "safety":
                 self._score_safety(
                     receiving_team,
@@ -1335,6 +1338,8 @@ class ClockPlaySimulator:
                 **event_details,
             )
             self._record_third_down(converted=True)
+            if route == "pass":
+                self.state.event_counts["pass_touchdown"] += 1
             self._score_touchdown(offense, source="scrimmage_play")
             return
 
@@ -1458,6 +1463,12 @@ class ClockPlaySimulator:
         yards = self._sample_prior_yards(
             prior, "yard_value_weights", outcome=outcome, fallback=0
         )
+        if outcome == "completion":
+            self.state.event_counts["pass_completion_yards"] += yards
+        elif outcome == "sack":
+            self.state.event_counts["sack_yards_lost"] += max(0, -yards)
+        elif outcome == "scramble":
+            self.state.event_counts["scramble_yards"] += yards
         if outcome in {"interception", "fumble"}:
             self._consume_clock(
                 self._play_seconds(offense, stopped_clock=False, kind="turnover")

@@ -344,6 +344,26 @@ def run(
             "timeout_endgame_logic": aggregate_events["timeout"] > 0,
             "overtime_path": aggregate_events["overtime_start"] > 0
             or overtime_probe["event_counts"].get("overtime_start", 0) == 1,
+            "pass_primary_outcomes_exclusive": aggregate_events["pass_attempt"]
+            == sum(
+                aggregate_events[f"pass_outcome_{outcome}"]
+                for outcome in (
+                    "completion",
+                    "incompletion",
+                    "sack",
+                    "scramble",
+                    "interception",
+                    "fumble",
+                )
+            ),
+            "special_teams_routes_exclusive": (
+                aggregate_events["route_punt"] == aggregate_events["punt"]
+                and aggregate_events["route_kickoff"] == aggregate_events["kickoff"]
+                and aggregate_events["route_field_goal"]
+                == aggregate_events["field_goal_made"]
+                + aggregate_events["field_goal_missed"]
+                + aggregate_events["field_goal_blocked"]
+            ),
         },
     }
 
