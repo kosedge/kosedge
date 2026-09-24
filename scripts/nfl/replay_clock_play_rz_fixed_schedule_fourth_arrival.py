@@ -174,6 +174,7 @@ class EventChainWalkResult:
     reached_fourth: bool = False
     td_before_fourth: bool = False
     terminal: str = "open"
+    fg_exit: bool = False
 
 
 def walk_parent_event_chain(drive: RzDrive) -> EventChainWalkResult:
@@ -199,6 +200,7 @@ def walk_parent_event_chain(drive: RzDrive) -> EventChainWalkResult:
     result.reached_fourth = bool(drive.reached_fourth)
     if drive.reached_fourth:
         result.terminal = str(drive.terminal or "fourth_down")
+        result.fg_exit = bool(drive.fourth_fg) or result.terminal == "field_goal"
         return result
     if drive.terminal and drive.terminal != "open":
         result.terminal = str(drive.terminal)
