@@ -1302,7 +1302,7 @@ class ClockPlaySimulator:
             return False
         fg_distance = 117 - self.state.yardline
         if (
-            self.state.yardline < 55
+            self.state.yardline < 80
             or fg_distance > self.config.field_goal_max_distance
         ):
             return False
