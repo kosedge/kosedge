@@ -1298,7 +1298,7 @@ class ClockPlaySimulator:
         if self.state.quarter != 4 or not self._is_endgame():
             return False
         gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
-        if gap != -3 or self.state.down >= 4:
+        if gap != -3 or self.state.down >= 3:
             return False
         fg_distance = 117 - self.state.yardline
         if (

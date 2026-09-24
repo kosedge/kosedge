@@ -950,7 +950,7 @@ def test_endgame_trail3_non_fourth_field_goal_state_is_reachable() -> None:
             clock_seconds=120.0,
             possession="home",
             yardline=65,
-            down=3,
+            down=2,
             distance=5,
             home_score=17,
             away_score=20,
