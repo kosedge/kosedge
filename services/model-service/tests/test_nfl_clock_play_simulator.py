@@ -5,6 +5,9 @@ from src.services.nfl_clock_play_simulator import (
     ClockPlayGameInputs,
     ClockPlaySimulator,
     ClockPlayState,
+    called_play_state_key,
+    designed_rush_state_key,
+    pass_state_key,
     simulate_clock_play_game,
     simulate_clock_play_overtime_probe,
 )
@@ -15,6 +18,28 @@ def _inputs() -> ClockPlayGameInputs:
         game_id="synthetic-clock-play",
         home_team="SYN_HOME",
         away_team="SYN_AWAY",
+    )
+
+
+def test_pass_outcome_state_splits_only_the_immediate_rz_approach() -> None:
+    common = {
+        "down": 1,
+        "distance": 10,
+        "goal_to_go": False,
+        "quarter": 1,
+        "clock_seconds": 600,
+        "score_gap": 0,
+    }
+
+    assert pass_state_key(yardline=69, **common).startswith("opponent_territory|")
+    assert pass_state_key(yardline=70, **common).startswith("red_zone_approach|")
+    assert pass_state_key(yardline=79, **common).startswith("red_zone_approach|")
+    assert pass_state_key(yardline=80, **common).startswith("red_zone|")
+    assert called_play_state_key(yardline=70, **common).startswith(
+        "opponent_territory|"
+    )
+    assert designed_rush_state_key(yardline=70, **common).startswith(
+        "opponent_territory|"
     )
 
 

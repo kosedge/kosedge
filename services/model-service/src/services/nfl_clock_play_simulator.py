@@ -198,6 +198,24 @@ def pass_field_bucket(yardline: int) -> str:
     return "goal_to_go"
 
 
+def pass_outcome_field_bucket(yardline: int) -> str:
+    """Keep pass outcomes separate for the immediate red-zone approach."""
+
+    if yardline <= 10:
+        return "own_10"
+    if yardline <= 35:
+        return "own_35"
+    if yardline < 50:
+        return "own_territory"
+    if yardline < 70:
+        return "opponent_territory"
+    if yardline < 80:
+        return "red_zone_approach"
+    if yardline < 95:
+        return "red_zone"
+    return "goal_to_go"
+
+
 def pass_distance_bucket(distance: int) -> str:
     if distance <= 2:
         return "short"
@@ -242,7 +260,7 @@ def pass_state_key(
 
     return "|".join(
         (
-            pass_field_bucket(yardline),
+            pass_outcome_field_bucket(yardline),
             str(max(1, min(4, int(down)))),
             pass_distance_bucket(distance),
             "gtg" if goal_to_go else "non_gtg",
@@ -288,14 +306,15 @@ def called_play_state_key(
 ) -> str:
     """Return the train-only conditional key for a pass-or-rush call."""
 
-    return pass_state_key(
-        yardline=yardline,
-        down=down,
-        distance=distance,
-        goal_to_go=goal_to_go,
-        quarter=quarter,
-        clock_seconds=clock_seconds,
-        score_gap=score_gap,
+    return "|".join(
+        (
+            pass_field_bucket(yardline),
+            str(max(1, min(4, int(down)))),
+            pass_distance_bucket(distance),
+            "gtg" if goal_to_go else "non_gtg",
+            pass_time_bucket(quarter, clock_seconds),
+            pass_score_bucket(score_gap),
+        )
     )
 
 
