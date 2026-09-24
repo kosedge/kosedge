@@ -88,6 +88,11 @@ def _load_clock_play_priors(
             "red_zone_fourth_decision_priors",
             "red_zone_fourth_decision",
         ),
+        (
+            "pre_entry_pass_rz_priors_path",
+            "pre_entry_pass_rz_priors",
+            "pre_entry_pass_rz",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:

@@ -5,6 +5,7 @@ from src.services.nfl_clock_play_simulator import (
     ClockPlayGameInputs,
     ClockPlaySimulator,
     ClockPlayState,
+    pre_entry_pass_rz_state_key,
     simulate_clock_play_game,
     simulate_clock_play_overtime_probe,
 )
@@ -107,6 +108,47 @@ def _rz_fourth_decision_config() -> ClockPlayConfig:
                     "field_goal": 1.0,
                     "go": 0.0,
                     "punt": 0.0,
+                },
+            }
+        },
+    )
+
+
+def _pre_entry_pass_rz_config(
+    *,
+    route: str = "run",
+    outcome: str = "first_down",
+    yards: int = 3,
+) -> ClockPlayConfig:
+    routes = {"pass": 0.0, "run": 0.0}
+    routes[route] = 1.0
+    outcomes = {
+        "touchdown": 0.0,
+        "turnover": 0.0,
+        "incomplete": 0.0,
+        "loss": 0.0,
+        "zero": 0.0,
+        "one_two": 0.0,
+        "short_gain": 0.0,
+        "first_down": 0.0,
+    }
+    outcomes[outcome] = 1.0
+    return ClockPlayConfig(
+        pre_entry_pass_rz_enabled=True,
+        pre_entry_pass_rz_priors={
+            "default": {
+                "bucket": "unit_test",
+                "route_probabilities": routes,
+                "outcome_probabilities": {
+                    "pass": outcomes,
+                    "run": outcomes,
+                },
+                "yard_value_weights": {
+                    selected_route: {
+                        selected_outcome: {str(yards): 1.0}
+                        for selected_outcome in outcomes
+                    }
+                    for selected_route in routes
                 },
             }
         },
@@ -378,6 +420,89 @@ def test_outside_red_zone_rush_bypasses_rush_transition() -> None:
     simulator._resolve_scrimmage_play("home")
 
     assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+
+
+def test_pre_entry_pass_rz_key_requires_the_owned_handoff_state() -> None:
+    assert (
+        pre_entry_pass_rz_state_key(
+            pre_entry_yardline=70,
+            yardline=82,
+            down=2,
+            distance=6,
+            goal_to_go=False,
+        )
+        == "70-74|20-16|2|6+|non_gtg"
+    )
+
+
+def test_pass_crossing_routes_exactly_once_to_joint_rz_continuation() -> None:
+    priors = _pre_entry_pass_rz_config().pre_entry_pass_rz_priors
+    rush = _rz_rush_transition_config(
+        outcome="touchdown"
+    ).red_zone_rush_transition_priors
+    config = ClockPlayConfig(
+        base_yards=10.0,
+        yards_spread=0.0,
+        turnover_probability=0.0,
+        incompletion_probability=0.0,
+        explosive_play_probability=0.0,
+        pre_entry_pass_rz_enabled=True,
+        pre_entry_pass_rz_priors=priors,
+        red_zone_rush_transition_enabled=True,
+        red_zone_rush_transition_priors=rush,
+    )
+    for seed in range(1, 100):
+        simulator = ClockPlaySimulator(
+            _inputs(), seed=seed, config=config, collect_events=True
+        )
+        simulator.state = ClockPlayState(
+            quarter=1,
+            clock_seconds=600.0,
+            possession="home",
+            yardline=79,
+            down=1,
+            distance=1,
+        )
+        simulator._resolve_scrimmage_play("home")
+        if simulator.state.event_counts["pre_entry_pass_rz_handoff"]:
+            simulator._resolve_scrimmage_play("home")
+            break
+    else:  # pragma: no cover - protects the train-supported handoff receipt
+        raise AssertionError("No deterministic eligible pre-entry pass crossing found")
+
+    assert simulator.state.event_counts["pre_entry_pass_rz_handoff"] == 1
+    assert simulator.state.event_counts["pre_entry_pass_rz_continuation"] == 1
+    assert simulator.state.event_counts["pre_entry_pass_rz_route_run"] == 1
+    assert simulator.state.event_counts["red_zone_rush_transition"] == 0
+    assert simulator.invariant_failures == []
+
+
+def test_fourth_down_never_consumes_pending_pre_entry_pass_rz_handoff() -> None:
+    simulator = ClockPlaySimulator(
+        _inputs(),
+        seed=1,
+        config=_pre_entry_pass_rz_config(),
+        collect_events=True,
+    )
+    simulator.state = ClockPlayState(
+        quarter=1,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=2,
+    )
+    simulator._pending_pre_entry_pass_rz_state = pre_entry_pass_rz_state_key(
+        pre_entry_yardline=79,
+        yardline=85,
+        down=4,
+        distance=2,
+        goal_to_go=False,
+    )
+    simulator._resolve_scrimmage_play("home")
+
+    assert simulator.state.event_counts["pre_entry_pass_rz_continuation"] == 0
+    assert simulator._pending_pre_entry_pass_rz_state is None
 
 
 def test_fourth_down_continuation_conversion_resets_first_down() -> None:

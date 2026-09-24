@@ -71,6 +71,11 @@ def _engine_config(config_payload: Mapping[str, Any]) -> dict[str, Any]:
             "red_zone_fourth_decision_priors",
             "Red-zone fourth decision",
         ),
+        (
+            "pre_entry_pass_rz_priors_path",
+            "pre_entry_pass_rz_priors",
+            "Pre-entry pass/RZ continuation",
+        ),
     ):
         raw_path = config_payload.get(config_key)
         if raw_path is None:

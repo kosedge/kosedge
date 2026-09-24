@@ -152,6 +152,35 @@ def rz_fourth_decision_state_key(
     )
 
 
+def pre_entry_pass_start_bucket(yardline: int) -> str:
+    """Bucket the opponent 30-21 pass starts owned by the joint handoff."""
+
+    if not 70 <= yardline <= 79:
+        raise ValueError("Pre-entry pass/RZ state requires a 70-79 pass start")
+    return "70-74" if yardline <= 74 else "75-79"
+
+
+def pre_entry_pass_rz_state_key(
+    *,
+    pre_entry_yardline: int,
+    yardline: int,
+    down: int,
+    distance: int,
+    goal_to_go: bool,
+) -> str:
+    """Key the first RZ continuation by the preceding 70-79 pass crossing."""
+
+    return "|".join(
+        (
+            pre_entry_pass_start_bucket(pre_entry_yardline),
+            rz_rush_field_bucket(yardline),
+            str(down),
+            rz_rush_distance_bucket(distance),
+            "gtg" if goal_to_go else "non_gtg",
+        )
+    )
+
+
 @dataclass(frozen=True)
 class ClockPlayTeamInput:
     """Synthetic or train-only team-strength inputs for one game path."""
@@ -203,6 +232,8 @@ class ClockPlayConfig:
     red_zone_rush_transition_priors: Mapping[str, Any] = field(default_factory=dict)
     red_zone_fourth_decision_enabled: bool = False
     red_zone_fourth_decision_priors: Mapping[str, Any] = field(default_factory=dict)
+    pre_entry_pass_rz_enabled: bool = False
+    pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
 
     @classmethod
@@ -275,6 +306,7 @@ class ClockPlaySimulator:
         )
         self.events: list[dict[str, Any]] = []
         self.invariant_failures: list[str] = []
+        self._pending_pre_entry_pass_rz_state: str | None = None
 
     def _snapshot(self) -> dict[str, Any]:
         state = self.state
@@ -372,6 +404,7 @@ class ClockPlaySimulator:
         reason: str,
         overtime_possession: bool = False,
     ) -> None:
+        self._pending_pre_entry_pass_rz_state = None
         self.state.possession = offense
         self.state.yardline = int(_clamp(float(yardline), 1.0, 99.0))
         self.state.down = 1
@@ -831,6 +864,179 @@ class ClockPlaySimulator:
         self._maybe_timeout_after_in_bounds_play(offense)
         self._validate_state()
 
+    def _pre_entry_pass_rz_prior(self, state_key: str) -> Mapping[str, Any]:
+        priors = self.config.pre_entry_pass_rz_priors
+        buckets = priors.get("buckets") if isinstance(priors, Mapping) else None
+        fallback = priors.get("default") if isinstance(priors, Mapping) else None
+        if isinstance(buckets, Mapping) and isinstance(buckets.get(state_key), Mapping):
+            return buckets[state_key]
+        if isinstance(fallback, Mapping):
+            return fallback
+        raise ValueError("Pre-entry pass/RZ process requires train-only priors")
+
+    def _resolve_pre_entry_pass_rz_continuation(
+        self, offense: TeamSide, *, state_key: str
+    ) -> None:
+        """Resolve exactly one first RZ continuation after an eligible pass entry."""
+
+        state = self.state
+        prior = self._pre_entry_pass_rz_prior(state_key)
+        route_probabilities = prior.get("route_probabilities")
+        outcome_probabilities = prior.get("outcome_probabilities")
+        if not isinstance(route_probabilities, Mapping) or not isinstance(
+            outcome_probabilities, Mapping
+        ):
+            raise ValueError("Pre-entry pass/RZ prior needs route and outcome probabilities")
+        route = self._sample_weighted(route_probabilities)
+        route_outcomes = outcome_probabilities.get(route)
+        if not isinstance(route_outcomes, Mapping):
+            raise ValueError("Pre-entry pass/RZ prior needs route-specific outcomes")
+        outcome = self._sample_weighted(route_outcomes)
+        bucket = str(prior.get("bucket", "default"))
+        clock_before = state.clock_seconds
+        start_yardline = state.yardline
+        start_down = state.down
+        distance = state.distance
+        distance_to_goal = 100 - start_yardline
+        yard_weights = prior.get("yard_value_weights")
+        outcome_weights = (
+            yard_weights.get(route, {}).get(outcome)
+            if isinstance(yard_weights, Mapping)
+            and isinstance(yard_weights.get(route), Mapping)
+            else None
+        )
+        if not isinstance(outcome_weights, Mapping):
+            raise ValueError("Pre-entry pass/RZ prior needs route-specific yard weights")
+        sampled_yards = int(round(float(self._sample_weighted(outcome_weights))))
+        clock_kind = (
+            "incomplete_pass"
+            if outcome == "incomplete"
+            else "first_down"
+            if outcome == "first_down"
+            else route
+        )
+        self._consume_clock(
+            self._play_seconds(
+                offense,
+                stopped_clock=outcome == "incomplete",
+                kind=clock_kind,
+            )
+        )
+        self._event(
+            "pre_entry_pass_rz_continuation",
+            offense=offense,
+            route=route,
+            outcome=outcome,
+            transition_bucket=bucket,
+            state_key=state_key,
+        )
+        self.state.event_counts[f"pre_entry_pass_rz_route_{route}"] += 1
+
+        if outcome == "touchdown":
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+                self.state.event_counts["third_down_conversion"] += 1
+            self._event(
+                "scrimmage_play",
+                offense=offense,
+                play_type=f"pre_entry_pass_rz_{route}",
+                yards=distance_to_goal,
+                touchdown=True,
+                transition_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            self._score_touchdown(offense, source="pre_entry_pass_rz_continuation")
+            return
+
+        if outcome == "incomplete":
+            if route != "pass":
+                raise ValueError("Only a pass continuation may have an incomplete outcome")
+            self._event(
+                "incomplete_pass",
+                offense=offense,
+                transition_bucket=bucket,
+                clock_before_seconds=round(clock_before, 3),
+                clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+            )
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+            state.down += 1
+            self._validate_state()
+            return
+
+        max_non_touchdown_yards = max(0, 99 - start_yardline)
+        if outcome == "first_down":
+            yards = min(
+                max_non_touchdown_yards,
+                max(distance, sampled_yards),
+            )
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            state.down = 1
+            state.distance = min(10, 100 - state.yardline)
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+                self.state.event_counts["third_down_conversion"] += 1
+        else:
+            maximum_without_first_down = min(distance - 1, max_non_touchdown_yards)
+            if outcome == "loss":
+                yards = min(-1, sampled_yards)
+            elif outcome == "zero":
+                yards = 0
+            elif outcome == "one_two":
+                yards = (
+                    min(maximum_without_first_down, max(1, sampled_yards))
+                    if maximum_without_first_down >= 1
+                    else 0
+                )
+            elif outcome == "short_gain":
+                yards = (
+                    min(maximum_without_first_down, max(3, sampled_yards))
+                    if maximum_without_first_down >= 3
+                    else max(0, maximum_without_first_down)
+                )
+            elif outcome == "turnover":
+                yards = min(max_non_touchdown_yards, sampled_yards)
+            else:
+                raise ValueError(f"Unknown pre-entry pass/RZ outcome: {outcome}")
+            state.yardline = int(
+                _clamp(float(start_yardline + yards), 1.0, 99.0)
+            )
+            if outcome == "turnover":
+                if start_down == 3:
+                    self.state.event_counts["third_down_attempt"] += 1
+                self._event(
+                    "scrimmage_play",
+                    offense=offense,
+                    play_type=f"pre_entry_pass_rz_{route}",
+                    yards=yards,
+                    touchdown=False,
+                    transition_bucket=bucket,
+                    clock_before_seconds=round(clock_before, 3),
+                    clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+                )
+                self._turnover(offense, kind="turnover")
+                return
+            state.down += 1
+            state.distance = max(1, distance - max(0, yards))
+            if start_down == 3:
+                self.state.event_counts["third_down_attempt"] += 1
+
+        self._event(
+            "scrimmage_play",
+            offense=offense,
+            play_type=f"pre_entry_pass_rz_{route}",
+            yards=yards,
+            touchdown=False,
+            transition_bucket=bucket,
+            clock_before_seconds=round(clock_before, 3),
+            clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
+        )
+        self._maybe_timeout_after_in_bounds_play(offense)
+        self._validate_state()
+
     def _maybe_timeout_after_in_bounds_play(self, offense: TeamSide) -> None:
         if (
             self.state.quarter != 4
@@ -882,6 +1088,7 @@ class ClockPlaySimulator:
     def _resolve_scrimmage_play(self, offense: TeamSide) -> None:
         state = self.state
         clock_before = state.clock_seconds
+        start_yardline = state.yardline
         fourth_down_attempt = state.down == 4
         if self._should_take_late_tied_non_fourth_field_goal(offense):
             self.state.event_counts["late_tied_non_fourth_field_goal_attempt"] += 1
@@ -894,6 +1101,7 @@ class ClockPlaySimulator:
             self._attempt_field_goal(offense, source="late_tied_non_fourth")
             return
         if fourth_down_attempt:
+            self._pending_pre_entry_pass_rz_state = None
             decision = self._fourth_down_decision(offense)
             self._event("fourth_down_decision", offense=offense, decision=decision)
             self.state.event_counts[f"fourth_down_{decision}"] += 1
@@ -906,6 +1114,20 @@ class ClockPlaySimulator:
             if self.config.fourth_down_continuation_enabled:
                 self._resolve_fourth_down_continuation(offense)
                 return
+
+        pending_pre_entry_state = self._pending_pre_entry_pass_rz_state
+        self._pending_pre_entry_pass_rz_state = None
+        if (
+            pending_pre_entry_state is not None
+            and self.config.pre_entry_pass_rz_enabled
+            and state.yardline >= 80
+            and state.down < 4
+        ):
+            self._resolve_pre_entry_pass_rz_continuation(
+                offense,
+                state_key=pending_pre_entry_state,
+            )
+            return
 
         attack = self._attack_factor(offense)
         pass_probability = 0.52
@@ -1041,6 +1263,24 @@ class ClockPlaySimulator:
             clock_before_seconds=round(clock_before, 3),
             clock_elapsed_seconds=round(clock_before - state.clock_seconds, 3),
         )
+        if (
+            self.config.pre_entry_pass_rz_enabled
+            and is_pass
+            and 70 <= start_yardline <= 79
+            and 80 <= target_yardline < 100
+        ):
+            self._pending_pre_entry_pass_rz_state = pre_entry_pass_rz_state_key(
+                pre_entry_yardline=start_yardline,
+                yardline=state.yardline,
+                down=state.down,
+                distance=state.distance,
+                goal_to_go=state.distance >= 100 - state.yardline,
+            )
+            self._event(
+                "pre_entry_pass_rz_handoff",
+                offense=offense,
+                state_key=self._pending_pre_entry_pass_rz_state,
+            )
         self._maybe_timeout_after_in_bounds_play(offense)
         self._validate_state()
 
