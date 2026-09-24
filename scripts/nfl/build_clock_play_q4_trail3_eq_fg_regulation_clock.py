@@ -63,10 +63,22 @@ def main() -> None:
 
     q = min(1.0, max(0.0, args.precedence_max_quantile))
     idx = min(n - 1, int(round(q * (n - 1))))
+    quantiles = {}
+    for label, quantile in (
+        ("p25", 0.25),
+        ("p50", 0.5),
+        ("p60", 0.6),
+        ("p65", 0.65),
+        ("p70", 0.7),
+        ("p75", 0.75),
+    ):
+        qi = min(n - 1, int(round(quantile * (n - 1))))
+        quantiles[label] = clocks[qi]
     payload = {
         "component": "q4_trail3_eq_fg_regulation_clock",
         "equalizing_fg_count": n,
         "mean_clock_seconds": sum(clocks) / n,
+        "clock_quantiles_seconds": quantiles,
         "precedence_max_quantile": q,
         "q4_trail3_fg_range_precedence_max_clock_seconds": clocks[idx],
     }
