@@ -259,7 +259,6 @@ class ClockPlayConfig:
     q4_endgame_trail3_non_fourth_field_goal_enabled: bool = False
     q4_endgame_trail3_non_fourth_field_goal_attempt_probability: float = 0.0
     q4_endgame_trail3_fg_range_approach_extra_yards: float = 0.0
-    q4_endgame_trail3_fg_chase_turnover_runtime_scale: float = 1.0
     pre_entry_pass_rz_enabled: bool = False
     pre_entry_pass_rz_priors: Mapping[str, Any] = field(default_factory=dict)
     model_version: str = DEFAULT_CLOCK_PLAY_MODEL_VERSION
@@ -1292,18 +1291,6 @@ class ClockPlaySimulator:
         self.state.use_timeout(defense)
         self._event("timeout", team=defense, reason="late_trailing_clock_stop")
 
-    def _endgame_trail3_fg_chase_active(self, offense: TeamSide) -> bool:
-        if self.state.quarter != 4 or not self._is_endgame():
-            return False
-        gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
-        if gap != -3 or self.state.down >= 4:
-            return False
-        fg_distance = 117 - self.state.yardline
-        return (
-            self.state.yardline >= 55
-            and fg_distance <= self.config.field_goal_max_distance
-        )
-
     def _endgame_trail3_fg_range_approach_extra_yards(self, offense: TeamSide) -> float:
         extra = self.config.q4_endgame_trail3_fg_range_approach_extra_yards
         if extra <= 0.0:
@@ -1452,13 +1439,6 @@ class ClockPlaySimulator:
             turnover_probability = _clamp(
                 self.config.turnover_probability / attack, 0.012, 0.065
             )
-            if self._endgame_trail3_fg_chase_active(offense):
-                turnover_probability = _clamp(
-                    turnover_probability
-                    * self.config.q4_endgame_trail3_fg_chase_turnover_runtime_scale,
-                    0.006,
-                    0.065,
-                )
             if self.rng.random() < turnover_probability:
                 self._consume_clock(
                     self._play_seconds(offense, stopped_clock=False, kind="turnover")

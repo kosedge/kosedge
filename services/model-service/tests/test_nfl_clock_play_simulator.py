@@ -935,21 +935,6 @@ def test_goal_line_fourth_down_conversion_is_a_touchdown() -> None:
     assert simulator.invariant_failures == []
 
 
-def test_endgame_trail3_fg_chase_active_in_fg_range() -> None:
-    simulator = ClockPlaySimulator(_inputs(), seed=1)
-    simulator.state = ClockPlayState(
-        quarter=4,
-        clock_seconds=120.0,
-        possession="home",
-        yardline=62,
-        down=3,
-        distance=8,
-        home_score=17,
-        away_score=20,
-    )
-    assert simulator._endgame_trail3_fg_chase_active("home")
-
-
 def test_endgame_trail3_fg_range_approach_extra_yards() -> None:
     config = ClockPlayConfig(q4_endgame_trail3_fg_range_approach_extra_yards=2.5)
     simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
