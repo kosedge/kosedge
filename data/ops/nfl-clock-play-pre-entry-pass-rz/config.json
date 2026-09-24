@@ -27,6 +27,7 @@
     "pre_entry_pass_rz_enabled": true,
     "red_zone_fourth_decision_enabled": true,
     "red_zone_endgame_trailing_fg_precedence_enabled": true,
+    "red_zone_q4_trail3_fg_precedence_full_quarter_enabled": true,
     "red_zone_rush_transition_enabled": true,
     "red_zone_pass_transition_enabled": false,
     "red_zone_generic_pass_incompletion_enabled": false,

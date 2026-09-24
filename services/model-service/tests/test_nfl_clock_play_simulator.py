@@ -418,6 +418,7 @@ def test_rz_endgame_trail3_precedence_overrides_go_prior() -> None:
     config = ClockPlayConfig(
         red_zone_fourth_decision_enabled=True,
         red_zone_endgame_trailing_fg_precedence_enabled=True,
+        q4_trail3_fg_range_action_probabilities={"field_goal": 1.0, "go": 0.0},
         red_zone_fourth_decision_priors={
             "default": {
                 "bucket": "unit_test",
@@ -435,6 +436,96 @@ def test_rz_endgame_trail3_precedence_overrides_go_prior() -> None:
         clock_seconds=120.0,
         possession="home",
         yardline=85,
+        down=4,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._fourth_down_decision("home") == "field_goal"
+
+
+def test_rz_q4_full_quarter_trail3_precedence_outside_endgame() -> None:
+    config = ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_q4_trail3_fg_precedence_full_quarter_enabled=True,
+        q4_trail3_fg_range_action_probabilities={"field_goal": 1.0, "go": 0.0},
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 0.0,
+                    "go": 1.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._fourth_down_decision("home") == "field_goal"
+
+
+def test_rz_q4_trail3_precedence_samples_train_go_branch() -> None:
+    config = ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_q4_trail3_fg_precedence_full_quarter_enabled=True,
+        q4_trail3_fg_range_action_probabilities={"field_goal": 0.0, "go": 1.0},
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 1.0,
+                    "go": 0.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=85,
+        down=4,
+        distance=5,
+        home_score=17,
+        away_score=20,
+    )
+    assert simulator._fourth_down_decision("home") == "go"
+
+
+def test_rz_q4_trail3_precedence_skips_outside_red_zone() -> None:
+    config = ClockPlayConfig(
+        red_zone_fourth_decision_enabled=True,
+        red_zone_q4_trail3_fg_precedence_full_quarter_enabled=True,
+        q4_trail3_fg_range_action_probabilities={"field_goal": 1.0, "go": 0.0},
+        red_zone_fourth_decision_priors={
+            "default": {
+                "bucket": "unit_test",
+                "action_probabilities": {
+                    "field_goal": 0.0,
+                    "go": 1.0,
+                    "punt": 0.0,
+                },
+            }
+        },
+    )
+    simulator = ClockPlaySimulator(_inputs(), seed=1, config=config)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=600.0,
+        possession="home",
+        yardline=65,
         down=4,
         distance=5,
         home_score=17,
