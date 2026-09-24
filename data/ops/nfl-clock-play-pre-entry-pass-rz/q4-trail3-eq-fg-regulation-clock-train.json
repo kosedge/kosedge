@@ -10,6 +10,6 @@
   "component": "q4_trail3_eq_fg_regulation_clock",
   "equalizing_fg_count": 181,
   "mean_clock_seconds": 273.58011049723757,
-  "precedence_max_quantile": 0.65,
-  "q4_trail3_fg_range_precedence_max_clock_seconds": 327.0
+  "precedence_max_quantile": 0.6,
+  "q4_trail3_fg_range_precedence_max_clock_seconds": 265.0
 }

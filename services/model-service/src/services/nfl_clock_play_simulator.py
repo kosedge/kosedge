@@ -666,6 +666,8 @@ class ClockPlaySimulator:
                     and self.state.yardline >= 45
                 ):
                     return "go"
+                if self.config.fourth_down_continuation_enabled:
+                    return "go"
                 return "punt"
             return "field_goal"
         return "punt"

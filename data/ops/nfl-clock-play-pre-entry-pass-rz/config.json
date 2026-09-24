@@ -12,7 +12,7 @@
     "clock_flow_runtime_scale": 0.956024,
     "q4_trailing_clock_flow_scale": 1.0,
     "q4_close_leading_clock_flow_scale": 1.0,
-    "q4_trail3_fg_range_precedence_max_clock_seconds": 327.0,
+    "q4_trail3_fg_range_precedence_max_clock_seconds": 265.0,
     "endgame_window_seconds": 180,
     "explosive_play_probability": 0.105,
     "field_goal_max_distance": 62,
