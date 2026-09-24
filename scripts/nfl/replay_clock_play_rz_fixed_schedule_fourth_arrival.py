@@ -115,6 +115,8 @@ class SnapRecord:
     touchdown: bool
     yards: int
     incomplete: bool
+    transition_bucket: str | None = None
+    sim_outcome: str | None = None
 
 
 @dataclass
@@ -160,6 +162,7 @@ def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
     drives: list[RzDrive] = []
     current: RzDrive | None = None
     in_possession = False
+    pending_rz_rush: Mapping[str, Any] | None = None
 
     for event in events:
         event_type = str(event.get("event_type") or "")
@@ -196,9 +199,28 @@ def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
                 )
             continue
 
+        if event_type == "red_zone_rush_transition":
+            pending_rz_rush = {
+                "outcome": event.get("outcome"),
+                "state": event.get("state") or {},
+                "transition_bucket": event.get("transition_bucket"),
+            }
+            continue
+
         if event_type == "scrimmage_play":
             play_type = str(event.get("play_type") or "")
-            pre_y, pre_d, pre_dist = _pre_state_from_scrimmage(event)
+            if play_type == "red_zone_rush_transition" and pending_rz_rush is not None:
+                pre_state = pending_rz_rush.get("state") or {}
+                pre_y = int(pre_state.get("yardline") or 1)
+                pre_d = int(pre_state.get("down") or 1)
+                pre_dist = int(pre_state.get("distance") or 10)
+                transition_bucket = pending_rz_rush.get("transition_bucket")
+                sim_outcome = pending_rz_rush.get("outcome")
+                pending_rz_rush = None
+            else:
+                pre_y, pre_d, pre_dist = _pre_state_from_scrimmage(event)
+                transition_bucket = None
+                sim_outcome = None
             if pre_y < 80 and yardline < 80:
                 if current is not None and current.terminal == "open":
                     current.terminal = "left_rz"
@@ -217,6 +239,10 @@ def _parse_rz_drives(events: Iterable[Mapping[str, Any]]) -> list[RzDrive]:
                     touchdown=bool(event.get("touchdown")),
                     yards=int(event.get("yards") or 0),
                     incomplete=False,
+                    transition_bucket=(
+                        str(transition_bucket) if transition_bucket is not None else None
+                    ),
+                    sim_outcome=str(sim_outcome) if sim_outcome is not None else None,
                 )
                 current.snaps.append(snap)
                 if snap.touchdown:

@@ -62,6 +62,9 @@ def _state_key(yardline: int, down: int, distance: int) -> str:
 
 
 def _classify_outcome(snap: Any) -> str:
+    sim_outcome = getattr(snap, "sim_outcome", None)
+    if sim_outcome:
+        return str(sim_outcome)
     if snap.touchdown:
         return "touchdown"
     if snap.yards >= snap.pre_distance:
@@ -112,7 +115,14 @@ def main() -> None:
                     if snap.route != "rz_rush_transition":
                         continue
                     snaps += 1
-                    key = _state_key(snap.pre_yardline, snap.pre_down, snap.pre_distance)
+                    bucket = getattr(snap, "transition_bucket", None)
+                    key = (
+                        str(bucket)
+                        if bucket
+                        else _state_key(
+                            snap.pre_yardline, snap.pre_down, snap.pre_distance
+                        )
+                    )
                     bucket_counts[key] += 1
                     outcome = _classify_outcome(snap)
                     empirical[outcome] += 1

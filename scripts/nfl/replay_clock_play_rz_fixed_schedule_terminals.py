@@ -109,7 +109,22 @@ def _advance(
     return new_yardline, min(4, down + 1), max(1, distance - max(0, yards)), None
 
 
+def _rush_prior_key(snap: Any, yardline: int, down: int, distance: int) -> str:
+    bucket = getattr(snap, "transition_bucket", None)
+    if bucket:
+        return str(bucket)
+    return _state_key(yardline, down, distance)
+
+
 def _parent_outcome(snap: Any) -> tuple[str, int]:
+    sim_outcome = getattr(snap, "sim_outcome", None)
+    if sim_outcome:
+        if sim_outcome == "turnover":
+            return "turnover", 0
+        if sim_outcome == "touchdown":
+            return "touchdown", max(snap.yards, 100 - snap.pre_yardline)
+        if sim_outcome in {"first_down", "loss", "zero", "one_two", "short_gain"}:
+            return sim_outcome, snap.yards
     if snap.incomplete:
         return "incomplete", 0
     if snap.touchdown:
@@ -151,7 +166,9 @@ def _walk_drive(
         redraw_pass = mode in {"pass", "both"} and snap.route == "generic_pass_rz"
 
         if redraw_rush:
-            prior = _prior_bucket(rush_priors, _state_key(yardline, down, distance))
+            prior = _prior_bucket(
+                rush_priors, _rush_prior_key(snap, yardline, down, distance)
+            )
             outcome = _sample_weighted(prior["outcome_probabilities"], rng)
             yards = _sample_yards(prior, outcome, rng)
         elif redraw_pass:
