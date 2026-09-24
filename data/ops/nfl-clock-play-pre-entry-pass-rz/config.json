@@ -5,7 +5,6 @@
   "pre_entry_pass_rz_priors_path": "data/ops/nfl-clock-play-pre-entry-pass-rz/pre-entry-pass-rz-priors.json",
   "red_zone_fourth_decision_priors_path": "data/ops/nfl-clock-play-joint-rz-state/rz-fourth-decision-priors.json",
   "red_zone_rush_transition_priors_path": "data/ops/nfl-clock-play-rz-rush-transition/rush-transition-priors.json",
-  "red_zone_pass_transition_priors_path": "data/ops/nfl-clock-play-pre-entry-pass-rz/rz-pass-transition-priors.json",
   "engine_config": {
     "base_play_seconds": 28.0,
     "base_yards": 4.2,
@@ -28,7 +27,7 @@
     "pre_entry_pass_rz_enabled": true,
     "red_zone_fourth_decision_enabled": true,
     "red_zone_rush_transition_enabled": true,
-    "red_zone_pass_transition_enabled": true,
+    "red_zone_pass_transition_enabled": false,
     "regulation_quarter_seconds": 900,
     "timeout_window_seconds": 100,
     "timeouts_per_team": 3,
@@ -45,7 +44,7 @@
     }
   },
   "scope": {
-    "calibration": "train_only_joint_pre_entry_pass_rz_and_non_handoff_rz_pass",
+    "calibration": "train_only_joint_pre_entry_pass_rz_first_continuation",
     "held_out_data": false,
     "market_data": false,
     "purpose": "one train-supported handoff from an eligible 70-79 pass crossing to its first non-fourth red-zone continuation"
