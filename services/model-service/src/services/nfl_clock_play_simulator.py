@@ -523,6 +523,11 @@ class ClockPlaySimulator:
     ) -> bool:
         if self.state.quarter != 4:
             return False
+        if (
+            self.state.clock_seconds <= self.config.endgame_window_seconds
+            and self.state.yardline >= 55
+        ):
+            return False
         gap = self.state.score[offense] - self.state.score[_OTHER_SIDE[offense]]
         fg_distance = 117 - self.state.yardline
         if fg_distance > self.config.field_goal_max_distance:
