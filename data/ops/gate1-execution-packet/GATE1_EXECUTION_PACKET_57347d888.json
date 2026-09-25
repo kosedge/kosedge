@@ -1,0 +1,231 @@
+{
+  "label": "GATE1_EXECUTION_PACKET_READY",
+  "status": "GATE1_EXECUTION_PACKET_READY",
+  "clears_gate_1": false,
+  "executor": "Cursor (execute only; no redesign; no merge/deploy; no cloud agents)",
+  "authored_by": "Alex Rourke (contract) / packet assembly on box",
+  "bound_parent_sha": "57347d888d2832a735bb826f6105c44b34d9cc72",
+  "bound_parent_sha_short": "57347d888",
+  "repo": "https://github.com/kosedge/kosedge",
+  "branch_to_create": "gate1-cert-wrapper-57347d888",
+  "wrapper_files_only": [
+    "data/ops/nfl-clock-play-pre-entry-pass-rz/certification_thresholds.json",
+    "services/model-service/tests/test_nfl_clock_play_simulator.py"
+  ],
+  "go_vs_punt_fix": {
+    "file": "services/model-service/tests/test_nfl_clock_play_simulator.py",
+    "test": "test_rz_q4_trail3_regulation_clock_blocks_early_fg_range_field_goal",
+    "line_at_parent": 556,
+    "change": "assert ... == \"go\" -> assert ... == \"punt\" at clock_seconds=350.0",
+    "keep": "300.0 and 240.0 -> field_goal",
+    "do_not_touch": [
+      "_fourth_down_decision",
+      "any services/model-service/src"
+    ],
+    "ruling": "TEST_EXPECTATION_STALE_WRONG"
+  },
+  "contract_authority": {
+    "path": "/workspace/gate1-cert-contract/GATE1_CERTIFICATION_THRESHOLDS_57347d888.json",
+    "status": "CERT_CONTRACT_READY",
+    "forbidden_pm_0_05": true,
+    "not_fit_to_sha": true
+  },
+  "prior_measured": {
+    "train": {
+      "field_goal_makes_per_game": 3.264407963674467,
+      "final_total_mean": 45.59517988124345,
+      "offensive_td_per_game": 4.82046804051694,
+      "red_zone_entries_per_game": 6.697520083828152,
+      "core_drives_per_game": 22.564093608103388
+    },
+    "sim_2048": {
+      "field_goal_makes_per_game": 4.02392578125,
+      "final_total_mean": 44.6455078125,
+      "offensive_td_per_game": 4.68017578125,
+      "red_zone_entries_per_game": 6.82373046875,
+      "core_drives_per_game": 22.3203125
+    },
+    "source": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)"
+  },
+  "hard_gate_precompute": [
+    {
+      "metric": "field_goal_makes_per_game",
+      "train": 3.264407963674467,
+      "sim": 4.02392578125,
+      "abs_delta": 0.7595178175755328,
+      "abs_delta_max": 0.119987,
+      "expected_verdict": "FAIL",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        3.144421,
+        3.384395
+      ],
+      "notes": "FG volume mechanism fail under honest contract thresholds (delta >> max); NOT a threshold-fitting issue"
+    },
+    {
+      "metric": "final_total_mean",
+      "train": 45.59517988124345,
+      "sim": 44.6455078125,
+      "abs_delta": 0.9496720687434532,
+      "abs_delta_max": 1.7637,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        43.83148,
+        47.35888
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    },
+    {
+      "metric": "offensive_td_per_game",
+      "train": 4.82046804051694,
+      "sim": 4.68017578125,
+      "abs_delta": 0.14029225926694,
+      "abs_delta_max": 0.2966,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        4.523868,
+        5.117068
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    },
+    {
+      "metric": "red_zone_entries_per_game",
+      "train": 6.697520083828152,
+      "sim": 6.82373046875,
+      "abs_delta": 0.12621038492184766,
+      "abs_delta_max": 0.2474,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        6.45012,
+        6.94492
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    },
+    {
+      "metric": "core_drives_per_game",
+      "train": 22.564093608103388,
+      "sim": 22.3203125,
+      "abs_delta": 0.24378110810338782,
+      "abs_delta_max": 0.7439,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        21.820194,
+        23.307994
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    }
+  ],
+  "structural_expected_after_wrapper": [
+    {
+      "metric": "freeze_state_invariants_and_structural_checks",
+      "train": null,
+      "sim": "expected all true (unchanged model)",
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "prior freeze at parent; wrapper does not touch simulator src",
+      "notes": "Wrapper is certification-only; structural freeze state expected unchanged"
+    },
+    {
+      "metric": "train_denominator_lock",
+      "train": "2863 games; anchors match denom receipt",
+      "sim": null,
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "notes": "PBP/config/inputs hashes unchanged vs parent"
+    },
+    {
+      "metric": "exclusive_routing_pytest_all_pass",
+      "train": null,
+      "sim": "after wrapper: GO->PUNT assert fix; 38/38 expected",
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "Alex contract go_vs_punt ruling TEST_EXPECTATION_STALE_WRONG",
+      "notes": "Single-line test assert change only; do not touch _fourth_down_decision"
+    },
+    {
+      "metric": "certification_thresholds_artifact_present",
+      "train": null,
+      "sim": "PRESENT after wrapper commit at data/ops/.../certification_thresholds.json",
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "this packet commit/certification_thresholds.json",
+      "notes": "Was MISSING at parent; wrapper adds it"
+    }
+  ],
+  "expected_gate1_status_after_packet": "GATE_1_NOT_CLEARED",
+  "expected_gate1_one_liner": "GATE_1_NOT_CLEARED — FG hard gate still FAIL (mechanism); pytest+thresholds PRESENT; other 4 hard metrics PASS under contract",
+  "certification_thresholds_sha256": "e581653295e07372948df83507df8fe0a2e62472c0079ce486538624412ac66d",
+  "artifacts": {
+    "packet_md": "/workspace/gate1-execution-packet/GATE1_EXECUTION_PACKET_57347d888.md",
+    "packet_json": "/workspace/gate1-execution-packet/GATE1_EXECUTION_PACKET_57347d888.json",
+    "certification_thresholds_json": "/workspace/gate1-execution-packet/commit/certification_thresholds.json",
+    "certification_thresholds_sha256": "e581653295e07372948df83507df8fe0a2e62472c0079ce486538624412ac66d",
+    "test_assert_patch": "/workspace/gate1-execution-packet/commit/test_assert.patch",
+    "commands": [
+      "/workspace/gate1-execution-packet/commands/00_create_wrapper_commit.sh",
+      "/workspace/gate1-execution-packet/commands/01_prove_no_model_change.sh",
+      "/workspace/gate1-execution-packet/commands/02_bind_hashes.sh",
+      "/workspace/gate1-execution-packet/commands/03_run_gate1_recert.sh",
+      "/workspace/gate1-execution-packet/commands/apply_contract_thresholds.py"
+    ],
+    "hard_gate_precompute": "/workspace/gate1-execution-packet/hard_gate_precompute.json",
+    "expected_recert_outcome": "/workspace/gate1-execution-packet/EXPECTED_RECERT_OUTCOME.md"
+  },
+  "bindings": {
+    "config_sha256": "2b3a8ac22569206b620ad5efe4d5dfb8c3b848894eae33b0ae934d4f242812b1",
+    "inputs_sha256": "982a5a03e4e519cbdc8f9a344000f8391f3a17a8a71e61dc8e4a8ce21afacf30",
+    "pbp_sha256": "823304baa68961187307c1d08774bee80a58d9757ee57be01f6879b34c5bca2c",
+    "seed_manifest_sha256": "46de6deb6fde81d366aa8191e48e4e58e9938abe0be576fa9f60efe5c7cfcad2",
+    "root_seeds": {
+      "neutral-structural": 114729,
+      "home-offense-edge": 228451,
+      "away-defense-edge": 336182,
+      "tempo-contrast": 443917
+    }
+  },
+  "diagnostics_only": [
+    "yl_55_79_fourth_arrivals_per_game",
+    "exact_final_margin_3_rate",
+    "exact_final_margin_7_rate",
+    "overtime_games_rate",
+    "equalizing_fg_per_game",
+    "equalizing_td_per_game",
+    "td_per_red_zone_entry",
+    "fourth_down_go_share",
+    "third_down_conversion_rate",
+    "certify_drives_per_game_possession_start"
+  ],
+  "cursor_must_not": [
+    "clear Gate 1",
+    "fit or widen thresholds to green FG",
+    "apply +/-0.05 as Gate 1 tolerance",
+    "touch simulator source / redesign model",
+    "merge / deploy / launch cloud agents / start R14 / touch held-out"
+  ],
+  "execution_order": [
+    "00_create_wrapper_commit.sh",
+    "01_prove_no_model_change.sh",
+    "02_bind_hashes.sh",
+    "03_run_gate1_recert.sh",
+    "Write receipt under /tmp/gate1-recert-$NEW_SHA/",
+    "Stop with GATE_1_NOT_CLEARED if FG FAIL (expected)"
+  ]
+}
