@@ -1,0 +1,1064 @@
+{
+  "desk_date": "2026-09-28",
+  "pinned": false,
+  "package": "monday",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Monday, Sep 28",
+    "bottom_line": "Week 3 finals locked for Sunday/TNF/SNF clubs. Frame: W3 RECAP + W4 PREVIEW. All filed seats Pass on win-totals except DEN Over 2/5 KEEP (Reese; house 10.51 vs FD 9.5, gap 1.01). LAC Under DROPPED→Pass. PHI/CHI MNF → Tuesday — not in this package. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "NFC North: DET 31–24 vs NYJ; ATL 35–14 @ GB (TNF); MIN 23–16 @ TB. CHI OFF Mon (MNF vs PHI → Tue). All Pass — Coming soon ON.",
+      "NFC East: NYG 12–7 vs TEN; WSH 33–31 vs SEA; BAL 34–31 DAL (Rio). PHI OFF Mon (MNF @ CHI → Tue). All Pass.",
+      "NFC South: ATL 35–14 @ GB (TNF); CAR 18–21 @ CLE; NO 27–35 vs LV; TB 16–23 vs MIN. All Pass.",
+      "NFC West: SF 36–30 vs ARI; SEA 31–33 @ WSH; ARI 30–36 @ SF; LAR 26–30 @ DEN (SNF). All Pass.",
+      "AFC East: BUF 24–16 vs LAC; KC 24–10 @ MIA; NE 6–35 @ JAX; NYJ 24–31 @ DET. All Pass.",
+      "AFC South: IND 19–17 vs HOU; JAX 35–6 vs NE; HOU 17–19 @ IND; TEN 7–12 @ NYG. All Pass.",
+      "AFC North: PIT 30–27 vs CIN; CLE 21–18 vs CAR; BAL 34–31 DAL (Rio); CIN 27–30 @ PIT. All Pass.",
+      "AFC West: DEN 30–26 vs LAR (SNF) — Over 2/5 KEEP; KC 24–10 @ MIA; LAC 16–24 @ BUF (Pass); LV 35–27 @ NO."
+    ],
+    "what_to_watch": "Monday IR cycle into Week 4 (Mayfield thumb; Jefferson/Oliver; Watson shoulder; Stanley toe; Porter/Dowdle into TNF). TNF PIT@CLE Thu. MNF PHI@CHI is Tuesday desk only — not on this Mon package. Do not chase street. Coming soon ON.",
+    "sources": [
+      {
+        "label": "NFL.com — Vikings at Buccaneers FINAL",
+        "href": "https://www.nfl.com/games/vikings-at-buccaneers-2026-reg-3"
+      },
+      {
+        "label": "Broncos — Cover 4 DEN 30–26",
+        "href": "https://www.denverbroncos.com/news/cover-4-in-back-and-forth-prime-time-duel-broncos-earn-30-26-win-over-rams"
+      },
+      {
+        "label": "Rams — game recap LAR 26–30",
+        "href": "https://www.therams.com/news/game-recap-rams-fall-to-broncos-30-26-on-sunday-night-football"
+      },
+      {
+        "label": "ESPN — BAL 34 DAL 31 Rio",
+        "href": "https://www.espn.com/nfl/game/_/gameId/401872960/ravens-cowboys"
+      },
+      {
+        "label": "RotoWire — win totals stamp",
+        "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+      },
+      {
+        "label": "NFL.com — Week 4 schedule",
+        "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "ARI",
+      "title": "Cardinals — W3 recap + W4 preview (Sep 28)",
+      "bottom_line": "W3 FINAL L 30–36 @ SF. Brissett 38/52, 280, 2 TD; Love/Wilson produced; fell to 1-2. Conner IR-DTR stands (W4 @ NYG = game 4; return window earliest W5). Street 4.5 juiced Over vs house 6.55. Pass — house/Over-side conflict (gap 2.05).",
+      "key_points": [
+        "W3 RECAP FINAL: L 30–36 @ SF. Fall to 1-2.",
+        "W4 PREVIEW: @ NYG Sun Oct 4. Conner IR-DTR stands — Pass on RB lean.",
+        "NUMBER: Street 4.5 O-150/U+118 vs house 6.55. Coming soon ON. Pass — Over-side conflict."
+      ],
+      "what_to_watch": "Official W4 IR sheet @ NYG. Any Conner practice window language (still Pass until designation moves).",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 30–36. Conner IR-DTR. Gap 2.05 house/Over-side — Pass.",
+      "sources": [
+        {
+          "label": "CBS — Cardinals at 49ers FINAL",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20260927_ARI@SF/"
+        },
+        {
+          "label": "49ers.com — W3 box",
+          "href": "https://www.49ers.com/game-day/2026/reg-week3/cardinals-at-49ers/box-score"
+        },
+        {
+          "label": "azcardinals.com — Conner IR path (53)",
+          "href": "https://www.azcardinals.com/news/cardinals-make-moves-to-get-to-initial-53-on-roster"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons club — Sep 28",
+      "bottom_line": "Falcons 35, Packers 14. Penix returned; Bijan 194 rush / 2 TD. 1–2. Pass.",
+      "key_points": [
+        "TNF FINAL: W 35–14 @ GB. Bijan Robinson 194 rush yards, 2 TD; Falcons 242 rush / 498 total (CBS/AP; Falcons.com).",
+        "Michael Penix Jr. first action since Nov ACL: 18/25, 256, 1 TD, 1 INT; settled after 1/5 start (Falcons.com).",
+        "Drake London big receiving day; Austin Hooper 5-yd TD. A.J. Terrell multi-week OUT; C.J. Henderson started.",
+        "W4: @ NO Mon Oct 5 (MNF — Tue drop after that Mon). Preview frame only on this Mon package."
+      ],
+      "what_to_watch": "Penix second start rhythm. Bijan workload. Terrell return window.",
+      "is_material_depth": true,
+      "sot_flag": "Penix returned W3 TNF. Terrell multi-week — do not invent IR dates.",
+      "sources": [
+        {
+          "label": "Falcons — Game Breakdown vs GB",
+          "href": "https://www.atlantafalcons.com/news/game-breakdown-what-happened-in-falcons-vs-packers"
+        },
+        {
+          "label": "CBS — Bijan 194 Falcons 35-14",
+          "href": "https://www.cbssports.com/nfl/news/bijan-robinson-runs-for-194-yards-as-falcons-rout-packers-35-14/"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3 Rio FINAL: BAL 34–31 DAL. Loop 56-yd FG at 0:00 after Aubrey tied :07. Flowers + Madubuike active. 2–1. W4 hosts TEN. Pass — house 8.98 vs FD 11.5.",
+      "key_points": [
+        "ESPN / Cowboys club / NFL.com FINAL: Ravens 34, Cowboys 31 at Maracanã. Tyler Loop 56-yd FG at 0:00 after Aubrey 23-yd tied 31–31 with 0:07. Jackson 15/20, 186, 2 TD; Henry 26/89/2; Flowers 5/84.",
+        "Club inactives (Mink): Flowers + Madubuike active (returns); Stanley inactive (toe) → Vinson first career start; Lane still IR wrist. Buchanan 2026 debut (club).",
+        "W4: vs TEN, M&T Bank, Sun Oct 4, 1:00p ET CBS. Do not invent Week 4 Stanley/WR designations."
+      ],
+      "what_to_watch": "Stanley toe path; Flowers/Madubuike snap carry into TEN week.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL BAL 34–31 Rio; Loop walk-off; Flowers+Madubuike active; Stanley inactive. Pass.",
+      "sources": [
+        {
+          "label": "ESPN — BAL 34 DAL 31 Final (Rio)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872960/ravens-cowboys"
+        },
+        {
+          "label": "Cowboys — Starlights Rio tracker",
+          "href": "https://www.dallascowboys.com/news/starlights-big-play-tracker-for-cowboys-ravens-in-rio"
+        },
+        {
+          "label": "Cowboys — Rio box score",
+          "href": "https://www.dallascowboys.com/game-day/2026/season/ravens-at-cowboys/box-score"
+        },
+        {
+          "label": "Ravens — Flowers/Madubuike active Rio inactives",
+          "href": "https://www.baltimoreravens.com/news/zay-flowers-active-nnamdi-madubuike-will-play-ravens-cowboys-brazil-rio-inactives"
+        },
+        {
+          "label": "NFL.com — Ravens at Cowboys Rio",
+          "href": "https://www.nfl.com/games/ravens-at-cowboys-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: beat LAC 24–16 (club). Overcame five TOs; Allen multi rush TD streak (3); Rousseau 6 sacks / 3. Oliver ACTIVE. W4: vs NE. Pass — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL W vs LAC 24–16 · 3–0.",
+        "Allen multi-rush-TD streak; Rousseau 6 sacks / 3.",
+        "W4: vs NE — Pass."
+      ],
+      "what_to_watch": "Monday IR; Allen/Cook workload into NE.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL W 24–16 vs LAC. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Bills club FINAL recap",
+          "href": "https://www.buffalobills.com/news/bills-24-chargers-16-final-score-recap-highlights"
+        },
+        {
+          "label": "Bills Week 3 inactives",
+          "href": "https://www.buffalobills.com/news/bills-inactives-vs-chargers-week-3"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "CAR",
+      "title": "Panthers club — Sep 28",
+      "bottom_line": "Browns 21, Panthers 18. Young late TD; Watson/Fannin answer. 1–2. Pass.",
+      "key_points": [
+        "FINAL: L 18–21 @ CLE. Young to Metchie 8-yd TD for 18–13 @4:25 Q4; Fitzgerald four FGs; Chuba stuffed on 2-pt. Young sacked 3x (Panthers Rapid Reactions / Browns.com).",
+        "CLE: Watson 16/30 144 2 TD (both Fannin, incl. 14-yd GW :1:48); Hickman INT sealed. CAR injuries: Mike Jackson groin DNR; Jalen Coker quad; Jaycee Horn helped off late; Xavier Legette / Devin Lloyd / Nick Scott inactive (panthers.com).",
+        "W4: vs DET — SNF."
+      ],
+      "what_to_watch": "Young after late miss. Defense after 1H clamp. DET SNF prep.",
+      "is_material_depth": true,
+      "sot_flag": "No IR invent from this pull. Score FINAL club/AP.",
+      "sources": [
+        {
+          "label": "Panthers — Rapid Reactions",
+          "href": "https://www.panthers.com/news/rapid-reactions-panthers-fall-on-the-road-late-in-cleveland"
+        },
+        {
+          "label": "Browns — CLE 21 CAR 18 recap",
+          "href": "https://www.clevelandbrowns.com/news/browns-21-panthers-18-final-score-stats-game-recap"
+        },
+        {
+          "label": "AP/ABC — Browns rally 21-18",
+          "href": "https://abcnews.com/Sports/wireStory/deshaun-watson-sparks-late-browns-rally-sealing-21-136803329"
+        }
+      ]
+    },
+    {
+      "team_id": "CIN",
+      "title": "Bengals — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3: PIT 30–27 at Acrisure. Burrow 282/3 TD; ST miscues + late fumble. Iosivas IR thumb; Hill inactive again. 2–1. W4 hosts JAX. Pass — house 7.21 vs FD 10.5.",
+      "key_points": [
+        "bengals.com FINAL: Burrow 28/37, 282, 3 TD; Chase 9/98 TD; Higgins 6/90 TD; Gesicki 4th-down TD for 27–24 lead. Ten PIT points off ST miscues; Burrow fumble recovered by Joseph-Day seals L (club).",
+        "Club: Iosivas → Reserve/Injured (thumb, W2 @ HOU). Hill inactive again W3. Giles-Harris signed from PS (club Sep 26).",
+        "W4: vs JAX, Paycor, Sun Oct 4, 1:00p ET CBS. Sit inventing Hill Week 4 return."
+      ],
+      "what_to_watch": "Iosivas IR clock; B.J. Hill Achilles path into JAX week.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 27–30; Iosivas IR; Hill inactive. Pass.",
+      "sources": [
+        {
+          "label": "Bengals — W3 recap PIT 30–27",
+          "href": "https://www.bengals.com/news/bengals-steelers-recap-postgame-notes-quotes-stats-week-3-2026"
+        },
+        {
+          "label": "Bengals — Iosivas IR",
+          "href": "https://www.bengals.com/news/andrei-iosivas-reserve-injured-list-joe-giles-harris-bengals-roster-update"
+        },
+        {
+          "label": "Bengals — W3 inactives",
+          "href": "https://www.bengals.com/news/bengals-steelers-inactives-week-3-2026"
+        },
+        {
+          "label": "NFL.com — Bengals at Steelers FINAL",
+          "href": "https://www.nfl.com/games/bengals-at-steelers-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3: CLE 21–18 vs CAR. Watson→Fannin GW TD 1:48 Q4; Hickman INT seals. Jenkins OUT 3rd straight; Sampson still IR. 2–1. W4 hosts PIT TNF. Pass — house 8.59 vs FD 6.5.",
+      "key_points": [
+        "clevelandbrowns.com FINAL: Browns 21, Panthers 18. Watson 16/30, 144, 2 TD (both Fannin, incl. 14-yd GW); 2-pt to Boston. Hickman INT sealed (club).",
+        "Club: Jenkins OUT (back) third consecutive; Sampson IR knee stands. Campbell inactive W3 per named beat (was Q club) — sit inventing TNF status.",
+        "W4: vs PIT — TNF Thu Oct 1, 8:15p ET Prime. Short week — do not invent Jenkins return."
+      ],
+      "what_to_watch": "Jenkins back + Campbell into TNF vs PIT; Sampson IR clock.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL CLE 21–18; Jenkins OUT 3rd; Sampson IR. Pass.",
+      "sources": [
+        {
+          "label": "Browns — W3 recap CLE 21–18",
+          "href": "https://www.clevelandbrowns.com/news/browns-21-panthers-18-final-score-stats-game-recap"
+        },
+        {
+          "label": "Browns — Jenkins OUT / Campbell Q",
+          "href": "https://www.clevelandbrowns.com/news/tyson-campbell-questionable-for-week-3-vs-panthers-injury-report"
+        },
+        {
+          "label": "Browns — Sampson IR knee",
+          "href": "https://www.clevelandbrowns.com/news/browns-place-rb-dylan-sampson-on-injured-reserve"
+        },
+        {
+          "label": "NFL.com — Week 3 What We Learned",
+          "href": "https://www.nfl.com/news/2026-nfl-season-week-3-what-we-learned-from-sunday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys club — Sep 28",
+      "bottom_line": "Ravens 34, Cowboys 31 (Rio). Aubrey tied :07; Loop 56-yd FG at 0:00. 1–2. Pass.",
+      "key_points": [
+        "FINAL: L 31–34 vs BAL at Maracanã. Prescott 25/40 276 1 TD; Lamb 7/112; Williams 19/98/1; Turpin 9-yd rush TD for 28–24 lead (ESPN).",
+        "Aubrey 23-yd FG tied 31–31 with 0:07; Tyler Loop walked off with 56-yd FG at 0:00 (ESPN scoring). Henry 26/89/2; Jackson 15/20 186 2 TD.",
+        "Club Starlights: Barham/Ezeiruaku stuff Henry on 4th-and-goal from 1 (Q4); Dak→Lamb 49-yd set up Turpin TD. No club IR invent from this pull.",
+        "W4: @ HOU."
+      ],
+      "what_to_watch": "Red-zone D after goal-line stands. Prescott vs HOU. Walk-off loss hangover.",
+      "is_material_depth": true,
+      "sot_flag": "Score FINAL ESPN/CBS. Do not invent IR from Rio pull.",
+      "sources": [
+        {
+          "label": "ESPN — BAL 34 DAL 31 Final (Rio)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872960/ravens-cowboys"
+        },
+        {
+          "label": "Cowboys — Starlights Rio tracker",
+          "href": "https://www.dallascowboys.com/news/starlights-big-play-tracker-for-cowboys-ravens-in-rio"
+        },
+        {
+          "label": "Cowboys — Rio box score",
+          "href": "https://www.dallascowboys.com/game-day/2026/season/ravens-at-cowboys/box-score"
+        },
+        {
+          "label": "NFL.com — Ravens at Cowboys Rio",
+          "href": "https://www.nfl.com/games/ravens-at-cowboys-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "DEN",
+      "title": "Broncos — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3 SNF FINAL: DEN 30–26 vs LAR. Nix 1-yd TD run :47; Hufanga 66-yd pick-six + end-zone INT seal. Cooper still Commissioner’s Exempt. 2–1. Over 2/5 KEEP — house 10.51 vs FD 9.5 (gap 1.01); Over juice FD −120. Line moved 8.5→9.5 since Sep 21 (gap compressed, still ≥0.5). W4 @ SF.",
+      "key_points": [
+        "denverbroncos.com Cover 4 + therams.com FINAL: Broncos 30, Rams 26. Shut out 1H (0–16), then 30 second-half points. Nix three TDs after break incl. 1-yd dive GW with 0:47; Hufanga 66-yd pick-six + end-zone INT seal (club).",
+        "Cooper still Commissioner’s Exempt through W3 FINAL — no reinstatement. Pre-SNF club IR: Coleman OUT ankle; Mims Q foot; Harvey expected available after W2 inactive — do not invent W4 RB1.",
+        "W4: @ SF — Sun Oct 4, 4:25p ET CBS. Over stamp is house vs street, not one SNF result."
+      ],
+      "what_to_watch": "Cooper exempt duration; Coleman/Mims Week 4 designations before @ SF.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL DEN 30–26; Cooper still exempt. Over 2/5 KEEP gap 1.01 on FD 9.5.",
+      "sources": [
+        {
+          "label": "Broncos — Cover 4 DEN 30–26",
+          "href": "https://www.denverbroncos.com/news/cover-4-in-back-and-forth-prime-time-duel-broncos-earn-30-26-win-over-rams"
+        },
+        {
+          "label": "Rams — game recap LAR 26–30",
+          "href": "https://www.therams.com/news/game-recap-rams-fall-to-broncos-30-26-on-sunday-night-football"
+        },
+        {
+          "label": "NFL.com — Rams at Broncos",
+          "href": "https://www.nfl.com/games/rams-at-broncos-2026-reg-3"
+        },
+        {
+          "label": "Broncos — W3 injury report (Coleman OUT / Mims Q)",
+          "href": "https://www.denverbroncos.com/news/injuryreport/injury-report-rbs-rj-harvey-and-j-k-dobbins-not-assigned-game-statuses-rb-jonah-coleman-ruled-out-for-week-3-game-vs-rams"
+        },
+        {
+          "label": "NFL.com — Cooper Commissioner’s Exempt",
+          "href": "https://www.nfl.com/news/nfl-places-broncos-olb-jonathon-cooper-on-commissioner-s-exempt-list"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions — Sep 28",
+      "bottom_line": "Week 3: Detroit 31–24 over NY Jets. Gibbs three TDs; Clark strip sealed it. Week 4 at Carolina (SNF). Pass.",
+      "key_points": [
+        "detroitlions.com Sep 27: Lions 31, Jets 24. Gibbs 20/99 rush + 7/65 receiving with three TDs (two rush, one catch). Goff 25/32, 269, 2 TD, 0 INT; St. Brown TD catch (third straight game). Chuck Clark sack/strip of Geno Smith under a minute; Jack Campbell recovered (club).",
+        "Club inactives / IR: Miller (knee) and Mahogany (hip) returned after sitting W2. Maddox season-ending foot; Harper to IR (ankle). Bartch (foot) inactive. D.J. Reed medical-spotter exit 3Q, returned 4Q — do not invent severity. Do not invent OL/S starters.",
+        "Week 4: Detroit at Carolina, Sun Oct 4, 8:20p ET (SNF). Rush attack 131 yards after 66 in W2 (club)."
+      ],
+      "what_to_watch": "Reed status into SNF @ CAR; secondary depth after Maddox/Harper IR. Do not invent CB1.",
+      "is_material_depth": true,
+      "sot_flag": "W3 win locked 31–24. Miller/Mahogany back; Maddox/Harper IR; Reed returned after spotter exit. Flag DET S/CB into W4 SNF @ CAR. Do not invent starters.",
+      "sources": [
+        {
+          "label": "Lions — W3 RECAP vs Jets (Sep 27)",
+          "href": "https://www.detroitlions.com/news/recap-lions-vs-jets-goff-gibbs-stbrown"
+        },
+        {
+          "label": "Lions — W3 inactives (Sep 27)",
+          "href": "https://www.detroitlions.com/news/inactives-lions-vs-jets-bartch-white-fitzgerald"
+        },
+        {
+          "label": "Lions — final injury report designations (Sep 25)",
+          "href": "https://www.detroitlions.com/news/lions-vs-jets-injury-report-sept-25-bartch-miller-harper"
+        },
+        {
+          "label": "NFL.com — Jets at Lions game center (FINAL)",
+          "href": "https://www.nfl.com/games/jets-at-lions-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "GB",
+      "title": "Packers — Sep 28",
+      "bottom_line": "Week 3: Atlanta 35–14 at Green Bay (TNF). OL attrition; 17 rush yards. Week 4 at Tampa Bay. Pass.",
+      "key_points": [
+        "packers.com Sep 24–25: Falcons 35, Packers 14. Early 7–0 then 27 unanswered against. ATL 498 yards / 37:05 TOP; Bijan Robinson 29/194/2; Drake London 9/194; Penix returned (club + NFL.com FINAL).",
+        "Club inactives: Reed, Bako-Bewele, Banks, Brinson, Campbell out; Hargrave active. In-game: Monk (quad) exited; Cooper evaluated for concussion. Love 28/53, 312, 2 TD, 1 INT; rush 9/17. Do not invent OL/WR/LB starters.",
+        "Week 4: Green Bay at Tampa Bay, Sun Oct 4. Extra days after TNF (LaFleur via club takeaways)."
+      ],
+      "what_to_watch": "Reed/Bako-Bewele/Banks multi-week outs; Monk quad + Cooper concussion eval into @ TB. Do not invent starters.",
+      "is_material_depth": true,
+      "sot_flag": "W3 loss locked 35–14. Reed/Bako-Bewele/Banks inactive; Monk/Cooper in-game exits. Flag GB OL/WR/LB into W4 @ TB. Do not invent starters.",
+      "sources": [
+        {
+          "label": "Packers — W3 5 takeaways vs Falcons (Sep 25)",
+          "href": "https://www.packers.com/news/game-recap-5-takeaways-from-packers-loss-to-falcons-week-3-2026"
+        },
+        {
+          "label": "Packers — W3 in-game updates FINAL 35–14 (Sep 24)",
+          "href": "https://www.packers.com/news/in-game-updates-week-3-falcons-2026"
+        },
+        {
+          "label": "Packers — W3 inactives (Sep 24)",
+          "href": "https://www.packers.com/news/packers-falcons-week-3-inactives-sept-24-2026"
+        },
+        {
+          "label": "NFL.com — Falcons at Packers game center (FINAL)",
+          "href": "https://www.nfl.com/games/falcons-at-packers-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: lost at IND 19–17 (AP). Collins OUT hamstring 2nd straight. 0–3. W4: vs DAL. Pass — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL L @ IND 17–19 · 0–3.",
+        "Collins OUT hamstring again.",
+        "W4: vs DAL — Pass."
+      ],
+      "what_to_watch": "Monday Collins status; Al-Shaair groin.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 17–19 @ IND. Collins OUT. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Texans Week 3 inactives",
+          "href": "https://www.houstontexans.com/news/texans-inactives-week-3-vs-indianapolis-colts"
+        },
+        {
+          "label": "AP via Yahoo (Marot)",
+          "href": "https://sports.yahoo.com/articles/colts-end-9-game-skid-204911468.html"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "IND",
+      "title": "Colts — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: beat HOU 19–17 (club). Shrader 4 FGs incl GW 53 (not 43). Pierce IR heel. W4: vs WSH London. Pass (show both) — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL W vs HOU 19–17 · 1–2.",
+        "Shrader GW 53; Pierce IR heel.",
+        "W4: vs WSH London — Pass (show both)."
+      ],
+      "what_to_watch": "Shrader groin; Pierce IR; London travel.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL W 19–17 vs HOU. Pierce IR. Pass (show both). Coming soon ON.",
+      "sources": [
+        {
+          "label": "Colts club FINAL recap",
+          "href": "https://www.colts.com/news/colts-take-home-first-win-of-2026-in-week-3-vs-houston-texans"
+        },
+        {
+          "label": "ESPN — Pierce IR",
+          "href": "https://www.espn.com/nfl/story/_/id/50034054/colts-officially-place-wr-alec-pierce-ir-heel-issue"
+        },
+        {
+          "label": "AP via Yahoo (Marot)",
+          "href": "https://sports.yahoo.com/articles/colts-end-9-game-skid-204911468.html"
+        },
+        {
+          "label": "Colts London Week 4 announcement",
+          "href": "https://www.colts.com/news/colts-to-face-washington-commanders-at-tottenham-stadium-in-london-in-week-4-of-2026-nfl-regular-season"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "JAX",
+      "title": "Jaguars — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: beat NE 35–6 (AP). Lawrence 3 TD bounce-back; 6th straight home RS win. W4: @ CIN. Pass — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL W vs NE 35–6 · 2–1.",
+        "Lawrence 3 TD; home RS streak.",
+        "W4: @ CIN — Pass."
+      ],
+      "what_to_watch": "Monday IR; Green II IR continuity.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL W 35–6 vs NE. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP via CBS Sports",
+          "href": "https://www.cbssports.com/nfl/news/trevor-lawrence-throws-3-tds-as-jaguars-rout-patriots-35-6/"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "KC",
+      "title": "Chiefs — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3: KC 24–10 @ MIA. Mahomes 246/2 TD; Walker multi-score. Simmons OUT 3rd straight (week-to-week, not IR). 3–0. Pass — house 9.31 vs FD 11.5 (gap 2.19). W4 @ LV.",
+      "key_points": [
+        "NFL.com / ESPN FINAL: Chiefs 24, Dolphins 10. Mahomes 20/24, 246, 2 TD, 1 INT; Walker 18/70 rush TD + receiving TD; Kelce late TD after 4th-down stop (ESPN).",
+        "Club inactives: Simmons (back) OUT third straight — week-to-week, not IR (PFT). Conner also inactive. Mahomes off Fri IR / started and finished.",
+        "W4: @ LV — Sun Oct 4, 4:25p ET CBS Allegiant. Pass stands — no new lean."
+      ],
+      "what_to_watch": "Simmons week-to-week path before Raiders; LT continuity (Benson).",
+      "is_material_depth": true,
+      "sot_flag": "FINAL KC 24–10; Simmons OUT 3rd straight week-to-week. Pass.",
+      "sources": [
+        {
+          "label": "NFL.com — Chiefs at Dolphins FINAL",
+          "href": "https://www.nfl.com/games/chiefs-at-dolphins-2026-reg-3"
+        },
+        {
+          "label": "ESPN — recap KC 24–10",
+          "href": "https://www.espn.com/nfl/recap/_/gameId/401872952"
+        },
+        {
+          "label": "Chiefs — W3 inactives (Simmons)",
+          "href": "https://www.chiefs.com/news/week-3-inactive-players-chiefs-vs-dolphins"
+        },
+        {
+          "label": "PFT — Simmons OUT / Delane set",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/lt-josh-simmons-out-cb-mansoor-delane-set-to-play-for-chiefs-dolphins"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3: BUF 24–16 at Highmark. 0–3. Biadasz season IR + Perryman IR≥4 still true; Slater available. Under DROPPED→Pass Sep 21 — Pass stands (house 8.48 vs FD 7.5 gap 0.98; do not invent new lean). W4 @ SEA.",
+      "key_points": [
+        "chargers.com / bills.com FINAL: Bills 24, Chargers 16. Herbert 20/34, 226, 1 TD, 1 INT; Cook 24/154/1 for BUF. Bills 5 TOs; LAC failed to fully capitalize (club/PFT).",
+        "Biadasz still season IR (ACL); Perryman IR eligible return window Week 5 vs DEN. Slater available W3. Donte Jackson concussion exit (ESPN) — do not invent IR.",
+        "W4: @ SEA — Sun Oct 4, 4:25p ET CBS. Pass stands — no new Under."
+      ],
+      "what_to_watch": "Interior OL continuity into Seattle; Perryman Week 5 window context only.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 16–24; Biadasz/Perryman IR hold; Under DROPPED→Pass (no new lean).",
+      "sources": [
+        {
+          "label": "Chargers — W3 recap @ BUF",
+          "href": "https://www.chargers.com/news/bills-game-recap-week-3-2026"
+        },
+        {
+          "label": "Bills — FINAL 24–16",
+          "href": "https://www.buffalobills.com/news/bills-24-chargers-16-final-score-recap-highlights"
+        },
+        {
+          "label": "Chargers — Biadasz IR",
+          "href": "https://www.chargers.com/news/tyler-biadasz-injured-reserve-sign-gary-jennings-2026"
+        },
+        {
+          "label": "ESPN — LAC@BUF recap",
+          "href": "https://www.espn.com/nfl/recap/_/gameId/401872953"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams — W3 recap + W4 preview (Sep 28)",
+      "bottom_line": "W3 FINAL L 26–30 @ DEN (SNF). Stafford late; Hufanga pick-six + end-zone INT seal. Watson shoulder OUT 2H. W4 @ PHI. Street 11.5 vs house 11.07. Pass — gap 0.43.",
+      "key_points": [
+        "W3 RECAP FINAL: L 26–30 @ DEN. Fall to 1–2.",
+        "W4 PREVIEW: @ PHI Sun Oct 4. Pass — no reprice off one SNF loss.",
+        "NUMBER: Street 11.5 O+112/U−136 vs house 11.07. Coming soon ON. Pass."
+      ],
+      "what_to_watch": "Official W4 injury report @ PHI. Watson shoulder / Ferguson ankle designations.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 26–30. Watson OUT 2H shoulder. Gap 0.43 — Pass.",
+      "sources": [
+        {
+          "label": "Rams — W3 game recap FINAL 26–30",
+          "href": "https://www.therams.com/news/game-recap-rams-fall-to-broncos-30-26-on-sunday-night-football"
+        },
+        {
+          "label": "Broncos — Cover 4 DEN 30–26",
+          "href": "https://www.denverbroncos.com/news/cover-4-in-back-and-forth-prime-time-duel-broncos-earn-30-26-win-over-rams"
+        },
+        {
+          "label": "NFL.com — Rams at Broncos",
+          "href": "https://www.nfl.com/games/rams-at-broncos-2026-reg-3"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3: LV 35–27 @ NO. Bowers debut 10/116/1; Cousins 3 TD; 19 unanswered after trailing 27–16. 3–0. Pass — house 6.07 vs FD 7.5. W4 hosts KC.",
+      "key_points": [
+        "Saints.com / CBS FINAL: Raiders 35, Saints 27. Cousins 22/33, 248, 3 TD; Bowers 10/116/1 (season debut after meniscus trim); Washington Jr. 36-yd rush TD; Gay 3/3 FG. LV scored 19 unanswered after trailing 27–16 (club/CBS).",
+        "NO led 27–16 late 3Q; four turnovers (Shough path) flipped game. Bowers active W3 confirmed (NBC Sports) — FINAL box unlocked.",
+        "W4: vs KC — Sun Oct 4, 4:25p ET CBS Allegiant. Pass on 7.5."
+      ],
+      "what_to_watch": "Bowers usage into KC week after debut; any Monday IR from Superdome.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL W 35–27; Bowers debut 10/116/1. Pass.",
+      "sources": [
+        {
+          "label": "CBS — LV@NO box 35–27",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20260927_LV@NO/"
+        },
+        {
+          "label": "Saints — Week 3 game center",
+          "href": "https://www.neworleanssaints.com/game-day/2026/reg-week3/raiders-at-saints/box-score"
+        },
+        {
+          "label": "NBC Sports — Bowers active W3",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-27/brock-bowers-knee-active-for-week-3-vs-saints"
+        },
+        {
+          "label": "NFL.com — Week 3 What We Learned",
+          "href": "https://www.nfl.com/news/2026-nfl-season-week-3-what-we-learned-from-sunday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: lost to KC 24–10 (AP). Achane knee OUT opening drive. 0–3. W4: @ MIN. Pass (show both) — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL L vs KC 10–24 · 0–3.",
+        "Achane knee OUT opening drive.",
+        "W4: @ MIN — Pass (show both)."
+      ],
+      "what_to_watch": "Monday Achane IR/status; Wright stinger.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 10–24 vs KC. Achane knee. Pass (show both). Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP via CBS Miami",
+          "href": "https://www.cbsnews.com/miami/news/kenneth-walker-iii-2-tds-chiefs-beat-dolphins-24-10-devon-achane-injury-sept-27-26/"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Sep 28",
+      "bottom_line": "Week 3: Minnesota 23–16 at Tampa Bay. Murray started; Price 86-yd PR TD; Reichard 3/3 FG. Week 4 hosts Miami. Pass.",
+      "key_points": [
+        "vikings.com / buccaneers.com Sep 27: Vikings 23, Buccaneers 16. Murray 15/29, 168, 1 TD, 1 INT; Addison 5/90/1 (41-yd TD); Jones 17/58. Price 86-yd punt-return TD; Reichard FGs 54/56/43 (26 consecutive). Rodgers INT sealed after Mayfield exit (club).",
+        "In-game exits (club observations): Jefferson ankle (tried return, unable); Oliver biceps; Demmings hamstring. Do not invent IR. Thorson (hamstring) out — Hekker punted. TB: Mayfield dislocated thumb late after Van Ginkel INT; Bain Jr./Trotter/Nunez-Roches inactive (buccaneers.com).",
+        "Week 4: Miami at Minnesota, Sun Oct 4. Record 3–0 after road win (club + Avery cross-check)."
+      ],
+      "what_to_watch": "Jefferson / Oliver / Demmings Week 4 designations before MIA; Mayfield status is TB beat (do not invent MIN lean off it).",
+      "is_material_depth": true,
+      "sot_flag": "W3 win locked 23–16. Jefferson ankle + Oliver biceps exits — flag WR/TE into W4 vs MIA. Do not invent starters.",
+      "sources": [
+        {
+          "label": "Vikings — W3 game observations (Sep 27)",
+          "href": "https://www.vikings.com/news/buccaneers-week-3-game-observations-isaiah-rodgers-homecoming"
+        },
+        {
+          "label": "Buccaneers — W3 FINAL 23–16 (Sep 27)",
+          "href": "https://www.buccaneers.com/news/bucs-lose-minnesota-vikings-week-3-2026-score-23-16"
+        },
+        {
+          "label": "Buccaneers — W3 inactives",
+          "href": "https://www.buccaneers.com/news/vikings-bucs-inactives-rookies-rueben-bain-jr-josiah-trotter-ruled-out"
+        },
+        {
+          "label": "NFL.com — Vikings at Buccaneers game center (FINAL)",
+          "href": "https://www.nfl.com/games/vikings-at-buccaneers-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: lost at JAX 35–6 (AP). Maye 1 TD/6 INT through 3; benched Q4. W4: @ BUF. Pass — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL L @ JAX 6–35 · 1–2.",
+        "Maye 1 TD/6 INT through 3; benched.",
+        "W4: @ BUF — Pass."
+      ],
+      "what_to_watch": "Monday OL (Van Roten); Maye role clarity.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 6–35 @ JAX. Maye regression. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP via CBS Sports",
+          "href": "https://www.cbssports.com/nfl/news/trevor-lawrence-throws-3-tds-as-jaguars-rout-patriots-35-6/"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "NO",
+      "title": "Saints club — Sep 28",
+      "bottom_line": "Raiders 35, Saints 27. Shough 4 TD but 4 turnovers; Q4 collapse after 27–16 lead. 1–2. Pass.",
+      "key_points": [
+        "FINAL: L 27–35 vs LV (club Game Recap + CBS). Shough 29/42 255 4 TD 1 INT; Olave 9/107; Johnson 8/53/2; Fant 4/33/2.",
+        "Led 27–16 late 3Q; zero 4Q points. Four turnovers (fumbles + INT) flipped game. Bowers 10/116/1 for LV; Cousins 3 TD passes.",
+        "W4: vs ATL — **MNF Week 4** (Tue drop after that Mon)."
+      ],
+      "what_to_watch": "Ball security. Shough after 4-TD/4-TO. ATL MNF prep (Tue card).",
+      "is_material_depth": true,
+      "sot_flag": "Score FINAL club/CBS. No invent IR from this pull.",
+      "sources": [
+        {
+          "label": "Saints — Game Recap Raiders 35 Saints 27",
+          "href": "https://www.neworleanssaints.com/news/"
+        },
+        {
+          "label": "CBS — LV@NO box 35-27",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20260927_LV@NO/"
+        },
+        {
+          "label": "Saints — Week 3 game center",
+          "href": "https://www.neworleanssaints.com/game-day/2026/reg-week3/raiders-at-saints/box-score"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants club — Sep 28",
+      "bottom_line": "Giants 12, Titans 7. Winston first start; Zvada four FGs. Burns knee exit. Dart IR rest of regular season. 2–1. Pass.",
+      "key_points": [
+        "FINAL: W 12–7 vs TEN. Club: Winston 14/22, 118 yards; Skattebo 20/60 + 30-yd catch; Najee 9/52; NYG 139 rush; Zvada 4/4 FG all scoring (giants.com Instant Analysis).",
+        "Jaxson Dart: IR / miss rest of regular season (MCL/PCL/meniscus; ACL intact). Club + NFL Network. Winston starter (giants.com Wed Sep 24).",
+        "Brian Burns knee mid-4Q — helped off (CBS/AP). Holland end-zone INT :17 sealed.",
+        "W4: vs ARI Sun."
+      ],
+      "what_to_watch": "Burns Week 4 status. Winston plan vs ARI. Dart recovery not for W4 card.",
+      "is_material_depth": true,
+      "sot_flag": "Dart IR rest of regular season is club/NFL Network. Burns knee exit — do not invent IR.",
+      "sources": [
+        {
+          "label": "Giants — Instant Analysis 12-7",
+          "href": "https://www.giants.com/news/instant-analysis-giants-defeat-titans-12-7"
+        },
+        {
+          "label": "Giants — Dart IR / Winston start",
+          "href": "https://www.giants.com/news/jaxson-dart-to-miss-rest-of-regular-season-jameis-winston-to-start-quarterback-injury-john-harbaugh"
+        },
+        {
+          "label": "NFL.com — Dart season-ending surgery",
+          "href": "https://www.nfl.com/news/giants-qb-jaxson-dart-season-ending-knee-surgery"
+        },
+        {
+          "label": "CBS — Giants 12 Titans 7 / Burns knee",
+          "href": "https://www.cbssports.com/nfl/news/giants-grind-past-titans-12-7-lose-brian-burns-to-knee-injury/"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: lost at DET 31–24 (AP). Erased 14-pt Q4 deficit; Clark sack-fumble sealed. Hall thigh; Fitzpatrick still OUT. W4: @ CHI. Pass — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL L @ DET 24–31 · 1–2.",
+        "Hall thigh; Fitzpatrick still OUT; Wilson cleared.",
+        "W4: @ CHI — Pass."
+      ],
+      "what_to_watch": "Monday Hall/Parham/Fitzpatrick status.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 24–31 @ DET. Hall thigh + Fitz OUT. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP via Sportsnet (Gibbs/Jets)",
+          "href": "https://www.sportsnet.ca/nfl/article/jahmyr-gibbs-scores-3-touchdowns-to-lift-lions-past-jets/"
+        },
+        {
+          "label": "PFT — Wilson cleared",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/garrett-wilson-cleared-after-concussion-evaluation"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers — Week 3 RECAP + Week 4 PREVIEW — Sep 28",
+      "bottom_line": "W3: PIT 30–27 vs CIN. Harmon strip-sack; Joseph-Day FR seals. Warren 127 rush. Porter Jr inactive 3rd straight; Dowdle inactive toe. 2–1. W4 @ CLE TNF. Pass — house 8.16 vs FD 7.5.",
+      "key_points": [
+        "steelers.com / bengals.com / NFL.com FINAL: Steelers 30, Bengals 27. Rodgers 19/34, 292, 3 TD, 1 INT; Warren 17-127 rush + 3/49 rec. Boswell 33 FG → 30–27 with 2:15; Harmon strip-sack of Burrow; Joseph-Day FR 0:44 seals (club).",
+        "Club inactives: Dowdle (toe); Porter Jr. (third straight); Allar; Howard 3QB. Pittman active after W2 foot OUT. Homer signed from PS (club).",
+        "W4: @ CLE — TNF Thu Oct 1, 8:15p ET Prime. Do not invent TNF Dowdle/Porter status."
+      ],
+      "what_to_watch": "Dowdle toe + Porter Jr. into short TNF week @ CLE.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL PIT 30–27; Porter inactive 3rd; Dowdle inactive toe. Pass.",
+      "sources": [
+        {
+          "label": "Steelers — W3 recap PIT 30–27",
+          "href": "https://www.steelers.com/news/steelers-beat-bengals-30-27"
+        },
+        {
+          "label": "Steelers — W3 inactives",
+          "href": "https://www.steelers.com/news/steelers-inactives-for-week-3-vs-bengals-x3568"
+        },
+        {
+          "label": "Bengals — W3 recap",
+          "href": "https://www.bengals.com/news/bengals-steelers-recap-postgame-notes-quotes-stats-week-3-2026"
+        },
+        {
+          "label": "NFL.com — Bengals at Steelers FINAL",
+          "href": "https://www.nfl.com/games/bengals-at-steelers-2026-reg-3"
+        }
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks — W3 recap + W4 preview (Sep 28)",
+      "bottom_line": "W3 FINAL L 31–33 @ WSH. Darnold returned (379/4TD/2INT); 3 TO (Price fumble + 2 INT incl. Medrano pick-six) snapped 12-game streak. W4 hosts LAC. Street 10.5 vs house 10.81. Pass — gap 0.31.",
+      "key_points": [
+        "W3 RECAP FINAL: L 31–33 @ WSH. Darnold return; 3 TO cost.",
+        "W4 PREVIEW: vs LAC Sun Oct 4. Pass — no reprice off one loss.",
+        "NUMBER: Street 10.5 O-142/U+112 vs house 10.81. Coming soon ON. Pass."
+      ],
+      "what_to_watch": "Official W4 injury report vs LAC. Emmanwori hamstring / Love calf designations.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 31–33. Darnold returned. Gap 0.31 — Pass.",
+      "sources": [
+        {
+          "label": "CBS — Seahawks at Commanders FINAL",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20260927_SEA@WAS/"
+        },
+        {
+          "label": "Seahawks.com — rapid reactions W3",
+          "href": "https://www.seahawks.com/news/rapid-reactions-turnovers-costly-as-seahawks-lose-33-31-in-washington"
+        },
+        {
+          "label": "Seahawks.com — W3 inactives",
+          "href": "https://www.seahawks.com/news/seahawks-at-commanders-week-3-inactives"
+        },
+        {
+          "label": "Commanders.com — W3 box",
+          "href": "https://www.commanders.com/game-day/seattle-seahawks-at-washington-commanders/box-score"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers — W3 recap + W4 preview (Sep 28)",
+      "bottom_line": "W3 FINAL W 36–30 vs ARI (home). Purdy 4 pass TD; Kittle 2; CMC rush TD. Collins SE/IR + Stribling IR stand; Evans Out ribs mid-game (refresh club). W4 hosts DEN. Street 11.5 juiced Over vs house 8.53. Pass — house/Under-side conflict (gap 2.97).",
+      "key_points": [
+        "W3 RECAP FINAL: W 36–30 vs ARI. Open 3-0.",
+        "W4 PREVIEW: vs DEN Sun Oct 4. Depth flags only — Pass on game lean.",
+        "NUMBER: Street 11.5 O-144/U+114 vs house 8.53. Coming soon ON. Pass. Never mint KEI."
+      ],
+      "what_to_watch": "Official W4 injury report vs DEN. Evans ribs / any further WR-DL moves.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL W 36–30. Collins SE + Stribling IR. Gap 2.97 house/Under-side — Pass.",
+      "sources": [
+        {
+          "label": "CBS — Cardinals at 49ers FINAL",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20260927_ARI@SF/"
+        },
+        {
+          "label": "49ers.com — W3 box",
+          "href": "https://www.49ers.com/game-day/2026/reg-week3/cardinals-at-49ers/box-score"
+        },
+        {
+          "label": "NFL.com — Cardinals at 49ers",
+          "href": "https://www.nfl.com/games/cardinals-at-49ers-2026-reg-3"
+        },
+        {
+          "label": "49ers.com — Collins OUT / season",
+          "href": "https://www.49ers.com/news/alfred-collins-out-james-thomas-jr-questionable-vs-rams-injury-report-ahead-of-sfvslar"
+        },
+        {
+          "label": "49ers.com — Stribling OUT path",
+          "href": "https://www.49ers.com/news/de-zhaun-stribling-out-kaelon-black-and-eddy-pineiro-questionable-vs-dolphins-injury-report-ahead-of-miavssf"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers club — Sep 28",
+      "bottom_line": "Vikings 23, Buccaneers 16. Murray returns; Mayfield late INT/injury. TB 0–3. Pass.",
+      "key_points": [
+        "FINAL: L 16–23 vs MIN. Murray 15/29 168 1 TD 1 INT; Addison 5/90/1; Price 86-yd PR TD; Reichard 3/3 FG (CBS box).",
+        "Mayfield 17/34 217 1 TD 1 INT — injured on late Van Ginkel INT; #10 J.Daniels mop-up (CBS PBP). Irving 15/46. Bain Jr. / Trotter / Nunez-Roches inactive (buccaneers.com).",
+        "W4: vs GB."
+      ],
+      "what_to_watch": "Mayfield Week 4 status. Bain/Trotter return. GB at home.",
+      "is_material_depth": true,
+      "sot_flag": "Mayfield late injury — do not invent IR. Score FINAL CBS/NFL.com.",
+      "sources": [
+        {
+          "label": "CBS — MIN@TB box FINAL 23-16",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20260927_MIN@TB/"
+        },
+        {
+          "label": "NFL.com — Vikings at Buccaneers game center",
+          "href": "https://www.nfl.com/games/vikings-at-buccaneers-2026-reg-3"
+        },
+        {
+          "label": "Bucs — Week 3 inactives",
+          "href": "https://www.buccaneers.com/news/vikings-bucs-inactives-rookies-rueben-bain-jr-josiah-trotter-ruled-out"
+        }
+      ]
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans — Week 3 recap / Week 4 preview — Sep 28",
+      "bottom_line": "W3 FINAL: lost at NYG 12–7 (Giants club). 0–3; offense stalled until late TD. Spears/Carmona ankle exits thin. W4: @ BAL. Pass — Coming soon ON.",
+      "key_points": [
+        "W3 FINAL L @ NYG 7–12 · 0–3.",
+        "Spears/Carmona ankle exits (thin).",
+        "W4: @ BAL — Pass."
+      ],
+      "what_to_watch": "Monday Spears/Carmona severity.",
+      "is_material_depth": true,
+      "sot_flag": "W3 FINAL L 7–12 @ NYG. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Giants club instant analysis",
+          "href": "https://www.giants.com/news/instant-analysis-giants-defeat-titans-12-7"
+        },
+        {
+          "label": "Titans Week 3 inactives",
+          "href": "https://www.tennesseetitans.com/news/game-inactives-week-3-titans-at-giants"
+        },
+        {
+          "label": "Exa scores hub 2026-09-27",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-09-27"
+        },
+        {
+          "label": "NFL.com — Week 4 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "WAS",
+      "title": "Commanders club — Sep 28",
+      "bottom_line": "Commanders 33, Seahawks 31. Mariota three TD passes; Medrano pick-six. First win. Daniels still out (elbow). 1–2. Pass.",
+      "key_points": [
+        "FINAL: W 33–31 vs SEA. Mariota 19/31 183 3 TD (White 6, Burks 11, McLaurin 30) ESPN. Medrano 50-yd pick-six. Mariota 9-yd scramble sealed (AP/ABC + club blog).",
+        "Daniels elbow: expected ~3 weeks or sooner with brace (NFL Network via reporting). Mariota first start in place.",
+        "SEA: Darnold returned — 379 yards, 4 TD, 2 INT. JSN 10/128/2. Emmanwori hamstring. Chenal (neck carted) / Patrick (ankle) for WAS.",
+        "W4: vs IND in London (Tottenham)."
+      ],
+      "what_to_watch": "Daniels return window. Chenal/Patrick. London slate prep.",
+      "is_material_depth": true,
+      "sot_flag": "Daniels still out W3; return estimate is named-beat/NFL Network — do not invent IR.",
+      "sources": [
+        {
+          "label": "ESPN — SEA@WSH Final",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872955/seahawks-commanders"
+        },
+        {
+          "label": "AP/ABC — Commanders 33 Seahawks 31",
+          "href": "https://abcnews.com/Sports/wireStory/commanders-snap-seattles-12-game-winning-streak-beat-136803420"
+        },
+        {
+          "label": "Commanders — Gameday blog",
+          "href": "https://www.commanders.com/news/gameday-blog-commanders-vs-seahawks-week-3"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 Rio FINAL BAL 34–31; Loop 56 FG; Flowers+Madubuike active; Stanley inactive; W4 vs TEN; Pass on 11.5."
+    },
+    {
+      "team_id": "CIN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 L 27–30; Iosivas IR; Hill inactive; W4 vs JAX; Pass on 10.5."
+    },
+    {
+      "team_id": "CLE",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 W 21–18; Jenkins OUT 3rd; Sampson IR; W4 vs PIT TNF; Pass on 6.5."
+    },
+    {
+      "team_id": "DEN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 SNF FINAL DEN 30–26; Nix TD :47; Hufanga INT seal; Cooper still exempt. Over 2/5 KEEP — gap 1.01 on FD 9.5; Over −120."
+    },
+    {
+      "team_id": "DET",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "W3 FINAL DET 31–24; Gibbs 3 TD; Miller/Mahogany back; Maddox/Harper IR; W4 SNF @ CAR; Pass; Coming soon ON.",
+      "status": "touched"
+    },
+    {
+      "team_id": "GB",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "W3 FINAL ATL 35–14; Reed/Bako-Bewele/Banks inactive; Monk/Cooper exits; W4 @ TB; Pass; Coming soon ON.",
+      "status": "touched"
+    },
+    {
+      "team_id": "KC",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 W 24–10; Simmons OUT 3rd; Mahomes 246/2; W4 @ LV; Pass on 11.5 — gap 2.19."
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 L 16–24 → 0–3; Biadasz/Perryman IR hold. Under DROPPED→Pass stands; W4 @ SEA."
+    },
+    {
+      "team_id": "LV",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 W 35–27; Bowers debut 10/116/1; W4 vs KC; Pass on 7.5."
+    },
+    {
+      "team_id": "MIN",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "W3 FINAL MIN 23–16; Murray start; Price PR TD; Jefferson/Oliver exits; W4 vs MIA; Pass; Coming soon ON.",
+      "status": "touched"
+    },
+    {
+      "team_id": "PIT",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W3 W 30–27; Porter inactive 3rd; Dowdle inactive toe; W4 @ CLE TNF; Pass on 7.5."
+    }
+  ]
+}
