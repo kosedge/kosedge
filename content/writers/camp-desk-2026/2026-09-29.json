@@ -1,0 +1,255 @@
+{
+  "desk_date": "2026-09-29",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk \u2014 Tuesday, Sep 29",
+    "bottom_line": "MNF drop: CHI 27\u20137 PHI (Keenum 247/2 TD pass + rush TD; CHI D 3 takeaways). IR/availability amend: TB Mayfield min 3 weeks / Jalon Daniels starts vs GB; MIA Achane IR (ACL season); NYG Burns torn ACL surgery; MIN Jefferson day-to-day ankle + Oliver torn bicep surgery. All Pass. DEN Over 2/5 KEEP unchanged. Coming soon ON \u2014 no minted KEI.",
+    "storylines": [
+      "MNF FINAL: CHI 27\u20137 vs PHI at Soldier Field. Keenum first start since 2023; Bears 17\u20130 in 2H. PHI/CHI were held off Mon package \u2014 filed here. Both clubs 2\u20131.",
+      "TB: Bowles \u2014 Mayfield dislocated thumb, MRI clean of fracture/ligament/tendon; min 3 weeks; no IR for now. Jalon Daniels starts W4 vs GB. Pass.",
+      "MIA: Club \u2014 Achane placed on IR (ACL tear; season). Hafley/NFL.com confirmed severity Mon. Pass.",
+      "NYG: Harbaugh club \u2014 Burns torn ACL, surgery; miss remainder. Thibodeaux/Carter workload. Pass.",
+      "MIN: O'Connell \u2014 Jefferson ankle sprain avoided long-term (day-to-day vs MIA); Oliver torn bicep \u2192 surgery. Pass.",
+      "Quiet skip: LAR Watson (already OUT 2H; not IR) / BAL Stanley progress thin / PIT Porter FP+Dowdle DNP estimated only / HOU Collins hopeful / DET Reed already returned. DEN Over KEEP stands. No 32-card dump. No Riley leans \u2014 Coming soon ON."
+    ],
+    "what_to_watch": "TNF PIT@CLE Thu Oct 1 (Porter/Dowdle designations). Wed\u2013Fri practice for Jefferson / Mayfield IR decision / Burns IR txn. CHI Jones knee + PHI Hurts post-concussion-check into W4. Do not restamp street or mint KEI.",
+    "sources": [
+      {
+        "label": "Bears \u2014 Game Recap CHI 27 PHI 7",
+        "href": "https://www.chicagobears.com/news/game-recap-case-keenum-defense-lead-bears-to-dominant-victory-over-eagles"
+      },
+      {
+        "label": "Eagles \u2014 Game Recap Bears 27 Eagles 7",
+        "href": "https://www.philadelphiaeagles.com/news/eagles-at-bears-game-recap-september-28-2026-nfl-week-3-regular-season-monday-night-football"
+      },
+      {
+        "label": "CBS / AP \u2014 PHI@CHI box FINAL 27-7",
+        "href": "https://www.cbssports.com/nfl/gametracker/recap/NFL_20260928_PHI@CHI/"
+      },
+      {
+        "label": "Buccaneers \u2014 Mayfield min 3 weeks; Daniels starts",
+        "href": "https://www.buccaneers.com/news/baker-mayfield-three-weeks-minimum-thumb-injury-update"
+      },
+      {
+        "label": "NFL.com \u2014 Mayfield out; Jalon Daniels starts",
+        "href": "https://www.nfl.com/news/buccaneers-qb-baker-mayfield-thumb-out-at-least-three-weeks-jalon-daniels"
+      },
+      {
+        "label": "Dolphins \u2014 Achane IR roster move",
+        "href": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x4614"
+      },
+      {
+        "label": "NFL.com \u2014 Achane ACL season / IR",
+        "href": "https://www.nfl.com/news/dolphins-rb-devon-achane-miss-2026-season-acl-tear"
+      },
+      {
+        "label": "Giants \u2014 Burns torn ACL; surgery",
+        "href": "https://www.giants.com/news/coach-john-harbaugh-confirms-torn-acl-for-olb-brian-burns-injury-update-week-3"
+      },
+      {
+        "label": "vikings.com \u2014 Jefferson / Oliver takeaways",
+        "href": "https://www.vikings.com/news/jj-mccarthy-trade-kevin-oconnell-nolan-teasley-quarterbacks-takeaways"
+      },
+      {
+        "label": "Rams \u2014 Watson not IR; likely out W4",
+        "href": "https://www.therams.com/news/injury-updates-mcvay-says-terrance-ferguson-ankle-and-jaylen-watson-shoulder-likely-out-for-week-4-at-eagles-latest-on-colby-parkinson-shoulder-and-puka-nacua-hip"
+      },
+      {
+        "label": "Steelers \u2014 W4 estimated IR (Porter FP / Dowdle DNP)",
+        "href": "https://www.steelers.com/news/week-4-injury-report-browns"
+      }
+    ]
+  },
+  "preview_delta": [
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "MNF FINAL W 27\u20137; Keenum start; W4 vs NYJ; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "PHI",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "MNF FINAL L 7\u201327; Hurts concussion check returned; W4 vs LAR; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "TB",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Mayfield min 3 weeks; Jalon Daniels starts W4 vs GB. Pass."
+    },
+    {
+      "team_id": "MIA",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Achane IR (ACL season). Pass."
+    },
+    {
+      "team_id": "NYG",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Burns torn ACL surgery; miss remainder. Pass."
+    },
+    {
+      "team_id": "MIN",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Jefferson day-to-day ankle; Oliver torn bicep surgery. Pass."
+    }
+  ],
+  "team_notes": [
+    {
+      "team_id": "CHI",
+      "title": "Bears \u2014 Sep 29",
+      "bottom_line": "MNF FINAL: Bears 27, Eagles 7 at Soldier Field. Keenum (Williams hamstring; Bagent cleared protocol Sunday but Keenum started) 24/34, 247, 2 TD pass + 1-yd rush TD; defense three takeaways and 62 yards allowed in the second half. Improve to 2\u20131 after a W2 loss to Minnesota. Week 4 hosts the Jets. Pass \u2014 Coming soon ON.",
+      "key_points": [
+        "chicagobears.com / CBS/AP FINAL: CHI 27\u20137. Opening Burden shovel TD; Santos FG 29 and 48; Raymond 41-yd TD; Keenum 1-yd sneak. Quarters PHI 0-7-0-0 / CHI 7-3-10-7. Bears 375 total / 36:53 TOP.",
+        "Defense: Booker punch \u2192 Woods FR; Thieneman end-zone INT of Dalton while Hurts was evaluated for concussion; Edwards INT of Hurts on fourth-and-5. PHI 2-of-9 third down.",
+        "In-game: LT Braxton Jones exited knee (3Q); Cam Lewis hip; Raymond shaken up on punt return and returned. Do not invent IR. W4: vs NYJ Sun Oct 4 (club schedule)."
+      ],
+      "what_to_watch": "Jones knee / Lewis hip designations before Jets. Williams/Bagent practice path \u2014 do not invent QB1. Pass \u2014 no mint.",
+      "is_material_depth": true,
+      "sot_flag": "MNF W 27\u20137 locked. Keenum start; CHI D 3 takeaways. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Bears \u2014 Game Recap CHI 27 PHI 7",
+          "href": "https://www.chicagobears.com/news/game-recap-case-keenum-defense-lead-bears-to-dominant-victory-over-eagles"
+        },
+        {
+          "label": "CBS / AP \u2014 PHI@CHI box",
+          "href": "https://www.cbssports.com/nfl/gametracker/recap/NFL_20260928_PHI@CHI/"
+        },
+        {
+          "label": "Bears \u2014 2026 schedule (W4 vs NYJ)",
+          "href": "https://www.chicagobears.com/schedule/"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins \u2014 Sep 29",
+      "bottom_line": "Monday roster: Achane placed on injured reserve after a torn ACL in the Week 3 loss to Kansas City \u2014 out for the season (club + NFL.com). Fall to 0\u20133 into @ MIN. Pass \u2014 Coming soon ON. Do not invent a new lean off RB IR.",
+      "key_points": [
+        "miamidolphins.com Sep 28: Achane \u2192 Reserve/Injured; Cooper Jr. waived; Ferrell/Miller released from PS.",
+        "NFL.com (Rapoport/Schefter) + Hafley Mon: ACL tear confirmed; season over. Gordon / Wright (stinger-foot inactive W3) depth path only \u2014 do not invent RB1.",
+        "Mon shelf already flagged Achane knee OUT opening drive \u2014 this card is the IR placement reverse."
+      ],
+      "what_to_watch": "Corresponding RB promotions; Wright availability @ MIN. Pass \u2014 no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Achane IR (ACL season). Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Dolphins \u2014 Achane IR roster move",
+          "href": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x4614"
+        },
+        {
+          "label": "NFL.com \u2014 Achane ACL season",
+          "href": "https://www.nfl.com/news/dolphins-rb-devon-achane-miss-2026-season-acl-tear"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings \u2014 Sep 29",
+      "bottom_line": "O'Connell Monday: Jefferson ankle sprain avoided long-term injury \u2014 day-to-day into Week 4 vs Miami (not ruled out). Oliver torn bicep will require surgery (extended miss / season long-shot). 3\u20130. Pass \u2014 Coming soon ON.",
+      "key_points": [
+        "vikings.com takeaways (O'Connell Mon): Jefferson \u2014 progress swelling / work week; no W4 Out designation yet. Do not invent active/inactive.",
+        "Oliver torn bicep \u2192 surgery; TE group (Hockenson + depth) must cover. Demmings hamstring \u2014 likely miss some time (thin; no separate invent).",
+        "Mon shelf flagged Jefferson/Oliver exits \u2014 this is the Monday severity amend. Pass on MIN win-total."
+      ],
+      "what_to_watch": "Wed\u2013Fri Jefferson practice before MIA. Any Oliver IR txn. Pass \u2014 no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Jefferson day-to-day; Oliver torn bicep surgery. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "vikings.com \u2014 Jefferson / Oliver takeaways",
+          "href": "https://www.vikings.com/news/jj-mccarthy-trade-kevin-oconnell-nolan-teasley-quarterbacks-takeaways"
+        },
+        {
+          "label": "CBS Minnesota \u2014 Jefferson ankle sprain",
+          "href": "https://www.cbsnews.com/minnesota/news/vikings-justin-jefferson-ankle-sprain-injury/"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants \u2014 Sep 29",
+      "bottom_line": "Harbaugh Monday: Burns suffered a torn ACL in the fourth quarter vs Tennessee and will undergo surgery \u2014 miss the remainder of the season. Reverses Mon shelf \u201cdo not invent IR\u201d severity watch. 2\u20131 into vs ARI. Pass \u2014 Coming soon ON.",
+      "key_points": [
+        "giants.com Sep 28: non-contact-ish contact knee on the edge; ACL confirmed; surgery upcoming. Thibodeaux and Carter expected to shoulder more pass-rush snaps.",
+        "Dart already IR rest of regular season (prior shelf). Consecutive weeks losing QB1 then top edge.",
+        "Do not invent corresponding 53-man fill or a win-total lean off Burns ACL."
+      ],
+      "what_to_watch": "Burns IR transaction timing; edge depth vs ARI. Pass \u2014 no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Burns torn ACL / surgery / season. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Giants \u2014 Burns torn ACL; surgery",
+          "href": "https://www.giants.com/news/coach-john-harbaugh-confirms-torn-acl-for-olb-brian-burns-injury-update-week-3"
+        },
+        {
+          "label": "NFL.com \u2014 Burns torn ACL",
+          "href": "https://www.nfl.com/news/giants-brian-burns-torn-acl-win-titans"
+        }
+      ]
+    },
+    {
+      "team_id": "PHI",
+      "title": "Eagles \u2014 Sep 29",
+      "bottom_line": "MNF FINAL: Bears 27, Eagles 7 at Soldier Field. Hurts 16/25, 153, 0 TD, 1 INT plus a 1-yd sneak TD as time expired in the first half; three turnovers; 62 yards in the second half. Fall to 2\u20131. Week 4 hosts the Rams. Pass \u2014 Coming soon ON.",
+      "key_points": [
+        "philadelphiaeagles.com / CBS/AP FINAL: PHI 7\u201327. Barkley 15-82 (only 9 rush yards after half). Smith 6-65. Greenard debut (limited snaps). Ertz 1-9 in first game back.",
+        "Hurts briefly exited for a concussion evaluation after a late hit by D'Marco Jackson; Dalton's end-zone INT (Thieneman) came while Hurts waited clearance; Hurts returned and finished. Do not invent IR/concussion designation.",
+        "W4: vs LAR Sun Oct 4 (CBS next-game note / NFL schedule). Short week after MNF \u2014 Pass on win-total."
+      ],
+      "what_to_watch": "Any post-MNF Hurts/OL designations before Rams. Pass \u2014 no mint.",
+      "is_material_depth": true,
+      "sot_flag": "MNF L 7\u201327 locked. Three TOs; Hurts returned after check. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Eagles \u2014 Game Recap Bears 27 Eagles 7",
+          "href": "https://www.philadelphiaeagles.com/news/eagles-at-bears-game-recap-september-28-2026-nfl-week-3-regular-season-monday-night-football"
+        },
+        {
+          "label": "CBS / AP \u2014 PHI@CHI box",
+          "href": "https://www.cbssports.com/nfl/gametracker/recap/NFL_20260928_PHI@CHI/"
+        },
+        {
+          "label": "Bears \u2014 Game Recap",
+          "href": "https://www.chicagobears.com/news/game-recap-case-keenum-defense-lead-bears-to-dominant-victory-over-eagles"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers \u2014 Sep 29",
+      "bottom_line": "Bowles Monday: Mayfield (dislocated right thumb) will miss a minimum of three weeks \u2014 MRI showed no fracture or ligament/tendon tear; surgery and IR not planned for now. Undrafted rookie Jalon Daniels will start Week 4 vs Green Bay. 0\u20133. Pass \u2014 Coming soon ON.",
+      "key_points": [
+        "buccaneers.com / NFL.com: first QB other than Mayfield to start since Brady 2022; Daniels finished W3 mop-up (0/3, Hail Mary INT). Bowles may add a third QB (Stick on PS).",
+        "Mon shelf: Mayfield late injury \u2014 do not invent IR. This card is the starter naming + timeline amend (not IR).",
+        "W4: vs GB Sun Oct 4. Pass \u2014 no minted KEI off QB change."
+      ],
+      "what_to_watch": "Any Mayfield IR decision if recovery slips; Daniels first-start protection plan. Pass \u2014 no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Mayfield min 3 weeks; Daniels starts vs GB. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Buccaneers \u2014 Mayfield min 3 weeks; Daniels starts",
+          "href": "https://www.buccaneers.com/news/baker-mayfield-three-weeks-minimum-thumb-injury-update"
+        },
+        {
+          "label": "NFL.com \u2014 Mayfield out; Daniels starts",
+          "href": "https://www.nfl.com/news/buccaneers-qb-baker-mayfield-thumb-out-at-least-three-weeks-jalon-daniels"
+        },
+        {
+          "label": "ESPN \u2014 Mayfield thumb (Laine)",
+          "href": "https://www.espn.com/nfl/story/_/id/50052996/buccaneers-mayfield-thumb-least-three-weeks-bowles-says"
+        }
+      ]
+    }
+  ]
+}
