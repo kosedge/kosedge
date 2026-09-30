@@ -43,3 +43,14 @@ curl -sS "https://model-service-production-e253.up.railway.app/cfb/season-engine
 # Local full smoke
 bash scripts/ci/production-smoke.sh
 ```
+
+## Copilot startup blocked by paused/uncommitted changes
+
+If Copilot cloud agent shows **“Failed to start working because we paused your changes”**, do this before retrying:
+
+1. Click **Show your changes** and review the file list.
+2. Keep legitimate research/audit work by committing it on the current branch/worktree.
+   - Preferred message for this incident class: `chore(nfl): preserve R14 audit and validation infrastructure`
+3. For temporary or unwanted edits, use `git stash push` instead of discarding blindly.
+4. Confirm the tree is clean (`git status` shows no staged/unstaged changes).
+5. Start the agent again only after the workspace is clean.
