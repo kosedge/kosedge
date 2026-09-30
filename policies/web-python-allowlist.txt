@@ -46,6 +46,10 @@ apps/web/src/ncaam_lab/schedule_sot_d.py
 apps/web/src/ncaam_lab/kenpom_asof.py
 apps/web/src/ncaam_lab/fair_b2.py
 apps/web/src/ncaam_lab/fair_b2_pace_v1.py
+apps/web/src/ncaam_lab/neutral_site_identity.py
+apps/web/src/ncaam_lab/fair_b2_pace_neutral_v1.py
+apps/web/scripts/lab_ncaam_b2_pace_neutral_v1_train_a.py
+apps/web/tests_pipeline/test_ncaam_lab_b2_pace_neutral_v1.py
 apps/web/src/ncaam_lab/materialize.py
 apps/web/src/ncaam_lab/results_attach.py
 apps/web/src/ncaam_lab/scorecard.py
