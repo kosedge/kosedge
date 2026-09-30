@@ -1,0 +1,304 @@
+{
+  "desk_date": "2026-09-30",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Wednesday, Sep 30",
+    "bottom_line": "Week 4 REG live. Afternoon IR/availability only: CAR Horn+Jackson dual-CB IR; TB McMillan IR (Mayfield min-3w path holds); GB Reed neck surgery season / IR; MIN Oliver IR txn (Jefferson still D2D); NYG Burns IR txn; HOU Edwards IR; BAL Gwyn fibula surgery 2–3 months (Ioane at C); TEN Carmona+Slater IR/surgery catch-up. All Pass. DEN Over 2/5 KEEP unchanged. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "CAR: Club Wed — starting CBs Jaycee Horn (quad) and Mike Jackson (groin) to IR into SNF vs DET. Moore / Tyus III from PS; Rochell to PS. Pass.",
+      "TB: Club Wed — Jalen McMillan (knee) to IR ≥4. Melifonwu promoted; Rypien to PS. Mayfield still min 3 weeks / no IR; Daniels starts vs GB. Pass.",
+      "GB: LaFleur Wed — Jayden Reed neck surgery, season-ending; IR path. Watson/Golden/Moore + Kraft load. Pass.",
+      "MIN: Club Tue 4p (post-shelf) — Josh Oliver to IR after torn-bicep surgery framing. Jefferson Wed DNP still day-to-day vs MIA. Pass.",
+      "NYG: Club Tue 4:51p (post-shelf) — Burns to Reserve/Injured; Berrios/Jones up; OBJ released. Pass.",
+      "HOU: NFL.com Wed — DT Mario Edwards (knee) to IR after W3 non-contact vs IND. Braswell from PS. Pass.",
+      "BAL: ESPN Wed — Gwyn fractured fibula, surgery, miss 2–3 months; Ioane preparing first start at C. Pass.",
+      "TEN: Club Tue IR (quiet-skipped Tue desk) + Saleh Wed surgery — Carmona (ankle) + Slater (foot) IR; Dellinger/Carter up. Pass.",
+      "Quiet skip: PIT Porter FP+Dowdle DNP (no TNF designation yet) / Jefferson thin DNP / Mayfield no IR reverse / CHI Jones + PHI Hurts no Wed reverse / WAS Daniels limited already-framed / HOU Collins hopeful. DEN Over KEEP stands. No 32-card dump. No Riley leans — Coming soon ON."
+    ],
+    "what_to_watch": "TNF PIT@CLE Thu Oct 1 final Porter/Dowdle/Ramsey designations. Fri–Sun Jefferson practice into MIA. Mayfield IR only if recovery slips. CHI Jones / PHI Hurts into W4. Do not restamp street or mint KEI.",
+    "sources": [
+      {
+        "label": "Panthers — Horn + Jackson IR",
+        "href": "https://www.panthers.com/news/panthers-place-jaycee-horn-and-mike-jackson-on-injured-reserve"
+      },
+      {
+        "label": "Buccaneers — McMillan IR; Rypien PS",
+        "href": "https://www.buccaneers.com/news/roster-moves-jalen-mcmillan-ir-qb-added-practice-squad"
+      },
+      {
+        "label": "CBS — Reed neck surgery season (LaFleur)",
+        "href": "https://www.cbssports.com/nfl/news/jayden-reed-injury-update-packers-wr-neck-surgery/"
+      },
+      {
+        "label": "NFL.com — Wed roundup (Horn/Jackson IR; Reed; Edwards IR; McMillan IR)",
+        "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+      },
+      {
+        "label": "vikings.com — Oliver IR; Van Noy/Brosmer up",
+        "href": "https://www.vikings.com/news/kyle-van-noy-max-brosmer-53-man-josh-oliver-injured-reserve"
+      },
+      {
+        "label": "Giants — Week 4 tracker Burns IR txn",
+        "href": "https://www.giants.com/news/week-4-tracker-latest-news-notes-roster-moves"
+      },
+      {
+        "label": "ESPN — Gwyn fibula surgery 2–3 months",
+        "href": "https://www.espn.com/nfl/story/_/id/50066661/sources-ravens-starting-center-jovaughn-gwyn-set-miss-months"
+      },
+      {
+        "label": "Titans — Carmona + Slater IR; Dellinger/Carter up",
+        "href": "https://www.tennesseetitans.com/news/titans-promote-g-garrett-dellinger-rb-michael-carter-to-active-roster-place-guards-fernando-carmona-and-jackson-slater-on-injured-reserve"
+      },
+      {
+        "label": "NBC — Texans Edwards IR",
+        "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-30/texans-place-dt-mario-edwards-on-ir"
+      }
+    ]
+  },
+  "preview_delta": [
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Gwyn fibula surgery 2–3 months; Ioane at C. Pass."
+    },
+    {
+      "team_id": "CAR",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Horn + Jackson dual-CB IR. Pass."
+    },
+    {
+      "team_id": "GB",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Reed neck surgery season / IR. Pass."
+    },
+    {
+      "team_id": "HOU",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Edwards knee IR. Pass."
+    },
+    {
+      "team_id": "MIN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Oliver IR txn; Jefferson still D2D. Pass."
+    },
+    {
+      "team_id": "NYG",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Burns IR txn post-shelf. Pass."
+    },
+    {
+      "team_id": "TB",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "McMillan IR; Mayfield path holds. Pass."
+    },
+    {
+      "team_id": "TEN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Carmona + Slater IR/surgery catch-up. Pass."
+    }
+  ],
+  "team_notes": [
+    {
+      "team_id": "BAL",
+      "title": "Ravens — Sep 30",
+      "bottom_line": "ESPN Wednesday: starting center Jovaughn Gwyn expected to miss two to three months with a fractured fibula that will likely require surgery (Fowler/Hensley). With Pocic also dealing with a knee, Minter said Monday rookie first-rounder Olaivavega Ioane is preparing to make his first start at center vs Tennessee. Pass — Coming soon ON.",
+      "key_points": [
+        "ESPN (Fowler via Hensley, Wed): Gwyn carted in Rio W3 win over Dallas; fractured fibula; surgery likely; 2–3 month miss. Club looking at OL help (Glasgow / Eguakun / Hergel workouts Tue).",
+        "Minter Mon: Ioane (No. 14 overall; started W1–3 at RG) preparing first career start at C. Do not invent IR txn timing.",
+        "W4: vs TEN Sun Oct 4. Pass on BAL win-total — no mint."
+      ],
+      "what_to_watch": "Any Gwyn IR transaction; Ioane/C depth chart vs TEN. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Gwyn fibula surgery 2–3 months; Ioane at C. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN — Gwyn fibula surgery 2–3 months",
+          "href": "https://www.espn.com/nfl/story/_/id/50066661/sources-ravens-starting-center-jovaughn-gwyn-set-miss-months"
+        },
+        {
+          "label": "NFL.com — Wed roundup Gwyn",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        }
+      ]
+    },
+    {
+      "team_id": "CAR",
+      "title": "Panthers — Sep 30",
+      "bottom_line": "Club Wednesday: starting cornerbacks Jaycee Horn (significant quad) and Mike Jackson (groin) placed on injured reserve after Week 3 exits vs Cleveland. Dual-CB IR into Sunday Night vs Detroit. Pass — Coming soon ON.",
+      "key_points": [
+        "panthers.com (Gantt, Wed ~10:42a ET): Horn + Jackson → IR Wednesday morning. Canales Mon called Horn's quad \"significant\"; Jackson left early W3 and did not return.",
+        "Corresponding moves: WR David Moore and RB Anthony Tyus III signed from the practice squad; CB Robert Rochell signed to the PS. Active CB depth: Will Lee III, Akayleb Evans, Chau Smith-Wade.",
+        "W4: vs DET Sun Oct 4 (SNF). Pass on CAR win-total — no mint."
+      ],
+      "what_to_watch": "Any additional CB elevations; Lee snap share vs DET. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Horn + Jackson dual-CB IR. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Panthers — Horn + Jackson IR",
+          "href": "https://www.panthers.com/news/panthers-place-jaycee-horn-and-mike-jackson-on-injured-reserve"
+        },
+        {
+          "label": "Panthers — Wed injury report (IR note)",
+          "href": "https://www.panthers.com/news/week-4-wednesday-injury-report-four-offensive-starters-out-jalen-coker-xavier-legette-damien-lewis-monroe-freeling"
+        },
+        {
+          "label": "NFL.com — Wed roundup Horn/Jackson IR",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        }
+      ]
+    },
+    {
+      "team_id": "GB",
+      "title": "Packers — Sep 30",
+      "bottom_line": "LaFleur Wednesday: Jayden Reed will undergo neck surgery and miss the remainder of the 2026 season after the Week 2 cart-off at the Jets — season-ending; IR path (Schefter). Not believed career-threatening but significant time. Pass — Coming soon ON.",
+      "key_points": [
+        "CBS / LaFleur Wed: \"It will be a season-ending [injury]\"; Reed informed club yesterday surgery is required. LaFleur: not career-threatening on current understanding; out a significant amount of time.",
+        "NFL.com Wed roundup: Schefter — Reed will be placed on injured reserve. Load shifts to Watson / Golden / Moore + TE Kraft.",
+        "W4: @ TB Sun Oct 4 (Daniels starting opposite). Pass on GB win-total — no mint."
+      ],
+      "what_to_watch": "Official Reed IR transaction posting; WR depth vs TB. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Reed neck surgery season / IR. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "CBS — Reed neck surgery season (LaFleur)",
+          "href": "https://www.cbssports.com/nfl/news/jayden-reed-injury-update-packers-wr-neck-surgery/"
+        },
+        {
+          "label": "NFL.com — Wed roundup Reed IR",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        }
+      ]
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans — Sep 30",
+      "bottom_line": "NFL.com / NBC Wednesday: DT Mario Edwards Jr. (knee) placed on injured reserve after a non-contact knee injury in Week 3 at Indianapolis — did not return. Season-long miss possible if surgery required. Pass — Coming soon ON.",
+      "key_points": [
+        "NFL.com Wed roundup: Edwards → IR. NBC (Carter): non-contact knee W3 vs IND; surgery risk / rest-of-season possible.",
+        "Corresponding: DE Chris Braswell signed to active roster from practice squad (NFL.com Wed).",
+        "W4: vs DAL Sun Oct 4. Pass — do not invent a lean off DT IR. Coming soon ON."
+      ],
+      "what_to_watch": "Any surgery confirmation on Edwards; DL snap redistribution. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Edwards knee IR. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "NFL.com — Wed roundup Edwards IR",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        },
+        {
+          "label": "NBC — Texans Edwards IR",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-30/texans-place-dt-mario-edwards-on-ir"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Sep 30",
+      "bottom_line": "Club Tuesday 4:00p ET (after Tue Club Desk shelf): Josh Oliver placed on Injured Reserve after the torn-bicep / surgery framing on the Tue card — IR txn completes what_to_watch. Jefferson (ankle) did not practice Wednesday and remains day-to-day into Miami — no Out designation invent. 3–0. Pass — Coming soon ON.",
+      "key_points": [
+        "vikings.com (Peters, Tue 4p): Oliver → IR; Van Noy and Max Brosmer signed from PS to 53 (McCarthy trade opened QB room space). Jeshaun Jones returned from suspension.",
+        "Tue Club Desk: Oliver torn bicep → surgery; watch for IR txn — this card is that placement. Do not invent season-ending beyond IR ≥4 minimum.",
+        "NFL.com Wed: O'Connell — Jefferson won't practice Wed; still day-to-day / feels better. Thin progress — hold D2D framing. W4: vs MIA Sun Oct 4."
+      ],
+      "what_to_watch": "Thu–Sun Jefferson practice before MIA. TE snap share (Hockenson + depth) without Oliver. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Oliver IR txn; Jefferson still D2D. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "vikings.com — Oliver IR; Van Noy/Brosmer up",
+          "href": "https://www.vikings.com/news/kyle-van-noy-max-brosmer-53-man-josh-oliver-injured-reserve"
+        },
+        {
+          "label": "NFL.com — Wed Jefferson DNP note",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants — Sep 30",
+      "bottom_line": "Club Tuesday 4:51p ET (after Tue Club Desk shelf): Brian Burns officially placed on Reserve/Injured after Monday's torn-ACL / surgery confirmation — IR txn completes Tue what_to_watch. Berrios and Charlie Jones signed from PS; Odell Beckham Jr. released; Mustipher to PS. 2–1 into vs ARI. Pass — Coming soon ON.",
+      "key_points": [
+        "giants.com Week 4 tracker (Tue 4:51p): Burns → Reserve/Injured among five moves. Severity already on Tue card (Harbaugh Mon ACL + surgery / miss remainder) — this is the roster txn amend.",
+        "Thibodeaux / Carter pass-rush workload holds. Do not invent a win-total lean off Burns IR.",
+        "W4: vs ARI Sun Oct 4. Pass — Coming soon ON."
+      ],
+      "what_to_watch": "Edge depth vs ARI; any further 53-man churn. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Burns IR txn. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Giants — Week 4 tracker Burns IR",
+          "href": "https://www.giants.com/news/week-4-tracker-latest-news-notes-roster-moves"
+        },
+        {
+          "label": "Giants — Burns torn ACL; surgery (Mon)",
+          "href": "https://www.giants.com/news/coach-john-harbaugh-confirms-torn-acl-for-olb-brian-burns-injury-update-week-3"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers — Sep 30",
+      "bottom_line": "Club Wednesday: Jalen McMillan (knee) placed on injured reserve — miss ≥4 after exiting on the third play vs Minnesota. Melifonwu promoted to the 53; Brett Rypien signed to the practice squad as a third QB while Mayfield remains min-three-weeks / no IR and Jalon Daniels starts vs Green Bay. 0–3. Pass — Coming soon ON.",
+      "key_points": [
+        "buccaneers.com (Smith, Wed ~10:29a ET): McMillan → IR (second straight season with an IR stint after 2025 neck). Knee W3; also missed W1 knee / limited W2.",
+        "Tue Club Desk: Mayfield min 3 weeks / Daniels starts — unchanged (Bowles still no IR for Mayfield). Rypien gives PS depth behind Daniels / Stick.",
+        "W4: vs GB Sun Oct 4. Pass — no minted KEI off WR IR + QB change."
+      ],
+      "what_to_watch": "Any Mayfield IR decision if recovery slips; WR pecking order without McMillan. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "McMillan IR; Mayfield path holds; Daniels starts. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Buccaneers — McMillan IR; Rypien PS",
+          "href": "https://www.buccaneers.com/news/roster-moves-jalen-mcmillan-ir-qb-added-practice-squad"
+        },
+        {
+          "label": "Buccaneers — Mayfield min 3 weeks; Daniels starts",
+          "href": "https://www.buccaneers.com/news/baker-mayfield-three-weeks-minimum-thumb-injury-update"
+        },
+        {
+          "label": "NFL.com — Wed roundup McMillan IR",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        }
+      ]
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans — Sep 30",
+      "bottom_line": "Club Tuesday (quiet-skipped on Tue Club Desk) + Saleh Wednesday surgery confirm: guards Fernando Carmona (ankle) and Jackson Slater (foot) placed on injured reserve after Week 3 exits at the Giants — both headed for surgery. Dellinger and RB Michael Carter promoted. Catch-up IR file. Pass — Coming soon ON.",
+      "key_points": [
+        "tennesseetitans.com (Wyatt, Tue 2:11p ET): Carmona + Slater → IR; Garrett Dellinger (claimed off CLE waivers path) and Michael Carter signed to the 53; Broeker / Robinson / Pappoe to PS.",
+        "NFL.com Wed / Saleh: Carmona ankle surgery; Slater foot surgery. Dual-G IR thins the interior into BAL.",
+        "Quiet-skipped Tue shelf — filed here on Wed pass (same catch-up pattern as ATL Terrell on 9/23). W4: vs BAL Sun Oct 4. Pass — no mint."
+      ],
+      "what_to_watch": "Dellinger / Mafi snap share at G vs BAL. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Carmona + Slater IR/surgery. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Titans — Carmona + Slater IR; Dellinger/Carter up",
+          "href": "https://www.tennesseetitans.com/news/titans-promote-g-garrett-dellinger-rb-michael-carter-to-active-roster-place-guards-fernando-carmona-and-jackson-slater-on-injured-reserve"
+        },
+        {
+          "label": "NFL.com — Wed Saleh Carmona/Slater surgery",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-30"
+        }
+      ]
+    }
+  ]
+}
