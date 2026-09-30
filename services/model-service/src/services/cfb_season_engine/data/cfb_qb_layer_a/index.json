@@ -1,0 +1,133 @@
+{
+  "qb_feature_contract_version": "cfb-qb-feature-v1",
+  "generated_at": "2026-09-11T23:03:59Z",
+  "layer": "A",
+  "seasons": {
+    "2022": {
+      "path": "services/model-service/src/services/cfb_season_engine/data/cfb_qb_layer_a/season_2022.json",
+      "n_mapped_fbs": 131,
+      "n_layer_a": 131,
+      "coverage": 1.0,
+      "talent_all": {
+        "n": 131,
+        "mean": 70.8456,
+        "sd": 6.8713,
+        "p10": 60.75,
+        "p25": 65.16,
+        "p50": 71.97,
+        "p75": 75.13,
+        "p90": 80.35,
+        "min": 54.62,
+        "max": 84.67
+      },
+      "talent_established": {
+        "n": 129,
+        "mean": 71.0676,
+        "sd": 6.683,
+        "p10": 61.762,
+        "p25": 65.37,
+        "p50": 72.05,
+        "p75": 75.17,
+        "p90": 80.362,
+        "min": 56.75,
+        "max": 84.67
+      },
+      "class_counts": {
+        "incumbent": 100,
+        "portal": 30,
+        "true_freshman": 1
+      },
+      "portal_n": 30,
+      "lowsample_n": 2,
+      "misses": []
+    },
+    "2023": {
+      "path": "services/model-service/src/services/cfb_season_engine/data/cfb_qb_layer_a/season_2023.json",
+      "n_mapped_fbs": 133,
+      "n_layer_a": 133,
+      "coverage": 1.0,
+      "talent_all": {
+        "n": 133,
+        "mean": 69.4098,
+        "sd": 7.9762,
+        "p10": 58.274,
+        "p25": 64.08,
+        "p50": 70.5,
+        "p75": 75.39,
+        "p90": 79.222,
+        "min": 47.5,
+        "max": 85.58
+      },
+      "talent_established": {
+        "n": 123,
+        "mean": 70.7259,
+        "sd": 6.6996,
+        "p10": 61.58,
+        "p25": 65.71,
+        "p50": 71.08,
+        "p75": 75.83,
+        "p90": 79.408,
+        "min": 56.08,
+        "max": 85.58
+      },
+      "class_counts": {
+        "incumbent": 90,
+        "portal": 40,
+        "open_competition": 2,
+        "true_freshman": 1
+      },
+      "portal_n": 40,
+      "lowsample_n": 10,
+      "misses": []
+    },
+    "2024": {
+      "path": "services/model-service/src/services/cfb_season_engine/data/cfb_qb_layer_a/season_2024.json",
+      "n_mapped_fbs": 134,
+      "n_layer_a": 134,
+      "coverage": 1.0,
+      "talent_all": {
+        "n": 134,
+        "mean": 68.9635,
+        "sd": 8.3012,
+        "p10": 57.62,
+        "p25": 63.905,
+        "p50": 69.07,
+        "p75": 75.2775,
+        "p90": 79.29,
+        "min": 48.0,
+        "max": 83.22
+      },
+      "talent_established": {
+        "n": 123,
+        "mean": 70.4147,
+        "sd": 6.9693,
+        "p10": 61.186,
+        "p25": 65.2,
+        "p50": 69.93,
+        "p75": 75.485,
+        "p90": 79.762,
+        "min": 53.45,
+        "max": 83.22
+      },
+      "class_counts": {
+        "incumbent": 74,
+        "portal": 52,
+        "open_competition": 6,
+        "true_freshman": 2
+      },
+      "portal_n": 54,
+      "lowsample_n": 11,
+      "misses": []
+    }
+  },
+  "forbidden_roster_sources": [
+    "espn_site_roster_current",
+    "espn_site_v2_roster_unscoped",
+    "espn_web_roster_query_season_ignored"
+  ],
+  "notes": [
+    "Layer B recruiting/cast/overrides/confirms are MISSING by contract.",
+    "2025 sealed. 2026 W1/W2 not used.",
+    "MATCHUP_RESPONSE not changed."
+  ]
+}
