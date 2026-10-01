@@ -1,0 +1,108 @@
+{
+  "desk_date": "2026-10-01",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Thursday, Oct 1",
+    "bottom_line": "Week 4 REG live. Afternoon team-update only: PIT trades CB Joey Porter Jr. to DAL for a 2027 sixth-round pick and a 2028 second-round pick (club Wed night / Steelers Thu confirm) — ends the TNF Porter watch; PIT Samuel/Dean/Everette CB path for Browns; DAL adds outside CB depth with Durant/Revel dinged, chance Sunday vs HOU debut per Schefter. All Pass. DEN Over 2/5 KEEP unchanged. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "DAL: Club Wed 11:00p ET — agree to terms on trade for Steelers CB Joey Porter Jr.; send 2027 sixth + 2028 second. Secondary mash (Durant hamstring / Revel knee-ankle); Schefter — chance Porter debuts Sun vs HOU. Pass.",
+      "PIT: Club Thu — complete Porter trade to Dallas (same picks). Porter inactive W1–3 + ruled OUT Wed for TNF @ CLE; CB rotation Samuel / Dean / Everette holds tonight. Pass.",
+      "Quiet skip: TNF Dowdle OUT + Ramsey Q (Wed designations, no reverse) / Jefferson still D2D (Wed DNP only) / Mayfield no IR reverse / CHI Braxton Jones week-to-week thin / PHI Hurts no reverse / DAL Bullard+Thompson Wed IR quiet leftover / HOU Edwards ACL season already on Wed IR path. DEN Over KEEP stands. No 32-card dump. No Riley leans — Coming soon ON."
+    ],
+    "what_to_watch": "TNF PIT@CLE inactives/Ramsey game-time. Porter physical arrival + any Sun HOU debut designation. Fri–Sun Jefferson practice into MIA. Mayfield IR only if recovery slips. CHI Jones / PHI Hurts into W4. Do not restamp street or mint KEI.",
+    "sources": [
+      {
+        "label": "Cowboys — Porter trade terms (2027 6th + 2028 2nd)",
+        "href": "https://www.dallascowboys.com/news/cowboys-agree-to-terms-on-trade-for-steelers-cb-joey-porter-jr"
+      },
+      {
+        "label": "Steelers — acquire two draft picks for Porter",
+        "href": "https://www.steelers.com/news/steelers-acquire-two-draft-picks-from-cowboys"
+      },
+      {
+        "label": "ESPN — Porter to Cowboys; chance Sun debut",
+        "href": "https://www.espn.com/nfl/story/_/id/50074351/sources-steelers-trade-joey-porter-jr-cowboys"
+      },
+      {
+        "label": "CBS — Porter traded to Cowboys",
+        "href": "https://www.cbssports.com/nfl/news/steelers-joey-porter-jr-traded-to-cowboys/"
+      },
+      {
+        "label": "NFL.com — Week 4 injury statuses (TNF Porter OUT / Dowdle OUT / Ramsey Q)",
+        "href": "https://www.nfl.com/news/nfl-week-4-injury-report-player-statuses-for-all-16-games"
+      }
+    ]
+  },
+  "preview_delta": [
+    {
+      "team_id": "DAL",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Acquire Porter (2027 6th + 2028 2nd). Pass."
+    },
+    {
+      "team_id": "PIT",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Trade Porter to DAL. Pass."
+    }
+  ],
+  "team_notes": [
+    {
+      "team_id": "DAL",
+      "title": "Cowboys — Oct 1",
+      "bottom_line": "Club Wednesday 11:00p ET (after Wed Club Desk shelf): Dallas agrees to terms on a trade for Steelers CB Joey Porter Jr., sending a 2027 sixth-round pick and a 2028 second-round pick to Pittsburgh. Adds outside CB depth with Cobie Durant (hamstring) and Shavon Revel (knee/ankle) on the injury report; Schefter — chance Porter debuts Sunday at Houston. Pass — Coming soon ON.",
+      "key_points": [
+        "dallascowboys.com (Yarrish, Wed 11:00p ET): Porter trade — 2027 sixth + 2028 second to PIT. Porter: 2023 second-rounder; 47 games / 41 starts; 165 tackles, 31 PBU, 3 INT career.",
+        "ESPN (Pryor/Archer): ends Steelers contract standoff + back/conditioning path; Porter needs two gameday roster appearances for the 2027 pick condition (source); Schefter — chance of Sunday debut vs Texans pending arrival/physical.",
+        "W4: @ HOU Sun Oct 4. Pass on DAL win-total — no mint off CB trade. Coming soon ON."
+      ],
+      "what_to_watch": "Porter arrival / practice window Thu–Fri; any Sun HOU active designation. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Acquire Porter (2027 6th + 2028 2nd). Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Cowboys — Porter trade terms",
+          "href": "https://www.dallascowboys.com/news/cowboys-agree-to-terms-on-trade-for-steelers-cb-joey-porter-jr"
+        },
+        {
+          "label": "ESPN — Porter to Cowboys; chance Sun debut",
+          "href": "https://www.espn.com/nfl/story/_/id/50074351/sources-steelers-trade-joey-porter-jr-cowboys"
+        },
+        {
+          "label": "CBS — Porter traded to Cowboys",
+          "href": "https://www.cbssports.com/nfl/news/steelers-joey-porter-jr-traded-to-cowboys/"
+        }
+      ]
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers — Oct 1",
+      "bottom_line": "Club Thursday: Pittsburgh completes the trade of CB Joey Porter Jr. to Dallas for a 2027 sixth-round pick and a 2028 second-round pick — ends the Wed Club Desk TNF Porter watch. Porter was inactive Weeks 1–3 and ruled OUT Wednesday for tonight at Cleveland; outside CB rotation stays Samuel / Dean / Everette. Pass — Coming soon ON.",
+      "key_points": [
+        "steelers.com (Varley, Thu ~1:00p ET): Porter to Cowboys for 2027 sixth + 2028 second. 47 games / 41 starts; inactive first three 2026 games after camp PUP / back + contract standoff.",
+        "ESPN Wed designations (still valid for TNF): Porter OUT (NIR/conditioning/back); Dowdle (toe) OUT; Ramsey (wrist) + Echols (concussion) questionable. Trade does not reverse tonight's OUT — he was already ruled out before the deal.",
+        "W4 TNF: @ CLE Thu Oct 1. Pass — no mint off CB trade. Coming soon ON."
+      ],
+      "what_to_watch": "TNF inactives (Ramsey/Echols); Everette snap share vs CLE. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Trade Porter to DAL (2027 6th + 2028 2nd). Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Steelers — acquire two draft picks for Porter",
+          "href": "https://www.steelers.com/news/steelers-acquire-two-draft-picks-from-cowboys"
+        },
+        {
+          "label": "ESPN — Porter OUT Wed; trade to Cowboys",
+          "href": "https://www.espn.com/nfl/story/_/id/50074351/sources-steelers-trade-joey-porter-jr-cowboys"
+        },
+        {
+          "label": "NFL.com — Week 4 TNF statuses",
+          "href": "https://www.nfl.com/news/nfl-week-4-injury-report-player-statuses-for-all-16-games"
+        }
+      ]
+    }
+  ]
+}
