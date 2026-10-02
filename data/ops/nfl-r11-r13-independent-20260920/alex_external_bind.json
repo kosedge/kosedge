@@ -1,0 +1,63 @@
+{
+  "id": "alex-external-provenance-bind-20260920",
+  "filed_by": "Alex",
+  "store": "Academy / research store (not this git checkout)",
+  "checkout_present": false,
+  "status": "PARTIAL_EXTERNAL",
+  "bind_allowed": false,
+  "exact_reproduction_established": false,
+  "do_not_invent_truncated_hashes": true,
+  "academy_files": [
+    {
+      "store_path": "permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.md",
+      "sha256_prefix": "bb6ebda9",
+      "sha256_full": null,
+      "present_in_this_checkout": false
+    },
+    {
+      "store_path": "permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.json",
+      "sha256_prefix": "d1dfc752",
+      "sha256_full": null,
+      "present_in_this_checkout": false
+    }
+  ],
+  "labels": {
+    "R11": {
+      "artifact_id": "pe_clock_play_v3.3",
+      "engine_id": "V33",
+      "engine_hash_prefix": "6f98bb19",
+      "engine_hash_full": null,
+      "runner_hash_prefix": "5abf5e69",
+      "runner_hash_full": null,
+      "seed": 20260917,
+      "named_but_unhashed": ["packets", "pbp_clock", "calib"]
+    },
+    "R13": {
+      "artifact_id": "pe_clock_play_v3.5",
+      "discarded": true,
+      "engine_id": "V35",
+      "engine_hash_prefix": "4db68127",
+      "engine_hash_full": null,
+      "runner_hash_prefix": "35700d8b",
+      "runner_hash_full": null,
+      "named_but_unhashed": ["gate", "STOP", "KEY7", "ENDGAME"]
+    }
+  },
+  "explicit_non_aliases": [
+    "services/model-service/src/services/nfl_simulator.py",
+    "personnel r11 / personnel_efficiency.py grouping rates",
+    "pe_drive_poss_v1",
+    "pe_drive_poss_v2",
+    "live SHA 153b6a884a8e",
+    "market-risk register R11",
+    "WR11 / WR13 ranks"
+  ],
+  "unrecoverable": [
+    "git SHAs for R11/R13 labels",
+    "Mac/Drive absolute paths",
+    "freeze/CLOCK_PLAY_R11 and CLOCK_PLAY_R13 directories",
+    "original argv",
+    "full sha256 (only prefixes were filed)",
+    "numeric key-3 / key-7 / OT / MAE / total metrics"
+  ]
+}
