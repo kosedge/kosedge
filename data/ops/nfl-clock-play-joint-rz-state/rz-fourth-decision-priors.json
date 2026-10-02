@@ -1,0 +1,519 @@
+{
+  "artifact_id": "Clock-Play Red-Zone Fourth-Down Decision Priors",
+  "historical_games_with_rz_fourth": 2664,
+  "historical_rows_examined": 507116,
+  "historical_source": "/Users/ryankos/kosedge/.worktrees/nfl-season-engine-status-timeout/data/ops/nfl-pbp-audit-input-2013-2025.ndjson",
+  "priors": {
+    "buckets": {
+      "10-6|1|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.40884733203761364,
+          "go": 0.5911526679623864,
+          "punt": 0.0
+        },
+        "bucket": "10-6|1|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.3353658536585366,
+            "go": 0.6646341463414634,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 55,
+            "go": 109,
+            "punt": 0
+          },
+          "decisions": 164
+        }
+      },
+      "10-6|2|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.6622845026621605,
+          "go": 0.33771549733783945,
+          "punt": 0.0
+        },
+        "bucket": "10-6|2|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.626984126984127,
+            "go": 0.373015873015873,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 79,
+            "go": 47,
+            "punt": 0
+          },
+          "decisions": 126
+        }
+      },
+      "10-6|3-5|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.8355574262789526,
+          "go": 0.16444257372104742,
+          "punt": 0.0
+        },
+        "bucket": "10-6|3-5|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.837378640776699,
+            "go": 0.16262135922330098,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 345,
+            "go": 67,
+            "punt": 0
+          },
+          "decisions": 412
+        }
+      },
+      "10-6|6+|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.8988286732665128,
+          "go": 0.10117132673348724,
+          "punt": 0.0
+        },
+        "bucket": "10-6|6+|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.9029733959311425,
+            "go": 0.09702660406885759,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 577,
+            "go": 62,
+            "punt": 0
+          },
+          "decisions": 639
+        }
+      },
+      "10-6|6+|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.9261299371974895,
+          "go": 0.07387006280251057,
+          "punt": 0.0
+        },
+        "bucket": "10-6|6+|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.94,
+            "go": 0.06,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 235,
+            "go": 15,
+            "punt": 0
+          },
+          "decisions": 250
+        }
+      },
+      "15-11|1|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.3908233303943553,
+          "go": 0.6091766696056446,
+          "punt": 0.0
+        },
+        "bucket": "15-11|1|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.3160919540229885,
+            "go": 0.6839080459770115,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 55,
+            "go": 119,
+            "punt": 0
+          },
+          "decisions": 174
+        }
+      },
+      "15-11|2|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.735799746252803,
+          "go": 0.26420025374719697,
+          "punt": 0.0
+        },
+        "bucket": "15-11|2|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.7153846153846154,
+            "go": 0.2846153846153846,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 93,
+            "go": 37,
+            "punt": 0
+          },
+          "decisions": 130
+        }
+      },
+      "15-11|3-5|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.8432276776582397,
+          "go": 0.15677232234176036,
+          "punt": 0.0
+        },
+        "bucket": "15-11|3-5|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.8445475638051044,
+            "go": 0.1554524361948956,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 364,
+            "go": 67,
+            "punt": 0
+          },
+          "decisions": 431
+        }
+      },
+      "15-11|6+|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.9043086294752578,
+          "go": 0.09569137052474216,
+          "punt": 0.0
+        },
+        "bucket": "15-11|6+|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.9137254901960784,
+            "go": 0.08627450980392157,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 233,
+            "go": 22,
+            "punt": 0
+          },
+          "decisions": 255
+        }
+      },
+      "15-11|6+|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.9169566913491711,
+          "go": 0.0830433086508289,
+          "punt": 0.0
+        },
+        "bucket": "15-11|6+|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.9206349206349206,
+            "go": 0.07936507936507936,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 696,
+            "go": 60,
+            "punt": 0
+          },
+          "decisions": 756
+        }
+      },
+      "1|1|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.18573515339948862,
+          "go": 0.8142648466005113,
+          "punt": 0.0
+        },
+        "bucket": "1|1|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.18313253012048192,
+            "go": 0.8168674698795181,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 76,
+            "go": 339,
+            "punt": 0
+          },
+          "decisions": 415
+        }
+      },
+      "1|6+|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.21458526654104634,
+          "go": 0.7854147334589536,
+          "punt": 0.0
+        },
+        "bucket": "1|6+|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.0,
+            "go": 1.0,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 0,
+            "go": 1,
+            "punt": 0
+          },
+          "decisions": 1
+        }
+      },
+      "20-16|1|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.4390589005586815,
+          "go": 0.5609410994413184,
+          "punt": 0.0
+        },
+        "bucket": "20-16|1|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.38164251207729466,
+            "go": 0.6183574879227053,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 79,
+            "go": 128,
+            "punt": 0
+          },
+          "decisions": 207
+        }
+      },
+      "20-16|2|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.7418840777714798,
+          "go": 0.2581159222285203,
+          "punt": 0.0
+        },
+        "bucket": "20-16|2|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.717948717948718,
+            "go": 0.28205128205128205,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 84,
+            "go": 33,
+            "punt": 0
+          },
+          "decisions": 117
+        }
+      },
+      "20-16|3-5|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.8710902353385108,
+          "go": 0.12890976466148923,
+          "punt": 0.0
+        },
+        "bucket": "20-16|3-5|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.8735632183908046,
+            "go": 0.12643678160919541,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 380,
+            "go": 55,
+            "punt": 0
+          },
+          "decisions": 435
+        }
+      },
+      "20-16|6+|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.8847412206286226,
+          "go": 0.1152587793713774,
+          "punt": 0.0
+        },
+        "bucket": "20-16|6+|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.8974358974358975,
+            "go": 0.10256410256410256,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 105,
+            "go": 12,
+            "punt": 0
+          },
+          "decisions": 117
+        }
+      },
+      "20-16|6+|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.9210569594324075,
+          "go": 0.07894304056759248,
+          "punt": 0.0
+        },
+        "bucket": "20-16|6+|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.9237113402061856,
+            "go": 0.07628865979381444,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 896,
+            "go": 74,
+            "punt": 0
+          },
+          "decisions": 970
+        }
+      },
+      "2|1|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.4263400624390435,
+          "go": 0.5736599375609565,
+          "punt": 0.0
+        },
+        "bucket": "2|1|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.2777777777777778,
+            "go": 0.7222222222222222,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 10,
+            "go": 26,
+            "punt": 0
+          },
+          "decisions": 36
+        }
+      },
+      "2|2|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.6289529309756142,
+          "go": 0.3710470690243859,
+          "punt": 0.0
+        },
+        "bucket": "2|2|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.6317829457364341,
+            "go": 0.3682170542635659,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 163,
+            "go": 95,
+            "punt": 0
+          },
+          "decisions": 258
+        }
+      },
+      "5-3|1|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.30479720154691387,
+          "go": 0.6952027984530861,
+          "punt": 0.0
+        },
+        "bucket": "5-3|1|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.20610687022900764,
+            "go": 0.7938931297709924,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 27,
+            "go": 104,
+            "punt": 0
+          },
+          "decisions": 131
+        }
+      },
+      "5-3|2|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.6672850380260952,
+          "go": 0.3327149619739048,
+          "punt": 0.0
+        },
+        "bucket": "5-3|2|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.6436781609195402,
+            "go": 0.3563218390804598,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 56,
+            "go": 31,
+            "punt": 0
+          },
+          "decisions": 87
+        }
+      },
+      "5-3|3-5|gtg": {
+        "action_probabilities": {
+          "field_goal": 0.8331987866605608,
+          "go": 0.16680121333943917,
+          "punt": 0.0
+        },
+        "bucket": "5-3|3-5|gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.8375558867362146,
+            "go": 0.16244411326378538,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 562,
+            "go": 109,
+            "punt": 0
+          },
+          "decisions": 671
+        }
+      },
+      "5-3|3-5|non_gtg": {
+        "action_probabilities": {
+          "field_goal": 0.805697876686891,
+          "go": 0.19430212331310903,
+          "punt": 0.0
+        },
+        "bucket": "5-3|3-5|non_gtg",
+        "sample": {
+          "action_probabilities": {
+            "field_goal": 0.8295454545454546,
+            "go": 0.17045454545454544,
+            "punt": 0.0
+          },
+          "actions": {
+            "field_goal": 73,
+            "go": 15,
+            "punt": 0
+          },
+          "decisions": 88
+        }
+      }
+    },
+    "default": {
+      "action_probabilities": {
+        "field_goal": 0.7631732168850073,
+        "go": 0.23682678311499272,
+        "punt": 0.0
+      },
+      "bucket": "default",
+      "sample": {
+        "action_probabilities": {
+          "field_goal": 0.7631732168850073,
+          "go": 0.23682678311499272,
+          "punt": 0.0
+        },
+        "actions": {
+          "field_goal": 5243,
+          "go": 1627,
+          "punt": 0
+        },
+        "decisions": 6870
+      }
+    }
+  },
+  "shrinkage": {
+    "parent": "red-zone field bucket",
+    "parent_pseudo_decisions": 30.0
+  },
+  "train_window": "2013-2023 regular season"
+}

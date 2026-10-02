@@ -1,0 +1,518 @@
+{
+  "checks": {
+    "clock_decrement_between_plays": true,
+    "down_distance_state": true,
+    "iterative_play_progression": true,
+    "overtime_path": true,
+    "possession_state": true,
+    "post_score_kickoff": true,
+    "timeout_endgame_logic": true,
+    "touchdown_to_try": true
+  },
+  "overtime_probe": {
+    "away_score": 0,
+    "away_team": "SYN_AWAY",
+    "event_counts": {
+      "field_goal_made": 1,
+      "fourth_down_decision": 2,
+      "game_end": 1,
+      "incomplete_pass": 1,
+      "kickoff": 1,
+      "overtime_start": 1,
+      "possession_start": 3,
+      "punt": 1,
+      "scrimmage_play": 8,
+      "turnover": 1
+    },
+    "events": [
+      {
+        "event_type": "overtime_start",
+        "probe": true,
+        "receiving_team": "home",
+        "state": {
+          "clock_seconds": 600.0,
+          "distance": 10,
+          "down": 1,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 25
+        }
+      },
+      {
+        "event_type": "kickoff",
+        "reason": "overtime_opening_kickoff",
+        "receiving_team": "home",
+        "receiving_yardline": 22,
+        "state": {
+          "clock_seconds": 600.0,
+          "distance": 10,
+          "down": 1,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 25
+        }
+      },
+      {
+        "event_type": "possession_start",
+        "overtime_possession": true,
+        "reason": "overtime_opening_kickoff",
+        "state": {
+          "clock_seconds": 600.0,
+          "distance": 10,
+          "down": 1,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 22
+        }
+      },
+      {
+        "clock_before_seconds": 600.0,
+        "clock_elapsed_seconds": 20.436,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "pass",
+        "state": {
+          "clock_seconds": 579.564,
+          "distance": 8,
+          "down": 2,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 24
+        },
+        "touchdown": false,
+        "yards": 2
+      },
+      {
+        "clock_before_seconds": 579.564,
+        "clock_elapsed_seconds": 33.41,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "pass",
+        "state": {
+          "clock_seconds": 546.154,
+          "distance": 8,
+          "down": 3,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 23
+        },
+        "touchdown": false,
+        "yards": -1
+      },
+      {
+        "clock_before_seconds": 546.154,
+        "clock_elapsed_seconds": 18.781,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "pass",
+        "state": {
+          "clock_seconds": 527.373,
+          "distance": 8,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 18
+        },
+        "touchdown": false,
+        "yards": -5
+      },
+      {
+        "decision": "punt",
+        "event_type": "fourth_down_decision",
+        "offense": "home",
+        "state": {
+          "clock_seconds": 527.373,
+          "distance": 8,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 18
+        }
+      },
+      {
+        "event_type": "punt",
+        "net_yards": 55,
+        "offense": "home",
+        "receiving_yardline": 27,
+        "state": {
+          "clock_seconds": 488.517,
+          "distance": 8,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 18
+        }
+      },
+      {
+        "event_type": "possession_start",
+        "overtime_possession": true,
+        "reason": "punt",
+        "state": {
+          "clock_seconds": 488.517,
+          "distance": 10,
+          "down": 1,
+          "possession": "away",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 27
+        }
+      },
+      {
+        "clock_before_seconds": 488.517,
+        "clock_elapsed_seconds": 42.0,
+        "event_type": "scrimmage_play",
+        "offense": "away",
+        "play_type": "pass",
+        "state": {
+          "clock_seconds": 446.517,
+          "distance": 10,
+          "down": 1,
+          "possession": "away",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 41
+        },
+        "touchdown": false,
+        "yards": 14
+      },
+      {
+        "event_type": "turnover",
+        "offense": "away",
+        "receiving_yardline": 59,
+        "state": {
+          "clock_seconds": 411.583,
+          "distance": 10,
+          "down": 1,
+          "possession": "away",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 41
+        }
+      },
+      {
+        "event_type": "possession_start",
+        "overtime_possession": true,
+        "reason": "turnover",
+        "state": {
+          "clock_seconds": 411.583,
+          "distance": 10,
+          "down": 1,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 59
+        }
+      },
+      {
+        "clock_before_seconds": 411.583,
+        "clock_elapsed_seconds": 7.013,
+        "event_type": "incomplete_pass",
+        "offense": "home",
+        "state": {
+          "clock_seconds": 404.57,
+          "distance": 10,
+          "down": 1,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 59
+        }
+      },
+      {
+        "clock_before_seconds": 404.57,
+        "clock_elapsed_seconds": 24.587,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "run",
+        "state": {
+          "clock_seconds": 379.983,
+          "distance": 10,
+          "down": 1,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 70
+        },
+        "touchdown": false,
+        "yards": 11
+      },
+      {
+        "clock_before_seconds": 379.983,
+        "clock_elapsed_seconds": 40.48,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "run",
+        "state": {
+          "clock_seconds": 339.504,
+          "distance": 10,
+          "down": 2,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 63
+        },
+        "touchdown": false,
+        "yards": -7
+      },
+      {
+        "clock_before_seconds": 339.504,
+        "clock_elapsed_seconds": 20.962,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "pass",
+        "state": {
+          "clock_seconds": 318.541,
+          "distance": 10,
+          "down": 3,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 60
+        },
+        "touchdown": false,
+        "yards": -3
+      },
+      {
+        "clock_before_seconds": 318.541,
+        "clock_elapsed_seconds": 26.37,
+        "event_type": "scrimmage_play",
+        "offense": "home",
+        "play_type": "run",
+        "state": {
+          "clock_seconds": 292.171,
+          "distance": 2,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 68
+        },
+        "touchdown": false,
+        "yards": 8
+      },
+      {
+        "decision": "field_goal",
+        "event_type": "fourth_down_decision",
+        "offense": "home",
+        "state": {
+          "clock_seconds": 292.171,
+          "distance": 2,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 0
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 68
+        }
+      },
+      {
+        "band": "mid",
+        "event_type": "field_goal_made",
+        "field_goal_distance": 49,
+        "offense": "home",
+        "points": 3,
+        "state": {
+          "clock_seconds": 283.189,
+          "distance": 2,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 3
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 68
+        }
+      },
+      {
+        "event_type": "game_end",
+        "reason": "overtime_sudden_death_after_equal_possessions",
+        "state": {
+          "clock_seconds": 283.189,
+          "distance": 2,
+          "down": 4,
+          "possession": "home",
+          "quarter": "OT",
+          "score": {
+            "away": 0,
+            "home": 3
+          },
+          "timeouts": {
+            "away": 3,
+            "home": 3
+          },
+          "yardline": 68
+        }
+      }
+    ],
+    "game_id": "neutral-structural",
+    "home_score": 3,
+    "home_team": "SYN_HOME",
+    "model_version": "nfl-clock-play-baseline-v1",
+    "overtime_possessions": {
+      "away": 1,
+      "home": 2
+    },
+    "play_count": 12,
+    "result_reason": "overtime_sudden_death_after_equal_possessions",
+    "seed": 16903921394128774823,
+    "state_invariants": {
+      "failures": [],
+      "final_state": {
+        "clock_seconds": 283.189,
+        "distance": 2,
+        "down": 4,
+        "possession": "home",
+        "quarter": "OT",
+        "score": {
+          "away": 0,
+          "home": 3
+        },
+        "timeouts": {
+          "away": 3,
+          "home": 3
+        },
+        "yardline": 68
+      },
+      "ok": true
+    },
+    "transition_counts": {}
+  }
+}
