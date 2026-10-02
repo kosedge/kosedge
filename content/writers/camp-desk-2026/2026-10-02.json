@@ -1,0 +1,104 @@
+{
+  "desk_date": "2026-10-02",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Friday, Oct 2",
+    "bottom_line": "Week 4 REG live. Afternoon IR/availability amend only: MIN rules WR Justin Jefferson (ankle) OUT for Sun vs MIA after Wed–Fri DNP — reverses Thu D2D watch; also OUT CB Charles Demmings + P Brett Thorson (hamstring). NO places RB Travis Etienne Jr. (hamstring) on IR ≥4 (club Thu ~4:05p CT / ESPN ~4:42p ET — after Thu #605 shelf); Kamara + Kendre Miller primary; CJ Donaldson short-yardage. All Pass. DEN Over 2/5 KEEP unchanged. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "MIN: Fri final report — Jefferson (ankle) OUT Sun vs MIA after Wed–Fri DNP; O'Connell — feeling better, hope practice next week, \"just couldn't get there.\" Also OUT: Demmings (hamstring), Thorson (right hamstring). Pass.",
+      "NO: Club Thu Oct 1 ~4:05p CT / ESPN ~4:42p ET (post-Thu shelf) — Etienne (hamstring) IR ≥4, no surgery; Kamara + Miller carry; Donaldson short-yardage; Bentley IV to PS; Austin Jr. promoted. MNF ATL@NO. Pass.",
+      "Quiet skip: TNF PIT@CLE finals (CLE 27–PIT 24; Ramsey/Echols active; Dowdle inactive — no reverse) / Porter practiced+physical / Fri we'll-see continuation / Mayfield still no IR / CHI Braxton Jones Fri OUT expected from W2W thin / PHI Hurts no reverse. DEN Over KEEP stands. No 32-card dump. No Riley leans — Coming soon ON."
+    ],
+    "what_to_watch": "Sun MIN vs MIA without Jefferson; Addison/Jennings/Felton WR path. MNF ATL@NO Kamara/Miller snap split + Donaldson short-yardage. Porter any Sun HOU active designation. Mayfield IR only if recovery slips. CHI Jones / PHI Hurts into W4. Do not restamp street or mint KEI.",
+    "sources": [
+      {
+        "label": "Vikings — final Week 4 injury report (Jefferson OUT)",
+        "href": "https://www.vikings.com/news/dolphins-injury-report-week-4-2026-nfl-season"
+      },
+      {
+        "label": "UPI — Jefferson ruled out vs Dolphins",
+        "href": "https://www.upi.com/Sports_News/NFL/2026/10/02/Minnesota-Vikings-Justin-Jefferson-out-Dolphins/8441790966966/"
+      },
+      {
+        "label": "CBS Minnesota — Jefferson OUT ankle",
+        "href": "https://www.cbsnews.com/minnesota/news/vikings-justin-jefferson-out-miami-dolphins/"
+      },
+      {
+        "label": "Saints — Etienne IR; Austin / Bentley / Ojabo moves",
+        "href": "https://www.neworleanssaints.com/news/ulysses-bentley-iv-david-ojabo-saints-roster-moves-transaction-alert-october-1-2026"
+      },
+      {
+        "label": "ESPN — Etienne (hamstring) on IR ≥4",
+        "href": "https://www.espn.com/nfl/story/_/id/50079185/saints-putting-rb-travis-etienne-hamstring-ir"
+      }
+    ]
+  },
+  "preview_delta": [
+    {
+      "team_id": "MIN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Jefferson OUT Sun vs MIA (D2D→OUT). Pass."
+    },
+    {
+      "team_id": "NO",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "Etienne IR ≥4 (post-Thu shelf). Pass."
+    }
+  ],
+  "team_notes": [
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Oct 2",
+      "bottom_line": "Friday final Week 4 injury report: WR Justin Jefferson (ankle) ruled OUT for Sunday vs Miami after Wed–Thu–Fri DNP — reverses the Thu Club Desk day-to-day / Fri–Sun practice watch. Also OUT: CB Charles Demmings (hamstring) and P Brett Thorson (right hamstring). O'Connell — Jefferson feeling better, hope to practice next week, \"just couldn't get there.\" Pass — Coming soon ON.",
+      "key_points": [
+        "vikings.com final report: Jefferson / Demmings / Thorson all OUT; Jefferson and Demmings Week 3 Tampa injuries; Thorson Week 2 Chicago. Cashman (elbow) FP Friday, expected available. Hekker to be promoted for punting (UPI).",
+        "UPI / CBS Minnesota (Fri): O'Connell — \"He's definitely feeling better… encouraged about where he's at, but just couldn't get there.\" Jefferson leads MIN with 13/179/2 through three games; Addison/Jennings starters with Felton/Jones/Price depth.",
+        "W4: vs MIA Sun Oct 4 (FOX, 3:05p CT). Pass on MIN win-total — no mint off WR OUT. Coming soon ON."
+      ],
+      "what_to_watch": "Addison/Jennings target share vs MIA; any Sat designation change (none expected). Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Jefferson OUT Sun vs MIA (D2D→OUT). Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Vikings — final Week 4 injury report",
+          "href": "https://www.vikings.com/news/dolphins-injury-report-week-4-2026-nfl-season"
+        },
+        {
+          "label": "UPI — Jefferson ruled out vs Dolphins",
+          "href": "https://www.upi.com/Sports_News/NFL/2026/10/02/Minnesota-Vikings-Justin-Jefferson-out-Dolphins/8441790966966/"
+        },
+        {
+          "label": "CBS Minnesota — Jefferson OUT ankle",
+          "href": "https://www.cbsnews.com/minnesota/news/vikings-justin-jefferson-out-miami-dolphins/"
+        }
+      ]
+    },
+    {
+      "team_id": "NO",
+      "title": "Saints — Oct 2",
+      "bottom_line": "Club Thursday Oct 1 ~4:05p CT (after Thu Club Desk #605 merge ~3:25p ET): New Orleans placed RB Travis Etienne Jr. (hamstring) on Injured Reserve — sidelines him at least four games; no surgery. Kamara and Kendre Miller take the majority of snaps; rookie CJ Donaldson in short-yardage / pass pro / ST. Kevin Austin Jr. promoted from PS; Ulysses Bentley IV + EDGE David Ojabo signed to practice squad. Pass — Coming soon ON.",
+      "key_points": [
+        "neworleanssaints.com (Thu 4:05p): Etienne IR; Austin Jr. to active roster; Bentley IV + Ojabo to practice squad. Etienne hamstring exit Week 3 vs LV (left after 16-yard run).",
+        "ESPN (Terrell, ~4:42p ET): Moore — \"at least four weeks\" then \"we'll see\"; no surgery. Kamara + Miller primary; Donaldson short-yardage role. Not on Wed/Thu Club Desk shelves (post-#605).",
+        "W4 MNF: vs ATL Mon Oct 5. Pass on NO win-total — no mint off RB IR. Coming soon ON."
+      ],
+      "what_to_watch": "MNF Kamara/Miller snap split; Donaldson short-yardage usage. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Etienne IR ≥4 (post-Thu shelf). Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Saints — Etienne IR; Austin / Bentley / Ojabo moves",
+          "href": "https://www.neworleanssaints.com/news/ulysses-bentley-iv-david-ojabo-saints-roster-moves-transaction-alert-october-1-2026"
+        },
+        {
+          "label": "ESPN — Etienne (hamstring) on IR ≥4",
+          "href": "https://www.espn.com/nfl/story/_/id/50079185/saints-putting-rb-travis-etienne-hamstring-ir"
+        }
+      ]
+    }
+  ]
+}
