@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kosedge://nfl-r11-r13-provenance/lineage.schema.json",
+  "title": "NFL experiment lineage slot",
+  "description": "Required fields to bind an R11/R13/R14 label to a reproducible run. Empty/null fields are fail-closed, not optional.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "label",
+    "status",
+    "bind_allowed",
+    "git",
+    "simulator_source_files",
+    "experiment_runner",
+    "config_parameter_set",
+    "data_inputs",
+    "random_seeds",
+    "command_used",
+    "calibration_artifacts",
+    "metrics",
+    "uncommitted_or_external_dependencies",
+    "evidence",
+    "notes"
+  ],
+  "properties": {
+    "label": { "type": "string", "enum": ["R11", "R13", "R14"] },
+    "status": {
+      "type": "string",
+      "enum": ["EXACT", "UNBOUND", "PARTIAL_EXTERNAL_ONLY", "REJECTED_ALIAS"]
+    },
+    "bind_allowed": { "type": "boolean" },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "branch", "worktree"],
+      "properties": {
+        "commit": { "type": ["string", "null"] },
+        "branch": { "type": ["string", "null"] },
+        "worktree": { "type": ["string", "null"] }
+      }
+    },
+    "simulator_source_files": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "experiment_runner": { "type": ["string", "null"] },
+    "config_parameter_set": { "type": ["string", "object", "null"] },
+    "data_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paths", "hashes"],
+      "properties": {
+        "paths": { "type": "array", "items": { "type": "string" } },
+        "hashes": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "random_seeds": {
+      "type": "array",
+      "items": { "type": ["integer", "string"] }
+    },
+    "command_used": { "type": ["string", "null"] },
+    "calibration_artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_3", "key_7", "ot", "mae", "total"],
+      "properties": {
+        "key_3": { "type": ["number", "null"] },
+        "key_7": { "type": ["number", "null"] },
+        "ot": { "type": ["number", "null"] },
+        "mae": { "type": ["number", "null"] },
+        "total": { "type": ["number", "null"] }
+      }
+    },
+    "uncommitted_or_external_dependencies": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" }
+  }
+}
