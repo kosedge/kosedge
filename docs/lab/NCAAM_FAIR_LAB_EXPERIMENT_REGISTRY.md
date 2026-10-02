@@ -6,6 +6,7 @@
 | ------------ | ----------------------------------------- | -------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `B2-C0-v1`   | `kenpom_adjem_plus_hca_v1`                | Incumbent B2               | **YES** (materialize) | Frozen historical                                                                                                            |
 | `B2-PACE-v1` | `kenpom_adjem_pit_tempo_plus_game_hca_v1` | Unit-correction challenger | **NO**                | Frozen for Train-A diagnostics; Phase 2.7A immutable HCA/clips + non-finite fail-closed; awaiting pocket/holdout unseal auth |
+| `B2-PACE-NEUTRAL-v1` | `kenpom_adjem_pit_tempo_gated_hca_v1` | Neutral-HCA gate on top of PACE | **NO** | Frozen preregistration + research plumbing (2026-09-09); Train-A evidence only; **not** promoted |
 
 Research alias `C3` refers to `B2-PACE-v1` in Phase 1B notes only.
 
@@ -25,8 +26,10 @@ Test-A residual structure and large-disagreement failures against B1 contributed
 
 | Candidate ID                               | Intent                                         | Status                                            |
 | ------------------------------------------ | ---------------------------------------------- | ------------------------------------------------- |
-| `B2-NEUTRAL-HCA-v1` / `B2-PACE-NEUTRAL-v1` | Zero HCA when reliable PIT `neutral_site=true` | registered_not_implemented (Phase 2.7A hard lock) |
+| `B2-NEUTRAL-HCA-v1` | historical alias only — do not implement under this ID | superseded by `B2-PACE-NEUTRAL-v1` |
+
+Canonical neutral challenger ID is **`B2-PACE-NEUTRAL-v1`** (see preregistration). Previously listed as `registered_not_implemented` under Phase 2.7A hard lock; research plumbing authorized 2026-09-09 without promotion.
 
 ## Product exposure lock
 
-No board, API, article, or UI path may consume `B2-PACE-v1` without a later explicit promotion decision. Materialize remains on incumbent only.
+No board, API, article, or UI path may consume `B2-PACE-v1` or `B2-PACE-NEUTRAL-v1` without a later explicit promotion decision. Materialize remains on incumbent only.
