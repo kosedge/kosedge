@@ -28,6 +28,9 @@ from src.services.cfb_season_engine.efficiency import (
 from src.services.cfb_season_engine.home_field import build_home_field_profile
 from src.services.cfb_season_engine.player_hooks import build_player_hooks
 from src.services.cfb_season_engine.position_groups import build_position_groups
+from src.services.cfb_season_engine.qb_feature_contract import (
+    QB_FEATURE_CONTRACT_VERSION,
+)
 from src.services.cfb_season_engine.qb_situation import build_qb_situation
 from src.services.cfb_season_engine.qb_situation_overrides import apply_qb_situation_override
 from src.services.cfb_season_engine.qb_confirmed_starters import apply_confirmed_starter
@@ -311,6 +314,7 @@ def _build_universe_from_team_payloads(
             "No live 2026 PBP EPA / weekly SP+ refresh; packaged 2025 final "
             "SP+ carry only"
         ),
+        "qb_feature_contract_version": QB_FEATURE_CONTRACT_VERSION,
     }
     return EngineUniverse(
         season=season,
