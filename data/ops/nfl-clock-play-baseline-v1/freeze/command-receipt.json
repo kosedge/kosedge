@@ -1,0 +1,9 @@
+{
+  "artifact_id": "Clock-Play Baseline v1",
+  "canonical_command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_clock_play_baseline_v1.py --config data/ops/nfl-clock-play-baseline-v1/config.json --inputs data/ops/nfl-clock-play-baseline-v1/inputs.json --output-dir <ARTIFACT_OUTPUT_DIR> --source-sha 3b5ff512350b020ddb80e1c1aea536650407e1b5",
+  "network_access": false,
+  "output_directory_contract": "Caller-selected artifact destination; excluded from canonical payload so an independent replay is byte-identical.",
+  "pythonpath": "services/model-service",
+  "runner_version": "clock-play-baseline-freeze-runner-v1",
+  "source_sha": "3b5ff512350b020ddb80e1c1aea536650407e1b5"
+}

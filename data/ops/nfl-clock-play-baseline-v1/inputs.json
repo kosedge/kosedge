@@ -1,0 +1,69 @@
+{
+  "artifact_id": "Clock-Play Baseline v1",
+  "data_kind": "synthetic_structural_cases",
+  "held_out_data": false,
+  "market_data": false,
+  "notes": "These hypothetical cases contain no actual results, market lines, player data, or historical play-by-play. They exercise state transitions only.",
+  "cases": [
+    {
+      "away": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.0,
+        "pace_factor": 1.0
+      },
+      "away_team": "SYN_AWAY",
+      "case_id": "neutral-structural",
+      "home": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.0,
+        "pace_factor": 1.0
+      },
+      "home_team": "SYN_HOME"
+    },
+    {
+      "away": {
+        "defense_rating": 0.98,
+        "offense_rating": 0.96,
+        "pace_factor": 0.99
+      },
+      "away_team": "SYN_AWAY_B",
+      "case_id": "home-offense-edge",
+      "home": {
+        "defense_rating": 1.02,
+        "offense_rating": 1.08,
+        "pace_factor": 1.01
+      },
+      "home_team": "SYN_HOME_B"
+    },
+    {
+      "away": {
+        "defense_rating": 1.06,
+        "offense_rating": 1.02,
+        "pace_factor": 0.98
+      },
+      "away_team": "SYN_AWAY_C",
+      "case_id": "away-defense-edge",
+      "home": {
+        "defense_rating": 0.97,
+        "offense_rating": 0.99,
+        "pace_factor": 1.01
+      },
+      "home_team": "SYN_HOME_C"
+    },
+    {
+      "away": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.01,
+        "pace_factor": 0.94
+      },
+      "away_team": "SYN_AWAY_D",
+      "case_id": "tempo-contrast",
+      "home": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.01,
+        "pace_factor": 1.08
+      },
+      "home_team": "SYN_HOME_D"
+    }
+  ]
+}

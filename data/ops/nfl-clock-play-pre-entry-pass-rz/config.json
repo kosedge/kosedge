@@ -1,0 +1,70 @@
+{
+  "artifact_id": "Clock-Play Joint Pre-Entry Pass-to-RZ Continuation",
+  "clock_flow_priors_path": "data/ops/nfl-clock-play-clock-flow/clock-flow-priors.json",
+  "fourth_down_continuation_priors_path": "data/ops/nfl-clock-play-v1.2-fourth-down/continuation-priors.json",
+  "pre_entry_pass_rz_priors_path": "data/ops/nfl-clock-play-pre-entry-pass-rz/pre-entry-pass-rz-priors.json",
+  "red_zone_fourth_decision_priors_path": "data/ops/nfl-clock-play-joint-rz-state/rz-fourth-decision-priors.json",
+  "red_zone_rush_transition_priors_path": "data/ops/nfl-clock-play-rz-rush-transition/rush-transition-priors.json",
+  "engine_config": {
+    "base_play_seconds": 28.0,
+    "base_yards": 4.2,
+    "clock_flow_enabled": true,
+    "clock_flow_runtime_scale": 0.956024,
+    "q4_trailing_clock_flow_scale": 1.0,
+    "q4_close_leading_clock_flow_scale": 1.0,
+    "q4_endgame_trail3_clock_flow_scale": 0.86,
+    "q4_trail3_fg_range_precedence_max_clock_seconds": 265.0,
+    "q4_trail3_fg_range_precedence_soft_max_clock_seconds": 468.0,
+    "q4_endgame_trail3_non_fourth_field_goal_enabled": true,
+    "q4_endgame_trail3_non_fourth_field_goal_attempt_probability": 0.12,
+    "q4_endgame_trail3_fg_range_approach_extra_yards": 2.5,
+    "q4_trail3_margin_preservation_field_goal_enabled": true,
+    "q4_trail3_margin_preservation_field_goal_probability": 0.78,
+    "q4_endgame_trail3_fg_range_block_goal_line_touchdown": true,
+    "endgame_window_seconds": 180,
+    "explosive_play_probability": 0.105,
+    "field_goal_max_distance": 62,
+    "fourth_down_continuation_enabled": true,
+    "fourth_down_go_distance": 2,
+    "hurry_play_seconds": 15.0,
+    "incompletion_probability": 0.305,
+    "kickoff_touchback_yardline": 25,
+    "late_field_goal_window_seconds": 10,
+    "late_trailing_timeout_max_deficit": 8,
+    "max_plays_per_game": 360,
+    "model_version": "nfl-clock-play-pre-entry-pass-rz",
+    "overtime_seconds": 600,
+    "play_seconds_spread": 8.0,
+    "pre_entry_pass_rz_enabled": true,
+    "red_zone_fourth_decision_enabled": true,
+    "red_zone_endgame_trailing_fg_precedence_enabled": true,
+    "red_zone_q4_trail3_fg_precedence_full_quarter_enabled": true,
+    "q4_trail3_fg_range_action_probabilities": {
+      "field_goal": 0.831858407079646,
+      "go": 0.16814159292035398
+    },
+    "red_zone_rush_transition_enabled": true,
+    "red_zone_pass_transition_enabled": false,
+    "red_zone_generic_pass_incompletion_enabled": false,
+    "regulation_quarter_seconds": 900,
+    "timeout_window_seconds": 100,
+    "timeouts_per_team": 3,
+    "turnover_probability": 0.027,
+    "yards_spread": 6.8
+  },
+  "freeze_run": {
+    "replicates_per_case": 512,
+    "root_seeds": {
+      "away-defense-edge": 336182,
+      "home-offense-edge": 228451,
+      "neutral-structural": 114729,
+      "tempo-contrast": 443917
+    }
+  },
+  "scope": {
+    "calibration": "train_only_joint_pre_entry_pass_rz_first_continuation",
+    "held_out_data": false,
+    "market_data": false,
+    "purpose": "one train-supported handoff from an eligible 70-79 pass crossing to its first non-fourth red-zone continuation"
+  }
+}
