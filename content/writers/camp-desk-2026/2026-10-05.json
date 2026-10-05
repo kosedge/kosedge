@@ -5,7 +5,7 @@
   "source_type": "kosedge-desk",
   "league_wrap": {
     "title": "Club Desk — Monday, Oct 5",
-    "bottom_line": "Week 4 finals locked for all 30 clubs that played Thursday, London, Sunday and SNF. Frame: W4 RECAP + W5 PREVIEW. Every seat is Pass on win totals; DEN's prior Over 2/5 is retired to Pass. ATL and NO play MNF — Tuesday desk, not in this package. W5 byes: KC, CAR. Coming soon ON — no minted KEI.",
+    "bottom_line": "Week 4 finals locked for all 30 clubs that played Thursday, London, Sunday and SNF. Frame: W4 RECAP + W5 PREVIEW. Every seat is Pass on win totals. ATL and NO play MNF — Tuesday desk, not in this package. W5 byes: KC, CAR. Coming soon ON — no minted KEI.",
     "storylines": [
       "NFC North: CHI 23–12 vs NYJ (3–1); GB 17–14 @ TB (2–2); MIN 15–10 vs MIA (4–0); DET 26–32 @ CAR on SNF (2–2). W5: CHI @ GB, MIN @ NO, DET @ ARI. All Pass.",
       "NFC East: DAL 34–30 @ HOU (2–2); NYG 36–24 vs ARI on Banks' 98-yard pick-six (3–1); PHI 20–24 vs LAR (2–2); WAS 13–30 vs IND in London (1–3). W5: TB @ DAL (TNF), PHI vs JAX (London), NYG @ WAS. All Pass.",
@@ -14,7 +14,7 @@
       "AFC East: NE 29–26 @ BUF (NE 2–2, BUF 3–1); MIA 10–15 @ MIN (0–4); NYJ 12–23 @ CHI (1–3). W5: LV @ NE, CIN @ MIA, CLE @ NYJ, BUF @ LAR (MNF). All Pass.",
       "AFC South: IND 30–13 vs WSH in London (2–2); JAX 22–17 @ CIN (3–1); HOU 30–34 vs DAL (0–4); TEN 18–24 @ BAL (0–4). W5: HOU @ TEN, IND @ PIT, JAX vs PHI (London). All Pass.",
       "AFC North: BAL 24–18 vs TEN (3–1); CLE 27–24 vs PIT on TNF (CLE 3–1, PIT 2–2); CIN 17–22 vs JAX (2–2). W5: BAL @ ATL (SNF), IND @ PIT, CIN @ MIA, CLE @ NYJ. All Pass.",
-      "AFC West: KC 30–27 @ LV (KC 4–0, W5 bye; LV 3–1); DEN 14–24 @ SF (2–2) — prior Over 2/5 retired to Pass; LAC 23–30 @ SEA (0–4). W5: DEN @ LAC, LV @ NE. All Pass."
+      "AFC West: KC 30–27 @ LV (KC 4–0, W5 bye; LV 3–1); DEN 14–24 @ SF (2–2); LAC 23–30 @ SEA (0–4). W5: DEN @ LAC, LV @ NE. All Pass."
     ],
     "what_to_watch": "Monday injury/IR cycle into Week 5: Lamar Jackson's ankle (BAL), Mariota's scans and Daniels' practice week (WAS), Barkley's hamstring (PHI), Chase's concussion protocol (CIN), Thornton and Rice (KC), Cooper's Achilles (GB), Darrisaw's concussion evaluation (MIN), Freeling and Phillips (CAR). TNF TB @ DAL Thu Oct 8; London PHI vs JAX Sun 9:30 a.m. ET. MNF ATL @ NO is Tuesday desk only. Coming soon ON.",
     "sources": [
@@ -412,9 +412,9 @@
         "Carolina: Bryce Young two TD passes to Tetairoa McMillan; Chuba Hubbard two rushing TDs; Ryan Fitzgerald FGs of 47 and 33. Detroit's last score came with 3:38 left (32–26).",
         "Club inactives Oct 4: CB D.J. Reed (rib, questionable) was active; G Ben Bartch (foot) was the only injury inactive; S Bishop Fitzgerald, LB Devin White, TE Tyler Conklin, DL Mekhi Wingo and edge Ahmed Hassanein were healthy scratches. Week 5: Lions at Cardinals, Sun Oct 11, 4:25 PM ET on FOX."
       ],
-      "what_to_watch": "Club recap and Monday injury report (not posted at file). Run game after 46 Gibbs yards. Reed's rib into Arizona.",
+      "what_to_watch": "CB Rock Ya-Sin's hamstring (left in the third quarter, did not return; detroitlions.com recap) and Monday injury news. Run game after 46 Gibbs yards. Reed's rib into Arizona.",
       "is_material_depth": true,
-      "sot_flag": "W4 loss locked 32–26 (NFL.com + ESPN; club recap pending at file). No in-game injury carried. Flag DET run game and CB (Reed rib) into W5 @ ARI.",
+      "sot_flag": "W4 loss locked 32–26 (NFL.com + ESPN + detroitlions.com recap). CB Ya-Sin (hamstring) left in the 3Q and did not return; no further status. Flag DET run game and CB (Reed rib, Ya-Sin hamstring) into W5 @ ARI.",
       "sources": [
         {
           "label": "NFL.com — Lions at Panthers game center (FINAL)",
@@ -427,6 +427,10 @@
         {
           "label": "Lions — W4 injury report and designations (Oct 2)",
           "href": "https://www.detroitlions.com/news/lions-at-panthers-injury-report-oct-2-bartch-reed-wonnum"
+        },
+        {
+          "label": "Lions — W4 recap at Panthers (Oct 5)",
+          "href": "https://www.detroitlions.com/news/recap-lions-at-panthers-bates-goff-gibbs"
         }
       ]
     },
