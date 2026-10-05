@@ -1,0 +1,1320 @@
+{
+  "desk_date": "2026-10-05",
+  "pinned": false,
+  "package": "monday",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Monday, Oct 5",
+    "bottom_line": "Week 4 finals locked for all 30 clubs that played Thursday, London, Sunday and SNF. Frame: W4 RECAP + W5 PREVIEW. Every seat is Pass on win totals; DEN's prior Over 2/5 is retired to Pass. ATL and NO play MNF — Tuesday desk, not in this package. W5 byes: KC, CAR. Coming soon ON — no minted KEI.",
+    "storylines": [
+      "NFC North: CHI 23–12 vs NYJ (3–1); GB 17–14 @ TB (2–2); MIN 15–10 vs MIA (4–0); DET 26–32 @ CAR on SNF (2–2). W5: CHI @ GB, MIN @ NO, DET @ ARI. All Pass.",
+      "NFC East: DAL 34–30 @ HOU (2–2); NYG 36–24 vs ARI on Banks' 98-yard pick-six (3–1); PHI 20–24 vs LAR (2–2); WAS 13–30 vs IND in London (1–3). W5: TB @ DAL (TNF), PHI vs JAX (London), NYG @ WAS. All Pass.",
+      "NFC South: CAR 32–26 vs DET on SNF (2–2, W5 bye); TB 14–17 vs GB (0–4, W5 @ DAL on TNF). ATL and NO play MNF — Tuesday desk. All Pass.",
+      "NFC West: SF 24–14 vs DEN (4–0); SEA 30–23 vs LAC (3–1); LAR 24–20 @ PHI (2–2); ARI 24–36 @ NYG (1–3). W5: SF @ SEA, DET @ ARI, BUF @ LAR (MNF Oct 12). All Pass.",
+      "AFC East: NE 29–26 @ BUF (NE 2–2, BUF 3–1); MIA 10–15 @ MIN (0–4); NYJ 12–23 @ CHI (1–3). W5: LV @ NE, CIN @ MIA, CLE @ NYJ, BUF @ LAR (MNF). All Pass.",
+      "AFC South: IND 30–13 vs WSH in London (2–2); JAX 22–17 @ CIN (3–1); HOU 30–34 vs DAL (0–4); TEN 18–24 @ BAL (0–4). W5: HOU @ TEN, IND @ PIT, JAX vs PHI (London). All Pass.",
+      "AFC North: BAL 24–18 vs TEN (3–1); CLE 27–24 vs PIT on TNF (CLE 3–1, PIT 2–2); CIN 17–22 vs JAX (2–2). W5: BAL @ ATL (SNF), IND @ PIT, CIN @ MIA, CLE @ NYJ. All Pass.",
+      "AFC West: KC 30–27 @ LV (KC 4–0, W5 bye; LV 3–1); DEN 14–24 @ SF (2–2) — prior Over 2/5 retired to Pass; LAC 23–30 @ SEA (0–4). W5: DEN @ LAC, LV @ NE. All Pass."
+    ],
+    "what_to_watch": "Monday injury/IR cycle into Week 5: Lamar Jackson's ankle (BAL), Mariota's scans and Daniels' practice week (WAS), Barkley's hamstring (PHI), Chase's concussion protocol (CIN), Thornton and Rice (KC), Cooper's Achilles (GB), Darrisaw's concussion evaluation (MIN), Freeling and Phillips (CAR). TNF TB @ DAL Thu Oct 8; London PHI vs JAX Sun 9:30 a.m. ET. MNF ATL @ NO is Tuesday desk only. Coming soon ON.",
+    "sources": [
+      {
+        "label": "NFL.com — Week 4 schedule",
+        "href": "https://www.nfl.com/schedules/2026/by-week/week-4"
+      },
+      {
+        "label": "NFL.com — Week 5 schedule",
+        "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+      },
+      {
+        "label": "ESPN — DET @ CAR Final (SNF)",
+        "href": "https://www.espn.com/nfl/game/_/gameId/401872978"
+      },
+      {
+        "label": "NFL.com — Lions at Panthers game center (FINAL)",
+        "href": "https://www.nfl.com/games/lions-at-panthers-2026-reg-4"
+      },
+      {
+        "label": "RotoWire — win totals stamp",
+        "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "ARI",
+      "title": "Cardinals — W4 recap + W5 preview (Oct 5)",
+      "bottom_line": "W4 FINAL L 24–36 @ NYG. Open 1-3. Brissett threw three INT, the last Deonte Banks' 98-yard pick-six on the final play; ARI led 14-3 after Q1 and was shut out in Q4. Left tackle Paris Johnson Jr. (biceps) and right guard Isaiah Adams (ankle) both left. W5 hosts DET. Street: 4.5, O -128 / U +102 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 6.55. Pass.",
+      "key_points": [
+        "W4 RECAP FINAL: L 24–36 @ NYG. Open 1-3; 98-yard pick-six ended it.",
+        "W5 PREVIEW: hosts DET Sun Oct 11. OL statuses (Johnson, Adams) are the primary variable.",
+        "NUMBER: Street 4.5 O -128 / U +102 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 6.55. Coming soon ON. Pass."
+      ],
+      "what_to_watch": "Monday update on Johnson (biceps), then the first W5 practice report: Adams, Wingard, Long.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL L 24–36 @ NYG. 1-3. LT Johnson biceps and RG Adams ankle unresolved. Win total Pass.",
+      "sources": [
+        {
+          "label": "ESPN — ARI @ NYG",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872966"
+        },
+        {
+          "label": "CBS — Cardinals at Giants recap",
+          "href": "https://www.cbssports.com/nfl/gametracker/recap/NFL_20261004_ARI@NYG/"
+        },
+        {
+          "label": "AZCardinals.com — Urban, Giants aftermath",
+          "href": "https://www.azcardinals.com/news/one-that-got-away-and-giants-aftermath"
+        },
+        {
+          "label": "Cardinals Wire (AOL) — Paris Johnson biceps",
+          "href": "https://www.aol.com/articles/arizona-cardinals-lt-paris-johnson-212232000.html"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 FINAL: BAL 24–18 TEN. Led 24–7 at half, then Lamar Jackson's left ankle ended his day (didn't return, boot; day-to-day per Rapoport via PFT — no W5 status). 3–1. W5 @ ATL SNF. Pass — FD 11.5 (O −140 / U +120; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); house 8.98 (Aug 22 preseason sim). Pass.",
+      "key_points": [
+        "Club + AP FINAL: Ravens 24, Titans 18 in the rain at M&T Bank. Henry 5-yd TD, Jackson TD passes to Flowers (19) and Andrews (3), Loop 64-yd FG at 0:00 1H (stadium record, club). TEN cut it to six on Robinson's 3-yd TD + 2-pt with 1:12 left.",
+        "Jackson 15/20, 222, 2 TD in the first half only; Huntley 8/9, 63 in relief. Henry 23-73 + TD — seven rush TDs through four games (club). Flowers 8/118/1. BAL 0 turnovers, 13 penalties for 131 yards (ESPN box).",
+        "Jackson left ankle: hurt on the last offensive snap of the 1H; Minter 'don't know enough about it' (Ryan Mink, club); left in a boot, 'believed to be day-to-day' (Rapoport via Josh Alper, PFT). First official read is Wednesday's report.",
+        "Forced to the sideline for the rest of the game (Ravens.com): CB Humphrey (calf), TE Smythe (Achilles) and RG Vorhees (foot); the club says Smythe and Vorhees were ruled out in-game, and gives no further updates. OLB Hendrickson was inactive (finger procedure; Ravens.com inactives). C Gwyn (ankle) + Pocic (knee) placed on IR after Brazil; rookie Ioane now at C (Ravens.com).",
+        "W5: @ ATL — SNF Sun Oct 11, 8:20p ET NBC, dome. ATL plays MNF Mon Oct 5, so the Falcons get six days to BAL's seven (NFL.com W5)."
+      ],
+      "what_to_watch": "Wednesday report on Jackson's ankle — Huntley-start talk is a hold until it's official. Humphrey/Smythe/Vorhees/Hendrickson designations.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL BAL 24–18; Jackson ankle day-to-day (no W5 status); Humphrey/Smythe/Vorhees left the game. Pass.",
+      "sources": [
+        {
+          "label": "Ravens — game recap vs TEN",
+          "href": "https://www.baltimoreravens.com/news/game-recap-ravens-titans-week-4-game-recap-injuries-lamar-jackson"
+        },
+        {
+          "label": "Ravens — Jackson ankle (Mink)",
+          "href": "https://www.baltimoreravens.com/news/lamar-jackson-ankle-injury-ravens-titans-tyler-huntley"
+        },
+        {
+          "label": "PFT — Jackson boot, day-to-day",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/lamar-jackson-left-stadium-in-a-boot-believed-to-be-day-to-day-with-ankle-injury"
+        },
+        {
+          "label": "Ravens — Smythe/Humphrey/Vorhees",
+          "href": "https://www.baltimoreravens.com/news/ravens-injuries-durham-smythe-marlon-humphrey-andrew-vorhees-achilles-calf-sidelined"
+        },
+        {
+          "label": "Ravens — inactives (Hendrickson)",
+          "href": "https://www.baltimoreravens.com/news/zay-flowers-ronnie-stanley-inactives-ravens-titans-2026"
+        },
+        {
+          "label": "ESPN — AP recap BAL 24–18",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872973"
+        },
+        {
+          "label": "NFL.com — Week 5 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+        }
+      ]
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: lost to NE 29–26 at Highmark (AP + Bills club). First loss of the year and first at new Highmark. 3–1. W5: @ LAR (MNF). Pass on 11.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL L vs NE 26–29 · 3–1.",
+        "Allen record 88th scrimmage TD; offense season lows (340 yds / 19 FD).",
+        "Moore shoulder, Oliver knee, Alford ankle in-game exits.",
+        "W5: @ LAR (MNF) — Pass."
+      ],
+      "what_to_watch": "Moore (shoulder), Oliver (knee), Alford (ankle), Benford (toe) status into @ LAR MNF.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL L 26–29 vs NE. Moore/Oliver/Alford exits. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Bills club — Patriots 29, Bills 26 FINAL recap",
+          "href": "https://www.buffalobills.com/news/patriots-29-bills-26-final-score-recap-highlights"
+        },
+        {
+          "label": "AP via CBS Sports — Maye 3 TDs, Pats rally 29–26",
+          "href": "https://www.cbssports.com/nfl/news/drake-maye-throws-3-tds-as-patriots-rally-past-bills-29-26/"
+        },
+        {
+          "label": "Bills club — Oliver (knee) / Alford (ankle) in-game injury updates",
+          "href": "https://www.buffalobills.com/news/bills-issue-injury-updates-on-ed-oliver-and-dee-alford"
+        },
+        {
+          "label": "ESPN — DJ Moore doubtful to return (shoulder)",
+          "href": "https://www.espn.com/nfl/story/_/id/50101817/bills-wr-dj-moore-doubtful-return-injuring-shoulder"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "CAR",
+      "title": "Panthers club — Oct 5",
+      "bottom_line": "Panthers 32, Lions 26 (SNF). McMillan 14 catches / 192 / two TDs, Hubbard 20 for 122 and two scores, Young 329 with no picks; late fourth-down stop seals it. 2–2 into the bye. Pass.",
+      "key_points": [
+        "FINAL: W 32–26 vs DET, Bank of America Stadium — the first Sunday Night Football game in Charlotte in 11 years (ESPN box; panthers.com). Tied 16–16 at half; CAR scored 16 of the next 19 (McMillan 10-yard TD, Hubbard 2-yard TD, Fitzgerald 33-yard FG) to lead 32–19 before Goff hit LaPorta for 8 with 3:38 left. Rookie CB Will Lee III and S Lathan Ransom stopped Detroit's final fourth down short (panthers.com); DET 1-for-3 on fourth down (ESPN box).",
+        "Young 29/41, 329, 2 TD, 0 INT, sacked 3x (ESPN box). McMillan 14/192/2 on 16 targets — 32- and 10-yard TDs; nine catches for 147 in the first half, a franchise record for receptions in a half (panthers.com). Next: Metchie 3/37, Waller 3/36 (ESPN box).",
+        "Usage: Hubbard 20 carries / 122 / 2 TD (15 and 2 yards; long 32); CAR ran 28 times for 127 (4.5 ypc) and held the ball 33:15, zero turnovers (ESPN box). Hubbard passed Christian McCaffrey for third on the club's all-time rushing list among running backs (panthers.com). Fitzgerald 2-of-2 on FGs (47, 33) but missed two extra points (ESPN box).",
+        "Defense, without both starting corners (Horn and Mike Jackson to IR Wednesday; Akayleb Evans and Lee started — panthers.com): Goff 32/52 for 412, 1 TD, 0 INT; DET held to 15 rushes for 46 and 2-for-4 in the red zone; DET K Jake Bates 4-of-4 on FGs (ESPN box). Evans led with 11 tackles (ESPN box).",
+        "Injuries: rookie RT Monroe Freeling (knee) left in the third quarter and did not return — Stone Forsythe replaced him; OLB Jaelan Phillips (hamstring) went to the injury tent in the fourth and did not return (panthers.com). Already out: LG Damien Lewis (Corey Bullock started) and WR Jalen Coker, inactive; WR Xavier Legette placed on IR Saturday, out at least four weeks (panthers.com). No further statuses published in these sources.",
+        "W5: BYE (ESPN W5 slate — teams on bye: KC, CAR). Bye note only."
+      ],
+      "what_to_watch": "Bye-week word on Freeling's knee and Phillips' hamstring; Coker and Lewis returns; corner depth with Horn and Jackson on IR. McMillan's target share (16 of 41) as Coker comes back.",
+      "is_material_depth": true,
+      "sot_flag": "Score FINAL ESPN (status Final, 32–26). Freeling / Phillips are in-game exits per panthers.com — no diagnosis beyond knee / hamstring, no return dates, no IR invented. Legette IR per panthers.com. ESPN recap/AP story not yet posted at pull (~11:55 p.m. ET); box from ESPN summary API.",
+      "sources": [
+        {
+          "label": "ESPN — DET @ CAR Final (box + scoring)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872978"
+        },
+        {
+          "label": "Panthers — Rapid Reactions: Panthers deliver in prime time, beating Lions",
+          "href": "https://www.panthers.com/news/rapid-reactions-panthers-deliver-in-prime-time-beating-lions-with-big-play-offense"
+        },
+        {
+          "label": "Panthers — Week 4 inactives vs. Detroit",
+          "href": "https://www.panthers.com/news/week-4-inactives-vs-detroit-jalen-coker-out-this-week-sunday-night-football-lions"
+        },
+        {
+          "label": "Panthers — Legette placed on injured reserve",
+          "href": "https://www.panthers.com/news/panthers-place-wide-receiver-xavier-legette-on-injured-reserve-lions-sunday-night-football-jalen-coker-status"
+        },
+        {
+          "label": "Panthers — Horn and Mike Jackson placed on IR",
+          "href": "https://www.panthers.com/news/panthers-place-jaycee-horn-and-mike-jackson-on-injured-reserve"
+        },
+        {
+          "label": "ESPN — NFL schedule, Week 5 (CAR bye)",
+          "href": "https://www.espn.com/nfl/schedule/_/week/5"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears — Oct 5",
+      "bottom_line": "Week 4: Chicago 23–12 over NY Jets. Bagent threw for 268 in his first start since 2023; Monangai ran for 146 and two TDs. Week 5 at Green Bay. Pass.",
+      "key_points": [
+        "chicagobears.com Oct 4: Bears 23, Jets 12; 3–1. Tyson Bagent 268 passing yards. Kyle Monangai 146 rushing yards, 2 TD on a career-high 30 carries. Bears out-gained NYJ 492–157; Jets 0-of-7 on third down. Bagent is the third QB to win a game for Chicago this season (Williams W1, Keenum W3).",
+        "Club Oct 2: Caleb Williams ruled out for a second straight game (right hamstring). Club Oct 3: LT Braxton Jones to Reserve/Injured (knee, from the Eagles game). Club said Theo Benedet would replace Jones; Ozzy Trapilo is ramping up and 'might be available sooner rather than later' (Johnson, Oct 2).",
+        "CB Kyler Gordon's 21-day PUP practice window opened Sep 30; full participant three straight days (club Oct 2). Eligible to play for the first time at Green Bay. Week 5: Bears at Packers, Sun Oct 11, noon CT on FOX (flexed from 3:25 CT)."
+      ],
+      "what_to_watch": "Williams hamstring status into Lambeau. Gordon activation call. LT room with Jones on IR and Trapilo still ramping.",
+      "is_material_depth": true,
+      "sot_flag": "W4 win locked 23–12. Williams out W3 and W4; Jones to IR; Gordon PUP window open. Flag QB, LT and nickel/CB into W5 @ GB.",
+      "sources": [
+        {
+          "label": "Bears — W4 recap vs Jets (Oct 4)",
+          "href": "https://www.chicagobears.com/news/game-recap-bears-ground-jets-improve-to-3-1"
+        },
+        {
+          "label": "Bears — Williams ruled out; Jones, Gordon, Trapilo notes (Oct 2)",
+          "href": "https://www.chicagobears.com/news/injury-update-caleb-williams-officially-ruled-out-for-sunday-s-game-vs-jets"
+        },
+        {
+          "label": "Bears — Jones to Reserve/Injured; Davenport, McCloud elevated (Oct 3)",
+          "href": "https://www.chicagobears.com/news/roster-moves-chicago-bears-place-braxton-jones-on-ir-elevate-2"
+        },
+        {
+          "label": "Bears — Gordon 21-day practice window (Sep 30)",
+          "href": "https://www.chicagobears.com/news/bears-open-db-kyler-gordon-s-21-day-practice-window"
+        },
+        {
+          "label": "Bears — Week 5 at Packers moved to noon CT (Sep 29)",
+          "href": "https://www.chicagobears.com/news/bears-week-5-game-vs-packers-moved-to-noon-ct-kickoff"
+        },
+        {
+          "label": "NFL.com — Jets at Bears game center (FINAL)",
+          "href": "https://www.nfl.com/games/jets-at-bears-2026-reg-4"
+        }
+      ]
+    },
+    {
+      "team_id": "CIN",
+      "title": "Bengals — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 FINAL: JAX 22–17 at Paycor. Burrow threw for 428 and still lost — 23 rush yards and Chase Brown stopped short on 4th-and-10. Chase (concussion) hurt in the 2Q; Higgins (adductor) hurt late. 2–2, two straight losses. W5 @ MIA, then a W6 bye. Pass — FD 10.5 (O +120 / U −140; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); house 7.21 (Aug 22 preseason sim). Pass.",
+      "key_points": [
+        "Club + Jaguars club FINAL: Jaguars 22, Bengals 17. JAX led 13–3 at half; Burrow–Gesicki 15-yd TD and a Burrow 1-yd run kept it close; final drive died at the JAX 12 with 0:50 left (Jaguars club/AP).",
+        "Burrow 39/54, 428, 1 TD, 2 INT + 1 rush TD; Higgins 11/157 (season high, club). CIN ran 15 times for 23 yards (ESPN box).",
+        "Chase concussion: facemask then a hit in the 2Q; missed the second half (ESPN, Ben Baby); Taylor: 'Ja'Marr has a concussion' (Bengals.com). Protocol applies; no W5 status.",
+        "Higgins adductor: Zac Taylor named it as his designation postgame (Bengals.com); no team timeline. Any 'month' figure out there is a columnist estimate, not team info.",
+        "W5: @ MIA — Sun Oct 11, 1:00p ET FOX, Hard Rock. MIA lost 15–10 at MIN to fall to 0–4. CIN is on bye Week 6, so W5 is the only game at risk before a buffer (NFL.com W5/W6)."
+      ],
+      "what_to_watch": "Chase protocol steps and Higgins' adductor at Monday's Taylor presser and Wednesday's report.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 17–22; Chase concussion, Higgins adductor (no timelines). Pass.",
+      "sources": [
+        {
+          "label": "Bengals — W4 recap vs JAX",
+          "href": "https://www.bengals.com/news/bengals-jaguars-recap-postgame-notes-quotes-stats-week-4-2026"
+        },
+        {
+          "label": "Jaguars — game report 22–17",
+          "href": "https://www.jaguars.com/news/game-report-2026-week-4-jaguars-22-bengals-17"
+        },
+        {
+          "label": "ESPN — Chase concussion (Baby)",
+          "href": "https://www.espn.com/nfl/story/_/id/50101891/bengals-star-wr-jamarr-chase-suffers-concussion-vs-jaguars"
+        },
+        {
+          "label": "Bengals — postgame quotes (Taylor: Chase, Higgins)",
+          "href": "https://www.bengals.com/news/bengals-jaguars-postgame-quotes-week-4-2026"
+        },
+        {
+          "label": "NFL.com — Week 5 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+        },
+        {
+          "label": "NFL.com — Week 6 schedule (CIN bye)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-6"
+        }
+      ]
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 TNF FINAL: CLE 27–24 PIT. Led 21–10 at the half and 24–16 late; PIT tied it 24–24 with 1:42 left (Steelers.com), then Szmyt's career-long 56 with 0:10 and Delpit's pick on PIT's last snap closed it. 3–1 for the first time since 2001. Graham (MCL + ankle sprains) is week-to-week. W5 @ NYJ off 10 days. Pass — FD 7.5 (O +100 / U −120; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals), up from 6.5 on Sep 27; house 8.59 (Aug 22 preseason sim). Pass.",
+      "key_points": [
+        "Club + AP FINAL: Browns 27, Steelers 24. Third straight win; eighth straight Thursday-night win (AP). 21 straight 2Q points: McLaughlin 28-yd run, Judkins 2-yd run, Watson–Fannin 2-yd TD.",
+        "Watson 24/33, 268, 1 TD, 1 INT — go-ahead drive for a third straight week (club). Five sacks of Rodgers by five players; two INTs (Ward, Delpit) (ESPN).",
+        "DT Mason Graham: MCL sprain + ankle sprain, 'week-to-week' (Kelsey Russo, club). He leads CLE with 4 sacks. Mike Hall Jr. (ankle) was carted to the locker room in the 2Q and returned in the 3Q (Daniel Oyefusi, ESPN).",
+        "OL: C Elgton Jenkins (concussion) out, Wypler expected to start in his place; G Teven Jenkins (back) out for a fourth straight game (Browns.com injury report).",
+        "W5: @ NYJ — Sun Oct 11, 1:00p ET CBS, MetLife. CLE on 10 days' rest; NYJ 1–3 after a 23–12 loss at CHI with Breece Hall (quad) inactive (NFL.com W5; Jets club)."
+      ],
+      "what_to_watch": "Graham's week-to-week clock and whether both Jenkinses are back for the Jets.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL W 27–24; 3–1; Graham MCL/ankle week-to-week. Pass.",
+      "sources": [
+        {
+          "label": "Browns — 27–24 final recap",
+          "href": "https://www.clevelandbrowns.com/news/browns-27-steelers-24-final-score-stats-game-recap"
+        },
+        {
+          "label": "Browns — Graham MCL + ankle",
+          "href": "https://www.clevelandbrowns.com/news/mason-graham-sustained-mcl-sprain-and-ankle-sprain-in-week-4-against-the-steelers"
+        },
+        {
+          "label": "Browns — Elgton Jenkins out W4",
+          "href": "https://www.clevelandbrowns.com/news/elgton-jenkins-out-for-week-4-against-the-steelers-injury-report"
+        },
+        {
+          "label": "ESPN — TNF game story",
+          "href": "https://www.espn.com/nfl/story/_/id/50079473/cleveland-browns-pittsburgh-steelers-week-4-tnf"
+        },
+        {
+          "label": "ESPN — Graham, Hall Jr. (Oyefusi)",
+          "href": "https://www.espn.com/nfl/story/_/id/50081421/browns-dt-mason-graham-leaves-game-knee-injury"
+        },
+        {
+          "label": "NFL.com — Browns at Jets W5",
+          "href": "https://www.nfl.com/games/browns-at-jets-2026-reg-5"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys club — Oct 5",
+      "bottom_line": "Cowboys 34, Texans 30. Lamb 17 catches, Williams three second-half TDs, Prescott 74-yard winning drive. 2–2. Pass.",
+      "key_points": [
+        "FINAL: W 34–30 @ HOU. Down 16–6 at half; 28 second-half points. Lamb career-high 17 catches / 189 yards (21 targets) and the 12-yard winner with 0:40 left (AP/ESPN box).",
+        "Prescott 32/45, 335 yards, 1 TD, 0 INT; 11 plays / 74 yards on the final drive incl. a fourth-down conversion; 9-for-9 for 89 to open the fourth (AP; Cowboys.com). Pickens 2/75 incl. 53-yarder (ESPN box).",
+        "Usage: Javonte Williams 19 carries / 62 yards / three TDs (8, 1, 2 yards), all second half; Dallas rushed 25 times for 75 (3.0 ypc) vs 45 pass attempts (ESPN box).",
+        "Aubrey 2-of-4: a 62-yarder blocked, then a 65-yarder with ~30 seconds left missed wide left; Houston turned the field into a 54-yard FG for 16–6 at the half (AP; Dallas Morning News).",
+        "CB Joey Porter Jr. debuted after the Wednesday trade from Pittsburgh and played extensively (AP). Overshown and Durant (both hamstring) were listed out pregame (ESPN game summary; NFL.com game center).",
+        "W5: vs TB Thu Oct 8, 8:15 p.m. ET, Prime Video, AT&T Stadium (ESPN). TB is 0–4 (ESPN/Bucs); short week for both — each played Sunday 1 p.m. ET."
+      ],
+      "what_to_watch": "Short-week legs and Lamb's target share (21 vs 45 attempts). Williams-heavy second half vs 3.0 ypc team rush. Porter's role in week two. Overshown/Durant practice reports.",
+      "is_material_depth": true,
+      "sot_flag": "Score FINAL ESPN/AP. Overshown/Durant hamstring outs are the pregame report — no return dates or IR invented.",
+      "sources": [
+        {
+          "label": "ESPN — DAL @ HOU Final (box + scoring)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872967"
+        },
+        {
+          "label": "ESPN/AP — Lamb's late TD caps Cowboys rally, 34-30",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872967"
+        },
+        {
+          "label": "CBS/AP — Lamb's 17-catch day lifts Cowboys",
+          "href": "https://www.cbssports.com/nfl/news/ceedee-lambs-17-catch-day-lifts-cowboys-to-late-win-over-texans/"
+        },
+        {
+          "label": "Cowboys — Game Recap, 34-30 win",
+          "href": "https://www.dallascowboys.com/news/game-recap-cowboys-thrill-with-34-30-win"
+        },
+        {
+          "label": "Dallas Morning News — Five thoughts, Cowboys-Texans",
+          "href": "https://www.dallasnews.com/sports/cowboys/article/cowboys-texans-five-thoughts-ceedee-lamb-22458951.php"
+        },
+        {
+          "label": "NFL.com — Cowboys at Texans game center",
+          "href": "https://www.nfl.com/games/cowboys-at-texans-2026-reg-4"
+        }
+      ]
+    },
+    {
+      "team_id": "DEN",
+      "title": "Broncos — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 FINAL: SF 24–14 DEN. 3–3 at half; a Mims muffed punt set up SF's go-ahead TD, and Purdy's 56-yarder to Kittle at 2:15 ended Nix's comeback bid. Surtain (ankle), Moss (ribs), Bryant (ankle) all left and didn't return. 2–2. Prior Over 2/5 retired to Pass. Street FD 9.5 (O −135 / U +115; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); house 10.51 (Aug 22 preseason sim). W5 @ LAC.",
+      "key_points": [
+        "AP via ESPN + NFL.com FINAL: 49ers 24, Broncos 14 at Levi's. Lutz FGs from 52 and 40; a field goal was blocked on the last play of the 1H to keep it 3–3 (AP).",
+        "SF's 28-yd TD drive (Purdy–Samuel 1) came off Mims' fumbled punt return; McCaffrey 1-yd TD made it 17–6. Nix–Waddle 13-yd TD + Badie 2-pt cut it to 17–14 with 4:05 left before Kittle's 56-yd TD (AP).",
+        "Nix 25/42, 214, 1 TD; Harvey 10 catches for 68; Dobbins 11-40. DEN 296 yds, 1 TO (ESPN box).",
+        "Injuries (AP): CB Surtain (ankle), CB Riley Moss (ribs), WR Pat Bryant (ankle) left and didn't return. No post-game designation yet. OLB Tillman (hamstring) was inactive (club). OLB Cooper still on the Commissioner's Exempt list.",
+        "W5: @ LAC — Sun Oct 11, 4:05p ET CBS, SoFi. Then a short week: hosts SEA on TNF Oct 15 (NFL.com W5/W6)."
+      ],
+      "what_to_watch": "Surtain and Moss — two starting corners — heading into Herbert and a short TNF turnaround.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 14–24 @ SF; Surtain/Moss/Bryant exits. Over 2/5 retired to Pass. Pass.",
+      "sources": [
+        {
+          "label": "ESPN — AP recap SF 24–14",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872975"
+        },
+        {
+          "label": "NFL.com — Broncos at 49ers",
+          "href": "https://www.nfl.com/games/broncos-at-49ers-2026-reg-4"
+        },
+        {
+          "label": "Broncos — W4 inactives",
+          "href": "https://www.denverbroncos.com/news/broncos-announce-inactives-for-week-4-game-vs-49ers"
+        },
+        {
+          "label": "NFL.com — Cooper Commissioner's Exempt",
+          "href": "https://www.nfl.com/news/nfl-places-broncos-olb-jonathon-cooper-on-commissioner-s-exempt-list"
+        },
+        {
+          "label": "NFL.com — Week 5 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+        },
+        {
+          "label": "RotoWire — NFL win totals (FD)",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions — Oct 5",
+      "bottom_line": "Week 4: Carolina 32–26 over Detroit (SNF), 2–2. Goff threw for 412 but the Lions settled for four Bates field goals and trailed 29–19 after three. Week 5 at Arizona. Pass.",
+      "key_points": [
+        "NFL.com / ESPN FINAL Oct 4: Panthers 32, Lions 26; Detroit 2–2. Jared Goff 32-of-52, 412 yards, 1 TD, 0 INT, sacked once. Jahmyr Gibbs 15 carries, 46 yards, 1 TD. Jameson Williams 6 for 102; Sam LaPorta 8 for 84 and the late TD; Amon-Ra St. Brown 8 for 75. Jake Bates field goals of 54, 43, 41 and 26.",
+        "Carolina: Bryce Young two TD passes to Tetairoa McMillan; Chuba Hubbard two rushing TDs; Ryan Fitzgerald FGs of 47 and 33. Detroit's last score came with 3:38 left (32–26).",
+        "Club inactives Oct 4: CB D.J. Reed (rib, questionable) was active; G Ben Bartch (foot) was the only injury inactive; S Bishop Fitzgerald, LB Devin White, TE Tyler Conklin, DL Mekhi Wingo and edge Ahmed Hassanein were healthy scratches. Week 5: Lions at Cardinals, Sun Oct 11, 4:25 PM ET on FOX."
+      ],
+      "what_to_watch": "Club recap and Monday injury report (not posted at file). Run game after 46 Gibbs yards. Reed's rib into Arizona.",
+      "is_material_depth": true,
+      "sot_flag": "W4 loss locked 32–26 (NFL.com + ESPN; club recap pending at file). No in-game injury carried. Flag DET run game and CB (Reed rib) into W5 @ ARI.",
+      "sources": [
+        {
+          "label": "NFL.com — Lions at Panthers game center (FINAL)",
+          "href": "https://www.nfl.com/games/lions-at-panthers-2026-reg-4"
+        },
+        {
+          "label": "Lions — W4 inactives at Panthers (Oct 4)",
+          "href": "https://www.detroitlions.com/news/inactives-lions-at-panthers-bartch-reed"
+        },
+        {
+          "label": "Lions — W4 injury report and designations (Oct 2)",
+          "href": "https://www.detroitlions.com/news/lions-at-panthers-injury-report-oct-2-bartch-reed-wonnum"
+        }
+      ]
+    },
+    {
+      "team_id": "GB",
+      "title": "Packers — Oct 5",
+      "bottom_line": "Week 4: Green Bay 17–14 at Tampa Bay. Defense closed it; Edgerrin Cooper left with an Achilles injury LaFleur called 'not good'. Week 5 hosts Chicago. Pass.",
+      "key_points": [
+        "packers.com Oct 4: Packers 17, Buccaneers 14; 2–2. Defense ended it: Evan Williams sack, then an incomplete pass on 4th-and-11 with under two minutes left. Two interceptions (Cooper, Williams). Trey Smack 58-yard FG gave a 10–7 halftime lead. Offense gave back chances: Kaleb Johnson fumble inside the 5, a late Jordan Love INT at the TB 7, 10 penalties.",
+        "Club: Cooper carted off in the second half with what was announced as an Achilles injury; LaFleur said 'not good' and he 'would suspect' the season is over. No IR move in the club sources pulled. RB Chris Brooks left with an ankle injury. Packers.com also notes Josh Jacobs on the commissioner's exempt list.",
+        "Line: Laken Tomlinson started at LG and Travis Glover at RG; Love was not sacked and hit twice. Kevin Zeitler (signed this week) was inactive. Reed (neck, season-ending surgery), Bako-Bewele and Brinson are on IR (club). Week 5: Chicago at Green Bay, Sun Oct 11, noon CT on FOX."
+      ],
+      "what_to_watch": "Cooper's formal status and the LB room without him. Brooks ankle with Jacobs on the exempt list. Zeitler's first snaps on a line that held up in W4.",
+      "is_material_depth": true,
+      "sot_flag": "W4 win locked 17–14. Cooper Achilles (likely season-ending per LaFleur), Brooks ankle; Reed, Bako-Bewele, Brinson on IR. Flag LB, RB and OL into W5 vs CHI.",
+      "sources": [
+        {
+          "label": "Packers — W4 5 takeaways vs Buccaneers (Oct 4)",
+          "href": "https://www.packers.com/news/game-recap-5-takeaways-from-packers-victory-over-buccaneers-week-4-2026"
+        },
+        {
+          "label": "Packers — Rapid reaction after W4 (Oct 4)",
+          "href": "https://www.packers.com/news/rapid-reaction-packers-get-win-but-still-hurting-ourselves-week-4-2026"
+        },
+        {
+          "label": "Packers — W4 inactives (Oct 4)",
+          "href": "https://www.packers.com/news/packers-buccaneers-week-4-inactives-oct-4-2026"
+        },
+        {
+          "label": "Packers — Brinson to IR (Oct 3)",
+          "href": "https://www.packers.com/news/packers-announce-injury-update-oct-3-2026"
+        },
+        {
+          "label": "Packers — Reed season-ending neck surgery (Oct 2)",
+          "href": "https://www.packers.com/news/packers-ready-to-pull-together-to-fill-jayden-reed-s-void-oct-2-2026"
+        },
+        {
+          "label": "NFL.com — Packers at Buccaneers game center (FINAL)",
+          "href": "https://www.nfl.com/games/packers-at-buccaneers-2026-reg-4"
+        }
+      ]
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: lost to DAL 34–30 (AP/ESPN + Cowboys club). Led 16–6 at half. Collins back: 7 rec / 118 / 2 TD. 0–4. W5: @ TEN. Pass on 7.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL L 30–34 vs DAL · 0–4.",
+        "Collins back: 7/118/2 TD; Stroud 347 yds, 0 TO.",
+        "Al-Shaair groin out; Smith hamstring; Crumedy shoulder.",
+        "W5: @ TEN — Pass."
+      ],
+      "what_to_watch": "Al-Shaair (groin), Jaylin Smith (hamstring), Crumedy (shoulder) into TEN.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL L 30–34 vs DAL. Collins back. Al-Shaair groin. Pass. Coming soon ON. AP 'trailed by 4' vs club 30–27 flagged.",
+      "sources": [
+        {
+          "label": "AP via ESPN — Cowboys 34, Texans 30 recap",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872967"
+        },
+        {
+          "label": "Cowboys club — Game Recap: Cowboys thrill with 34–30 win",
+          "href": "https://www.dallascowboys.com/news/game-recap-cowboys-thrill-with-34-30-win"
+        },
+        {
+          "label": "Yahoo Sports (Charean Williams) — Cowboys' TD with 40 seconds left beats Texans",
+          "href": "https://sports.yahoo.com/articles/cowboys-touchdown-40-seconds-left-201911087.html"
+        },
+        {
+          "label": "SI — 7 Texans takeaways vs Cowboys",
+          "href": "https://www.si.com/nfl/texans/onsi/7-texans-takeaways-from-crushing-30-34-loss-vs-cowboys-in-week-4"
+        },
+        {
+          "label": "CBS Sports — Jaylin Smith hamstring",
+          "href": "https://www.cbssports.com/fantasy/football/news/texans-jaylin-smith-injures-hamstring-vs-dallas-in-week-4/"
+        },
+        {
+          "label": "Yahoo Sports (Jonathan M. Alexander) — Texans get Collins back, won't have Al-Shaair (Ryans 'some time' quote)",
+          "href": "https://sports.yahoo.com/articles/texans-nico-collins-back-cowboys-212736765.html"
+        },
+        {
+          "label": "PFT — Texans rule out Azeez Al-Shaair",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/texans-rule-out-azeez-al-shaair-list-jadeveon-clowney-as-questionable"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "IND",
+      "title": "Colts — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: beat WSH 30–13 in London (AP + Colts club). Taylor 2 TD, Shrader 3 FG. 2–2. W5: @ PIT. Pass on 8.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL W 30–13 vs WSH (London) · 2–2.",
+        "Taylor 2 TD; Jones 2 TO; Shrader 3 FG.",
+        "Carlies ribs, Key + Dulin hamstrings, Allen groin; Raimann returned.",
+        "W5: @ PIT — Pass."
+      ],
+      "what_to_watch": "Allen (groin), Carlies (ribs), Key (hamstring), Dulin (hamstring) into PIT.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL W 30–13 vs WSH. Multiple soft-tissue injuries. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Colts club — Colts overcome sluggish start to thump Commanders in London",
+          "href": "https://www.colts.com/news/colts-overcome-sluggish-start-to-thump-commanders-in-london"
+        },
+        {
+          "label": "AP via CBS Sports — Jonathan Taylor powers Colts past Commanders in London",
+          "href": "https://www.cbssports.com/nfl/news/jonathan-taylor-powers-colts-past-commanders-in-london/"
+        },
+        {
+          "label": "IndyStar via Yahoo — Colts good news and bad news on injuries in London",
+          "href": "https://sports.yahoo.com/articles/colts-good-news-bad-news-184145744.html"
+        },
+        {
+          "label": "Sky Sports — Colts 30–13 Commanders",
+          "href": "https://www.skysports.com/nfl/news/13594955/nfl-in-london-indianapolis-colts-beat-washington-commanders-30-13-at-tottenham-hotspur-stadium"
+        },
+        {
+          "label": "NFL.com Game Center — IND at WSH 2026 REG 4",
+          "href": "https://www.nfl.com/games/colts-at-commanders-2026-reg-4"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "JAX",
+      "title": "Jaguars — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: beat CIN 22–17 (AP + Jaguars club). Two Burrow INTs; stop on 4th-and-10 sealed it. 3–1, first in AFC South. W5: vs PHI in London. Pass on 10.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL W 22–17 @ CIN · 3–1.",
+        "Defense: 2 Burrow INTs; INT streak 9 games.",
+        "Ransaw knee, Murray concussion, Brown hamstring.",
+        "W5: vs PHI (London) — Pass."
+      ],
+      "what_to_watch": "Ransaw (knee), Murray (concussion protocol), Brown (hamstring) into PHI in London.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL W 22–17 @ CIN. Secondary thin. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Jaguars club — Game Report: Jaguars 22, Bengals 17",
+          "href": "https://www.jaguars.com/news/game-report-2026-week-4-jaguars-22-bengals-17"
+        },
+        {
+          "label": "AP via CBS Sports — Jaguars hold off Burrow, Bengals 22–17",
+          "href": "https://www.cbssports.com/nfl/news/jaguars-hold-off-joe-burrow-bengals-for-22-17-win/"
+        },
+        {
+          "label": "Bengals club — Postgame recap vs Jaguars",
+          "href": "https://www.bengals.com/news/bengals-jaguars-recap-postgame-notes-quotes-stats-week-4-2026"
+        },
+        {
+          "label": "Florida Times-Union — Ransaw knee",
+          "href": "https://www.jacksonville.com/story/sports/nfl/jaguars/2026/10/04/jacksonville-jaguars-caleb-ransaw-knee-injury-cincinnati-bengals-football/92091133007/"
+        },
+        {
+          "label": "Florida Times-Union — Murray concussion",
+          "href": "https://www.jacksonville.com/story/sports/nfl/jaguars/2026/10/04/jacksonville-jaguars-eric-murray-evaluated-concussion-cincinnati-bengals-score-touchdown/92093279007/"
+        },
+        {
+          "label": "Sky Sports — PHI vs JAX at Tottenham next Sunday",
+          "href": "https://www.skysports.com/nfl/news/13594955/nfl-in-london-indianapolis-colts-beat-washington-commanders-30-13-at-tottenham-hotspur-stadium"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "KC",
+      "title": "Chiefs — Week 4 RECAP + Week 5 BYE — Oct 5",
+      "bottom_line": "W4 FINAL: KC 30–27 @ LV. Walker 22-177, 2 TD; 20 fourth-quarter points, the last seven off a Raiders kickoff fumble. Thornton (5/111/2 TD) carted off (left-leg injury per AP; ankle per ESPN's game injury list); Rice (hamstring) didn't return. 4–0. W5 BYE. Pass — FD 11.5 (O −125 / U +105; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); house 9.31 (Aug 22 preseason sim). Pass.",
+      "key_points": [
+        "AP via ESPN + NFL.com FINAL: Chiefs 30, Raiders 27 at Allegiant. LV led 13–10 into the 4Q; Walker's 76-yd run set up Mahomes–Thornton 8-yd TD for KC's first lead (AP).",
+        "Walker 2-yd TD at 3:21 for the lead for good (23–19), then a 22-yd TD after LV fumbled the kickoff. Cousins–Bowers 20-yd TD + 2-pt at 1:46; Cousins picked on the final drive (AP/ESPN).",
+        "Mahomes 15/30, 225, 2 TD, 0 INT; KC 189 rush yds, 0 TO (ESPN box). Mahomes 6–0 at Allegiant; Reid 7–1 there (AP).",
+        "Thornton suffered a 'gruesome-looking' left leg injury on his 55-yd catch and was carted off (AP); ESPN's game injury list shows ankle. Rice (hamstring) left in the 1Q (AP). LT Josh Simmons (back) was inactive (Chiefs.com inactives); Benson started the prior three games (Yahoo Sports, Oct 3). No post-game timelines yet.",
+        "BYE W5 (NFL.com). Next: vs LAC, Sun Oct 18, 4:25p ET CBS, Arrowhead — 14 days between games (NFL.com W6)."
+      ],
+      "what_to_watch": "Thornton and Rice diagnoses over the bye; whether Simmons is back for LAC.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL W 30–27 @ LV; 4–0; Thornton carted off, Rice hamstring. W5 bye. Pass.",
+      "sources": [
+        {
+          "label": "ESPN — AP recap KC 30–27",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872976"
+        },
+        {
+          "label": "ESPN — KC@LV game page (injury list)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872976"
+        },
+        {
+          "label": "NFL.com — Chiefs at Raiders",
+          "href": "https://www.nfl.com/games/chiefs-at-raiders-2026-reg-4"
+        },
+        {
+          "label": "Chiefs — W4 inactives",
+          "href": "https://www.chiefs.com/news/week-4-inactive-players-chiefs-vs-raiders"
+        },
+        {
+          "label": "Yahoo — Simmons ruled out W4 (Muntaha)",
+          "href": "https://sports.yahoo.com/articles/patrick-mahomes-loses-key-protector-170202845.html"
+        },
+        {
+          "label": "NFL.com — Week 5 schedule (KC bye)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+        },
+        {
+          "label": "NFL.com — Week 6 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-6"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 FINAL: SEA 30–23 LAC. Down 20–6 at half after two Herbert picks and a muffed punt; won the 2H 17–10, then a late strip-sack ended it. Four giveaways, 16 flags. 0–4. Alt (neck), Slater (ankle), Penning (head) all tagged in-game. W5 hosts DEN. Pass — FD 7.5 (O +310 / U −400; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); house 8.48 (Aug 22 preseason sim). Pass.",
+      "key_points": [
+        "Chargers club + NFL.com FINAL: Seahawks 30, Chargers 23 at Lumen. Herbert 5/15, 36 yds, 2 INT in the 1H (club); SEA's first TD followed a Derius Davis muffed punt (club).",
+        "2H: Herbert–Vidal 9-yd TD, Hampton 2-yd TD, Dicker 36 FG with 2:14 left to make it 30–23; a personal foul gave SEA a first down, and Herbert was strip-sacked on the last possession (club).",
+        "Herbert 19/31, 189, 1 TD, 2 INT; LAC 4 TO (2 INT, 2 lost fumbles), 16 penalties for 130 yds, sacked 4 times (ESPN box).",
+        "S Derwin James (hamstring) inactive (club). ESPN's game injury listing tagged RT Alt (neck), T Slater (ankle), OL Penning (head) and WR McConkey (foot) during play — no post-game designations yet. LB Perryman's IR window opens W5; no activation news.",
+        "W5: vs DEN — Sun Oct 11, 4:05p ET CBS, SoFi (NFL.com W5). W6: @ KC Oct 18."
+      ],
+      "what_to_watch": "Both tackles and Penning after the game; the line in front of Herbert is the whole story at 0–4.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 23–30 @ SEA; 0–4; Alt/Slater/Penning in-game tags. Pass (Under dropped to Pass Sep 21).",
+      "sources": [
+        {
+          "label": "Chargers — game recap @ SEA",
+          "href": "https://www.chargers.com/news/game-recap-seahawks-week-4-2026"
+        },
+        {
+          "label": "NFL.com — Chargers at Seahawks",
+          "href": "https://www.nfl.com/games/chargers-at-seahawks-2026-reg-4"
+        },
+        {
+          "label": "Chargers — W4 inactives (James)",
+          "href": "https://www.chargers.com/news/seahawks-week-4-inactives-derwin-james"
+        },
+        {
+          "label": "ESPN — LAC@SEA game",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872977"
+        },
+        {
+          "label": "NFL.com — Week 5 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams — W4 recap + W5 preview (Oct 5)",
+      "bottom_line": "W4 FINAL W 24–20 @ PHI. Open 2-2. LAR trailed 20-10 into the fourth and scored 14 unanswered; 415 yards to PHI's 172. Nacua returned: 9-125 and a rushing TD. W5 is MNF Oct 12 vs BUF; Donald, Watson and Parkinson unresolved. Street: 10.5, O -146 / U +116 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals); was 11.5 on Sep 27. House print (Aug 22 preseason sim, cite-only; not public KEI): 11.07. Pass.",
+      "key_points": [
+        "W4 RECAP FINAL: W 24–20 @ PHI. Open 2-2; Nacua back.",
+        "W5 PREVIEW: hosts BUF on MNF Oct 12. Donald, Watson, Parkinson statuses are the variable.",
+        "NUMBER: Street 10.5 O -146 / U +116 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 11.07. Coming soon ON. Pass."
+      ],
+      "what_to_watch": "First W5 practice report (Wed): Donald, Watson, Parkinson, Stewart.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL W 24–20 @ PHI. 2-2. Donald/Watson/Parkinson unresolved. Win total Pass.",
+      "sources": [
+        {
+          "label": "ESPN — LAR @ PHI",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872970"
+        },
+        {
+          "label": "CBS/AP — Rams rally past Eagles",
+          "href": "https://www.cbssports.com/nfl/news/kyren-williams-scores-twice-late-as-rams-rally-past-eagles-24-20/"
+        },
+        {
+          "label": "TheRams.com — Game Recap",
+          "href": "https://www.therams.com/news/game-recap-rams-rally-for-24-20-road-win-over-eagles-in-philadelphia"
+        },
+        {
+          "label": "PhiladelphiaEagles.com — W4 recap",
+          "href": "https://www.philadelphiaeagles.com/news/rams-vs-eagles-game-recap-october-4-2026-nfl-week-4-regular-season-jalen-hurts-matthew-stafford"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 FINAL: KC 30–27 at Allegiant. Led 13–10 into the 4Q and 19–17 with 4:53 left, then a kickoff fumble set up KC's clinching TD. Cousins 365 and 2 TD, but 72 rush yards. First loss: 3–1. W5 @ NE, third road game in four weeks. Pass — FD 7.5 (O −170 / U +145; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); DK 8.5 (O −112 / U −114; DK via RotoWire, same Sun Oct 4 8:13 PM ET pull); house 6.07 (Aug 22 preseason sim). Pass.",
+      "key_points": [
+        "AP via ESPN + NFL.com FINAL: Chiefs 30, Raiders 27. Cousins–Ian Thomas 27-yd TD; Gay FGs from 32, 48, 44 and 48. First 4Q points LV's defense had allowed all season (AP).",
+        "After Walker's go-ahead TD, LV fumbled the ensuing kickoff and KC scored again. Cousins–Bowers 20-yd TD + 2-pt to Cody White at 1:46; Cousins intercepted near midfield on the final drive (AP).",
+        "Cousins 31/52, 365, 2 TD, 1 INT — ends his seven-game win streak (AP). Bowers 6/86/1 playing through illness. Jeanty 15-58; team 72 rush yds, 2.8 a carry (AP/ESPN box).",
+        "G/C Jackson Powers-Johnson (groin) was inactive (Chiefs.com inactives) after being listed Out on Friday's injury report (Raiders.com). ESPN's game listing tagged WR Nailor (concussion) and Zuhn (knee) during play — no post-game designations yet.",
+        "W5: @ NE — Sun Oct 11, 1:00p ET CBS, Gillette; cross-country early window. NE 2–2 after beating BUF 29–26 (NFL.com W5; CBS/AP)."
+      ],
+      "what_to_watch": "Nailor's concussion and Powers-Johnson's groin before a 10 a.m. body-clock kick in Foxborough.",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 27–30 vs KC; 3–1; kickoff fumble set up KC clincher. Pass.",
+      "sources": [
+        {
+          "label": "ESPN — AP recap KC 30–27",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872976"
+        },
+        {
+          "label": "NFL.com — Chiefs at Raiders",
+          "href": "https://www.nfl.com/games/chiefs-at-raiders-2026-reg-4"
+        },
+        {
+          "label": "Chiefs — W4 inactives (both teams)",
+          "href": "https://www.chiefs.com/news/week-4-inactive-players-chiefs-vs-raiders"
+        },
+        {
+          "label": "Raiders — W4 injury report",
+          "href": "https://www.raiders.com/news/las-vegas-raiders-kansas-city-chiefs-week-4-injury-report-2026-season-nfl"
+        },
+        {
+          "label": "PFT — Bowers active",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/brock-bowers-officially-active-for-raiders-chiefs"
+        },
+        {
+          "label": "NFL.com — Raiders at Patriots W5",
+          "href": "https://www.nfl.com/games/raiders-at-patriots-2026-reg-5"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: lost to MIN 15–10 (ESPN FINAL). Minnesota scored on five field goals; Ollie Gordon II 9 carries / 100 yds / 12-yd TD. 0–4. W5: vs CIN. Pass on 3.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL L 10–15 @ MIN · 0–4.",
+        "Gordon 9/100/TD; Willis 9/17, 85 yds; 198 total yds.",
+        "Achane torn ACL, on IR since Sep 28.",
+        "W5: vs CIN — Pass."
+      ],
+      "what_to_watch": "Postgame club injury report; Wright (stinger/foot) and Gordon workload into CIN.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL L 10–15 @ MIN (ESPN FINAL only — no AP/club recap indexed yet). Achane ACL/IR. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "ESPN scoreboard API — MIA @ MIN FINAL (event 401872974)",
+          "href": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20261004"
+        },
+        {
+          "label": "ESPN game summary API — scoring plays + box (event 401872974)",
+          "href": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872974"
+        },
+        {
+          "label": "ESPN — Achane torn ACL (Sep 28)",
+          "href": "https://www.espn.com/nfl/story/_/id/50052064/sources-dolphins-rb-devon-achane-suffered-torn-acl-vs-chiefs"
+        },
+        {
+          "label": "NBC Sports PFT — Dolphins put Achane on injured reserve",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/dolphins-put-devon-achane-on-injured-reserve"
+        },
+        {
+          "label": "Dolphins club — Game preview at MIN (context)",
+          "href": "https://www.miamidolphins.com/news/game-preview-miami-dolphins-at-minnesota-vikings"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Oct 5",
+      "bottom_line": "Week 4: Minnesota 15–10 over Miami, 4–0. Hockenson 13 catches, Reichard 5-for-5 on field goals; Jackson and Darrisaw left hurt. Week 5 at New Orleans. Pass.",
+      "key_points": [
+        "vikings.com Oct 4: Vikings 15, Dolphins 10; 4–0. T.J. Hockenson 13 catches (13 targets), 119 yards. Kyler Murray 27-of-37, 247 yards, in his third start with Minnesota. Aaron Jones Sr. 20 carries, 94 yards. Will Reichard 5-for-5 (47, 50, 33, 41, 29), 31 straight field goals. Dallas Turner both sacks plus a forced fumble; Miami's Malik Willis 9-of-17, 85 yards.",
+        "Club: LG Donovan Jackson left on the second possession with a knee injury (Joe Huber in). LT Christian Darrisaw left with a neck injury, returned in the second half, then left again to be evaluated for a concussion (Ryan Van Demark in). Justin Jefferson (ankle), Chuck Demmings (hamstring) and Brett Thorson (hamstring) were ruled out.",
+        "Roster: TE Josh Oliver on IR (biceps, Sep 29). J.J. McCarthy traded to the Giants Sep 28; Max Brosmer is the emergency QB behind Murray and Carson Wentz. Week 5: Vikings at Saints, Sun Oct 11, 1 PM ET on FOX (Caesars Superdome)."
+      ],
+      "what_to_watch": "Jackson knee and Darrisaw concussion evaluation before New Orleans. Jefferson's ankle ('day-to-day', O'Connell, Sep 30).",
+      "is_material_depth": true,
+      "sot_flag": "W4 win locked 15–10. Jackson knee, Darrisaw neck/concussion eval; Jefferson, Demmings, Thorson out in W4; Oliver on IR. Flag OL, WR and CB into W5 @ NO.",
+      "sources": [
+        {
+          "label": "Vikings — W4 game observations vs Dolphins (Oct 4)",
+          "href": "https://www.vikings.com/news/dolphins-week-4-observations-tj-hockenson-13-catches"
+        },
+        {
+          "label": "Vikings — final injury report, Jefferson ruled out (Oct 2)",
+          "href": "https://www.vikings.com/news/dolphins-injury-report-week-4-2026-nfl-season"
+        },
+        {
+          "label": "Vikings — W4 inactives (Oct 4)",
+          "href": "https://www.vikings.com/news/vikings-dolphins-inactives-week-4-2026-nfl-season"
+        },
+        {
+          "label": "Vikings — roster moves: Oliver to IR, Brosmer to 53 (Sep 29)",
+          "href": "https://www.vikings.com/news/kyle-van-noy-max-brosmer-53-man-josh-oliver-injured-reserve"
+        },
+        {
+          "label": "NFL.com — Dolphins at Vikings game center (FINAL)",
+          "href": "https://www.nfl.com/games/dolphins-at-vikings-2026-reg-4"
+        }
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: beat BUF 29–26 (AP + Patriots club). First visiting team to win at new Highmark. Maye 3 TD. 2–2. W5: vs LV. Pass on 9.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL W 29–26 @ BUF · 2–2.",
+        "Maye 3 TD after six INTs and a lost fumble in his first three starts (AP); offense season highs.",
+        "Gonzalez + Barmore shoulders; Hollins calf.",
+        "W5: vs LV — Pass."
+      ],
+      "what_to_watch": "Gonzalez (shoulder), Barmore (shoulder), Hollins (calf) into LV.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL W 29–26 @ BUF. Gonzalez/Barmore shoulders. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "AP via CBS Sports — Maye 3 TDs, Patriots rally past Bills 29–26",
+          "href": "https://www.cbssports.com/nfl/news/drake-maye-throws-3-tds-as-patriots-rally-past-bills-29-26/"
+        },
+        {
+          "label": "AP via CBS Boston — Patriots stun Bills (Chism)",
+          "href": "https://www.cbsnews.com/boston/news/patriots-bills-week-4-recap-drake-maye-efton-chism/"
+        },
+        {
+          "label": "Patriots club — Game notes: first team to win in Buffalo's new stadium",
+          "href": "https://www.patriots.com/news/game-notes-patriots-become-first-team-to-win-in-buffalo-s-new-stadium"
+        },
+        {
+          "label": "Patriots club — Gonzalez / Barmore ruled out",
+          "href": "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-christian-gonzalez-and-christian-barmore-for-sunday-s-week-4-matchup-vs-bills"
+        },
+        {
+          "label": "Boston Globe — Patriots 29, Bills 26",
+          "href": "https://www.bostonglobe.com/2026/10/04/sports/patriots-bills-live-score-news/"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants club — Oct 5",
+      "bottom_line": "Giants 36, Cardinals 24. Winston three TD / two INT; Banks 98-yard pick-six as time expired. 3–1, first in the NFC East. Pass.",
+      "key_points": [
+        "FINAL: W 36–24 vs ARI. On fourth-and-goal with NYG up 30–24, Deonte Banks picked off Brissett and returned it 98 yards as time expired (giants.com; AP). Sole first place in the NFC East at 3–1 (AP).",
+        "Winston 18/29, 250 yards, 3 TD (Fields 12, Nabers 25, T. Johnson 11), 2 INT, sacked 4x (ESPN box). Fields' TD ended a nine-quarter touchdown drought, the first such stretch since 1999 (giants.com). Nabers 6/112/1, season high; 39-yard third-and-12 grab (giants.com).",
+        "Usage: Skattebo 18 carries / 58 yards; Giants are 5–0 when he gets 18+ carries and 0–7 with 17 or fewer (giants.com). NYG rushed 28 for 87 (3.1 ypc, ESPN box). Zvada 3-for-3 (39, 50, 52); 9-for-9 on the year (giants.com).",
+        "Roster: Brian Burns placed on injured reserve (torn ACL, from the Week 3 game) per giants.com. J.J. McCarthy — acquired from MIN for a 2027 fifth — was active, did not play (giants.com; AP). Bryan Hudson made his first start at center. Berrios (foot), Pinnock (concussion), Golston (neck) left in-game; no further status in these sources.",
+        "W5: @ WSH Sun Oct 11, 1 p.m. ET, FOX, Northwest Stadium (ESPN). WAS is 1–3: Mariota (knee) status open; Daniels expected at Wednesday practice (commanders.com)."
+      ],
+      "what_to_watch": "Skattebo's carry count vs the 18 line. Three turnovers after two through the first three games. Wednesday–Friday reports on Berrios / Pinnock / Golston. Which QB WAS starts.",
+      "is_material_depth": true,
+      "sot_flag": "Burns IR / torn ACL is club-reported (giants.com Oct 4); in-game exits (Berrios, Pinnock, Golston) have no statuses yet.",
+      "sources": [
+        {
+          "label": "Giants — Instant Analysis, 36-24 over ARI",
+          "href": "https://www.giants.com/news/instant-analysis-giants-clinch-36-24-victory-over-cardinals-on-deonte-banks-98-yard-pick-six"
+        },
+        {
+          "label": "ESPN/AP — Winston 3 TDs, Banks' pick-6 seals 36-24",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872966"
+        },
+        {
+          "label": "ESPN — ARI @ NYG Final (box + scoring)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872966"
+        },
+        {
+          "label": "CBS/AP — Winston throws 3 TDs to lead Giants past Cardinals",
+          "href": "https://www.cbssports.com/nfl/news/jameis-winston-throws-3-tds-to-lead-giants-past-cardinals-36-24/"
+        },
+        {
+          "label": "Commanders — Instant analysis vs IND",
+          "href": "https://www.commanders.com/news/instant-analysis-commanders-colts-week-4"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: lost to CHI 23–12 (AP + Jets club). 0-of-7 on third down, 12 penalties. 1–3. W5: vs CLE. Pass on 6.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL L 12–23 @ CHI · 1–3.",
+        "0-of-7 third down; 12 penalties; 3 INTs negated.",
+        "Brownlee concussion; Hall quad inactive.",
+        "W5: vs CLE — Pass."
+      ],
+      "what_to_watch": "Hall (quad), Brownlee (concussion protocol), Mitchell / Taylor / Parham inactives into CLE.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL L 12–23 @ CHI. Brownlee concussion; Hall out. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Jets club — Jets-Bears game recap",
+          "href": "https://www.newyorkjets.com/news/jets-bears-game-recap-10-04-2026"
+        },
+        {
+          "label": "Jets club — Week 4 inactives vs Bears",
+          "href": "https://www.newyorkjets.com/news/jets-vs-bears-game-inactives-10-04-2026"
+        },
+        {
+          "label": "AP via CBS Chicago — Bears beat Jets 23–12",
+          "href": "https://www.cbsnews.com/chicago/news/bears-beat-jets-23-12/"
+        },
+        {
+          "label": "Bears club — Game Recap: Bears ground Jets, improve to 3–1",
+          "href": "https://www.chicagobears.com/news/game-recap-bears-ground-jets-improve-to-3-1"
+        },
+        {
+          "label": "CBS Sports — Brownlee doesn't return",
+          "href": "https://www.cbssports.com/fantasy/football/news/jets-jarvis-brownlee-doesnt-return-sunday/"
+        },
+        {
+          "label": "Jets club — Aaron Glenn postgame (penalties)",
+          "href": "https://www.newyorkjets.com/news/aaron-glenn-frustrated-by-jets-penalties-complementary-football-bears-loss-10-04-2026"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "PHI",
+      "title": "Eagles club — Oct 5",
+      "bottom_line": "Rams 24, Eagles 20. Led 20–10 at half, scored nothing after; Hurts 12/27 for 93; Barkley (hamstring) out in the first quarter. 2–2. Pass.",
+      "key_points": [
+        "FINAL: L 20–24 vs LAR. Eagles outscored 31–0 in the second half of their last two games (AP). Up 20–10, Sirianni went for it on fourth-and-2 from the 2 — no conversion; Rams scored 14 in the final four minutes (Kyren Williams 1 and 7 yards). Sirianni: \"that's on me\" (eagles.com).",
+        "Offense: 172 total yards, 68 net passing, 0-for-12 on third down; Hurts 12/27, 93, 2 TD (both Darius Cooper, 10 and 18), sacked 4x (AP; ESPN box). Rushing split: Bigsby 14/55, Shipley 6/23 (ESPN box).",
+        "Saquon Barkley (right hamstring) left in the first quarter after two carries (ESPN). Bigsby (hip), Quinyon Mitchell (knee), Jonathan Greenard (ankle) also left. Also on the club's injury list: DeVonta Smith (hamstring), Baun (concussion), Goedert (knee), Epps (groin), Hollywood Brown (ankle), Fred Johnson (knee); Lane Johnson was a late scratch for personal reasons (eagles.com; AP).",
+        "Rams side: Stafford 32/51, 317, 2 INT; Puka Nacua 9/125 on return from a two-game absence (AP).",
+        "W5: vs JAX in London, Sun Oct 11, 9:30 a.m. ET, NFL Network, Tottenham Hotspur Stadium (ESPN). JAX is 3–1 after 22–17 at CIN (ESPN). Early kick plus travel on a roster missing starters."
+      ],
+      "what_to_watch": "Backfield: Barkley / Bigsby availability before the flight. Third-down offense (0-for-12). Secondary and edge depth with Mitchell / Greenard. Lane Johnson status.",
+      "is_material_depth": true,
+      "sot_flag": "Barkley, Bigsby, Mitchell, Greenard: in-game exits only — no timetable in club/AP/ESPN. Lane Johnson absence is personal per club — do not characterize.",
+      "sources": [
+        {
+          "label": "ESPN — LAR @ PHI Final (box + scoring)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872970"
+        },
+        {
+          "label": "ESPN/AP — Rams rally behind Stafford, Williams to beat Eagles 24-20",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872970"
+        },
+        {
+          "label": "Eagles — Sirianni reacts to 24-20 loss",
+          "href": "https://www.philadelphiaeagles.com/news/nick-sirianni-reacts-to-sunday-24-20-loss-to-the-rams-2026-nfl-week-4"
+        },
+        {
+          "label": "ESPN — Barkley leaves game with hamstring injury",
+          "href": "https://www.espn.com/nfl/story/_/id/50101243/eagles-rb-saquon-barkley-leaves-game-hamstring-injury"
+        },
+        {
+          "label": "Philadelphia Inquirer — Battered Eagles fall 24-20",
+          "href": "https://www.inquirer.com/eagles/rams-loss-nfl-week-4-saquon-barkley-quinyon-mitchell-jonathan-greenard-injuries-20261004.html"
+        }
+      ]
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers — Week 4 RECAP + Week 5 PREVIEW — Oct 5",
+      "bottom_line": "W4 TNF FINAL: CLE 27–24. Rodgers tied it 24–24 with 1:42 left (Steelers.com), then Szmyt hit from 56 with 0:10. Sacked five times, two picks. Harmon (foot) and Dean (ankle) look like multi-week absences per Rapoport. 2–2. W5 hosts IND off 10 days' rest. Pass — FD 7.5 (O +105 / U −125; FD via RotoWire, pulled Sun Oct 4 8:13 PM ET, after the finals); house 8.16 (Aug 22 preseason sim). Same Pass as Sep 27.",
+      "key_points": [
+        "Club + AP FINAL: Browns 27, Steelers 24 at Huntington Bank Field. Fourth straight Thursday loss, 0-for-5 in that building (club/AP). CLE scored 21 straight in the 2Q; PIT clawed back with Washington (21) and Freiermuth (3) TDs plus a Rodgers sneak 2-pt.",
+        "Rodgers 22/40, 299, 3 TD, 2 INT, sacked 5; Warren 17-93; Metcalf 5/115. Boswell missed from 48 (CLE recap). PIT 361 yds, 2 TO (ESPN box).",
+        "DT Harmon (foot) carted off — 'a few weeks,' IR a consideration (Rapoport via ESPN). CB Dean (ankle) could miss 'a couple of weeks' (Rapoport via Yahoo). No club confirmation on either yet.",
+        "CB Joey Porter Jr. is off the roster: Pittsburgh traded him to Dallas (Steelers.com, Oct 1); he was inactive for the first three games. Ramsey played through a broken wrist; RB Dowdle (toe, ESPN) inactive a second straight week (Steelers.com).",
+        "W5: vs IND — Sun Oct 11, 1:00p ET CBS, Acrisure. PIT on 10 days' rest; IND 2–2 and coming home from London (NFL.com W5)."
+      ],
+      "what_to_watch": "Harmon IR decision and Dean's ankle — Dean left Thursday's game with Porter already traded to Dallas (Steelers.com).",
+      "is_material_depth": true,
+      "sot_flag": "FINAL L 24–27 @ CLE; Harmon/Dean multi-week per Rapoport; Porter traded to DAL. Pass.",
+      "sources": [
+        {
+          "label": "Steelers — edged by Browns 27–24",
+          "href": "https://www.steelers.com/news/steelers-edged-by-browns-27-24"
+        },
+        {
+          "label": "CBS Sports — AP recap, Szmyt 56",
+          "href": "https://www.cbssports.com/nfl/news/andre-szmyts-late-56-yard-fg-lifts-browns-past-steelers-27-24/"
+        },
+        {
+          "label": "ESPN — Harmon expected to miss weeks",
+          "href": "https://www.espn.com.sg/nfl/story/_/id/50099497/source-steelers-derrick-harmon-expected-miss-multiple-weeks"
+        },
+        {
+          "label": "Yahoo — Harmon/Dean",
+          "href": "https://sports.yahoo.com/articles/steelers-dt-derrick-harmon-cb-132829441.html"
+        },
+        {
+          "label": "Steelers — W4 inactives",
+          "href": "https://www.steelers.com/news/steelers-inactives-for-week-4-vs-browns"
+        },
+        {
+          "label": "Steelers — Porter trade to Dallas",
+          "href": "https://www.steelers.com/news/steelers-acquire-two-draft-picks-from-cowboys"
+        },
+        {
+          "label": "ESPN — Steelers W4 report (Porter, Dowdle toe)",
+          "href": "https://www.espn.com/nfl/story/_/id/50070581/steelers-rule-joey-porter-again-jalen-ramsey-questionable"
+        },
+        {
+          "label": "NFL.com — Week 5 schedule",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-5"
+        }
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks — W4 recap + W5 preview (Oct 5)",
+      "bottom_line": "W4 FINAL W 30–23 vs LAC. Open 3-1 after the W3 loss at WSH. LAC gave the ball away four times to SEA's one; SEA gained 286 yards to LAC's 301. W5 hosts SF; Leonard Williams (ankle) unresolved. Street: 10.5, O -146 / U +116 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 10.81. Pass.",
+      "key_points": [
+        "W4 RECAP FINAL: W 30–23 vs LAC. Open 3-1; turnover margin +3.",
+        "W5 PREVIEW: hosts SF Sun Oct 11. Williams ankle and Okada hamstring are the statuses to track.",
+        "NUMBER: Street 10.5 O -146 / U +116 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 10.81. Coming soon ON. Pass."
+      ],
+      "what_to_watch": "Official W5 injury report: Leonard Williams (ankle), Ty Okada (hamstring), Chazz Surratt (calf). Midweek only.",
+      "is_material_depth": false,
+      "sot_flag": "W4 FINAL W 30–23 vs LAC. 3-1. Williams ankle unresolved. Win total Pass.",
+      "sources": [
+        {
+          "label": "ESPN — LAC @ SEA",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872977"
+        },
+        {
+          "label": "CBS — Chargers at Seahawks FINAL",
+          "href": "https://www.cbssports.com/nfl/gametracker/recap/NFL_20261004_LAC@SEA/"
+        },
+        {
+          "label": "Seahawks.com — W4 box score",
+          "href": "https://www.seahawks.com/game-day/2026/reg-week4/seahawks-vs-chargers/box-score"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers — W4 recap + W5 preview (Oct 5)",
+      "bottom_line": "W4 FINAL W 24–14 vs DEN. Open 4-0. Purdy 19/30, 218, 2 TD, zero giveaways; Kittle 56-yard TD. Bosa and Thompson missed W4; Juszczyk (knee) and Stout (shoulder) unresolved. W5 at SEA. Street: 12.5, O +120 / U -152 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 8.53. Pass.",
+      "key_points": [
+        "W4 RECAP FINAL: W 24–14 vs DEN. Open 4-0, zero turnovers.",
+        "W5 PREVIEW: at SEA Sun Oct 11. Pass on the game line; front-seven and fullback statuses unresolved.",
+        "NUMBER: Street 12.5 O +120 / U -152 (DK via RotoWire, pulled Sun Oct 4, 8:00 PM ET, after all four W4 finals). House print (Aug 22 preseason sim, cite-only; not public KEI): 8.53. Coming soon ON. Pass."
+      ],
+      "what_to_watch": "Official W5 injury report: Bosa, Thompson, Mykel Williams (PUP window), Juszczyk, Stout. Midweek only.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL W 24–14. 4-0. Bosa/Thompson missed W4; Juszczyk and Stout unresolved. Win total Pass.",
+      "sources": [
+        {
+          "label": "ESPN — DEN @ SF",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872975"
+        },
+        {
+          "label": "CBS — Broncos at 49ers FINAL",
+          "href": "https://www.cbssports.com/nfl/gametracker/boxscore/NFL_20261004_DEN@SF/"
+        },
+        {
+          "label": "49ers.com — W4 box score",
+          "href": "https://www.49ers.com/game-day/2026/reg-week4/broncos-at-49ers/box-score"
+        },
+        {
+          "label": "SF Standard — 49ers beat Broncos",
+          "href": "https://sfstandard.com/2026/10/04/49ers-beat-broncos-undefeated-brock-purdy-nfc/"
+        },
+        {
+          "label": "RotoWire — DK win totals",
+          "href": "https://www.rotowire.com/betting/nfl/tables/team-futures.php?future=Win%20Totals"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers club — Oct 5",
+      "bottom_line": "Packers 17, Buccaneers 14. Rookie Jalon Daniels' first start: 148 yards, 1 TD, 2 INT, 55 rushing; final drive stalled on pressure. 0–4. Pass.",
+      "key_points": [
+        "FINAL: L 14–17 vs GB. Fourth straight loss by seven or fewer (buccaneers.com). Down 17–7; Daniels hit Gainwell for 10 yards early in the fourth to make it 17–14.",
+        "Daniels 19/27, 148, 1 TD, 2 INT, sacked 3x, plus 8 carries / 55 yards (ESPN box). TB ran 31 times for 141 (4.5 ypc); Irving 16/61. Godwin 6/31, Otton 4/37 (ESPN box; buccaneers.com).",
+        "Defense forced a Kaleb Johnson fumble inside the 5 and a Parrish INT in the fourth — no points off either — while GB scored 10 off TB's two turnovers (buccaneers.com).",
+        "Last drive: fourth-and-11 near midfield, Daniels under pressure (free rusher, eight-man look per Daniels); incomplete. Bowles passed on a 65-yard FG try — too far, wind (buccaneers.com; AP).",
+        "QB status: Baker Mayfield (dislocated right thumb) out a minimum of three weeks per Bowles (buccaneers.com Sep 28); Daniels draws at least three starts. Winfield Jr. (abdomen/rib) exited late; Dennis (ankle) hurt (buccaneers.com; AP). No Thursday status published yet in these sources.",
+        "W5: @ DAL Thu Oct 8, 8:15 p.m. ET, Prime Video (ESPN; buccaneers.com). Four days after a Sunday 1 p.m. kick."
+      ],
+      "what_to_watch": "Protection: 16 sacks allowed through four games (buccaneers.com). Daniels' second start on a four-day turnaround. Winfield / Dennis availability. Any Mayfield practice signal.",
+      "is_material_depth": true,
+      "sot_flag": "Mayfield timeline is Bowles via buccaneers.com: minimum three weeks, not IR — no Thursday return implied. Winfield / Dennis: in-game exits only.",
+      "sources": [
+        {
+          "label": "ESPN — GB @ TB Final (box + scoring)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872968"
+        },
+        {
+          "label": "ESPN/AP — Love throws 2 TDs, Packers edge Buccaneers 17-14",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872968"
+        },
+        {
+          "label": "Buccaneers — Packers hold off Bucs in Daniels' debut start",
+          "href": "https://www.buccaneers.com/news/packers-bucs-week-4-recap-postgame-report-2026"
+        },
+        {
+          "label": "Buccaneers — Mayfield three weeks minimum, thumb update",
+          "href": "https://www.buccaneers.com/news/baker-mayfield-three-weeks-minimum-thumb-injury-update"
+        }
+      ]
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans — Week 4 recap / Week 5 preview — Oct 5",
+      "bottom_line": "W4 FINAL: lost to BAL 24–18 (Titans club). Fell behind 24–7 at half; Ward 222 yds, Tate 9/145. 0–4. W5: vs HOU. Pass on 4.5 — Coming soon ON.",
+      "key_points": [
+        "W4 FINAL L 18–24 @ BAL · 0–4.",
+        "Ward 222 yds; Tate 9/145; two 1H turnovers; failed goal-line sequence.",
+        "Carmona + Slater on IR (Tue); Spears / Winston availability unconfirmed post-game.",
+        "W5: vs HOU — Pass."
+      ],
+      "what_to_watch": "Guard depth (Carmona / Slater IR), Spears (ankle), Winston (shoulder) into HOU.",
+      "is_material_depth": true,
+      "sot_flag": "W4 FINAL L 18–24 @ BAL. 0–4. Carmona/Slater IR. Pass. Coming soon ON.",
+      "sources": [
+        {
+          "label": "Titans club — Titans fall 24–18 to Ravens, drop to 0–4",
+          "href": "https://www.tennesseetitans.com/news/titans-fall-24-18-to-ravens-drop-to-0-4-on-the-season-ravens"
+        },
+        {
+          "label": "Titans club — Quick Hits, Friday of Ravens week (Carmona/Slater IR)",
+          "href": "https://www.tennesseetitans.com/news/quick-hits-on-the-titans-from-friday-of-ravens-week"
+        },
+        {
+          "label": "Ravens club — Ravens hold off Titans despite injuries",
+          "href": "https://www.baltimoreravens.com/news/game-recap-ravens-titans-week-4-game-recap-injuries-lamar-jackson"
+        },
+        {
+          "label": "SI — Texans face Titans in Week 5",
+          "href": "https://www.si.com/nfl/texans/onsi/7-texans-takeaways-from-crushing-30-34-loss-vs-cowboys-in-week-4"
+        },
+        {
+          "label": "Exa scores hub 2026-10-04",
+          "href": "https://exa.ai/library/sports/nfl?date=2026-10-04"
+        }
+      ]
+    },
+    {
+      "team_id": "WAS",
+      "title": "Commanders club — Oct 5",
+      "bottom_line": "Colts 30, Commanders 13 (London). Mariota out after two drives (knee; Quinn: MCL, scans Monday); rookie Kaliakmanis finishes. 1–3. Pass.",
+      "key_points": [
+        "FINAL: L 13–30 vs IND at Tottenham. WAS led 6–0 after two drives (Stevens 31, 29), then punted on three straight; 2-for-15 on third down. Taylor 20/95 and two 5-yard TDs; Jones added a 4-yard TD run (AP; ESPN box).",
+        "QB: Mariota (starting for Daniels) left in the second drive with a right-knee injury; Quinn said it looks like an MCL aggravation, scans Monday, no timetable (ESPN; AP; commanders.com). Third-string rookie Athan Kaliakmanis: 15/33, 186, 1 TD (47-yard to Burks), 1 INT (ESPN box).",
+        "Daniels missed his second straight game (dislocated left elbow; ruled out Friday) and wears a brace; Quinn's stated goal is a full week of practice Wed–Fri and a start vs NYG (commanders.com; Quinn via Washington Times).",
+        "Other injuries: WR Jaylin Lane carted off (serious ankle per Quinn); Omenihu groin (ruled out in game); Terry McLaurin held out with a hamstring (commanders.com; ESPN). An 87-yard TD catch by Antonio Williams was wiped out by an illegal-shift penalty (commanders.com).",
+        "W5: vs NYG Sun Oct 11, 1 p.m. ET, FOX, Northwest Stadium (ESPN). NYG is 3–1 and alone in first in the NFC East (AP)."
+      ],
+      "what_to_watch": "Monday scan on Mariota; whether Daniels practices in full Wednesday. WR depth with Lane out and McLaurin's hamstring. Red-zone and third-down finish (2-for-15).",
+      "is_material_depth": true,
+      "sot_flag": "Mariota MCL is Quinn's read pending scans; Daniels start is a stated goal, not a status. Lane / Omenihu / McLaurin: no return dates in sources — none invented.",
+      "sources": [
+        {
+          "label": "ESPN — IND vs WSH Final (London; box + scoring)",
+          "href": "https://www.espn.com/nfl/game/_/gameId/401872965"
+        },
+        {
+          "label": "ESPN/AP — Taylor runs for 2 TDs, Colts beat Commanders 30-13 in London",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872965"
+        },
+        {
+          "label": "Commanders — Instant analysis, 1-3 after 30-13 loss",
+          "href": "https://www.commanders.com/news/instant-analysis-commanders-colts-week-4"
+        },
+        {
+          "label": "Commanders — Daniels ruled out vs IND (game status)",
+          "href": "https://www.commanders.com/news/game-status-commanders-colts-2026"
+        },
+        {
+          "label": "ESPN — Mariota out, Commanders turn to Kaliakmanis",
+          "href": "https://www.espn.com/nfl/story/_/id/50099890/marcus-mariota-injured-commanders-turn-rookie-qb-athan-kaliakmanis"
+        },
+        {
+          "label": "Washington Times — Commanders cross fingers for Daniels' return",
+          "href": "https://www.washingtontimes.com/news/2026/oct/4/washington-commanders-cross-fingers-jayden-daniels-return-marcus/"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 W 24–18; Jackson ankle (no W5 status); in-game exits; W5 @ ATL SNF; Pass on 11.5."
+    },
+    {
+      "team_id": "CHI",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "status": "touched",
+      "reason": "W4 FINAL CHI 23–12; Bagent 268; Monangai 146 + 2 TD; Williams out; Jones to IR; Gordon PUP window; W5 at GB; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "CIN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 L 17–22; Chase concussion, Higgins adductor; W5 @ MIA, W6 bye; Pass on 10.5."
+    },
+    {
+      "team_id": "CLE",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 TNF W 27–24; 3–1; Graham week-to-week; W5 @ NYJ; Pass on 7.5 (street moved 6.5→7.5)."
+    },
+    {
+      "team_id": "DEN",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 L 14–24 @ SF; Surtain/Moss/Bryant exits; Over 2/5 retired → Pass; FD 9.5."
+    },
+    {
+      "team_id": "DET",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "status": "touched",
+      "reason": "W4 FINAL CAR 32–26 over DET (SNF; 2–2); Goff 412; Gibbs 46 + TD; four Bates FGs; Reed active (rib); club recap pending; W5 @ ARI; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "GB",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "status": "touched",
+      "reason": "W4 FINAL GB 17–14 at TB; Cooper Achilles; Brooks ankle; Reed/Bako-Bewele/Brinson IR; W5 vs CHI; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "KC",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 W 30–27 @ LV; 4–0; Thornton/Rice injuries; W5 bye; Pass on 11.5."
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 L 23–30 @ SEA; 0–4; OL in-game tags; W5 vs DEN; Pass on 7.5."
+    },
+    {
+      "team_id": "LV",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 L 27–30 vs KC; 3–1; kickoff fumble set up KC clincher; W5 @ NE; Pass on 7.5."
+    },
+    {
+      "team_id": "MIN",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most",
+        "date"
+      ],
+      "status": "touched",
+      "reason": "W4 FINAL MIN 15–10 over MIA (4–0); Hockenson 13 catches; Reichard 5-for-5; Jackson knee, Darrisaw neck/concussion eval; Oliver IR; W5 @ NO; Pass; Coming soon ON."
+    },
+    {
+      "team_id": "PIT",
+      "fields": ["bottom_line", "key_points", "what_to_watch", "sot_flag"],
+      "status": "touched",
+      "reason": "W4 TNF L 24–27; Harmon/Dean multi-week per Rapoport; Porter traded to DAL; W5 vs IND; Pass on 7.5 (unchanged since Sep 27)."
+    }
+  ]
+}
