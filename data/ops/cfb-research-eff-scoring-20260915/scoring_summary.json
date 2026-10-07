@@ -1,0 +1,42 @@
+{
+  "pipeline_version": "cfb-research-eff-scoring-v1",
+  "research_only": true,
+  "production_promote": false,
+  "as_of": "20260915",
+  "generated_at": "2026-09-15T18:07:35.119885+00:00",
+  "protocol": "docs/cfb/EVAL_PROTOCOL.md",
+  "recommendation": {
+    "recommendation": "revise",
+    "reason": "Confirmation beats one of {margin, total} or the gain is thin / bias is worse than +1.5 vs the better baseline. Keep research.",
+    "n": 280,
+    "confirm_margin_mae": 13.04784142508041,
+    "confirm_total_mae": 14.154479530414518,
+    "best_baseline_margin": {
+      "name": "prior_blend_points",
+      "mae": 14.259692756833136
+    },
+    "best_baseline_total": {
+      "name": "league_mean_points",
+      "mae": 13.683602110304573
+    },
+    "rel_margin": 0.08498439289107516,
+    "rel_total": -0.034411802997059225,
+    "production_promote": false,
+    "confirmation_set": "2024 weeks >= 10",
+    "dev_evidence_2025_not_used_for_call": true
+  },
+  "selected": {
+    "pace_source": "pace_plays",
+    "hfa_k": 10.0
+  },
+  "h_pts": 5.870444749510898,
+  "h_prior": 6.72725685350096,
+  "h_window": 5.868948657134452,
+  "hfa_k": 10.0,
+  "pace_source": "pace_plays",
+  "ppp": 5.662166569616673,
+  "confirmation_n": 280,
+  "boards_stay_coming_soon": true,
+  "production_sp_plus_unchanged": true,
+  "production_kei_unchanged": true
+}
