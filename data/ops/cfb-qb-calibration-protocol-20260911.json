@@ -1,0 +1,200 @@
+{
+  "as_of": "2026-09-11",
+  "kill_switch": true,
+  "play": false,
+  "public_cfb": false,
+  "lambda": null,
+  "line_curve": false,
+  "matchup_response_frozen": 1.40,
+  "median_to_50_ship": false,
+  "opened_2025_residuals": false,
+  "qb_feature_contract_version": "cfb-qb-feature-v1",
+  "placeholder_version": "cfb-qb-feature-placeholder-unknown-50",
+  "diagnosis_pr": 539,
+  "recommendation": {
+    "build_historical_dataset": "GO",
+    "build_layer": "A",
+    "recalibrate_coefficients": "STOP",
+    "different_qb_architecture": "NOT_YET",
+    "architecture_trigger": "Layer A coverage < 90% official FBS or systematic year-scoped stats 404 on G5",
+    "confirm_2026_w1_w2": "confirmatory_only",
+    "season_2025": "sealed"
+  },
+  "formula": {
+    "zero_attempts_non_portal": 48.0,
+    "zero_attempts_portal": 52.0,
+    "base": 42.0,
+    "attempt_cap": 22.0,
+    "attempt_div": 22.0,
+    "ypa_cap": 12.0,
+    "ypa_scale": 1.1,
+    "td_cap": 10.0,
+    "td_scale": 0.35,
+    "portal_bump": 2.0,
+    "clamp": [35.0, 96.0],
+    "lowsample_attempts": 80,
+    "completion_rate_term": false,
+    "missing_qb_talent": 50.0,
+    "missing_qb_class": "unknown",
+    "recruiting_packaged_floor_2026": 55.0,
+    "starter_rule": "max prior-season attempts, then experience years, then name"
+  },
+  "windows": {
+    "train_0": {"seasons": [2022], "weeks": "1-14"},
+    "val_0": {"seasons": [2023], "weeks": "1-14"},
+    "train_1": {"seasons": [2022, 2023], "weeks": "1-14"},
+    "val_1_primary": {"seasons": [2024], "weeks": "1-14"},
+    "sealed": {"seasons": [2025]},
+    "confirm": {"seasons": [2026], "weeks": "1-2"}
+  },
+  "minimum_evidence_to_recalibrate": {
+    "contract_tests_green": true,
+    "layer_a_coverage_min": 0.9,
+    "train_games_min": 700,
+    "val_2024_games_min": 700,
+    "established_talent_mean": [62.0, 76.0],
+    "established_talent_sd": [5.0, 14.0],
+    "objective": "2024 val vs actual and close; 2026 confirmatory only",
+    "unseal_2025_required": false
+  },
+  "availability": [
+    {
+      "input": "season_Y_roster_membership_espn_core",
+      "2022": "RECONSTRUCTABLE",
+      "2023": "RECONSTRUCTABLE",
+      "2024": "RECONSTRUCTABLE",
+      "2025": "RECONSTRUCTABLE",
+      "2026": "EXACT"
+    },
+    {
+      "input": "espn_site_roster_unscoped",
+      "2022": "FORBIDDEN",
+      "2023": "FORBIDDEN",
+      "2024": "FORBIDDEN",
+      "2025": "FORBIDDEN",
+      "2026": "FORBIDDEN"
+    },
+    {
+      "input": "prior_year_attempts_yards_td_espn_year_scoped_stats",
+      "2022": "RECONSTRUCTABLE",
+      "2023": "RECONSTRUCTABLE",
+      "2024": "RECONSTRUCTABLE",
+      "2025": "RECONSTRUCTABLE",
+      "2026": "EXACT"
+    },
+    {
+      "input": "same_season_counting_stats_as_week0_talent",
+      "2022": "LEAKAGE",
+      "2023": "LEAKAGE",
+      "2024": "LEAKAGE",
+      "2025": "LEAKAGE",
+      "2026": "LEAKAGE"
+    },
+    {
+      "input": "portal_Y_vs_Ym1_roster_join",
+      "2022": "RECONSTRUCTABLE",
+      "2023": "RECONSTRUCTABLE",
+      "2024": "RECONSTRUCTABLE",
+      "2025": "RECONSTRUCTABLE",
+      "2026": "RECONSTRUCTABLE"
+    },
+    {
+      "input": "portal_live_team_history_no_year_cut",
+      "2022": "PROXY",
+      "2023": "PROXY",
+      "2024": "PROXY",
+      "2025": "PROXY",
+      "2026": "EXACT_ISH"
+    },
+    {
+      "input": "espn_athlete_experience_raw",
+      "2022": "PROXY",
+      "2023": "PROXY",
+      "2024": "PROXY",
+      "2025": "PROXY",
+      "2026": "EXACT"
+    },
+    {
+      "input": "experience_first_appearance_reconstruct",
+      "2022": "RECONSTRUCTABLE",
+      "2023": "RECONSTRUCTABLE",
+      "2024": "RECONSTRUCTABLE",
+      "2025": "RECONSTRUCTABLE",
+      "2026": "NOT_NEEDED"
+    },
+    {
+      "input": "recruiting_class_score_year_Y",
+      "2022": "MISSING",
+      "2023": "MISSING",
+      "2024": "MISSING",
+      "2025": "MISSING",
+      "2026": "EXACT"
+    },
+    {
+      "input": "ol_weapons_unit_grades",
+      "2022": "MISSING",
+      "2023": "MISSING",
+      "2024": "MISSING",
+      "2025": "MISSING",
+      "2026": "EXACT"
+    },
+    {
+      "input": "expert_qb_overrides",
+      "2022": "MISSING",
+      "2023": "MISSING",
+      "2024": "MISSING",
+      "2025": "MISSING",
+      "2026": "EXACT"
+    },
+    {
+      "input": "w1_confirmed_starters_book",
+      "2022": "MISSING",
+      "2023": "MISSING",
+      "2024": "MISSING",
+      "2025": "SEALED",
+      "2026": "EXACT"
+    },
+    {
+      "input": "close_and_finals",
+      "2022": "RECONSTRUCTABLE",
+      "2023": "RECONSTRUCTABLE",
+      "2024": "RECONSTRUCTABLE",
+      "2025": "SEALED",
+      "2026": "CONFIRMATORY"
+    },
+    {
+      "input": "prior_year_efficiency_sp_or_adj_epa",
+      "2022": "RECONSTRUCTABLE",
+      "2023": "RECONSTRUCTABLE",
+      "2024": "RECONSTRUCTABLE",
+      "2025": "SEALED",
+      "2026": "EXACT"
+    }
+  ],
+  "probes": {
+    "espn_core_ala_athlete_counts": {
+      "2022": 236,
+      "2023": 242,
+      "2024": 182,
+      "2025": 177,
+      "2026": 127
+    },
+    "mccord_4433971_year_scoped_stats": {
+      "2021": {"att": 38, "yds": 416, "td": 2},
+      "2022": {"att": 20, "yds": 190, "td": 1},
+      "2023": {"att": 348, "yds": 3170, "td": 24},
+      "2024": {"att": 558, "yds": 4326, "td": 29},
+      "2025": "404"
+    },
+    "mccord_team_ids": {
+      "2022": "194",
+      "2023": "194",
+      "2024": "183",
+      "2025": "183_stale_athlete_ref",
+      "2026": "183_stale_athlete_ref"
+    },
+    "experience_year_lock": "FAILED — athlete.experience is current class on season-scoped URLs",
+    "cfbd_api_key": false,
+    "warehouse_parquet_mounted": false
+  }
+}
