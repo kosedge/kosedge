@@ -1,0 +1,34 @@
+{
+  "label": "R11",
+  "status": "UNBOUND",
+  "bind_allowed": false,
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": null,
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": {}
+  },
+  "random_seeds": [],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "Label R11 is not present as an experiment identity in this checkout, git history, tags, Linear, Notion, Gmail, or Google Drive titles. If it exists, it is outside the repo (local worktree, private worker, or uncommitted war-room pack) and was not available to this agent."
+  ],
+  "evidence": [
+    "data/ops/nfl-r11-r13-provenance-20260920/search_log.json"
+  ],
+  "notes": "Fail-closed. Do not alias pe_drive_poss_v1, SHA b5ee9d80…, live git_sha 153b6a884a8e, or any Fair Lines cert fixture as frozen R11."
+}
