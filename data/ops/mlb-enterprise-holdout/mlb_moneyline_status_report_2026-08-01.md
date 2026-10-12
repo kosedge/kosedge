@@ -32,8 +32,8 @@
 | Stack | **S0** — HFA 1.025, matchup ON, wind-dir ON, ERA/WHIP quality |
 | Stuff proxy / lineup timing | OFF |
 | Pitch matchup / true arsenal (team-family) | OFF (`MLB_PITCH_MATCHUP_ENABLED=false`) |
-| Batter-level arsenal | **In progress / default OFF** (`MLB_PITCH_MATCHUP_BATTER_LEVEL`) — see §5 |
-| Optional ML head | Skipped |
+| Batter-level arsenal | **OFF** — densify graded **no-ship** (`MLB_PITCH_MATCHUP_BATTER_LEVEL=false`) — see §5 |
+| Optional ML head | Next research path (PA-mul graveyard closed) |
 
 ---
 
@@ -60,8 +60,9 @@ Fixed closing-line intersection unless noted. Leakage **0** on all densify ablat
 | M1 stuff-shape pitch (BOM bug) | +0.0044 | +0.063 | +0.002 | 0.250 | Contaminated | no |
 | W1 park-rel totals wind | +0.0039 | +0.025 | +0.004 | 0.250 | MAE worse | no |
 | **M1t true arsenal × team-family** | **+0.0039** | **0** | +0.002 | 0.250 | ΔML +0.00009 vs M0; RL dead | **no** |
+| **M1b batter-level lineup contact** | **+0.00364** | +0.013 | +0.002 | 0.251 | ΔML −0.00019 vs M0; leak 0 | **no** |
 
-Detail artifacts: `stack_ablation_*`, `sp_talent_v2_*`, `statcast_stuff_*`, `lineup_nowcast_timing_*`, `late_info_stamp_*`, `pitch_matchup_*`, `totals_park_wind_*`, `true_arsenal_*`, `live_late_info_clv_*` under this folder.
+Detail artifacts: `stack_ablation_*`, `sp_talent_v2_*`, `statcast_stuff_*`, `lineup_nowcast_timing_*`, `late_info_stamp_*`, `pitch_matchup_*`, `totals_park_wind_*`, `true_arsenal_*`, `batter_level_arsenal_*`, `live_late_info_clv_*` under this folder.
 
 ---
 
@@ -79,21 +80,21 @@ Detail artifacts: `stack_ablation_*`, `sp_talent_v2_*`, `statcast_stuff_*`, `lin
 
 ---
 
-## 5. Batter-level arsenal track (next lever)
+## 5. Batter-level arsenal track — **no-ship**
 
 **Hypothesis:** Team-family contact was too coarse; lineup-ID batter contact × pitcher pitch-type mix could move ML without killing RL.
 
-**Implementation (branch `mlb-batter-level-arsenal`):**
-- Per-batter as-of `batter_contact_asof_index.json`
-- `get_batter_contact_as_of` + `blend_lineup_batter_contact` + `resolve_batter_family_for_matchup`
-- Flag `MLB_PITCH_MATCHUP_BATTER_LEVEL` (default **false**); densify arm **M1b**
-- Lineup player `id` from Stats API in `fetch_game_lineup_features`
-- Unit tests: **12 passed** (`test_mlb_batter_level_arsenal.py` + true arsenal)
-- Densify grade **not run yet** (needs Railway image with M1b) — **no ship until Inter ML CLV ≥ +0.010, RL/total intact, leak 0**
+**Graded:** Railway force-resim densify task `b52bf4c4-bd7c-42d7-ae80-3bbfa5f41c3c` (M0/M1/M1b), window `2026-05-20→2026-07-17`, `max_games=1200`, no Odds densify. PR [#63](https://github.com/kosedge/kosedge/pull/63) wiring stays OFF.
 
-Detail: `batter_level_arsenal_2026-08-01.md`.
+| Config | Inter ML | Inter RL | Inter Tot | WF Brier | ECE | Leak | Sim |
+|--------|---------:|---------:|----------:|---------:|----:|-----:|----:|
+| M0 | +0.00383 | +0.051 | +0.004 | 0.25047 | 0.0233 | 0 | 628 |
+| M1t | +0.00392 | 0 | +0.002 | 0.24997 | 0.0229 | 0 | 628 |
+| M1b | **+0.00364** | +0.013 | +0.002 | 0.25131 | 0.0238 | 0 | 628 |
 
-If densify also fails: stop multiplying PA muls; pivot to architecture (see §8).
+**Decision:** keep `MLB_PITCH_MATCHUP_ENABLED` / `MLB_PITCH_MATCHUP_BATTER_LEVEL` **false**. M1b fails +0.010 gate and is slightly worse than M0. **Stop PA-mul research**; pivot to architecture (see §8).
+
+Detail: `batter_level_arsenal_2026-08-01.md` + `.json`.
 
 ---
 
@@ -114,13 +115,14 @@ Do **not** market “proven +EV” or open stake flags. See `unused_holdout_stak
 
 **We are not there.**
 
-- Intersection ML CLV stuck ~**+0.004** after a full graveyard of levers.  
-- Brier fails the 0.24 sharpness gate.  
+- Intersection ML CLV stuck ~**+0.004** after a full graveyard of levers — including **batter-level M1b (+0.00364, no-ship)**.  
+- Brier fails the 0.24 sharpness gate (~0.250–0.251).  
 - Prior +0.023 CLV was **sample-confounded** — do not cite it for subscription.  
-- Edgeboard now correctly *displays* ML edge in prob points with tighter tags; that is a **product** win, not a model edge win.  
+- Edgeboard correctly *displays* ML edge in prob points with tighter tags; that is a **product** win, not a model edge win.  
+- PA-mul / Statcast contact research is exhausted for subscription CLV.  
 - Subscription / stake marketing remains **no-go** until unused-holdout + CLV/Brier clear.
 
-**Blocking:** model sharpness vs close, not UI.
+**Blocking:** model sharpness vs close (architecture), not UI.
 
 ---
 
@@ -128,12 +130,11 @@ Do **not** market “proven +EV” or open stake flags. See `unused_holdout_stak
 
 | Rank | Move | Expected value | Trap risk |
 |:----:|------|----------------|-----------|
-| 1 | **Finish batter-level densify grade** (honest ship/no-ship) | Medium — last high-specificity Statcast mul | Medium if we keep shipping muls after fail |
-| 2 | **Architecture change** — optional calibrated ML head / market-prior blend with frozen holdout | Medium–High if designed with leakage discipline | High if it becomes “fit the close” |
-| 3 | **Live ≤3h late-info CLV** once lake has confirms (infra ready; n=0 today) | Medium for ops measurement | Low sunk cost — already wired |
-| 4 | Totals park×weather with CV MAE (not as ML lever) | Low–Medium for totals product | High if sold as ML fix |
-| 5 | More quality muls (FIP/stuff/timing variants) | **Low** — graveyard says noise | **Sunk-cost trap — stop** |
-| 6 | Odds densify for sharper closes | Measurement only | Credits; does not create edge |
+| 1 | **Architecture change** — optional calibrated ML head / market-prior blend with frozen holdout | Medium–High if designed with leakage discipline | High if it becomes “fit the close” |
+| 2 | **Live ≤3h late-info CLV** once lake has confirms (infra ready; n=0 today) | Medium for ops measurement | Low sunk cost — already wired |
+| 3 | Totals park×weather with CV MAE (not as ML lever) | Low–Medium for totals product | High if sold as ML fix |
+| 4 | More quality / Statcast PA muls (incl. batter-level) | **Low** — graveyard closed (M1b no-ship) | **Sunk-cost trap — stop** |
+| 5 | Odds densify for sharper closes | Measurement only | Credits; does not create edge |
 
 ---
 
@@ -153,8 +154,8 @@ Do **not** market “proven +EV” or open stake flags. See `unused_holdout_stak
 
 ## 10. Top 3 remaining moves
 
-1. Complete batter-level arsenal densify → ship only if ≥ +0.010 Inter ML CLV.  
-2. If that fails: design a **market-aware ML head** (or stop mul research) with unused holdout frozen.  
-3. Grow live ≤3h late-info lake and grade when n>0 — do not open stake marketing meantime.
+1. Design a **market-aware ML head** (or stop mul research) with unused holdout frozen — batter-level densify **failed** the ship gate.  
+2. Grow live ≤3h late-info lake and grade when n>0.  
+3. Do **not** open stake marketing; do **not** flip pitch-matchup / batter-level flags.
 
 Companion: `../mlb-model-enterprise-grade-report.md` (refreshed same day).
