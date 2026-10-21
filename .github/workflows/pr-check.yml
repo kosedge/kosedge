@@ -276,7 +276,7 @@ jobs:
         if: steps.paths.outputs.cfb_ms == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_cfb_enterprise_gates.py tests/test_cfb_name_to_code_fail_closed.py tests/test_cfb_power_sot.py tests/test_cfb_futures.py tests/test_cfb_kei.py
+          pytest -q tests/test_cfb_enterprise_gates.py tests/test_cfb_name_to_code_fail_closed.py tests/test_cfb_power_sot.py tests/test_cfb_futures.py tests/test_cfb_kei.py tests/test_cfb_roster_inflation_diag.py
 
       - name: Run NBA season-engine tests
         if: steps.paths.outputs.nba_ms == '1'
