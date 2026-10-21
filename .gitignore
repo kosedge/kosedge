@@ -122,6 +122,9 @@ data/ops/nfl-phase3-depth-cache/
 # Rest/weather game-card forecast cache (as_of JSON; do not commit)
 data/ops/nfl-rest-weather-cache/
 
+# CFB historical reconstruction caches (ESPN core athletes, SDV CSVs)
+data/cfb/raw/
+
 # DepthSotWorkItem runtime queue / receipts (generate locally; do not commit day dumps)
 data/ops/nfl-daily-intel/queue/runtime/
 data/ops/nfl-daily-intel/proposed/camp-flag-*.json
