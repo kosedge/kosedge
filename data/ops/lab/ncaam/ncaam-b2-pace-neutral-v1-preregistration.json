@@ -1,0 +1,18 @@
+{
+  "candidate_id": "B2-PACE-NEUTRAL-v1",
+  "method_id": "kenpom_adjem_pit_tempo_gated_hca_v1",
+  "parent_candidate_id": "B2-PACE-v1",
+  "status": "frozen_train_a_research_only",
+  "promoted": false,
+  "production_default": false,
+  "population": "train_a_2022-11-07_to_2023-03-12",
+  "forbidden_windows": ["test_a", "pocket_2025", "holdout_2024_25"],
+  "hca_home": 2.8696,
+  "hca_neutral": 0.0,
+  "venue_statuses_eligible": ["confirmed_home", "confirmed_neutral"],
+  "unknown_venue_policy": "fail_closed_no_fair",
+  "non_boolean_neutral_site_policy": "unknown_fail_closed_no_coercion",
+  "bootstrap": { "n": 2000, "seed": 20260909 },
+  "metrics_are_promotional_gates": false,
+  "august_31_ratings_as_week2_kei": false
+}
