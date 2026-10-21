@@ -1,0 +1,29 @@
+{
+  "ok": false,
+  "error": "warehouse_parquet_missing",
+  "clean_dir": "/Volumes/KosEdgeData/clean/cfb/historical",
+  "candidates_checked": [
+    "/Volumes/KosEdgeData/clean/cfb/historical",
+    "/workspace/data/cfb/warehouse/clean",
+    "/workspace/services/model-service/data/cfb/warehouse/clean"
+  ],
+  "hint": "Mount KosEdgeData or run ingest_historical_warehouse.py --repo-fallback",
+  "inventory_citation": {
+    "path": "data/ops/cfb-historical-warehouse-v1-20260812-inventory.json",
+    "season_range": {
+      "min": 2020,
+      "max": 2025
+    },
+    "games": 5196,
+    "closing_lines": 5196,
+    "by_season_with_close": {
+      "2020": 512,
+      "2021": 814,
+      "2022": 838,
+      "2023": 907,
+      "2024": 965,
+      "2025": 958
+    },
+    "note": "Games+closes are 2020\u20132025 in v1 inventory; 2019 is PBP-only."
+  }
+}
