@@ -31,6 +31,8 @@ Until a stake policy is separately approved: numbers only, no “play this” ch
 
 **Playing time (2026-08-20):** Depth SoT is authoritative for **who gets volume**. QB3 / WR4+ / RB3+ cannot take starter shares from last-year priors. Caps in `nfl_playing_time.py`; remat after Railway. Expert values require material volume + ADP ≤ 250. See `data/ops/nfl-playing-time-role-caps-20260820.md`.
 
+**LIVE smoke (2026-08-20):** Prod 2025 pool is 3C (max 4590 / n=4 / gap 0.097); equality green at `player-production-v3-phase3c`. **`NFL_WEEKLY_PROPS_LIVE` stays false** — worker not draining (Celery backlog + pending bare rematerialize) and 2026 season desk is preseason-bundle fallback, not SUM spine. See `data/ops/nfl-spine-live-smoke-20260820.md`.
+
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept
 ✅ GOOD: one player-game mean; fantasy points = scoring of that mean; futures = season sum + uncertainty
