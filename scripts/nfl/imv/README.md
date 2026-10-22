@@ -4,11 +4,12 @@ Sealed Mac runners and the file-backed nflverse feature path. These scripts
 **do not** write certification data into git. Do not commit snapshot
 directories, scores, or SHA256SUMS from a live seal.
 
-| File | Role |
-| --- | --- |
-| `nfl-imv-prestage-nflverse.sh` | Separate fetch. Network ON. Writes files + sha + cutoff. |
-| `nfl-imv-feature-path-v2.md` | Approved local architecture (no silent defaults). |
-| `nfl-imv-sealed-v2.sh` | Darwin + network deny. `--base` dedicated worktree. W7 refused. |
+| File                             | Role                                                            |
+| -------------------------------- | --------------------------------------------------------------- |
+| `nfl-imv-prestage-nflverse.sh`   | Separate fetch. Network ON. Writes files + sha + cutoff.        |
+| `nfl-imv-feature-path-v2.md`     | Approved local architecture (no silent defaults).               |
+| `nfl-imv-feature-coverage-v2.md` | 41-key sourced / unavailable / flag table.                      |
+| `nfl-imv-sealed-v2.sh`           | Darwin + network deny. `--base` dedicated worktree. W7 refused. |
 
 v2 usage (Ryan's Mac, dedicated BASE, not `~/kosedge`):
 

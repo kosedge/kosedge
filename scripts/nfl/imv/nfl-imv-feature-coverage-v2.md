@@ -1,0 +1,62 @@
+# IMV v2 feature-coverage table
+
+Extract of §0 from `nfl-imv-feature-path-v2.md`.
+Pin: `b1d857d356d5afc422c86ffb1e9a25afdf2a4225` (`nfl-v1.5-matchup-sim`, 41 `FEATURE_KEYS`, schema v3).
+Rule: never default silently. Unavailable keys are **flagged and left null** — never filled with `7.0` / `0.0` / `1.0`.
+Status is **sourced** only if a pre-staged, sha-pinned nflverse file can produce the value through BASE builders with **strict lag**.
+
+| Feature                                                   | Status                            | nflverse source                      | If missing / unused                                                                        |
+| --------------------------------------------------------- | --------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `week`                                                    | sourced                           | `games.csv` `week`                   | `FLAG_MISSING_WEEK` → BLOCKED                                                              |
+| `home_off_epa_5g`                                         | sourced                           | PBP 2025+2026 → rolling 5g           | `FLAG_MISSING_EPA` → BLOCKED                                                               |
+| `away_off_epa_5g`                                         | sourced                           | PBP 2025+2026 → rolling 5g           | `FLAG_MISSING_EPA` → BLOCKED                                                               |
+| `home_def_epa_allowed_5g`                                 | sourced                           | PBP 2025+2026 → rolling 5g           | `FLAG_MISSING_EPA` → BLOCKED                                                               |
+| `away_def_epa_allowed_5g`                                 | sourced                           | PBP 2025+2026 → rolling 5g           | `FLAG_MISSING_EPA` → BLOCKED                                                               |
+| `home_pressure_allowed_5g`                                | sourced                           | PBP `sack`/`qb_hit` rolling          | `FLAG_MISSING_PRESSURE`                                                                    |
+| `away_pressure_allowed_5g`                                | sourced                           | PBP `sack`/`qb_hit` rolling          | `FLAG_MISSING_PRESSURE`                                                                    |
+| `home_pressure_generated_5g`                              | sourced                           | PBP `sack`/`qb_hit` rolling          | `FLAG_MISSING_PRESSURE`                                                                    |
+| `away_pressure_generated_5g`                              | sourced                           | PBP `sack`/`qb_hit` rolling          | `FLAG_MISSING_PRESSURE`                                                                    |
+| `home_pass_rate_5g`                                       | sourced                           | PBP pass/run rolling                 | `FLAG_MISSING_PASS_RATE`                                                                   |
+| `away_pass_rate_5g`                                       | sourced                           | PBP pass/run rolling                 | `FLAG_MISSING_PASS_RATE`                                                                   |
+| `home_early_down_pass_rate_5g`                            | sourced                           | PBP `down`∈{1,2}                     | `FLAG_MISSING_EARLY_DOWN`                                                                  |
+| `away_early_down_pass_rate_5g`                            | sourced                           | PBP `down`∈{1,2}                     | `FLAG_MISSING_EARLY_DOWN`                                                                  |
+| `home_red_zone_td_rate_5g`                                | sourced                           | PBP `yardline_100`+TD                | `FLAG_MISSING_RZ`                                                                          |
+| `away_red_zone_td_rate_5g`                                | sourced                           | PBP `yardline_100`+TD                | `FLAG_MISSING_RZ`                                                                          |
+| `home_success_offense_5g`                                 | sourced                           | PBP `success`                        | `FLAG_MISSING_SUCCESS`                                                                     |
+| `away_success_offense_5g`                                 | sourced                           | PBP `success`                        | `FLAG_MISSING_SUCCESS`                                                                     |
+| `home_success_defense_allowed_5g`                         | sourced                           | PBP `success`                        | `FLAG_MISSING_SUCCESS`                                                                     |
+| `away_success_defense_allowed_5g`                         | sourced                           | PBP `success`                        | `FLAG_MISSING_SUCCESS`                                                                     |
+| `diff_off_epa_5g`                                         | sourced                           | both EPA sides                       | `FLAG_MISSING_DIFF` (never 0)                                                              |
+| `diff_def_epa_allowed_5g`                                 | sourced                           | both EPA sides                       | `FLAG_MISSING_DIFF` (never 0)                                                              |
+| `diff_pressure_generated_5g`                              | sourced                           | both pressure sides                  | `FLAG_MISSING_DIFF` (never 0)                                                              |
+| `diff_pressure_allowed_5g`                                | sourced                           | both pressure sides                  | `FLAG_MISSING_DIFF` (never 0)                                                              |
+| `diff_red_zone_td_rate_5g`                                | sourced                           | both RZ sides                        | `FLAG_MISSING_DIFF` (never 0)                                                              |
+| `diff_success_rate_5g`                                    | sourced                           | both success sides                   | `FLAG_MISSING_DIFF` (never 0)                                                              |
+| `home_kav_offense_5g`                                     | sourced                           | PBP via `kav.py`, week−1             | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `away_kav_offense_5g`                                     | sourced                           | PBP via `kav.py`, week−1             | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `home_kav_defense_5g`                                     | sourced                           | PBP via `kav.py`, week−1             | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `away_kav_defense_5g`                                     | sourced                           | PBP via `kav.py`, week−1             | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `home_kav_net_5g`                                         | sourced                           | PBP via `kav.py`, week−1             | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `away_kav_net_5g`                                         | sourced                           | PBP via `kav.py`, week−1             | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `diff_kav_net_5g`                                         | sourced                           | both KAV nets, week−1                | `FLAG_KAV_LAGGED_NULL` (never 0)                                                           |
+| `home_rest_days`                                          | sourced                           | `games.csv` `home_rest`              | `FLAG_MISSING_REST` — never `7.0`                                                          |
+| `away_rest_days`                                          | sourced                           | `games.csv` `away_rest`              | `FLAG_MISSING_REST` — never `7.0`                                                          |
+| `diff_rest_days`                                          | sourced                           | both rest sides                      | `FLAG_MISSING_REST` — never `0`                                                            |
+| `roof_dome`                                               | sourced                           | `games.csv` `roof` ∈ {dome,closed}   | `FLAG_MISSING_ROOF` (do not assume outdoor)                                                |
+| `surface_turf`                                            | sourced                           | `games.csv` `surface` contains turf  | `FLAG_MISSING_SURFACE`                                                                     |
+| `is_divisional_game`                                      | sourced                           | `games.csv` `div_game` or BASE map   | `FLAG_MISSING_DIV`                                                                         |
+| `home_injury_impact`                                      | **unavailable**                   | raw `injuries_2026` ≠ Kos nowcast    | `FLAG_MISSING_KOSEDGE_INJURY_NOWCAST` — never `0.0`                                        |
+| `away_injury_impact`                                      | **unavailable**                   | raw `injuries_2026` ≠ Kos nowcast    | `FLAG_MISSING_KOSEDGE_INJURY_NOWCAST` — never `0.0`                                        |
+| `diff_injury_impact`                                      | **unavailable**                   | derived from nowcast                 | `FLAG_MISSING_KOSEDGE_INJURY_NOWCAST` — never `0.0`                                        |
+| `offense_index_*` / `defense_index_*` (warehouse true-PR) | **unavailable as warehouse SoT**  | not in games/PBP alone               | `FLAG_MISSING_TRUE_PR_PRIOR` — never dataclass `1.0`; optional local backbone rebuild only |
+| Injury multipliers / info velocity                        | **unavailable**                   | Kos nowcast                          | `FLAG_MISSING_INJURY_OVERLAY` — never `1.0`/`0.0`                                          |
+| Live weather                                              | **unavailable**                   | Open-Meteo; post-game temp/wind only | W8 `FLAG_MISSING_WEATHER`; W4–W6 `WEATHER_POSTGAME` if used                                |
+| Travel miles / TZ                                         | **unavailable**                   | not in schedules                     | `FLAG_MISSING_TRAVEL` — never `0`                                                          |
+| Personnel / coach / ST-KAV                                | **unavailable**                   | not v3 keys                          | `FLAG_ABSENT_V3` — omit, do not zero                                                       |
+| Live / owned closes                                       | **unavailable** for W8 MODEL-ONLY | Odds / warehouse                     | omit columns; W4–W6 may attach `market_close_nflverse` for grading only                    |
+| HFA `+1.05`                                               | model-applied, must declare       | BASE `HOME_FIELD_POINTS`             | `hfa_declared=true` or `HFA_UNDECLARED`; intl `FLAG_HFA_ON_NEUTRAL` → BLOCKED              |
+| Hand-entered news                                         | **forbidden**                     | —                                    | `hand_entered_news=false`                                                                  |
+
+Counts: **38 sourced** (31 rolling/KAV + week + 3 rest + 3 venue/div) · **3 v3 keys unavailable** (injury trio) · sim extras flagged as above.
+
+Do not run W7. Design only — no builder or runner was executed.
