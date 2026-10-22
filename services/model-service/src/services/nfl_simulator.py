@@ -296,7 +296,13 @@ def _build_matchup_adjustments(inputs: NflGameInputs) -> Dict[str, Any]:
     if inputs.tendency_spread_signal is None and (
         inputs.tendency_proe_home is not None or inputs.tendency_proe_away is not None
     ):
-        from src.services.nfl_tendency_pricing import tendency_game_signals
+        try:
+            from src.services.nfl_tendency_pricing import tendency_game_signals
+        except ImportError as exc:
+            raise RuntimeError(
+                "nfl_simulator: tendency signal unavailable (SQLAlchemy/import); "
+                "fail closed — must not drop to 0.0"
+            ) from exc
 
         signals = tendency_game_signals(
             float(inputs.tendency_proe_home or 0.0),

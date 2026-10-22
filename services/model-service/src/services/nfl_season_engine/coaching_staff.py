@@ -72,7 +72,12 @@ def load_packaged_coaching_staff(
             "coaching_holes": list(NFL_TEAMS),
         }
 
-    payload = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            "F-2/F-3: packaged coaching JSON failed; fail closed (must not empty)"
+        ) from exc
     teams_raw = payload.get("teams") or {}
     by_team: Dict[str, Dict[str, Any]] = {}
     if isinstance(teams_raw, Mapping):
@@ -131,6 +136,11 @@ def continuity_staff_from_packaged(
     Unknown continuity flags stay omitted (→ approximate neutral), never
     defaulted to ``new=True``.
     """
+    path = _PACKAGED_COACHING_FILES.get(int(season))
+    if path is not None and not path.is_file():
+        raise RuntimeError(
+            "F-2/F-3: packaged coaching file missing; fail closed (must not empty)"
+        )
     book, _meta = load_packaged_coaching_staff(season)
     out: Dict[str, Dict[str, Any]] = {}
     for team, row in book.items():
