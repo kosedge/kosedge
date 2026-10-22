@@ -176,9 +176,9 @@ class TeamContinuity:
             ),
             **dict(self.drivers or {}),
         }
-        # R-1: always surface the packaged-QB1 ABSENT/PRESENT flag in output.
+        # R-1: surface the flag. Missing is NOT_RECORDED, not ABSENT.
         if payload.get("packaged_qb1_flag") in (None, ""):
-            payload["packaged_qb1_flag"] = PACKAGED_QB1_ABSENT
+            payload["packaged_qb1_flag"] = PACKAGED_QB1_NOT_RECORDED
         return payload
 
 
@@ -508,14 +508,15 @@ def blend_weights_with_continuity(
 # ---------------------------------------------------------------------------
 
 
+PACKAGED_QB1_NOT_RECORDED = "NOT_RECORDED"
 PACKAGED_QB1_ABSENT = "ABSENT"
 PACKAGED_QB1_PRESENT = "PRESENT"
 _PACKAGED_QB1_FLAG: Dict[int, str] = {}
 
 
 def packaged_qb1_flag(season: int) -> str:
-    """R-1: explicit ABSENT/PRESENT flag for the packaged QB1 file."""
-    return _PACKAGED_QB1_FLAG.get(int(season), PACKAGED_QB1_ABSENT)
+    """R-1: NOT_RECORDED until a load is attempted; then ABSENT or PRESENT."""
+    return _PACKAGED_QB1_FLAG.get(int(season), PACKAGED_QB1_NOT_RECORDED)
 
 
 def _refuse_w8_db_loader(name: str, session: Any = None) -> None:

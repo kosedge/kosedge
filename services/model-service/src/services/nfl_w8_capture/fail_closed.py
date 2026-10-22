@@ -34,6 +34,7 @@ BANNED_IMPORT_NAMES = frozenset(
         "fetch_skill_yards_by_player",
         "fetch_team_proe_map",
         "fetch_team_direction_rates",
+        "runpy",
     }
 )
 
@@ -44,6 +45,15 @@ _FROM_IMPORT_RE = re.compile(
 _IMPORT_AS_RE = re.compile(
     r"^\s*import\s+(\S+)(?:\s+as\s+(\w+))?\s*$"
 )
+# Built as pieces so this file does not contain the call text itself.
+_OPAQUE_EXEC_RE = re.compile(r"(?<![\w])" + "exec" + r"\s*\(")
+_OPAQUE_GETATTR_RE = re.compile(
+    r"getattr\s*\(\s*[^,]+,\s*(['\"])(?:import_module|find_spec)\1"
+)
+_OPAQUE_RUNPY_RE = re.compile(r"(?<![\w])runpy\.")
+
+# Remaining known limits (not scanned): compile(), eval(), importlib.machinery,
+# custom loaders, __loader__.load_module, zipimport.
 
 
 class FailClosedError(RuntimeError):
@@ -342,6 +352,29 @@ def logical_import_units(text: str) -> list[str]:
     return units
 
 
+def opaque_loader_names(text: str) -> list[str]:
+    """K-2: opaque loaders (builtin exec, the runpy module, getattr, non-literals)."""
+    found: set[str] = set()
+    if _OPAQUE_EXEC_RE.search(text):
+        found.add("exec")
+    if _OPAQUE_GETATTR_RE.search(text):
+        found.add("getattr_import")
+    if _OPAQUE_RUNPY_RE.search(text):
+        found.add("runpy")
+    callables = sorted(dynamic_import_callables(text), key=len, reverse=True)
+    if callables:
+        any_call = re.compile(
+            r"(?<![\w])(?:"
+            + "|".join(re.escape(name) for name in callables)
+            + r")\s*\("
+        )
+        for match in any_call.finditer(text):
+            after = text[match.end() - 1 : match.end() + 120]
+            if not re.match(r"\(\s*['\"]", after):
+                found.add("nonliteral_import")
+    return sorted(found)
+
+
 def banned_names_in_source(text: str) -> list[str]:
     """K-2: banned names from joined imports and dynamic loaders."""
     found: set[str] = set()
@@ -353,6 +386,7 @@ def banned_names_in_source(text: str) -> list[str]:
         found.update(_banned_tokens_in(" ".join(dynamic_import_targets(flat))))
     for target in dynamic_import_targets(text):
         found.update(_banned_tokens_in(target))
+    found.update(opaque_loader_names(text))
     return sorted(found)
 
 
@@ -366,6 +400,31 @@ def source_has_banned_import(text: str) -> bool:
     return bool(banned_names_in_source(text))
 
 
+def default_w8_scan_roots() -> list[Path]:
+    """W8 capture package (including fail_closed.py) plus script-level dry_run."""
+    capture_dir = Path(__file__).resolve().parent
+    repo = Path(__file__).resolve().parents[5]
+    script_dir = repo / "scripts" / "nfl" / "w8_capture"
+    roots = [capture_dir]
+    if script_dir.is_dir():
+        roots.append(script_dir)
+    return roots
+
+
+def db_loader_scanned_paths(root: Path | None = None) -> list[Path]:
+    if root is not None:
+        bases = [Path(root)]
+    else:
+        bases = default_w8_scan_roots()
+    paths: list[Path] = []
+    for base in bases:
+        if base.is_file():
+            paths.append(base)
+            continue
+        paths.extend(sorted(base.rglob("*.py")))
+    return paths
+
+
 def db_loader_import_hits(root: Path | None = None) -> list[str]:
     """F-6 / K-2: W8 capture source must not import DB loaders or brokers."""
     return [name for name, _names in db_loader_import_findings(root)]
@@ -374,11 +433,8 @@ def db_loader_import_hits(root: Path | None = None) -> list[str]:
 def db_loader_import_findings(
     root: Path | None = None,
 ) -> list[tuple[str, list[str]]]:
-    base = Path(root) if root is not None else Path(__file__).resolve().parent
     findings: list[tuple[str, list[str]]] = []
-    for path in sorted(base.rglob("*.py")):
-        if path.name == "fail_closed.py" and root is None:
-            continue
+    for path in db_loader_scanned_paths(root):
         names = banned_names_in_source(path.read_text(encoding="utf-8"))
         if names:
             findings.append((path.name, names))

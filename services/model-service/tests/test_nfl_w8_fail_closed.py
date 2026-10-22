@@ -16,6 +16,7 @@ from src.services.nfl_handicapping_framework import (
 )
 from src.services.nfl_season_engine.continuity_score import (
     PACKAGED_QB1_ABSENT,
+    PACKAGED_QB1_NOT_RECORDED,
     ContinuitySourceError,
     TeamContinuity,
     _load_packaged_qb1,
@@ -38,6 +39,7 @@ from src.services.nfl_w8_capture.fail_closed import (
     collect_nfl_env_overrides,
     collect_stop_env_names,
     db_loader_import_hits,
+    db_loader_scanned_paths,
     import_line_is_banned,
     persist_stop_and_raise,
     record_nfl_env_overrides,
@@ -414,6 +416,32 @@ def test_k2_aliased_import_module_and_find_spec_are_caught(tmp_path: Path) -> No
     assert "sqlalchemy" in payload["import_names"]
 
 
+def test_k2_default_scan_includes_fail_closed_and_script_dry_run() -> None:
+    paths = db_loader_scanned_paths()
+    names = {p.name for p in paths}
+    assert "fail_closed.py" in names
+    assert any(
+        p.name == "dry_run.py" and "scripts" in p.parts for p in paths
+    )
+    assert db_loader_import_hits() == []
+
+
+def test_k2_opaque_loaders_are_caught(tmp_path: Path) -> None:
+    source = (
+        "import importlib\n"
+        "name = 'redis'\n"
+        "importlib.import_module(name)\n"
+        "getattr(importlib, 'import_module')('celery')\n"
+        "import runpy\n"
+        + "ex" + "ec('import sqlalchemy')\n"
+    )
+    payload = _k2_guard_stop(tmp_path, source)
+    assert "nonliteral_import" in payload["import_names"]
+    assert "getattr_import" in payload["import_names"]
+    assert "runpy" in payload["import_names"]
+    assert "exec" in payload["import_names"]
+
+
 def test_k3_env_stop_writes_names_only(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -493,8 +521,10 @@ def test_f5_already_imported_src_is_stop(monkeypatch: pytest.MonkeyPatch) -> Non
 
 
 def test_r1_absent_packaged_qb1_is_explicit_flag() -> None:
+    assert packaged_qb1_flag(1800) == PACKAGED_QB1_NOT_RECORDED
     _load_packaged_qb1(1999)
     assert packaged_qb1_flag(1999) == PACKAGED_QB1_ABSENT
+    assert packaged_qb1_flag(1800) == PACKAGED_QB1_NOT_RECORDED
     drivers = TeamContinuity(
         team="SEA",
         continuity_score=0.5,
@@ -503,6 +533,13 @@ def test_r1_absent_packaged_qb1_is_explicit_flag() -> None:
         drivers={"packaged_qb1_flag": packaged_qb1_flag(1999)},
     ).to_drivers()
     assert drivers["packaged_qb1_flag"] == PACKAGED_QB1_ABSENT
+    blank = TeamContinuity(
+        team="SEA",
+        continuity_score=0.5,
+        band="mid",
+        prior_travel_weight=1.0,
+    ).to_drivers()
+    assert blank["packaged_qb1_flag"] == PACKAGED_QB1_NOT_RECORDED
 
 
 def test_k4_route_b_closure_listing_is_import_time() -> None:
