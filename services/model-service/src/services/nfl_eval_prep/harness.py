@@ -72,6 +72,7 @@ def build_rebuild_plan(
         runner="src.services.nfl_eval_prep.local_tree_check.check_local_tree",
         notes=(
             "LOCAL_TREE_CHECKED is not a gate and is not PREP_VALIDATED.",
+            "NOT the 803ceb4e runner v2; approval of this code is not route approval.",
             "G3 diagnostic only after LC-1..LC-3 and a Ryan P-1 approval.",
             "2026 W8+ is a future population; capture is not built here.",
             "Closing lines are comparison labels, never rebuild features.",

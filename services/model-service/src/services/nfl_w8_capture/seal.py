@@ -204,8 +204,9 @@ def _build_and_seal_impl(
     min_lead_minutes: int,
     default_seal_by_et: datetime,
 ) -> CaptureResult:
+    stop_record = Path(root) / "STOP.json"
     try:
-        guards = run_builder_guards()
+        guards = run_builder_guards(stop_record_path=stop_record)
     except FailClosedError as exc:
         raise CaptureError(str(exc)) from exc
     refuse_credentials(dry_run=dry_run)
@@ -329,6 +330,7 @@ def _build_and_seal_impl(
             "dry_run": dry_run,
             "publish": False,
             "nfl_env_overrides": guards["nfl_env_overrides"],
+            "stop_env_names": guards["stop_env_names"],
             "src_root": guards["src_root"],
             "fail_closed": ["F-0", "F-1", "F-2", "F-3", "F-4", "F-5", "F-6"],
         },

@@ -9,6 +9,8 @@ week-forward refits are NOT registered here and are refused.
 
 from __future__ import annotations
 
+import hashlib
+import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Iterable, Optional, Sequence
@@ -18,22 +20,34 @@ CONTAMINATED_EVAL_SEASONS = frozenset({2024, 2025})
 FROZEN_PLUMBING_WEEKS_2026 = frozenset({4, 5, 6})
 DIAGNOSTIC_SEASONS_DEFAULT = tuple(range(2013, 2024))  # 2013–2023 inclusive
 REBUILD_MIN_SEASON = 2013
+# Documented name only. C-7 forbids an implicit read of this path.
 RYAN_FILED_PRE2013_RELATIVE = Path("docs/research/NFL_RYAN_FILED_PRE2013_SEASONS.md")
+_SHA256_HEX = re.compile(r"^[0-9a-fA-F]{64}$")
 
 
 class SplitError(ValueError):
     """Illegal split, eval season, or train/eval overlap."""
 
 
-def load_ryan_filed_pre2013_seasons(path: Optional[Path] = None) -> frozenset[int]:
-    """Read a Ryan-filed pre-2013 season list. Missing file → empty set.
+def load_ryan_filed_pre2013_seasons(
+    path: Path,
+    *,
+    expected_sha256: str,
+) -> frozenset[int]:
+    """Read a Ryan-filed pre-2013 season list. Path and file sha are required.
 
     Expected body contains a line ``seasons: 2009,2010`` (integers only).
-    The file does not exist in this repo unless Ryan files it.
+    Does not read the repo default path unless the caller passes that path
+    and its sha.
     """
-    target = Path(path) if path is not None else _default_ryan_filed_path()
+    if not expected_sha256 or not _SHA256_HEX.fullmatch(str(expected_sha256)):
+        raise SplitError("C-7: ryan_filed_file_sha256 must be a sha256 hex digest")
+    target = Path(path)
     if not target.is_file():
-        return frozenset()
+        raise SplitError("C-7: Ryan-filed pre-2013 universe file is missing")
+    digest = hashlib.sha256(target.read_bytes()).hexdigest()
+    if digest.lower() != str(expected_sha256).lower():
+        raise SplitError("C-7: Ryan-filed pre-2013 file sha mismatch")
     text = target.read_text(encoding="utf-8")
     seasons: set[int] = set()
     for line in text.splitlines():
@@ -48,27 +62,24 @@ def load_ryan_filed_pre2013_seasons(path: Optional[Path] = None) -> frozenset[in
     return frozenset(s for s in seasons if s < REBUILD_MIN_SEASON)
 
 
-def _default_ryan_filed_path() -> Path:
-    here = Path(__file__).resolve()
-    repo = here.parents[5]  # services/model-service/src/services/nfl_eval_prep → repo
-    return repo / RYAN_FILED_PRE2013_RELATIVE
-
-
 def assert_season_in_rebuild_universe(
     season: int,
     *,
     ryan_filed_pre2013: Optional[frozenset[int]] = None,
+    ryan_filed_file_sha256: Optional[str] = None,
 ) -> None:
-    """C-7: refuse pre-2013 unless a Ryan-filed season list includes it."""
+    """C-7: refuse pre-2013 unless a Ryan-filed universe file sha is passed."""
     year = int(season)
     if year >= REBUILD_MIN_SEASON:
         return
-    filed = (
-        ryan_filed_pre2013
-        if ryan_filed_pre2013 is not None
-        else load_ryan_filed_pre2013_seasons()
-    )
-    if year not in filed:
+    if ryan_filed_pre2013 is None or not ryan_filed_file_sha256:
+        raise SplitError(
+            f"C-7: pre-2013 season {year} refused unless a Ryan-filed "
+            "universe file sha is passed"
+        )
+    if not _SHA256_HEX.fullmatch(str(ryan_filed_file_sha256)):
+        raise SplitError("C-7: ryan_filed_file_sha256 must be a sha256 hex digest")
+    if year not in ryan_filed_pre2013:
         raise SplitError(
             f"C-7: pre-2013 season {year} refused unless a Ryan-filed season list includes it"
         )
@@ -127,6 +138,8 @@ def build_expanding_window_folds(
     *,
     min_train_seasons: int = 1,
     allow_contaminated_eval: bool = False,
+    ryan_filed_pre2013: Optional[frozenset[int]] = None,
+    ryan_filed_file_sha256: Optional[str] = None,
 ) -> list[ExpandingWindowFold]:
     """S-1. ``allow_contaminated_eval`` is locked False; the flag exists to fail closed."""
     if allow_contaminated_eval:
@@ -135,7 +148,11 @@ def build_expanding_window_folds(
     if not ordered:
         raise SplitError("no seasons")
     for year in ordered:
-        assert_season_in_rebuild_universe(year)
+        assert_season_in_rebuild_universe(
+            year,
+            ryan_filed_pre2013=ryan_filed_pre2013,
+            ryan_filed_file_sha256=ryan_filed_file_sha256,
+        )
     blocked = [s for s in ordered if s in CONTAMINATED_EVAL_SEASONS or s >= 2026]
     if blocked:
         raise SplitError(f"blocked seasons in split universe: {blocked}")

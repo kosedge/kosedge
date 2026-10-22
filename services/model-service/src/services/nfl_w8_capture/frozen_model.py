@@ -132,13 +132,15 @@ def predict_stream(
     rows: Sequence[Mapping[str, Any]],
     *,
     stream: str,
+    stop_record_path: str | None = None,
 ) -> list[dict[str, Any]]:
-    from src.services.nfl_w8_capture.fail_closed import run_builder_guards
+    from src.services.nfl_w8_capture.fail_closed import run_builder_guards, w8_build_context
 
-    run_builder_guards()
-    if stream not in {STREAM_MARKET, STREAM_INDEPENDENT}:
-        raise FrozenModelError(f"unknown stream {stream}")
-    return [score_row(row, stream=stream) for row in rows]
+    with w8_build_context():
+        run_builder_guards(stop_record_path=stop_record_path)
+        if stream not in {STREAM_MARKET, STREAM_INDEPENDENT}:
+            raise FrozenModelError(f"unknown stream {stream}")
+        return [score_row(row, stream=stream) for row in rows]
 
 
 def predictions_bytes(rows: Sequence[Mapping[str, Any]]) -> bytes:

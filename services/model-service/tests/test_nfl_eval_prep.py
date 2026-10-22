@@ -35,6 +35,7 @@ from src.services.nfl_eval_prep.splits import (
     assert_season_in_rebuild_universe,
     assert_train_only,
     build_expanding_window_folds,
+    load_ryan_filed_pre2013_seasons,
 )
 from src.services.nfl_eval_prep.synthetic import write_synthetic_bundle
 
@@ -48,21 +49,21 @@ def test_asof_keeps_strictly_before_kickoff() -> None:
         feature_name="home_off_epa_5g",
         as_of="2018-09-13T12:00:00+00:00",
         kickoff_utc="2018-09-13T17:00:00+00:00",
-        source="archive:synthetic",
+        source="archive:snapshot:eval_prep_synthetic_v1",
     )
     late = AsOfProof(
         game_id="SYN-1",
         feature_name="home_kav_net_5g",
         as_of="2018-09-13T17:00:00+00:00",
         kickoff_utc="2018-09-13T17:00:00+00:00",
-        source="archive:synthetic",
+        source="archive:snapshot:eval_prep_synthetic_v1",
     )
     missing = AsOfProof(
         game_id="SYN-2",
         feature_name="rest_days_home",
         as_of="",
         kickoff_utc="2018-09-13T17:00:00+00:00",
-        source="archive:synthetic",
+        source="archive:snapshot:eval_prep_synthetic_v1",
     )
     unnamed = AsOfProof(
         game_id="SYN-3",
@@ -76,7 +77,7 @@ def test_asof_keeps_strictly_before_kickoff() -> None:
     assert [v.reason for v in result.excluded] == [
         "as_of_not_before_cutoff",
         "unprovable_as_of",
-        "source_not_named_archive",
+        "source_not_archive_snapshot_or_sha",
     ]
     assert ASOF_IS_SELF_DECLARED is True
     assert kept.asof_self_declared is True
@@ -90,7 +91,7 @@ def test_asof_refuses_close_or_score_feature_name() -> None:
                 feature_name="spread_line",
                 as_of="2018-09-13T12:00:00+00:00",
                 kickoff_utc="2018-09-13T17:00:00+00:00",
-                source="archive:synthetic",
+                source="archive:snapshot:eval_prep_synthetic_v1",
             )
         ]
     )
@@ -111,7 +112,7 @@ def test_proofs_from_feature_row_refuses_whole_row_as_of() -> None:
             "game_id": "SYN-1",
             "home_off_epa_5g": 0.1,
             "as_of": "2018-09-13T12:00:00+00:00",
-            "source": "archive:synthetic",
+            "source": "archive:snapshot:eval_prep_synthetic_v1",
         },
         feature_names=("home_off_epa_5g",),
         kickoff_utc="2018-09-13T17:00:00+00:00",
@@ -202,10 +203,91 @@ def test_expanding_window_is_train_only_by_season() -> None:
 
 
 def test_c7_refuses_pre2013_without_ryan_filed_list() -> None:
-    with pytest.raises(SplitError, match="C-7"):
+    with pytest.raises(SplitError, match="file sha is passed"):
         assert_season_in_rebuild_universe(2012, ryan_filed_pre2013=frozenset())
-    assert_season_in_rebuild_universe(2012, ryan_filed_pre2013=frozenset({2012}))
+    with pytest.raises(SplitError, match="file sha is passed"):
+        assert_season_in_rebuild_universe(2012, ryan_filed_pre2013=frozenset({2012}))
+    with pytest.raises(SplitError, match="C-7"):
+        assert_season_in_rebuild_universe(
+            2012,
+            ryan_filed_pre2013=frozenset({2011}),
+            ryan_filed_file_sha256="a" * 64,
+        )
+    assert_season_in_rebuild_universe(
+        2012,
+        ryan_filed_pre2013=frozenset({2012}),
+        ryan_filed_file_sha256="a" * 64,
+    )
     assert_season_in_rebuild_universe(2013)
+
+
+def test_k5_c6_refuses_result_and_prefix_denylist() -> None:
+    for name in ("result", "close_ml", "final_margin", "grade_ats"):
+        out = validate_asof_proofs(
+            [
+                AsOfProof(
+                    game_id="SYN-1",
+                    feature_name=name,
+                    as_of="2018-09-13T12:00:00+00:00",
+                    kickoff_utc="2018-09-13T17:00:00+00:00",
+                    source="archive:snapshot:eval_prep_synthetic_v1",
+                )
+            ]
+        )
+        assert out.kept_n == 0
+        assert out.excluded[0].reason == "close_or_score_column_refused_as_feature"
+
+
+def test_k5_c6_requires_archive_snapshot_or_sha() -> None:
+    freeform = validate_asof_proofs(
+        [
+            AsOfProof(
+                game_id="SYN-1",
+                feature_name="home_off_epa_5g",
+                as_of="2018-09-13T12:00:00+00:00",
+                kickoff_utc="2018-09-13T17:00:00+00:00",
+                source="archive:synthetic",
+            )
+        ]
+    )
+    assert freeform.kept_n == 0
+    assert freeform.excluded[0].reason == "source_not_archive_snapshot_or_sha"
+    sha_ok = validate_asof_proofs(
+        [
+            AsOfProof(
+                game_id="SYN-1",
+                feature_name="home_off_epa_5g",
+                as_of="2018-09-13T12:00:00+00:00",
+                kickoff_utc="2018-09-13T17:00:00+00:00",
+                source="archive:sha256:" + ("ab" * 32),
+            )
+        ]
+    )
+    assert sha_ok.kept_n == 1
+
+
+def test_k6_c7_binds_pre2013_to_passed_file_sha(tmp_path: Path) -> None:
+    filed = tmp_path / "filed.md"
+    filed.write_text("# note\nseasons: 2011,2012\n", encoding="utf-8")
+    digest = __import__("hashlib").sha256(filed.read_bytes()).hexdigest()
+    seasons = load_ryan_filed_pre2013_seasons(filed, expected_sha256=digest)
+    assert seasons == frozenset({2011, 2012})
+    with pytest.raises(SplitError, match="sha mismatch"):
+        load_ryan_filed_pre2013_seasons(filed, expected_sha256="b" * 64)
+    with pytest.raises(TypeError):
+        load_ryan_filed_pre2013_seasons()  # type: ignore[misc]
+    assert_season_in_rebuild_universe(
+        2012, ryan_filed_pre2013=seasons, ryan_filed_file_sha256=digest
+    )
+
+
+def test_c8_disclaimer_is_literal() -> None:
+    from src.services.nfl_eval_prep.local_tree_check import LOCAL_TREE_CHECKED
+    import src.services.nfl_eval_prep.local_tree_check as tree
+
+    text = Path(tree.__file__).read_text(encoding="utf-8")
+    assert LOCAL_TREE_CHECKED == "LOCAL_TREE_CHECKED"
+    assert "NOT the 803ceb4e runner v2; approval of this code is not route approval" in text
 
 
 def test_rebuild_plan_does_not_include_eval_seasons() -> None:
@@ -228,6 +310,10 @@ def test_local_tree_check_validates_synthetic_bundle(tmp_path: Path) -> None:
     assert out.status != "PREP_VALIDATED"
     assert out.to_dict()["gate"] is False
     assert out.to_dict()["asof_self_declared"] is True
+    assert (
+        "NOT the 803ceb4e runner v2; approval of this code is not route approval."
+        in out.notes
+    )
     assert out.games_kept == 6  # weeks 2–3 × 3 seasons
     assert out.games_seen == 6
     assert [f["eval_season"] for f in out.folds] == [2017, 2018]
@@ -251,7 +337,7 @@ def test_local_tree_check_excludes_same_week_and_late_asof(tmp_path: Path) -> No
             {
                 "game_id": "SYN-2018-W03-AAA-BBB",
                 "feature_week": 3,
-                "source": "archive:synthetic",
+                "source": "archive:snapshot:eval_prep_synthetic_v1",
                 "home_off_epa_5g": 0.1,
                 "home_off_epa_5g_as_of": "2018-09-15T16:00:00+00:00",
             }
@@ -279,7 +365,7 @@ def test_local_tree_check_refuses_whole_row_as_of(tmp_path: Path) -> None:
                 "game_id": "SYN-2018-W03-AAA-BBB",
                 "feature_week": 2,
                 "as_of": "2018-09-15T16:00:00+00:00",
-                "source": "archive:synthetic",
+                "source": "archive:snapshot:eval_prep_synthetic_v1",
                 "home_off_epa_5g": 0.1,
             }
         ],
@@ -306,7 +392,7 @@ def test_local_tree_check_refuses_close_column(tmp_path: Path) -> None:
                 {
                     "game_id": "SYN-2018-W03-AAA-BBB",
                     "feature_week": 2,
-                    "source": "archive:synthetic",
+                    "source": "archive:snapshot:eval_prep_synthetic_v1",
                     "home_off_epa_5g": 0.1,
                     "home_off_epa_5g_as_of": "2018-09-15T16:00:00+00:00",
                     "spread_line": -3.5,

@@ -48,7 +48,7 @@ def build_synthetic_rows() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
                 "season": season,
                 "week": week,
                 "feature_week": week - 1,
-                "source": "archive:synthetic",
+                "source": "archive:snapshot:eval_prep_synthetic_v1",
                 "home_off_epa_5g": 0.02 * week,
                 "away_off_epa_5g": -0.01 * week,
                 "home_def_epa_allowed_5g": 0.01,

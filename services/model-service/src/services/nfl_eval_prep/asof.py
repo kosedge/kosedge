@@ -5,9 +5,10 @@ available (fail closed). Same spirit as ``cfb_warehouse.leakage``; this module
 is the NFL eval-prep contract and does not open a warehouse.
 
 C-6: as-of values are **self-declared**. This module does not verify them
-against an external clock or a source capture time. A named archived source
-(``archive:<name>``) is required. Whole-row as-of fallback is forbidden.
-Close and score columns are not features.
+against an external clock or a source capture time. An archived source must
+carry a snapshot id or sha (``archive:snapshot:<id>`` or ``archive:sha256:<hex>``),
+not a free-form ``archive:<name>``. Whole-row as-of fallback is forbidden.
+Close, result, and score columns are not features.
 """
 
 from __future__ import annotations
@@ -20,9 +21,12 @@ from typing import Any, Iterable, Mapping, Optional, Sequence
 
 PROOF_RULE = "as_of_strictly_before_kickoff_utc"
 ASOF_IS_SELF_DECLARED = True
-ARCHIVED_SOURCE_RE = re.compile(r"^archive:[A-Za-z0-9._-]+$")
+# C-6: snapshot id or sha only. Free-form archive:<name> is refused.
+ARCHIVED_SOURCE_RE = re.compile(
+    r"^archive:(?:sha256:[0-9a-fA-F]{64}|snapshot:[A-Za-z0-9._-]{8,})$"
+)
 
-# Never accepted as rebuild features (labels / closes).
+# Never accepted as rebuild features (labels / closes / grades / results).
 FORBIDDEN_FEATURE_COLUMNS = frozenset(
     {
         "home_score",
@@ -47,8 +51,10 @@ FORBIDDEN_FEATURE_COLUMNS = frozenset(
         "actual_total",
         "actual_spread_home",
         "closes",
+        "result",
     }
 )
+FORBIDDEN_FEATURE_PREFIXES = ("close", "final_", "grade")
 
 
 def parse_utc(value: Any) -> Optional[datetime]:
@@ -129,11 +135,19 @@ class AsOfValidationResult:
 
 
 def named_archived_source(source: str) -> Optional[str]:
-    """Return None if ``source`` is a legal ``archive:<name>`` token."""
+    """Return None if ``source`` carries an archive snapshot id or sha."""
     text = str(source or "").strip()
     if not ARCHIVED_SOURCE_RE.fullmatch(text):
-        return "source_not_named_archive"
+        return "source_not_archive_snapshot_or_sha"
     return None
+
+
+def is_forbidden_feature_column(name: str) -> bool:
+    """C-6: exact denylist plus close* / final_* / grade* prefixes."""
+    token = str(name or "")
+    if token in FORBIDDEN_FEATURE_COLUMNS:
+        return True
+    return any(token.startswith(prefix) for prefix in FORBIDDEN_FEATURE_PREFIXES)
 
 
 def _reason_for(proof: AsOfProof) -> Optional[str]:
@@ -166,7 +180,7 @@ def validate_asof_proofs(
             cutoff=(str(raw["cutoff"]) if raw.get("cutoff") else None),
             asof_self_declared=bool(raw.get("asof_self_declared", True)),
         )
-        if proof.feature_name in FORBIDDEN_FEATURE_COLUMNS:
+        if is_forbidden_feature_column(proof.feature_name):
             result.excluded.append(
                 AsOfViolation(
                     game_id=proof.game_id,
@@ -205,7 +219,7 @@ def validate_asof_proofs(
 
 
 def forbidden_feature_columns_present(row: Mapping[str, Any]) -> tuple[str, ...]:
-    return tuple(sorted(key for key in row if key in FORBIDDEN_FEATURE_COLUMNS))
+    return tuple(sorted(key for key in row if is_forbidden_feature_column(str(key))))
 
 
 def proofs_from_feature_row(
@@ -229,7 +243,7 @@ def proofs_from_feature_row(
     for name in feature_names:
         if name not in row:
             continue
-        if name in FORBIDDEN_FEATURE_COLUMNS:
+        if is_forbidden_feature_column(name):
             continue
         as_of = str(row.get(f"{name}_as_of") or "")
         feat_source = str(row.get(f"{name}_source") or source)

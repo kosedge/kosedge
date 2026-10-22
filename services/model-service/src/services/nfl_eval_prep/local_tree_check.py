@@ -1,7 +1,8 @@
 """Local sealed-tree contract check (IMV C-6 / C-7 / C-8).
 
 Not a runner. Not a gate. Status is never a certification or PREP_VALIDATED
-token. Validates as-of proofs, L-1/L-2/L-3 contracts, and expanding-window
+token. NOT the 803ceb4e runner v2; approval of this code is not route approval.
+Validates as-of proofs, L-1/L-2/L-3 contracts, and expanding-window
 plans on a local tree only.
 
 Does not simulate games, fit models on real seasons, fetch odds, or open a
@@ -98,6 +99,7 @@ def _schedule_index(
     bundle: LocalInputPath,
     *,
     ryan_filed_pre2013: Optional[frozenset[int]] = None,
+    ryan_filed_file_sha256: Optional[str] = None,
 ) -> dict[str, dict[str, Any]]:
     out: dict[str, dict[str, Any]] = {}
     for row in bundle.schedule_rows:
@@ -107,7 +109,9 @@ def _schedule_index(
         season = int(row.get("season") or 0)
         week = int(row.get("week") or 0)
         assert_season_in_rebuild_universe(
-            season, ryan_filed_pre2013=ryan_filed_pre2013
+            season,
+            ryan_filed_pre2013=ryan_filed_pre2013,
+            ryan_filed_file_sha256=ryan_filed_file_sha256,
         )
         if season in CONTAMINATED_EVAL_SEASONS:
             raise LocalTreeCheckError(
@@ -128,6 +132,7 @@ def check_local_tree(
     build_folds: bool = True,
     min_train_seasons: int = 1,
     ryan_filed_pre2013: Optional[frozenset[int]] = None,
+    ryan_filed_file_sha256: Optional[str] = None,
 ) -> LocalTreeCheckResult:
     """Check a local sealed tree. Does not score, fit, or certify."""
     _refuse_live_env()
@@ -138,7 +143,9 @@ def check_local_tree(
 
     try:
         schedule = _schedule_index(
-            bundle, ryan_filed_pre2013=ryan_filed_pre2013
+            bundle,
+            ryan_filed_pre2013=ryan_filed_pre2013,
+            ryan_filed_file_sha256=ryan_filed_file_sha256,
         )
     except SplitError as exc:
         raise LocalTreeCheckError(str(exc)) from exc
@@ -229,6 +236,8 @@ def check_local_tree(
                 for f in build_expanding_window_folds(
                     sorted(kept_seasons),
                     min_train_seasons=min_train_seasons,
+                    ryan_filed_pre2013=ryan_filed_pre2013,
+                    ryan_filed_file_sha256=ryan_filed_file_sha256,
                 )
             ]
             for fold in folds:
@@ -246,12 +255,14 @@ def check_local_tree(
         leak_diff=leak_fix_diff(),
         notes=[
             "LOCAL_TREE_CHECKED is not a gate and is not PREP_VALIDATED.",
+            "NOT the 803ceb4e runner v2; approval of this code is not route approval.",
             "As-of timestamps are self-declared; this check does not verify "
             "them against an external clock or source capture time.",
-            "Close and score columns are refused as features.",
+            "Close, result, and score columns are refused as features.",
             "Whole-row as-of fallback is refused.",
-            "Named archived source (archive:<name>) is required.",
-            "Pre-2013 seasons are refused unless a Ryan-filed season list includes them.",
+            "Archived source must carry a snapshot id or sha "
+            "(archive:snapshot:<id> or archive:sha256:<hex>).",
+            "Pre-2013 seasons are refused unless a Ryan-filed universe file sha is passed.",
             "No simulation ran.",
             "No grading ran.",
             "No eval season (2024/2025) was opened.",

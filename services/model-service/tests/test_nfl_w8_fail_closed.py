@@ -15,6 +15,7 @@ from src.services.nfl_handicapping_framework import (
     get_nfl_handicapping_config,
 )
 from src.services.nfl_season_engine.continuity_score import (
+    PACKAGED_QB1_ABSENT,
     ContinuitySourceError,
     _load_packaged_qb1,
     build_continuity_book,
@@ -22,6 +23,7 @@ from src.services.nfl_season_engine.continuity_score import (
     fetch_prior_primary_qbs,
     fetch_roster_sets,
     fetch_skill_yards_by_player,
+    packaged_qb1_flag,
 )
 from src.services.nfl_season_engine.efficiency_backbone import (
     TeamEfficiencyPackage,
@@ -33,12 +35,15 @@ from src.services.nfl_w8_capture.fail_closed import (
     FailClosedError,
     assert_src_not_shadowed,
     collect_nfl_env_overrides,
+    collect_stop_env_names,
     db_loader_import_hits,
+    import_line_is_banned,
     record_nfl_env_overrides,
     refuse_db_loaders,
     run_builder_guards,
     w8_build_context,
 )
+from src.services.nfl_w8_capture.frozen_model import predict_stream
 from src.services.nfl_w8_capture.seal import CaptureError, build_and_seal
 
 
@@ -185,9 +190,8 @@ def test_f2_continuity_loaders_fail_closed(
     else:
         monkeypatch.setattr(cs, target, boom)
 
-    with pytest.raises(ContinuitySourceError, match="fail closed"):
+    with pytest.raises(ContinuitySourceError, match=match):
         build_continuity_book(MagicMock(), season=2026, teams=["SEA"])
-    assert match
 
 
 def test_f3_json_decode_fails_closed(
@@ -227,12 +231,20 @@ def test_f4_nfl_env_override_is_stop_and_recorded(
     monkeypatch.setenv("NFL_FRAMEWORK_HFA_POINTS", "9.99")
     names = collect_nfl_env_overrides()
     assert "NFL_FRAMEWORK_HFA_POINTS" in names
-    with pytest.raises(FailClosedError, match="F-4 STOP") as exc:
-        record_nfl_env_overrides()
+    stop = tmp_path / "unit-stop.json"
+    with pytest.raises(FailClosedError, match="K-1/F-4 STOP") as exc:
+        record_nfl_env_overrides(stop_record_path=stop)
     assert "NFL_FRAMEWORK_HFA_POINTS" in str(exc.value)
-    with pytest.raises(CaptureError, match="F-4 STOP") as cap:
-        build_and_seal(**_empty_seal_kwargs(tmp_path))
+    payload = json.loads(stop.read_text(encoding="utf-8"))
+    assert payload["env_names"] == ["NFL_FRAMEWORK_HFA_POINTS"]
+    assert payload["values_recorded"] is False
+    assert "9.99" not in stop.read_text(encoding="utf-8")
+    with pytest.raises(CaptureError, match="K-1/F-4 STOP") as cap:
+        build_and_seal(**_empty_seal_kwargs(tmp_path / "seal-nfl"))
     assert "NFL_FRAMEWORK_HFA_POINTS" in str(cap.value)
+    written = json.loads((tmp_path / "seal-nfl" / "seal" / "STOP.json").read_text(encoding="utf-8"))
+    assert written["env_names"] == ["NFL_FRAMEWORK_HFA_POINTS"]
+    assert written["values_recorded"] is False
 
 
 def test_f4_bad_env_value_does_not_revert_to_default(
@@ -251,6 +263,7 @@ def test_f4_successful_build_records_empty_overrides(tmp_path: Path) -> None:
         (Path(built.root) / "manifest.json").read_text(encoding="utf-8")
     )
     assert manifest["nfl_env_overrides"] == []
+    assert manifest["stop_env_names"] == []
 
 
 def test_f5_shadowed_src_is_stop(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -300,3 +313,101 @@ def test_f6_reaching_db_loader_during_w8_build_is_stop() -> None:
 
 def test_f6_w8_capture_source_does_not_import_db_loaders() -> None:
     assert db_loader_import_hits() == []
+
+
+def test_k1_redis_and_celery_are_stop_on_every_build_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("REDIS_URL", "redis://example.invalid/0")
+    monkeypatch.setenv("CELERY_BROKER_URL", "amqp://example.invalid/")
+    names = collect_stop_env_names()
+    assert names == ["CELERY_BROKER_URL", "REDIS_URL"]
+    with pytest.raises(CaptureError, match="K-1/F-4 STOP") as exc:
+        build_and_seal(**_empty_seal_kwargs(tmp_path))
+    assert "REDIS_URL" in str(exc.value)
+    assert "CELERY_BROKER_URL" in str(exc.value)
+    assert "redis://example.invalid" not in str(exc.value)
+    stop = json.loads((tmp_path / "seal" / "STOP.json").read_text(encoding="utf-8"))
+    assert stop["env_names"] == ["CELERY_BROKER_URL", "REDIS_URL"]
+    assert stop["values_recorded"] is False
+    monkeypatch.delenv("REDIS_URL")
+    monkeypatch.delenv("CELERY_BROKER_URL")
+    monkeypatch.setenv("DATABASE_URL", "postgresql://example.invalid/none")
+    with pytest.raises(FailClosedError, match="K-1/F-4 STOP"):
+        predict_stream([], stream="market_informed", stop_record_path=tmp_path / "pred-stop.json")
+    pred = json.loads((tmp_path / "pred-stop.json").read_text(encoding="utf-8"))
+    assert pred["env_names"] == ["DATABASE_URL"]
+    assert "postgresql://" not in (tmp_path / "pred-stop.json").read_text(encoding="utf-8")
+
+
+def test_k2_fetcher_stop_without_w8_capture_build_env() -> None:
+    assert not __import__("os").environ.get("W8_CAPTURE_BUILD")
+    with pytest.raises(RuntimeError, match="F-6 STOP"):
+        fetch_prior_primary_qbs(None, prior_season=2025)
+    with pytest.raises(RuntimeError, match="F-6 STOP"):
+        fetch_roster_sets(None, season=2026)
+
+
+def test_k2_planted_import_line_is_caught(tmp_path: Path) -> None:
+    planted = tmp_path / "planted.py"
+    planted.write_text("from x import fetch_roster_sets\n", encoding="utf-8")
+    assert import_line_is_banned("from x import fetch_roster_sets")
+    assert import_line_is_banned("import celery")
+    assert import_line_is_banned("from src.services.nfl_season_engine import continuity_score")
+    assert "planted.py" in db_loader_import_hits(tmp_path)
+
+
+def test_k3_env_stop_writes_names_only(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("NFL_FRAMEWORK_PRIOR_TOTAL_POINTS", "99.9")
+    with pytest.raises(CaptureError, match="K-1/F-4 STOP"):
+        build_and_seal(**_empty_seal_kwargs(tmp_path))
+    text = (tmp_path / "seal" / "STOP.json").read_text(encoding="utf-8")
+    payload = json.loads(text)
+    assert payload["status"] == "STOP"
+    assert payload["env_names"] == ["NFL_FRAMEWORK_PRIOR_TOTAL_POINTS"]
+    assert payload["values_recorded"] is False
+    assert "99.9" not in text
+
+
+def test_f5_src_py_module_file_is_stop(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    (tmp_path / "src.py").write_text("shadow = True\n", encoding="utf-8")
+    monkeypatch.syspath_prepend(str(tmp_path))
+    with pytest.raises(FailClosedError, match="src.py"):
+        assert_src_not_shadowed()
+
+
+def test_f5_already_imported_src_is_stop(monkeypatch: pytest.MonkeyPatch) -> None:
+    class FakeSrc:
+        __file__ = "/tmp/evil-src/__init__.py"
+        __path__ = ["/tmp/evil-src"]
+
+    monkeypatch.setitem(sys.modules, "src", FakeSrc())
+    with pytest.raises(FailClosedError, match="already-imported src"):
+        assert_src_not_shadowed()
+
+
+def test_r1_absent_packaged_qb1_is_explicit_flag() -> None:
+    _load_packaged_qb1(1999)
+    assert packaged_qb1_flag(1999) == PACKAGED_QB1_ABSENT
+
+
+def test_k4_route_b_closure_listing_matches_on_disk() -> None:
+    from src.services.nfl_eval_prep.route_b_closure import (
+        CLOSURE_LISTING,
+        ENGINE_DIR,
+        listed_rows,
+        sha256_file,
+    )
+
+    rows = listed_rows()
+    assert len(rows) == 33
+    assert CLOSURE_LISTING.is_file()
+    text = CLOSURE_LISTING.read_text(encoding="utf-8")
+    for rel, digest in rows:
+        assert digest == sha256_file(ENGINE_DIR / Path(rel).name)
+        assert digest in text
+        assert rel in text

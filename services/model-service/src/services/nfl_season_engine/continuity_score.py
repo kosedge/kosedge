@@ -504,8 +504,18 @@ def blend_weights_with_continuity(
 # ---------------------------------------------------------------------------
 
 
-def _refuse_w8_db_loader(name: str) -> None:
-    if os.environ.get("W8_CAPTURE_BUILD"):
+PACKAGED_QB1_ABSENT = "ABSENT"
+PACKAGED_QB1_PRESENT = "PRESENT"
+_PACKAGED_QB1_FLAG: Dict[int, str] = {}
+
+
+def packaged_qb1_flag(season: int) -> str:
+    """R-1: explicit ABSENT/PRESENT flag for the packaged QB1 file."""
+    return _PACKAGED_QB1_FLAG.get(int(season), PACKAGED_QB1_ABSENT)
+
+
+def _refuse_w8_db_loader(name: str, session: Any = None) -> None:
+    if os.environ.get("W8_CAPTURE_BUILD") or session is None:
         raise RuntimeError(f"F-6 STOP: builder reached DB loader {name}")
 
 
@@ -522,7 +532,9 @@ def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
     """Return {team: (player_id, player_name)} from packaged depth chart."""
     path = _packaged_qb1_path(int(season))
     if path is None:
+        _PACKAGED_QB1_FLAG[int(season)] = PACKAGED_QB1_ABSENT
         return {}
+    _PACKAGED_QB1_FLAG[int(season)] = PACKAGED_QB1_PRESENT
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -545,7 +557,7 @@ def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
 
 def fetch_prior_primary_qbs(session: Any, *, prior_season: int) -> Dict[str, Tuple[str, str]]:
     """Prior-season primary passer by attempts → {team: (player_id, name)}."""
-    _refuse_w8_db_loader("fetch_prior_primary_qbs")
+    _refuse_w8_db_loader("fetch_prior_primary_qbs", session)
     from sqlalchemy import text
 
     rows = session.execute(
@@ -584,7 +596,7 @@ def fetch_current_qb1(
     as_of_week: Optional[int] = None,
 ) -> Dict[str, Tuple[str, str]]:
     """Current projected QB1 from packaged depth SoT (exclusive when present)."""
-    _refuse_w8_db_loader("fetch_current_qb1")
+    _refuse_w8_db_loader("fetch_current_qb1", session)
 
     week = int(as_of_week or 1)
     packaged = _load_packaged_qb1(int(season))
@@ -624,7 +636,7 @@ def fetch_roster_sets(
     session: Any, *, season: int
 ) -> Dict[str, Dict[str, str]]:
     """{team: {player_id: position}} for a season."""
-    _refuse_w8_db_loader("fetch_roster_sets")
+    _refuse_w8_db_loader("fetch_roster_sets", session)
     from sqlalchemy import text
 
     rows = session.execute(
@@ -652,7 +664,7 @@ def fetch_skill_yards_by_player(
     session: Any, *, prior_season: int
 ) -> Dict[str, Dict[str, float]]:
     """{team: {player_id: yards}} skill production in prior season."""
-    _refuse_w8_db_loader("fetch_skill_yards_by_player")
+    _refuse_w8_db_loader("fetch_skill_yards_by_player", session)
     from sqlalchemy import text
 
     rows = session.execute(
