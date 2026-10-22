@@ -1,6 +1,6 @@
 # Route-(b) import-time closure (33 modules)
 
-head: `272423872fa82c6ed96d1af82cec88a24e2694a8`
+head: `5ed9e21d50f9c98afc738b565e4c187a5dd0a9d9`
 
 K-4 pin for IMV pure-diff. IMPORT-TIME closure of the frozen scripts
 `src.services.nfl_simulator` and `src.services.nfl_season_engine`.
