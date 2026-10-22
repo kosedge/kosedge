@@ -38,8 +38,11 @@ BANNED_IMPORT_NAMES = frozenset(
 )
 
 _IMPORT_LINE_RE = re.compile(r"^\s*(?:from|import)\s+(.+)$", re.DOTALL)
-_DYNAMIC_IMPORT_RE = re.compile(
-    r"""(?:importlib\s*\.\s*import_module|__import__)\s*\(\s*(['"])([^'"]+)\1"""
+_FROM_IMPORT_RE = re.compile(
+    r"^\s*from\s+(\S+)\s+import\s+(.+)$", re.DOTALL
+)
+_IMPORT_AS_RE = re.compile(
+    r"^\s*import\s+(\S+)(?:\s+as\s+(\w+))?\s*$"
 )
 
 
@@ -92,6 +95,7 @@ def write_stop_record(
     names: list[str],
     *,
     reason: str,
+    import_names: list[str] | None = None,
 ) -> Path:
     """K-3: persist STOP names (never values) before the exception exits."""
     requested = _require_explicit_stop_path(path)
@@ -100,18 +104,17 @@ def write_stop_record(
         "status": "STOP",
         "reason": reason,
         "env_names": list(names),
+        "import_names": list(import_names or []),
         "values_recorded": False,
     }
     text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
-    n = 0
-    target = requested
+    target = unique_stop_record_path(requested)
     while True:
         flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
         try:
             fd = os.open(target, flags, 0o644)
         except FileExistsError:
-            n += 1
-            target = requested.with_name(f"{requested.stem}.{n}{requested.suffix}")
+            target = unique_stop_record_path(requested)
             continue
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
             handle.write(text)
@@ -123,16 +126,23 @@ def persist_stop_and_raise(
     *,
     reason: str,
     stop_record_path: Path | str | None,
+    import_names: list[str] | None = None,
 ) -> None:
+    recorded = list(import_names or names)
     try:
-        write_stop_record(stop_record_path, names, reason=reason)
+        write_stop_record(
+            stop_record_path,
+            names,
+            reason=reason,
+            import_names=import_names,
+        )
     except FailClosedError as exc:
         if "explicit absolute path" in str(exc):
             raise FailClosedError(
-                f"{reason}: {names} (K-3: STOP.json path required; never cwd)"
+                f"{reason}: {recorded} (K-3: STOP.json path required; never cwd)"
             ) from exc
         raise
-    raise FailClosedError(f"{reason}: {names}")
+    raise FailClosedError(f"{reason}: {recorded}")
 
 
 def record_nfl_env_overrides(
@@ -228,8 +238,81 @@ def w8_build_context() -> Iterator[None]:
             os.environ[W8_CAPTURE_BUILD_ENV] = prev
 
 
-def _tokens_are_banned(blob: str) -> bool:
-    return any(token in BANNED_IMPORT_NAMES for token in re.split(r"[^\w]+", blob) if token)
+def _flatten_import_unit(unit: str) -> str:
+    return " ".join(part.rstrip("\\") for part in unit.splitlines())
+
+
+def _tokens_from(blob: str) -> list[str]:
+    return [token for token in re.split(r"[^\w]+", blob) if token]
+
+
+def _banned_tokens_in(blob: str) -> list[str]:
+    return [token for token in _tokens_from(blob) if token in BANNED_IMPORT_NAMES]
+
+
+def _parse_import_items(rest: str) -> list[tuple[str, str]]:
+    body = rest.strip()
+    if body.startswith("(") and body.endswith(")"):
+        body = body[1:-1]
+    items: list[tuple[str, str]] = []
+    for raw in body.split(","):
+        part = raw.strip()
+        if not part:
+            continue
+        if " as " in part:
+            orig, alias = part.split(" as ", 1)
+            items.append((orig.strip(), alias.strip()))
+        else:
+            items.append((part, part))
+    return items
+
+
+def dynamic_import_callables(text: str) -> set[str]:
+    """Call names that load a module by string, including aliases (K-2 (d))."""
+    names = {
+        "__import__",
+        "importlib.import_module",
+        "importlib.util.find_spec",
+        "import_module",
+        "find_spec",
+    }
+    for unit in logical_import_units(text):
+        flat = _flatten_import_unit(unit)
+        from_match = _FROM_IMPORT_RE.match(flat)
+        if from_match:
+            module = from_match.group(1)
+            for orig, alias in _parse_import_items(from_match.group(2)):
+                if module == "importlib" and orig == "import_module":
+                    names.add(alias)
+                if module == "importlib" and orig == "util":
+                    names.add(f"{alias}.find_spec")
+                if module == "importlib.util" and orig == "find_spec":
+                    names.add(alias)
+            continue
+        as_match = _IMPORT_AS_RE.match(flat)
+        if not as_match:
+            continue
+        module = as_match.group(1)
+        bound = as_match.group(2) or module
+        if module == "importlib":
+            names.add(f"{bound}.import_module")
+            names.add(f"{bound}.util.find_spec")
+        elif module == "importlib.util":
+            names.add(f"{bound}.find_spec")
+    return names
+
+
+def dynamic_import_targets(text: str) -> list[str]:
+    """Module strings passed to importlib / __import__ / find_spec / aliases."""
+    callables = sorted(dynamic_import_callables(text), key=len, reverse=True)
+    if not callables:
+        return []
+    pattern = re.compile(
+        r"(?<![\w])(?:"
+        + "|".join(re.escape(name) for name in callables)
+        + r")\s*\(\s*(['\"])([^'\"]+)\1"
+    )
+    return [hit.group(2) for hit in pattern.finditer(text)]
 
 
 def logical_import_units(text: str) -> list[str]:
@@ -259,54 +342,92 @@ def logical_import_units(text: str) -> list[str]:
     return units
 
 
+def banned_names_in_source(text: str) -> list[str]:
+    """K-2: banned names from joined imports and dynamic loaders."""
+    found: set[str] = set()
+    for unit in logical_import_units(text):
+        flat = _flatten_import_unit(unit)
+        match = _IMPORT_LINE_RE.match(flat)
+        if match:
+            found.update(_banned_tokens_in(match.group(1)))
+        found.update(_banned_tokens_in(" ".join(dynamic_import_targets(flat))))
+    for target in dynamic_import_targets(text):
+        found.update(_banned_tokens_in(target))
+    return sorted(found)
+
+
 def import_line_is_banned(line: str) -> bool:
     """True if an import line or dynamic import names a banned module (K-2)."""
-    flat = " ".join(part.rstrip("\\") for part in line.splitlines())
-    match = _IMPORT_LINE_RE.match(flat)
-    if match and _tokens_are_banned(match.group(1)):
-        return True
-    for hit in _DYNAMIC_IMPORT_RE.finditer(flat):
-        if _tokens_are_banned(hit.group(2)):
-            return True
-    return False
+    return bool(banned_names_in_source(line))
 
 
 def source_has_banned_import(text: str) -> bool:
     """K-2: scan joined parenthesized imports plus importlib / __import__."""
-    for unit in logical_import_units(text):
-        if import_line_is_banned(unit):
-            return True
-    for hit in _DYNAMIC_IMPORT_RE.finditer(text):
-        if _tokens_are_banned(hit.group(2)):
-            return True
-    return False
+    return bool(banned_names_in_source(text))
 
 
 def db_loader_import_hits(root: Path | None = None) -> list[str]:
     """F-6 / K-2: W8 capture source must not import DB loaders or brokers."""
+    return [name for name, _names in db_loader_import_findings(root)]
+
+
+def db_loader_import_findings(
+    root: Path | None = None,
+) -> list[tuple[str, list[str]]]:
     base = Path(root) if root is not None else Path(__file__).resolve().parent
-    hits: list[str] = []
+    findings: list[tuple[str, list[str]]] = []
     for path in sorted(base.rglob("*.py")):
         if path.name == "fail_closed.py" and root is None:
             continue
-        text = path.read_text(encoding="utf-8")
-        if source_has_banned_import(text):
-            hits.append(path.name)
-    return hits
+        names = banned_names_in_source(path.read_text(encoding="utf-8"))
+        if names:
+            findings.append((path.name, names))
+    return findings
+
+
+def db_loader_banned_names(root: Path | None = None) -> list[str]:
+    found: set[str] = set()
+    for _filename, names in db_loader_import_findings(root):
+        found.update(names)
+    return sorted(found)
+
+
+def refuse_banned_imports(
+    *,
+    root: Path | None = None,
+    stop_record_path: Path | str | None = None,
+) -> list[str]:
+    """K-2: builder gate. A hit writes names to STOP.json and raises."""
+    names = db_loader_banned_names(root)
+    if names:
+        persist_stop_and_raise(
+            [],
+            reason="K-2 STOP: banned import in W8 capture source",
+            stop_record_path=stop_record_path,
+            import_names=names,
+        )
+    return names
 
 
 def run_builder_guards(
     *,
     session: Any = None,
     stop_record_path: Path | str | None = None,
+    import_scan_root: Path | str | None = None,
 ) -> dict[str, Any]:
-    """Run K-1 / F-4 / F-5 / F-6 before any W8 seal or predict work."""
+    """Run K-1 / K-2 / F-4 / F-5 / F-6 before any W8 seal or predict work."""
     env_names = record_nfl_env_overrides(stop_record_path=stop_record_path)
     refuse_db_loaders(session)
     src_root = assert_src_not_shadowed()
+    scan_root = Path(import_scan_root) if import_scan_root is not None else None
+    banned = refuse_banned_imports(
+        root=scan_root,
+        stop_record_path=stop_record_path,
+    )
     return {
         "nfl_env_overrides": [n for n in env_names if n.startswith("NFL_")],
         "stop_env_names": env_names,
         "src_root": str(src_root),
         "db_session": None,
+        "banned_import_names": banned,
     }

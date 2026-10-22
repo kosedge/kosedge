@@ -17,6 +17,7 @@ from src.services.nfl_handicapping_framework import (
 from src.services.nfl_season_engine.continuity_score import (
     PACKAGED_QB1_ABSENT,
     ContinuitySourceError,
+    TeamContinuity,
     _load_packaged_qb1,
     build_continuity_book,
     fetch_current_qb1,
@@ -267,6 +268,7 @@ def test_f4_successful_build_records_empty_overrides(tmp_path: Path) -> None:
     )
     assert manifest["nfl_env_overrides"] == []
     assert manifest["stop_env_names"] == []
+    assert manifest["banned_import_names"] == []
 
 
 def test_f5_shadowed_src_is_stop(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -350,38 +352,66 @@ def test_k2_session_none_outside_w8_does_not_stop() -> None:
     assert len(qb1) >= 24
 
 
-def test_k2_planted_import_line_is_caught(tmp_path: Path) -> None:
+def _k2_guard_stop(tmp_path: Path, source: str) -> dict:
     planted = tmp_path / "planted.py"
-    planted.write_text("from x import fetch_roster_sets\n", encoding="utf-8")
+    planted.write_text(source, encoding="utf-8")
+    stop = tmp_path / "STOP.json"
+    with pytest.raises(FailClosedError, match="K-2 STOP") as exc:
+        run_builder_guards(stop_record_path=stop, import_scan_root=tmp_path)
+    payload = json.loads(stop.read_text(encoding="utf-8"))
+    assert payload["status"] == "STOP"
+    assert payload["values_recorded"] is False
+    assert payload["import_names"]
+    assert "K-2 STOP" in str(exc.value)
+    return payload
+
+
+def test_k2_planted_import_line_is_caught(tmp_path: Path) -> None:
     assert import_line_is_banned("from x import fetch_roster_sets")
     assert import_line_is_banned("import celery")
     assert import_line_is_banned("import redis")
     assert import_line_is_banned("from src.services.nfl_season_engine import continuity_score")
+    payload = _k2_guard_stop(tmp_path, "from x import fetch_roster_sets\n")
+    assert "fetch_roster_sets" in payload["import_names"]
     assert "planted.py" in db_loader_import_hits(tmp_path)
 
 
 def test_k2_planted_multiline_parenthesized_import_is_caught(tmp_path: Path) -> None:
-    planted = tmp_path / "planted_multiline.py"
-    planted.write_text(
-        "from x import (\n    fetch_roster_sets,\n    harmless_name,\n)\n",
-        encoding="utf-8",
-    )
+    source = "from x import (\n    fetch_roster_sets,\n    harmless_name,\n)\n"
     assert import_line_is_banned("from x import (\n    fetch_roster_sets,\n)")
-    assert source_has_banned_import(planted.read_text(encoding="utf-8"))
-    assert "planted_multiline.py" in db_loader_import_hits(tmp_path)
+    assert source_has_banned_import(source)
+    payload = _k2_guard_stop(tmp_path, source)
+    assert "fetch_roster_sets" in payload["import_names"]
+    assert "planted.py" in db_loader_import_hits(tmp_path)
 
 
 def test_k2_importlib_and_dunder_import_and_redis_are_caught(tmp_path: Path) -> None:
-    planted = tmp_path / "planted_dynamic.py"
-    planted.write_text(
+    source = (
         "import importlib\n"
         "importlib.import_module('redis')\n"
-        "__import__('celery')\n",
-        encoding="utf-8",
+        "__import__('celery')\n"
     )
     assert import_line_is_banned("importlib.import_module('sqlalchemy')")
     assert import_line_is_banned('__import__("psycopg2")')
-    assert "planted_dynamic.py" in db_loader_import_hits(tmp_path)
+    payload = _k2_guard_stop(tmp_path, source)
+    assert "redis" in payload["import_names"]
+    assert "celery" in payload["import_names"]
+    assert "planted.py" in db_loader_import_hits(tmp_path)
+
+
+def test_k2_aliased_import_module_and_find_spec_are_caught(tmp_path: Path) -> None:
+    source = (
+        "from importlib import import_module as load_mod\n"
+        "load_mod('redis')\n"
+        "from importlib.util import find_spec as spec_of\n"
+        "spec_of('celery')\n"
+        "import importlib.util as iu\n"
+        "iu.find_spec('sqlalchemy')\n"
+    )
+    payload = _k2_guard_stop(tmp_path, source)
+    assert "redis" in payload["import_names"]
+    assert "celery" in payload["import_names"]
+    assert "sqlalchemy" in payload["import_names"]
 
 
 def test_k3_env_stop_writes_names_only(
@@ -409,6 +439,25 @@ def test_k3_stop_json_requires_explicit_absolute_path(
         write_stop_record("STOP.json", ["NFL_X"], reason="unit")
     assert not cwd_stop.exists()
     assert list(tmp_path.glob("STOP*.json")) == []
+
+
+def test_k3_predict_stream_requires_explicit_stop_path(tmp_path: Path) -> None:
+    from src.services.nfl_w8_capture.frozen_model import FrozenModelError
+
+    with pytest.raises(FrozenModelError, match="explicit absolute STOP.json path"):
+        predict_stream([], stream="market_informed", stop_record_path=None)  # type: ignore[arg-type]
+    with pytest.raises(FrozenModelError, match="explicit absolute STOP.json path"):
+        predict_stream([], stream="market_informed", stop_record_path="STOP.json")
+
+
+def test_k3_seal_root_must_be_absolute(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    kwargs = _empty_seal_kwargs(tmp_path)
+    kwargs["root"] = "relative-seal"
+    with pytest.raises(CaptureError, match="seal root must be an explicit absolute path"):
+        build_and_seal(**kwargs)
+    assert not (tmp_path / "relative-seal").exists()
+    assert not (tmp_path / "STOP.json").exists()
 
 
 def test_k3_stop_json_does_not_clobber(tmp_path: Path) -> None:
@@ -446,6 +495,14 @@ def test_f5_already_imported_src_is_stop(monkeypatch: pytest.MonkeyPatch) -> Non
 def test_r1_absent_packaged_qb1_is_explicit_flag() -> None:
     _load_packaged_qb1(1999)
     assert packaged_qb1_flag(1999) == PACKAGED_QB1_ABSENT
+    drivers = TeamContinuity(
+        team="SEA",
+        continuity_score=0.5,
+        band="mid",
+        prior_travel_weight=1.0,
+        drivers={"packaged_qb1_flag": packaged_qb1_flag(1999)},
+    ).to_drivers()
+    assert drivers["packaged_qb1_flag"] == PACKAGED_QB1_ABSENT
 
 
 def test_k4_route_b_closure_listing_is_import_time() -> None:

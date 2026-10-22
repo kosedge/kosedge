@@ -204,14 +204,16 @@ def _build_and_seal_impl(
     min_lead_minutes: int,
     default_seal_by_et: datetime,
 ) -> CaptureResult:
-    stop_record = Path(root) / "STOP.json"
+    base = Path(root)
+    if not base.is_absolute():
+        raise CaptureError("K-3: seal root must be an explicit absolute path")
+    stop_record = base / "STOP.json"
     try:
         guards = run_builder_guards(stop_record_path=stop_record)
     except FailClosedError as exc:
         raise CaptureError(str(exc)) from exc
     refuse_credentials(dry_run=dry_run)
     refuse_publish(publish)
-    base = Path(root)
     if base.exists() and any(base.iterdir()):
         raise CaptureError("capture root must be empty")
     base.mkdir(parents=True, exist_ok=True)
@@ -332,6 +334,7 @@ def _build_and_seal_impl(
             "nfl_env_overrides": guards["nfl_env_overrides"],
             "stop_env_names": guards["stop_env_names"],
             "src_root": guards["src_root"],
+            "banned_import_names": guards.get("banned_import_names") or [],
             "fail_closed": ["F-0", "F-1", "F-2", "F-3", "F-4", "F-5", "F-6"],
         },
     )

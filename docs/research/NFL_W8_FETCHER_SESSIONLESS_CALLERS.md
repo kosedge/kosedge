@@ -24,6 +24,7 @@ break that path.
 | caller | fetcher | session | relies on session-less? |
 | --- | --- | --- | --- |
 | `continuity_score.build_continuity_book` | prior QB / current QB1 / roster ×2 / skill-yards | live `session` | no |
+| `tasks.py` (~l.1238) `build_continuity_book(...)` | same six via the book (prior QB / current QB1 / roster ×2 / skill-yards) | live `session` | no |
 | `qb_premium` (QB book build) | `fetch_current_qb1`, `fetch_prior_primary_qbs` | live `session` | no |
 | `tasks.py` (~4775, ~15220) | `fetch_team_proe_map` | live `session` | no |
 | `tests/test_nfl_depth_sot_audit.py:150` | `fetch_current_qb1(None, season=2026, as_of_week=1)` | **None** | **yes — packaged SoT exclusive when ≥24 teams** |

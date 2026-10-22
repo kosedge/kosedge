@@ -11,6 +11,7 @@ because there is no RNG). An independent rebuild must match bytes.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from src.services.nfl_w8_capture.constants import STREAM_INDEPENDENT, STREAM_MARKET
@@ -132,10 +133,14 @@ def predict_stream(
     rows: Sequence[Mapping[str, Any]],
     *,
     stream: str,
-    stop_record_path: str | None = None,
+    stop_record_path: Path | str,
 ) -> list[dict[str, Any]]:
     from src.services.nfl_w8_capture.fail_closed import run_builder_guards, w8_build_context
 
+    if stop_record_path is None or not Path(stop_record_path).is_absolute():
+        raise FrozenModelError(
+            "K-3: predict_stream requires an explicit absolute STOP.json path"
+        )
     with w8_build_context():
         run_builder_guards(stop_record_path=stop_record_path)
         if stream not in {STREAM_MARKET, STREAM_INDEPENDENT}:

@@ -155,7 +155,7 @@ class TeamContinuity:
     fidelity: str = "approximate"  # real | mixed | approximate
 
     def to_drivers(self) -> Dict[str, Any]:
-        return {
+        payload = {
             "continuity_score": round(float(self.continuity_score), 4),
             "band": self.band,
             "prior_travel_weight": round(float(self.prior_travel_weight), 4),
@@ -176,6 +176,10 @@ class TeamContinuity:
             ),
             **dict(self.drivers or {}),
         }
+        # R-1: always surface the packaged-QB1 ABSENT/PRESENT flag in output.
+        if payload.get("packaged_qb1_flag") in (None, ""):
+            payload["packaged_qb1_flag"] = PACKAGED_QB1_ABSENT
+        return payload
 
 
 def band_from_score(score: float) -> str:
@@ -769,6 +773,7 @@ def build_continuity_book(
         current_qbs = fetch_current_qb1(
             session, season=int(season), as_of_week=as_of_week
         )
+        qb1_flag = packaged_qb1_flag(int(season))
     except Exception as exc:
         raise ContinuitySourceError(
             "F-2/F-3: current QB load failed; fail closed (must not empty)"
@@ -878,6 +883,7 @@ def build_continuity_book(
             roster_return_share=roster_ret,
             major_churn=major if roster_ret is not None else None,
         )
+        cont.drivers["packaged_qb1_flag"] = qb1_flag
         out[team] = cont
     return out
 
