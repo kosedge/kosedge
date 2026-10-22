@@ -29,12 +29,17 @@ def _pointer_snapshot() -> tuple[str, str]:
 def test_weekly_last_run_schema_and_stage_status() -> None:
     contract = _load("nfl_operate_contract")
     stages = [
+        contract.stage("operate_week", "pass", "week=0", hook="w"),
+        contract.stage("local_inputs", "skip", "no manifest", hook="li"),
         contract.stage("results_ingest", "skip", "preseason", hook="x"),
+        contract.stage("b0_snapshot", "skip", "week < 1", hook="b0"),
+        contract.stage("postweek_grade", "skip", "week < 1", hook="pg"),
         contract.stage("proof_log", "pass", "path ok", hook="y"),
         contract.stage("depth_injury_hook", "human_required", "manual intel", hook="z"),
         contract.stage("identity_audit", "pass", "CLEAR_ERROR=0", hook="a"),
         contract.stage("kei_board_rebuild", "pass", "slate ok", hook="b"),
         contract.stage("health_smoke", "pass", "pointer ok", hook="c"),
+        contract.stage("computation_trace", "skip", "week < 1", hook="t"),
     ]
     payload = {
         "schema": contract.WEEKLY_SCHEMA,
@@ -49,9 +54,12 @@ def test_weekly_last_run_schema_and_stage_status() -> None:
     assert payload["status"] == "pass"
     assert contract.validate_weekly_last_run(payload) == []
     fail_stages = list(stages)
-    fail_stages[3] = contract.stage(
-        "identity_audit", "fail", "CLEAR_ERROR=1", hook="a"
-    )
+    fail_stages = [
+        contract.stage("identity_audit", "fail", "CLEAR_ERROR=1", hook="a")
+        if s["id"] == "identity_audit"
+        else s
+        for s in fail_stages
+    ]
     assert contract.overall_status(fail_stages) == "fail"
 
 
@@ -64,6 +72,7 @@ def test_weekly_dry_run_does_not_flip_pointer(tmp_path: Path) -> None:
     payload = weekly.run_weekly(
         week=0,
         dry_run=True,
+        skip_audit=True,
         last_run_path=last_run,
         pointer_path=POINTER,
     )
@@ -97,6 +106,7 @@ def test_weekly_cli_dry_run_pass(tmp_path: Path) -> None:
             "--dry-run",
             "--week",
             "0",
+            "--skip-audit",
             "--last-run",
             str(tmp_path / "last.json"),
         ]

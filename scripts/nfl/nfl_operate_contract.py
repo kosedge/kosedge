@@ -26,15 +26,23 @@ MAX_N_TEAM_WITHOUT_ALLOW = 50_000
 DEFAULT_N_PLAYER = 1_000
 
 STAGE_STATUSES = ("pass", "fail", "skip", "human_required")
+# v2: operate week is decoupled from the research pin. B0 + local grade
+# sit beside the original Phase-1 stages. Cron/Beat stay Platform Reliability.
 WEEKLY_STAGE_IDS = (
+    "operate_week",
+    "local_inputs",
     "results_ingest",
+    "b0_snapshot",
+    "postweek_grade",
     "proof_log",
     "depth_injury_hook",
     "identity_audit",
     "kei_board_rebuild",
     "health_smoke",
+    "computation_trace",
 )
-WEEKLY_SCHEMA = "nfl-weekly-operate-last/v1"
+WEEKLY_SCHEMA = "nfl-weekly-operate-last/v2"
+WEEKLY_SCHEMA_LEGACY = "nfl-weekly-operate-last/v1"
 CHECKPOINT_SCHEMA = "nfl-ros-checkpoint-last/v1"
 
 HOOKS = {
@@ -47,6 +55,9 @@ HOOKS = {
     "injury_kei": "scripts/nfl/injury_kei_reprice.py",
     "identity_audit": "scripts/nfl/audit_nfl_pack_vs_market.py",
     "edge_board": "scripts/nfl/check_edge_board_week1.py",
+    "b0_snapshot": "scripts/nfl/nfl_local_inputs.py",
+    "postweek_grade": "scripts/nfl/nfl_historical_eval_contract.py",
+    "computation_trace": "scripts/nfl/nfl_computation_trace.py",
     "release_gate": "scripts/nfl/preseason_release_gate.py",
     "research_sim": "scripts/nfl/run_launch_research_sims.py",
     "publish": "scripts/nfl/publish_launch_research_to_web.py",
@@ -134,7 +145,7 @@ def human_required_items(stages: Sequence[Mapping[str, Any]]) -> List[str]:
 
 def validate_weekly_last_run(payload: Mapping[str, Any]) -> List[str]:
     errors: List[str] = []
-    if payload.get("schema") != WEEKLY_SCHEMA:
+    if payload.get("schema") not in {WEEKLY_SCHEMA, WEEKLY_SCHEMA_LEGACY}:
         errors.append("schema")
     if payload.get("status") not in ("pass", "fail"):
         errors.append("status")
