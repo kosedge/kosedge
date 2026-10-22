@@ -244,9 +244,9 @@ Statuses: **present** / **missing** / **needs decision**. Owners from IMV §7.
 | P-5 | Adopt or reject PR-1..PR-4 + new calibration metrics **before results** | **Needs decision** | Ryan | Totals/ML **not certifiable** until adopted. |
 | P-6 | Bootstrap gating unit (by week vs game) | **Needs decision** | Ryan | IMV proposes cluster-by-week; 4f832c91 allows either if pre-registered. Seed 4141 / 10k resamples is in the frozen text, not in this repo. |
 | P-7 | Leakage-free rebuild code, L-1/L-2 fixed, L-3 flagged, pinned sha | **Present (bytes)** | Cursor | This PR. **Not run** on 2024/2025 or any real slate. |
-| P-8 | Local feature path + runner v2 (803ceb4e) | **Present (bytes)** | Cursor | `nfl_eval_prep.local_path` + `runner_v2`. Full 803ceb4e text is **not in this public repo** — bytes follow the plan’s cited rules (local only, as_of proof, grading isolation, SHA256SUMS last). Gaps vs the unseen full memo: **UNKNOWN**. |
+| P-8 | Local feature path + tree check (803ceb4e) | **Present (bytes)** | Cursor | `nfl_eval_prep.local_path` + `local_tree_check`. Status `LOCAL_TREE_CHECKED` is **not a gate** (C-8). Full 803ceb4e text is **not in this public repo**. |
 | P-9 | Prod-parity export (`c57032db`) | **Missing / BLOCKED** | Railway / PR / Ryan | Feature-parity, **not** predictive criteria. In-repo: no c57032db packet, no 14-field export path under that name. Blocker named by IMV as Railway. Required action (from plan): Railway recovery, then Ryan-authorized v3 export. Expected completion: **UNKNOWN** (no Railway access in this pass). |
-| P-10 | Automated prospective pregame capture (G4 / 2026 W8+) | **Missing** | PR / Cursor | Only clean evidence. Not built. |
+| P-10 | Automated prospective pregame capture (G4 / 2026 W8+) | **Present (bytes / dry-run)** | Cursor / PR / custodian | `nfl_w8_capture`. Live seal still needs operator snaps + custodian receipt. |
 | P-11 | 2,998 trace bundle | **Missing** (answered as unsupported) | Cursor / Alex | §2. No bundle to seal. |
 | P-12 | Blind-reimplementation roles | **Needs decision** | CoS / Ryan | LC-4. Not this PR. |
 | P-13 | Pre-registration filed 0444 | **Needs decision** | IMV drafts / Ryan | IMV N-1. |
@@ -283,7 +283,8 @@ Implemented in this PR. **Synthetic data only.**
 | L-1 / L-2 contracts + L-3 flags | `…/leaks.py` + `docs/research/NFL_EVAL_PREP_L1_L2_LEAK_FIX_DIFF.md` |
 | Expanding-window splits, train-only | `…/splits.py` |
 | Local input path (803ceb4e) | `…/local_path.py` |
-| Runner v2 | `…/runner_v2.py` + `scripts/nfl/eval_prep/runner_v2.py` |
+| Local tree check (not a runner / not a gate) | `…/local_tree_check.py` + `scripts/nfl/eval_prep/local_tree_check.py` |
+| W8 capture (isolated) | `…/nfl_w8_capture/` + `scripts/nfl/w8_capture/dry_run.py` |
 | Harness plan (no execute) | `…/harness.py` |
 | Synthetic fixtures | `…/synthetic.py` |
 | Tests | `services/model-service/tests/test_nfl_eval_prep.py` |

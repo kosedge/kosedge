@@ -69,11 +69,12 @@ def build_rebuild_plan(
         folds=folds,
         leak_diff=leak_fix_diff(),
         blocked=dict(HARVEST_BLOCKED),
-        runner="src.services.nfl_eval_prep.runner_v2.run_local_rebuild",
+        runner="src.services.nfl_eval_prep.local_tree_check.check_local_tree",
         notes=(
+            "LOCAL_TREE_CHECKED is not a gate and is not PREP_VALIDATED.",
             "G3 diagnostic only after LC-1..LC-3 and a Ryan P-1 approval.",
-            "G4 sealed 2026 W8+ is the only clean evidence; not built here.",
+            "2026 W8+ is a future population; capture is not built here.",
             "Closing lines are comparison labels, never rebuild features.",
-            "n=2998 is UNSUPPORTED until R-6 is re-earned.",
+            "n=2998 is withdrawn from certification evidence.",
         ),
     )

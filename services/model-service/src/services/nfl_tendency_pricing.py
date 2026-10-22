@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any, Dict, Mapping
 
-from sqlalchemy import text
-
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, float(value)))
@@ -45,6 +43,8 @@ def fetch_team_proe_map(
     down_distance rows so callers get one season-level PROE per team.
     """
     _ = situation  # reserved for future bucket filters
+    from sqlalchemy import text
+
     rows = session.execute(
         text(
             """
@@ -70,6 +70,8 @@ def fetch_team_direction_rates(
     *,
     season: int,
 ) -> Dict[str, Dict[str, float]]:
+    from sqlalchemy import text
+
     rows = session.execute(
         text(
             """

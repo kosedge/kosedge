@@ -1,4 +1,4 @@
-"""Synthetic-only tests for NFL eval-prep (IMV t4175u P-7 / P-8). No real seasons."""
+"""Synthetic-only tests for NFL eval-prep (IMV t4175u / PR #610 C-6..C-8). No real seasons."""
 
 from __future__ import annotations
 
@@ -7,7 +7,12 @@ from pathlib import Path
 
 import pytest
 
-from src.services.nfl_eval_prep.asof import AsOfProof, validate_asof_proofs
+from src.services.nfl_eval_prep.asof import (
+    ASOF_IS_SELF_DECLARED,
+    AsOfProof,
+    proofs_from_feature_row,
+    validate_asof_proofs,
+)
 from src.services.nfl_eval_prep.harness import build_rebuild_plan
 from src.services.nfl_eval_prep.leaks import (
     L1_FIXED_JOIN,
@@ -19,10 +24,15 @@ from src.services.nfl_eval_prep.leaks import (
     leak_fix_diff,
     require_week_cap,
 )
-from src.services.nfl_eval_prep.local_path import write_local_input_path
-from src.services.nfl_eval_prep.runner_v2 import RunnerV2Error, run_local_rebuild
+from src.services.nfl_eval_prep.local_path import LocalPathError, write_local_input_path
+from src.services.nfl_eval_prep.local_tree_check import (
+    LOCAL_TREE_CHECKED,
+    LocalTreeCheckError,
+    check_local_tree,
+)
 from src.services.nfl_eval_prep.splits import (
     SplitError,
+    assert_season_in_rebuild_universe,
     assert_train_only,
     build_expanding_window_folds,
 )
@@ -38,28 +48,75 @@ def test_asof_keeps_strictly_before_kickoff() -> None:
         feature_name="home_off_epa_5g",
         as_of="2018-09-13T12:00:00+00:00",
         kickoff_utc="2018-09-13T17:00:00+00:00",
-        source="synthetic",
+        source="archive:synthetic",
     )
     late = AsOfProof(
         game_id="SYN-1",
         feature_name="home_kav_net_5g",
         as_of="2018-09-13T17:00:00+00:00",
         kickoff_utc="2018-09-13T17:00:00+00:00",
-        source="synthetic",
+        source="archive:synthetic",
     )
     missing = AsOfProof(
         game_id="SYN-2",
         feature_name="rest_days_home",
         as_of="",
         kickoff_utc="2018-09-13T17:00:00+00:00",
+        source="archive:synthetic",
+    )
+    unnamed = AsOfProof(
+        game_id="SYN-3",
+        feature_name="home_off_epa_5g",
+        as_of="2018-09-13T12:00:00+00:00",
+        kickoff_utc="2018-09-13T17:00:00+00:00",
         source="synthetic",
     )
-    result = validate_asof_proofs([kept, late, missing])
+    result = validate_asof_proofs([kept, late, missing, unnamed])
     assert result.kept_n == 1
     assert [v.reason for v in result.excluded] == [
         "as_of_not_before_cutoff",
         "unprovable_as_of",
+        "source_not_named_archive",
     ]
+    assert ASOF_IS_SELF_DECLARED is True
+    assert kept.asof_self_declared is True
+
+
+def test_asof_refuses_close_or_score_feature_name() -> None:
+    result = validate_asof_proofs(
+        [
+            AsOfProof(
+                game_id="SYN-1",
+                feature_name="spread_line",
+                as_of="2018-09-13T12:00:00+00:00",
+                kickoff_utc="2018-09-13T17:00:00+00:00",
+                source="archive:synthetic",
+            )
+        ]
+    )
+    assert result.kept_n == 0
+    assert result.excluded[0].reason == "close_or_score_column_refused_as_feature"
+
+
+def test_proofs_from_feature_row_refuses_whole_row_as_of() -> None:
+    with pytest.raises(ValueError, match="whole-row as-of"):
+        proofs_from_feature_row(
+            {"game_id": "SYN-1", "home_off_epa_5g": 0.1, "as_of": "2018-09-13T12:00:00+00:00"},
+            feature_names=("home_off_epa_5g",),
+            kickoff_utc="2018-09-13T17:00:00+00:00",
+            allow_row_as_of=True,
+        )
+    proofs = proofs_from_feature_row(
+        {
+            "game_id": "SYN-1",
+            "home_off_epa_5g": 0.1,
+            "as_of": "2018-09-13T12:00:00+00:00",
+            "source": "archive:synthetic",
+        },
+        feature_names=("home_off_epa_5g",),
+        kickoff_utc="2018-09-13T17:00:00+00:00",
+    )
+    assert proofs[0].as_of == ""
 
 
 def test_l1_rejects_same_week_join() -> None:
@@ -140,6 +197,15 @@ def test_expanding_window_is_train_only_by_season() -> None:
         assert_train_only((2013,), 2026, week=4)
     with pytest.raises(SplitError, match="blocked seasons"):
         build_expanding_window_folds([2013, 2024])
+    with pytest.raises(SplitError, match="C-7"):
+        build_expanding_window_folds([2012, 2013, 2014])
+
+
+def test_c7_refuses_pre2013_without_ryan_filed_list() -> None:
+    with pytest.raises(SplitError, match="C-7"):
+        assert_season_in_rebuild_universe(2012, ryan_filed_pre2013=frozenset())
+    assert_season_in_rebuild_universe(2012, ryan_filed_pre2013=frozenset({2012}))
+    assert_season_in_rebuild_universe(2013)
 
 
 def test_rebuild_plan_does_not_include_eval_seasons() -> None:
@@ -151,12 +217,17 @@ def test_rebuild_plan_does_not_include_eval_seasons() -> None:
     assert 2025 not in payload["diagnostic_seasons"]
     assert payload["folds"][-1]["eval_season"] == 2023
     assert max(payload["folds"][-1]["train_seasons"]) == 2022
+    assert "local_tree_check" in payload["runner"]
+    assert "runner_v2" not in payload["runner"]
 
 
-def test_runner_v2_validates_synthetic_bundle(tmp_path: Path) -> None:
+def test_local_tree_check_validates_synthetic_bundle(tmp_path: Path) -> None:
     root = write_synthetic_bundle(tmp_path / "bundle")
-    out = run_local_rebuild(str(root))
-    assert out.status == "PREP_VALIDATED"
+    out = check_local_tree(str(root))
+    assert out.status == LOCAL_TREE_CHECKED
+    assert out.status != "PREP_VALIDATED"
+    assert out.to_dict()["gate"] is False
+    assert out.to_dict()["asof_self_declared"] is True
     assert out.games_kept == 6  # weeks 2–3 × 3 seasons
     assert out.games_seen == 6
     assert [f["eval_season"] for f in out.folds] == [2017, 2018]
@@ -164,7 +235,7 @@ def test_runner_v2_validates_synthetic_bundle(tmp_path: Path) -> None:
     assert out.to_dict()["certified"] is False
 
 
-def test_runner_v2_excludes_same_week_and_late_asof(tmp_path: Path) -> None:
+def test_local_tree_check_excludes_same_week_and_late_asof(tmp_path: Path) -> None:
     write_local_input_path(
         tmp_path,
         manifest={"kind": "synthetic"},
@@ -180,18 +251,89 @@ def test_runner_v2_excludes_same_week_and_late_asof(tmp_path: Path) -> None:
             {
                 "game_id": "SYN-2018-W03-AAA-BBB",
                 "feature_week": 3,
-                "as_of": "2018-09-15T16:00:00+00:00",
-                "source": "synthetic",
+                "source": "archive:synthetic",
                 "home_off_epa_5g": 0.1,
+                "home_off_epa_5g_as_of": "2018-09-15T16:00:00+00:00",
             }
         ],
     )
-    out = run_local_rebuild(str(tmp_path), build_folds=False)
+    out = check_local_tree(str(tmp_path), build_folds=False)
     assert out.games_kept == 0
     assert out.excluded[0]["reason"] == "L-1_same_week_or_missing_feature_week"
 
 
-def test_runner_v2_refuses_contaminated_season(tmp_path: Path) -> None:
+def test_local_tree_check_refuses_whole_row_as_of(tmp_path: Path) -> None:
+    write_local_input_path(
+        tmp_path,
+        manifest={"kind": "synthetic"},
+        schedule_rows=[
+            {
+                "game_id": "SYN-2018-W03-AAA-BBB",
+                "season": 2018,
+                "week": 3,
+                "kickoff_utc": "2018-09-15T17:00:00+00:00",
+            }
+        ],
+        feature_rows=[
+            {
+                "game_id": "SYN-2018-W03-AAA-BBB",
+                "feature_week": 2,
+                "as_of": "2018-09-15T16:00:00+00:00",
+                "source": "archive:synthetic",
+                "home_off_epa_5g": 0.1,
+            }
+        ],
+    )
+    out = check_local_tree(str(tmp_path), build_folds=False)
+    assert out.games_kept == 0
+    assert out.excluded[0]["reason"] == "whole_row_as_of_refused"
+
+
+def test_local_tree_check_refuses_close_column(tmp_path: Path) -> None:
+    with pytest.raises(LocalPathError, match="close/score"):
+        write_local_input_path(
+            tmp_path,
+            manifest={"kind": "synthetic"},
+            schedule_rows=[
+                {
+                    "game_id": "SYN-2018-W03-AAA-BBB",
+                    "season": 2018,
+                    "week": 3,
+                    "kickoff_utc": "2018-09-15T17:00:00+00:00",
+                }
+            ],
+            feature_rows=[
+                {
+                    "game_id": "SYN-2018-W03-AAA-BBB",
+                    "feature_week": 2,
+                    "source": "archive:synthetic",
+                    "home_off_epa_5g": 0.1,
+                    "home_off_epa_5g_as_of": "2018-09-15T16:00:00+00:00",
+                    "spread_line": -3.5,
+                }
+            ],
+        )
+
+
+def test_local_tree_check_refuses_pre2013_without_ryan_list(tmp_path: Path) -> None:
+    write_local_input_path(
+        tmp_path,
+        manifest={"kind": "synthetic"},
+        schedule_rows=[
+            {
+                "game_id": "SYN-2012-W03-AAA-BBB",
+                "season": 2012,
+                "week": 3,
+                "kickoff_utc": "2012-09-16T17:00:00+00:00",
+            }
+        ],
+        feature_rows=[],
+    )
+    with pytest.raises(LocalTreeCheckError, match="C-7"):
+        check_local_tree(str(tmp_path), ryan_filed_pre2013=frozenset())
+
+
+def test_local_tree_check_refuses_contaminated_season(tmp_path: Path) -> None:
     write_local_input_path(
         tmp_path,
         manifest={"kind": "synthetic"},
@@ -205,11 +347,11 @@ def test_runner_v2_refuses_contaminated_season(tmp_path: Path) -> None:
         ],
         feature_rows=[],
     )
-    with pytest.raises(RunnerV2Error, match="contaminated"):
-        run_local_rebuild(str(tmp_path))
+    with pytest.raises(LocalTreeCheckError, match="contaminated"):
+        check_local_tree(str(tmp_path))
 
 
-def test_runner_v2_refuses_w4_w6_plumbing_week(tmp_path: Path) -> None:
+def test_local_tree_check_refuses_w4_w6_plumbing_week(tmp_path: Path) -> None:
     write_local_input_path(
         tmp_path,
         manifest={"kind": "synthetic"},
@@ -223,8 +365,8 @@ def test_runner_v2_refuses_w4_w6_plumbing_week(tmp_path: Path) -> None:
         ],
         feature_rows=[],
     )
-    with pytest.raises(RunnerV2Error, match="plumbing"):
-        run_local_rebuild(str(tmp_path))
+    with pytest.raises(LocalTreeCheckError, match="plumbing"):
+        check_local_tree(str(tmp_path))
 
 
 def test_local_path_refuses_grading_tree(tmp_path: Path) -> None:
@@ -236,15 +378,15 @@ def test_local_path_refuses_grading_tree(tmp_path: Path) -> None:
     )
     (tmp_path / "grading").mkdir()
     (tmp_path / "grading" / "finals.jsonl").write_text("{}\n", encoding="utf-8")
-    with pytest.raises(RunnerV2Error, match="LC-6"):
-        run_local_rebuild(str(tmp_path))
+    with pytest.raises(LocalTreeCheckError, match="LC-6"):
+        check_local_tree(str(tmp_path))
 
 
-def test_runner_v2_refuses_database_url(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_local_tree_check_refuses_database_url(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     write_synthetic_bundle(tmp_path)
     monkeypatch.setenv("DATABASE_URL", "postgresql://example.invalid/none")
-    with pytest.raises(RunnerV2Error, match="DATABASE_URL"):
-        run_local_rebuild(str(tmp_path))
+    with pytest.raises(LocalTreeCheckError, match="DATABASE_URL"):
+        check_local_tree(str(tmp_path))
     monkeypatch.delenv("DATABASE_URL", raising=False)
 
 

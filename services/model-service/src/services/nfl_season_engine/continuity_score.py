@@ -43,6 +43,10 @@ _OL_POS = frozenset({"OL", "T", "G", "C", "OT", "OG", "LS", "C/G", "G/C"})
 
 _PACKAGE_DATA_DIR = Path(__file__).resolve().parent / "data"
 
+
+class ContinuitySourceError(RuntimeError):
+    """F-2/F-3: roster/QB/skill/coaching load failed. Fail closed — do not empty."""
+
 # Curated HC/OC change flags for the upcoming season (approximate until a live
 # coaching feed exists). Only material known breaks are listed; missing teams
 # contribute a neutral staff factor labeled approximate.
@@ -506,8 +510,10 @@ def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
         return {}
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: packaged QB1 JSON failed; fail closed (must not empty)"
+        ) from exc
     out: Dict[str, Tuple[str, str]] = {}
     for row in payload.get("rows") or []:
         if str(row.get("position") or "").upper() != "QB":
@@ -589,8 +595,10 @@ def fetch_current_qb1(
             name = str(getattr(row, "player_name", None) or row[2] or "")
             if team and pid:
                 out.setdefault(team, (pid, name))
-    except Exception:
-        pass
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: official depth QB1 load failed; fail closed (must not empty)"
+        ) from exc
     return out
 
 
@@ -719,26 +727,36 @@ def build_continuity_book(
     team_list = [normalize_team(t) for t in (teams or [])]
     try:
         prior_qbs = fetch_prior_primary_qbs(session, prior_season=prior_season)
-    except Exception:
-        prior_qbs = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: prior QB load failed; fail closed (must not empty)"
+        ) from exc
     try:
         current_qbs = fetch_current_qb1(
             session, season=int(season), as_of_week=as_of_week
         )
-    except Exception:
-        current_qbs = _load_packaged_qb1(int(season))
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: current QB load failed; fail closed (must not empty)"
+        ) from exc
     try:
         roster_prior = fetch_roster_sets(session, season=prior_season)
-    except Exception:
-        roster_prior = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: prior roster load failed; fail closed (must not empty)"
+        ) from exc
     try:
         roster_curr = fetch_roster_sets(session, season=int(season))
-    except Exception:
-        roster_curr = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: current roster load failed; fail closed (must not empty)"
+        ) from exc
     try:
         skill_yards = fetch_skill_yards_by_player(session, prior_season=prior_season)
-    except Exception:
-        skill_yards = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: skill-yards load failed; fail closed (must not empty)"
+        ) from exc
 
     # Packaged HC/OC/DC book is the product SoT; curated flags backfill only.
     try:
@@ -747,8 +765,10 @@ def build_continuity_book(
         )
 
         staff_book = dict(continuity_staff_from_packaged(int(season)))
-    except Exception:
-        staff_book = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: coaching staff load failed; fail closed (must not empty)"
+        ) from exc
     for team_key, raw in CURATED_STAFF_BY_SEASON.get(int(season), {}).items():
         if team_key not in staff_book:
             staff_book[team_key] = dict(raw)

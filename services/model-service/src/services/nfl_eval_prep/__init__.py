@@ -9,9 +9,15 @@ Do not import production remat, W4–W6 plumbing evidence, or ``scripts/nfl/imv/
 """
 
 from src.services.nfl_eval_prep.asof import (
+    ASOF_IS_SELF_DECLARED,
     AsOfProof,
     AsOfViolation,
     validate_asof_proofs,
+)
+from src.services.nfl_eval_prep.local_tree_check import (
+    LOCAL_TREE_CHECKED,
+    LocalTreeCheckError,
+    check_local_tree,
 )
 from src.services.nfl_eval_prep.harness import (
     RebuildPlan,
@@ -36,9 +42,12 @@ from src.services.nfl_eval_prep.splits import (
 )
 
 __all__ = [
+    "ASOF_IS_SELF_DECLARED",
+    "LOCAL_TREE_CHECKED",
     "AsOfProof",
     "AsOfViolation",
     "CONTAMINATED_EVAL_SEASONS",
+    "LocalTreeCheckError",
     "ExpandingWindowFold",
     "FROZEN_PLUMBING_WEEKS_2026",
     "L1_FIXED_JOIN",
@@ -51,6 +60,7 @@ __all__ = [
     "assert_train_only",
     "build_expanding_window_folds",
     "build_rebuild_plan",
+    "check_local_tree",
     "flag_l3_defaults",
     "require_week_cap",
     "validate_asof_proofs",

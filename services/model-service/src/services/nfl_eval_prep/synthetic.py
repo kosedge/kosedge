@@ -42,28 +42,40 @@ def build_synthetic_rows() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
             # Week-1 games have no prior week → omitted from features (excluded, not invented).
             if week == 1:
                 continue
-            features.append(
-                {
-                    "game_id": gid,
-                    "season": season,
-                    "week": week,
-                    "feature_week": week - 1,
-                    "as_of": _as_of(season, week),
-                    "source": "synthetic",
-                    "home_off_epa_5g": 0.02 * week,
-                    "away_off_epa_5g": -0.01 * week,
-                    "home_def_epa_allowed_5g": 0.01,
-                    "away_def_epa_allowed_5g": 0.02,
-                    "home_kav_net_5g": 0.05,
-                    "away_kav_net_5g": -0.04,
-                    "rest_days_home": 7.0,
-                    "rest_days_away": 7.0,
-                    "rest_observed": True,
-                    "home_injury_impact": 0.0,
-                    "away_injury_impact": 0.0,
-                    "injury_observed": True,
-                }
-            )
+            stamp = _as_of(season, week)
+            row = {
+                "game_id": gid,
+                "season": season,
+                "week": week,
+                "feature_week": week - 1,
+                "source": "archive:synthetic",
+                "home_off_epa_5g": 0.02 * week,
+                "away_off_epa_5g": -0.01 * week,
+                "home_def_epa_allowed_5g": 0.01,
+                "away_def_epa_allowed_5g": 0.02,
+                "home_kav_net_5g": 0.05,
+                "away_kav_net_5g": -0.04,
+                "rest_days_home": 7.0,
+                "rest_days_away": 7.0,
+                "rest_observed": True,
+                "home_injury_impact": 0.0,
+                "away_injury_impact": 0.0,
+                "injury_observed": True,
+            }
+            for name in (
+                "home_off_epa_5g",
+                "away_off_epa_5g",
+                "home_def_epa_allowed_5g",
+                "away_def_epa_allowed_5g",
+                "home_kav_net_5g",
+                "away_kav_net_5g",
+                "rest_days_home",
+                "rest_days_away",
+                "home_injury_impact",
+                "away_injury_impact",
+            ):
+                row[f"{name}_as_of"] = stamp
+            features.append(row)
     return features, schedule
 
 

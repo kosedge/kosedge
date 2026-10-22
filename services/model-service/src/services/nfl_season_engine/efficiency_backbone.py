@@ -755,8 +755,11 @@ def blend_packages(
         )
 
         var_boost = continuity_uncertainty_boost(cont_score) if travel < 1.0 - 1e-12 else 0.0
-    except Exception:
-        var_boost = 0.0
+    except Exception as exc:
+        raise RuntimeError(
+            "efficiency_backbone: continuity_score unavailable; fail closed "
+            "(continuity_boost must not default to 0.0)"
+        ) from exc
     base_var = uncertainty_from_games(games_for_weight)
     variance = round(_clamp(base_var + var_boost, 0.55, 1.60), 4)
 

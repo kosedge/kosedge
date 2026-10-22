@@ -10,16 +10,68 @@ week-forward refits are NOT registered here and are refused.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import Any, Iterable, Optional, Sequence
 
 
 CONTAMINATED_EVAL_SEASONS = frozenset({2024, 2025})
 FROZEN_PLUMBING_WEEKS_2026 = frozenset({4, 5, 6})
 DIAGNOSTIC_SEASONS_DEFAULT = tuple(range(2013, 2024))  # 2013–2023 inclusive
+REBUILD_MIN_SEASON = 2013
+RYAN_FILED_PRE2013_RELATIVE = Path("docs/research/NFL_RYAN_FILED_PRE2013_SEASONS.md")
 
 
 class SplitError(ValueError):
     """Illegal split, eval season, or train/eval overlap."""
+
+
+def load_ryan_filed_pre2013_seasons(path: Optional[Path] = None) -> frozenset[int]:
+    """Read a Ryan-filed pre-2013 season list. Missing file → empty set.
+
+    Expected body contains a line ``seasons: 2009,2010`` (integers only).
+    The file does not exist in this repo unless Ryan files it.
+    """
+    target = Path(path) if path is not None else _default_ryan_filed_path()
+    if not target.is_file():
+        return frozenset()
+    text = target.read_text(encoding="utf-8")
+    seasons: set[int] = set()
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("#") or not stripped.lower().startswith("seasons:"):
+            continue
+        payload = stripped.split(":", 1)[1]
+        for token in payload.replace("[", " ").replace("]", " ").split(","):
+            token = token.strip()
+            if token.isdigit():
+                seasons.add(int(token))
+    return frozenset(s for s in seasons if s < REBUILD_MIN_SEASON)
+
+
+def _default_ryan_filed_path() -> Path:
+    here = Path(__file__).resolve()
+    repo = here.parents[5]  # services/model-service/src/services/nfl_eval_prep → repo
+    return repo / RYAN_FILED_PRE2013_RELATIVE
+
+
+def assert_season_in_rebuild_universe(
+    season: int,
+    *,
+    ryan_filed_pre2013: Optional[frozenset[int]] = None,
+) -> None:
+    """C-7: refuse pre-2013 unless a Ryan-filed season list includes it."""
+    year = int(season)
+    if year >= REBUILD_MIN_SEASON:
+        return
+    filed = (
+        ryan_filed_pre2013
+        if ryan_filed_pre2013 is not None
+        else load_ryan_filed_pre2013_seasons()
+    )
+    if year not in filed:
+        raise SplitError(
+            f"C-7: pre-2013 season {year} refused unless a Ryan-filed season list includes it"
+        )
 
 
 @dataclass(frozen=True)
@@ -82,6 +134,8 @@ def build_expanding_window_folds(
     ordered = tuple(sorted({int(s) for s in seasons}))
     if not ordered:
         raise SplitError("no seasons")
+    for year in ordered:
+        assert_season_in_rebuild_universe(year)
     blocked = [s for s in ordered if s in CONTAMINATED_EVAL_SEASONS or s >= 2026]
     if blocked:
         raise SplitError(f"blocked seasons in split universe: {blocked}")

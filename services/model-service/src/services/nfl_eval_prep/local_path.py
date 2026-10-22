@@ -15,6 +15,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
+from src.services.nfl_eval_prep.asof import forbidden_feature_columns_present
+
 
 FORBIDDEN_FEATURE_TREE_NAMES = frozenset(
     {
@@ -94,6 +96,13 @@ def load_local_input_path(root: Path | str) -> LocalInputPath:
         raise LocalPathError("manifest must not carry network or database_url")
     features = _read_jsonl(base / "features" / "rows.jsonl")
     schedule = _read_jsonl(base / "schedule" / "games.jsonl")
+    for idx, row in enumerate(features):
+        banned = forbidden_feature_columns_present(row)
+        if banned:
+            raise LocalPathError(
+                f"C-6: close/score column(s) {list(banned)} refused as features "
+                f"(features/rows.jsonl:{idx + 1})"
+            )
     return LocalInputPath(
         root=base,
         manifest=manifest,
