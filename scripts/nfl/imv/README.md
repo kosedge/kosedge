@@ -21,7 +21,11 @@ directories, scores, or SHA256SUMS from a live seal.
 | `nfl-imv-prod-export-spec-v2.4.md`     | C-4 capture / data_as_of / query_sha.                                   |
 | `nfl-imv-feature-path-v2.4.md`         | 47616a70 addendum: pins, cert tols, bundle.                             |
 | `nfl-imv-mac-runbook-v2.3.md`          | One-page Mac commands + Desktop tar (P-4).                              |
-| `nfl-imv-mac-runbook-v2.4.md`          | RETURNED: IMV outside BASE, box paths, no parquet tar.                  |
+| `nfl-imv-mac-runbook-v2.4.md`          | RETURNED (54ba672b). Use v2.4.1.                                        |
+| `nfl-imv-mac-runbook-v2.4.1.md`        | K-1..K-4 closed. No `rm -rf`. Sha-check v24 + three shells.             |
+| `nfl-imv-v2.5-r-trace.md`              | R-1..R-9 + C-3/C-4 close.                                               |
+| `nfl-imv-feature-path-v2.5.md`         | v2.5 reader addendum.                                                   |
+| `nfl_imv_v25.py`                       | v2.5 reader. Does not edit v21–v24.                                     |
 | `nfl-imv-feature-coverage-v2.md`       | 41-key sourced / unavailable / flag table.                              |
 | `nfl-imv-v2.1-c-trace.md`              | C-1..C-8 trace.                                                         |
 | `nfl-imv-v2.2-x-trace.md`              | X-1..X-9 trace (gating first).                                          |

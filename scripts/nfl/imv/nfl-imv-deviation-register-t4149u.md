@@ -125,7 +125,9 @@ Rest raw + derived. Team-code consistency required.
 `home_rest_days`, `away_rest_days`, `roof_dome` — exact match vs the
 exported raw **and** derived values, same game. Not scored as feature
 parity. Roof map: dome/closed → 1, outdoors/open → 0, else NULL. A row
-with `roof_vocab_unknown=true` has roof SOURCE-CHECK = `NOT_RUN`.
+with `roof_vocab_unknown=true` has roof SOURCE-CHECK = `NOT_RUN` and
+blocks cert PASS (`NOT_RUN_ROOF_VOCAB`). SOURCE-CHECK compares to the
+PR SQL v3 derivation, not to `tasks.py` rest `or 7.0` / roof-missing→0.
 
 ### 1 internal check
 
@@ -178,6 +180,31 @@ Fix plan (do **not** edit frozen `nfl_imv_v22.py` `57a419b4` /
 - A local `offense_index` formula that is not BASE `package_to_strength_indices`
 - Shipping these lagged/unweighted/null-injury numbers as if they were warehouse true-PR
 - Filling rest `7.0` / injury `0.0` / index `1.0` to “look like prod”
+
+## D-1 — Bye-week and cross-season mixing (own entry)
+
+**DEVIATES.** Prod 5g windows are **same-season** (`ingest.py:1298`
+`WHERE season = :season`). Local windows are last 5 **played REG**
+team-weeks with `(season,week) < game`, bye omitted, POST / `week>18`
+dropped, and **2025 REG tail fills early 2026** (`nfl_imv_v22.py:151–246`).
+
+Effect: early-2026 local windows (W4–W6 for teams with byes or short
+2026 history) mix 2025 weeks. Prod W-1 rows for those same teams do
+**not**. W4–W6 parity on those teams compares different windows. This
+is a separate deviation from the CURRENT-ROW vs lag-only gap already
+logged in the shared rolling notes.
+
+## D-2 — Cursor-authored parity fixtures withdrawn
+
+All Cursor-authored parity fixtures and samples are **withdrawn as
+evidence**. None may be cited as parity. That includes
+`scripts/nfl/imv/fixtures/parity-prod-w6-sample.jsonl`,
+`parity-local-w6-sample.jsonl`, and any in-test constructed export.
+The reader refuses `kind != sealed_prod_feature_export`. A synthetic
+unit-test CSV is not a sealed prod export.
+
+SOURCE-CHECK rest/roof compares to the **PR SQL v3 derivation**, not to
+the model input path (`tasks.py` rest `or 7.0`; missing roof → 0).
 
 Plumbing-only Mac runs may call the **pinned** sim. They must keep the
 deviation flags on every row.

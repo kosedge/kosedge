@@ -40,3 +40,13 @@ They are forced null. Fix plan is in
 - Empty or wrong export = `NOT_RUN`.
 
 41-key split: **10 / 3 / 1 / 3 / 24**.
+
+## v2.5 (54ba672b)
+
+Reader is `nfl_imv_v25.py`. Outermost 41-col SELECT. Types fixed.
+Roof-flagged rows block cert PASS. Rest raw =
+`schedule_game_date − *_prev_reg_game_date`. Exported dups + row
+count. STL/SD/OAK and unparseable `game_id` → `FAIL_TEAM_CODE`.
+Cert tolerance override refused. `evidence_label=REPORTED`.
+`query_sha` must equal the v3 pin. Export sha and build-start
+required. Plumbing status is `PASS_PLUMBING` and is not cert.
