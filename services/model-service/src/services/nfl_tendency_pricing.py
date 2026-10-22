@@ -14,7 +14,13 @@ EPA matchup packs or market blend — it sharpens, it does not rewrite.
 
 from __future__ import annotations
 
+import os
 from typing import Any, Dict, Mapping
+
+
+def _refuse_w8_db_loader(name: str) -> None:
+    if os.environ.get("W8_CAPTURE_BUILD"):
+        raise RuntimeError(f"F-6 STOP: builder reached DB loader {name}")
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -43,6 +49,7 @@ def fetch_team_proe_map(
     down_distance rows so callers get one season-level PROE per team.
     """
     _ = situation  # reserved for future bucket filters
+    _refuse_w8_db_loader("fetch_team_proe_map")
     from sqlalchemy import text
 
     rows = session.execute(
@@ -70,6 +77,7 @@ def fetch_team_direction_rates(
     *,
     season: int,
 ) -> Dict[str, Dict[str, float]]:
+    _refuse_w8_db_loader("fetch_team_direction_rates")
     from sqlalchemy import text
 
     rows = session.execute(

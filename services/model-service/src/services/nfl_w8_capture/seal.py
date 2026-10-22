@@ -26,7 +26,11 @@ from src.services.nfl_w8_capture.constants import (
     STREAM_INDEPENDENT,
     STREAM_MARKET,
 )
-from src.services.nfl_w8_capture.fail_closed import FailClosedError, run_builder_guards
+from src.services.nfl_w8_capture.fail_closed import (
+    FailClosedError,
+    run_builder_guards,
+    w8_build_context,
+)
 from src.services.nfl_w8_capture.odds_ms import snapshot_record
 from src.services.nfl_w8_capture.streams import (
     StreamError,
@@ -160,6 +164,46 @@ def build_and_seal(
     default_seal_by_et: datetime = DEFAULT_SEAL_BY_ET,
 ) -> CaptureResult:
     """Write two streams, checksum, chain, and seal. Does not grade or publish."""
+    with w8_build_context():
+        return _build_and_seal_impl(
+            root,
+            games=games,
+            market_predictions=market_predictions,
+            independent_predictions=independent_predictions,
+            market_inputs=market_inputs,
+            independent_inputs=independent_inputs,
+            market_proofs=market_proofs,
+            independent_proofs=independent_proofs,
+            odds_snapshots=odds_snapshots,
+            model_version=model_version,
+            code_sha=code_sha,
+            now_utc=now_utc,
+            dry_run=dry_run,
+            publish=publish,
+            min_lead_minutes=min_lead_minutes,
+            default_seal_by_et=default_seal_by_et,
+        )
+
+
+def _build_and_seal_impl(
+    root: Path | str,
+    *,
+    games: Sequence[Mapping[str, Any]],
+    market_predictions: Sequence[Mapping[str, Any]],
+    independent_predictions: Sequence[Mapping[str, Any]],
+    market_inputs: Sequence[Mapping[str, Any]],
+    independent_inputs: Sequence[Mapping[str, Any]],
+    market_proofs: Sequence[Mapping[str, Any]],
+    independent_proofs: Sequence[Mapping[str, Any]],
+    odds_snapshots: Sequence[Mapping[str, Any]],
+    model_version: str,
+    code_sha: str,
+    now_utc: datetime,
+    dry_run: bool,
+    publish: bool,
+    min_lead_minutes: int,
+    default_seal_by_et: datetime,
+) -> CaptureResult:
     try:
         guards = run_builder_guards()
     except FailClosedError as exc:

@@ -20,6 +20,7 @@ North star: ``data/ops/nfl-model-vision.md``.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -503,10 +504,24 @@ def blend_weights_with_continuity(
 # ---------------------------------------------------------------------------
 
 
+def _refuse_w8_db_loader(name: str) -> None:
+    if os.environ.get("W8_CAPTURE_BUILD"):
+        raise RuntimeError(f"F-6 STOP: builder reached DB loader {name}")
+
+
+def _packaged_qb1_path(season: int) -> Optional[Path]:
+    name = f"nfl_depth_chart_{int(season)}_w1.json"
+    for folder in (_PACKAGE_DATA_DIR, _PACKAGE_DATA_DIR / "historical"):
+        path = folder / name
+        if path.is_file():
+            return path
+    return None
+
+
 def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
     """Return {team: (player_id, player_name)} from packaged depth chart."""
-    path = _PACKAGE_DATA_DIR / f"nfl_depth_chart_{int(season)}_w1.json"
-    if not path.is_file():
+    path = _packaged_qb1_path(int(season))
+    if path is None:
         return {}
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -530,6 +545,7 @@ def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
 
 def fetch_prior_primary_qbs(session: Any, *, prior_season: int) -> Dict[str, Tuple[str, str]]:
     """Prior-season primary passer by attempts → {team: (player_id, name)}."""
+    _refuse_w8_db_loader("fetch_prior_primary_qbs")
     from sqlalchemy import text
 
     rows = session.execute(
@@ -568,7 +584,7 @@ def fetch_current_qb1(
     as_of_week: Optional[int] = None,
 ) -> Dict[str, Tuple[str, str]]:
     """Current projected QB1 from packaged depth SoT (exclusive when present)."""
-    from sqlalchemy import text
+    _refuse_w8_db_loader("fetch_current_qb1")
 
     week = int(as_of_week or 1)
     packaged = _load_packaged_qb1(int(season))
@@ -578,6 +594,8 @@ def fetch_current_qb1(
     # No packaged SoT — bridge from official depth only.
     out: Dict[str, Tuple[str, str]] = dict(packaged)
     try:
+        from sqlalchemy import text
+
         rows = session.execute(
             text(
                 """
@@ -606,6 +624,7 @@ def fetch_roster_sets(
     session: Any, *, season: int
 ) -> Dict[str, Dict[str, str]]:
     """{team: {player_id: position}} for a season."""
+    _refuse_w8_db_loader("fetch_roster_sets")
     from sqlalchemy import text
 
     rows = session.execute(
@@ -633,6 +652,7 @@ def fetch_skill_yards_by_player(
     session: Any, *, prior_season: int
 ) -> Dict[str, Dict[str, float]]:
     """{team: {player_id: yards}} skill production in prior season."""
+    _refuse_w8_db_loader("fetch_skill_yards_by_player")
     from sqlalchemy import text
 
     rows = session.execute(

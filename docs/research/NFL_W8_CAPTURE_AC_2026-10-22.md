@@ -39,11 +39,11 @@ Dry-run refuses `DATABASE_URL` / Odds keys. Credentials are operator-supplied of
 | Flag | Behavior |
 | ---- | -------- |
 | F-0 | `efficiency_backbone.blend_packages` raises if `continuity_score` import fails; no silent 0.0 boost |
-| F-1 | `nfl_simulator` raises if tendency import fails; no silent 0.0 tendency. `tendency_game_signals` no longer imports SQLAlchemy at module load |
-| F-2/F-3 | `continuity_score` loaders raise `ContinuitySourceError` instead of emptying roster/QB/skill/coaching or swallowing JSON/DB errors |
-| F-4 | W8 builder records `NFL_*` names; any override is STOP |
-| F-5 | W8 builder refuses a shadowed `src` earlier on `sys.path` |
-| F-6 | W8 builder STOP if `DATABASE_URL` is set or a DB session is passed |
+| F-1 | Missing SQLAlchemy no longer drops the tendency signal (`tendency_game_signals` is pure math). If the pricing module itself cannot be imported, `nfl_simulator` fail-closes instead of 0.0 |
+| F-2/F-3 | Six continuity loaders raise `ContinuitySourceError` instead of emptying roster/QB/skill/coaching. Corrupt packaged QB1/coaching JSON and official-depth DB failures also fail closed |
+| F-4 | Each W8 build records `NFL_*` names in `manifest.json`. Any override is STOP. A non-float `NFL_*` value no longer reverts to the framework default |
+| F-5 | W8 builder refuses a regular or earlier `src` on `sys.path` that would shadow the namespace package |
+| F-6 | W8 builder STOP if `DATABASE_URL` is set, a DB session is passed, or a continuity/tendency DB fetcher is invoked during the build |
 
 **Still missing for a live W8 seal:** operator Odds snapshots (or honest MISSING rows) per game; real code sha of the deploy pin; custodian identity and receipt channel; live kickoff list; no publish.
 

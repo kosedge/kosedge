@@ -133,6 +133,9 @@ def predict_stream(
     *,
     stream: str,
 ) -> list[dict[str, Any]]:
+    from src.services.nfl_w8_capture.fail_closed import run_builder_guards
+
+    run_builder_guards()
     if stream not in {STREAM_MARKET, STREAM_INDEPENDENT}:
         raise FrozenModelError(f"unknown stream {stream}")
     return [score_row(row, stream=stream) for row in rows]
