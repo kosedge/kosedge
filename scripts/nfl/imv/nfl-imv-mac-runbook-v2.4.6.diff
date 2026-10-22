@@ -1,0 +1,240 @@
+--- nfl-imv-mac-runbook-v2.4.5.md	2026-10-22 18:02:03.370031414 +0000
++++ nfl-imv-mac-runbook-v2.4.6.md	2026-10-22 18:05:56.257749904 +0000
+@@ -1,4 +1,4 @@
+-# Mac runbook v2.4.5 — e3ae3984 B-1 / B-2 / B-3
++# Mac runbook v2.4.6 — e3ae3984 B-1 / B-2 / B-3 (verbatim checks)
+ 
+ Ryan's Mac. Dedicated **b1d857d3** worktree. **Not** `~/kosedge`. No W7.
+ No Odds / Railway / prod DB on the seal. Re-run = **new** snapshot.
+@@ -15,13 +15,26 @@
+ B-2 and B-3. **W4 and W5 each get their own seal and tar, the same as W6.**
+ They are never evidence unless sealed.
+ 
+-## IMV acceptance texts (exact; do not reinterpret)
++## IMV texts from filing e3ae3984 (copied word for word)
+ 
+-**B-1:** on the Mac, hash the manifest with shasum -a 256 and check it against the full pin 4c287d5b2d5ce49cd606818ab15345c15ddb378049a4b21a21cc3580c3dbd1f2. Then `cd "$PRE_RETRO" && shasum -a 256 -c` of the manifest entries in shasum format, with no ignore-missing. Then chmod -R a-w.
++**B-1** (e3ae3984 l.32–46):
+ 
+-**B-2:** the seven checks, verbatim, with WT set to /Users/ryankos/kosedge-imv-plumb2-b1d857d3.
++B-1: l.123 checks PRE_RETRO/imv-manifest.tsv against MANIFEST_PIN.
++- The pin is the sha of the retro manifest listing file, not of imv-manifest.tsv. The listing's own entry for imv-manifest.tsv != pin (tool).
++- So l.123 always fails. It fails closed, but the rerun can never pass.
++- The required per-file -c against PRE_RETRO is never done.
++- Fix: delete l.123 and, after l.124, run:
++    awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
++  Then chmod -R a-w.
++- B-1b: use shasum -a 256 (as elsewhere in the runbook), not sha256sum. sha256sum on the Mac is UNVERIFIED.
++
++**B-3** (e3ae3984 l.93–95):
++
++B-3 (blocking): the K-4 seal-ack order is not enforced.
++- The retro block (l.268-282) and the W8 block (l.292-322) run box copy -> "IMV acks" comment -> seal in ONE block, with no stop.
++- Add a fail-closed test "${IMV_STORE_ACK_OK:-}" = "1" before each sealed-v2.4.sh call, or put the seal in its own block.
+ 
+-**B-3:** each build's block STOPs once its store sha and evidence are on the box. A separate seal block starts with `: "${IMV_SEAL_ACK_<WEEK>:?IMV ack required}"`.
++B-3 (store-ack gate before each seal);
+ 
+ ## Pre-run conditions 1–8
+ 
+@@ -91,7 +104,7 @@
+   test -f "$SRC/$name"
+   cp "$SRC/$name" "$IMV/$name"
+ done < "$SUMS"
+-cp "$SRC"/nfl-imv-mac-runbook-v2.4.5.md "$IMV"/
++cp "$SRC"/nfl-imv-mac-runbook-v2.4.6.md "$IMV"/
+ cp "$SRC"/SHA256SUMS.v2.5 "$IMV"/SHA256SUMS.v2.5
+ cp "$SRC"/SHA256SUMS.v2.6.1 "$IMV"/SHA256SUMS.v2.6.1
+ cp "$SRC"/SHA256SUMS.v2.6.2 "$IMV"/SHA256SUMS.v2.6.2
+@@ -144,10 +157,11 @@
+ test -f "$DESK"
+ # CoS copies $DESK to the box and matches $MANIFEST_PIN. STOP until CoS confirms.
+ test "${COS_BOX_MANIFEST_OK:-}" = "1"
+-# B-1: hash the manifest with shasum -a 256 vs the full pin
++# B-1b: shasum -a 256, not sha256sum. Desktop listing vs pin (l.124).
+ test "$(shasum -a 256 "$DESK" | awk '{print $1}')" = "$MANIFEST_PIN"
+-# then cd "$PRE_RETRO" && shasum -a 256 -c of the converted entries; no --ignore-missing
+-cd "$PRE_RETRO" && awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
++# Fix: delete l.123 and, after l.124, run:
++awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
++# Then chmod -R a-w.
+ chmod -R a-w "$PRE_RETRO"
+ test ! -w "$PRE_RETRO/imv-manifest.tsv"
+ printf '%s\n' "$PRE_RETRO" | tee /var/tmp/nfl-imv-prestage-nflverse/PRE_RETRO.txt
+@@ -211,25 +225,13 @@
+ ```bash
+ set -euo pipefail
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+-# (1) HEAD
+-test "$(git -C "$WT" rev-parse HEAD)" = "b1d857d356d5afc422c86ffb1e9a25afdf2a4225"
+-# (2) diff --quiet HEAD
+-git -C "$WT" diff --quiet HEAD
+-# (3) ls-files --others --exclude-standard = 0
+-test "$(git -C "$WT" ls-files --others --exclude-standard | wc -l)" -eq 0
+-# (4) sparse absent (RD-1: absent)
+-test "$(git -C "$WT" config --bool core.sparseCheckout || true)" != "true"
+-test ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)"
+-# (5) ls-files -v '^[a-zS]' = 0
+-test "$(git -C "$WT" ls-files -v | awk '/^[a-zS]/{c++} END{print c+0}')" -eq 0
+-# (6) strict per-path MISSING = 0
+-# (mode-160000 gitlinks excluded only by name)
+-set +o pipefail
+-test "$(cd "$WT" && git ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l)" -eq 0
+-set -o pipefail
+-# (7) sim path + git ls-files --error-unmatch
+-test -f "$WT/services/model-service/src/services/nfl_simulator.py"
+-git -C "$WT" ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py
++[ "$(git -C "$WT" rev-parse HEAD)" = b1d857d356d5afc422c86ffb1e9a25afdf2a4225 ]
++git -C "$WT" --no-optional-locks diff --quiet HEAD
++[ "$(git -C "$WT" --no-optional-locks ls-files --others --exclude-standard | wc -l | tr -d ' ')" = 0 ]
++v=$(git -C "$WT" config --get core.sparseCheckout || true); [ -z "$v" ] || [ "$v" = false ]; [ ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)" ]
++[ "$(git -C "$WT" --no-optional-locks ls-files -v | grep -c '^[a-zS]' || true)" = 0 ]
++[ "$(cd "$WT" && git --no-optional-locks ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l | tr -d ' ')" = 0 ]
++test -f "$WT/services/model-service/src/services/nfl_simulator.py" && git -C "$WT" --no-optional-locks ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py >/dev/null
+ ```
+ 
+ ## 2. Feature builds (network DENY; new --out each time)
+@@ -244,19 +246,15 @@
+ ```bash
+ set -euo pipefail
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
++[ "$(git -C "$WT" rev-parse HEAD)" = b1d857d356d5afc422c86ffb1e9a25afdf2a4225 ]
++git -C "$WT" --no-optional-locks diff --quiet HEAD
++[ "$(git -C "$WT" --no-optional-locks ls-files --others --exclude-standard | wc -l | tr -d ' ')" = 0 ]
++v=$(git -C "$WT" config --get core.sparseCheckout || true); [ -z "$v" ] || [ "$v" = false ]; [ ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)" ]
++[ "$(git -C "$WT" --no-optional-locks ls-files -v | grep -c '^[a-zS]' || true)" = 0 ]
++[ "$(cd "$WT" && git --no-optional-locks ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l | tr -d ' ')" = 0 ]
++test -f "$WT/services/model-service/src/services/nfl_simulator.py" && git -C "$WT" --no-optional-locks ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py >/dev/null
+ BASE="$WT"
+ W4_PARTIAL=/var/tmp/nfl-imv-features/w4-20261022T173520Z
+-test "$(git -C "$WT" rev-parse HEAD)" = "b1d857d356d5afc422c86ffb1e9a25afdf2a4225"
+-git -C "$WT" diff --quiet HEAD
+-test "$(git -C "$WT" ls-files --others --exclude-standard | wc -l)" -eq 0
+-test "$(git -C "$WT" config --bool core.sparseCheckout || true)" != "true"
+-test ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)"
+-test "$(git -C "$WT" ls-files -v | awk '/^[a-zS]/{c++} END{print c+0}')" -eq 0
+-set +o pipefail
+-test "$(cd "$WT" && git ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l)" -eq 0
+-set -o pipefail
+-test -f "$WT/services/model-service/src/services/nfl_simulator.py"
+-git -C "$WT" ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py
+ OUT4=/var/tmp/nfl-imv-features/w4-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT4" != "$W4_PARTIAL"
+ test ! -e "$OUT4"
+@@ -275,7 +273,7 @@
+ 
+ ```bash
+ set -euo pipefail
+-: "${IMV_SEAL_ACK_W4:?IMV ack required}"
++test "${IMV_STORE_ACK_OK:-}" = "1"
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT4" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w4.sha256)" \
+@@ -290,19 +288,15 @@
+ ```bash
+ set -euo pipefail
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
++[ "$(git -C "$WT" rev-parse HEAD)" = b1d857d356d5afc422c86ffb1e9a25afdf2a4225 ]
++git -C "$WT" --no-optional-locks diff --quiet HEAD
++[ "$(git -C "$WT" --no-optional-locks ls-files --others --exclude-standard | wc -l | tr -d ' ')" = 0 ]
++v=$(git -C "$WT" config --get core.sparseCheckout || true); [ -z "$v" ] || [ "$v" = false ]; [ ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)" ]
++[ "$(git -C "$WT" --no-optional-locks ls-files -v | grep -c '^[a-zS]' || true)" = 0 ]
++[ "$(cd "$WT" && git --no-optional-locks ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l | tr -d ' ')" = 0 ]
++test -f "$WT/services/model-service/src/services/nfl_simulator.py" && git -C "$WT" --no-optional-locks ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py >/dev/null
+ BASE="$WT"
+ W4_PARTIAL=/var/tmp/nfl-imv-features/w4-20261022T173520Z
+-test "$(git -C "$WT" rev-parse HEAD)" = "b1d857d356d5afc422c86ffb1e9a25afdf2a4225"
+-git -C "$WT" diff --quiet HEAD
+-test "$(git -C "$WT" ls-files --others --exclude-standard | wc -l)" -eq 0
+-test "$(git -C "$WT" config --bool core.sparseCheckout || true)" != "true"
+-test ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)"
+-test "$(git -C "$WT" ls-files -v | awk '/^[a-zS]/{c++} END{print c+0}')" -eq 0
+-set +o pipefail
+-test "$(cd "$WT" && git ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l)" -eq 0
+-set -o pipefail
+-test -f "$WT/services/model-service/src/services/nfl_simulator.py"
+-git -C "$WT" ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py
+ OUT5=/var/tmp/nfl-imv-features/w5-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT5" != "$W4_PARTIAL"
+ test ! -e "$OUT5"
+@@ -321,7 +315,7 @@
+ 
+ ```bash
+ set -euo pipefail
+-: "${IMV_SEAL_ACK_W5:?IMV ack required}"
++test "${IMV_STORE_ACK_OK:-}" = "1"
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT5" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w5.sha256)" \
+@@ -336,19 +330,15 @@
+ ```bash
+ set -euo pipefail
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
++[ "$(git -C "$WT" rev-parse HEAD)" = b1d857d356d5afc422c86ffb1e9a25afdf2a4225 ]
++git -C "$WT" --no-optional-locks diff --quiet HEAD
++[ "$(git -C "$WT" --no-optional-locks ls-files --others --exclude-standard | wc -l | tr -d ' ')" = 0 ]
++v=$(git -C "$WT" config --get core.sparseCheckout || true); [ -z "$v" ] || [ "$v" = false ]; [ ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)" ]
++[ "$(git -C "$WT" --no-optional-locks ls-files -v | grep -c '^[a-zS]' || true)" = 0 ]
++[ "$(cd "$WT" && git --no-optional-locks ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l | tr -d ' ')" = 0 ]
++test -f "$WT/services/model-service/src/services/nfl_simulator.py" && git -C "$WT" --no-optional-locks ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py >/dev/null
+ BASE="$WT"
+ W4_PARTIAL=/var/tmp/nfl-imv-features/w4-20261022T173520Z
+-test "$(git -C "$WT" rev-parse HEAD)" = "b1d857d356d5afc422c86ffb1e9a25afdf2a4225"
+-git -C "$WT" diff --quiet HEAD
+-test "$(git -C "$WT" ls-files --others --exclude-standard | wc -l)" -eq 0
+-test "$(git -C "$WT" config --bool core.sparseCheckout || true)" != "true"
+-test ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)"
+-test "$(git -C "$WT" ls-files -v | awk '/^[a-zS]/{c++} END{print c+0}')" -eq 0
+-set +o pipefail
+-test "$(cd "$WT" && git ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l)" -eq 0
+-set -o pipefail
+-test -f "$WT/services/model-service/src/services/nfl_simulator.py"
+-git -C "$WT" ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py
+ OUT6=/var/tmp/nfl-imv-features/w6-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT6" != "$W4_PARTIAL"
+ test ! -e "$OUT6"
+@@ -367,7 +357,7 @@
+ 
+ ```bash
+ set -euo pipefail
+-: "${IMV_SEAL_ACK_W6:?IMV ack required}"
++test "${IMV_STORE_ACK_OK:-}" = "1"
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT6" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w6.sha256)" \
+@@ -388,19 +378,15 @@
+ ```bash
+ set -euo pipefail
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
++[ "$(git -C "$WT" rev-parse HEAD)" = b1d857d356d5afc422c86ffb1e9a25afdf2a4225 ]
++git -C "$WT" --no-optional-locks diff --quiet HEAD
++[ "$(git -C "$WT" --no-optional-locks ls-files --others --exclude-standard | wc -l | tr -d ' ')" = 0 ]
++v=$(git -C "$WT" config --get core.sparseCheckout || true); [ -z "$v" ] || [ "$v" = false ]; [ ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)" ]
++[ "$(git -C "$WT" --no-optional-locks ls-files -v | grep -c '^[a-zS]' || true)" = 0 ]
++[ "$(cd "$WT" && git --no-optional-locks ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l | tr -d ' ')" = 0 ]
++test -f "$WT/services/model-service/src/services/nfl_simulator.py" && git -C "$WT" --no-optional-locks ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py >/dev/null
+ BASE="$WT"
+ W4_PARTIAL=/var/tmp/nfl-imv-features/w4-20261022T173520Z
+-test "$(git -C "$WT" rev-parse HEAD)" = "b1d857d356d5afc422c86ffb1e9a25afdf2a4225"
+-git -C "$WT" diff --quiet HEAD
+-test "$(git -C "$WT" ls-files --others --exclude-standard | wc -l)" -eq 0
+-test "$(git -C "$WT" config --bool core.sparseCheckout || true)" != "true"
+-test ! -e "$(git -C "$WT" rev-parse --git-path info/sparse-checkout)"
+-test "$(git -C "$WT" ls-files -v | awk '/^[a-zS]/{c++} END{print c+0}')" -eq 0
+-set +o pipefail
+-test "$(cd "$WT" && git ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l)" -eq 0
+-set -o pipefail
+-test -f "$WT/services/model-service/src/services/nfl_simulator.py"
+-git -C "$WT" ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py
+ OUT8=/var/tmp/nfl-imv-features/w8-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT8" != "$W4_PARTIAL"
+ test ! -e "$OUT8"
+@@ -418,7 +404,7 @@
+ 
+ ```bash
+ set -euo pipefail
+-: "${IMV_SEAL_ACK_W8:?IMV ack required}"
++test "${IMV_STORE_ACK_OK:-}" = "1"
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT8" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w8.sha256)" \
