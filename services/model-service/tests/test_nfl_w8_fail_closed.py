@@ -38,10 +38,13 @@ from src.services.nfl_w8_capture.fail_closed import (
     collect_stop_env_names,
     db_loader_import_hits,
     import_line_is_banned,
+    persist_stop_and_raise,
     record_nfl_env_overrides,
     refuse_db_loaders,
     run_builder_guards,
+    source_has_banned_import,
     w8_build_context,
+    write_stop_record,
 )
 from src.services.nfl_w8_capture.frozen_model import predict_stream
 from src.services.nfl_w8_capture.seal import CaptureError, build_and_seal
@@ -340,12 +343,11 @@ def test_k1_redis_and_celery_are_stop_on_every_build_path(
     assert "postgresql://" not in (tmp_path / "pred-stop.json").read_text(encoding="utf-8")
 
 
-def test_k2_fetcher_stop_without_w8_capture_build_env() -> None:
+def test_k2_session_none_outside_w8_does_not_stop() -> None:
+    """Fetcher STOP is W8-scoped. Packaged SoT uses fetch_current_qb1(None)."""
     assert not __import__("os").environ.get("W8_CAPTURE_BUILD")
-    with pytest.raises(RuntimeError, match="F-6 STOP"):
-        fetch_prior_primary_qbs(None, prior_season=2025)
-    with pytest.raises(RuntimeError, match="F-6 STOP"):
-        fetch_roster_sets(None, season=2026)
+    qb1 = fetch_current_qb1(None, season=2026, as_of_week=1)
+    assert len(qb1) >= 24
 
 
 def test_k2_planted_import_line_is_caught(tmp_path: Path) -> None:
@@ -353,8 +355,33 @@ def test_k2_planted_import_line_is_caught(tmp_path: Path) -> None:
     planted.write_text("from x import fetch_roster_sets\n", encoding="utf-8")
     assert import_line_is_banned("from x import fetch_roster_sets")
     assert import_line_is_banned("import celery")
+    assert import_line_is_banned("import redis")
     assert import_line_is_banned("from src.services.nfl_season_engine import continuity_score")
     assert "planted.py" in db_loader_import_hits(tmp_path)
+
+
+def test_k2_planted_multiline_parenthesized_import_is_caught(tmp_path: Path) -> None:
+    planted = tmp_path / "planted_multiline.py"
+    planted.write_text(
+        "from x import (\n    fetch_roster_sets,\n    harmless_name,\n)\n",
+        encoding="utf-8",
+    )
+    assert import_line_is_banned("from x import (\n    fetch_roster_sets,\n)")
+    assert source_has_banned_import(planted.read_text(encoding="utf-8"))
+    assert "planted_multiline.py" in db_loader_import_hits(tmp_path)
+
+
+def test_k2_importlib_and_dunder_import_and_redis_are_caught(tmp_path: Path) -> None:
+    planted = tmp_path / "planted_dynamic.py"
+    planted.write_text(
+        "import importlib\n"
+        "importlib.import_module('redis')\n"
+        "__import__('celery')\n",
+        encoding="utf-8",
+    )
+    assert import_line_is_banned("importlib.import_module('sqlalchemy')")
+    assert import_line_is_banned('__import__("psycopg2")')
+    assert "planted_dynamic.py" in db_loader_import_hits(tmp_path)
 
 
 def test_k3_env_stop_writes_names_only(
@@ -369,6 +396,32 @@ def test_k3_env_stop_writes_names_only(
     assert payload["env_names"] == ["NFL_FRAMEWORK_PRIOR_TOTAL_POINTS"]
     assert payload["values_recorded"] is False
     assert "99.9" not in text
+
+
+def test_k3_stop_json_requires_explicit_absolute_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    cwd_stop = tmp_path / "STOP.json"
+    with pytest.raises(FailClosedError, match="never cwd"):
+        persist_stop_and_raise(["NFL_X"], reason="unit", stop_record_path=None)
+    with pytest.raises(FailClosedError, match="explicit absolute path"):
+        write_stop_record("STOP.json", ["NFL_X"], reason="unit")
+    assert not cwd_stop.exists()
+    assert list(tmp_path.glob("STOP*.json")) == []
+
+
+def test_k3_stop_json_does_not_clobber(tmp_path: Path) -> None:
+    first = tmp_path / "STOP.json"
+    written_first = write_stop_record(first, ["NFL_ONE"], reason="first")
+    assert written_first == first
+    original = first.read_text(encoding="utf-8")
+    written_second = write_stop_record(first, ["NFL_TWO"], reason="second")
+    assert written_second != first
+    assert written_second.name == "STOP.1.json"
+    assert first.read_text(encoding="utf-8") == original
+    assert json.loads(first.read_text(encoding="utf-8"))["env_names"] == ["NFL_ONE"]
+    assert json.loads(written_second.read_text(encoding="utf-8"))["env_names"] == ["NFL_TWO"]
 
 
 def test_f5_src_py_module_file_is_stop(
@@ -395,19 +448,31 @@ def test_r1_absent_packaged_qb1_is_explicit_flag() -> None:
     assert packaged_qb1_flag(1999) == PACKAGED_QB1_ABSENT
 
 
-def test_k4_route_b_closure_listing_matches_on_disk() -> None:
+def test_k4_route_b_closure_listing_is_import_time() -> None:
     from src.services.nfl_eval_prep.route_b_closure import (
         CLOSURE_LISTING,
-        ENGINE_DIR,
+        EXPECTED_MODULE_COUNT,
+        LAZY_ENGINE_MODULES,
+        REPO_ROOT,
+        REQUIRED_RELPATHS,
         listed_rows,
         sha256_file,
     )
 
     rows = listed_rows()
-    assert len(rows) == 33
+    rels = [rel for rel, _ in rows]
+    assert len(rows) == EXPECTED_MODULE_COUNT == 33
     assert CLOSURE_LISTING.is_file()
     text = CLOSURE_LISTING.read_text(encoding="utf-8")
+    assert text.startswith("# Route-(b) import-time closure (33 modules)")
+    assert "head:" in text
+    for required in REQUIRED_RELPATHS:
+        assert required in rels
+        assert required in text
+    for lazy in LAZY_ENGINE_MODULES:
+        assert not any(rel.endswith(lazy) for rel in rels)
+        assert f"`{lazy}`" not in text
     for rel, digest in rows:
-        assert digest == sha256_file(ENGINE_DIR / Path(rel).name)
+        assert digest == sha256_file(REPO_ROOT / rel)
         assert digest in text
         assert rel in text

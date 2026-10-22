@@ -24,6 +24,7 @@ BANNED_IMPORT_NAMES = frozenset(
         "kombu",
         "psycopg",
         "psycopg2",
+        "redis",
         "db",
         "continuity_score",
         "nfl_tendency_pricing",
@@ -36,7 +37,10 @@ BANNED_IMPORT_NAMES = frozenset(
     }
 )
 
-_IMPORT_LINE_RE = re.compile(r"^\s*(?:from|import)\s+(.+)$")
+_IMPORT_LINE_RE = re.compile(r"^\s*(?:from|import)\s+(.+)$", re.DOTALL)
+_DYNAMIC_IMPORT_RE = re.compile(
+    r"""(?:importlib\s*\.\s*import_module|__import__)\s*\(\s*(['"])([^'"]+)\1"""
+)
 
 
 class FailClosedError(RuntimeError):
@@ -57,23 +61,61 @@ def collect_nfl_env_overrides() -> list[str]:
     return [name for name in collect_stop_env_names() if name.startswith("NFL_")]
 
 
+def _require_explicit_stop_path(path: Path | str | None) -> Path:
+    """K-3: STOP.json is written only to an explicit absolute path, never cwd."""
+    if path is None or str(path).strip() == "":
+        raise FailClosedError(
+            "K-3 STOP: STOP.json requires an explicit absolute path (never cwd)"
+        )
+    out = Path(path)
+    if not out.is_absolute():
+        raise FailClosedError(
+            "K-3 STOP: STOP.json requires an explicit absolute path (never cwd)"
+        )
+    return out
+
+
+def unique_stop_record_path(path: Path) -> Path:
+    """Noclobber: if path exists, pick STOP.N.json beside it."""
+    if not path.exists():
+        return path
+    n = 1
+    while True:
+        candidate = path.with_name(f"{path.stem}.{n}{path.suffix}")
+        if not candidate.exists():
+            return candidate
+        n += 1
+
+
 def write_stop_record(
-    path: Path | str,
+    path: Path | str | None,
     names: list[str],
     *,
     reason: str,
 ) -> Path:
     """K-3: persist STOP names (never values) before the exception exits."""
-    out = Path(path)
-    out.parent.mkdir(parents=True, exist_ok=True)
+    requested = _require_explicit_stop_path(path)
+    requested.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "status": "STOP",
         "reason": reason,
         "env_names": list(names),
         "values_recorded": False,
     }
-    out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return out
+    text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+    n = 0
+    target = requested
+    while True:
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+        try:
+            fd = os.open(target, flags, 0o644)
+        except FileExistsError:
+            n += 1
+            target = requested.with_name(f"{requested.stem}.{n}{requested.suffix}")
+            continue
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(text)
+        return target
 
 
 def persist_stop_and_raise(
@@ -82,8 +124,14 @@ def persist_stop_and_raise(
     reason: str,
     stop_record_path: Path | str | None,
 ) -> None:
-    target = Path(stop_record_path) if stop_record_path else Path.cwd() / DEFAULT_STOP_RECORD_NAME
-    write_stop_record(target, names, reason=reason)
+    try:
+        write_stop_record(stop_record_path, names, reason=reason)
+    except FailClosedError as exc:
+        if "explicit absolute path" in str(exc):
+            raise FailClosedError(
+                f"{reason}: {names} (K-3: STOP.json path required; never cwd)"
+            ) from exc
+        raise
     raise FailClosedError(f"{reason}: {names}")
 
 
@@ -160,8 +208,9 @@ def refuse_db_loaders(session: Any = None) -> None:
 
 
 def refuse_if_w8_reached_db_loader(name: str, session: Any = None) -> None:
-    """F-6 / K-2: STOP if invoked during a W8 build or without a session."""
-    if os.environ.get(W8_CAPTURE_BUILD_ENV) or session is None:
+    """F-6: STOP only inside a W8 build. Session-less callers outside W8 stay open."""
+    _ = session
+    if os.environ.get(W8_CAPTURE_BUILD_ENV):
         raise FailClosedError(f"F-6 STOP: builder reached DB loader {name}")
 
 
@@ -179,13 +228,58 @@ def w8_build_context() -> Iterator[None]:
             os.environ[W8_CAPTURE_BUILD_ENV] = prev
 
 
+def _tokens_are_banned(blob: str) -> bool:
+    return any(token in BANNED_IMPORT_NAMES for token in re.split(r"[^\w]+", blob) if token)
+
+
+def logical_import_units(text: str) -> list[str]:
+    """Join parenthesized / backslash-continued import statements into units."""
+    units: list[str] = []
+    pending: list[str] | None = None
+    depth = 0
+    for raw in text.splitlines():
+        line = raw.split("#", 1)[0]
+        if pending is not None:
+            pending.append(line)
+            depth += line.count("(") - line.count(")")
+            continued = line.rstrip().endswith("\\")
+            if depth <= 0 and not continued:
+                units.append("\n".join(pending))
+                pending = None
+            continue
+        if not _IMPORT_LINE_RE.match(line):
+            continue
+        depth = line.count("(") - line.count(")")
+        if depth > 0 or line.rstrip().endswith("\\"):
+            pending = [line]
+        else:
+            units.append(line)
+    if pending:
+        units.append("\n".join(pending))
+    return units
+
+
 def import_line_is_banned(line: str) -> bool:
-    """True if an import line names a banned module or symbol (K-2)."""
-    match = _IMPORT_LINE_RE.match(line)
-    if not match:
-        return False
-    tokens = re.split(r"[^\w]+", match.group(1))
-    return any(token in BANNED_IMPORT_NAMES for token in tokens if token)
+    """True if an import line or dynamic import names a banned module (K-2)."""
+    flat = " ".join(part.rstrip("\\") for part in line.splitlines())
+    match = _IMPORT_LINE_RE.match(flat)
+    if match and _tokens_are_banned(match.group(1)):
+        return True
+    for hit in _DYNAMIC_IMPORT_RE.finditer(flat):
+        if _tokens_are_banned(hit.group(2)):
+            return True
+    return False
+
+
+def source_has_banned_import(text: str) -> bool:
+    """K-2: scan joined parenthesized imports plus importlib / __import__."""
+    for unit in logical_import_units(text):
+        if import_line_is_banned(unit):
+            return True
+    for hit in _DYNAMIC_IMPORT_RE.finditer(text):
+        if _tokens_are_banned(hit.group(2)):
+            return True
+    return False
 
 
 def db_loader_import_hits(root: Path | None = None) -> list[str]:
@@ -196,10 +290,8 @@ def db_loader_import_hits(root: Path | None = None) -> list[str]:
         if path.name == "fail_closed.py" and root is None:
             continue
         text = path.read_text(encoding="utf-8")
-        for line in text.splitlines():
-            if import_line_is_banned(line):
-                hits.append(path.name)
-                break
+        if source_has_banned_import(text):
+            hits.append(path.name)
     return hits
 
 

@@ -19,7 +19,9 @@ from typing import Any, Dict, Mapping
 
 
 def _refuse_w8_db_loader(name: str, session: Any = None) -> None:
-    if os.environ.get("W8_CAPTURE_BUILD") or session is None:
+    # W8-only. Callers outside W8 may pass a live session or use packaged paths.
+    _ = session
+    if os.environ.get("W8_CAPTURE_BUILD"):
         raise RuntimeError(f"F-6 STOP: builder reached DB loader {name}")
 
 

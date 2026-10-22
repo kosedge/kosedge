@@ -515,7 +515,9 @@ def packaged_qb1_flag(season: int) -> str:
 
 
 def _refuse_w8_db_loader(name: str, session: Any = None) -> None:
-    if os.environ.get("W8_CAPTURE_BUILD") or session is None:
+    # W8-only. Session-less packaged SoT (fetch_current_qb1(None)) stays open.
+    _ = session
+    if os.environ.get("W8_CAPTURE_BUILD"):
         raise RuntimeError(f"F-6 STOP: builder reached DB loader {name}")
 
 
