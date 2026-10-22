@@ -80,7 +80,7 @@ Shared rolling deviations (apply to every `*_5g` rate unless a row says more):
 | 23  | `diff_pressure_allowed_5g`        | DEVIATES | Prod: **`away - home`** `ingest.py:1494`. Local: **`home - away`**. Sign convention differs.                                                                                                                                                                      |
 | 24  | `diff_red_zone_td_rate_5g`        | DEVIATES | Prod `ingest.py:1495` home−away. Local home−away on lagged RZ. Not passed to sim.                                                                                                                                                                                 |
 | 25  | `diff_success_rate_5g`            | DEVIATES | Prod: mean of `(home_off−away_off)` and `(away_def−home_def)` `nfl_matchup_features.py:153-158`. Local: `home_success_offense_5g - away_success_offense_5g` only (`nfl_imv_v22.py:545`).                                                                          |
-| 26  | `home_kav_offense_5g`             | DEVIATES | Prod: warehouse KAV via matchup pack / `kav.build_weekly_lagged_features` `kav.py:172-184` (week−1). Local: `feat.setdefault(..., None)` `nfl_imv_v21.py:834-842`. **`kav.py` is never called.**                                                                  |
+| 26  | `home_kav_offense_5g`             | DEVIATES | **Builder does not produce the 7 KAV keys at all** (c57032db). Prod: warehouse KAV / `kav.build_weekly_lagged_features` `kav.py:172-184` (week−1). Local: `feat.setdefault(..., None)` `nfl_imv_v21.py:834-842`. **`kav.py` is never called.** See fix plan.      |
 | 27  | `away_kav_offense_5g`             | DEVIATES | Same as #26.                                                                                                                                                                                                                                                      |
 | 28  | `home_kav_defense_5g`             | DEVIATES | Same as #26.                                                                                                                                                                                                                                                      |
 | 29  | `away_kav_defense_5g`             | DEVIATES | Same as #26.                                                                                                                                                                                                                                                      |
@@ -132,6 +132,29 @@ run; no values.
 `away_kav_defense_5g`, `home_kav_net_5g`, `away_kav_net_5g`, `diff_kav_net_5g`,
 `home_injury_impact`, `away_injury_impact`, `diff_injury_impact`,
 `diff_rest_days`, `surface_turf`, `is_divisional_game`.
+
+## KAV omission — DEVIATES + fix plan (c57032db)
+
+The builder **does not produce** these 7 keys:
+`home_kav_offense_5g`, `away_kav_offense_5g`, `home_kav_defense_5g`,
+`away_kav_defense_5g`, `home_kav_net_5g`, `away_kav_net_5g`,
+`diff_kav_net_5g`. They are forced null. That is **DEVIATES**, not
+UNTESTED.
+
+Fix plan (do **not** edit frozen `nfl_imv_v22.py` `57a419b4` /
+`nfl_imv_v23.py` `fe66b374`):
+
+1. After the v22 store write, a later helper (v24 overlay or a pin-bump)
+   calls BASE `data_platform_nfl/kav.py:172` `build_weekly_lagged_features`
+   with as-of **week−1 only**.
+2. Map `kav_offense_5g` / `kav_defense_5g` / `kav_net_5g` onto home and
+   away; set `diff_kav_net_5g = home_net − away_net`.
+3. Week 1 / missing history → **null + `FLAG_KAV_LAGGED_NULL`**, never 0.
+4. Same-week PBP must not enter the bundle (`kav.py` already refuses it).
+5. Pass the seven keys into `NflGameInputs` in `try_sim` (today they stay
+   dataclass None).
+6. Re-run is a new snapshot. Do not treat filled KAV as warehouse KAV
+   until a cert-grade export compare exists.
 
 ## What would make this a second model (forbidden)
 
