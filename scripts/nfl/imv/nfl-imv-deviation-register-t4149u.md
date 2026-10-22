@@ -99,27 +99,36 @@ Shared rolling deviations (apply to every `*_5g` rate unless a row says more):
 
 **IDENTICAL feature-key constructions: none of 41.** Every key is a different reader, window, default, or omission. The **sim function** and **backbone helpers** remain IDENTICAL (table above) so this path does not become a second model.
 
-## Parity coverage (14 vs remaining 27)
+## Parity / source-check split (c57032db + 73815046)
 
-v2.2 `PARITY_KEYS` (`nfl_imv_v22.py:37-52`) — 14 names. v2.3 live compare is
-**local week W vs prod week W-1, team-form only**
-(`PARITY_TEAM_KEYS` `nfl_imv_v23.py:37-43`) and is
-`NOT_RUN_NO_PROD_EXPORT` until a genuine sealed export exists. No builder
-run; no values.
+41 `FEATURE_KEYS` = **10 parity / 3 SOURCE-CHECK / 1 internal / 3 injury-null / 24 untested**.
 
-### Of the 14 — covered by the v2.3 join (10)
+Cert PASS (`c57032db`): zero out-of-tolerance on the 10 **and** ≥1 matched
+team-week **and** ≥90% coverage **and** 100% on SOURCE-CHECK + internal.
+Coverage below 90% = FAIL. Empty or wrong export = `NOT_RUN` (not FAIL).
+Export is **CSV** (`features.csv`); no jsonl converter (`73815046`).
+
+### 10 feature-parity keys (local W vs prod W−1, tol 0.005)
 
 `home_off_epa_5g`, `away_off_epa_5g`, `home_def_epa_allowed_5g`,
 `away_def_epa_allowed_5g`, `home_pass_rate_5g`, `away_pass_rate_5g`,
 `home_success_offense_5g`, `away_success_offense_5g`,
 `home_pressure_allowed_5g`, `away_pressure_allowed_5g`.
 
-### Of the 14 — listed in v2.2, **not** in the v2.3 W−1 team join (4)
+### 3 SOURCE-CHECK (not feature parity)
 
-`home_rest_days`, `away_rest_days`, `diff_off_epa_5g`, `roof_dome`
-(game-level; W vs W−1 team join does not apply).
+`home_rest_days`, `away_rest_days`, `roof_dome` — exact match vs the
+exported raw/derived values, same game. Not scored as feature parity.
 
-### Remaining 27 FEATURE_KEYS — untested by any parity list
+### 1 internal check
+
+`diff_off_epa_5g` must equal `home_off_epa_5g − away_off_epa_5g`.
+
+### 3 injury-null (DEVIATES; not parity)
+
+`home_injury_impact`, `away_injury_impact`, `diff_injury_impact`.
+
+### Remaining 24 FEATURE_KEYS — untested by any parity list
 
 `week`,
 `home_pressure_generated_5g`, `away_pressure_generated_5g`,

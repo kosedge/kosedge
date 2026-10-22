@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""IMV v2.4 (47616a70 + c57032db). Layer on frozen v21/v22/v23.
+"""IMV v2.4 (47616a70 + c57032db + 73815046). Layer on frozen v21/v22/v23.
 
 Do not edit nfl_imv_v22.py or nfl_imv_v23.py. Pins:
   v22 = 57a419b4…  (full V22_PIN)
@@ -15,18 +15,22 @@ C-6 write store SHA256SUMS last
 
 c57032db PASS (cert): zero OOT AND ≥1 matched team-week AND ≥90% coverage
 AND 100% on separate-check keys.
+
+73815046: native CSV reader (no converter). rest/roof = SOURCE-CHECK.
+diff_off_epa = internal. 10 / 3 / 1 / 3 / 24 key split.
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import json
 import os
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import nfl_imv_v21 as v21
 import nfl_imv_v22 as v22
@@ -34,6 +38,7 @@ import nfl_imv_v23 as v23
 
 RULING = "47616a70"
 PARITY_PROTOCOL = "c57032db"
+EXPORT_RULING = "73815046"
 SCRIPT_ID = "nfl-imv-v2.4"
 CERT_CANDIDATE = v21.CERT_CANDIDATE
 V21_PIN = v23.V21_PIN
@@ -47,14 +52,90 @@ PROD_EXPORT_KIND = v23.PROD_EXPORT_KIND
 WEEKLY_AVG_RULE = v23.WEEKLY_AVG_RULE
 PARITY_TEAM_KEYS = v23.PARITY_TEAM_KEYS
 PARITY_KEYS_14 = v22.PARITY_KEYS
-# C-2: 10 of 14 are the team-form W vs W-1 set. These four are separate.
-SEPARATE_CHECK_KEYS = (
+# C-2 / c57032db: 10 feature-parity keys. 73815046 reclassifies the rest.
+SOURCE_CHECK_KEYS = (
     "home_rest_days",
     "away_rest_days",
     "roof_dome",
-    "diff_off_epa_5g",
+)
+INTERNAL_CHECK_KEYS = ("diff_off_epa_5g",)
+SEPARATE_CHECK_KEYS = SOURCE_CHECK_KEYS + INTERNAL_CHECK_KEYS
+PARITY_FEATURE_KEYS = (
+    "home_off_epa_5g",
+    "away_off_epa_5g",
+    "home_def_epa_allowed_5g",
+    "away_def_epa_allowed_5g",
+    "home_pass_rate_5g",
+    "away_pass_rate_5g",
+    "home_success_offense_5g",
+    "away_success_offense_5g",
+    "home_pressure_allowed_5g",
+    "away_pressure_allowed_5g",
+)
+INJURY_NULL_KEYS = (
+    "home_injury_impact",
+    "away_injury_impact",
+    "diff_injury_impact",
+)
+UNTESTED_KEYS = (
+    "week",
+    "home_pressure_generated_5g",
+    "away_pressure_generated_5g",
+    "home_early_down_pass_rate_5g",
+    "away_early_down_pass_rate_5g",
+    "home_red_zone_td_rate_5g",
+    "away_red_zone_td_rate_5g",
+    "home_success_defense_allowed_5g",
+    "away_success_defense_allowed_5g",
+    "diff_def_epa_allowed_5g",
+    "diff_pressure_generated_5g",
+    "diff_pressure_allowed_5g",
+    "diff_red_zone_td_rate_5g",
+    "diff_success_rate_5g",
+    "home_kav_offense_5g",
+    "away_kav_offense_5g",
+    "home_kav_defense_5g",
+    "away_kav_defense_5g",
+    "home_kav_net_5g",
+    "away_kav_net_5g",
+    "diff_kav_net_5g",
+    "diff_rest_days",
+    "surface_turf",
+    "is_divisional_game",
 )
 N_OF_14_COMPARABLE = 10
+# 73815046: fixed ordered columns from PR_PROD_PARITY_EXPORT_v1.sql
+CSV_COLUMNS = (
+    "season",
+    "week",
+    "game_id",
+    "home_team",
+    "away_team",
+    "home_off_epa_5g",
+    "away_off_epa_5g",
+    "home_def_epa_allowed_5g",
+    "away_def_epa_allowed_5g",
+    "home_pass_rate_5g",
+    "away_pass_rate_5g",
+    "home_success_offense_5g",
+    "away_success_offense_5g",
+    "home_pressure_allowed_5g",
+    "away_pressure_allowed_5g",
+    "home_pressure_generated_5g",
+    "away_pressure_generated_5g",
+    "home_early_down_pass_rate_5g",
+    "away_early_down_pass_rate_5g",
+    "home_red_zone_td_rate_5g",
+    "away_red_zone_td_rate_5g",
+    "home_success_defense_allowed_5g",
+    "away_success_defense_allowed_5g",
+    "diff_off_epa_5g",
+    "home_rest_days",
+    "away_rest_days",
+    "roof_dome",
+)
+CSV_INT_COLS = frozenset({"season", "week"})
+CSV_STR_COLS = frozenset({"game_id", "home_team", "away_team"})
 COVERAGE_MIN = 0.90
 # C-3: plumbing (v2.3) vs pre-registered cert (c57032db).
 PARITY_TOLERANCES_PLUMBING = dict(v23.PARITY_TOLERANCES)
@@ -78,6 +159,8 @@ BUNDLE_DOCS = (
     "nfl-imv-feature-path-v2.2.md",
     "nfl-imv-feature-path-v2.3.md",
     "nfl-imv-feature-path-v2.4.md",
+    "nfl-imv-parity-protocol-c57032db.md",
+    "PR_PROD_PARITY_EXPORT_v1.sql",
 )
 
 # Re-export runner names.
@@ -229,15 +312,220 @@ def write_store_sha256sums_last(store: Path) -> Dict[str, Any]:
     }
 
 
+def csv_columns_from_sql(sql_text: str) -> Tuple[str, ...]:
+    """Ordered SELECT list from PR_PROD_PARITY_EXPORT_v1.sql."""
+    cols: List[str] = []
+    in_select = False
+    for raw in sql_text.splitlines():
+        line = raw.split("--", 1)[0].strip().rstrip(",")
+        if not line:
+            continue
+        upper = line.upper()
+        if upper.startswith("SELECT"):
+            in_select = True
+            rest = line[6:].strip().rstrip(",")
+            if rest and rest.upper() != "SELECT":
+                cols.append(rest)
+            continue
+        if upper.startswith("FROM"):
+            break
+        if in_select:
+            cols.append(line)
+    return tuple(cols)
+
+
+def load_sql_columns() -> Tuple[str, ...]:
+    here = Path(__file__).resolve().parent / "PR_PROD_PARITY_EXPORT_v1.sql"
+    ops = Path("/workspace/ops/platform/PR_PROD_PARITY_EXPORT_v1.sql")
+    for path in (here, ops):
+        if path.is_file():
+            got = csv_columns_from_sql(path.read_text(encoding="utf-8"))
+            if got:
+                return got
+    return CSV_COLUMNS
+
+
+def _parse_csv_cell(col: str, raw: str) -> Any:
+    text = "" if raw is None else str(raw).strip()
+    if text == "":
+        return None
+    if col in CSV_INT_COLS:
+        return int(text)
+    if col in CSV_STR_COLS:
+        return text
+    return float(text)
+
+
+def read_prod_export_csv(csv_path: Path) -> Dict[str, Any]:
+    """73815046: native CSV. No jsonl converter. Header + fixed types."""
+    expected = load_sql_columns()
+    if not csv_path.is_file():
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "features.csv missing (CSV required; no converter)",
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    text = csv_path.read_text(encoding="utf-8")
+    if not text.strip():
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "empty CSV",
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    reader = csv.reader(text.splitlines())
+    try:
+        header = next(reader)
+    except StopIteration:
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "CSV header required",
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    header = [h.strip() for h in header]
+    if not header:
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "CSV header required",
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    unknown = [c for c in header if c not in expected]
+    missing = [c for c in expected if c not in header]
+    if unknown or missing or list(header) != list(expected):
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "CSV columns missing or unknown vs PR_PROD_PARITY_EXPORT_v1.sql",
+            "unknown": unknown,
+            "missing": missing,
+            "header": header,
+            "expected": list(expected),
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    rows: List[Dict[str, Any]] = []
+    seen: Dict[Tuple[Any, ...], int] = {}
+    for i, cells in enumerate(reader, start=2):
+        if not cells or all(str(c).strip() == "" for c in cells):
+            continue
+        if len(cells) != len(header):
+            return {
+                "status": "NOT_RUN_NO_PROD_EXPORT",
+                "reason": f"CSV row {i} width {len(cells)} != header {len(header)}",
+                "rows": [],
+                "ruling": EXPORT_RULING,
+            }
+        rec: Dict[str, Any] = {}
+        try:
+            for col, cell in zip(header, cells):
+                rec[col] = _parse_csv_cell(col, cell)
+        except (TypeError, ValueError) as exc:
+            return {
+                "status": "NOT_RUN_NO_PROD_EXPORT",
+                "reason": f"CSV type error row {i}: {exc}",
+                "rows": [],
+                "ruling": EXPORT_RULING,
+            }
+        key = (
+            rec.get("season"),
+            rec.get("week"),
+            v21.canon_team(str(rec.get("home_team") or "")),
+            v21.canon_team(str(rec.get("away_team") or "")),
+        )
+        seen[key] = seen.get(key, 0) + 1
+        rows.append(rec)
+    if not rows:
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "empty CSV",
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    dups = [k for k, n in seen.items() if n > 1]
+    if dups:
+        return {
+            "status": "FAIL_DUPLICATE_SCHEDULE_ROWS",
+            "reason": "duplicate schedule rows in export CSV",
+            "duplicates": [list(k) for k in dups],
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    return {
+        "status": "OK",
+        "reason": None,
+        "rows": rows,
+        "sha256": v21.sha256_file(csv_path),
+        "path": str(csv_path),
+        "columns": list(expected),
+        "ruling": EXPORT_RULING,
+    }
+
+
 def load_prod_export(
     export_dir: Optional[Path],
     *,
     build_started_utc: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """C-4: genuine export + capture time, data as-of, SQL sha; reject post-build."""
-    base = v23.load_prod_export(export_dir)
-    if base.get("status") != "OK":
-        return base
+    """C-4 + 73815046 CSV (no converter). Capture/as-of/sql sha; reject post-build."""
+    if export_dir is None:
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "IMV_PROD_EXPORT unset",
+            "rows": [],
+            "meta": None,
+            "ruling": EXPORT_RULING,
+        }
+    root = Path(export_dir)
+    csv_path = root / "features.csv"
+    if not csv_path.is_file():
+        alt = root / "export.csv"
+        csv_path = alt if alt.is_file() else csv_path
+    if not csv_path.is_file():
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "features.csv missing (CSV required; no jsonl converter)",
+            "path": str(root),
+            "rows": [],
+            "ruling": EXPORT_RULING,
+        }
+    parsed = read_prod_export_csv(csv_path)
+    if parsed.get("status") != "OK":
+        return parsed
+    meta_path = root / "EXPORT.meta.json"
+    meta: Dict[str, Any] = {}
+    if meta_path.is_file():
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    if str(meta.get("kind") or "") != PROD_EXPORT_KIND:
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "kind is not sealed_prod_feature_export (authored samples refused)",
+            "path": str(root),
+            "rows": [],
+            "meta": meta,
+            "ruling": EXPORT_RULING,
+        }
+    base = {
+        "status": "OK",
+        "reason": None,
+        "rows": parsed["rows"],
+        "meta": meta,
+        "path": parsed.get("path"),
+        "sha256": parsed.get("sha256"),
+        "ruling": EXPORT_RULING,
+    }
+    got = parsed.get("sha256")
+    if meta.get("sha256") and str(meta["sha256"]).strip().lower() != str(got or "").lower():
+        return {
+            "status": "NOT_RUN_NO_PROD_EXPORT",
+            "reason": "EXPORT sha256 mismatch vs features.csv",
+            "got": got,
+            "expected": meta["sha256"],
+            "rows": [],
+            "meta": meta,
+            "ruling": EXPORT_RULING,
+        }
     meta = dict(base.get("meta") or {})
     captured = meta.get("captured_utc") or meta.get("capture_ts")
     data_as_of = meta.get("data_as_of") or meta.get("as_of") or meta.get("data_as_of_utc")
@@ -294,6 +582,31 @@ def load_prod_export(
     return base
 
 
+def key_split() -> Dict[str, Any]:
+    """73815046: 10 parity / 3 source-check / 1 internal / 3 injury null / 24 untested."""
+    return {
+        "parity": list(PARITY_FEATURE_KEYS),
+        "source_check": list(SOURCE_CHECK_KEYS),
+        "internal": list(INTERNAL_CHECK_KEYS),
+        "injury_null": list(INJURY_NULL_KEYS),
+        "untested": list(UNTESTED_KEYS),
+        "n": {
+            "parity": len(PARITY_FEATURE_KEYS),
+            "source_check": len(SOURCE_CHECK_KEYS),
+            "internal": len(INTERNAL_CHECK_KEYS),
+            "injury_null": len(INJURY_NULL_KEYS),
+            "untested": len(UNTESTED_KEYS),
+            "total": (
+                len(PARITY_FEATURE_KEYS)
+                + len(SOURCE_CHECK_KEYS)
+                + len(INTERNAL_CHECK_KEYS)
+                + len(INJURY_NULL_KEYS)
+                + len(UNTESTED_KEYS)
+            ),
+        },
+    }
+
+
 def _exact(a: Any, b: Any) -> bool:
     if a is None and b is None:
         return True
@@ -345,6 +658,7 @@ def _separate_game_checks(
                 {
                     "game_id": gid,
                     "key": "diff_off_epa_5g",
+                    "class": "INTERNAL",
                     "reason": "not_home_minus_away",
                     "home_off_epa_5g": ho,
                     "away_off_epa_5g": ao,
@@ -365,30 +679,42 @@ def _separate_game_checks(
             )
             continue
         checked += 1
-        for key in ("home_rest_days", "away_rest_days", "roof_dome"):
+        for key in SOURCE_CHECK_KEYS:
             if not _exact(lrow.get(key), prow.get(key)):
                 fails.append(
                     {
                         "game_id": gid,
                         "key": key,
+                        "class": "SOURCE-CHECK",
                         "local": lrow.get(key),
                         "prod": prow.get(key),
                         "reason": "exact_mismatch",
                     }
                 )
+    source_fails = [f for f in fails if f.get("class") == "SOURCE-CHECK" or f.get("key") == "same_game_join"]
+    internal_fails = [f for f in fails if f.get("key") == "diff_off_epa_5g"]
     n_required = identity_checked + (checked * 3)
     n_fail = len(fails)
     pct = 1.0 if n_required and n_fail == 0 else (0.0 if not n_required else max(0.0, 1.0 - n_fail / n_required))
     return {
         "keys": list(SEPARATE_CHECK_KEYS),
+        "source_check_keys": list(SOURCE_CHECK_KEYS),
+        "internal_check_keys": list(INTERNAL_CHECK_KEYS),
         "n_local": len(list(local_rows)),
         "n_same_game_joined": checked,
         "n_identity_checked": identity_checked,
         "n_fails": n_fail,
+        "n_source_fails": len(source_fails),
+        "n_internal_fails": len(internal_fails),
         "pct": pct,
         "perfect": n_fail == 0 and identity_checked >= 1,
+        "source_perfect": len(source_fails) == 0 and checked >= 1,
+        "internal_perfect": len(internal_fails) == 0 and identity_checked >= 1,
         "fails": fails,
-        "rule": "rest_days(h/a) and roof_dome exact same-game; diff_off_epa == home-away",
+        "rule": (
+            "SOURCE-CHECK rest_days(h/a)+roof_dome exact vs export; "
+            "INTERNAL diff_off_epa == home-away"
+        ),
     }
 
 
@@ -402,6 +728,17 @@ def parity_local_w_vs_prod_w_minus_1(
     build_started_utc: Optional[str] = None,
 ) -> Dict[str, Any]:
     """C-1/C-2/C-3 + c57032db. 10 keys vs prod W-1; rest/roof/diff separate."""
+    if export.get("status") == "FAIL_DUPLICATE_SCHEDULE_ROWS":
+        return {
+            "status": "FAIL_DUPLICATE_SCHEDULE_ROWS",
+            "reason": export.get("reason"),
+            "week_cap": int(week_cap),
+            "comparable_of_14": N_OF_14_COMPARABLE,
+            "key_split": key_split(),
+            "grade": grade,
+            "protocol": PARITY_PROTOCOL,
+            "export_ruling": EXPORT_RULING,
+        }
     if export.get("status") == "FAIL_EXPORT_CAPTURED_AFTER_BUILD":
         return {
             "status": "FAIL_EXPORT_CAPTURED_AFTER_BUILD",
@@ -453,6 +790,10 @@ def parity_local_w_vs_prod_w_minus_1(
     elif g == "cert":
         if coverage < COVERAGE_MIN:
             status = "FAIL_COVERAGE"
+        elif not separate.get("source_perfect"):
+            status = "FAIL_SOURCE_CHECK"
+        elif not separate.get("internal_perfect"):
+            status = "FAIL_INTERNAL_CHECK"
         elif not separate.get("perfect"):
             status = "FAIL_SEPARATE_CHECKS"
         else:
@@ -468,6 +809,7 @@ def parity_local_w_vs_prod_w_minus_1(
         "n_keys": len(PARITY_TEAM_KEYS),
         "comparable_of_14": N_OF_14_COMPARABLE,
         "of_14_not_on_team_join": list(SEPARATE_CHECK_KEYS),
+        "key_split": key_split(),
         "grade": g,
         "tolerances": tols,
         "tolerances_plumbing": dict(PARITY_TOLERANCES_PLUMBING),
