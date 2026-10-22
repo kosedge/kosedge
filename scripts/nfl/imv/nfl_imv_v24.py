@@ -335,9 +335,9 @@ def csv_columns_from_sql(sql_text: str) -> Tuple[str, ...]:
 
 
 def load_sql_columns() -> Tuple[str, ...]:
-    here = Path(__file__).resolve().parent / "PR_PROD_PARITY_EXPORT_v1.sql"
     ops = Path("/workspace/ops/platform/PR_PROD_PARITY_EXPORT_v1.sql")
-    for path in (here, ops):
+    here = Path(__file__).resolve().parent / "PR_PROD_PARITY_EXPORT_v1.sql"
+    for path in (ops, here):
         if path.is_file():
             got = csv_columns_from_sql(path.read_text(encoding="utf-8"))
             if got:
