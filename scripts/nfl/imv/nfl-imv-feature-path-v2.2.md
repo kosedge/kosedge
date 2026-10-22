@@ -51,8 +51,9 @@ Not warehouse true-PR. Local, lag-only, pinned BASE functions:
 
 1. Weekly REG rates from pre-staged PBP. 2025 capped at week 18; 2026 capped
    at `pbp_week_cap` (= `game_week_cap - 1`). Postseason dropped.
-2. Season rows = play-weighted averages of those weeks, `week <= as_of_week`
-   for the current season (`as_of_week = game_week - 1`).
+2. Season rows = **unweighted mean of weekly rates** (code; v2.3 reconciliation)
+   for weeks `<= as_of_week`. Play counts are summed for backbone sample size
+   only, not used as rate weights. `as_of_week = game_week - 1`.
 3. `build_package_from_season_row` (prior 2025 + current) →
    `blend_packages` → `prior_current_blend_weight`
    (`w_current = clamp(completed_reg/8, 0, 1)`) →
