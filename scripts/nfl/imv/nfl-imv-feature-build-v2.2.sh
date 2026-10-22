@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+# nfl-imv-feature-build-v2.2.sh
+# f9b25e81 X-8/X-9 gating + X-2/X-5 build. NOT the sealed run.
+#
+# DO NOT RUN until IMV code-checks. W7 refused.
+# Darwin + sandbox-exec network deny + EPERM probe (X-8).
+# Refuses an existing --out directory (X-9). Stamps HELPER.sha256.
+#
+# Caps (X-5): --game-week-cap 6 --pbp-week-cap 5   (W4–W6 RETROSPECTIVE)
+#             --game-week-cap 8 --pbp-week-cap 7   (W8 PROSPECTIVE-RESEARCH)
+# pbp MUST equal game-1. W7 mode refused.
+
+set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
+export GIT_OPTIONAL_LOCKS=0
+
+SCRIPT_ID="nfl-imv-feature-build-v2.2"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_PATH="${SCRIPT_DIR}/$(basename "$0")"
+HELPER="${SCRIPT_DIR}/nfl_imv_v22.py"
+CERT_CANDIDATE="b1d857d356d5afc422c86ffb1e9a25afdf2a4225"
+
+BASE=""
+PRESTAGE=""
+OUT=""
+GAME_WEEK_CAP=""
+PBP_WEEK_CAP=""
+PACK=""
+
+usage() {
+  printf '%s\n' "Usage: bash $0 --base BASE --prestage DIR --out DIR --game-week-cap {4|5|6|8} --pbp-week-cap N" >&2
+  printf '%s\n' "X-5: pbp-week-cap must be game-week-cap-1. W7 refused. X-9: --out must not exist." >&2
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --base) BASE="${2:-}"; shift 2 ;;
+    --prestage) PRESTAGE="${2:-}"; shift 2 ;;
+    --out) OUT="${2:-}"; shift 2 ;;
+    --game-week-cap) GAME_WEEK_CAP="${2:-}"; shift 2 ;;
+    --pbp-week-cap) PBP_WEEK_CAP="${2:-}"; shift 2 ;;
+    --pack) PACK="${2:-}"; shift 2 ;;
+    w7|w7-pregame)
+      printf '%s\n' "FAIL: W7 mode refused (f9b25e81)." >&2
+      exit 2 ;;
+    -h|--help) usage; exit 2 ;;
+    *) printf '%s\n' "FAIL: unknown arg $1" >&2; usage; exit 2 ;;
+  esac
+done
+
+if [[ -z "${BASE}" || -z "${PRESTAGE}" || -z "${OUT}" || -z "${GAME_WEEK_CAP}" || -z "${PBP_WEEK_CAP}" ]]; then
+  usage
+  exit 2
+fi
+if [[ "${GAME_WEEK_CAP}" == "7" ]]; then
+  printf '%s\n' "FAIL: W7 refused (X-5)." >&2
+  exit 2
+fi
+if [[ "${PBP_WEEK_CAP}" != "$((GAME_WEEK_CAP - 1))" ]]; then
+  printf '%s\n' "FAIL: X-5 cap pair pbp=${PBP_WEEK_CAP} != game-1 ($((GAME_WEEK_CAP - 1)))" >&2
+  exit 2
+fi
+if [[ ! -f "${HELPER}" ]]; then
+  printf '%s\n' "FAIL: missing ${HELPER}" >&2
+  exit 2
+fi
+if [[ "${BASE}" != /* || "${OUT}" != /* ]]; then
+  printf '%s\n' "FAIL: --base and --out must be absolute" >&2
+  exit 2
+fi
+if [[ "${BASE}" == "${HOME}/kosedge" || "${BASE}" == "${HOME}/kosedge/" ]]; then
+  printf '%s\n' "FAIL: S-1 BASE must not be ~/kosedge" >&2
+  exit 2
+fi
+# X-9: refuse existing output dir (do not mkdir -p over it).
+if [[ -e "${OUT}" ]]; then
+  printf '%s\n' "FAIL: X-9 --out already exists: ${OUT}" >&2
+  exit 2
+fi
+
+if [[ "$(uname -s)" != "Darwin" ]]; then
+  printf '%s\n' "FAIL: ${SCRIPT_ID} must run on Ryan's Mac (Darwin). Host=$(uname -s)." >&2
+  exit 2
+fi
+
+if [[ -z "${IMV_BUILD_SANDBOXED:-}" ]]; then
+  command -v sandbox-exec >/dev/null 2>&1 || { printf '%s\n' "FAIL: sandbox-exec missing" >&2; exit 2; }
+  export IMV_BUILD_SANDBOXED=1
+  exec sandbox-exec -p '(version 1)
+(allow default)
+(deny network*)
+(deny network-outbound)
+(deny network-inbound)
+' /bin/bash "$SCRIPT_PATH" --base "${BASE}" --prestage "${PRESTAGE}" --out "${OUT}" \
+    --game-week-cap "${GAME_WEEK_CAP}" --pbp-week-cap "${PBP_WEEK_CAP}" ${PACK:+--pack "${PACK}"}
+fi
+
+REPO="$(git -C "${BASE}" rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "${REPO}" ]]; then
+  printf '%s\n' "FAIL: --base is not a git worktree" >&2
+  exit 2
+fi
+HEAD="$(git -C "${REPO}" rev-parse HEAD)"
+if [[ "${HEAD}" != "${CERT_CANDIDATE}" ]]; then
+  printf '%s\n' "FAIL: BASE HEAD ${HEAD} != ${CERT_CANDIDATE}" >&2
+  exit 2
+fi
+if [[ -n "$(git -C "${REPO}" status --porcelain)" ]]; then
+  printf '%s\n' "FAIL: BASE is dirty" >&2
+  exit 2
+fi
+for ev in DATABASE_URL ODDS_API_KEY THE_ODDS_API_KEY MODEL_SERVICE_URL RAILWAY_TOKEN; do
+  if [[ -n "${!ev:-}" ]]; then
+    printf '%s\n' "FAIL: env ${ev} is set (value not printed)" >&2
+    exit 2
+  fi
+done
+
+if [[ -d "${PRESTAGE}" ]]; then
+  PRESTAGE_DIR="${PRESTAGE}"
+elif [[ -f "${PRESTAGE}" ]]; then
+  PRESTAGE_DIR="$(tr -d '\n' < "${PRESTAGE}")"
+else
+  printf '%s\n' "FAIL: --prestage is not a dir or LATEST pointer" >&2
+  exit 2
+fi
+MANIFEST="${PRESTAGE_DIR}/imv-manifest.tsv"
+if [[ ! -f "${MANIFEST}" ]]; then
+  printf '%s\n' "FAIL: no imv-manifest.tsv in ${PRESTAGE_DIR}" >&2
+  exit 2
+fi
+
+GAMES=""
+PBP_ARGS=()
+while IFS=$'\t' read -r sha path role as_of; do
+  [[ -z "${sha}" || "${sha}" == \#* ]] && continue
+  fp="${path}"
+  if [[ "${fp}" != /* ]]; then
+    fp="${PRESTAGE_DIR}/${path}"
+  fi
+  if [[ ! -f "${fp}" ]]; then
+    printf '%s\n' "FAIL: missing ${fp}" >&2
+    exit 2
+  fi
+  got="$(python3 -c 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest())' "${fp}")"
+  if [[ "${got}" != "${sha}" ]]; then
+    printf '%s\n' "FAIL: sha mismatch ${fp}" >&2
+    exit 2
+  fi
+  case "${role}" in
+    schedule_games_csv) GAMES="${fp}" ;;
+    pbp_2025|pbp_2026) PBP_ARGS+=(--pbp "${fp}") ;;
+  esac
+done < "${MANIFEST}"
+if [[ -z "${GAMES}" || ${#PBP_ARGS[@]} -lt 1 ]]; then
+  printf '%s\n' "FAIL: manifest needs schedule_games_csv + pbp_2025/pbp_2026" >&2
+  exit 2
+fi
+
+mkdir "${OUT}"
+export FIXED_OUT="${OUT}"
+# X-8: EPERM probe inside OUT
+python3 - <<'PY'
+import errno, json, os, socket, sys
+out = os.environ["FIXED_OUT"]
+doc = {"probe": "connect 1.1.1.1:443", "result": None, "errno": None}
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.settimeout(2.0)
+try:
+    s.connect(("1.1.1.1", 443))
+except OSError as e:
+    doc["errno"] = e.errno
+    if e.errno == errno.EPERM:
+        doc["result"] = "EPERM_OK"
+        open(os.path.join(out, "EPERM_PROBE.json"), "w").write(json.dumps(doc, indent=2) + "\n")
+        open(os.path.join(out, "EPERM_PROBE.txt"), "w").write("EPERM_OK\n")
+        sys.exit(0)
+    doc["result"] = "NETWORK_DENY_NOT_EPERM"
+    open(os.path.join(out, "EPERM_PROBE.json"), "w").write(json.dumps(doc, indent=2) + "\n")
+    sys.exit(3)
+else:
+    s.close()
+    doc["result"] = "NETWORK_REACHABLE"
+    open(os.path.join(out, "EPERM_PROBE.json"), "w").write(json.dumps(doc, indent=2) + "\n")
+    sys.exit(3)
+PY
+EPERM_RC=$?
+if [[ "${EPERM_RC}" -ne 0 ]]; then
+  printf '%s\n' "FAIL: X-8 EPERM probe rc=${EPERM_RC}" >&2
+  exit 3
+fi
+
+HELPER_SHA="$(python3 -c 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest())' "${HELPER}")"
+printf '%s\n' "${HELPER_SHA}" > "${OUT}/HELPER.sha256"
+
+PACK_ARG=()
+if [[ -n "${PACK}" ]]; then
+  PACK_ARG=(--pack "${PACK}")
+fi
+
+# build_feature_store refuses if out_dir exists — pin EPERM/HELPER into a sibling
+# and pass a fresh FEATURE_DIR? X-9 is --out. We already created OUT for probes.
+# Python build is told to write into OUT/store so OUT itself is the stamp dir
+# already created. Override: write features into OUT (exists). The Python
+# exists() check would BLOCK. So we pass --out "${OUT}/store" which must not exist.
+FEATURE_DIR="${OUT}/store"
+python3 "${HELPER}" build \
+  --base "${REPO}" \
+  --games-csv "${GAMES}" \
+  "${PBP_ARGS[@]}" \
+  --out "${FEATURE_DIR}" \
+  --game-week-cap "${GAME_WEEK_CAP}" \
+  --pbp-week-cap "${PBP_WEEK_CAP}" \
+  "${PACK_ARG[@]}"
+
+# promote store files next to probes (digest still of FEATURE_STORE_FILES)
+if [[ -d "${FEATURE_DIR}" ]]; then
+  cp -f "${FEATURE_DIR}/"* "${OUT}/" 2>/dev/null || true
+fi
+printf '%s\n' "${HELPER_SHA}" > "${OUT}/HELPER.sha256"
+printf '%s\n' "${SCRIPT_ID} helper=${HELPER_SHA} out=${OUT}"
