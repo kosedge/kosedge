@@ -1,7 +1,7 @@
 -- PR_PROD_PARITY_EXPORT_v1.sql
--- Ordered columns for the sealed prod CSV export (73815046).
--- v2 of this file is forthcoming; do not invent columns.
--- Reader: header required, empty field = null, unknown/missing column = NOT_RUN.
+-- Historical 27-col SELECT. Live reader binds to v3
+-- (ops/platform/PR_PROD_PARITY_EXPORT_v3.sql pin b10d6cfd…).
+-- Do not invent v3 bytes here. Reader: missing/mismatch v3 = NOT_RUN.
 
 SELECT
   season,

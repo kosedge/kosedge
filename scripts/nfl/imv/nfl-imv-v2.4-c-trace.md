@@ -7,7 +7,7 @@ Bundle every imported helper + feature-path + README. Runbook
 | Cond | Ask                                                                | v2.4                                                                                                |
 | ---- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | C-1  | zero matched rows → FAIL                                           | `FAIL_ZERO_MATCHED_ROWS` when `compared_team_weeks < 1` (`nfl_imv_v24.py`)                          |
-| C-2  | only 10 of 14 comparable; rest/roof/EPA-diff separate              | Team join stays 10 keys. Separate: rest(h/a)+roof exact same-game; `diff_off_epa == home-away`      |
+| C-2  | only 10 of 14 comparable; rest/roof/EPA-diff separate              | Team join stays 10 keys. Separate: rest raw+derived + roof exact; `diff_off_epa == home-away`       |
 | C-3  | tighter cert tols, separate from plumbing                          | plumbing 0.02/0.03; cert **0.005**. Cert PASS also needs ≥90% coverage + 100% separate (`c57032db`) |
 | C-4  | export capture time, data as-of, SQL sha; reject after build start | `captured_utc` + `data_as_of` + `query_sha`; `FAIL_EXPORT_CAPTURED_AFTER_BUILD`                     |
 | C-5  | pin v22=57a419b4 and v23=fe66b374; BLOCK mismatch                  | Full pins in `V22_PIN` / `V23_PIN`; builder + runner + `stamp_helper_shas`                          |

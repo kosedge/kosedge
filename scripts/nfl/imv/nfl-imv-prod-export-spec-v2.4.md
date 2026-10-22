@@ -1,8 +1,13 @@
-# Prod feature export spec (v2.4 / 47616a70)
+# Prod feature export spec (v2.4 / 47616a70 + v3 SQL)
 
 Parent: `nfl-imv-prod-export-spec-v2.3.md`. v2.4 **adds** C-4 fields.
 Parity is **NOT_RUN_NO_PROD_EXPORT** until a genuine sealed export is
 supplied. Do **not** author samples.
+
+Reader SQL is **v3** at `ops/platform/PR_PROD_PARITY_EXPORT_v3.sql`,
+pin `b10d6cfd90b0586070c5a4ed3df5cd9782d2d7ad6e6145dcc3719f67a3d5e5c0`.
+Missing file or sha mismatch → `NOT_RUN`. 41-column CSV.
+`roof_vocab_unknown` is an audit column. Rest raw + derived.
 
 ## Required `EXPORT.meta.json`
 
@@ -28,8 +33,8 @@ Missing `captured_utc`, `data_as_of`, or `query_sha` →
 `captured_utc` **after** the feature `BUILD_STARTED_UTC` →
 `FAIL_EXPORT_CAPTURED_AFTER_BUILD`.
 
-Same SQL / weeks / columns as v2.3 (weeks 3–7, include rest + roof +
-`diff_off_epa_5g` for the separate checks).
+Columns are the v3 SELECT list only (not v1). Weeks 3–7. Include rest
+raw + derived, roof + `roof_vocab_unknown`, and `diff_off_epa_5g`.
 
 ```bash
 export IMV_PROD_EXPORT=/abs/genuine-sealed-prod-export

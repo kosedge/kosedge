@@ -107,6 +107,11 @@ Cert PASS (`c57032db`): zero out-of-tolerance on the 10 **and** ≥1 matched
 team-week **and** ≥90% coverage **and** 100% on SOURCE-CHECK + internal.
 Coverage below 90% = FAIL. Empty or wrong export = `NOT_RUN` (not FAIL).
 Export is **CSV** (`features.csv`); no jsonl converter (`73815046`).
+Reader is bound to `PR_PROD_PARITY_EXPORT_v3.sql` pin
+`b10d6cfd90b0586070c5a4ed3df5cd9782d2d7ad6e6145dcc3719f67a3d5e5c0`.
+Missing file or sha mismatch = `NOT_RUN`. 41-column CSV.
+`roof_vocab_unknown=true` → that row's roof SOURCE-CHECK = `NOT_RUN`.
+Rest raw + derived. Team-code consistency required.
 
 ### 10 feature-parity keys (local W vs prod W−1, tol 0.005)
 
@@ -118,7 +123,9 @@ Export is **CSV** (`features.csv`); no jsonl converter (`73815046`).
 ### 3 SOURCE-CHECK (not feature parity)
 
 `home_rest_days`, `away_rest_days`, `roof_dome` — exact match vs the
-exported raw/derived values, same game. Not scored as feature parity.
+exported raw **and** derived values, same game. Not scored as feature
+parity. Roof map: dome/closed → 1, outdoors/open → 0, else NULL. A row
+with `roof_vocab_unknown=true` has roof SOURCE-CHECK = `NOT_RUN`.
 
 ### 1 internal check
 

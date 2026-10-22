@@ -13,8 +13,9 @@ directories, scores, or SHA256SUMS from a live seal.
 | `nfl-imv-feature-path-v2.3.md`         | ccecea74 addendum: P-1..P-5 + X-3 export.                               |
 | `nfl-imv-v2.3-p-trace.md`              | P-1..P-5 + X-3 trace.                                                   |
 | `nfl-imv-v2.4-c-trace.md`              | 47616a70 C-1..C-6 + returned runbook.                                   |
-| `nfl-imv-parity-protocol-c57032db.md`  | c57032db PASS bar + 73815046 CSV reader.                                |
-| `PR_PROD_PARITY_EXPORT_v1.sql`         | Ordered prod CSV columns (v2 forthcoming).                              |
+| `nfl-imv-parity-protocol-c57032db.md`  | c57032db PASS bar + 73815046 CSV reader + v3 SQL pin.                   |
+| `PR_PROD_PARITY_EXPORT_v1.sql`         | Historical 27-col SELECT. Not the live reader bind.                     |
+| `PR_PROD_PARITY_EXPORT_v3.sha256`      | Pin `b10d6cfd…`. File bytes live at `ops/platform/…_v3.sql`.            |
 | `nfl-imv-deviation-register-t4149u.md` | Local vs prod 41 keys / strength / model (not a 2nd model).             |
 | `nfl-imv-prod-export-spec-v2.3.md`     | Prod export query/columns/weeks for X-3.                                |
 | `nfl-imv-prod-export-spec-v2.4.md`     | C-4 capture / data_as_of / query_sha.                                   |

@@ -19,8 +19,11 @@ Only these 10 keys use local week W vs prod week W−1 by team:
 `success_offense_5g`, `pressure_allowed_5g`.
 
 The other 4 of the v2.2 14 are **separate same-game** checks
-(`c57032db`): `home_rest_days`, `away_rest_days`, `roof_dome` (exact);
+(`c57032db`): `home_rest_days`, `away_rest_days` (raw + derived),
+`roof_dome` (exact; `roof_vocab_unknown=true` → that row NOT_RUN);
 `diff_off_epa_5g` must equal `home_off_epa_5g − away_off_epa_5g`.
+Team codes must be NFL-32 after alias. Reader SQL is v3 pin
+`b10d6cfd…`.
 
 ## C-3 cert vs plumbing tolerances
 

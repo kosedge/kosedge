@@ -21,11 +21,19 @@ The builder does **not produce** `home/away_kav_offense_5g`,
 They are forced null. Fix plan is in
 `nfl-imv-deviation-register-t4149u.md` (do not edit frozen v22/v23).
 
-## 73815046 reader
+## 73815046 reader + v3 SQL pin
 
 - Prod export is **CSV**. No jsonl converter.
-- Columns = ordered SELECT list in
-  `ops/platform/PR_PROD_PARITY_EXPORT_v1.sql` (v2 forthcoming).
+- Columns = **exact ordered SELECT list** in
+  `ops/platform/PR_PROD_PARITY_EXPORT_v3.sql`.
+- Reader pin: `sha256 = b10d6cfd90b0586070c5a4ed3df5cd9782d2d7ad6e6145dcc3719f67a3d5e5c0`.
+- Missing file or sha mismatch = `NOT_RUN`. Do not invent the SQL bytes.
+- Output is a **41-column** CSV. `roof_vocab_unknown` is an audit column.
+- `dome`/`closed` → 1; `outdoors`/`open` → 0; anything else → NULL.
+- Rest values come in **raw and derived** form. SOURCE-CHECK prefers derived.
+- `roof_vocab_unknown=true` on a row → that row's roof SOURCE-CHECK = `NOT_RUN`.
+- Team-code consistency: home/away must be the NFL-32 set after LA→LAR /
+  WSH→WAS (and JAC/STL/SD/OAK aliases); `game_id` teams must agree.
 - Header required. Types fixed. Empty field = null.
 - Missing or unknown column = `NOT_RUN`.
 - Duplicate schedule rows = `FAIL`.
