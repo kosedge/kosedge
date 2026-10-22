@@ -1,0 +1,88 @@
+IMV CHECK — v2.6.5 / runbook v2.4.7. PURE DIFF CHECK vs filing 81e3c5cb (five edits). Filed 2026-10-22 14:17:59 EDT.
+Text only. No project code run. No DB, no network. Full shas compared by tool, never printed. __pycache__ not opened.
+
+SHAS (test -s before each; all MATCH)
+- SHA256SUMS 97d8535b: 51 entries, sha256sum -c all OK.
+- runbook v2.4.7 18a11bdd. diff fb08731a.
+- A fresh diff -u v2.4.6 -> v2.4.7 is byte-identical to the bundled diff (body; the 2 timestamp header lines excluded).
+- Versus v2.6.4:
+  - nothing missing;
+  - DIFF: SHA256SUMS only;
+  - NEW: IMV_CHECK_v2.6.4_81e3c5cb.txt (cmp-identical to my filing), nfl-imv-deviation-register-rd1-erratum.md, runbook v2.4.7 .md and .diff, nfl-imv-v2.6.5-81e3c5cb-trace.md;
+  - all new files are listed in and pass 97d8535b;
+  - everything else is byte-identical.
+
+VERDICT: runbook v2.4.7 RETURN (single item: PIN value). Edits 1, 3, 4 and 5 PASS. Edit 2 is correct in structure but the pinned value is wrong.
+
+HUNK REVIEW (every hunk in the fresh diff)
+- h1 l.1: title retitled. Cosmetic, accepted.
+- h1 l.7: NEW LINE, the ":?" interactive-paste caveat (copied verbatim from 81e3c5cb B-3 caveat).
+  - FINDING F-1: outside the five edits. Documentary only, with no behaviour change. Accepted. No action required.
+- h2 l.32-37: the B-3 documentation text is replaced by the 4 exact per-week lines. Part of edit 1.
+- h3 cond.2: the pin description is updated. Part of edit 2.
+- h4 l.90-111: SUMS/SUMS_V262 tests, copy loop, removal of the l.107-110 copies, comment removals. Part of edit 2 (see below).
+- h5 l.126: the check-pins comment now says "(3f8b33a2)". Part of edit 2, and stale (see F-2).
+- h6 l.162: T-1.
+- h7, h8, h10, h12, h14: E-1 L7, at 5 places.
+- h9, h11, h13, h15: B-3 per-week acks.
+- No other change.
+
+EDIT 1 B-3 ........ PASS.
+- l.275, 317, 359, 406 are the first line after set -euo pipefail:
+    : "${IMV_SEAL_ACK_W4:?IMV ack required}"
+    : "${IMV_SEAL_ACK_W5:?IMV ack required}"
+    : "${IMV_SEAL_ACK_W6:?IMV ack required}"
+    : "${IMV_SEAL_ACK_W8:?IMV ack required}"
+- IMV_STORE_ACK_OK: 0 hits.
+- Exactly 4 sealed-v2.4.sh calls (l.280, 322, 364, 411), each in an acked block. No unacked seal path.
+EDIT 3 E-1 ........ PASS. The exact L7 text appears 5 times (reference, W4, W5, W6, W8). L1-L6 are unchanged.
+EDIT 4 T-1 ........ PASS. l.162 is exactly:
+    cd "$PRE_RETRO" && awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
+EDIT 5 W-1 ........ PASS. nfl-imv-deviation-register-rd1-erratum.md l.6 is exactly the 81e3c5cb line. Its parent rd-p2 (9cdfc185) is frozen and byte-identical.
+EDIT 2 PIN ........ NOT CLOSED.
+- Structure OK:
+  - SUMS="$SRC/SHA256SUMS";
+  - SUMS_V262 = a63150b5 and SUMS_V261 = 5d64a848, each with its own full-sha test (tool MATCH, l.102, 104);
+  - v2.5 test kept (l.98);
+  - copy loop and cd "$IMV" && shasum -a 256 -c "$SUMS" run over SUMS;
+  - check-pins --sums "$SUMS" --sums-v25 "$SUMS_V25", exit 0 and ok=true (l.127-129).
+- F-2 (blocking): the l.100 full pin (and cond.2) equals the v2.6.4 SHA256SUMS, 3f8b33a2 (tool), NOT 97d8535b.
+  - On the v2.6.5 SRC, l.100 FAILS and the run STOPs at block 0b. Fail-closed, but no build can start.
+  - On a v2.6.4 SRC, runbook v2.4.7 is not in the SUMS.
+- F-3 (structural): runbook v2.4.7 is itself listed in 97d8535b. A runbook cannot carry the full sha of a SUMS that lists the runbook (a hash cycle), so "pin the actually-run SUMS inside the runbook" is unattainable as written.
+- RULING (intent): pinning the actually-run SUMS satisfies the IMV rule (SRC must match the bundle it runs), and 3f8b33a2 does not.
+  - The pin must come from the IMV filing, out of band, not from inside the runbook.
+  - Exact text for l.100-101:
+      SUMS_PIN="${IMV_BUNDLE_SUMS_SHA:?IMV bundle SUMS sha required}"
+      test "$(shasum -a 256 "$SUMS" | awk '{print $1}')" = "$SUMS_PIN"
+  - IMV_BUNDLE_SUMS_SHA = the full 97d8535b sha of the v2.6.x bundle's SHA256SUMS, relayed by CoS from the IMV filing (any later bundle: the new IMV-filed sha).
+  - Change cond.2 and the l.126 comment to "SUMS full sha supplied as IMV_BUNDLE_SUMS_SHA (IMV-filed)".
+  - The runbook's own integrity is then covered by shasum -c over SUMS.
+  - Keep the a63150b5 and 5d64a848 full-sha tests in the runbook. They are fixed files and have no cycle.
+- l.107-110 removal: WITHIN edit 2. 81e3c5cb said "Drop the separate l.107-110 copies, which the loop then covers".
+  - 97d8535b lists SHA256SUMS.v2.5, .v2.6.1, .v2.6.2 and runbook v2.4.7, so all are now copied by the loop AND verified by -c.
+  - Before, runbook v2.4.6 was copied unverified. This STRENGTHENS the check. Not a finding.
+
+STILL HOLD (unchanged lines): B-1 rest, B-2 L1-L6, L-1 to L-5, conditions 1 and 3-8, W8 seal START before 2026-10-29 20:15 ET, W7 refused, no rm, pkill or checkout, zero parquet in the tars.
+
+EXECUTION RULING — W4-W6 RETRO RERUN: NOT YET.
+- Builds cannot start on v2.4.7, because block 0b STOPs on the stale l.100 pin (F-2). Do not hand-edit the pin on the Mac.
+- It may launch on runbook v2.4.8 whose diff against v2.4.7 contains ONLY the F-2/F-3 exact text above (l.100-101, cond.2, l.126 comment), after an IMV pure-diff check PASS.
+- Then:
+  - builds W4, W5 and W6 (B-2 seven lines, fresh dirs) may run, each STOPping once the store sha and evidence are on the box;
+  - each seal runs only in its own block, after IMV sets IMV_SEAL_ACK_W4, _W5 and _W6 individually, following IMV review of that week's boxed store sha (K-4);
+  - EPERM_OK must appear in both OUT and the seal;
+  - each tar goes to the box before any results discussion.
+- W8: same, with its own prestage on or after 10-27, and the seal must START before 2026-10-29 20:15 ET.
+- The W4 partial is never used. No gate, tolerance or criterion was changed.
+
+PARITY: NOT_RUN.
+EVIDENCE GRADE: PLUMBING-ONLY.
+
+CAVEATS
+- Static review only.
+- Interactive-paste ":?" behaviour, macOS shasum -c on stdin, and check-pins acceptance of a 51-entry SUMS remain UNVERIFIED.
+- The trace's PIN row says the -c runs "over 3f8b33a2", consistent with F-2.
+- No 64-hex was printed. No forbidden folder, parquet, .rds or __pycache__ was opened.
+
+NO-GO, Coming Soon ON.
