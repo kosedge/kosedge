@@ -15,6 +15,7 @@ import pytest
 from src.services.nfl_handicapping_framework import compute_nfl_projection_decomposition
 from src.services.nfl_injury_nowcast import (
     _aggregate_team_nowcast,
+    _merge_roster_continuity_into_nowcast,
     compute_team_week_injury_severity,
     fetch_nfl_injury_nowcast,
 )
@@ -22,14 +23,29 @@ from src.services.nfl_injury_null_contract import (
     FLAG_INJURY_PARTIAL_OFF,
     FLAG_MISSING_KOSEDGE_INJURY_NOWCAST,
     FLAG_RAW_INJURIES_2026_REFUSED,
+    FIT_PROTOCOL_ID,
     GAME_LINE_INJURY_GUARDS,
+    GAME_LINE_NOWCAST_KEYS,
+    IDENTITY_RULE_SEASON_FALLBACK,
+    IDENTITY_RULE_TEAM_MATCH,
+    IDENTITY_RULE_UNRESOLVED,
+    INJURY_FIELD_SHORT_NAME,
+    INJURY_PATH_FIELDS,
     MISSING_DISCLOSURE,
+    FitRowFailure,
     apply_injury_residual_once,
+    bound_hash,
     build_injury_accounting_ledger,
     config_hash,
+    count_identity_resolutions,
+    empty_nowcast_payload,
+    evaluate_fit_as_of,
     impact_triple,
+    parse_fit_kickoff_utc,
     refuse_raw_injury_source,
+    resolve_fit_player_identity,
     resolve_nfl_totals_env,
+    resolve_unscaled_indices,
     write_sealed_injury_export,
 )
 from pathlib import Path
@@ -140,24 +156,27 @@ def test_p3_6_severity_missing_team_week_is_null() -> None:
     assert home is None and diff is None
 
 
-def test_p3_7_framework_drop_one_skips_injuries_depth() -> None:
+@pytest.mark.parametrize("field", INJURY_PATH_FIELDS)
+def test_p3_7_framework_drop_one_skips_injuries_depth(field: str) -> None:
     complete = compute_nfl_projection_decomposition(**COMPLETE_FRAMEWORK)
     injuries = complete["factor_contributions"]["injuries_depth"]
     assert injuries["available"] is False
-    assert injuries["margin_points"] == 0.0
-    assert injuries["total_points"] == 0.0
+    assert injuries["margin_points"] is None
+    assert injuries["total_points"] is None
 
     dropped = dict(COMPLETE_FRAMEWORK)
-    dropped["injury_nowcast_impact_home"] = None
+    dropped[field] = None
     out = compute_nfl_projection_decomposition(**dropped)
     inj = out["factor_contributions"]["injuries_depth"]
     assert inj["available"] is False
-    assert inj["margin_points"] == 0.0
-    assert inj["raw_signals"]["home_impact"] is None
-    assert "impact_home" in inj["raw_signals"]["dropped_fields"]
+    assert inj["margin_points"] is None
+    assert inj["total_points"] is None
+    short = INJURY_FIELD_SHORT_NAME[field]
+    assert short in inj["raw_signals"]["dropped_fields"]
 
 
-def test_p3_8_totals_drop_one_does_not_invent_injury_term() -> None:
+@pytest.mark.parametrize("field", INJURY_PATH_FIELDS)
+def test_p3_8_totals_drop_one_does_not_invent_injury_term(field: str) -> None:
     complete = NflGameInputs(
         game_id="p3-8",
         home_team="KC",
@@ -176,7 +195,7 @@ def test_p3_8_totals_drop_one_does_not_invent_injury_term() -> None:
         away_off_epa_5g=0.10,
         home_pass_rate_5g=0.60,
         away_pass_rate_5g=0.58,
-        **{**COMPLETE_SIM_INJURY, "injury_nowcast_offense_multiplier_home": None},
+        **{**COMPLETE_SIM_INJURY, field: None},
     )
     complete_adj = _build_totals_adjustments(complete)
     dropped_adj = _build_totals_adjustments(dropped)
@@ -184,7 +203,8 @@ def test_p3_8_totals_drop_one_does_not_invent_injury_term() -> None:
     assert "injury_total_signal" not in dropped_adj["components"]
     assert complete_adj["components"]["injury_total_signal_applied"] is False
     assert dropped_adj["components"]["injury_total_signal_applied"] is False
-    assert "offense_multiplier_home" in dropped_adj["components"]["injury_dropped_fields"]
+    short = INJURY_FIELD_SHORT_NAME[field]
+    assert short in dropped_adj["components"]["injury_dropped_fields"]
 
 
 def test_p3_9_simulator_missing_disclosure() -> None:
@@ -200,10 +220,38 @@ def test_p3_9_simulator_missing_disclosure() -> None:
     assert block["away_impact"] is None
 
 
-def test_p3_10_12_index_scale_and_multiplier_default_absent() -> None:
+FULL_STRENGTH_INDICES = {
+    "offense_home": 1.12,
+    "offense_away": 0.94,
+    "defense_home": 1.03,
+    "defense_away": 0.88,
+}
+
+
+@pytest.mark.parametrize("field", INJURY_PATH_FIELDS)
+def test_p3_10_12_index_scale_and_multiplier_default_absent(field: str) -> None:
     assert "float(offense_home) * float(home_off_mult)" not in TASKS_SRC
     assert 'home_nowcast.get("offense_multiplier")) or 1.0' not in TASKS_SRC
     assert 'home_nowcast.get("impact_score")) or 0.0' not in TASKS_SRC
+    complete_fields = {key: 0.97 for key in INJURY_PATH_FIELDS}
+    complete = resolve_unscaled_indices(
+        full_strength=FULL_STRENGTH_INDICES, injury_fields=complete_fields
+    )
+    assert complete["index_scale_applied"] is False
+    assert complete["indices_equal_full_strength"] is True
+    assert complete["current"] == FULL_STRENGTH_INDICES
+    dropped_fields = dict(complete_fields)
+    dropped_fields[field] = None
+    dropped = resolve_unscaled_indices(
+        full_strength=FULL_STRENGTH_INDICES, injury_fields=dropped_fields
+    )
+    assert dropped["index_scale_applied"] is False
+    assert dropped["indices_equal_full_strength"] is True
+    assert dropped["current"] == complete["current"] == FULL_STRENGTH_INDICES
+    assert dropped["fields"][field] is None
+    assert dropped["fields"][field] != 1.0
+    assert field in dropped["dropped_fields"]
+    assert dropped["guards"]["index_scale_applied"] is False
 
 
 def test_p3_11_residual_drop_one_unit_is_null() -> None:
@@ -322,3 +370,134 @@ def test_kei_publish_identity_untouched() -> None:
     beat_text = beat.read_text().lower()
     assert "nfl_injury_kei" not in beat_text
     assert "kei_cadence" not in beat_text
+
+
+CONTINUITY_COMPLETE = {
+    "adjustment_count": 1,
+    "offense_multiplier": 0.97,
+    "defense_multiplier": 1.04,
+    "confidence": 0.8,
+    "impact_score": 0.11,
+    "top_drivers": [{"kind": "roster_continuity", "player_name": "Star", "impact_score": -0.4}],
+}
+
+
+def test_g1_merge_roster_continuity_does_not_fill_empty_nowcast() -> None:
+    empty = empty_nowcast_payload()
+    merged = _merge_roster_continuity_into_nowcast(empty, CONTINUITY_COMPLETE)
+    for key in GAME_LINE_NOWCAST_KEYS:
+        assert merged[key] is None
+    assert FLAG_MISSING_KOSEDGE_INJURY_NOWCAST in merged["flags"]
+    assert merged["roster_continuity_adjustment_count"] == 1
+    assert isinstance(merged.get("roster_continuity"), dict)
+    assert GAME_LINE_INJURY_GUARDS["continuity_as_second_line"] is False
+
+
+@pytest.mark.parametrize("field", GAME_LINE_NOWCAST_KEYS)
+def test_g1_merge_roster_continuity_drop_one_does_not_fill(field: str) -> None:
+    complete_nowcast = {
+        "impact_score": 0.22,
+        "offense_multiplier": 0.96,
+        "defense_multiplier": 1.03,
+        "confidence": 0.7,
+        "flags": [],
+        "top_drivers": [],
+    }
+    dropped = dict(complete_nowcast)
+    dropped[field] = None
+    merged = _merge_roster_continuity_into_nowcast(dropped, CONTINUITY_COMPLETE)
+    assert merged[field] is None
+    if field == "impact_score":
+        assert merged["impact_score"] is None
+    else:
+        assert merged.get(field) is None
+
+
+def test_g4_fit_kickoff_utc_normalized_and_missing_gametime_fails() -> None:
+    edt = parse_fit_kickoff_utc("2018-09-09", "13:00:00")
+    assert edt.tzinfo is not None
+    assert edt.utcoffset().total_seconds() == 0
+    assert edt.isoformat() == "2018-09-09T17:00:00+00:00"
+    est = parse_fit_kickoff_utc("2018-12-09", "13:00:00")
+    assert est.isoformat() == "2018-12-09T18:00:00+00:00"
+    with pytest.raises(FitRowFailure, match="missing gametime"):
+        parse_fit_kickoff_utc("2018-09-09", None)
+    with pytest.raises(FitRowFailure, match="missing gametime"):
+        parse_fit_kickoff_utc("2018-09-09", "")
+    with pytest.raises(FitRowFailure, match="23:59:59"):
+        parse_fit_kickoff_utc("2018-09-09", "23:59:59")
+    ok = evaluate_fit_as_of(
+        report_time="2018-09-08T12:00:00+00:00",
+        gameday="2018-09-09",
+        gametime="13:00",
+    )
+    assert ok["as_of_ok"] is True
+    assert ok["kickoff_utc"].tzinfo is not None
+    with pytest.raises(FitRowFailure, match="not before kickoff"):
+        evaluate_fit_as_of(
+            report_time="2018-09-09T18:00:00+00:00",
+            gameday="2018-09-09",
+            gametime="13:00",
+        )
+
+
+def test_g5_identity_rule_and_season_fallback_counts() -> None:
+    roster_by_team = {"KC": {"00-001"}, "BUF": {"00-002"}}
+    roster_season = {"00-001", "00-002", "00-003"}
+    team = resolve_fit_player_identity(
+        player_id="00-001",
+        team="KC",
+        roster_by_team=roster_by_team,
+        roster_season=roster_season,
+    )
+    fallback = resolve_fit_player_identity(
+        player_id="00-003",
+        team="KC",
+        roster_by_team=roster_by_team,
+        roster_season=roster_season,
+    )
+    missing = resolve_fit_player_identity(
+        player_id="00-999",
+        team="KC",
+        roster_by_team=roster_by_team,
+        roster_season=roster_season,
+    )
+    assert team["identity_rule"] == IDENTITY_RULE_TEAM_MATCH
+    assert fallback["identity_rule"] == IDENTITY_RULE_SEASON_FALLBACK
+    assert missing["identity_rule"] == IDENTITY_RULE_UNRESOLVED
+    assert missing["identity_resolved"] is False
+    counts = count_identity_resolutions([team, fallback, missing])
+    assert counts[IDENTITY_RULE_TEAM_MATCH] == 1
+    assert counts[IDENTITY_RULE_SEASON_FALLBACK] == 1
+    assert counts["season_fallback"] == 1
+    assert counts[IDENTITY_RULE_UNRESOLVED] == 1
+
+
+def test_k3_qb1_points_per_index_unit_is_named() -> None:
+    from src.services.nfl_season_engine.injury_paths import (
+        QB1_FLOOR_SPREAD_POINTS,
+        QB1_INDEX_UNITS,
+        QB1_POINTS_PER_INDEX_UNIT,
+        player_offense_value,
+    )
+    from src.services.nfl_season_engine.types import PlayerRole
+
+    assert QB1_POINTS_PER_INDEX_UNIT == 12.5
+    assert QB1_INDEX_UNITS == 0.12
+    assert QB1_FLOOR_SPREAD_POINTS == 1.5
+    qb1 = PlayerRole(player_key="qb1", player_name="QB1", team="KC", position="QB", depth_order=1)
+    assert player_offense_value(qb1) == QB1_INDEX_UNITS
+    assert player_offense_value(qb1) * QB1_POINTS_PER_INDEX_UNIT == QB1_FLOOR_SPREAD_POINTS
+
+
+def test_k2_bound_hash_reproduces_d4_v1_inputs(monkeypatch) -> None:
+    for key in list(os.environ):
+        if key.startswith("NFL_TOTALS_"):
+            monkeypatch.delenv(key, raising=False)
+    assert config_hash() == (
+        "0d491abef53cb67e82106dda184fb40fbe21fc3883afd8313fd87108cf40d6cb"
+    )
+    assert bound_hash(code_sha="3fa9f024360efd70209b7348e6c812a588fe1c74") == (
+        "638198a551ad192180d635a8edd1406b5aa8f1f47fbb026a98332ffee09e7db5"
+    )
+    assert FIT_PROTOCOL_ID == "injury-residual-cal-v2"

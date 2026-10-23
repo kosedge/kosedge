@@ -11,8 +11,9 @@ import hashlib
 import json
 import math
 import os
-from datetime import datetime, timezone
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from datetime import datetime, time, timezone
+from typing import Any, AbstractSet, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from zoneinfo import ZoneInfo
 
 INJURY_KEYS = ("home_injury_impact", "away_injury_impact", "diff_injury_impact")
 FLAG_MISSING_KOSEDGE_INJURY_NOWCAST = "FLAG_MISSING_KOSEDGE_INJURY_NOWCAST"
@@ -55,6 +56,44 @@ GAME_LINE_INJURY_GUARDS = {
     "kei_injury_applied": False,
     "continuity_as_second_line": False,
 }
+
+FIT_PROTOCOL_ID = "injury-residual-cal-v2"
+FIT_KICKOFF_SOURCE_TZ = ZoneInfo("America/New_York")
+ENGINEERING_CODE_SHA_D4_V1 = "3fa9f024360efd70209b7348e6c812a588fe1c74"
+
+IDENTITY_RULE_TEAM_MATCH = "team_match"
+IDENTITY_RULE_SEASON_FALLBACK = "season_fallback"
+IDENTITY_RULE_UNRESOLVED = "unresolved"
+
+# Every injury input P3-7 / P3-8 / P3-10 must iterate (G-3).
+INJURY_PATH_FIELDS = (
+    "injury_nowcast_impact_home",
+    "injury_nowcast_impact_away",
+    "injury_nowcast_confidence_home",
+    "injury_nowcast_confidence_away",
+    "injury_nowcast_offense_multiplier_home",
+    "injury_nowcast_offense_multiplier_away",
+    "injury_nowcast_defense_multiplier_home",
+    "injury_nowcast_defense_multiplier_away",
+)
+
+INJURY_FIELD_SHORT_NAME = {
+    "injury_nowcast_impact_home": "impact_home",
+    "injury_nowcast_impact_away": "impact_away",
+    "injury_nowcast_confidence_home": "confidence_home",
+    "injury_nowcast_confidence_away": "confidence_away",
+    "injury_nowcast_offense_multiplier_home": "offense_multiplier_home",
+    "injury_nowcast_offense_multiplier_away": "offense_multiplier_away",
+    "injury_nowcast_defense_multiplier_home": "defense_multiplier_home",
+    "injury_nowcast_defense_multiplier_away": "defense_multiplier_away",
+}
+
+GAME_LINE_NOWCAST_KEYS = (
+    "impact_score",
+    "offense_multiplier",
+    "defense_multiplier",
+    "confidence",
+)
 
 NFL_TOTALS_ENV_KEYS = (
     "NFL_TOTALS_PASS_RATE_WEIGHT",
@@ -482,3 +521,185 @@ def stamp_projection_injury_accounting(
         projection.get("markets") if isinstance(projection.get("markets"), dict) else {}
     )
     return projection
+
+
+class FitRowFailure(ValueError):
+    """C-4 / G-4: a fit-path row cannot be built. Never coerce to 0.0 or EOD."""
+
+
+def bound_hash(*, code_sha: str, env: Optional[Mapping[str, str]] = None) -> str:
+    """Config hash bound to protocol id + executable tree (D-4)."""
+    return config_hash(
+        extra={"protocol": FIT_PROTOCOL_ID, "code_sha": str(code_sha)},
+        env=env,
+    )
+
+
+def resolve_unscaled_indices(
+    *,
+    full_strength: Mapping[str, float],
+    injury_fields: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """P3-10: game-line indices stay full-strength. Never multiply by injury."""
+    recorded = {key: nullable_float(injury_fields.get(key)) for key in INJURY_PATH_FIELDS}
+    dropped = [key for key, value in recorded.items() if value is None]
+    current = {
+        name: float(full_strength[name])
+        for name in ("offense_home", "offense_away", "defense_home", "defense_away")
+    }
+    return {
+        "index_scale_applied": False,
+        "full_strength": dict(current),
+        "current": dict(current),
+        "indices_equal_full_strength": True,
+        "fields": recorded,
+        "dropped_fields": dropped,
+        "guards": game_line_guards(applied=False),
+    }
+
+
+def _parse_clock_component(gametime: Any) -> time:
+    raw = str(gametime).strip()
+    if not raw:
+        raise FitRowFailure("missing gametime")
+    compact = raw.upper().replace(" ", "")
+    am_pm = None
+    if compact.endswith("AM") or compact.endswith("PM"):
+        am_pm = compact[-2:]
+        compact = compact[:-2]
+    parts = compact.split(":")
+    if len(parts) < 2 or len(parts) > 3:
+        raise FitRowFailure(f"unparseable gametime: {gametime!r}")
+    try:
+        hour = int(parts[0])
+        minute = int(parts[1])
+        second = int(parts[2]) if len(parts) == 3 else 0
+    except ValueError as exc:
+        raise FitRowFailure(f"unparseable gametime: {gametime!r}") from exc
+    if am_pm == "AM":
+        if hour == 12:
+            hour = 0
+    elif am_pm == "PM":
+        if hour != 12:
+            hour += 12
+    if hour == 23 and minute == 59 and second == 59:
+        raise FitRowFailure("gametime default 23:59:59 is not a kickoff (C-4)")
+    return time(hour=hour, minute=minute, second=second)
+
+
+def parse_fit_kickoff_utc(gameday: Any, gametime: Any) -> datetime:
+    """UTC-normalize a fit-path kickoff. Missing gametime fails the row (G-4 / C-4).
+
+    Source wall clock is America/New_York. Never defaults to 23:59:59.
+    """
+    if gametime is None or str(gametime).strip() == "":
+        raise FitRowFailure("missing gametime")
+    if isinstance(gametime, datetime):
+        kickoff = gametime
+        if kickoff.tzinfo is None:
+            kickoff = kickoff.replace(tzinfo=FIT_KICKOFF_SOURCE_TZ)
+        return kickoff.astimezone(timezone.utc)
+    if gameday is None or str(gameday).strip() == "":
+        raise FitRowFailure("missing gameday")
+    if isinstance(gameday, datetime):
+        day = gameday.date()
+    else:
+        day_text = str(gameday).strip()
+        try:
+            day = datetime.strptime(day_text[:10], "%Y-%m-%d").date()
+        except ValueError as exc:
+            raise FitRowFailure(f"unparseable gameday: {gameday!r}") from exc
+    clock = gametime if isinstance(gametime, time) else _parse_clock_component(gametime)
+    local = datetime.combine(day, clock, tzinfo=FIT_KICKOFF_SOURCE_TZ)
+    return local.astimezone(timezone.utc)
+
+
+def parse_fit_report_time_utc(value: Any) -> Optional[datetime]:
+    """UTC-normalize a listing report_time. None stays None (caller fails the row)."""
+    if value is None or str(value).strip() == "":
+        return None
+    if isinstance(value, datetime):
+        stamp = value
+        if stamp.tzinfo is None:
+            stamp = stamp.replace(tzinfo=timezone.utc)
+        return stamp.astimezone(timezone.utc)
+    raw = str(value).strip()
+    if raw.endswith("Z"):
+        raw = raw[:-1] + "+00:00"
+    try:
+        stamp = datetime.fromisoformat(raw)
+    except ValueError:
+        return None
+    if stamp.tzinfo is None:
+        stamp = stamp.replace(tzinfo=timezone.utc)
+    return stamp.astimezone(timezone.utc)
+
+
+def evaluate_fit_as_of(
+    *,
+    report_time: Any,
+    gameday: Any,
+    gametime: Any,
+) -> Dict[str, Any]:
+    """Fit-path as-of (C-4). Missing gametime or report_time ≥ kickoff fails the row."""
+    kickoff_utc = parse_fit_kickoff_utc(gameday, gametime)
+    report_utc = parse_fit_report_time_utc(report_time)
+    if report_utc is None:
+        raise FitRowFailure("missing report_time")
+    if report_utc >= kickoff_utc:
+        raise FitRowFailure("report_time not before kickoff")
+    return {
+        "kickoff_utc": kickoff_utc,
+        "report_time_utc": report_utc,
+        "as_of_ok": True,
+    }
+
+
+def resolve_fit_player_identity(
+    *,
+    player_id: Any,
+    team: Any,
+    roster_by_team: Mapping[str, AbstractSet[str]],
+    roster_season: AbstractSet[str],
+) -> Dict[str, Any]:
+    """C-11 / G-5: record which rule resolved each player. Ids + roster only."""
+    pid = str(player_id or "").strip()
+    team_norm = str(team or "").strip().upper()
+    team_ids = roster_by_team.get(team_norm, frozenset())
+    if pid and pid in team_ids:
+        return {
+            "player_id": pid,
+            "team": team_norm,
+            "identity_resolved": True,
+            "identity_rule": IDENTITY_RULE_TEAM_MATCH,
+        }
+    if pid and pid in roster_season:
+        return {
+            "player_id": pid,
+            "team": team_norm or None,
+            "identity_resolved": True,
+            "identity_rule": IDENTITY_RULE_SEASON_FALLBACK,
+        }
+    return {
+        "player_id": pid or None,
+        "team": team_norm or None,
+        "identity_resolved": False,
+        "identity_rule": IDENTITY_RULE_UNRESOLVED,
+    }
+
+
+def count_identity_resolutions(rows: Sequence[Mapping[str, Any]]) -> Dict[str, int]:
+    """Count identity rules, including season-only fallbacks (G-5)."""
+    counts = {
+        IDENTITY_RULE_TEAM_MATCH: 0,
+        IDENTITY_RULE_SEASON_FALLBACK: 0,
+        IDENTITY_RULE_UNRESOLVED: 0,
+    }
+    for row in rows:
+        rule = str(row.get("identity_rule") or IDENTITY_RULE_UNRESOLVED)
+        if rule not in counts:
+            counts[rule] = 0
+        counts[rule] += 1
+    counts["n"] = len(rows)
+    counts["season_fallback"] = counts[IDENTITY_RULE_SEASON_FALLBACK]
+    return counts

@@ -385,8 +385,24 @@ def _merge_roster_continuity_into_nowcast(
     cont_def = nullable_float(continuity.get("defense_multiplier"))
     cont_conf = nullable_float(continuity.get("confidence"))
     cont_imp = nullable_float(continuity.get("impact_score"))
-    if offense is None or defense is None or impact is None:
-        return nowcast
+    # Drop-one (G-1): a missing game-line key stays NULL. Continuity
+    # metadata may attach, but it must not fill the hole.
+    if offense is None or defense is None or impact is None or confidence is None:
+        incomplete = dict(nowcast)
+        incomplete["roster_continuity_adjustment_count"] = int(
+            continuity.get("adjustment_count") or 0
+        )
+        incomplete["roster_continuity"] = {
+            "offense_multiplier": continuity.get("offense_multiplier"),
+            "defense_multiplier": continuity.get("defense_multiplier"),
+            "impact_score": continuity.get("impact_score"),
+            "top_drivers": list(continuity.get("top_drivers") or []),
+        }
+        flags = list(incomplete.get("flags") or [])
+        if FLAG_MISSING_KOSEDGE_INJURY_NOWCAST not in flags:
+            flags.append(FLAG_MISSING_KOSEDGE_INJURY_NOWCAST)
+        incomplete["flags"] = flags
+        return incomplete
 
     merged_offense = _clamp(offense * (cont_off if cont_off is not None else 1.0), 0.82, 1.08)
     merged_defense = _clamp(defense * (cont_def if cont_def is not None else 1.0), 0.90, 1.18)
