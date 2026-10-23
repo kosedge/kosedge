@@ -74,7 +74,7 @@ def test_epa_vs_record_replay_differs_on_more_than_one_matchup() -> None:
         # Personnel / injury stay off on this probe (season_too_early analogue).
         for src in ("epa", "record"):
             comps = row[src]["components"]
-            assert comps["injuries_depth"]["margin_points"] == 0.0
+            assert comps["injuries_depth"]["margin_points"] is None
             assert comps["personnel_efficiency"]["margin_points"] == 0.0
     # Failure must reproduce on ≥2 matchups, not a one-game special case.
     assert "ATL@PIT" in material
