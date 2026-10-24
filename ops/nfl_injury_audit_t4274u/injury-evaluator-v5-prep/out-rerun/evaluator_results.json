@@ -1,0 +1,118 @@
+{
+  "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+  "b3": null,
+  "clip_count": 0,
+  "close_label": "comparative research, not certified CLV",
+  "command": "python3 run_injury_residual_evaluator.py --mode tests",
+  "expected_answers_commit": "ffe0f88b59fb0315724298d78d7ede5e8c3c6d3a",
+  "expected_sha": "656d61ec2e9c3a5e8774bbcb02f384a78eaf21fb5e000614ba1f3e6b263b0179",
+  "export_sha": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "folds": [],
+  "frozen_fit_head": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "holdout": "STOPPED",
+  "kind": "evaluator_v5_prep",
+  "metric_label": "close vs outcome",
+  "n_boot": 10000,
+  "ruling_sha": "88da5f42d918a9462da01ac01fd8260f7a0d9c2cad6a587492e5b9caf41cca6b",
+  "seed": 20261023,
+  "sigma_margin": 13.5,
+  "sigma_margin_source": "C-10 services/model-service/src/services/nfl_injury_null_contract.py L339-341; L410 HEAD 8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "sigma_total": 14.0,
+  "sigma_total_source": "inputs/sigma_preregistration.md",
+  "spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+  "tests": {
+    "T-1": {
+      "ats_adj": 1.0,
+      "ats_base": null,
+      "delta": 1.5,
+      "label": "close vs outcome",
+      "mirror": -1.5,
+      "n_nopick_spread_ats_base": 3,
+      "p_half_ats_none": true,
+      "pass": true
+    },
+    "T-10": {
+      "a": "VALUE PROVEN",
+      "b": "NO CLAIM",
+      "b_ci": [
+        -0.6176470588235294,
+        0.4411764705882353
+      ],
+      "b_n_unique_deltas": 2,
+      "c": "NO CLAIM",
+      "c_k4_computed": false,
+      "c_ll_uci": 0.0020999999999999908,
+      "pass": true
+    },
+    "T-2": {
+      "pass": true,
+      "rejection_means": "SIGNIFICANT",
+      "significant": [
+        "spread_clv_delta"
+      ]
+    },
+    "T-3": {
+      "bit_identical": true,
+      "ci": [
+        0.01,
+        0.01
+      ],
+      "pass": true
+    },
+    "T-4": {
+      "bins": [
+        3,
+        6,
+        8
+      ],
+      "brier": 0.16333333333333333,
+      "clip_count": 0,
+      "logloss": 0.49870307570903244,
+      "pass": true,
+      "perfect_slope": 1.0000000000000002
+    },
+    "T-5": {
+      "pass": true,
+      "phi": 0.5912529568183097
+    },
+    "T-6": {
+      "i2_499": "INCONCLUSIVE",
+      "i2_partial": "INCONCLUSIVE",
+      "i2_pass": "MET",
+      "n_pass": 501,
+      "pass": true
+    },
+    "T-7": {
+      "n_identical": 8,
+      "n_missing_close": 2,
+      "pass": true
+    },
+    "T-8": {
+      "flags": [
+        "FLAG_MISSING_delta_margin",
+        "FLAG_MISSING_delta_total",
+        "FLAG_MISSING_baseline_margin",
+        "FLAG_MISSING_baseline_total",
+        "FLAG_MISSING_close_spread_home",
+        "FLAG_MISSING_close_total",
+        "FLAG_MISSING_actual_margin",
+        "FLAG_MISSING_actual_total"
+      ],
+      "pass": true
+    },
+    "T-9": {
+      "b3_carry": true,
+      "detected": "LEAKAGE",
+      "et_naive": true,
+      "kinds": [
+        "source_after_as_of",
+        "as_of_equals_kickoff",
+        "as_of_after_kickoff",
+        "unparseable",
+        "missing"
+      ],
+      "pass": true
+    }
+  }
+}
