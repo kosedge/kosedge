@@ -262,6 +262,7 @@ The builder must not create either token. Filing v3 does not create them.
 ## 7. Still forbidden until CLEAR
 
 - Open, read, or join 2024/2025 listings, rosters, depth, outcomes, or closes.
+- Build or run the D-2 holdout runner (waits for Ryan’s CLEAR).
 - Produce or score a holdout export.
 - Set any `NFL_TOTALS_*`.
 - Merge this PR, unlock overlays, deploy, or apply on publish.
