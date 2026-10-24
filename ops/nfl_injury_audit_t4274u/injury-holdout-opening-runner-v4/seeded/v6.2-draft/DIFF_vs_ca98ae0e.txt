@@ -1,0 +1,74 @@
+--- /workspace/ops/nfl_injury_audit_t4274u/injury-holdout-opening-runner-v4/seeded/ca98ae0e/run_injury_residual_evaluator.py	2026-10-24 15:55:50.700696082 +0000
++++ /workspace/ops/nfl_injury_audit_t4274u/injury-holdout-opening-runner-v4/seeded/v6.2-draft/run_injury_residual_evaluator.py	2026-10-24 16:00:43.623210608 +0000
+@@ -1,5 +1,8 @@
+ #!/usr/bin/env python3
+-"""Injury residual evaluator v6.1 — e7a0d737 D-1/D-3/D-4/D-5.
++"""Injury residual evaluator v6.2 DRAFT — lock+PASS holdout allowance only.
++
++PENDING_RYAN. Diff vs ca98ae0e is the season guard only. No metric change.
++v6.1 body: e7a0d737 D-1/D-3/D-4/D-5.
+ 
+ Holdout STOPPED. No CLEAR/IMV tokens. No 2024–25. No D-2 runner.
+ Authoritative rulings: e7a0d737 / 1ef1f0a7 / d18ebf22 / 501e8a99. Copy 0e0d54bc is non-authoritative.
+@@ -84,6 +87,25 @@
+ K4_SLOPE = (0.9, 1.1)
+ I2_MIN = 500
+ FORBIDDEN = {2024, 2025, 2026}
++# v6.2 only: lock+PASS may admit 2024/2025. Default closed = ca98ae0e. 2026 never.
++_HOLDOUT_ALLOWANCE = {"lock_is_production": False, "pass_verified": False}
++
++
++def permit_holdout_scoring(*, lock_is_production: bool, pass_verified: bool) -> None:
++    """Runner calls this after a production lock and verified PASS. No metric change."""
++    _HOLDOUT_ALLOWANCE["lock_is_production"] = bool(lock_is_production)
++    _HOLDOUT_ALLOWANCE["pass_verified"] = bool(pass_verified)
++
++
++def _season_blocked(season: int) -> bool:
++    year = int(season)
++    if year == 2026:
++        return True
++    if year in {2024, 2025}:
++        return not (_HOLDOUT_ALLOWANCE["lock_is_production"] and _HOLDOUT_ALLOWANCE["pass_verified"])
++    return False
++
++
+ CLOSE_LABEL = "comparative research, not certified CLV"
+ CVO_LABEL = "close vs outcome"
+ TOKEN_NAMES = ("RYAN_CLEAR_ON_FROZEN_RECORD", "IMV_PASS", "CLEAR", "RYAN_CLEAR")
+@@ -504,7 +526,7 @@
+     }
+     for row in universe:
+         season = int(row["season"])
+-        if season in FORBIDDEN:
++        if _season_blocked(season):
+             die(f"{name} contains forbidden season {season}")
+         missing["n_universe_by_season"][season] += 1
+         weeks[season].add(int(row["week"]))
+@@ -1387,7 +1409,7 @@
+     with path.open(newline="", encoding="utf-8") as handle:
+         for row in csv.DictReader(handle):
+             season = int(row["season"])
+-            if season in FORBIDDEN:
++            if _season_blocked(season):
+                 die("nflverse close file contains holdout season")
+             key = (season, int(row["week"]), alias(row["home"]), alias(row["away"]))
+             out[key] = {
+@@ -1463,7 +1485,7 @@
+     games = []
+     for g in doc.get("games") or []:
+         season = int(g["season"])
+-        if season in FORBIDDEN:
++        if _season_blocked(season):
+             die(f"export contains holdout {season}")
+         src, asof, ko = g.get("source_ts"), g.get("as_of_ts"), g.get("kickoff_utc")
+         gid = str(g.get("game_id") or "")
+@@ -1550,7 +1572,7 @@
+                 season = int(row["season"])
+             except (TypeError, ValueError):
+                 continue
+-            if season in FORBIDDEN:
++            if _season_blocked(season):
+                 die("record baseline contains holdout season")
+             key = (season, int(row["week"]), alias(row.get("home") or ""), alias(row.get("away") or ""))
+             try:
