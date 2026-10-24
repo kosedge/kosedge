@@ -1,0 +1,37 @@
+{
+  "behavior": {
+    "B-1": "ok",
+    "B-3": "ok",
+    "B-4": "ok",
+    "E-2": "ok",
+    "E-3": "ok",
+    "E-5": "ok"
+  },
+  "bit_identical_out": true,
+  "errors": [],
+  "n_errors": 0,
+  "ok": true,
+  "out_hashes": {
+    "dry-run-report.md": "628af1e592db15ad0405ffbd785b5ed6078d19813c1b19fdc6879a359fa65ead",
+    "evaluator_results.json": "40d972e357863e6f269268055980897e832b741340c48d774cb735f4e3ee48b3",
+    "provenance.md": "9945d99fcc1e9f93088891deb93e130adc4a557a23d6f930d5bfc491a4ba8f0f"
+  },
+  "out_rerun_hashes": {
+    "dry-run-report.md": "628af1e592db15ad0405ffbd785b5ed6078d19813c1b19fdc6879a359fa65ead",
+    "evaluator_results.json": "40d972e357863e6f269268055980897e832b741340c48d774cb735f4e3ee48b3",
+    "provenance.md": "9945d99fcc1e9f93088891deb93e130adc4a557a23d6f930d5bfc491a4ba8f0f"
+  },
+  "package": ".",
+  "tests": {
+    "T-1": true,
+    "T-10": true,
+    "T-2": true,
+    "T-3": true,
+    "T-4": true,
+    "T-5": true,
+    "T-6": true,
+    "T-7": true,
+    "T-8": true,
+    "T-9": true
+  }
+}

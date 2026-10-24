@@ -1,5 +1,4 @@
 out-rerun/
 checker.log
-checker.stdout.txt
 __pycache__/
 *.pyc

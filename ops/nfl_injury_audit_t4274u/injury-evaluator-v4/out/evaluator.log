@@ -1,0 +1,5 @@
+cmd=python3 run_injury_residual_evaluator.py --mode all
+STOP: LEAKAGE row0 source_ts>2022-09-11T17:00:00Z; row1 joined_before_freeze
+STOP: B-3: cannot join close/outcome without source_ts/as_of_ts game_id=2018_1_BBB_AAA
+T-1..T-10 PASS
+B-3 STOP: sealed export has no source_ts/as_of_ts on game objects; close/outcome join not performed. present_keys=['applied', 'complete', 'continuity_source_away', 'continuity_source_home', 'delta_margin', 'delta_total', 'game_id', 'season', 'week'] n_source_ts=0 n_as_of_ts=0 n_games=2863
