@@ -1,0 +1,6 @@
+# Official `out/` is force-added (repo-root gitignore excludes out/).
+out-rerun/
+checker.log
+checker.stdout.txt
+__pycache__/
+*.pyc

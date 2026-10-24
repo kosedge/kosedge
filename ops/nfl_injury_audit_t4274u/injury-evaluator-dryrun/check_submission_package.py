@@ -81,7 +81,7 @@ TOKEN_NAMES = ("RYAN_CLEAR_ON_FROZEN_RECORD", "IMV_PASS", "CLEAR", "RYAN_CLEAR")
 SECRET_RE = re.compile(r"(api[_-]?key|secret|token|password|authorization:\s*bearer)\s*[:=]", re.I)
 
 MANIFEST_SKIP_NAMES = {"MANIFEST", "checker.log", "checker.stdout.txt"}
-MANIFEST_SKIP_DIR_PARTS = {".git"}
+MANIFEST_SKIP_DIR_PARTS = {".git", "out-rerun", "__pycache__"}
 
 
 def log(msg: str) -> None:
@@ -108,7 +108,7 @@ def iter_package_files(root: Path) -> List[Path]:
             continue
         if any(part in MANIFEST_SKIP_DIR_PARTS for part in path.parts):
             continue
-        if path.name in MANIFEST_SKIP_NAMES:
+        if path.name in MANIFEST_SKIP_NAMES or path.suffix == ".pyc":
             continue
         out.append(path)
     return out
@@ -229,6 +229,9 @@ def check_cohort(cohort: Dict[str, Any]) -> List[str]:
         "n_missing_actual",
         "n_missing_baseline",
         "n_missing_close_by_season",
+        "n_missing_actual_by_season",
+        "n_missing_baseline_by_season",
+        "n_incomplete_by_season",
         "n_universe_by_season",
         "n_identical_cohort",
         "n_paired_both_clv",
@@ -293,10 +296,11 @@ def check_gate_table(path: Path) -> List[str]:
     if not path.is_file():
         return ["SEEDED MISSING gate-table.md"]
     text = path.read_text(encoding="utf-8")
+    squashed = " ".join(text.split())
     if REQUIRED_SPEC not in text:
         errors.append("gate-table.md missing verified spec sha")
     for key, quote in VERBATIM.items():
-        if quote not in text:
+        if " ".join(quote.split()) not in squashed:
             errors.append(f"gate-table.md missing verbatim {key}")
     for cite in ("L125–127", "L128", "L129–131", "L136–137", "L138–139", "L140–141", "L142–143", "L144–145"):
         if cite not in text:
@@ -346,6 +350,38 @@ def run_evaluator(root: Path, out: Path, cohorts: str) -> int:
     return proc.returncode
 
 
+def compare_rerun(submitted: Path, rerun: Path, required_cohorts: List[str]) -> List[str]:
+    """Compare decisions and required metrics; ignore run HEAD (ops commit may differ)."""
+    errors = []
+    if not rerun.is_file():
+        return [f"rerun results missing {rerun}"]
+    a = json.loads(submitted.read_text(encoding="utf-8"))
+    b = json.loads(rerun.read_text(encoding="utf-8"))
+    for key in ("spec_sha", "export_sha", "fit_object_sha", "seed", "close_label", "holdout"):
+        if a.get(key) != b.get(key):
+            errors.append(f"rerun {key} {b.get(key)!r} != submitted {a.get(key)!r}")
+    by_a = {c["name"]: c for c in a.get("cohorts") or []}
+    by_b = {c["name"]: c for c in b.get("cohorts") or []}
+    for name in required_cohorts:
+        ca, cb = by_a.get(name), by_b.get(name)
+        if not ca or not cb:
+            errors.append(f"rerun missing cohort compare {name}")
+            continue
+        if ca.get("i4", {}).get("decision") != cb.get("i4", {}).get("decision"):
+            errors.append(
+                f"rerun {name} decision {cb['i4']['decision']!r} != submitted {ca['i4']['decision']!r}"
+            )
+        for key in REQUIRED_METRICS:
+            va, vb = (ca.get("metrics") or {}).get(key), (cb.get("metrics") or {}).get(key)
+            if va is None and vb is None:
+                continue
+            if va is None or vb is None or abs(float(va) - float(vb)) > 1e-12:
+                errors.append(f"rerun {name} metric {key} {vb!r} != submitted {va!r}")
+        if ca.get("k4", {}).get("pass") != cb.get("k4", {}).get("pass"):
+            errors.append(f"rerun {name} k4.pass mismatch")
+    return errors
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description="IMV submission-readiness package checker")
     p.add_argument("--package", default=str(Path(__file__).resolve().parent))
@@ -368,19 +404,30 @@ def main() -> int:
     if args.write_manifest:
         write_manifest(root)
 
+    required_cohorts = [c.strip() for c in args.cohorts.split(",") if c.strip()]
     if args.rerun:
-        rc = run_evaluator(root, root / "out", args.cohorts)
+        rerun_out = root / "out-rerun"
+        rc = run_evaluator(root, rerun_out, args.cohorts)
         if rc != 0:
             log(f"ERROR evaluator re-run exited {rc}")
             errors.append(f"evaluator re-run exited {rc}")
-        if args.write_manifest:
-            write_manifest(root)
+        else:
+            errors.extend(
+                compare_rerun(
+                    root / "out" / "evaluator_results.json",
+                    rerun_out / "evaluator_results.json",
+                    required_cohorts,
+                )
+            )
 
     if args.verify:
         errors.extend(check_manifest(root))
         errors.extend(check_gate_table(root / "gate-table.md"))
-        errors.extend(check_provenance(root / "provenance.md"))
-        errors.extend(check_results(root / "out" / "evaluator_results.json", [c.strip() for c in args.cohorts.split(",") if c.strip()]))
+        prov = root / "provenance.md"
+        if not prov.is_file():
+            prov = root / "out" / "provenance.md"
+        errors.extend(check_provenance(prov))
+        errors.extend(check_results(root / "out" / "evaluator_results.json", required_cohorts))
         errors.extend(check_no_tokens(root))
         seeded_copy = root / "seeded" / "IMV_SPEC_NFL_INJURY_ADJUSTMENT_TESTS_v1.txt"
         if not seeded_copy.is_file():

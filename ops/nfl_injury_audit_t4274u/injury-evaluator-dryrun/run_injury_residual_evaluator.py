@@ -620,6 +620,9 @@ def evaluate(name: str, universe: List[Dict[str, Any]], notes: str) -> Dict[str,
         "n_missing_actual": 0,
         "n_missing_baseline": 0,
         "n_missing_close_by_season": Counter(),
+        "n_missing_actual_by_season": Counter(),
+        "n_missing_baseline_by_season": Counter(),
+        "n_incomplete_by_season": Counter(),
         "n_universe_by_season": Counter(),
     }
     for row in universe:
@@ -630,6 +633,7 @@ def evaluate(name: str, universe: List[Dict[str, Any]], notes: str) -> Dict[str,
         weeks[season].add(int(row["week"]))
         if not row.get("residual_complete"):
             missing["n_incomplete_residual"] += 1
+            missing["n_incomplete_by_season"][season] += 1
             continue
         dm, dt = row.get("delta_margin"), row.get("delta_total")
         if dm is not None and dt is not None and (float(dm) != 0.0 or float(dt) != 0.0):
@@ -641,9 +645,11 @@ def evaluate(name: str, universe: List[Dict[str, Any]], notes: str) -> Dict[str,
             continue
         if row.get("actual_margin") is None or row.get("actual_total") is None:
             missing["n_missing_actual"] += 1
+            missing["n_missing_actual_by_season"][season] += 1
             continue
         if row.get("baseline_margin") is None or row.get("baseline_total") is None:
             missing["n_missing_baseline"] += 1
+            missing["n_missing_baseline_by_season"][season] += 1
             continue
         identical.append(row)
 
@@ -663,6 +669,9 @@ def evaluate(name: str, universe: List[Dict[str, Any]], notes: str) -> Dict[str,
         [b["mean_y"] for b in rel if b["n"] > 0 and b["mean_y"] is not None],
     )
     stats["slope_adj"] = slope
+    stats["metric_undefined"]["slope_adj"] = (
+        None if slope is not None else "need >=2 occupied reliability bins; not a stub"
+    )
     k4_notes = []
     if not paired:
         k4_pass = False
@@ -676,12 +685,19 @@ def evaluate(name: str, universe: List[Dict[str, Any]], notes: str) -> Dict[str,
             and slope is not None
             and K4_SLOPE_LO <= slope <= K4_SLOPE_HI
         )
+        if ll_boot.get("ci_hi") is None or ll_boot["ci_hi"] > K4_LOGLOSS_UPPER:
+            k4_notes.append(f"logloss_CI_hi {ll_boot.get('ci_hi')} > {K4_LOGLOSS_UPPER}")
+        if br_boot.get("ci_hi") is None or br_boot["ci_hi"] > K4_BRIER_UPPER:
+            k4_notes.append(f"brier_CI_hi {br_boot.get('ci_hi')} > {K4_BRIER_UPPER}")
         if slope is None:
             k4_notes.append("slope undefined (need >=2 occupied reliability bins); K-4 fail")
         elif not (K4_SLOPE_LO <= slope <= K4_SLOPE_HI):
             k4_notes.append(f"slope {slope} outside [0.9, 1.1]")
     decision = i4_decision(i2, bool(holm_by[PRIMARY]["significant"]), bool(boot[PRIMARY]["excludes_0"]), k4_pass)
     missing["n_missing_close_by_season"] = dict(missing["n_missing_close_by_season"])
+    missing["n_missing_actual_by_season"] = dict(missing["n_missing_actual_by_season"])
+    missing["n_missing_baseline_by_season"] = dict(missing["n_missing_baseline_by_season"])
+    missing["n_incomplete_by_season"] = dict(missing["n_incomplete_by_season"])
     missing["n_universe_by_season"] = dict(missing["n_universe_by_season"])
     missing["n_identical_cohort"] = len(identical)
     missing["n_paired_both_clv"] = stats["n_paired"]
@@ -917,8 +933,11 @@ def write_report(path: Path, results: List[Dict[str, Any]], cmd: str, head: str)
             f"- Product claim: {i4['product_claim']} ({i4['i5']})",
             f"- Identical cohort n={m['n_identical_cohort']} ; paired both-CLV n={m['n_paired_both_clv']}",
             f"- Missing: incomplete={m['n_incomplete_residual']} close={m['n_missing_close']} "
-            f"close_by_season={m['n_missing_close_by_season']} actual={m['n_missing_actual']} "
-            f"baseline={m['n_missing_baseline']}",
+            f"actual={m['n_missing_actual']} baseline={m['n_missing_baseline']}",
+            f"- Missing by season: incomplete={m['n_incomplete_by_season']} "
+            f"close={m['n_missing_close_by_season']} actual={m['n_missing_actual_by_season']} "
+            f"baseline={m['n_missing_baseline_by_season']}",
+            f"- Universe by season: {m['n_universe_by_season']}",
             f"- edge=0 drops: base={m['n_edge0_base']} adj={m['n_edge0_adj']}",
             f"- K-4: logloss_CI_hi={k4['logloss_delta_ci_hi']} "
             f"brier_CI_hi={k4['brier_delta_ci_hi']} slope={k4['slope_adj']} pass={k4['pass']} {k4['notes']}",
@@ -1110,7 +1129,10 @@ def main() -> int:
         json.dumps(payload, sort_keys=True, indent=2, default=str) + "\n", encoding="utf-8"
     )
     write_report(out / "dry-run-report.md", results, cmd, head)
-    write_provenance(out.parent / "provenance.md", cmd, head, results)
+    write_provenance(out / "provenance.md", cmd, head, results)
+    official_out = Path(__file__).resolve().parent / "out"
+    if out.resolve() == official_out.resolve():
+        write_provenance(out.parent / "provenance.md", cmd, head, results)
     mismatches = []
     for res in results:
         expect = KNOWN_ANSWERS.get(res["name"])
@@ -1120,7 +1142,7 @@ def main() -> int:
         die("known-answer mismatch: " + "; ".join(mismatches))
     log(f"wrote {out / 'evaluator_results.json'}")
     log(f"wrote {out / 'dry-run-report.md'}")
-    log(f"wrote {out.parent / 'provenance.md'}")
+    log(f"wrote {out / 'provenance.md'}")
     print(json.dumps({r["name"]: r["i4"]["decision"] for r in results}, sort_keys=True))
     return 0
 
