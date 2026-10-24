@@ -1128,7 +1128,11 @@ def run_fixtures(expected: Dict[str, Any], out_dir: Path) -> Dict[str, Any]:
     if REAL_LOCK.exists():
         die("F-E2E wrote the real lock")
     (out_dir / "synthetic").mkdir(parents=True, exist_ok=True)
-    shutil.copy2(receipt_path, out_dir / "synthetic" / "receipt.json")
+    dest_receipt = out_dir / "synthetic" / "receipt.json"
+    if dest_receipt.exists():
+        dest_receipt.chmod(stat.S_IWUSR | stat.S_IRUSR)
+    shutil.copy2(receipt_path, dest_receipt)
+    dest_receipt.chmod(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
     results["F-E2E"] = {
         "stop": False,
         "writer_invoked": True,
