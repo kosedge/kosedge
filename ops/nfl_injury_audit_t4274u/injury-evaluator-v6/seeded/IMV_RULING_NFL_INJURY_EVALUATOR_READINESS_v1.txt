@@ -1,0 +1,135 @@
+IMV RULING: NFL INJURY EVALUATOR READINESS (scorer + gates + dry run) - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v1.txt
+Filed: 2026-10-24 08:29:53 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Method: text only. The scorer/checker were NOT run. No 2024/25 data, network, git or PR reads. Hex masked.
+  Exact-prefix ls only.
+Package: /cursor/stores/store-d315a02f-07d6-4ce7-8619-79e1c045a027/grok-bot/agents/
+  ed6e606b-f8e8-484b-b4fb-2a3f4cf44e0d/attachments/01M5PY1EW*
+  10 files. All 10 named shas MATCH:
+  - manifest da701faa;
+  - log e58670ed;
+  - stdout 2f39bc85;
+  - json 7afc75a6;
+  - dry-run report b7c20793;
+  - gate-table 447d9589;
+  - provenance fb02399f (2 identical copies);
+  - scorer a8ec13a7;
+  - checker b207f6b7.
+  The spec a156459b is NOT in the package. The manifest's seeded/ copy was not attached. It was checked
+  against the IMV SoT copy in this dir (a156459b).
+Also checked against IMV_SPEC_NFL_INJURY_PRE_HOLDOUT_ACCEPTANCE_v1.txt (54bc78ec, filed 2026-10-23
+  13:26 EDT).
+Cycle record (t4317u/t4320u): first evaluator submission after request RETURNs v1 (52c72095) and v2
+  (37565942). First-pass acceptance: NO. Resubmission cycle count on this track: 3 (this is the third
+  RETURN).
+
+EVIDENCE CLASSES
+  Independently inspected by IMV: scorer + gate-table + provenance text; gate verbatim blocks vs
+    a156459b L125-145 (read directly); the seed arithmetic.
+  Trusted third party: none.
+  Secondhand (builder-reported, not reproducible here):
+  - all run outputs (log, stdout, json, report);
+  - HEAD 2241af8e "ops-only descendant";
+  - the input shas at /opt/cursor/artifacts/... and /cursor/stores/self/... (these paths and the
+    evaluator dir /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/ do NOT exist on this
+    box).
+
+VERDICT: RETURN.
+
+WHAT PASSES (no change needed)
+  - Gate-table verbatim blocks K-2/K-3/K-4 and I-1..I-5 = a156459b L125-131 / L136-145, word for word.
+  - I-3: 3 markets x 3 metrics, ids enforced. Holm step-down at alpha/(m-i), stopping at the first
+    non-rejection (scorer L231-255). Rejection = SIGNIFICANT. The v2 inversion is fixed.
+  - I-2: counts non-zero ADJUSTMENT (not edge). Full season = all weeks 1..17 (<2021) / 1..18 present
+    (L441-452). Shortfall = INCONCLUSIVE.
+  - I-4 mapping (L263-268): INCONCLUSIVE if I-2 unmet; VALUE PROVEN only if primary Holm-significant AND CI
+    excludes 0 AND K-4; else NO CLAIM. These are the spec's three labels.
+  - K-4 numbers 0.002 / 0.0005 / [0.9, 1.1] (L38-41). K-4 fails closed when uncomputable. n_boot 10,000,
+    week blocks, paired.
+  - NULL inputs skip the row; no "or 0.0" in the scoring inputs. The 2024-26 OOS rows are read-and-skipped
+    (586) before any field is stored (accepted pattern, 09636bec). No other holdout path. No network
+    import. No token is created; the run dies if a token is present.
+  - The close is labelled "comparative research, not certified CLV". No 5a653f63 comparison.
+  - The log and stdout decisions match the provenance/report.
+
+COMPLETE DEFECT LIST (one pass)
+ BLOCKING
+  E-1 Seed. PINNED_SEED = 2708041115 is labelled int("a156459b",16), but int("a156459b",16) = 2706785691.
+      The derivation is false. The PRE-REGISTERED seed is 20261023 (acceptance spec T-3/E-7, filed before
+      this run). 2708041115 was not pre-registered. Use 20261023, numpy default_rng per T-3, or file a
+      seed amendment BEFORE any result is viewed. Since le2023 results now exist, only 20261023 is legal.
+  E-2 Direction of VALUE PROVEN. excludes_0 = (lo>0) or (hi<0), and i4_decision does not test the sign. So
+      a significantly WORSE adjusted model (delta<0) can return VALUE PROVEN. Acceptance (a) I-4 requires
+      the favourable direction (delta>0). Fix: VALUE PROVEN requires lo>0 on the primary.
+  E-3 Apparent sign inversion of spread CLV and ATS. edge = spread_model - close_home. edge>0 means the
+      model's home line is above the close, i.e. the model favours the AWAY side. The code scores
+      edge>0 & home-covered as an ATS win, and CLV = (close - actual_spread) x sign(edge) is likewise
+      positive when home covers. Both arms are flipped, so the paired delta sign is flipped. This is
+      inherited from the frozen score_rows L662-674 identity. Must be settled by acceptance T-1 with a hand-
+      computed answer filed first. If confirmed: correct, and file the erratum for the formula.
+      Also note: "CLV" here is an outcome-vs-close measure, not a price-vs-close CLV. The label must say
+      so (I-1 intends CLV against the closing line).
+  E-4 Fixtures. Only 3 cohorts, built by the scorer's own make_synthetic/pred_from_p. Their answers are
+      NOT independent: the scorer generates and grades itself. Acceptance T-1..T-10 are absent:
+      - T-2 Holm vector, T-3 constant-delta and bit-identical rerun, T-4 Brier/LL hand values, T-5 Phi;
+      - T-6 I-2 variants (499 / 1 season + partial / edge-counting);
+      - T-7 missing-close, T-8 NULL;
+      - T-9 PLANTED LEAK (no leakage detector exists in the scorer);
+      - T-10 REVERSED GATE (CI includes 0; K-4 LL 0.0021).
+      Expected answers must be filed (sha) before the run and computed independently (by hand or in a
+      separate file).
+  E-5 Bootstrap zero-fill. L307 "boot.append(0.0 if val is None else val)" substitutes 0 for an undefined
+      resample statistic. This biases the CI and p toward 0 (the silent-zero pattern). Fix: draw again, or
+      count and report undefined draws and fail if any occur.
+  E-6 K-4 calibration slope. It is OLS on 10-bin reliability means (L667-671). The pre-registered
+      definition (acceptance (a) K-4) is the slope b of logit(y) ~ logit(p_adj) on games. Implement as
+      registered.
+  E-7 Identical game set. A row is dropped from ALL metrics (Brier, LL, K-2/K-4, the other 8 tests) when
+      either arm's spread edge = 0 (L494-495). K-2/K-4 must use the identical close-present set. Only the
+      CLV/ATS tests use the both-defined subset, reported per arm. Zero effect on le2023 (edge0 = 0/0), but
+      it is structural.
+  E-8 Paths. SPEC_STORE, EXPORT, FIT_OBJECT and the evaluator dir do not exist on the IMV box (37565942
+      F-8, acceptance E-6). Deposit the package on the box at exact paths with SHA256SUMS + sidecars, or
+      point to existing box paths (injury-fit-le2023/).
+      Missing spec: sha256_file() raises FileNotFoundError. That is fail-closed but uncontrolled; use an
+      explicit die.
+  E-9 le2023 dry run is not per acceptance (c). Required: F1 (n=268) and F2 (n=271) inner folds plus
+      pooled tables. Provided: one pooled 2013-2023 cohort of 2852 games, which includes fit years
+      (in-sample).
+      Close source: OOS market_* is used, not the F-3 nflverse spread_line named in request v2. Either
+      declare that the holdout will use the same source, or use nflverse.
+  E-10 Modeling challenges M-1..M-5 (acceptance (d)) are absent from the report: large-margin bias buckets,
+      accuracy vs base with CIs, calibration per fold + V coverage, information beyond the market, and
+      deferral of OOS edge survival.
+ NON-BLOCKING (fold into the same resubmission)
+  N-1 sigma 9.8 is a "framework prior" constant. T-5 requires the unshrunk sigma from frozen fit_object
+      6a5490db. Cite where it comes from. The same sigma is used for totals: justify or pre-register a
+      totals sigma.
+  N-2 The ML "implied-prob CLV" is (p_close - y) x sign, a result-scored measure. Define it in the gate
+      table and the fixtures.
+  N-3 The gate-table I-2 note says "weeks 1-18". The code uses 17 for <2021. Align the text.
+  N-4 The checker b207f6b7 was not reviewed beyond its sha. Its checks must include E-1..E-8.
+  N-5 Spec a156459b to be included in the package (seeded/ copy) per its own manifest.
+
+MODELING CHALLENGES (descriptive only, not gates; secondhand numbers)
+  - le2023 NO CLAIM. K-4 upper CI: LL 0.0137 (> 0.002), Brier 0.0068 (> 0.0005), so the adjusted model
+    looks WORSE calibrated than base even in-sample. Slope 0.29 (on the non-registered bin-OLS
+    definition) suggests strong overconfidence of p_adj.
+  - n_nonzero 2845/2852: nearly every game is adjusted, so the layer is never "neutral".
+  - With fixed 12.5 scaling (DV-3) and record/HFA base (DV-2), "beats base" tests the injury layer
+    against a weak W-L baseline, not against the market. Information beyond the market is untested
+    (M-4 absent).
+  - Pooling the fit years makes le2023 in-sample-adjacent. None of it may be cited as edge (I-5).
+
+SHORTEST PATH TO PASS
+  1 Fix E-1, E-2, E-3 (after the T-1 hand check), E-5, E-6, E-7 in one new scorer sha.
+  2 File T-1..T-10 expected answers (hand or independent file, sha) BEFORE running. Include the planted
+    leak (T-9) with a leakage detector in the scorer, and the reversed gate (T-10).
+  3 Run fixtures + le2023 F1/F2/pooled with seed 20261023. Add M-1..M-5. Address N-1..N-5.
+  4 Deposit on the box at exact existing paths, with SHA256SUMS + 0444 sidecars. CoS readiness R1-R5.
+  5 IMV one-pass re-review.
+  PASS would confirm only the scorer and gates. Any holdout opening still needs a separate request, IMV
+  review and Ryan's explicit CLEAR. No gate is weakened by this ruling.
+
+NO-GO, Coming Soon ON.
