@@ -1,0 +1,17 @@
+{
+  "compared_fields": [
+    "applied",
+    "complete",
+    "continuity_source_away",
+    "continuity_source_home",
+    "delta_margin",
+    "delta_total",
+    "game_id",
+    "season",
+    "week"
+  ],
+  "examples": [],
+  "n_field_diffs_outside_new_fields": 0,
+  "n_rows": 2863,
+  "pass": true
+}

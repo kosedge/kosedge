@@ -1,0 +1,15 @@
+RYAN PATH 1 DECISION
+Cited sha8: 1298bddb
+Original bytes were not present on this box; this file is a quote deposit.
+
+Verbatim (Ryan):
+Path 1: new export with timestamps; I authorize the pre-2024-only rerun of frozen code
+
+Scope authorized:
+- B-3 Path 1 only, as IMV ruling 88da5f42 requires
+- pre-2024 / le2023 only
+- new versioned export with source_ts and as_of_ts
+- never edit d87e6129
+- do not rerun F1/F2/pooled until IMV reviews this evidence
+- no 2024/25 data
+- no tokens
