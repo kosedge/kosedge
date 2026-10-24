@@ -1,0 +1,6 @@
+{
+  "errors": [],
+  "n_errors": 0,
+  "ok": true,
+  "package": "."
+}

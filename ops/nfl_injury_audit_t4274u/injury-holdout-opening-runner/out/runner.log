@@ -1,0 +1,13 @@
+STOP: O-1 opening blocked: IMV has not passed this opening runner; real lock not written; 2024/25 not opened
+lock written fixtures/holdout-missing/holdout-once.lock sha=924bd698 mode=0444
+STOP: O-1 export: holdout listings absent after lock; lock consumed
+lock consumed fixtures/holdout-missing/holdout-once.lock reason=export STOP
+STOP: O-3 lock: existing lock fixtures/lock-present/holdout-once.lock
+lock written fixtures/double-open/holdout-once.lock sha=924bd698 mode=0444
+STOP: O-1 export: holdout listings absent after lock; lock consumed
+lock consumed fixtures/double-open/holdout-once.lock reason=export STOP
+STOP: O-3 lock: existing lock fixtures/double-open/holdout-once.lock
+STOP: O-1 refuse: no tuning or refit path
+STOP: O-5 incomplete: complete row has a null per-side timestamp game_id=2022_1_BBB_AAA field=source_ts_home
+fixtures: F-DEFAULT-HOLDOUT F-HOLDOUT F-LOCK-PRESENT F-DOUBLE-OPEN F-REFIT F-PER-SIDE STOP; F-OK-SCORE recorded
+le2023 guards: listings=58653 Z=58653 n_incomplete=11

@@ -1,0 +1,41 @@
+{
+  "i4": {
+    "decision": "INCONCLUSIVE",
+    "decision_label": "DRY RUN - NOT A RESULT",
+    "i5": "null results reported as null; no product claim",
+    "k4_pass": false,
+    "primary_ci_excludes_0": false,
+    "primary_ci_lo_gt_0": false,
+    "primary_significant_after_holm": false,
+    "product_claim": false
+  },
+  "incomplete": {
+    "excluded_game_ids": [
+      "2022_2_CCC_DDD"
+    ],
+    "n_incomplete": 1,
+    "n_incomplete_by_season": {
+      "2022": 1
+    },
+    "n_kept": 1
+  },
+  "missing": {
+    "n_missing_close": 0,
+    "n_missing_close_by_season": {}
+  },
+  "pin": {
+    "blob_sha_not_a_pin": "6301573f5e01b3d33a6b1e06b33d682c7b644da29c39f6c697cc615e9bf72d97",
+    "on_disk_sha": "a4f9193c0fefa8f42bfabc788c64451ab43dffff7cfcdb00bdead203f7f4b9aa"
+  },
+  "tz": {
+    "n_empty": 0,
+    "n_listings": 1,
+    "n_naive": 0,
+    "n_offset": 0,
+    "n_other": 0,
+    "n_z": 1,
+    "years_opened": [
+      2022
+    ]
+  }
+}
