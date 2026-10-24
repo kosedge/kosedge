@@ -2,8 +2,10 @@
 
 **SoT spec sha256:** `a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881`  
 **Acceptance spec sha256:** `54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574`  
-**Ruling sha256:** `88da5f42d918a9462da01ac01fd8260f7a0d9c2cad6a587492e5b9caf41cca6b` (v3; wins; B-3 only open)  
-**Prior ruling:** `1a090e3b58e440c79888662813f1a3d64c1761d4ae32d400170ee19a144eb20c`  
+**Ruling (cited sha8):** `d18ebf22` PASS WITH CONDITIONS; erratum `501e8a99`  
+**Cited ruling file sha256:** `0e0d54bc14e47bb3ef817b4e2dd135baa24ccff2a686eccbf5f5cab38fc1130c`  
+**Prior ruling:** `88da5f42d918a9462da01ac01fd8260f7a0d9c2cad6a587492e5b9caf41cca6b`  
+**Export pin:** on-disk `a38a55bb` (`46d2a565` is blob only)  
 **Spec v2:** not used as SoT.  
 **This table quotes s6/s7. It does not retune gates.**  
 **Holdout STOPPED (t4315u `d6fca6f0`). No CLEAR.**
