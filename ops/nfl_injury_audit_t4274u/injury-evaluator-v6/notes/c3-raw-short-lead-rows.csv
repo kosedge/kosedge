@@ -1,0 +1,12 @@
+season,game_type,team,week,gsis_id,position,full_name,first_name,last_name,report_primary_injury,report_secondary_injury,report_status,practice_primary_injury,practice_secondary_injury,practice_status,date_modified
+2022,REG,CLE,10,00-0036915,LB,Jeremiah Owusu-Koramoah,Jeremiah,Owusu-Koramoah,Knee,,Out,Knee,,Limited Participation in Practice,2022-11-11T18:45:46Z
+2022,REG,MIA,10,00-0034487,WR,Trent Sherfield,Trent,Sherfield,Toe,,Questionable,,,"
+    ",2022-11-13T14:40:40Z
+2023,REG,MIA,12,00-0031921,T,Kendall Lamm,Kendall,Lamm,Back,,Questionable,,,"
+    ",2023-11-24T16:26:38Z
+2023,REG,NYJ,12,00-0036501,CB,Michael Carter,Michael,Carter,Hamstring,,Doubtful,Hamstring,,Did Not Participate In Practice,2023-11-23T19:10:53Z
+2023,REG,HOU,14,00-0032790,S,DeAndre Houston-Carson,DeAndre,Houston-Carson,Illness,,Out,,,"
+    ",2023-12-10T13:14:09Z
+2023,REG,NYJ,14,00-0032432,G,Wes Schweitzer,Wes,Schweitzer,Calf,,Out,Calf,,Did Not Participate In Practice,2023-12-08T20:54:33Z
+2023,REG,LAC,15,00-0030500,DT,Nicholas Williams,Nicholas,Williams,Shoulder,,Questionable,Shoulder,,Limited Participation in Practice,2023-12-14T23:34:17Z
+2023,REG,LV,15,00-0034759,T,Kolton Miller,Kolton,Miller,Shoulder,,Out,Shoulder,,Did Not Participate In Practice,2023-12-13T21:30:45Z

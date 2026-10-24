@@ -1,0 +1,132 @@
+IMV RULING: NFL INJURY EVALUATOR READINESS - v4
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v4.txt
+Filed: 2026-10-24 09:30:43 EDT (-0400)
+Author: IMV (Model Validation Lead). One-pass review of
+  /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-v5/ under d18ebf22 and erratum 501e8a99.
+Method: text only. No project code was run; only IMV read-only python/json reads. No 2024/25 data, no
+  network, no git. Exact paths; hex masked.
+Cycle record: 7th submission on this track. One-pass acceptance: YES WITH CONDITIONS.
+
+INTEGRITY (IMV-computed)
+  - MANIFEST = 1c41547a (matches MANIFEST.sha256; 36 lines). SHA256SUMS: 40 entries, all OK.
+  - out/ = out-rerun/ bit-identical: report e8a0c512, results 69450d49, provenance 6b9298ae.
+  - checker.stdout ok:true, n_errors 0, T-1..T-10 true.
+  - Seeded files:
+    - a38a55bb sealed_injury_export_ts_v1.json; d87e6129 (C-1 reference only); fit 6a5490db;
+    - null contract ff8e6527; spec a156459b; acceptance 54bc78ec;
+    - READINESS v1/v2/v3 = a0501d57 / 1a090e3b / 88da5f42;
+    - expected answers FILE df516fed (sidecar OK). 852fe21c is the expected-answers COMMIT.
+
+EVIDENCE CLASSES
+  Inspected: the scorer source, the T1_T10_EXPECTED file, the null contract file, the notes, out/out-rerun,
+    the checker output, the seeded copy 0e0d54bc, and my originals d18ebf22 / 501e8a99.
+  Trusted-internal secondhand: the checker and evaluator execution.
+  Secondhand: the commit order of 852fe21c before the run. The log does not show it; the file's
+    "filed_before_run" flag is self-asserted.
+
+DISPOSITIONS
+P-1/W-2 MET.
+  - REQUIRED_EXPORT = a38a55bb (L32). Blob 46d2a565 is held as NOT_A_PIN (L33) and rejected (L1485).
+  - The on-disk sha is enforced at load (L1284-1285). The export is resolved from
+    seeded/sealed_injury_export_ts_v1.json (L1481).
+P-2 MET, with condition C-2.
+  - assert_p2_timestamp_contract (L364-375): complete with a null timestamp -> STOP; incomplete with a
+    timestamp -> STOP. It is applied on load and again in apply_c5_exclude.
+  - Exclusion happens before the arms split, so it is identical in both arms. A guard in join_fold
+    (L1329-1330) catches any incomplete row that slips through.
+  - Counts are asserted: total 11, 2022 = 3, 2023 = 1 (L37-39, L1316-1319).
+  - IMV's own count from a38a55bb: incomplete by season = 2013: 2, 2014: 1, 2015: 1, 2017: 1, 2020: 2,
+    2022: 3, 2023: 1. Total 11. MATCH.
+  - Universes 268 (2022) and 271 (2023) = complete REG games, consistent with the counts.
+  - T-9 fixtures for both STOP cases appear in the log (2022_1_BBB_AAA; 2022_2_IND_JAX).
+  - C-2 gap: the rule checks the count, not the identity of the rows, and checks the 3 aggregate
+    timestamps but not source_ts_home/away or the null deltas.
+P-3 MET in content; order secondhand.
+  - df516fed T-9.p2_c5 states: identical exclusion in both arms, counts 11/3/1, and both STOP cases.
+  - T-9 has 6 violation fixtures, including naive_zoneless.
+  - Commit 852fe21c: order secondhand (see C-4).
+P-4 MET.
+  - parse_ts_utc dies on a zoneless value (L339-355). Fixture naive_zoneless; the log shows
+    "STOP: P-4: naive/zoneless timestamp STOP".
+  - This supersedes W-3 (closed).
+W-1 MET.
+  - My erratum 501e8a99 (IMV dir) records the ULP overwrite (320 values, max 1.07e-14) and the
+    re-implemented frozen main().
+  - The package note notes/wrapper-erratum-501e8a99.md (88d26274) is a CoS disclosure, consistent in
+    substance (318 + 2 = 320; it skips _assert_run_invariants and the 729-point grid). It is NOT my
+    erratum's bytes and must not be cited as such (C-1).
+W-4 MET (inspected).
+  - seeded null contract = ff8e6527.
+  - parse_fit_kickoff_utc (L590-614): naive kickoffs are localized with
+    FIT_KICKOFF_SOURCE_TZ = ZoneInfo("America/New_York") (L61), then converted to UTC. This is
+    DST-aware; a missing gametime fails the row and there is no 23:59:59 default.
+  - nullable_float (L123-134) returns None and never 0.0; impact_triple gives a NULL diff if either side
+    is NULL (L137-147). NULLs are not zero-filled.
+  - The note text matches the file.
+  - C-3 finding: parse_fit_report_time_utc (L617-635) treats a NAIVE report time as UTC. If the raw
+    nflverse date_modified values were naive ET, the true as_of would be 4-5 h LATER than recorded.
+    IMV count on a38a55bb: kickoff - as_of < 5 h on 4 games (< 4 h on 3; minimum 1.68 h). Those 4 games
+    could leak under that hypothesis. The raw format is not on the box: unverified.
+CHECKER / REPRODUCIBILITY: MET.
+GATE LOGIC (not judging performance): CONSISTENT.
+  - F1: n = 268, a single season (full = 1) -> I-2 INCONCLUSIVE -> INCONCLUSIVE.
+  - F2: n = 271, full = 1 -> INCONCLUSIVE.
+  - Pooled: n = 539, I-2 MET (2 full seasons). Primary CI [-0.395, 0.784], lo > 0 false; the primary is
+    not significant after Holm; K-4 fails (LL CI-hi 0.0243 > 0.002) -> NO CLAIM.
+  - The two Holm-significant metrics are logloss deltas in the adverse direction, so no claim arises.
+  - All results are labelled DRY RUN - NOT A RESULT; product_claim false.
+
+DESCRIPTIVE (in-sample-adjacent le2023; not evidence of edge; I-5)
+  - M-1: all 539 pooled |delta| < 3 (the other delta buckets are empty). The |close| buckets are
+    n = 142 / 266 / 68 / 63.
+  - M-2, base vs adjusted:
+    - F1: MAE 9.374 / 9.690, LL 0.6784 / 0.7001, Brier 0.2426 / 0.2532, MAE-delta CI [0.113, 0.510].
+    - F2: MAE 11.005 / 11.127, LL 0.6815 / 0.6882, Brier 0.2442 / 0.2476, CI [-0.122, 0.371].
+    - Pooled: MAE 10.194 / 10.412, LL 0.6799 / 0.6941, Brier 0.2434 / 0.2504, CI [0.059, 0.379];
+      adj_beats_base false.
+  - M-3: 80% coverage F1 0.828, F2 0.782, pooled 0.805.
+  - M-4: the open correlation was NOT RUN (634fdb52 unverified).
+    Adjusted-vs-close residual (pred_m_adj + close_spread_home):
+    F1 n = 268, mean -0.597, sd 5.949; F2 n = 271, -0.676, 5.375; pooled n = 539, -0.637, 5.662.
+  - M-5: DEFERRED to the holdout.
+
+FLAG RULING (0e0d54bc)
+  - seeded/IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v4_CITED.txt (0e0d54bc) is NOT a byte copy and NOT
+    verbatim: 0 of its 18 lines occur in d18ebf22, and all 6 condition lines are paraphrases.
+    Examples: "P-3: commit the new expected answers before the run" vs the original's fixture and count
+    requirements. Its claim that "original bytes were not present on this box" is now false.
+  - Its name also collides with this filing.
+  - RULING: NOT ACCEPTABLE as a citation. The provenance "ruling 0e0d54bc" is non-authoritative.
+  - Authoritative references are the IMV originals in /workspace/fg-repair/imv-gate1-review-2026-10-02/:
+    d18ebf22, 501e8a99 and this file.
+  - The substance of 0e0d54bc matched the requirements, so the work done under it is not voided.
+
+VERDICT: PASS WITH CONDITIONS on the scorer and gates.
+  - A holdout REQUEST may be filed once C-1 to C-4 are met in it.
+  - Opening the holdout still needs a separate IMV review of that request and Ryan's explicit CLEAR.
+  - No gate is weakened.
+
+COMPLETE LIST (conditions for the holdout request)
+  C-1: re-seed BYTE copies of d18ebf22, 501e8a99 and this ruling, or cite their shas and full paths. Fix
+    the provenance ruling field. Rename or retire the "_v4_CITED" copy and label it non-authoritative.
+    DELETE NOTHING.
+  C-2: pin the 11 excluded game_ids (the C-5 set) and require null deltas plus null per-side
+    timestamps. For the holdout, pre-declare the incomplete-row rule, with counts derived from the
+    export before any outcome or close join.
+  C-3: deposit evidence of the raw date_modified / report_time format (zone-bearing or not) from
+    8e2a15ac inputs, at least for the 4 games with a gap under 5 h.
+    - If any raw value is naive ET: correct the export, or exclude affected rows by a pre-declared rule.
+    - Apply the same check to the holdout export.
+  C-4: show the commit order of 852fe21c before the run (commit timestamp vs the run log), or record it
+    as secondhand in the request.
+  Carried: M-4 open correlation stays NOT RUN until a verified timestamped open exists. M-5 is
+    deferred. The holdout export must use the same writer (frozen helpers) and the a38a55bb-style
+    sidecar convention.
+
+SHORTEST PATH
+  1 Make C-1 to C-4 deposits (no scorer code change is needed except C-2), then refresh MANIFEST/SUMS.
+  2 File the holdout REQUEST v3 citing the IMV originals, with the frozen scorer sha and the expected
+    answers df516fed (or a successor).
+  3 IMV one-pass review of the request, then Ryan's CLEAR.
+
+NO-GO, Coming Soon ON.

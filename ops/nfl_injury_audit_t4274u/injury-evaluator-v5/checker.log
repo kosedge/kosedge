@@ -1,0 +1,4 @@
+STOP: B-3: cannot join close/outcome without source_ts/as_of_ts/kickoff_utc game_id=2018_1_BBB_AAA
+STOP: LEAKAGE row0 source_ts<=as_of_ts<kickoff_utc violated src=2022-09-11T16:00:00Z asof=2022-09-11T17:00:00Z ko=2022-09-11T17:00:00Z
+STOP: P-4: naive/zoneless timestamp STOP
+wrote MANIFEST n=36

@@ -1,0 +1,57 @@
+{
+  "d87e6129_untouched": true,
+  "fieldwise_diff": {
+    "compared_fields": [
+      "applied",
+      "complete",
+      "continuity_source_away",
+      "continuity_source_home",
+      "delta_margin",
+      "delta_total",
+      "game_id",
+      "season",
+      "week"
+    ],
+    "examples": [],
+    "n_field_diffs_outside_new_fields": 0,
+    "n_rows": 2863,
+    "pass": true
+  },
+  "fit_object_recomputes": true,
+  "folds_rerun": false,
+  "frozen": {
+    "bound": "049f97d679968165506fa71cdcf98038a65196ca52fa824a689742bd56b3e0dc",
+    "config": "0d491abef53cb67e82106dda184fb40fbe21fc3883afd8313fd87108cf40d6cb",
+    "contract": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+    "e1": "continuity_source tagged per side; UNKNOWN when None, never neutral 0",
+    "export": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+    "fit_object": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+    "head": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+    "ledger": "8b8b6a52faf06785bcc939aee06f89eb7750bf21bea289bfa9c0163fb0616ad1",
+    "script": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c"
+  },
+  "grid_searched": false,
+  "holdout_years_touched": false,
+  "kind": "injury_b3_path1_export",
+  "new_export": {
+    "blob_sha256": "46d2a5657d1b5a5eb1af03f4d643afbfaa4762f31260daff439b5df1ac1456eb",
+    "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+    "n_games": 2863,
+    "n_players": 56496,
+    "on_disk_sha256": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+    "path": "sealed_injury_export_ts_v1.json"
+  },
+  "ruling_sha": "88da5f42d918a9462da01ac01fd8260f7a0d9c2cad6a587492e5b9caf41cca6b",
+  "ryan_authorization": "1298bddb",
+  "timestamp_audit": {
+    "incomplete_non_null_timestamps": 0,
+    "n_asof_fail": 24,
+    "n_complete": 2852,
+    "n_games": 2863,
+    "n_incomplete": 11,
+    "n_null_side": 8,
+    "n_violations_source_le_asof_lt_kickoff": 0,
+    "pass": true,
+    "violation_examples": []
+  }
+}

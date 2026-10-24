@@ -1,0 +1,184 @@
+IMV PRE-REGISTERED TEST SPECIFICATION: NFL INJURY-ADJUSTMENT LAYER
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_SPEC_NFL_INJURY_ADJUSTMENT_TESTS_v1.txt
+Filed: 2026-10-23 09:17:38 EDT (-0400)
+Author: IMV (Model Validation Lead) - independent validator; IMV builds nothing it validates.
+Status: PRE-REGISTERED v1. Written BEFORE any audit output or result was seen.
+        Audit (Cursor cloud agent bc-17c185df) outputs NOT read. No repo, git, network or code used.
+
+SCOPE SOURCE - Ryan t4274u, VERIFIED via ReadTranscript of Chief of Staff
+(ed6e606b-f8e8-484b-b4fb-2a3f4cf44e0d), message stamped Fri Oct 23 2026 09:15 ET. Exact quote:
+  "NFL Injury Pipeline — Existing Implementation Audit
+   We already have injury ingestion, availability, role redistribution and KEI injury
+   repricing code in the repository.
+   Before designing another injury system, have Cursor trace the existing implementations
+   and determine:
+   1. Which modules are currently operational versus dormant or disconnected.
+   2. Where the three missing injury inputs originate and why the local NFL runner cannot
+      populate them.
+   3. How injuries change baseline spreads, totals and moneylines, including player
+      replacement quality.
+   4. Whether injury adjustments are applied once, without double-counting effects already
+      reflected in team strength.
+   5. Whether offensive, defensive and offensive-line injuries are modeled adequately.
+   6. Which missing pieces require engineering versus independent statistical calibration.
+   Preserve the original model price alongside the injury-adjusted price and record data
+   timestamps and adjustment provenance.
+   Have IMV establish tests for injury impact, uncertainty, calibration and incremental value.
+   Do not alter the active certification work or automatically promote the existing injury
+   modules.
+   Report what we can reuse and what actually needs to be built. No duplicate injury pipeline."
+
+FREEZE RULE: every gate, threshold, season split and decision rule below is fixed now.
+No gate may change after any result is seen. Changes only by a new version (_v2) filed
+BEFORE the affected test runs, with the reason; results already seen void the change.
+Placeholders marked [AUDIT-FILL] may be filled only with FACTS (names, paths, fields),
+never with thresholds.
+
+==========================================================================================
+1. PRICE PRESERVATION AND PROVENANCE (gate P)
+==========================================================================================
+P-1  Every output row carries BOTH base and adjusted values, side by side, never overwritten:
+     base_spread / adj_spread, base_total / adj_total, base_home_wp / adj_home_wp
+     (and the derived moneyline for each). Base must equal the unadjusted model run byte-for-
+     byte (re-derived check on a sample of >=50 rows; 0 mismatches allowed).
+P-2  Each adjustment row records:
+     a. per-input data timestamp of every injury report/status used (report_ts, source_ts);
+     b. as_of_ts <= decision_ts (the pricing time). Any input with source_ts > as_of_ts or
+        as_of_ts > decision_ts = LEAKAGE -> row FAILS; any leakage in a run fails the run;
+     c. source name and source version/feed revision;
+     d. components: per player (player_id, status, p_play, replacement_id, delta per market)
+        and per unit (QB, OL, skill, DEF), plus the total;
+     e. code sha (full) and config hash (sha256 of the resolved config).
+P-3  Missing input => adjustment value NULL plus an explicit flag
+     (e.g. FLAG_MISSING_KOSEDGE_INJURY_NOWCAST). Never fill a default, zero or prior.
+     Test: fixtures with each input removed in turn must yield NULL+flag, not 0.0.
+P-4  Provenance must be sufficient to recompute adj from base + components (tolerance 1e-9).
+PASS = P-1..P-4 all hold on 100% of rows. Anything else FAIL (fail closed).
+
+==========================================================================================
+2. UNIT AND SIGN TESTS (gate U) - synthetic fixtures only, no real data
+==========================================================================================
+U-1  No injuries => adjustment exactly 0.0 on every market; adj == base.
+U-2  Sign: starting QB OUT on team A moves spread toward opponent, lowers A win prob;
+     direction for total pre-declared per unit [AUDIT-FILL: model's documented direction];
+     any unexpected sign = FAIL.
+U-3  Monotonicity: more/worse injuries (or lower p_play) never helps the injured team.
+     OUT >= DOUBTFUL >= QUESTIONABLE >= ACTIVE in effect size.
+U-4  Home/away symmetry: mirroring the fixture (swap home/away, same injuries) gives an
+     equal-magnitude, opposite-sign adjustment (HFA held constant; tolerance 1e-9).
+U-5  Bounds: |adj spread delta| and |adj total delta| per game and per player within caps
+     declared in config [AUDIT-FILL: cap values as they exist in code]; any breach = FAIL.
+     Win prob stays in (0,1); total stays within model clamp.
+U-6  Replacement quality: same starter out with a better backup gives a smaller effect;
+     backup equal to starter gives ~0; missing replacement data => NULL+flag, not a guess.
+U-7  Determinism: same inputs + same sha/config => identical output.
+PASS = all fixtures pass. One failure = FAIL.
+
+==========================================================================================
+3. DOUBLE-COUNTING (gate D)
+==========================================================================================
+D-1  Base-rating overlap: if base ratings already reflect a player's absence (e.g. games
+     already missed in the rating window), the layer must not subtract again. Fixture: a
+     player out for N prior weeks; effect must be reduced per declared rule
+     [AUDIT-FILL: how ratings ingest availability].
+D-2  Market overlap: when adjusted price is compared to market, the market already prices
+     public injury news. Incremental-value tests (sec. 7) use closing line, and no injury
+     signal may be fed by market-derived numbers. Any market input inside the layer = FAIL.
+D-3  Ablations: run with each unit (QB, OL, skill, DEF) switched off in turn and all off.
+     Sum of per-unit components must equal the total adjustment (additive model) or the
+     declared interaction term must be reported explicitly; unexplained residual > 1e-6 = FAIL.
+D-4  Single application: an injury applied in both role redistribution and KEI repricing
+     counts once. Trace test: one player injured => exactly one non-zero component path.
+PASS = D-1..D-4 hold.
+
+==========================================================================================
+4. COVERAGE (gate C - reporting gate, disclosure-bound)
+==========================================================================================
+C-1  Report per position group (QB, OL, skill: RB/WR/TE, DEF: DL/LB/DB, ST optional):
+     share of games where injury inputs exist, share of injured players modeled, share
+     with replacement data. By week and season.
+C-2  Any group below 90% coverage, or modeled as zero/unmodeled, is listed as a gap.
+C-3  Each gap carries a disclosure string that travels to output rows and to product copy
+     (e.g. "OL injuries not modeled"). Missing disclosure = FAIL.
+No group may be claimed "covered" without its rate.
+
+==========================================================================================
+5. UNCERTAINTY (gate V)
+==========================================================================================
+V-1  Questionable/doubtful are probabilistic: p_play per status, source of p_play declared
+     [AUDIT-FILL]; p_play itself calibrated on training seasons only (reliability report).
+V-2  Propagation: adjustment reported as expected value plus interval (e.g. 10/90 over
+     play/no-play scenarios); variance of the outcome distribution reported with and
+     without the adjustment.
+V-3  Compare outcome distributions (margin, total) base vs adjusted: mean shift, spread
+     of distribution, and PIT/coverage of 80% intervals on training seasons.
+V-4  Late-news risk: rows where status changes after as_of_ts are flagged and counted.
+PASS = V-1..V-3 reported; 80% interval empirical coverage within 75-85% on training.
+
+==========================================================================================
+6. CALIBRATION (gate K)
+==========================================================================================
+K-1  Seasons: TRAINING/development = [AUDIT-FILL: seasons available, all strictly before
+     the holdout]; SEALED HOLDOUT = 2024 and 2025 (already sealed; IMV does not open them).
+     Holdout is touched ONCE, after spec, code sha and config hash are frozen and filed.
+     Any tuning, threshold choice or feature selection using holdout = FAIL, run void.
+K-2  Metrics, base vs adjusted on the same games: Brier and log loss (win prob);
+     cover reliability for spread and total (predicted cover prob vs actual);
+     reliability diagram in 10 bins with counts.
+K-3  CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.
+K-4  Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss
+     <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1].
+     Failing = layer stays off.
+
+==========================================================================================
+7. INCREMENTAL VALUE (gate I) - decision rule fixed now
+==========================================================================================
+I-1  Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against
+     the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.
+I-2  Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and
+     >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).
+I-3  Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family
+     alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.
+I-4  Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95%
+     block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.
+I-5  Soft, borderline or insignificant results cannot become a product claim, marketing
+     copy, or a "improves accuracy" statement. Report them as null results.
+
+==========================================================================================
+8. GOVERNANCE
+==========================================================================================
+G-1  Separation of duties: Cursor/Alex build and change code; IMV validates (text and
+     deposited outputs only); Ryan acks exact shas. No party validates its own work.
+G-2  No automatic promotion. Passing every gate makes the layer ELIGIBLE only; Ryan decides
+     promotion explicitly on exact code sha + config hash. No auto-enable flags.
+G-3  No effect on active certification: W4-W6 seals and W8 hold are untouched; this spec
+     adds no gate to them and no rerun. Injury flags on W4 remain disclosed as filed.
+G-4  Fail closed: missing input, failed test, leakage or missing provenance => NULL + flag,
+     base price published, adjusted price withheld.
+G-5  Disclosure: every limitation (coverage gaps, null injuries, uncertainty, inconclusive
+     value) carries through to any product copy word-for-word in substance.
+G-6  No duplicate pipeline: tests run against the existing modules the audit identifies.
+G-7  E-02: this file is never edited; corrections by erratum or _v2 only.
+
+==========================================================================================
+9. OPEN QUESTIONS FOR THE AUDIT (bc-17c185df) TO ANSWER
+==========================================================================================
+Q-1  Which modules (ingestion, availability, role redistribution, KEI repricing) are
+     operational, dormant or disconnected; entry points and call paths.
+Q-2  The 3 inputs behind FLAG_MISSING_KOSEDGE_INJURY_NOWCAST: names, origin, why the local
+     runner cannot populate them, and whether they carry source timestamps.
+Q-3  Exact formula by which each module changes spread, total and moneyline; where
+     replacement quality enters and its data source.
+Q-4  Do base team ratings already absorb absences? Rating window and update cadence.
+Q-5  Are role redistribution and KEI repricing both applied to the same player?
+Q-6  Is any market-derived number used inside the injury layer?
+Q-7  Coverage of QB, OL, skill and DEF; is OL modeled as a unit or per player?
+Q-8  How p_play is set for questionable/doubtful; is it calibrated anywhere?
+Q-9  Existing caps/clamps on injury deltas and their config keys.
+Q-10 Which seasons of point-in-time injury data exist (with as-of timestamps) for training.
+Q-11 Does current output already store base and adjusted side by side? Which fields exist.
+Q-12 Engineering gaps vs calibration gaps, per item.
+
+Verdict now: SPEC ONLY. No layer is eligible. Nothing promoted.
+
+NO-GO, Coming Soon ON.
