@@ -1,0 +1,19 @@
+{
+  "games": [
+    {
+      "as_of_ts": null,
+      "away": "BBB",
+      "complete": true,
+      "delta_margin": 1.0,
+      "delta_total": 0.2,
+      "game_id": "2022_1_BBB_AAA",
+      "home": "AAA",
+      "kickoff_utc": null,
+      "season": 2022,
+      "source_ts": null,
+      "source_ts_away": null,
+      "source_ts_home": null,
+      "week": 1
+    }
+  ]
+}
