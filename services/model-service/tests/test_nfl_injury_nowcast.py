@@ -58,8 +58,10 @@ def test_injury_nowcast_stale_and_no_data_fallback() -> None:
 
     empty = _aggregate_team_nowcast([])
     assert empty["injury_count"] == 0
-    assert empty["offense_multiplier"] == 1.0
-    assert empty["defense_multiplier"] == 1.0
+    assert empty["offense_multiplier"] is None
+    assert empty["defense_multiplier"] is None
+    assert empty["impact_score"] is None
+    assert "FLAG_MISSING_KOSEDGE_INJURY_NOWCAST" in empty["flags"]
 
 
 def test_merge_roster_continuity_is_noop_with_no_adjustments() -> None:
@@ -151,14 +153,22 @@ def test_fetch_nfl_injury_nowcast_blends_in_roster_continuity_for_preseason() ->
     )
     nowcast = fetch_nfl_injury_nowcast(session, season_year=2026, home_team="CLE", away_team="CIN")
     assert nowcast["source"] == "nfl_dp_injuries+roster_continuity"
-    assert nowcast["home"]["defense_multiplier"] > 1.0
+    # Empty listing stays NULL on the game-line keys (D-1). Continuity is metadata.
+    assert nowcast["home"]["defense_multiplier"] is None
+    assert nowcast["home"]["impact_score"] is None
     assert nowcast["home"]["roster_continuity_adjustment_count"] == 1
-    assert nowcast["away"]["defense_multiplier"] == 1.0
+    continuity_meta = nowcast["home"]["roster_continuity"]
+    assert isinstance(continuity_meta, dict)
+    assert continuity_meta.get("top_drivers") or continuity_meta.get("impact_score") is not None
+    assert nowcast["away"]["defense_multiplier"] is None
     assert nowcast["away"].get("roster_continuity_adjustment_count") is None
+    assert "FLAG_MISSING_KOSEDGE_INJURY_NOWCAST" in nowcast["flags"]
 
 
 def test_fetch_nfl_injury_nowcast_source_unchanged_without_roster_continuity() -> None:
     session = _InjuryNowcastSession(continuity_rows=[])
     nowcast = fetch_nfl_injury_nowcast(session, season_year=2026, home_team="CLE", away_team="CIN")
     assert nowcast["source"] == "nfl_dp_injuries"
-    assert nowcast["home"]["defense_multiplier"] == 1.0
+    assert nowcast["home"]["defense_multiplier"] is None
+    assert nowcast["home"]["impact_score"] is None
+    assert "FLAG_MISSING_KOSEDGE_INJURY_NOWCAST" in nowcast["flags"]
