@@ -1,0 +1,17 @@
+{
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "fit_object_has_sigma_field": false,
+  "fit_object_keys_checked": [
+    "bound_hash",
+    "code_sha",
+    "config_hash",
+    "selected_params",
+    "spec_C"
+  ],
+  "sigma_margin": 13.5,
+  "sigma_total": 14.0,
+  "sigma_margin_citation": "fit_object 6a5490db has no sigma key. Margin σ = 13.5 is the C-10 default in nfl_injury_null_contract.py at frozen HEAD 8e2a15ac when baseline_stdev is missing (same commit as the fit).",
+  "sigma_total_citation": "Pre-registered totals σ, distinct from margin σ (N-1). 14.0 is the NFL totals residual scale; not imputed from a missing fit field.",
+  "t5_fixture_sigma": 13.0,
+  "t5_note": "T-5 unit test uses σ=13 as written. Production scoring uses sigma_margin=13.5 and sigma_total=14.0. T-5 forbids √2 rescale."
+}
