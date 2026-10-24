@@ -115,6 +115,12 @@ from .services.nfl_data import (
 )
 from .services.nfl_environment import build_nfl_environment_context
 from .services.nfl_injury_nowcast import compute_team_week_injury_severity, fetch_nfl_injury_nowcast
+from .services.nfl_injury_null_contract import (
+    build_injury_accounting_ledger,
+    config_hash as injury_config_hash,
+    impact_triple,
+    stamp_projection_injury_accounting,
+)
 from .services.nfl_handicapping_framework import (
     NFL_HANDICAPPING_FRAMEWORK_VERSION,
     get_nfl_handicapping_config,
@@ -4810,10 +4816,10 @@ def run_nfl_market_simulations(
             # margins several points past the EPA pack + market.
             # NFL #564: force_overlays_off keeps this neutralization after W1.
             if overlays_off:
-                home_off_mult = 1.0
-                away_off_mult = 1.0
-                home_def_mult = 1.0
-                away_def_mult = 1.0
+                home_off_mult = None
+                away_off_mult = None
+                home_def_mult = None
+                away_def_mult = None
                 home_injury_conf = None
                 away_injury_conf = None
                 home_injury_impact = None
@@ -4823,10 +4829,11 @@ def run_nfl_market_simulations(
                 home_hours_change = None
                 away_hours_change = None
             else:
-                home_off_mult = _to_float(home_nowcast.get("offense_multiplier")) or 1.0
-                away_off_mult = _to_float(away_nowcast.get("offense_multiplier")) or 1.0
-                home_def_mult = _to_float(home_nowcast.get("defense_multiplier")) or 1.0
-                away_def_mult = _to_float(away_nowcast.get("defense_multiplier")) or 1.0
+                # C-7 / D-1: never default multipliers to 1.0 or impacts to 0.0.
+                home_off_mult = _to_float(home_nowcast.get("offense_multiplier"))
+                away_off_mult = _to_float(away_nowcast.get("offense_multiplier"))
+                home_def_mult = _to_float(home_nowcast.get("defense_multiplier"))
+                away_def_mult = _to_float(away_nowcast.get("defense_multiplier"))
                 home_injury_conf = _to_float(home_nowcast.get("confidence"))
                 away_injury_conf = _to_float(away_nowcast.get("confidence"))
                 home_injury_impact = _to_float(home_nowcast.get("impact_score"))
@@ -4835,9 +4842,8 @@ def run_nfl_market_simulations(
                 away_info_vel = _to_float(away_nowcast.get("info_velocity_score"))
                 home_hours_change = _to_float(home_nowcast.get("hours_since_change"))
                 away_hours_change = _to_float(away_nowcast.get("hours_since_change"))
-            # Full-strength = blended intrinsic PR; current = after injury/
-            # availability multipliers. Do not overwrite full-strength when
-            # someone sits — both stay available on the prior payloads.
+            # Full-strength = blended intrinsic PR. Game-line guard: never
+            # index-scale from injury multipliers, even if overlays unlock (§7.1.5).
             full_off_home = float(
                 home_prior.get("full_strength_offense_index", offense_home) or offense_home
             )
@@ -4850,13 +4856,10 @@ def run_nfl_market_simulations(
             full_def_away = float(
                 away_prior.get("full_strength_defense_index", defense_away) or defense_away
             )
-            cur_off_home = float(offense_home) * float(home_off_mult)
-            cur_off_away = float(offense_away) * float(away_off_mult)
-            # defense_index is "higher = stronger defense" (see
-            # _load_team_strength_priors). injury/roster-continuity nowcast
-            # defense_multiplier is "higher = weaker defense" → DIVISOR.
-            cur_def_home = float(defense_home) / float(home_def_mult or 1.0)
-            cur_def_away = float(defense_away) / float(away_def_mult or 1.0)
+            cur_off_home = full_off_home
+            cur_off_away = full_off_away
+            cur_def_home = full_def_home
+            cur_def_away = full_def_away
             if isinstance(home_prior, dict):
                 home_prior["full_strength_offense_index"] = full_off_home
                 home_prior["full_strength_defense_index"] = full_def_home
@@ -5025,8 +5028,10 @@ def run_nfl_market_simulations(
                 away_div = NFL_TEAM_DIVISION.get(str(m.get("away_abbr") or ""))
                 home_rest_val = _to_float(m.get("rest_days_home")) or 7.0
                 away_rest_val = _to_float(m.get("rest_days_away")) or 7.0
-                home_injury_impact = _to_float(home_nowcast.get("impact_score")) or 0.0
-                away_injury_impact = _to_float(away_nowcast.get("impact_score")) or 0.0
+                home_injury_impact, away_injury_impact, diff_injury_impact = impact_triple(
+                    home_nowcast.get("impact_score"),
+                    away_nowcast.get("impact_score"),
+                )
                 feature_row = {
                     "week": _to_float(mp.get("week")),
                     "home_off_epa_5g": _to_float(mp.get("home_off_epa_5g")),
@@ -5085,7 +5090,7 @@ def run_nfl_market_simulations(
                     ),
                     "home_injury_impact": home_injury_impact,
                     "away_injury_impact": away_injury_impact,
-                    "diff_injury_impact": home_injury_impact - away_injury_impact,
+                    "diff_injury_impact": diff_injury_impact,
                     "home_rest_days": home_rest_val,
                     "away_rest_days": away_rest_val,
                     "diff_rest_days": home_rest_val - away_rest_val,
@@ -5151,10 +5156,14 @@ def run_nfl_market_simulations(
                     "away_abbr": str(m.get("away_abbr") or ""),
                     "market_spread_home": market_lines.get("market_spread_home"),
                     "market_total": market_lines.get("market_total"),
-                    "offense_index_home": float(offense_home) * float(home_off_mult),
-                    "offense_index_away": float(offense_away) * float(away_off_mult),
-                    "defense_index_home": float(defense_home) / float(home_def_mult or 1.0),
-                    "defense_index_away": float(defense_away) / float(away_def_mult or 1.0),
+                    "offense_index_home": full_off_home,
+                    "offense_index_away": full_off_away,
+                    "defense_index_home": full_def_home,
+                    "defense_index_away": full_def_away,
+                    "home_nowcast": home_nowcast if isinstance(home_nowcast, dict) else {},
+                    "away_nowcast": away_nowcast if isinstance(away_nowcast, dict) else {},
+                    "injury_nowcast": injury_nowcast if isinstance(injury_nowcast, dict) else {},
+                    "kickoff": m.get("kickoff") or m.get("start_time") or m.get("game_date"),
                 }
             )
             processed += 1
@@ -5228,6 +5237,28 @@ def run_nfl_market_simulations(
                 projection_for_storage,
                 line_role="model",
             )
+            try:
+                _injury_cfg_hash = injury_config_hash()
+            except Exception:
+                _injury_cfg_hash = None
+            _item_nowcast = item.get("injury_nowcast") if isinstance(item.get("injury_nowcast"), dict) else {}
+            _injury_ledger = build_injury_accounting_ledger(
+                baseline_markets=projection_for_storage.get("markets")
+                if isinstance(projection_for_storage.get("markets"), dict)
+                else {},
+                home_nowcast=item.get("home_nowcast") if isinstance(item.get("home_nowcast"), dict) else {},
+                away_nowcast=item.get("away_nowcast") if isinstance(item.get("away_nowcast"), dict) else {},
+                as_of={
+                    "listing_as_of": _item_nowcast.get("listing_as_of"),
+                    "kickoff_utc": item.get("kickoff"),
+                },
+                source={
+                    "payload_sha256": None,
+                    "snapshot_id": None,
+                },
+                config_hash_value=_injury_cfg_hash,
+            )
+            stamp_projection_injury_accounting(projection_for_storage, _injury_ledger)
             audit_block = projection_for_storage.get("audit")
             if not isinstance(audit_block, dict):
                 audit_block = {}
@@ -6703,9 +6734,13 @@ def _fetch_nfl_supervised_training_rows(
         surface = str(row.get("surface") or "").lower()
         home_div = NFL_TEAM_DIVISION.get(home_team)
         away_div = NFL_TEAM_DIVISION.get(away_team)
-        row["home_injury_impact"] = home_inj.get("impact_score", 0.0)
-        row["away_injury_impact"] = away_inj.get("impact_score", 0.0)
-        row["diff_injury_impact"] = row["home_injury_impact"] - row["away_injury_impact"]
+        home_imp, away_imp, diff_imp = impact_triple(
+            home_inj.get("impact_score"),
+            away_inj.get("impact_score"),
+        )
+        row["home_injury_impact"] = home_imp
+        row["away_injury_impact"] = away_imp
+        row["diff_injury_impact"] = diff_imp
         row["home_rest_days"] = float(row.get("home_rest_days")) if row.get("home_rest_days") is not None else 7.0
         row["away_rest_days"] = float(row.get("away_rest_days")) if row.get("away_rest_days") is not None else 7.0
         row["diff_rest_days"] = row["home_rest_days"] - row["away_rest_days"]

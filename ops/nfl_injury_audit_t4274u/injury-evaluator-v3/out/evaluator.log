@@ -1,0 +1,6 @@
+cmd=python3 /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-v3/run_injury_residual_evaluator.py --out /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-v3/out --mode all
+STOP: LEAKAGE row0 source_ts>2022-09-11T17:00:00Z; row1 joined_before_freeze
+T-1..T-10 PASS
+F1 n=268 i4=INCONCLUSIVE
+F2 n=271 i4=INCONCLUSIVE
+pooled n=539 i4=NO CLAIM
