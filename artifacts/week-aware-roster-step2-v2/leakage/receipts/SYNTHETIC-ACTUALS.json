@@ -1,0 +1,152 @@
+{
+  "T-PIT-1": {
+    "id": "T-PIT-1",
+    "player_id": "00-SYN-JOIN",
+    "member": false,
+    "missingness": "MISSING_ROW",
+    "silent_include": false,
+    "qb1": false
+  },
+  "T-PIT-2": {
+    "id": "T-PIT-2",
+    "week": 6,
+    "qba_depth_order": 1,
+    "qbb_depth_order": 2,
+    "qba_is_qb1": true,
+    "qbb_is_qb1": false
+  },
+  "T-PIT-3": {
+    "id": "T-PIT-3",
+    "player_id": "00-SYN-TRD",
+    "membership": [
+      {
+        "week": 7,
+        "team": "AAA",
+        "member": true
+      },
+      {
+        "week": 8,
+        "team": "AAA",
+        "member": true
+      },
+      {
+        "week": 8,
+        "team": "BBB",
+        "member": false
+      },
+      {
+        "week": 9,
+        "team": "AAA",
+        "member": false
+      },
+      {
+        "week": 9,
+        "team": "BBB",
+        "member": true
+      }
+    ]
+  },
+  "T-PIT-4": {
+    "id": "T-PIT-4",
+    "player_id": "00-SYN-PS",
+    "after_cutoff": {
+      "member_53": false,
+      "promoted_role": false,
+      "missingness": "MISSING_ROW"
+    },
+    "before_cutoff": {
+      "member_53": true,
+      "promoted_role": true,
+      "missingness": "OK"
+    }
+  },
+  "T-PIT-5": {
+    "id": "T-PIT-5",
+    "player_id": "00-SYN-BEN",
+    "week1_roster_status_applied": false,
+    "mutated_eligible_res_applied": true,
+    "week1_member": false,
+    "injury_status_from_listing": "active",
+    "listing_as_of_ok": true,
+    "season_union_would_mark_res": true
+  },
+  "T-PIT-6": {
+    "id": "T-PIT-6",
+    "player_id": "00-SYN-NTS",
+    "member": false,
+    "missingness": "MISSING_TS",
+    "imputed_from_season": false,
+    "default_depth_2": false,
+    "x_continuity": null
+  },
+  "T-PIT-7": {
+    "id": "T-PIT-7",
+    "closed_at_cutoff": false,
+    "rows": [
+      {
+        "player_id": "00-SYN-LT",
+        "eligible": true,
+        "missingness": "OK"
+      },
+      {
+        "player_id": "00-SYN-EQ",
+        "eligible": false,
+        "missingness": "TS_EQUAL_CUTOFF"
+      },
+      {
+        "player_id": "00-SYN-GT",
+        "eligible": false,
+        "missingness": "TS_AFTER_CUTOFF"
+      }
+    ]
+  },
+  "T-PIT-8": {
+    "id": "T-PIT-8",
+    "required_classes": [
+      "injuries",
+      "rosters",
+      "depth",
+      "transactions",
+      "qb_changes",
+      "odds",
+      "weather"
+    ],
+    "undeclared_allowed": false,
+    "all_have_availability_ts_or_ryan_exempt": true,
+    "live_scan": {
+      "injuries": true,
+      "rosters": true,
+      "depth": true,
+      "transactions": true,
+      "qb_changes": false,
+      "odds": false,
+      "weather": false
+    },
+    "live_scan_deferred": [
+      "qb_changes",
+      "odds",
+      "weather"
+    ]
+  },
+  "T-PIT-9": {
+    "id": "T-PIT-9",
+    "bit_identical": true,
+    "n_runs": 2,
+    "cross_process": true
+  },
+  "T-PIT-10": {
+    "id": "T-PIT-10",
+    "cited_fit_sha8": "8d188da2",
+    "cited_builder_sha8": "247744d2",
+    "cited_fit_sha_ok": true,
+    "cited_builder_sha_ok": true,
+    "gpit_on_exit_code": 2,
+    "gpit_on_stderr_has_stop": true,
+    "gpit_on_n_members": 0,
+    "gpit_off_exit_code": 0,
+    "gpit_off_stderr_has_stop": false,
+    "gpit_off_stderr_has_superseded": true,
+    "gpit_off_player_in_season_union": true,
+    "gpit_off_distinct_from_on": true
+  }
+}

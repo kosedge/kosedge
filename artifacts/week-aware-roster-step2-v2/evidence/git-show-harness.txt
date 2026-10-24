@@ -1,0 +1,13 @@
+commit caf6cf167de883bb5e11039820623cff47262eb7
+Author:     Cursor Agent <cursoragent@cursor.com>
+AuthorDate: Sat Oct 24 22:19:55 2026 +0000
+Commit:     Cursor Agent <cursoragent@cursor.com>
+CommitDate: Sat Oct 24 22:19:55 2026 +0000
+
+    feat(nfl): week-aware Step 2 v2 harness after expected answers 1643d3ca
+    
+    Closes D-1 (harness writes harness_commit), D-2 (measurable
+    assertions), D-3 (cited load_rosters 8d188da2 / load_rosters_dir
+    247744d2). D-4 path (ii). No refit, no opening, no lock.
+    
+    Co-authored-by: kosedge <kosedge@users.noreply.github.com>

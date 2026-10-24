@@ -1,0 +1,2 @@
+caf6cf167de883bb5e11039820623cff47262eb7 feat(nfl): week-aware Step 2 v2 harness after expected answers 1643d3ca
+1643d3ca65877f20472c6f4f9fa0a0ae2d12c8da docs(nfl): file week-aware Step 2 v2 expected answers before harness
