@@ -1,0 +1,139 @@
+{
+  "filed_before_run": true,
+  "filed_note": "Holdout opening expected answers. Gate table plus output schema. NO holdout values. Filed and hashed before the opening runner exists. Ruling b7364186. Ryan CLEAR fabf8732. Request 35cbb56e. Real lock not written. No 2024/25 byte.",
+  "opening_permitted": false,
+  "holdout_years_opened": false,
+  "holdout_values": null,
+  "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+  "ryan_message_id": "t4335s14919",
+  "ryan_verbatim": "CLEAR: build the runner, IMV reviews, then open once",
+  "d2_ruling_sha": "b7364186cc2aa900fd39e2dd22e78e2e69b63d2cac11fd6fa6b234997494b6b8",
+  "request_v3_1_sha": "35cbb56e10cfe0ec3730441a453f171bda917e7c58ad3e5eb2fe2c573de5ef7b",
+  "scorer_sha": "ca98ae0e70fcdee77d46aed3c4f9be5644079da6adf08411891e1d5b7970e6c6",
+  "writer_sha": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f",
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "frozen_export_sha": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+  "frozen_script_sha": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+  "null_contract_sha": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+  "sot_spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+  "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+  "seed": 20261023,
+  "sigma_margin": 13.5,
+  "sigma_total": 14.0,
+  "gates_verbatim": {
+    "I-1": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+    "I-2": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+    "I-3": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+    "I-4": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+    "I-5": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+    "K-2": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+    "K-3": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+    "K-4": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off."
+  },
+  "i4_operational": {
+    "VALUE_PROVEN_requires": ["I-2 MET", "primary Holm-significant", "primary CI lo>0", "K-4 pass"],
+    "else": "NO CLAIM",
+    "I-2_shortfall": "INCONCLUSIVE",
+    "no_product_claim": true
+  },
+  "receipt_schema": {
+    "kind": "opening_receipt",
+    "opening_permitted": "bool — false in this package",
+    "holdout_years_opened": "bool — must be false in this package",
+    "lock": {
+      "path": "workspace-relative lock path",
+      "mode": "0444",
+      "sha256": "hex of lock bytes",
+      "status": "open|consumed",
+      "statement": "opened once",
+      "decision_sha": "fabf8732…",
+      "ryan_message_id": "t4335s14919",
+      "request_sha": "35cbb56e…",
+      "imv_d2_ruling_sha": "b7364186…",
+      "runner_sha": "this opening runner file sha",
+      "scorer_sha": "ca98ae0e…",
+      "writer_sha": "9947b880…",
+      "fit_sha": "6a5490db…",
+      "expected_sha": "this file sha",
+      "utc": "ISO-8601 Z",
+      "operator": "string"
+    },
+    "export_on_disk_sha": "holdout export on-disk .v2 pin or null if STOP before write",
+    "tz": {
+      "n_listings": "int",
+      "n_z": "int",
+      "n_offset": "int",
+      "n_naive": "int",
+      "n_empty": "int",
+      "n_other": "int",
+      "years_opened": "int list"
+    },
+    "incomplete": {
+      "n_incomplete": "int",
+      "n_incomplete_by_season": "map season->int",
+      "excluded_game_ids": "list of game_id"
+    },
+    "n_missing_close": "int",
+    "n_missing_close_by_season": "map season->int",
+    "folds": {
+      "F1": {"n": "int", "i2": "MET|INCONCLUSIVE", "i4": "VALUE PROVEN|NO CLAIM|INCONCLUSIVE", "k4": "object", "primary": "object"},
+      "F2": {"n": "int", "i2": "MET|INCONCLUSIVE", "i4": "VALUE PROVEN|NO CLAIM|INCONCLUSIVE", "k4": "object", "primary": "object"},
+      "pooled": {"n": "int", "i2": "MET|INCONCLUSIVE", "i4": "VALUE PROVEN|NO CLAIM|INCONCLUSIVE", "k4": "object", "primary": "object"}
+    },
+    "log_sha": "sha256 of out/runner.log",
+    "stop": "STOP line or null",
+    "consumed": "bool — true if any STOP after lock write"
+  },
+  "F-HOLDOUT": {
+    "stop": true,
+    "via": "main(['--mode','holdout','--workspace', fixture])",
+    "must_contain": "O-1 export: holdout listings absent after lock",
+    "lock_written": true,
+    "lock_consumed": true,
+    "real_lock_written": false,
+    "holdout_bytes_read": false
+  },
+  "F-LOCK-PRESENT": {
+    "stop": true,
+    "must_contain": "O-3 lock: existing lock"
+  },
+  "F-DOUBLE-OPEN": {
+    "stop": true,
+    "must_contain": "O-3 lock: existing lock"
+  },
+  "F-REFIT": {
+    "stop": true,
+    "must_contain": "O-1 refuse: no tuning or refit path",
+    "lock_written": false
+  },
+  "F-PER-SIDE": {
+    "stop": true,
+    "must_contain": "O-5 incomplete: complete row has a null per-side timestamp"
+  },
+  "F-DEFAULT-HOLDOUT": {
+    "stop": true,
+    "via": "main(['--mode','holdout'])",
+    "must_contain": "O-1 opening blocked",
+    "lock_written": false,
+    "real_lock_written": false
+  },
+  "le2023_guards": {
+    "n_listings": 58653,
+    "n_z": 58653,
+    "n_naive": 0,
+    "n_incomplete": 11,
+    "excluded_game_ids": [
+      "2013_1_CIN_CHI",
+      "2013_1_NYG_DAL",
+      "2014_15_SF_SEA",
+      "2015_1_NO_ARI",
+      "2017_1_IND_LA",
+      "2020_1_GB_MIN",
+      "2020_6_KC_BUF",
+      "2022_2_IND_JAX",
+      "2022_7_CHI_NE",
+      "2022_12_BAL_JAX",
+      "2023_5_HOU_ATL"
+    ]
+  }
+}
