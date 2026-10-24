@@ -1808,7 +1808,7 @@ def run_le2023(expected: Dict[str, Any], out_dir: Path) -> Dict[str, Any]:
         die(f"B-4b(R) deposited n={deposited.get('n')} games={len(deposited.get('games') or [])}")
     if compare.get("verdict") != "0_DIFF":
         die(f"B-4b(R) deposited compare verdict {compare.get('verdict')} != 0_DIFF")
-    if int(compare.get("n_delta_margin_diff") or 1) or int(compare.get("n_delta_total_diff") or 1):
+    if compare.get("n_delta_margin_diff") != 0 or compare.get("n_delta_total_diff") != 0:
         die("B-4b(R) deposited compare is not 0-diff")
     builder = import_builder()
     live = builder.reproduce_le2023_a38a55bb(HERE)
