@@ -1,0 +1,142 @@
+IMV RULING: NFL INJURY HOLDOUT RUNNER D-2 - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_RUNNER_D2_v1.txt
+Filed: 2026-10-24 11:12:34 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Scope: one-pass review of /workspace/ops/nfl_injury_audit_t4274u/injury-holdout-runner-d2/ against
+  8ca00bc4 (+ erratum 14ac1819) and request v3.1 35cbb56e.
+Method: text only. No project code was run; only IMV read-only sha256sum/python csv/json reads of
+  le2023 files. No network, no GitHub, no git; no 2024/25 data, PBP, parquet or .rds; exact paths;
+  no worktree writes. Hex masked.
+Cycle record: 10th submission on this track. One-pass acceptance of the D-2 guards: YES WITH
+  CONDITIONS. The opening stage is not yet submitted.
+
+AUTHORIZATION (graded as a DECISION FILE, not a transcript)
+  - /workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_t4335s14919_HOLDOUT_CLEAR_v3_1_v1.txt:
+    sha8 fabf8732 = its sidecar; 0444; dated 11:01 ET; card t4335s14919.
+  - Quotes verbatim: "CLEAR: build the runner, IMV reviews, then open once".
+  - Scope: request v3.1 35cbb56e, plus 8ca00bc4 + 14ac1819.
+  - Conditions: no 2024/25 read before IMV passes the runner; lock; single opening; no merge/deploy.
+  - It is a recorded decision file that cites the card id. IMV did not see the underlying message
+    (secondhand as to the transcript). It is valid as the CLEAR record required by v3.1.
+
+INTEGRITY (IMV-computed)
+  - MANIFEST = 25c4625e (matches its sidecar). SHA256SUMS: 79 entries, all OK.
+  - Runner run_injury_holdout_d2.py = 1e8facd8 (FILE sha, 600 lines, read in full).
+  - Expected answers: the FILE t_expected/D2_EXPECTED.json is e46b4fec (sidecar matches).
+    ff3b3b0b is the COMMIT (inputs/expected_answers_commit.txt), so "filed before the runner" is
+    secondhand.
+  - Seeded export: on-disk a38a55bb (.sha256.v2); blob 46d2a565 (.sha256).
+
+D-2 ITEMS IN CODE (inspected)
+  1 Listings TZ census, naive STOP (census_listings_tz / classify_date_modified):
+    - classifies every date_modified as z / offset / naive / empty / other;
+    - naive -> STOP, and any empty or other -> STOP;
+    - opens only the allowed years and refuses holdout file names or seasons. MET.
+  2 Incomplete-row rule, counted before any join (apply_incomplete_row_rule):
+    - complete with a null aggregate timestamp -> STOP;
+    - incomplete with any of the 5 timestamps or either delta non-null -> STOP;
+    - it refuses if state.joined is set;
+    - join_close_or_outcome refuses unless the TZ census and incomplete count are done, and in this
+      package it always STOPs. MET.
+  3 Observed excluded IDs and counts by season are written to out/*/provenance.md and
+    d2_results.json. MET.
+  4 Export pin by on-disk .v2 (pin_export_v2):
+    - a missing .v2 -> STOP; a sidecar basename mismatch -> STOP;
+    - a sidecar equal to the blob hash -> STOP; sidecar != on-disk -> STOP;
+    - on-disk equal to 46d2a565 -> STOP. MET.
+  Also: the env is refused if NFL_TOTALS_* is set; it refuses if a token or lock file is present; all
+  seeded shas are resolved.
+
+FIXTURES (code read; output graded trusted-internal; there is no separate stderr log, only
+  d2-report.md and checker.stdout)
+  - F-NAIVE, F-INC-TS, F-INC-DELTA, F-COMP-NULL, F-V2-MISSING, F-V2-BLOB and F-V2-MISMATCH each run
+    the full run_pipeline on a dedicated fixture dir. Each STOP message shown in d2-report.md matches
+    D2_EXPECTED must_contain.
+  - F-JOIN-FIRST calls join with tz done and incomplete not done -> the order STOP. Genuine.
+  - F-NAME calls assert_path_not_holdout("listings_2024.csv") -> STOP. Genuine, but a unit-level test
+    only.
+  - F-HOLDOUT is TAUTOLOGICAL: the fixture calls die() directly and does not run main --mode
+    holdout. The checker's holdout_mode "stop" is trusted-internal. In code, main --mode holdout
+    calls mode_holdout(), which dies unconditionally, before resolve_seeded and after the env/token
+    checks.
+  - F-OK records n_incomplete = 1, ids [2022_2_CCC_DDD], as expected.
+
+le2023 CLAIMS
+  INSPECTED by IMV (seeded/listings-le2023/, le2023 csv only):
+  - 11 files, 2013-2023; shas match notes/listings-le2023-sha256.txt and the earlier c3 shas;
+  - rows 58653: Z 58653, naive 0, offset 0, other 0, holdout seasons 0;
+  - game_type REG 56537, WC 1010, DIV 669, CON 324, SB 113.
+  This UPGRADES C-3 and D-3 (e7a0d737 / 14ac1819) from secondhand to INSPECTED.
+  Trusted-internal: out/le2023 results show n_incomplete 11, by season 2013:2, 2014:1, 2015:1,
+    2017:1, 2020:2, 2022:3, 2023:1, ids identical to the IMV pin (d18ebf22 (d)), n_kept 2852;
+    joined false; opening_permitted false.
+
+SCOPE OF THE RUNNER - FINDINGS
+  - 2024/25 read before the lock: NO PATH FOUND. There is no holdout input parameter; mode holdout
+    dies; the name/season/path guards are present.
+  - Close/outcome leak into inputs: NO PATH. No close or outcome file is read; the join always STOPs.
+  - Fit: there is no fit or refit code (no tuning path). 6a5490db and d87e6129 are NOT pinned or
+    referenced in the runner; only HEAD 8e2a15ac is.
+  - Seed 20261023 is noted as "reserved, unused".
+  - Gates, metrics, folds and bootstrap: NOT PRESENT. Nothing is imported from scorer ca98ae0e and
+    nothing is byte-copied. The runner scores nothing.
+  - "Open once": NOT IMPLEMENTED. There is no lock write, no lock-then-open sequence, no single-use
+    marker and no receipt. assert_no_tokens only refuses if a lock already exists.
+  - The holdout export does not exist. Writing it (the Path 1 writer on 2024/25 listings) IS itself a
+    2024/25 read and therefore part of the opening.
+
+VERDICT: PASS WITH CONDITIONS on the D-2 guard components (D-2 CLOSED as code + fixtures).
+  LOCK + SINGLE OPENING MAY NOT PROCEED YET. This package contains no opening, scoring or lock code,
+  so "open once" cannot be executed by IMV-reviewed code. No gate is changed.
+
+COMPLETE DEFECT LIST
+  - O-1 (BLOCKER for lock/opening): an opening runner (new sha) that, in one process, does:
+    lock check -> lock write -> holdout export write by the frozen Path 1 writer -> D-2 guards
+    (pin .v2, TZ census, incomplete rule) -> close/outcome join -> score.
+    - Scoring must import scorer ca98ae0e by sha-verified path, or be byte-identical (gates, metrics,
+      folds, bootstrap; seed 20261023; sigma 13.5/14.0).
+    - No tuning or refit path.
+    - It must fail closed if any step STOPs, AFTER the lock is consumed.
+  - O-2: pin fit_object 6a5490db, frozen export d87e6129 (reference), writer 9947b880 / frozen
+    script 8d188da2 / null contract ff8e6527 in the runner, and assert them before the lock.
+  - O-3: single-use enforcement in code, with fixtures:
+    - an existing lock -> STOP;
+    - the lock is written (0444, with sha) before the first 2024/25 byte is read;
+    - a second invocation -> STOP;
+    - an abort after the lock records "consumed".
+  - O-4: replace the tautological F-HOLDOUT with a real main(["--mode","holdout"]) fixture. Add
+    fixtures for lock-present, double-open and refit-attempt.
+  - O-5 (minor): the complete-row check should also require per-side timestamps (source_ts_home/away)
+    to be non-null.
+  - O-6 (minor): emit a stderr run log with the STOP lines into out/ and SUMS.
+  - O-7 (evidence): the expected-answers commit order for ff3b3b0b is secondhand. Record the commit
+    time vs the runner file time in a C-4-style note.
+
+LOCK-TIME REQUIREMENTS (for the opening after O-1..O-4 PASS)
+  - The runner sha is pinned in the lock and equals the IMV-passed sha.
+  - The scorer is ca98ae0e and the expected answers are the then-current file sha. Expected answers
+    for the holdout (gate table plus output schema, no values) must be filed before the lock.
+  - The code state is tagged or committed, and the tag/commit id is recorded (not merged/deployed;
+    NO-GO stands).
+  - The lock file records: Ryan decision fabf8732 + t4335s14919; IMV PASS ruling sha;
+    request 35cbb56e; runner, scorer, writer, fit and expected shas; UTC time; operator; and the
+    statement "opened once".
+  - The opening receipt must contain:
+    - the holdout export on-disk .v2 sha;
+    - the TZ census counts;
+    - n_incomplete and its ids by season;
+    - n_missing_close by season;
+    - F1/F2/pooled verdicts with all I/K values;
+    - stdout/log shas; MANIFEST/SUMS;
+    - any STOP, which consumes the holdout.
+  - All outputs are 0444, followed by an IMV one-pass review of the receipt. No product claim (I-5).
+
+SHORTEST PATH
+  1 Build the opening runner (O-1..O-4; O-5..O-7 alongside) and file the expected answers first.
+  2 IMV one-pass review of that runner sha.
+  3 Write the lock per the requirements above, then the single opening, then the receipt.
+  4 IMV receipt review.
+  Ryan's CLEAR fabf8732 already covers this sequence ("build the runner, IMV reviews, then open
+  once"). No further CLEAR is needed unless the scope changes.
+
+NO-GO, Coming Soon ON.
