@@ -1,0 +1,22 @@
+{
+  "package": "week-aware-roster-step2-v1",
+  "step": 2,
+  "imv_spec_sha8": "8eb532c1",
+  "inv1_unconditional_pass": "af37925e",
+  "inv1_base_manifest": "7d93380e",
+  "inv1_erratum_manifest": "396800e3",
+  "scoring_rule_delta": "none",
+  "metric_gates": "K-2..K-4 I-1..I-5 unchanged",
+  "closed_at_cutoff": false,
+  "refit": false,
+  "opening": false,
+  "holdout_read": false,
+  "source_sot_pin": false,
+  "gpit_mode_default": "1",
+  "n_dev_games": 2863,
+  "n_reconstructible": 0,
+  "b2b_2024_2025_opened": false,
+  "expected_answers_commit": null,
+  "harness_commit": null,
+  "needs_ryan": ["NR-1"]
+}

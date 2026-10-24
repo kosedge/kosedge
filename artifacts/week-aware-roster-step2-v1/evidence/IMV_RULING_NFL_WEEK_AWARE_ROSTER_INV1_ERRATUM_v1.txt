@@ -1,0 +1,94 @@
+IMV RULING: NFL WEEK-AWARE ROSTER INV-1 ERRATUM - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_WEEK_AWARE_ROSTER_INV1_ERRATUM_v1.txt
+Filed: Saturday 2026-10-24 18:03:53 EDT
+Author: IMV (Model Validation Lead). IMV builds nothing it validates.
+Scope: re-hash of
+  /workspace/ops/nfl_injury_audit_t4274u/week-aware-roster-inv1-erratum-v1/
+  against conditions C-1..C-4 in
+  IMV_RULING_NFL_WEEK_AWARE_ROSTER_INV1_v1.txt (sha8 988c0d65).
+Method: sha256sum -c; Read of ERRATUM/C-1..C-4/pins/COS/STOP; cmp of
+  cited/holdout_delta_producer.py vs injury-holdout-opening-runner-v6 copy;
+  rg for pre-kickoff on runner/expected/gate; re-hash registers on this box.
+  No project code run, no network, no git, no GitHub, no 2024/25 pack open,
+  no lock. Hex masked except sha8 pins.
+Parent: INV-1 PASS WITH CONDITIONS 988c0d65; MANIFEST 7d93380e unchanged as
+  inventory base. This erratum amends it.
+
+==========================================================================================
+VERDICT: PASS
+==========================================================================================
+INV1_ERRATUM_VERDICT: PASS
+INV1_COMBINED_STATUS: UNCONDITIONAL PASS (INV-1 7d93380e + erratum 396800e3)
+MANIFEST_SHA8: 396800e3
+MANIFEST_SHA256: 396800e3b4405aa7deb543adb011441cab2c30035b7b3451c0dd249449b981c2
+Conditions C-1..C-4 CLOSED. No source pins, no refit, no opening, no new
+Ryan CLEAR authorized. Step 2 (revised SPEC + T-PIT package) may proceed
+under SPEC 8eb532c1 only after CoS directs Cursor; IMV still reviews Step 2
+before any holdout request.
+
+==========================================================================================
+1. INTEGRITY (IMV-inspected)
+==========================================================================================
+- SHA256SUMS: 0 failures.
+- MANIFEST sha8 396800e3 MATCH CoS claim.
+- Deposit files 0444; holdout-once.lock ABSENT.
+- evidence/IMV_RULING…INV1_v1.txt byte-identical to filed 988c0d65.
+- pins.json: nr2_withdrawn true; needs_ryan ["NR-1"]; registers cite
+  DATA_ASSETS 8ca7c553 and INVENTORY cf9ebb2ffb27 with hashed_on_this_vm
+  false (honest Cursor VM miss); b9_g5 text correct; producer sha
+  ae8f9585…; b2b DO-NOT-OPEN sizes; step2/refit/pins false.
+
+==========================================================================================
+2. C-1 MAJOR — CLOSED
+==========================================================================================
+NR-2 withdrawn in ERRATUM, C-1-nr2-withdrawn.md, COS-HANDOFF, STOP.
+B9/G5 reclassified: "register exists; no week-aware roster/depth asset row."
+IMV re-hashed on this box:
+  /workspace/kosedge-registers/DATA_ASSETS.md → sha8 8ca7c553 MATCH
+  /workspace/ops/nfl_data_inventory_t4183u/INVENTORY_v1.md → sha12 cf9ebb2ffb27 MATCH
+Needs-Ryan remaining: NR-1 only. No spend. Odds API ON HOLD.
+
+==========================================================================================
+3. C-2 MINOR — CLOSED
+==========================================================================================
+A6 general "v6 freezes pre-kickoff claim" sentence DROPPED.
+cited/holdout_delta_producer.py sha8 ae8f9585: cmp EQUAL to
+  injury-holdout-opening-runner-v6/holdout_delta_producer.py.
+IMV line check MATCH cites:
+  L12 "pre-kickoff information only, with as_of <= kickoff"
+  L78-81 _pre_kickoff_only (post-game score fields)
+  L84-99 _assert_as_of_before_kickoff (listing_as_of only)
+  L130-131 both called
+rg on run_injury_holdout_opening.py, gate-table.md,
+  t_expected/HOLDOUT_HAND_CHECK.md, t_expected/HOLDOUT_EXPECTED.json:
+  0 matches for pre-kickoff / as_of <= kickoff. Claim of no runner/
+  expected-answers A6 cite CONFIRMED.
+
+==========================================================================================
+4. C-3 MINOR — CLOSED
+==========================================================================================
+holdout_v3 L812-840, ingest.py L1735-1795, injury_paths.py,
+deploy-vercel HEAD 20d51f22 all labeled SECONDHAND. Producer deposited
+for re-hash (done above).
+
+==========================================================================================
+5. C-4 MINOR — CLOSED
+==========================================================================================
+B2b nfl_depth_chart_2024_w1.json (70910) and _2025_w1.json (78884)
+tagged EXISTING BUT UNVERIFIED; holdout-era DO-NOT-OPEN; name+size only;
+contents not read. IMV did not open those files.
+
+==========================================================================================
+6. DISPOSITIONS / NEXT
+==========================================================================================
+- INV-1 track: UNCONDITIONAL PASS (base + erratum).
+- NR-1 still open Needs-Ryan (drive/research-store weekly archives).
+- SPEC 8eb532c1 Step 2 now eligible when CoS directs: revised
+  implementation SPEC + T-PIT-1..10 leakage package on synthetic +
+  approved development only.
+- Still forbidden until Steps 2–6 + NEW Ryan CLEAR: source SoT pins that
+  invent coverage, refit, holdout open, lock write, merges/deploys/
+  publication.
+- Season-level fit/export evidence remains SUPERSEDED for week-aware cert.
+
+NO-GO, Coming Soon ON.

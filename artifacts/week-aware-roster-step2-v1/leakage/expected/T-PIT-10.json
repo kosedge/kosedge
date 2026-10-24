@@ -1,0 +1,7 @@
+{
+  "id": "T-PIT-10",
+  "gpit_mode": "1",
+  "season_level_loader": "HARD_STOP",
+  "exit_code": 2,
+  "stderr_contains": "G-PIT STOP: season-level roster loader forbidden"
+}
