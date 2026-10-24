@@ -1,0 +1,20 @@
+{
+  "holdout_years_opened": [],
+  "surfaces": [
+    {"id": "A1-LOAD", "group": "A1", "path": "holdout_frozen_row_builder.py", "sha8": "247744d2", "symbol": "load_rosters_dir", "lines": "267-302", "leak": ["membership", "depth", "role"], "holdout_opened": false},
+    {"id": "A1-BUILD", "group": "A1", "path": "holdout_frozen_row_builder.py", "sha8": "247744d2", "symbol": "build_rows", "lines": "327-329", "leak": ["membership", "depth", "role"], "holdout_opened": false},
+    {"id": "A1-FITLOAD", "group": "A1", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "load_rosters", "lines": "289-314", "leak": ["membership", "depth", "role"], "holdout_opened": false},
+    {"id": "A1-PRE", "group": "A1", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "precompute_games", "lines": "458-497", "leak": ["membership", "depth", "role"], "holdout_opened": false},
+    {"id": "A1-UNITS", "group": "A1", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "side_units", "lines": "534-562", "leak": ["role"], "holdout_opened": false},
+    {"id": "A1-WRITE", "group": "A1", "path": "write_sealed_injury_export_ts_v1.py", "sha8": "9947b880", "symbol": "export", "lines": "338-345", "leak": ["membership", "depth", "role"], "holdout_opened": false},
+    {"id": "A2-VAL", "group": "A2", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "precompute_games", "lines": "466-485", "leak": ["depth", "role"], "holdout_opened": false},
+    {"id": "A2-IDX", "group": "A2", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "_structural_index", "lines": "149-176", "leak": ["role"], "holdout_opened": false},
+    {"id": "A2-IDENT", "group": "A2", "path": "nfl_injury_null_contract_8e2a15ac.py", "sha8": "ff8e6527", "symbol": "resolve_fit_player_identity", "lines": "658-688", "leak": ["membership"], "holdout_opened": false},
+    {"id": "A3-APPLY", "group": "A3", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "apply_params", "lines": "565-718", "leak": ["membership", "depth", "role"], "holdout_opened": false},
+    {"id": "A3-OBJ", "group": "A3", "path": "fit_object.json", "sha8": "6a5490db", "symbol": "Spec C", "lines": null, "leak": ["membership", "depth", "role"], "classification": "SUPERSEDED", "holdout_opened": false},
+    {"id": "A3-EXP", "group": "A3", "path": "le2023 export", "sha8": "a38a55bb", "symbol": "sealed export", "lines": null, "leak": ["membership", "depth", "role"], "classification": "SUPERSEDED", "holdout_opened": false},
+    {"id": "A4-CONT", "group": "A4", "path": "run_injury_residual_fit.py", "sha8": "8d188da2", "symbol": "continuity_for_team", "lines": "355-396", "leak": ["membership", "role"], "r6_satisfied": false, "holdout_opened": false},
+    {"id": "A5-CLAIM", "group": "A5", "path": "holdout_delta_producer.py", "sha8": "ae8f9585", "symbol": "_assert_as_of_before_kickoff", "lines": "12,78-99,128-129", "leak": ["claim"], "holdout_opened": false},
+    {"id": "A6-V6", "group": "A6", "path": "artifacts/injury-holdout-opening-runner-v6/", "sha8": null, "symbol": "paused package", "lines": null, "leak": ["claim"], "holdout_opened": false}
+  ]
+}
