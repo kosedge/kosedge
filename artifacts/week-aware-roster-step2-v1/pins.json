@@ -16,7 +16,7 @@
   "n_dev_games": 2863,
   "n_reconstructible": 0,
   "b2b_2024_2025_opened": false,
-  "expected_answers_commit": null,
+  "expected_answers_commit": "528797468b860cde2f9e39e88a8e2d0e8decc29a",
   "harness_commit": null,
   "needs_ryan": ["NR-1"]
 }
