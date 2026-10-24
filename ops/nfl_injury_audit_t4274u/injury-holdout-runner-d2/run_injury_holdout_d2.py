@@ -103,6 +103,13 @@ def pkg_path(*parts: str) -> Path:
     return path
 
 
+def relpath(path: Path) -> str:
+    try:
+        return path.resolve().relative_to(HERE).as_posix()
+    except ValueError:
+        return path.name
+
+
 def assert_env_clean() -> None:
     leaked = sorted(k for k in os.environ if k.startswith(NFL_TOTALS_PREFIX))
     if leaked:
@@ -153,7 +160,7 @@ def pin_export_v2(export_path: Path, sidecar_path: Optional[Path] = None) -> Dic
     sidecar = sidecar_path or Path(str(export_path) + ".sha256.v2")
     assert_path_not_holdout(sidecar)
     if not sidecar.is_file():
-        die(f"D-2 export pin: missing on-disk .v2 sidecar {sidecar}")
+        die(f"D-2 export pin: missing on-disk .v2 sidecar {relpath(sidecar)}")
     line = sidecar.read_text(encoding="utf-8").strip()
     parts = line.split()
     if len(parts) != 2:
@@ -453,7 +460,7 @@ def run_fixtures(expected: Dict[str, Any], out_dir: Path) -> Dict[str, Any]:
     results["F-V2-MISMATCH"] = require_stop(capture_stop(f_v2_mismatch), expected["F-V2-MISMATCH"]["must_contain"], "F-V2-MISMATCH")
 
     def f_join_first() -> None:
-        state: Dict[str, Any] = {}
+        state: Dict[str, Any] = {"tz_census_done": True}
         join_close_or_outcome(state, [{"season": 2022}])
 
     results["F-JOIN-FIRST"] = require_stop(capture_stop(f_join_first), expected["F-JOIN-FIRST"]["must_contain"], "F-JOIN-FIRST")

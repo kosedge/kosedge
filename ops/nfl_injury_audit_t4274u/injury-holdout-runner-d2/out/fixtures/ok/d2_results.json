@@ -1,0 +1,34 @@
+{
+  "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+  "export_blob_sha_not_a_pin": "6301573f5e01b3d33a6b1e06b33d682c7b644da29c39f6c697cc615e9bf72d97",
+  "export_on_disk_sha": "a4f9193c0fefa8f42bfabc788c64451ab43dffff7cfcdb00bdead203f7f4b9aa",
+  "holdout_years_opened": false,
+  "incomplete": {
+    "excluded_game_ids": [
+      "2022_2_CCC_DDD"
+    ],
+    "n_incomplete": 1,
+    "n_incomplete_by_season": {
+      "2022": 1
+    },
+    "n_kept": 1
+  },
+  "joined": false,
+  "kind": "F-OK",
+  "opening_permitted": false,
+  "tz": {
+    "examples": {
+      "offset": "2022-09-11T16:05:00-04:00",
+      "z": "2022-09-11T16:00:00Z"
+    },
+    "n_empty": 0,
+    "n_listings": 2,
+    "n_naive": 0,
+    "n_offset": 1,
+    "n_other": 0,
+    "n_z": 1,
+    "years_opened": [
+      2022
+    ]
+  }
+}

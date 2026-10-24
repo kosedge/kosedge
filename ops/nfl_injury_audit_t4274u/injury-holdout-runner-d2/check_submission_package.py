@@ -21,7 +21,7 @@ REQUIRED_EXPORT = "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706
 REQUIRED_EXPORT_BLOB_NOT_A_PIN = "46d2a5657d1b5a5eb1af03f4d643afbfaa4762f31260daff439b5df1ac1456eb"
 REQUIRED_EXPECTED = "e46b4fec5bdf892291c1f1617f59a5b1bd0d6f90d1e288fd005a149542260043"
 REQUIRED_EXPECTED_COMMIT = "ff3b3b0bfe91a42d4165a2cd81d5a811277b38c7"
-SKIP_DIRS = {".git", "__pycache__"}
+SKIP_DIRS = {".git", "__pycache__", "fixtures-checker"}
 SKIP_NAMES = {"MANIFEST", "SHA256SUMS", "MANIFEST.sha256", "checker.log", "checker.stdout.txt"}
 SEEDED = (
     ("decision", "seeded/DECISION_RYAN_t4335s14919_HOLDOUT_CLEAR_v3_1_v1.txt", REQUIRED_DECISION),
@@ -76,7 +76,7 @@ def write_manifest(root: Path) -> None:
 def behavioral(mod, root: Path, errors: List[str]) -> Dict[str, Any]:
     out: Dict[str, Any] = {}
     expected = json.loads((root / "t_expected/D2_EXPECTED.json").read_text(encoding="utf-8"))
-    fixtures = mod.run_fixtures(expected, root / "out" / "fixtures-checker")
+    fixtures = mod.run_fixtures(expected, Path("/tmp/injury-d2-fixtures-checker"))
     for key in (
         "F-NAIVE",
         "F-INC-TS",
@@ -133,7 +133,8 @@ def main() -> int:
         got = sha256_file(path)
         if got != exp:
             errors.append(f"SEEDED {label} {got} != {exp}")
-    if (root / "seeded/listings-le2023").glob("listings_2024.csv") or list((root / "seeded/listings-le2023").glob("listings_2025.csv")):
+    listings_le = root / "seeded/listings-le2023"
+    if list(listings_le.glob("listings_2024.csv")) or list(listings_le.glob("listings_2025.csv")) or list(listings_le.glob("listings_2026.csv")):
         errors.append("holdout listings present")
     if errors:
         print(json.dumps({"ok": False, "n_errors": len(errors), "errors": errors}, indent=2))
