@@ -23,8 +23,8 @@
   "b2b_2024_2025_opened": false,
   "cited_load_rosters": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
   "cited_load_rosters_dir": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
-  "expected_answers_commit": null,
-  "harness_commit": null,
+  "expected_answers_commit": "1643d3ca65877f20472c6f4f9fa0a0ae2d12c8da",
+  "harness_commit": "caf6cf167de883bb5e11039820623cff47262eb7",
   "commit_order_proof": "deposited_git_show",
   "v1_commit_order": "SECONDHAND",
   "needs_ryan": ["NR-1"]
