@@ -1,0 +1,37 @@
+{
+  "games": [
+    {
+      "away": "BBB",
+      "complete": true,
+      "delta_margin": 1.0,
+      "delta_total": 0.2,
+      "game_id": "2022_1_BBB_AAA",
+      "home": "AAA",
+      "kickoff_utc": "2022-09-11T18:00:00Z",
+      "row_status": "ok",
+      "season": 2022,
+      "sides": {
+        "away": {
+          "listing_as_of": "2022-09-11T16:00:00Z"
+        },
+        "home": {
+          "listing_as_of": "2022-09-11T16:00:00Z"
+        }
+      },
+      "week": 1
+    },
+    {
+      "away": "CCC",
+      "complete": false,
+      "delta_margin": null,
+      "delta_total": null,
+      "game_id": "2022_2_CCC_DDD",
+      "home": "DDD",
+      "kickoff_utc": null,
+      "row_status": "incomplete",
+      "season": 2022,
+      "sides": {},
+      "week": 2
+    }
+  ]
+}
