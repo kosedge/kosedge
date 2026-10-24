@@ -1,0 +1,89 @@
+IMV RULING: NFL INJURY EVALUATOR READINESS - v6 (v6.1 package + HOLDOUT REQUEST v3.1)
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v6.txt
+Filed: 2026-10-24 09:53:07 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Scope: one-pass check of /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-v6.1/ and
+  nfl-injury-holdout-request-2024-2025-v3.1.md (sha8 35cbb56e) against e7a0d737 D-1, D-3, D-4 and D-5.
+Method: text only. No project code was run; only IMV read-only cmp/diff/sha256sum/python json reads.
+  No network, no GitHub, no git; no 2024/25 data, PBP, parquet or .rds; exact paths; no worktree
+  writes. Hex masked.
+Cycle record: 9th submission on this track. One-pass acceptance: YES.
+
+INTEGRITY (IMV-computed)
+  - MANIFEST = dcd76b54 (matches its sidecar). SHA256SUMS: 57 entries, all OK.
+  - Scorer = ca98ae0e. Request v3.1 = 35cbb56e. v3 4c40a0e7 kept unchanged.
+  - Expected-answers FILE = 1358bc64 (sidecar matches). 74662be2 is the COMMIT
+    (inputs/expected_answers_commit.txt).
+  - Seeded rulings are cmp byte-exact with the IMV originals: e7a0d737, 1ef1f0a7, d18ebf22, 501e8a99,
+    a0501d57, 1a090e3b, 88da5f42.
+  - checker ok:true, n_errors 0, bit_identical_out true.
+  - out/ = out-rerun/: report 3285f350, results 4528cb64, provenance 1d441224.
+  - Folds unchanged: F1 INCONCLUSIVE, F2 INCONCLUSIVE, pooled NO CLAIM.
+  - IMV compared v6 vs v6.1 results: per fold, metrics, modeling (M-1..M-5) and i4 are IDENTICAL.
+    Only provenance/expected/kind/ruling/test fields differ.
+
+SCORER DIFF e0d82c91 -> ca98ae0e (full diff read by IMV)
+  The only changes are:
+  - the docstring;
+  - REQUIRED_RULING -> e7a0d737, plus REQUIRED_READINESS_V4 = 1ef1f0a7 (and its resolve);
+  - REQUIRED_EXPECTED -> 1358bc64;
+  - the D-5 T-9 fixture block (+45 lines) and the d5_pinned_complete_stop flag;
+  - the report title, kind, and the provenance strings and notes list.
+  No change to the gates, metrics, folds, parsing, exclusion, leakage or bootstrap code. No unrelated
+  change.
+
+DISPOSITIONS
+D-1 CLOSED.
+  - Request v3.1 and notes/d1-imv-original-paths.md give the full IMV path and full sha256 for
+    e7a0d737, 1ef1f0a7, d18ebf22 and 501e8a99. Each package copy is byte-exact (inspected).
+  - 0e0d54bc is still not cited.
+D-3 CLOSED on arithmetic and mechanism; the counts are SECONDHAND.
+  - 1010 + 669 + 324 + 113 = 2116, and 56537 + 2116 = 58653: arithmetic verified.
+  - The mechanism (load_listings keeps game_type == REG only) is consistent with the REG filtering
+    IMV previously read in the frozen script (0ad8aca9).
+  - The raw listings directory is not on this box, so the per-type counts are secondhand.
+D-4 CLOSED (disclosure).
+  - The v6 order (967ec5d7 13:36:02Z < 6af27a22 13:37:16Z) is in notes/c4-expected-answers-commit-order.md
+    (L42-59) and in request v3.1. The git order remains secondhand for IMV.
+D-5 CLOSED (inspected code; log trusted-internal).
+  - Fixture: the 11 pinned rows, with 2022_2_IND_JAX set complete=true (with timestamps and deltas) ->
+    apply_c5_exclude(pinned_ids=...) must STOP.
+  - The log shows "STOP: C-2: excluded set [... 10 ids] != pinned [... 11 ids]".
+  - The expected answers key pinned_id_complete_set_mismatch == "STOP" is asserted.
+EVIDENCE CLASSES
+  Inspected: hashes; byte compares; the scorer diff; the request diff; notes; results JSON.
+  Trusted-internal secondhand: checker and evaluator execution; the T-9 log lines.
+  Secondhand: raw listing counts (D-3); git commit order (C-4/D-4, including 74662be2 before
+    ca98ae0e); the store copies.
+
+REQUEST v3.1 (35cbb56e) AS A DOCUMENT
+  - No runner: CONFIRMED. "D-2 runner is not attached", and building/running it is listed as
+    forbidden until CLEAR. The scorer keeps the FORBIDDEN 2024/25/26 guards.
+  - Gates: the I-1..I-5 and K-2..K-4 sections are untouched by the diff, so the e7a0d737 verbatim
+    finding stands. No gate is weakened.
+  - It requires IMV review of the v3.1 sha plus Ryan's explicit CLEAR (message id + decision-file
+    sha). It also states that the D-2 runner needs its own IMV review before any 2024/25 read.
+    CONFIRMED.
+
+VERDICT: PASS (scorer and gates; request v3.1 as a document).
+  - This ruling is the IMV review of request v3.1 sha 35cbb56e.
+  - Request v3.1 is READY for Ryan's CLEAR decision. It is Ryan's decision alone; IMV does not CLEAR.
+  - Opening is NOT permitted by this PASS.
+
+COMPLETE DEFECT LIST
+  - D-2 (OPENING BLOCKER, carried): after any CLEAR, and before any 2024/25 read, the holdout runner
+    must implement in code, with a fixture for each STOP:
+    - the listings zone census (naive STOP);
+    - the incomplete-row rule and its count before the join;
+    - the observed-id pin into provenance;
+    - the on-disk .v2 export pin.
+    IMV one-pass review of that runner, then the lock, then the single opening.
+  - No other open defects. The secondhand items (D-3 counts, git order) are recorded, not defects.
+
+SHORTEST PATH
+  1 Ryan decides CLEAR or not on request v3.1 (35cbb56e), recorded with message id and decision-file
+    sha.
+  2 If CLEARed: build the D-2 runner, then IMV one-pass review.
+  3 Lock, then the single opening.
+
+NO-GO, Coming Soon ON.
