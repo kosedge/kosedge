@@ -1,0 +1,172 @@
+IMV RULING: NFL INJURY B-3 PATH 1 TIMESTAMPED EXPORT + EVALUATOR v5-prep - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_B3_PATH1_EXPORT_v1.txt
+Filed: 2026-10-24 09:19:26 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Method: text only. No project code was run. The only code run was IMV-authored read-only python
+  (json/datetime/zoneinfo) to load and compare the two export JSON files. No 2024/25 data (both exports
+  contain seasons 2013-2023 only), no network, no git. Exact paths; hex masked.
+Cycle record: 6th submission on this track. First-pass acceptance of this Path 1 package: YES WITH
+  CONDITIONS.
+
+AUTHORIZATION
+  /workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_t4322u_B3_PATH1_LE2023_RERUN_v1.txt
+  - sha 1298bddb, 0444, 09:03:55 EDT, sidecar present.
+  - Verbatim match: "Path 1: new export with timestamps; I authorize the pre-2024-only rerun of frozen code"
+    (Ryan, 2026-10-24 09:03 ET, context 88da5f42 B-3, no holdout, d87e6129 never edited).
+  - Scope: Path 1 only, le2023/pre-2024 only.
+  - The package copy RYAN_PATH1_AUTHORIZATION_1298bddb.txt is a quote deposit; the original is on the
+    box and governs.
+
+INTEGRITY (IMV-computed)
+  injury-b3-path1-export/: SHA256SUMS all 18 entries OK.
+  - New export sealed_injury_export_ts_v1.json: on disk = a38a55bb (.sha256.v2); blob = 46d2a565 (.sha256).
+  - Wrapper write_sealed_injury_export_ts_v1.py = 9947b880 (sidecar OK).
+  - writer_only.diff = 34af7fa3. fit_object_recomputed.json = 6a5490db.
+  - Frozen injury-fit-le2023/sealed_injury_export.json = d87e6129: UNCHANGED on disk.
+  - Frozen fit_object.json = 6a5490db.
+  injury-evaluator-v5-prep/: MANIFEST 353144ce (matches MANIFEST.sha256); SHA256SUMS 34 entries all OK.
+  - out/ and out-rerun/ hashes identical: report 0069899b, results f9c13dda, provenance 1b05da3d.
+  - out-rerun/* is listed in MANIFEST and SUMS, so C-1 (88da5f42) is CLOSED.
+
+EVIDENCE CLASSES
+  Independently inspected / computed by IMV:
+  - the authorization file;
+  - wrapper and diff source text;
+  - my OWN field-wise diff and timestamp audit of d87e6129 vs a38a55bb (all 2863 rows);
+  - 4 kickoff hand checks; the kickoff-time distribution;
+  - the 11-row identity vs C-5 (0ad8aca9 L51-54);
+  - v5-prep leak-check and T-9 code; package hashes.
+  Trusted-internal secondhand: the CoS/builder checker rerun (ok:true, bit-identical).
+  Secondhand:
+  - the wrapper EXECUTION, which ran on the builder VM. /opt/cursor/artifacts/injury-fit-le2023,
+    /tmp/kosedge-8e2a15ac/... and /tmp/injury-fit-raw-le2023 do not exist on this box;
+  - n_asof_fail = 24 (late or unparseable reports dropped by the frozen filter);
+  - the null-contract sha ff8e6527 and the text of parse_fit_kickoff_utc / parse_fit_report_time_utc (not
+    on the box);
+  - the order of expected-answers commit ffe0f88b.
+    Note: ffe0f88b is the COMMIT id. The expected-answers FILE is 656d61ec. Mtimes are deposit times
+    (09:15-09:16) and prove no order.
+
+(a) WRAPPER 9947b880 / writer_only.diff - ACCEPTED WITH CONDITION W-1
+  - Calls the frozen helpers: it loads the sha-pinned frozen script 8d188da2 by exec, with a sys.path
+    rewrite to the 8e2a15ac worktree (L91-108). It uses frozen load_schedule/listings/rosters/oos,
+    precompute_games, apply_params, score_rows and write_sealed_injury_export (L337-345, L355-363,
+    L521-531).
+  - Report time = frozen last_report_before_kickoff -> sides[*].listing_as_of. Kickoff = frozen
+    parse_fit_kickoff_utc via precompute_games -> kickoff_utc. Nothing is re-derived (timestamps_for_game
+    L137-169 only takes max/min).
+  - It refuses to write into the frozen dir and checks that d87e6129 is unmutated (L313-316, L519-536).
+  - The frozen script and d87e6129 are untouched.
+  NOT literally "writer-only", which is the subject of W-1:
+  - The wrapper re-implements the frozen main() orchestration (A / B-theta / C evaluation and fit-object
+    assembly, L346-424) instead of calling it.
+  - It CANONICALIZES floats: 2 fit_object floats (|diff| <= 3.6e-15) and 318 delta_margin values
+    (|diff| <= 1.07e-14) were overwritten with the frozen bit patterns (L425, L466-487).
+  So "fit_object recomputes to 6a5490db" and "byte-identical" are true only after canonicalization.
+  The true finding is: reproduced to <= 1.1e-14, then frozen bytes retained. The scored fields are
+  therefore exactly the C-1 values. The tolerance is far below any decision-relevant scale, so this is
+  not material, but it must be labelled as such.
+  W-1: amend EVIDENCE.md / writer_only.diff, by erratum (no edit of filed files), to state "orchestration
+    re-implemented; frozen helpers called; ULP canonicalization n=320, max 1.07e-14".
+  UTC handling: CONFIRMED EMPIRICALLY (the helper text itself is secondhand; see (c)).
+
+(b) IMV FIELD-WISE DIFF (my own; d87e6129 vs a38a55bb)
+  - rows 2863 / 2863; game_id sets equal; no duplicates; same order;
+  - field diffs over all original keys (value, type and repr): 0;
+  - new keys exactly {source_ts, source_ts_home, source_ts_away, as_of_ts, kickoff_utc}; missing keys: none;
+  - players arrays identical (56496 = 56496);
+  - top-level: only created_at differs (new export). code_sha, config, fit_object_sha 6a5490db and
+    fit_years are equal;
+  - seasons 2013-2023 only.
+  RESULT: PASS.
+
+(c) IMV TIMESTAMP AUDIT (parsed to UTC; my own)
+  - non-null rows 2852; naive timestamps 0;
+  - violations of source_ts <= as_of_ts < kickoff_utc: 0; per-side source_ts_home/away < kickoff violations: 0;
+  - source_ts = min(sides) and as_of_ts = max(sides) on every row;
+  - all-null rows 11; partially-null rows 0;
+  - kickoff - as_of gap: min 1.68 h (2023_15_LAC_LV), median 53.0 h, max 102.2 h; gaps < 1 h: 0.
+  Late reports: no included report is at or after kickoff. Excluded late/unparseable reports
+    (n_asof_fail = 24) cannot be recounted from the export: secondhand.
+  Kickoff hand checks (game_id = season_week_away_home):
+  - 2023_1_DET_KC: Thu 2023-09-07 20:20 EDT (UTC-4) = 2023-09-08T00:20Z. MATCH.
+  - 2022_15_MIA_BUF: Sat 2022-12-17 20:15 EST (UTC-5) = 2022-12-18T01:15Z. MATCH.
+  - 2018_10_CAR_PIT: Thu 2018-11-08 20:20 EST (DST ended 11-04) = 2018-11-09T01:20Z. MATCH.
+  - 2020_1_HOU_KC: Thu 2020-09-10 20:20 EDT = 2020-09-11T00:20Z. MATCH.
+  The kickoff distribution is bimodal (17:00Z n=698 and 18:00Z n=810, i.e. 1:00 PM ET under EDT and
+  EST), consistent with DST-aware ET->UTC conversion.
+  RESULT: PASS.
+
+(d) THE 11 NULL ROWS - RULING
+  - The all-null rows are EXACTLY the 11 complete=false rows (set equality). No null row has
+    complete=true. All 11 have delta_margin = delta_total = None.
+  - They match C-5 (0ad8aca9): 8 games with a missing side (2013_1_CIN_CHI, 2017_1_IND_LA,
+    2020_1_GB_MIN, 2020_6_KC_BUF, 2022_2_IND_JAX, 2022_7_CHI_NE, 2022_12_BAL_JAX, 2023_5_HOU_ATL), plus
+    2013_1_NYG_DAL, 2014_15_SF_SEA and 2015_1_NO_ARI (unresolved non-ST players; C-6).
+  - These rows were already outside the scored set under the frozen rules (2852 complete), so excluding
+    them is CONSISTENT and NOT post-hoc.
+  Required rule, pre-declared in the gate table and the expected answers before the rerun:
+  - complete=false AND all five timestamps null AND both deltas null -> counted, excluded identically in
+    both arms, reported per season;
+  - any null timestamp on a complete=true row -> STOP;
+  - any complete=false row with non-null timestamps -> STOP;
+  - the expected count is 11 in total, and 4 in F1/F2 (2022: 3, 2023: 1).
+  As coded today, v5-prep load_export_games/join_fold DIE on ANY null timestamp (fail closed), so the
+  folds cannot run until this rule is implemented (P-2).
+
+(e) SIDECAR CHAIN - ACCEPTED
+  - .sha256.v2 = on-disk a38a55bb, and is the gate. .sha256 = blob 46d2a565, same convention as 765b9c1e,
+    and is NOT the gate.
+  - SIDECAR_CHAIN_NOTE.md cites 09636bec / 0ad8aca9 and states d87e6129 is untouched. C1_FROZEN_PINS
+    unchanged.
+  - Condition W-2: every consumer must pin a38a55bb (on-disk), never 46d2a565.
+
+(f) EVALUATOR v5-prep - ACCEPTED WITH PRECONDITIONS
+  - parse_ts_utc: ISO -> UTC; empty or unparseable gives None (L~330-349).
+  - detect_leakage enforces src <= asof < kickoff on parsed UTC, and fails closed on missing or
+    unparseable (L351-366).
+  - T-9 covers source_after_as_of, as_of_equals_kickoff, as_of_after_kickoff, unparseable, missing,
+    joined_before_freeze and naive-ET==kickoff (L975-1030; expected T-9 in 656d61ec). The log shows all
+    seven STOPs.
+  - Mode was tests only; folds were NOT scored ("folds": {}). 2024/25 untouched.
+  - Expected answers file 656d61ec present (commit ffe0f88b; order secondhand).
+  - Condition W-3: naive timestamps are treated as America/New_York. That suits nflverse wall times, but
+    export fields carry explicit offsets, so a NAIVE value in an export field must STOP, not be assumed
+    ET. 0 naive today.
+  - BLOCKERS FOR THE RUN (P-1): REQUIRED_EXPORT is still d87e6129 (L32, L1392) and seeded/ holds the old
+    export.
+
+VERDICT: PASS WITH CONDITIONS. B-3 is CLOSED on the evidence: real, frozen-helper timestamps, verified
+  independently, with 0 violations. The F1/F2/pooled rerun MAY PROCEED only after P-1..P-4 are met in a
+  new scorer sha, verified by the checker. Running before then is not permitted, and the scorer would
+  STOP anyway. This does not weaken B-3: the substantive gate is met, and P-1..P-4 are wiring to the
+  verified export.
+
+COMPLETE LIST
+  Preconditions to the rerun:
+  - P-1: pin REQUIRED_EXPORT to a38a55bb; seed sealed_injury_export_ts_v1.json (+ .v2) into the package;
+    keep d87e6129 seeded only as the C-1 reference.
+  - P-2: implement the 11-row rule in (d) (count / exclude / STOP cases). Pre-declare it in gate-table.md.
+  - P-3: new expected answers (new sha) covering P-2: a fixture for each STOP case, a counted exclusion,
+    and expected F1/F2/pooled exclusion counts 3/1/4.
+  - P-4: W-3, i.e. naive in export fields -> STOP, with a fixture. The checker asserts P-1..P-4
+    behaviourally; out/out-rerun bit-identical.
+  Conditions (no rerun dependency):
+  - W-1: erratum labelling ULP canonicalization (n=320, max 1.07e-14) and re-implemented orchestration.
+  - W-2: consumers pin the on-disk sha a38a55bb.
+  - W-4: deposit the text (path, sha, lines) of parse_fit_kickoff_utc / parse_fit_report_time_utc and the
+    null contract ff8e6527 from the 8e2a15ac worktree. My empirical check stands in for it now.
+  Carried: M-1..M-5 and the adj-vs-close residual are produced with the folds. The fold outputs get the
+    next IMV one-pass review.
+
+SHORTEST PATH
+  1 Make P-1..P-4 in one scorer sha. File the new expected answers first. Checker green; out/out-rerun
+    bit-identical.
+  2 Run tests + F1/F2/pooled (seed 20261023) in the package dir, le2023 only. Deposit with 0444 + SUMS.
+  3 File the W-1 erratum and the W-4 deposit (any time before the holdout request).
+  4 IMV one-pass review of the P-1..P-4 diff and the fold outputs. A readiness PASS confirms the
+    scorer/gates only.
+  The holdout still needs a separate request (v3), IMV review and Ryan's explicit CLEAR. No gate is
+  weakened by this ruling.
+
+NO-GO, Coming Soon ON.

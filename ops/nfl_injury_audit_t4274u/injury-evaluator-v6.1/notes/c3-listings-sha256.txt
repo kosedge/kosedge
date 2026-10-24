@@ -1,0 +1,17 @@
+# 8e2a15ac fit-path listings (le2023 only; no 2024/25)
+
+Source directory: /tmp/injury-fit-raw-le2023/listings/
+Used by the frozen Path 1 writer / fit at HEAD 8e2a15ac.
+Seasons present: 2013–2023. No listings_2024.csv or listings_2025.csv.
+
+b84c71cf23be81375bbca62f7d2c51d53fa75330fbcf9f598ec4ac17fea7d8be  listings_2013.csv
+e675fd5d86c3451d76e7c5d530095db1641347eb3f9796c9a30dd7a75e3ba634  listings_2014.csv
+fbca54ef42594cc52facc0d8c8dd74802b812771b9e33032e44ae8c7e21b0360  listings_2015.csv
+504e05968cb9c54ddc730fd9b6e7d1dd16a62db8029cc784d3d7bafcea7ff7cb  listings_2016.csv
+0d5139fbf41b0866517bd2bd5fd85bb20dbd4dd9bc36a706fed030a88731de6f  listings_2017.csv
+4724e1f37cc3076f564e997fbf269190e7dbe795a39315b903788e0a9c40065e  listings_2018.csv
+daddfe8e04ddc3a29bce14f362e774fbadfb274c807f1f0fde7b5bf32aaf6cdf  listings_2019.csv
+706cca82824214f6b73ba0c6e537d3ee39766a50c644b8974b9fc28d7518de90  listings_2020.csv
+1049fb9ff0fe7cfcf3ba8bfe1f5a35d3aba985c461c8fb7bf5201735b6d34254  listings_2021.csv
+5f0d60324e597edd1a2ced8540b04e40b51dd440591dd1df11b8d96343387c9e  listings_2022.csv
+16b04e21da5aa3944cfa9c22cafcc84ed7e6d9866eaddf0344e9b8cbf2f63afe  listings_2023.csv

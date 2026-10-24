@@ -1,0 +1,151 @@
+IMV RULING: NFL INJURY EVALUATOR READINESS - v3 (one-pass re-review; scope B-1..B-4 + 1a090e3b conditions)
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v3.txt
+Filed: 2026-10-24 09:01:35 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Method: text only. Nothing was run (scorer, checker, tests, fit code). No 2024/25 data, network or git.
+  Exact paths; hex masked. A read-only json.load key census of fit_ledger.json (le2023) was done for the
+  B-3 feasibility question only.
+Package: /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-v4/
+  All files 0444, deposited 08:58:35-38 EDT 2026-10-24.
+Integrity (IMV-computed):
+  - MANIFEST = eac8abd8 (matches MANIFEST.sha256).
+  - sha256sum -c SHA256SUMS: all OK. SUMS = MANIFEST + MANIFEST/MANIFEST.sha256.
+  - out/ vs out-rerun/: all 5 files hash-identical. evaluator_results 40d972e3, report 628af1e5,
+    provenance 9945d99f, log 6028784b, stdout d6adf84c. These equal checker.stdout.txt out/out_rerun hashes.
+  - Seeded: a156459b, 54bc78ec, a0501d57, 1a090e3b, fit 6a5490db, export d87e6129.
+  - Expected answers: 2ccdd753 (new version; sidecar present).
+Cycle record: 5th submission on this track. First-pass acceptance: NO. 5th RETURN, narrowed to one item.
+
+EVIDENCE CLASSES
+  Independently inspected:
+  - scorer 5a20050f and checker 23ff53c7 source;
+  - out vs out-rerun hashes;
+  - notes and sigma pre-registration text;
+  - the frozen fit script run_injury_residual_fit.py (8d188da2) at injury-fit-le2023/, L317-340, L450-525,
+    L955-1000;
+  - fit_ledger.json (8b8b6a52) key census.
+  Trusted-internal secondhand: CoS's checker rerun on the box (ok:true; bit-identical, results 40d972e3).
+    The package hashes are consistent with it.
+  Secondhand:
+  - the timing of expected-answers commit 1712c256;
+  - "filed before any v4 run" on sigma_preregistration.md and m4-634fdb52.md (all mtimes are deposit
+    times within 3 s, so they cannot show order);
+  - sigma 13.5 at nfl_injury_null_contract.py L339-341/L410 (not read).
+
+VERDICT: RETURN, narrowed to B-3 only. Everything else is CLOSED.
+  PASS WITH CONDITIONS was considered and rejected. B-3 was blocking, and the scorer's real-data path
+  (timestamped join -> leak check -> folds -> M-1..M-5) has never executed. A PASS would certify an
+  untested path, and turning a blocking item into a precondition would weaken the gate.
+
+DISPOSITIONS (scorer line numbers)
+  B-1 CLOSED. ats_from_line returns None when arm == close (L130-136); ats_from_prob returns None at
+      p == 0.5 (L138-143). No-pick counts per arm (L439-487); the bootstrap stats skip None (L575, L581).
+      Fixture: T-1 records ats_base null, n_nopick_spread_ats_base 3, p_half_ats_none (L822-840); the
+      checker asserts the same (checker L101-109).
+      cvo_points = 0.0 at no-pick (L281-284) is the registered T-1 rule (CLV beats close by 0), not ATS.
+  B-2 CLOSED. The checker imports the scorer and asserts behaviour: E-2 (3 cases), E-3, B-1, E-5
+      (undefined bootstrap), B-3 (real export + carry + die) (checker L83-149). It reruns into out-rerun/
+      and compares hashes and T-records (L185-235). The only remaining string check is the B-4 absence
+      check (L151), which is acceptable.
+      Condition C-1: list out-rerun/* in MANIFEST/SUMS.
+  B-4 CLOSED. resolve() is package-relative with no fallback and dies if a file is missing (L121-127).
+      Grep finds no "/cursor/stores" or "/opt/cursor" in the scorer. Git is no longer read (L1336).
+      The command is package-relative, so on its own it cannot prove the directory. CoS's rerun in this
+      directory (checker cwd=root, L185-190), with identical hashes, is trusted-internal secondhand
+      that it does.
+  C-E4a CLOSED. T-10c is wired to the computed k4c (L1063-1067); c_ll_uci = 0.0021, k4 false, NO CLAIM.
+  C-E4b CLOSED. T-10b dies if the delta is identically 0 (L1037-1047). CI [-0.618, 0.441] includes 0;
+      2 unique deltas, which is thin but meets the condition.
+  C-E8 CLOSED (see B-4).
+  C-N1 CLOSED IN FORM. inputs/sigma_preregistration.md (e24afdb1): margin 13.5 cites the C-10 source;
+      total 14.0 is declared new and total-only. Its pre-run order is secondhand.
+  C-M4 CLOSED IN FORM. notes/m4-634fdb52.md (acfeb613): NOT RUN, citing 634fdb52, plus the residual
+      definition pred_m_adj + close_spread_home. That residual and M-1..M-5 on le2023 cannot exist until
+      B-3 is cleared.
+  1712c256 timing: SECONDHAND. No mtime or log supports the order.
+
+B-3 (OPEN, BLOCKING) - FINDINGS
+  Fail-closed behaviour CONFIRMED in code:
+  - export_timestamp_status counts source_ts/as_of_ts (L1111-1130);
+  - load_export_games returns no games if timestamps are missing, and dies per game on any partial
+    missing (L1133-1145);
+  - join_fold dies before any close/outcome join without timestamps (L1167-1175);
+  - logged result: n_source_ts = 0, n_as_of_ts = 0, n_games = 2863; folds not scored.
+  This is the correct behaviour.
+  Code gap: detect_leakage compares source_ts > as_of_ts as STRINGS (L326-328) and has NO kickoff bound.
+    The required test is source_ts <= as_of_ts < kickoff_utc, on parsed UTC datetimes, failing closed on
+    any missing or unparseable value.
+  Feasibility (frozen fit code 8d188da2):
+  - last_report_before_kickoff (L317-340) keeps only listings with parsed date_modified < kickoff (strict).
+    Unparseable or late rows are counted as n_asof_fail and dropped.
+  - A side with no usable listing gives units_null (NULL, not healthy 0) and the game is incomplete.
+  - Per side, the code already computes listing_as_of = the max usable report time (L501), and per game
+    kickoff_utc (L520).
+  - But the export writer (L963-975) DROPS listing_as_of and kickoff_utc, which is why d87e6129 lacks
+    them. fit_ledger.json carries kickoff_utc (2863 rows) but NOT listing_as_of.
+  - So the timestamps exist only in the fit run's memory. Neither path can be met from deposited artifacts
+    without re-executing frozen code. That needs Ryan's authorization; IMV does not run it.
+
+B-3 RULING - ACCEPTABLE PATHS
+  Path (1) PREFERRED - new versioned export (e.g. sealed_injury_export_ts_v1.json). Never edit d87e6129;
+    C-1 is unchanged.
+    How: re-execute the frozen code 8e2a15ac / 8d188da2 with fit object 6a5490db and the same inputs. The
+      only change is an export-writer extension, delivered as a separate, reviewed, sha-pinned wrapper or
+      patch, that emits per game:
+      - as_of_ts = max(listing_as_of home, away);
+      - per-side source_ts = listing_as_of;
+      - kickoff_utc.
+    Evidence required:
+    (a) the wrapper/patch text and its sha, with a diff showing that only the export-writer fields are
+        added;
+    (b) a field-wise diff over all 2863 rows proving applied, complete, continuity_source_home/away,
+        delta_margin, delta_total, game_id, season and week are byte-identical to d87e6129 (0 diffs);
+    (c) a recomputed fit_object sha equal to 6a5490db, plus ledger e1/bound/config equal to C-1;
+    (d) counts: n_null side, n_asof_fail, and source_ts <= as_of_ts < kickoff with 0 violations; every
+        incomplete game has null timestamps and is excluded;
+    (e) the fit-ruling sidecar chain extended: a new .sha256 plus a NOTE citing 09636bec/0ad8aca9;
+    (f) IMV text review of the new export before any evaluator rerun.
+  Path (2) ACCEPTABLE ALTERNATIVE - as-of proof by construction.
+    Code-read part: SATISFIED IN FORM by 8d188da2 L317-340 (strict report < kickoff; unparseable excluded;
+      no usable listing gives NULL).
+    Still required:
+    (a) the text of parse_fit_report_time_utc and parse_fit_kickoff_utc, with file path, sha and line
+        cites, proving UTC handling. nflverse gameday/gametime are US Eastern; an incorrect zone shifts the
+        bound by 4-5 h;
+    (b) a per-row deposit for all 2863 le2023 games: game_id, kickoff_utc (must equal the fit_ledger
+        value), per-side listing_as_of / max usable date_modified, n_usable, and n_asof_fail. This must be
+        produced by the frozen helper functions, not new logic. 0 violations of
+        source_ts <= as_of_ts < kickoff;
+    (c) the evaluator ingests that deposit, sha-pinned, joined by game_id; it dies on any missing date or
+        any game_id mismatch.
+    Disclosed limitation: date_modified is a record-modification time, not a publication time. Late
+      modification is excluded (conservative); backdating is undetectable. State this in the request.
+  NOT ACCEPTABLE: as_of_ts = kickoff hardcoded; deriving as_of from the close/outcome tables; skipping
+    or soft-warning the check; using fit_ledger.json kickoff_utc alone (it has no report time); editing
+    d87e6129.
+  Either path also needs these scorer changes:
+  - detect_leakage parses ISO-8601 to UTC and enforces source_ts <= as_of_ts < kickoff_utc (dies on
+    missing or unparseable);
+  - a T-9 fixture for each violation type (source after as_of; as_of = kickoff; as_of after kickoff;
+    unparseable);
+  - updated expected answers, filed under a new sha.
+  Path (1) or (2) requires re-executing frozen code on le2023 only (no 2024/25). That is Ryan's call to
+  authorize; this ruling does not authorize it.
+
+COMPLETE OPEN LIST
+  B-3 (blocking): as above.
+  C-1 (condition): list out-rerun/* in MANIFEST/SUMS.
+  Carried, not a defect: le2023 folds, M-1..M-5 and the adj-vs-close residual must be produced once B-3
+    clears. The gate logic is unchanged and was already verified for consistency in 1a090e3b.
+
+SHORTEST PATH TO PASS
+  1 Ryan chooses Path (1) or (2) and authorizes a le2023-only re-execution of frozen code (no 2024/25).
+  2 Deposit the evidence for the chosen path ((1) a-e or (2) a-c) with 0444 sidecars, then IMV text review.
+  3 Scorer: UTC-parsed leak test with the kickoff bound, the new T-9 fixtures, and new expected answers
+    (sha). Fix C-1.
+  4 Rerun tests + F1/F2/pooled with seed 20261023 in the package dir; CoS checker rerun bit-identical.
+  5 IMV one-pass review limited to B-3, its evidence and the fold outputs.
+  PASS would confirm only the scorer and gates. The holdout still needs a separate request (v3), IMV
+  review and Ryan's explicit CLEAR. No gate is weakened by this ruling.
+
+NO-GO, Coming Soon ON.

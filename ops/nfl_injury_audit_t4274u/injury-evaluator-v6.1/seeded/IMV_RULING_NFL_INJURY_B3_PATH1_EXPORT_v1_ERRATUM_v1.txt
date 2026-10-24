@@ -1,0 +1,4 @@
+ERRATUM to IMV_RULING_NFL_INJURY_B3_PATH1_EXPORT_v1.txt (d18ebf22). Filed: Sat Oct 24 09:20:21 EDT 2026
+The phrase "all 18 entries OK" was unverified when written. Recount now: injury-b3-path1-export/SHA256SUMS has 18 non-empty lines; all passed per the review. Verdict unchanged.
+Also noted per W-1: wrapper re-implements frozen main() and overwrote 320 floats (max diff 1.07e-14) with frozen values; byte-identity/6a5490db hold post-overwrite. No decision changes.
+NO-GO, Coming Soon ON.

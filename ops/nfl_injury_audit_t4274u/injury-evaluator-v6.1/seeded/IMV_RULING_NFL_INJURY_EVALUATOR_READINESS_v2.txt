@@ -1,0 +1,133 @@
+IMV RULING: NFL INJURY EVALUATOR READINESS - v2 (one-pass re-review)
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v2.txt
+Filed: 2026-10-24 08:48:03 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Method: text only (ls/cat/sed/grep/sha256sum on exact paths; read-only json.load of the results file).
+  The scorer, checker and tests were NOT run. No 2024/25 data, network, git or PR reads. Hex masked.
+Package: /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-v3-54bc78ec/
+  All files 0444, deposited 2026-10-24 08:44:40-43 EDT.
+Against: ruling a0501d57; acceptance spec 54bc78ec; SoT spec a156459b.
+Integrity (IMV-computed):
+  - MANIFEST = a28aa309 (matches MANIFEST.sha256).
+  - sha256sum -c SHA256SUMS: all 24 entries OK.
+  - Every MANIFEST entry matches the file on disk.
+  - Seeded files: a156459b, 54bc78ec, a0501d57, fit 6a5490db, export d87e6129.
+  - Expected answers: 8319a63a (matches its sidecar).
+Cycle record: 4th submission on this track (request v1, request v2, evaluator v1, evaluator v3).
+  First-pass acceptance: NO. Fourth RETURN.
+
+EVIDENCE CLASSES
+  Independently inspected:
+  - scorer b0cb7492 and checker 8e300d77 source, gate-table, T1_HAND_CHECK.md, T1_T10_EXPECTED.json;
+  - my own E-3 hand check against the code;
+  - the arithmetic of T-2/T-4/T-5/T-6;
+  - the fold results checked against the gate logic.
+  Trusted third party: none.
+  Secondhand:
+  - all run outputs (log, stdout, results, report, provenance);
+  - run HEAD 71381795 and the claim that the expected answers were committed before the run;
+  - sigma 13.5 as the C-10 default in nfl_injury_null_contract.py (not read);
+  - sigma_total 14.0 "pre-registered" (no pre-registration file was shown);
+  - the bit-identical rerun (out-rerun/ is excluded).
+  File timestamps prove nothing about order: t_expected/ (08:44:43) was deposited AFTER out/ (08:44:41).
+
+VERDICT: RETURN (narrow; 4 blocking items; all others closed or conditions).
+
+ITEM DISPOSITIONS (line numbers are in run_injury_residual_evaluator.py b0cb7492 unless noted)
+  E-1 CLOSED. PINNED_SEED = 20261023 (L31); numpy default_rng(seed) (L322); a wrong seed dies (L311).
+  E-2 CLOSED. i4_decision requires ci_lo > 0.0 (L290-295); lo_gt_0 is reported (L345).
+  E-3 CLOSED (sign); see B-1 for the ATS no-pick defect. cvo_points: if spread_arm == close it returns
+      0.0, else sign(close - spread_arm) x (close - actual) (L256-260).
+      IMV hand check on the code, T-1 game: close -3.0, adj -4.5, actual_spread -4.5 (am = +4.5).
+      close > arm, so +1 x (-3 - (-4.5)) = +1.5. ATS (L443): spr_a < cs, and y_cover = (4.5 - 3 > 0) = 1,
+      so it is a WIN. Base equals close, so cvo = 0, delta = +1.5. Mirror (adj -1.5): -1 x 1.5 = -1.5.
+      v1 inversion confirmed and corrected; erratum given in T1_HAND_CHECK.md.
+      Label "close vs outcome": CVO_LABEL (L42), results metric_label, gate-table L51/L70.
+  E-4 CLOSED IN FORM; independence ACCEPTED; pre-run order SECONDHAND.
+      The expected values are closed-form, hand-derivable constants and are not scorer output:
+      - T-2: 0.001 <= 0.05/9, then 0.01 > 0.00625, stop; 1 rejection;
+      - T-4: Brier 0.163333; LL = -(ln0.8 + ln0.4 + ln0.7)/3 = 0.498703;
+      - T-5: Phi(3/13) = 0.591253;
+      - T-6: 501 / 499 / partial.
+      The scorer loads the file by sha (L726-730) and compares against it.
+      Supporting independence: T-4 flags that 54bc78ec printed 0.498434. IMV ERRATUM: that printed value
+      is wrong. The formula governs, so 0.49870307 is correct. No other change to 54bc78ec.
+      T-9 detector L298-307; T-10 a/b/c L870-947.
+      Conditions:
+      - C-E4a: T-10c calls i4_decision(..., k4=False) with a hardcoded value (~L944). Wire it to the
+        computed k4c.
+      - C-E4b: the T-10b fixture is degenerate (spread delta identically 0, so CI = [0,0]). Add a CI-
+        includes-0 fixture that has variance.
+  E-5 CLOSED. An undefined draw is redrawn up to 32 times; if any draw stays undefined, CI = None and
+      p = 1 (fail closed). No 0.0 fill (L322-341).
+  E-6 CLOSED. calibration_slope_logit: logistic IRLS of logit(y) on logit(p_adj) (L189-216). Perfect-
+      calibration fixture gives slope 1 (T-4).
+  E-7 CLOSED for K-2/K-4: one close-present set for both arms (L361-410); same_ids reported. Superseded
+      by B-1 for ATS.
+  E-8 CLOSED. Seeded copies exist on the box at exact paths; resolve() dies cleanly with a message
+      (L101-117). Condition C-E8: remove the /cursor/stores/self and /opt/cursor fallbacks (assert_env).
+  E-9 CLOSED. F1 = 2022 (n=268), F2 = 2023 (n=271), pooled 539 (L1178). Close = inputs/nflverse_
+      close_le2023.csv (634d8e73); the loader dies on any 2024-26 row (L959-975).
+  E-10 CLOSED. M-1..M-5 are emitted per fold (L627-697).
+      M-4 NOT RUN: ACCEPTABLE as a disclosed limitation, NOT a blocker. 54bc78ec (d) is descriptive ("no
+        gate"). It permits "NOT RUN with reason" where no usable open exists. The drive pre7d data is
+        EXISTING BUT UNVERIFIED (634fdb52), so it is not "usable" for this purpose.
+        Condition C-M4: cite 634fdb52 as the reason, and still report "residual of adj vs close", which
+        needs no open.
+      M-5 DEFERRED: ACCEPTABLE. This is the spec's own wording (54bc78ec L118-119).
+  N-1 CLOSED WITH CONDITION. inputs/sigma_from_fit.json: fit_object has no sigma field. Margin 13.5 is the
+      C-10 default (secondhand); total 14.0 is a NEW choice with no pre-registration file. T-5 uses 13
+      with no sqrt2 (L141-152).
+      C-N1: file a pre-registration note (sha) for sigma_total = 14.0 and cite C-10 by path/line before
+      any holdout request. sigma_total affects only total tests, not the primary.
+  N-2 CLOSED. gate-table L70; cvo_prob L263-267.
+  N-3 CLOSED. gate-table L41 (weeks 1-17 before 2021; 1-18 from 2021); code matches.
+  N-4 REVIEWED -> OPEN as B-2. The checker (8e300d77, 185 lines) verifies seeded shas, MANIFEST
+      completeness and results fields. But E-1..E-8 are checked only by SOURCE-STRING presence
+      (L119-136), not by behaviour; e.g. the E-7 string is present while B-1 exists.
+  N-5 CLOSED. seeded/ holds a156459b.
+
+FOLD RESULTS vs GATE LOGIC (consistency only, not performance)
+  F1: 268 nonzero, 1 full season, so I-2 INCONCLUSIVE and I-4 INCONCLUSIVE. Consistent.
+  F2: 271 nonzero, 1 full season, so I-2 INCONCLUSIVE and I-4 INCONCLUSIVE. Consistent.
+  Pooled: 539 >= 500 and 2 full seasons, so I-2 MET. Primary is not Holm-significant, its CI includes
+    0, and K-4 fails, so I-4 = NO CLAIM. Consistent.
+  Labels: "DRY RUN - NOT A RESULT"; product_claim false. edge0 = 0/0, undefined draws 0, clip_count 0.
+
+BLOCKING DEFECTS (complete list)
+  B-1 No-pick ATS silently scored as a LOSS. cvo_points never returns None (L256-260), so ats_b/ats_a at
+      L442-443 ("None if cvo is None") are never None. A no-pick (spr == close) evaluates to 0.0, i.e. a
+      loss. This contradicts the builder's own T-1 rule ("ATS undefined if no pick") and 54bc78ec T-7/I-1
+      (arm-specific rows counted, not imputed). spread_ats_delta is one of the 9 Holm tests.
+      Same pattern for total/ML ATS at p == 0.5 (L452, L457).
+      Zero effect on le2023 (edge0 0/0), but it is structural.
+      Fix: no pick gives ATS None. Report counts per arm. Add a fixture.
+  B-2 The checker's own submitted run FAILS: checker.stdout.txt shows {"ok": false, "MANIFEST sha mismatch
+      provenance.md"}. IMV now finds the MANIFEST consistent, so the checker evidence is stale or comes
+      from another state.
+      Fix: rerun the checker on THIS directory, deposit a passing output, and replace the string-presence
+      checks for E-2/E-3/E-5/E-7 with behavioural asserts. Include out-rerun hashes so the bit-identical
+      claim is checkable.
+  B-3 The leakage detector is inert on real data. detect_leakage reads source_ts/as_of_ts/
+      *_joined_before_freeze (L298-307), but join_fold (L1003-1031) carries none of those fields. On
+      le2023 or the holdout, P-2b and I-1's "same as_of_ts" are never checked; T-9 passes only because
+      the fixture plants the fields.
+      Fix: carry as_of_ts/source_ts from the sealed export, or die if they are absent. The close/outcome
+      join must happen after the freeze marker.
+  B-4 Run-path mismatch. The log and provenance command is .../injury-evaluator-v3/run_injury_residual_
+      evaluator.py, which does NOT exist on the box. The scored outputs come from a different directory
+      than the reviewed one.
+      Fix: a run from (or a sha-matched deposit of) this exact directory, with the command path matching.
+
+SHORTEST PATH TO PASS
+  1 Fix B-1 (one function plus a fixture) and B-3 (carry or require as_of_ts/source_ts; die if absent)
+    in one new scorer sha. Apply C-E4a/C-E4b and C-E8 in the same edit.
+  2 File the C-N1 sigma pre-registration note, and the C-M4 reason plus the adj-vs-close residual.
+  3 Rerun tests + F1/F2/pooled with seed 20261023 from THIS directory. Run the checker (behavioural)
+    and deposit a passing stdout plus out-rerun hashes. New MANIFEST/SHA256SUMS, 0444.
+  4 IMV one-pass review limited to B-1..B-4 and the conditions above. Everything closed here stays
+    closed unless the diff touches it.
+  PASS would confirm only the scorer and gates. Any holdout opening still needs a separate request
+  (v3), IMV review and Ryan's explicit CLEAR. No gate is weakened by this ruling.
+
+NO-GO, Coming Soon ON.

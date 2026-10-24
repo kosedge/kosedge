@@ -1,0 +1,21 @@
+IMV RULING CITED — B-3 Path 1 PASS WITH CONDITIONS
+Cited sha8: d18ebf22
+Erratum cited sha8: 501e8a99
+Original ruling/erratum bytes were not present on this box at file time.
+Binding conditions as given to CoS (Ryan 1298bddb still in force for pre-2024-only):
+
+IMV ruled B-3 Path 1 PASS WITH CONDITIONS (ruling d18ebf22, erratum 501e8a99).
+Ryan's decision 1298bddb authorizes only a rerun of the frozen code on pre-2024 data.
+The 2024–25 holdout stays CLOSED: do not read or score it.
+
+Before any run:
+- P-1/W-2: pin the scorer and package to the on-disk export a38a55bb everywhere. 46d2a565 is the blob hash only.
+- P-2: code the 11-row rule. Exclude exactly the C-5 complete=false rows, identically in both arms, and count them (expected 3 in 2022 and 1 in 2023). If a complete row has a null timestamp, or an incomplete row has a timestamp, STOP.
+- P-3: commit the new expected answers before the run.
+- P-4: a naive (zoneless) timestamp means STOP.
+- W-1: write an erratum noting that the wrapper re-implements frozen main() and overwrote 320 floats (max diff 1.07e-14).
+- W-4: deposit the text of the frozen UTC helpers and the null contract ff8e6527.
+
+Then get the checker green and run tests plus F1/F2/pooled with seed 20261023.
+Write the v5 package with MANIFEST and SHA256SUMS to store artifacts/injury-evaluator-v5/.
+STOP there for IMV's one-pass review: no merge, no push beyond the review PR, no holdout.
