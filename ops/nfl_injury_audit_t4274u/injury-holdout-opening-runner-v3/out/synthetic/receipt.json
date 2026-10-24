@@ -1,0 +1,1312 @@
+{
+  "baseline_method_sha": "76aac887eddc67f19aaa3236d89fbcd51d2f1675e1416761dd70756df5d1a311",
+  "consumed": true,
+  "delta_producer_sha": "57df9a50a64493c2f89b37480164852653318abadff5cec1871b7c360a9daed0",
+  "export_on_disk_sha": "3d310e6f34ddd2dab2a83c7fef4cc1ca6048c6b9de107e1dc154c5adbb74a794",
+  "folds": {
+    "F1": {
+      "i1": {
+        "ml_ats_delta": 0.0,
+        "ml_clv_implied_prob_delta": 0.0,
+        "ml_logloss_delta": -0.05214875543526676,
+        "spread_ats_delta": 0.0,
+        "spread_clv_delta": 0.0,
+        "spread_logloss_delta": -0.06427290206379765,
+        "total_ats_delta": 0.0,
+        "total_clv_delta": 0.0,
+        "total_logloss_delta": 0.06143859247539962
+      },
+      "i2": "INCONCLUSIVE",
+      "i3_holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.4906,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.4906,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.4906,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        }
+      ],
+      "i3_holm_adjusted_p": {
+        "ml_ats_delta": 1.0,
+        "ml_clv_implied_prob_delta": 1.0,
+        "ml_logloss_delta": 1.0,
+        "spread_ats_delta": 1.0,
+        "spread_clv_delta": 1.0,
+        "spread_logloss_delta": 1.0,
+        "total_ats_delta": 1.0,
+        "total_clv_delta": 1.0,
+        "total_logloss_delta": 1.0
+      },
+      "i4": "INCONCLUSIVE",
+      "k2": {
+        "mean_brier_adj": 0.19428993108478787,
+        "mean_brier_base": 0.2199632622996693,
+        "mean_logloss_adj": 0.5808490443625813,
+        "mean_logloss_base": 0.6329977997978481,
+        "reliability": {
+          "ml": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5601840358066719,
+              "mean_y": 1.0,
+              "n": 2,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ],
+          "spread": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": 0.4719686376520314,
+              "mean_y": 1.0,
+              "n": 2,
+              "nan_reason": null
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ],
+          "total": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": 0.48129931050377595,
+              "mean_y": 1.0,
+              "n": 1,
+              "nan_reason": null
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5664695274711582,
+              "mean_y": 0.0,
+              "n": 1,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ]
+        }
+      },
+      "k4": {
+        "brier_delta_ci_hi": 0.0,
+        "logloss_delta_ci_hi": 0.0,
+        "notes": [
+          "slope undefined"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "n": 2,
+      "primary": {
+        "ci_hi": 0.0,
+        "ci_lo": 0.0,
+        "ci_lo_gt_0": false,
+        "holm": false
+      },
+      "year": 2098
+    },
+    "F2": {
+      "i1": {
+        "ml_ats_delta": 0.0,
+        "ml_clv_implied_prob_delta": 0.27471363191396175,
+        "ml_logloss_delta": -0.06953167391368902,
+        "spread_ats_delta": 0.3333333333333333,
+        "spread_clv_delta": 2.6666666666666665,
+        "spread_logloss_delta": -0.08571113704671496,
+        "total_ats_delta": -0.3333333333333333,
+        "total_clv_delta": -7.333333333333333,
+        "total_logloss_delta": -0.002876957629548834
+      },
+      "i2": "INCONCLUSIVE",
+      "i3_holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0742,
+          "p_holm_adj": 0.6678000000000001,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0742,
+          "p_holm_adj": 0.5936,
+          "significant": false,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.6006,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.6006,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.6006,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.6006,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.6006,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.8268,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        }
+      ],
+      "i3_holm_adjusted_p": {
+        "ml_ats_delta": 1.0,
+        "ml_clv_implied_prob_delta": 1.0,
+        "ml_logloss_delta": 0.5936,
+        "spread_ats_delta": 1.0,
+        "spread_clv_delta": 1.0,
+        "spread_logloss_delta": 0.6678000000000001,
+        "total_ats_delta": 1.0,
+        "total_clv_delta": 1.0,
+        "total_logloss_delta": 1.0
+      },
+      "i4": "INCONCLUSIVE",
+      "k2": {
+        "mean_brier_adj": 0.1857321540131607,
+        "mean_brier_base": 0.2199632622996693,
+        "mean_logloss_adj": 0.5634661258841591,
+        "mean_logloss_base": 0.6329977997978481,
+        "reliability": {
+          "ml": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5699128516846074,
+              "mean_y": 1.0,
+              "n": 3,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ],
+          "spread": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": 0.4793269115381768,
+              "mean_y": 0.5,
+              "n": 2,
+              "nan_reason": null
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5014775606234324,
+              "mean_y": 1.0,
+              "n": 1,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ],
+          "total": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": 0.49554048809995793,
+              "mean_y": 1.0,
+              "n": 1,
+              "nan_reason": null
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.531123634686339,
+              "mean_y": 0.0,
+              "n": 2,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ]
+        }
+      },
+      "k4": {
+        "brier_delta_ci_hi": 0.0,
+        "logloss_delta_ci_hi": 0.0,
+        "notes": [
+          "slope undefined"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "n": 3,
+      "primary": {
+        "ci_hi": 8.0,
+        "ci_lo": 0.0,
+        "ci_lo_gt_0": false,
+        "holm": false
+      },
+      "year": 2099
+    },
+    "pooled": {
+      "i1": {
+        "ml_ats_delta": 0.0,
+        "ml_clv_implied_prob_delta": 0.16482817914837705,
+        "ml_logloss_delta": -0.06257850652232011,
+        "spread_ats_delta": 0.2,
+        "spread_clv_delta": 1.6,
+        "spread_logloss_delta": -0.07713584305354804,
+        "total_ats_delta": -0.2,
+        "total_clv_delta": -4.4,
+        "total_logloss_delta": 0.02284926241243055
+      },
+      "i2": "INCONCLUSIVE",
+      "i3_holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0206,
+          "p_holm_adj": 0.1854,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0206,
+          "p_holm_adj": 0.1648,
+          "significant": false,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.6078,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.6366,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.6366,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.6366,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.6366,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.6366,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 1.0,
+          "p_holm_adj": 1.0,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        }
+      ],
+      "i3_holm_adjusted_p": {
+        "ml_ats_delta": 1.0,
+        "ml_clv_implied_prob_delta": 1.0,
+        "ml_logloss_delta": 0.1648,
+        "spread_ats_delta": 1.0,
+        "spread_clv_delta": 1.0,
+        "spread_logloss_delta": 0.1854,
+        "total_ats_delta": 1.0,
+        "total_clv_delta": 1.0,
+        "total_logloss_delta": 1.0
+      },
+      "i4": "INCONCLUSIVE",
+      "k2": {
+        "mean_brier_adj": 0.18915526484181158,
+        "mean_brier_base": 0.2199632622996693,
+        "mean_logloss_adj": 0.570419293275528,
+        "mean_logloss_base": 0.6329977997978481,
+        "reliability": {
+          "ml": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5660213253334331,
+              "mean_y": 1.0,
+              "n": 5,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ],
+          "spread": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": 0.4756477745951041,
+              "mean_y": 0.75,
+              "n": 4,
+              "nan_reason": null
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5014775606234324,
+              "mean_y": 1.0,
+              "n": 1,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ],
+          "total": [
+            {
+              "bin": 0,
+              "hi": 0.1,
+              "lo": 0.0,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 1,
+              "hi": 0.2,
+              "lo": 0.1,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 2,
+              "hi": 0.3,
+              "lo": 0.2,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 3,
+              "hi": 0.4,
+              "lo": 0.3,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 4,
+              "hi": 0.5,
+              "lo": 0.4,
+              "mean_p": 0.4884198993018669,
+              "mean_y": 1.0,
+              "n": 2,
+              "nan_reason": null
+            },
+            {
+              "bin": 5,
+              "hi": 0.6,
+              "lo": 0.5,
+              "mean_p": 0.5429055989479455,
+              "mean_y": 0.0,
+              "n": 3,
+              "nan_reason": null
+            },
+            {
+              "bin": 6,
+              "hi": 0.7,
+              "lo": 0.6,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 7,
+              "hi": 0.8,
+              "lo": 0.7,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 8,
+              "hi": 0.9,
+              "lo": 0.8,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            },
+            {
+              "bin": 9,
+              "hi": 1.0,
+              "lo": 0.9,
+              "mean_p": null,
+              "mean_y": null,
+              "n": 0,
+              "nan_reason": "bin empty; not a stub"
+            }
+          ]
+        }
+      },
+      "k4": {
+        "brier_delta_ci_hi": -0.010269332485952576,
+        "logloss_delta_ci_hi": -0.020859502174106703,
+        "notes": [
+          "slope undefined"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "n": 5,
+      "primary": {
+        "ci_hi": 4.8,
+        "ci_lo": 0.0,
+        "ci_lo_gt_0": false,
+        "holm": false
+      },
+      "year": null
+    }
+  },
+  "holdout_years_opened": false,
+  "incomplete": {
+    "excluded_game_ids": [
+      "2098_2_CCC_DDD"
+    ],
+    "n_incomplete": 1,
+    "n_incomplete_by_season": {
+      "2098": 1
+    }
+  },
+  "kind": "opening_receipt",
+  "lock": {
+    "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+    "baseline_method_sha": "76aac887eddc67f19aaa3236d89fbcd51d2f1675e1416761dd70756df5d1a311",
+    "code_tag": "7a4171e9292317b3db0033d9c2c484118060f558",
+    "consumed": false,
+    "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+    "delta_producer_sha": "57df9a50a64493c2f89b37480164852653318abadff5cec1871b7c360a9daed0",
+    "erratum_sha": "14ac18190c89d3620a6f27d0a0be64fc8147c321063ca4aeaa459faa31fcde41",
+    "expected_commit": "fd2ed658166c068c088bb8d971e899da87017ab9",
+    "expected_sha": "1cffb97927095930f675963a9656524435f36bd1d79077ab3245d403f6cd2fcd",
+    "fit_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+    "frozen_export_sha": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+    "frozen_script_sha": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+    "head_sha": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+    "imv_d2_ruling_sha": "b7364186cc2aa900fd39e2dd22e78e2e69b63d2cac11fd6fa6b234997494b6b8",
+    "le2023_export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+    "mode": "0444",
+    "null_contract_sha": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+    "opening_runner_pass_sha": null,
+    "opening_runner_return_v2_sha": "77d9c00a306d1399aeeab6558a522182aa52d63c42c0b1f8cc4d350c1b0c3d0d",
+    "operator": "fixture",
+    "path": "/tmp/opening-v3-e2e-auqm8puz/e2e/holdout-once.lock",
+    "path1_export_composition": "Path 1 holdout export = apply_params(8d188da2, selected_params from 6a5490db) + timestamps_for_game(9947b880) + write_sidecar_chain(9947b880). writer.main() is the le2023 Path 1 entrypoint and is not invoked on holdout.",
+    "readiness_sha": "8ca00bc49b412c1524b4a0d5a1ebacdd7bc4fe26f3e6354d52cb549812dbb012",
+    "request_sha": "35cbb56e10cfe0ec3730441a453f171bda917e7c58ad3e5eb2fe2c573de5ef7b",
+    "runner_sha": "e6e103ded96fb26b535045e6a42da63ec454521ea95cc0d1aff2c3574371d796",
+    "ryan_message_id": "t4335s14919",
+    "ryan_verbatim": "CLEAR: build the runner, IMV reviews, then open once",
+    "scorer_sha": "ca98ae0e70fcdee77d46aed3c4f9be5644079da6adf08411891e1d5b7970e6c6",
+    "sha256": "ec34cbde5491b9434a62f9a39a864c51a592035e3b329b81e086c8df1b3f865a",
+    "spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+    "statement": "opened once",
+    "status": "consumed",
+    "utc": "2026-10-24T15:48:33Z",
+    "writer_sha": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f"
+  },
+  "log_sha": "35b5b35507f16137f0ede9746de3a79fe3748273e9e631d2bd8eeab0925c3fc1",
+  "manifest_sha": "b7c58fddcc81e1646a503c27e662602303e5f362898def46920d53fa5c43b228",
+  "n_missing_close": 0,
+  "n_missing_close_by_season": {},
+  "opening_permitted": false,
+  "path1_export_composition": "Path 1 holdout export = apply_params(8d188da2, selected_params from 6a5490db) + timestamps_for_game(9947b880) + write_sidecar_chain(9947b880). writer.main() is the le2023 Path 1 entrypoint and is not invoked on holdout.",
+  "producer_invoked": true,
+  "receipt_manifest_sha": "6f76de26bf7cf79b4001a21f13be57ce337904fdb3babb4e2cea5386453c7d14",
+  "receipt_sums_sha": "6f76de26bf7cf79b4001a21f13be57ce337904fdb3babb4e2cea5386453c7d14",
+  "runner_sha": "e6e103ded96fb26b535045e6a42da63ec454521ea95cc0d1aff2c3574371d796",
+  "scorer_sha": "ca98ae0e70fcdee77d46aed3c4f9be5644079da6adf08411891e1d5b7970e6c6",
+  "stop": null,
+  "sums_sha": "b7c58fddcc81e1646a503c27e662602303e5f362898def46920d53fa5c43b228",
+  "tz": {
+    "n_empty": 0,
+    "n_listings": 12,
+    "n_naive": 0,
+    "n_offset": 0,
+    "n_other": 0,
+    "n_z": 12,
+    "years_opened": [
+      2098,
+      2099
+    ]
+  },
+  "writer_invoked": true,
+  "writer_sha": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f"
+}

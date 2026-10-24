@@ -1,0 +1,140 @@
+{
+  "games": [
+    {
+      "away": "BBB",
+      "home": "AAA",
+      "kickoff_utc": "2098-09-11T18:00:00Z",
+      "row_status": "ok",
+      "season": 2098,
+      "sides": {
+        "away": {
+          "listing_as_of": "2098-09-11T16:00:00Z",
+          "players": []
+        },
+        "home": {
+          "listing_as_of": "2098-09-11T16:00:00Z",
+          "players": [
+            {
+              "identity_resolved": true,
+              "is_qb1_out_candidate": false,
+              "n_lag_out": 0,
+              "status": "out",
+              "unit": "off",
+              "value": 0.2
+            }
+          ]
+        }
+      },
+      "week": 1,
+      "x_continuity_away": 0.0,
+      "x_continuity_home": 0.0
+    },
+    {
+      "away": "CCC",
+      "home": "DDD",
+      "kickoff_utc": null,
+      "row_status": "incomplete",
+      "season": 2098,
+      "sides": {},
+      "week": 2
+    },
+    {
+      "away": "FFF",
+      "home": "EEE",
+      "kickoff_utc": "2098-09-13T18:00:00Z",
+      "row_status": "ok",
+      "season": 2098,
+      "sides": {
+        "away": {
+          "listing_as_of": "2098-09-13T16:00:00Z",
+          "players": []
+        },
+        "home": {
+          "listing_as_of": "2098-09-13T16:00:00Z",
+          "players": []
+        }
+      },
+      "week": 3,
+      "x_continuity_away": 0.0,
+      "x_continuity_home": 0.0
+    },
+    {
+      "away": "HHH",
+      "home": "GGG",
+      "kickoff_utc": "2099-09-11T18:00:00Z",
+      "row_status": "ok",
+      "season": 2099,
+      "sides": {
+        "away": {
+          "listing_as_of": "2099-09-11T16:00:00Z",
+          "players": []
+        },
+        "home": {
+          "listing_as_of": "2099-09-11T16:00:00Z",
+          "players": [
+            {
+              "identity_resolved": true,
+              "is_qb1_out_candidate": false,
+              "n_lag_out": 0,
+              "status": "out",
+              "unit": "off",
+              "value": 0.2
+            }
+          ]
+        }
+      },
+      "week": 1,
+      "x_continuity_away": 0.0,
+      "x_continuity_home": 0.0
+    },
+    {
+      "away": "JJJ",
+      "home": "III",
+      "kickoff_utc": "2099-09-12T18:00:00Z",
+      "row_status": "ok",
+      "season": 2099,
+      "sides": {
+        "away": {
+          "listing_as_of": "2099-09-12T16:00:00Z",
+          "players": []
+        },
+        "home": {
+          "listing_as_of": "2099-09-12T16:00:00Z",
+          "players": []
+        }
+      },
+      "week": 2,
+      "x_continuity_away": 0.0,
+      "x_continuity_home": 0.0
+    },
+    {
+      "away": "LLL",
+      "home": "KKK",
+      "kickoff_utc": "2099-09-13T18:00:00Z",
+      "row_status": "ok",
+      "season": 2099,
+      "sides": {
+        "away": {
+          "listing_as_of": "2099-09-13T16:00:00Z",
+          "players": []
+        },
+        "home": {
+          "listing_as_of": "2099-09-13T16:00:00Z",
+          "players": [
+            {
+              "identity_resolved": true,
+              "is_qb1_out_candidate": false,
+              "n_lag_out": 0,
+              "status": "out",
+              "unit": "off",
+              "value": 0.2
+            }
+          ]
+        }
+      },
+      "week": 3,
+      "x_continuity_away": 0.0,
+      "x_continuity_home": 0.0
+    }
+  ]
+}
