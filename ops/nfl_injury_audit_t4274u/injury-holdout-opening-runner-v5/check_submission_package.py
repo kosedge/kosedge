@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -146,7 +147,7 @@ def main() -> int:
         errors.append("B-13 pre-lock input check missing")
     if "float(raw_p) * (9" in src or "min(1.0, float(raw_p)" in src:
         errors.append("B-6 runner Holm formula still present")
-    if "def ryan_scorer_v62_authorized" in src:
+    if re.search(r"^def ryan_scorer_v62_authorized\(", src, re.M):
         errors.append("B-14 runtime scorer switch still present")
     if "ACTIVE_SCORER_SHA" not in src or ACTIVE_SCORER_SHA not in src:
         errors.append("B-14 single scorer constant missing")

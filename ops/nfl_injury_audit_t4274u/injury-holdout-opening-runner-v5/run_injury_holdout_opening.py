@@ -1494,7 +1494,7 @@ def run_fixtures(expected: Dict[str, Any], out_dir: Path) -> Dict[str, Any]:
     results["F-MARKER-NO-2024"] = {"stop": False, "admitted_2024_2025": False, "synthetic_after_lock": True}
 
     src = pkg_path("run_injury_holdout_opening.py").read_text(encoding="utf-8")
-    if "def ryan_scorer_v62_authorized" in src:
+    if re.search(r"^def ryan_scorer_v62_authorized\(", src, re.M):
         die("F-SCORER-PINNED-V62: runtime switch function still present")
     if active_scorer_sha() != ACTIVE_SCORER_SHA or ACTIVE_SCORER_SHA != REQUIRED_SCORER:
         die("F-SCORER-PINNED-V62: active pin is not the single v6.2 sha")
