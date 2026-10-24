@@ -1,0 +1,151 @@
+IMV RULING: NFL WEEK-AWARE ROSTER INV-1 - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_WEEK_AWARE_ROSTER_INV1_v1.txt
+Filed: Saturday 2026-10-24 17:58:30 EDT
+Author: IMV (Model Validation Lead). IMV builds nothing it validates.
+Scope: text-only review of
+  /workspace/ops/nfl_injury_audit_t4274u/week-aware-roster-inv1/
+  against IMV_SPEC_NFL_WEEK_AWARE_ROSTER_LEAKAGE_v1.txt (sha8 8eb532c1)
+  and DECISION_RYAN_t4344u_OPTION_B_WEEK_AWARE_ROSTERS_v1.txt (sha8 47afd7f6).
+Method: sha256sum -c; Read/rg on exact deposit paths and on-box
+  injury-holdout-opening-runner-v6 seeded copies; cross-check
+  /workspace/kosedge-registers/DATA_ASSETS.md and
+  /workspace/ops/nfl_data_inventory_t4183u/INVENTORY_v1.md.
+  No project code run, no network, no git, no GitHub, no 2024/25 holdout
+  open, no lock written. Hex masked in narrative except sha8 pins.
+Cycle: INV-1 first submission after Option B. One-pass acceptance: NO
+  (conditions). Holdout remains sealed.
+
+==========================================================================================
+VERDICT: PASS WITH CONDITIONS
+==========================================================================================
+INV1_VERDICT: PASS WITH CONDITIONS
+MANIFEST_SHA8: 7d93380e
+MANIFEST_SHA256: 7d93380e1ef7… (IMV sha256sum MATCH; SUMS 0 failures)
+Conditions C-1..C-4 below. None requires opening 2024–25. No source pins,
+no refit, no opening, no new Ryan CLEAR authorized by this ruling.
+
+==========================================================================================
+1. INTEGRITY (IMV-inspected)
+==========================================================================================
+- SHA256SUMS: 0 failures from package dir.
+- MANIFEST sha8 7d93380e MATCH CoS claim.
+- Deposit files 0444; package dirs 0755 (acceptable for dirs).
+- holdout-once.lock ABSENT under /workspace/ops/nfl_injury_audit_t4274u/.
+- evidence/: Option B 47afd7f6; SPEC 8eb532c1; drive-research-store-check.md
+  present (sha8 not re-stated as a pin).
+- pins.json: SPEC 8eb532c1; Option B 47afd7f6; root cause 0feec57e B-4b(n)-PIT;
+  superseded CLEAR fabf8732 and scorer allowance 592e0bb9; frozen context
+  (6a5490db, d87e6129, a38a55bb, 8d188da2, 247744d2, 9947b880, ae8f9585,
+  ff8e6527) marked not re-authorized; holdout_once_lock_written false;
+  holdout_years_read []; refit_started false; sources_pinned_as_sot false;
+  leakage_pass_claimed false. Consistent with G and STOP.
+
+==========================================================================================
+2. COMPLETENESS vs SPEC §5 A–G (IMV-inspected)
+==========================================================================================
+A–G present and cover required content. F is plan-only (explicitly not run).
+STOP / README / COS-HANDOFF agree with A–G except they still carry NR-2 as
+Needs-Ryan (see C-1).
+
+==========================================================================================
+3. A — AFFECTED SURFACES (IMV-inspected on runner-v6 deposit copies)
+==========================================================================================
+On-box copies under injury-holdout-opening-runner-v6/ (sha8 MATCH cites):
+- A1-FITLOAD seeded/run_injury_residual_fit.py load_rosters (L289-314,
+  8d188da2): YES. Loops roster_{season}.csv 2012-2023; never reads week /
+  game_type / status; season-union by_team/by_season; depth=1 if any
+  STARTER_SLOTS row wins.
+- A1-LOAD holdout_frozen_row_builder.py (247744d2) L267-302: YES, same.
+- A1-WRITE seeded/write_sealed_injury_export_ts_v1.py (9947b880): YES,
+  calls fit.load_rosters then precompute_games.
+- A2 identity / A4 current_ids (fit script ~458-497): YES, use season union.
+- A5 holdout_delta_producer.py (ae8f9585): YES. Docstring L12 claims
+  "pre-kickoff information only, with as_of <= kickoff"; L78-99 checks
+  listing_as_of / post-game fields only — never roster availability_ts.
+- A4 R-6: Cursor correctly states prior-season-only continuity is NOT yet
+  proven for the defective path; honest.
+Secondhand (not re-proven on this box): untracked holdout_v3 L812-840;
+  ingest.py L1735-1795; production injury_paths.py claim; deploy-vercel
+  HEAD. A6 cites v6 package generally without path:line (C-2/C-3).
+
+==========================================================================================
+4. B / C — OWNED SOURCES AND GAPS
+==========================================================================================
+IMV-inspected vs INVENTORY_v1.md sha12 cf9ebb2ffb27 and DATA_ASSETS.md
+sha8 8ca7c553:
+- W1 packs = week-label as_of, not capture-time: MATCH inventory.
+- Owned-DB updated_at/ingested_at = 2026-07 ingest, not as-of: MATCH.
+- Historical weekly non-W1 ABSENT pre-2025: MATCH.
+- 2026 W1 timestamped snapshots = capture-time but wrong era for pre-2024
+  fit: MATCH.
+- Conclusion that no certifiable week-aware roster asset is registered:
+  HOLDS (register file exists; week-aware asset row does not).
+
+G1–G4, G6: consistent and honest. Default that pre-2024 games needing
+B1/B2 membership/depth are ineligible: CORRECT (R-3).
+NR-1 (KosEdgeData / research-store weekly archives): VALID Needs-Ryan,
+  no spend. Odds API stays ON HOLD. No buy proposed.
+NR-2 / G5 / B9: DEFECT — see C-1. DATA_ASSETS.md and INVENTORY_v1.md are
+  on this CoS box at the paths the SPEC cited. Cursor cloud VM miss ≠
+  missing institutional memory.
+
+==========================================================================================
+5. D / E / F / G
+==========================================================================================
+D (draft): availability_ts + kind; membership; depth/role (default depth=2
+  forbidden); txn_event; missingness codes; join via prediction_cutoff =
+  min(kickoff_utc, decision_ts). Adequate as draft, not a pin.
+E: cutoff <= kickoff; == fails closed until a later freeze says
+  closed-at-cutoff; > always FAIL; ingest never counts as availability_ts.
+  ACCEPTABLE draft.
+F: T-PIT-1..10 all mapped with synthetic 2098 plan + shared control that
+  current load_rosters fails 1/2/5/10. Explicitly not run; no PASS claimed.
+  ACCEPTABLE for INV-1 Step 1.
+G: 2024–25 unread (incl. W1 pack contents unread); lock absent; no refit /
+  pins / leakage PASS. Owned-DB 2025-W1 used for counts/columns only —
+  disclosed. ACCEPTABLE.
+
+==========================================================================================
+6. CONDITIONS (complete; one pass)
+==========================================================================================
+C-1 MAJOR — Withdraw NR-2 as Needs-Ryan. File an INV-1 erratum (or v1.1
+    additive) that: (a) hashes on-box
+    /workspace/kosedge-registers/DATA_ASSETS.md (sha8 8ca7c553) and
+    /workspace/ops/nfl_data_inventory_t4183u/INVENTORY_v1.md
+    (sha12 cf9ebb2ffb27); (b) reclassifies B9/G5 as
+    "register exists; no week-aware roster/depth asset row";
+    (c) removes NR-2 from Needs-Ryan. NR-1 alone remains.
+C-2 MINOR — A6: add exact path:line cites for "pre-kickoff only" (or
+    equivalent) text in the v6 runner / producer / expected-answers
+    deposit (A5 already has producer L12; extend to A6 surfaces).
+C-3 MINOR — Label secondhand A items (holdout_v3, ingest.py,
+    injury_paths.py, deploy-vercel HEAD) SECONDHAND, or deposit the
+    exact files with sha8.
+C-4 MINOR — Tag B2b (2024/25 W1 packs) holdout-era DO-NOT-OPEN in B
+    (G already says contents unread; make the class explicit).
+
+Shortest path to unconditional INV-1 PASS: one Cursor erratum covering
+C-1..C-4; IMV re-hashes; no holdout, no refit, no spend.
+
+==========================================================================================
+7. DISPOSITIONS / NEXT
+==========================================================================================
+- NR-1: remains Needs-Ryan (confirm drive/research-store weekly archives).
+  IMV does not ask Ryan to buy anything.
+- NR-2: NOT Needs-Ryan; Cursor context miss (C-1).
+- After C-1..C-4 closed: Cursor may proceed to SPEC Step 2 materials
+  (revised implementation SPEC + leakage-test package on synthetic +
+  approved development only). IMV will RETURN any opening package, refit,
+  or source-SoT pin that arrives before Steps 1–6 of 8eb532c1 and a NEW
+  Ryan CLEAR.
+- Prior season-level fit/export evidence (a38a55bb / 6a5490db path) stays
+  SUPERSEDED for week-aware certification (R-5).
+
+Evidence classes:
+  IMV-inspected: integrity; A1/A2/A4/A5 on runner-v6 copies; B/C vs
+    inventory+DATA_ASSETS; D–G text.
+  Secondhand: Drive/Notion searches; unmounted KosEdgeData; 2019–2023 W1
+    pack byte contents; A items under C-3.
+  CoS: NR-2 is context miss — CONFIRMED by IMV hashes.
+
+NO-GO, Coming Soon ON.

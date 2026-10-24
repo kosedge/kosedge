@@ -1,0 +1,32 @@
+{
+  "package": "week-aware-roster-inv1-erratum-v1",
+  "inv1_manifest_sha8": "7d93380e",
+  "imv_ruling_sha8": "988c0d65",
+  "imv_ruling_sha256": "988c0d65e06f4a19447d283e1b13e5eb03dfb8cdeb77c756db4fe31a8bad00b0",
+  "imv_spec_sha8": "8eb532c1",
+  "ryan_option_b_sha8": "47afd7f6",
+  "nr2_withdrawn": true,
+  "needs_ryan": ["NR-1"],
+  "registers": {
+    "DATA_ASSETS.md": {
+      "path": "/workspace/kosedge-registers/DATA_ASSETS.md",
+      "sha8_imv_inspected": "8ca7c553",
+      "hashed_on_this_vm": false
+    },
+    "INVENTORY_v1.md": {
+      "path": "/workspace/ops/nfl_data_inventory_t4183u/INVENTORY_v1.md",
+      "sha12_imv_inspected": "cf9ebb2ffb27",
+      "hashed_on_this_vm": false
+    }
+  },
+  "b9_g5": "register exists; no week-aware roster/depth asset row",
+  "producer_cited_sha256": "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8dd630",
+  "b2b_do_not_open": {
+    "nfl_depth_chart_2024_w1.json": {"size": 70910, "contents_read": false},
+    "nfl_depth_chart_2025_w1.json": {"size": 78884, "contents_read": false}
+  },
+  "holdout_once_lock_written": false,
+  "step2_started": false,
+  "refit_started": false,
+  "sources_pinned_as_sot": false
+}
