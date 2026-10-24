@@ -1,0 +1,9 @@
+{
+  "id": "T-PIT-6",
+  "player_id": "00-SYN-NTS",
+  "member": false,
+  "missingness": "MISSING_TS",
+  "imputed_from_season": false,
+  "default_depth_2": false,
+  "x_continuity": null
+}

@@ -1,0 +1,28 @@
+{
+  "id": "T-PIT-5",
+  "game": {
+    "season": 2098,
+    "week": 1,
+    "team": "PIT",
+    "game_type": "REG",
+    "kickoff_utc": "2098-09-07T17:00:00+00:00"
+  },
+  "roster_rows": [
+    {
+      "season": 2098,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "player_id": "00-SYN-BEN",
+      "status": "RES",
+      "availability_ts": "2098-12-28T12:00:00+00:00"
+    }
+  ],
+  "listings": [
+    {
+      "player_id": "00-SYN-BEN",
+      "report_status": "active",
+      "report_time": "2098-09-07T12:00:00+00:00"
+    }
+  ]
+}

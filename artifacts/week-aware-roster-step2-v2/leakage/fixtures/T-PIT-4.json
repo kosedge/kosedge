@@ -1,0 +1,55 @@
+{
+  "id": "T-PIT-4",
+  "player_id": "00-SYN-PS",
+  "roster_rows": [
+    {
+      "season": 2098,
+      "week": 8,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-PS",
+      "status": "DEV",
+      "availability_ts": "2098-10-26T12:00:00+00:00"
+    }
+  ],
+  "cases": [
+    {
+      "label": "after_cutoff",
+      "game": {
+        "season": 2098,
+        "week": 9,
+        "team": "AAA",
+        "game_type": "REG",
+        "kickoff_utc": "2098-11-02T17:00:00+00:00"
+      },
+      "transactions": [
+        {
+          "player_id": "00-SYN-PS",
+          "from_team": "AAA",
+          "to_team": "AAA",
+          "event_type": "PS_up",
+          "availability_ts": "2098-11-02T18:00:00+00:00"
+        }
+      ]
+    },
+    {
+      "label": "before_cutoff",
+      "game": {
+        "season": 2098,
+        "week": 9,
+        "team": "AAA",
+        "game_type": "REG",
+        "kickoff_utc": "2098-11-02T17:00:00+00:00"
+      },
+      "transactions": [
+        {
+          "player_id": "00-SYN-PS",
+          "from_team": "AAA",
+          "to_team": "AAA",
+          "event_type": "PS_up",
+          "availability_ts": "2098-10-28T12:00:00+00:00"
+        }
+      ]
+    }
+  ]
+}

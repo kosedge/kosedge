@@ -1,0 +1,209 @@
+IMV SPEC: NFL WEEK-AWARE ROSTER RECONSTRUCTION AND LEAKAGE CONTROLS - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_SPEC_NFL_WEEK_AWARE_ROSTER_LEAKAGE_v1.txt
+Filed: Saturday 2026-10-24 17:46:26 EDT
+Author: IMV (Model Validation Lead). IMV builds nothing it validates.
+Method: text-only; registers + exact paths. No code run, no network, no git, no 2024/25 holdout open, no lock.
+Authority (IMV-verified):
+  DECISION_RYAN_t4344u_OPTION_B_WEEK_AWARE_ROSTERS_v1.txt
+    path /workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_t4344u_OPTION_B_WEEK_AWARE_ROSTERS_v1.txt
+    sha256 47afd7f631bb1685c2768f95720656d4d9442835274f90c7731afd3028605098 (sha8 47afd7f6)
+  Against: IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v6.txt sha8 0feec57e (B-4b(n)-PIT).
+Nature: NORMATIVE requirements + acceptance gates for week-aware roster / depth reconstruction and the
+  permanent as-of leakage test. This SPEC does NOT pin implementation sources, purchase data, change
+  K-*/I-* metric gates in a156459b, or authorize any holdout opening. Source pins wait on INV-1.
+
+==========================================================================================
+0. VERDICT / HOLD
+==========================================================================================
+VERDICT: HOLD — Option B locked. Do NOT open 2024–25 on season-level rosters.
+SUPERSEDED for the defective season-level-roster opening route (per 47afd7f6):
+  - DECISION_RYAN_t4335s14919_HOLDOUT_CLEAR_v3_1_v1.txt (fabf8732)
+  - DECISION_RYAN_SCORER_V6_2.txt (592e0bb9) as an opening-route allowance
+A new explicit Ryan CLEAR is required for any corrected opening after IMV approves this track.
+Standing: overlays disabled; research unpromoted; holdout sealed; no merges/deploys/publication;
+  NFL NO-GO; Coming Soon ON.
+
+==========================================================================================
+1. PREFLIGHT (t4301u) — registers + inventory, classified
+==========================================================================================
+EXISTING AND VERIFIED
+  - Ryan Option B decision 47afd7f6 (mode 0444; content MATCH CoS relay).
+  - B-4b(n)-PIT defect in opening-runner v6 ruling 0feec57e (season-level roster; week ignored;
+    depth = any starter slot in season; membership = season union).
+  - Frozen injury track pins (context only; not re-authorized for opening): fit 6a5490db;
+    frozen export d87e6129; le2023 export a38a55bb; scorer SoT history through 8b482cb9;
+    QB1_INDEX_UNITS = 0.12.
+  - Design as-of intent (C-4) already required report_time < kickoff and same-listing depth
+    (nfl-injury-single-application-design-t4285u-v2); season-level roster load violated the spirit
+    of that claim for membership/depth.
+  - Registers: DATA_ASSETS.md (sha8 8ca7c553 of mirror), MODEL_MODULES.md, DECISIONS.md row t4344u,
+    WORKSTREAMS.md (holdout BLOCKED).
+
+EXISTING BUT UNVERIFIED / LIMITED for week-aware PIT
+  - Box NFL feature inventory INVENTORY_v1.md sha12 cf9ebb2ffb27:
+      * historical/nfl_depth_chart_{2019..2025}_w1.json — week-label as_of only; derived from
+        current nflverse release (revisable) → NOT archived capture-time PIT.
+      * 2026 W1 depth snapshots with UTC filename stamps — genuine capture-time, wrong era for
+        pre-2024 fit.
+      * nfl_dp_* owned-DB NDJSON (rosters, depth_chart_weekly) — updated_at/ingested_at = 2026-07
+        ingest, not as-of; tiny 2025 sample.
+  - Injury audit packages under /workspace/ops/nfl_injury_audit_t4274u/ (builders/runners) —
+    season-level roster_*.csv path documented in 0feec57e.
+
+MISSING (for a certifiable week-aware historical reconstruction)
+  - Archived, timestamped weekly roster / depth / transactions covering the approved pre-2024
+    development window with availability_ts <= prediction cutoff per game-week.
+  - Register entry for any week-aware roster asset with provenance and capture-time evidence.
+  - Permanent automated as-of leakage test suite (this SPEC defines it; Cursor must implement).
+
+SUPERSEDED
+  - Season-level roster method as a holdout-opening and "pre-kickoff only" claim path
+    (CLEAR fabf8732 / scorer-opening allowance 592e0bb9 for that route).
+  - Pre-2024 findings that depended on season-level membership/depth (must be reevaluated; do not
+    carry forward as certified evidence).
+
+Absence from an agent's context is not absence from Kos Edge — Cursor INV-1 must re-check drive,
+  research-store, and any nflverse archives Kos Edge already owns before proposing acquisition.
+
+==========================================================================================
+2. PERMANENT AS-OF LEAKAGE GATE (cross-sport; Ryan t4344u)
+==========================================================================================
+G-PIT (HARD): No historical model input may contain information whose availability timestamp is
+  later than the prediction cutoff for that prediction.
+Applies to: injuries, rosters, depth charts, transactions, quarterback changes, odds, weather,
+  and every other time-sensitive feature.
+NFL-extra (HARD): historical roster-membership and player-role tests MUST cover trades, injuries,
+  starter replacements, and practice-squad promotions.
+Fail closed: any violation → row BLOCKED or component NULL per existing NULL contract; never
+  invent membership/role; never zero-fill a missing PIT field to keep a game eligible.
+This gate is permanent and applies beyond the injury layer (NBA/MLB/college reuse).
+
+Definitions (binding for this SPEC):
+  prediction_cutoff = the earliest of (kickoff_utc, declared decision_ts) for that game, unless a
+    tighter product cutoff is frozen in the revised execution package.
+  availability_ts = the earliest time the datum was knowable from the pinned source provenance
+    (capture time, publication time, or provider as_of). Ingest/updated_at alone is NEVER enough.
+  week-aware roster row = a membership or depth/role assignment tied to (season, week, team,
+    player_id) with availability_ts <= prediction_cutoff for every game that uses it.
+
+==========================================================================================
+3. AFFECTED SURFACES Cursor MUST document (INV-1 §A) — complete list required
+==========================================================================================
+Document every season-level (or otherwise non-PIT) roster/depth use in:
+  A1. Injury builder / nowcast path that builds residuals or components
+  A2. Replacement-quality / identity resolution (C-11 surfaces)
+  A3. Historical fit (le2023 and any earlier fit object / export)
+  A4. Continuity inputs that incorrectly use within-season future weeks
+  A5. Baseline or producer text claiming "pre-kickoff only" while reading season-level rosters
+  A6. Any evaluator, runner, or expected-answers text that freezes the defective claim
+For each: exact path, sha8, function/symbol, which fields leak (membership / depth / role /
+  status), seasons touched, and whether 2024–25 holdout files were opened (must remain NO).
+
+==========================================================================================
+4. RECONSTRUCTION RULES (normative; source pins TBD after INV-1)
+==========================================================================================
+R-1 Preserve 2024–25 unopened. No holdout-once.lock. No consumption of the superseded CLEAR.
+R-2 Never infer historical availability from a later roster/depth/transaction state.
+R-3 Insufficient evidence → missing/ineligible (NULL + flag or game/component dropped per frozen
+    null contract). Never invent starters, depth, or membership.
+R-4 Refit only on approved pre-2024 development data after week-aware inputs pass G-PIT tests.
+R-5 Reevaluate earlier pre-2024 findings; do not carry forward leakage-invalidated metrics,
+    fit objects, or exports as certified. Prior hashes may be cited as SUPERSEDED evidence only.
+R-6 Continuity that uses only complete prior-season snapshots (fully before season S) may remain
+    if INV-1 proves no within-season future leak; state that proof explicitly.
+R-7 Identity (C-11) still resolves from ids + depth SoT only; performance may not pick replacements.
+R-8 Metric gates K-2..K-4 and I-1..I-5 in a156459b / pre-holdout acceptance remain unchanged.
+    This SPEC adds G-PIT and NFL-extra tests; it does not weaken calibration or CLV gates.
+
+==========================================================================================
+5. MANDATORY CURSOR PACKAGE INV-1 (file before any implementation SPEC pins or refit)
+==========================================================================================
+Deposit under /workspace/ops/nfl_injury_audit_t4274u/week-aware-roster-inv1/ with MANIFEST +
+SHA256SUMS (0444). Contents:
+
+INV-1.A  Affected-surfaces table (§3) with path/sha8/line or symbol cites.
+INV-1.B  Source candidates Kos Edge ALREADY owns (drive, research-store, nflverse archives,
+         owned DB exports, W1 depth packs, any weekly dumps). For each candidate:
+           coverage (seasons/weeks), schema columns, availability_ts field or proof none exists,
+           revisability risk, EXISTING AND VERIFIED / EXISTING BUT UNVERIFIED / MISSING / SUPERSEDED,
+           whether usable for pre-2024 fit without opening 2024/25 holdout.
+INV-1.C  Gap statement: what weeks/seasons cannot be reconstructed without new acquisition.
+         If acquisition is proposed: cost, vendor, Ryan-Needs flag — IMV does not authorize spend.
+INV-1.D  Proposed week-aware schema (draft): keys, availability_ts, membership, depth/role,
+         transaction events; missingness codes; join to game_id / kickoff_utc.
+INV-1.E  Proposed prediction_cutoff rule (must be <= kickoff; state any tighter freeze).
+INV-1.F  Synthetic fixture plan for §6 tests (no holdout data).
+INV-1.G  Explicit confirmation: 2024–25 holdout files unread; no lock written.
+
+IMV reviews INV-1 text-only. Only after INV-1 PASS (or PASS WITH CONDITIONS that do not require
+holdout) may Cursor file a revised implementation SPEC + leakage-test package for IMV approval.
+
+==========================================================================================
+6. LEAKAGE / MEMBERSHIP TESTS (synthetic + approved development only; all HARD)
+==========================================================================================
+Cursor implements and runs these BEFORE IMV review. Expected answers deposited before the run.
+Fixtures use synthetic seasons (e.g. 2098/2099) or approved <=2023 development extracts that
+IMV can re-hash; never 2024/25 holdout.
+
+T-PIT-1 Future membership blocked: player joins team in week w+k (k>0); game in week w must NOT
+         treat player as rostered. Expected: absent from membership; component NULL/ineligible
+         per contract — never silent include.
+T-PIT-2 Future starter blocked: backup becomes depth=1 only after week w injury; week w game must
+         NOT see depth=1 from the later state.
+T-PIT-3 Trade as-of: player traded mid-season; pre-trade games use old team only; post-trade use
+         new team only; availability_ts from transaction provenance.
+T-PIT-4 Practice-squad promotion: promotion availability_ts after kickoff of week w → week w game
+         must not use promoted role.
+T-PIT-5 Injury status separation: injury listing PIT remains governed by existing report_time <
+         kickoff rules; roster reconstruction must not re-introduce status look-ahead via season
+         union. Fixture where season-level status would leak and week-aware must not.
+T-PIT-6 Missing evidence: delete availability_ts / weekly row → result is missing/ineligible, not
+         imputed from season aggregate or next week.
+T-PIT-7 Cutoff inequality: availability_ts == prediction_cutoff allowed only if the frozen rule
+         says closed-at-cutoff; availability_ts > cutoff always FAIL.
+T-PIT-8 Cross-feature scan (contract test): a manifest of time-sensitive feature classes
+         (injuries, rosters, depth, transactions, QB changes, odds, weather) each has an
+         availability_ts column or an explicit EXEMPT-WITH-RYAN-REASON. Undeclared class = FAIL.
+T-PIT-9 Determinism: re-run on same pinned inputs → bit-identical membership/depth outputs.
+T-PIT-10 Regression: season-level loader path either removed or hard-STOPs when G-PIT mode is on.
+
+Pass rule: all T-PIT-* PASS on synthetic; then on approved development sample Cursor files a
+coverage report (weeks reconstructible / ineligible counts) WITHOUT refitting until IMV accepts
+the leakage package. Refit is a separate submission after leakage PASS.
+
+==========================================================================================
+7. APPROVAL SEQUENCE (fail closed)
+==========================================================================================
+Step 1  Cursor files INV-1 → IMV text review PASS/RETURN.
+Step 2  Cursor files revised week-aware implementation SPEC + frozen scoring-rule delta (if any)
+        + leakage-test package (code text + fixtures + expected answers + receipts on synthetic
+        and approved development). Metric gates unchanged unless Ryan re-opens them.
+Step 3  IMV approves revised SPEC, leakage controls, frozen scoring rules.
+Step 4  Cursor refits on approved pre-2024 development only; deposits fit/export with provenance.
+Step 5  IMV reevaluates pre-2024 findings under week-aware inputs (new ruling; old results do not
+        auto-carry).
+Step 6  Cursor tests evaluator/runner on synthetic + development; IMV reviews execution package.
+Step 7  Only then may a new holdout request be presented, and only after a NEW Ryan CLEAR.
+
+IMV will RETURN any opening package that arrives before Steps 1–6 are complete.
+
+==========================================================================================
+8. WHAT THIS SPEC DELIBERATELY DOES NOT DO
+==========================================================================================
+- Does not select a vendor or authorize Odds API / roster-data spend.
+- Does not reopen 2024/25.
+- Does not keep a38a55bb / 6a5490db as certified week-aware evidence.
+- Does not allow "disclose and open" under season-level rosters (Option A rejected by Ryan).
+- Does not change builder≠approver: Cursor builds; IMV challenges; Ryan clears openings.
+
+==========================================================================================
+9. SHORTEST LEGITIMATE PATH TO A FUTURE PASS (t4317u)
+==========================================================================================
+1) INV-1 complete and truthful about gaps.
+2) Reconstruct only weeks with real availability_ts; mark the rest ineligible.
+3) Leakage tests T-PIT-1..10 green on synthetic + development.
+4) IMV-approved revised SPEC + scoring rules.
+5) Refit + reevaluate pre-2024.
+6) New execution package → IMV → new Ryan CLEAR → one opening.
+
+NO-GO, Coming Soon ON.

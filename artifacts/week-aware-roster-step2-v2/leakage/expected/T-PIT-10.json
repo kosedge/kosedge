@@ -1,0 +1,15 @@
+{
+  "id": "T-PIT-10",
+  "cited_fit_sha8": "8d188da2",
+  "cited_builder_sha8": "247744d2",
+  "cited_fit_sha_ok": true,
+  "cited_builder_sha_ok": true,
+  "gpit_on_exit_code": 2,
+  "gpit_on_stderr_has_stop": true,
+  "gpit_on_n_members": 0,
+  "gpit_off_exit_code": 0,
+  "gpit_off_stderr_has_stop": false,
+  "gpit_off_stderr_has_superseded": true,
+  "gpit_off_player_in_season_union": true,
+  "gpit_off_distinct_from_on": true
+}

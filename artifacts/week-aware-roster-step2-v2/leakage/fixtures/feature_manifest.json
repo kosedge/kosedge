@@ -1,0 +1,41 @@
+{
+  "id": "T-PIT-8",
+  "undeclared_allowed": false,
+  "classes": [
+    {
+      "name": "injuries",
+      "availability_ts_field": "report_time",
+      "exempt_with_ryan_reason": null
+    },
+    {
+      "name": "rosters",
+      "availability_ts_field": "availability_ts",
+      "exempt_with_ryan_reason": null
+    },
+    {
+      "name": "depth",
+      "availability_ts_field": "availability_ts",
+      "exempt_with_ryan_reason": null
+    },
+    {
+      "name": "transactions",
+      "availability_ts_field": "availability_ts",
+      "exempt_with_ryan_reason": null
+    },
+    {
+      "name": "qb_changes",
+      "availability_ts_field": "availability_ts",
+      "exempt_with_ryan_reason": null
+    },
+    {
+      "name": "odds",
+      "availability_ts_field": "availability_ts",
+      "exempt_with_ryan_reason": null
+    },
+    {
+      "name": "weather",
+      "availability_ts_field": "availability_ts",
+      "exempt_with_ryan_reason": null
+    }
+  ]
+}

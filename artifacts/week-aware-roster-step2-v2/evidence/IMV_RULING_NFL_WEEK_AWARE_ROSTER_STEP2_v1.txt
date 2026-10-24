@@ -1,0 +1,124 @@
+IMV RULING: NFL WEEK-AWARE ROSTER STEP 2 (SPEC + LEAKAGE) - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_WEEK_AWARE_ROSTER_STEP2_v1.txt
+Filed: Saturday 2026-10-24 18:13:59 EDT
+Author: IMV (Model Validation Lead). IMV builds nothing it validates.
+Scope: Step 3 review (SPEC 8eb532c1 §7) of
+  /workspace/ops/nfl_injury_audit_t4274u/week-aware-roster-step2-v1/
+  against IMV_SPEC_NFL_WEEK_AWARE_ROSTER_LEAKAGE_v1.txt (sha8 8eb532c1)
+  and INV-1 unconditional PASS (af37925e + 7d93380e / 396800e3).
+Method: sha256sum -c; Read of SPEC/scoring/pins/STOP/code/fixtures/
+  expected/receipts; cmp evidence vs filed; IMV python JSON compare of
+  expected vs SYNTHETIC-ACTUALS and independent spot re-derive of
+  classify/stop helpers in /workspace/imv_scratch (copy of deposited
+  modules only). Harness was NOT run to regenerate package receipts.
+  No network, no git, no GitHub, no 2024/25 open, no lock.
+Cycle: Step 2 first submission. One-pass acceptance: NO (RETURN).
+
+==========================================================================================
+VERDICT: RETURN
+==========================================================================================
+STEP2_VERDICT: RETURN
+MANIFEST_SHA8: d6484094
+MANIFEST_SHA256: d64840942d27… (IMV sha256sum MATCH CoS; SUMS 0 failures)
+Step 4 (refit) NOT authorized. No source SoT pin, no opening, no lock,
+no new Ryan CLEAR. Holdout remains sealed.
+
+What is sound (not enough alone for PASS):
+- Integrity clean; evidence SPEC/erratum byte-eq filed copies; lock absent.
+- SPEC.md text aligns with 8eb532c1 G-PIT / R-rules; closed-at-cutoff false;
+  W1 week-label ineligible; B2b DO-NOT-OPEN; no SoT pin; reconstructible=0
+  until capture-time source exists (NR-1).
+- scoring-rule-delta.md: None. K-*/I-* unchanged. SUPERSEDED fit/export
+  not re-certified. ACCEPTABLE as scoring freeze for this step.
+- Substantive synthetic cases T-PIT-1/2/3/7 exercise classify_row / qb1 /
+  trade look-ahead; expected JSON == SYNTHETIC-ACTUALS for all 10 ids
+  (consistency only — see D-1).
+- DEV-COVERAGE: n=2863 REG keys 2013–2023, holdout years 0, reconstructible
+  0 by honest missing-source rule; B2b not opened.
+
+==========================================================================================
+DEFECTS (complete, one pass)
+==========================================================================================
+D-1 BLOCKER (receipt provenance) SYNTHETIC.json and DEV-COVERAGE.json
+     contain key harness_commit. Deposited run_t_pit.py main() builds
+     syn/cov dicts with expected_answers_commit only — it never writes
+     harness_commit. Receipts were therefore not produced verbatim by
+     the deposited harness (post-edit or different writer).
+     Fix: add harness_commit to the deposited harness and re-run into
+     fresh receipts, OR regenerate receipts byte-for-byte from the
+     deposited harness and drop the orphan key; either way receipts must
+     be reproducible from the deposited code alone.
+
+D-2 BLOCKER (vacuous / non-falsifiable assertions — L-4)
+     (a) week_aware_roster_status_applied() (week_aware_roster.py
+         L269-281) returns False on every path; T-PIT-5's
+         week1_roster_status_applied check cannot fail. IMV confirmed
+         even with an eligible RES row the helper stays False.
+     (b) T-PIT-6 imputed_from_season is hardcoded False in run_t_pit.py
+         L152 (not measured).
+     (c) is_member always sets silent_include=False (T-PIT-1 field cannot
+         fail).
+     (d) T-PIT-10 hardcodes season_level_loader:"HARD_STOP"; only
+         exit_code/stderr are measured.
+     Fix: replace with assertions that fail under a mutated fixture or
+     drop the vacuous fields and rely only on measurable outputs
+     (member/missingness/exit_code) with adversarial fixtures.
+
+D-3 MAJOR (T-PIT-10 stub ≠ production loader)
+     season_level_loader.py is a package stub that sys.exit(2) even when
+     GPIT_MODE is unset. It is not the INV-1-cited production
+     load_rosters (8d188da2 / 247744d2). Does not prove the real builder
+     hard-STOPs under G-PIT.
+     Fix: point T-PIT-10 at the deposited production loader/builder entry
+     (or an exact copy under leakage/code with sha8 pin), assert STOP
+     with GPIT_MODE=1 and a distinct behavior or documented SUPERSEDED
+     refusal without GPIT_MODE; do not open holdout files.
+
+D-4 MAJOR (SPEC §6 / §7 development leg)
+     Authority SPEC requires leakage tests on synthetic AND approved
+     development data before IMV accepts the leakage package. This
+     deposit runs T-PIT-1..10 on synthetic 2098 only; development path
+     is a coverage count with hardcoded n_reconstructible=0, not T-PIT
+     execution on development extracts.
+     Fix: either (i) run applicable T-PIT cases on approved <=2023
+     development extracts IMV can re-hash, or (ii) file a SPEC erratum
+     for IMV adopting "synthetic-only T-PIT + development ineligibility
+     coverage" as the Step 2 bar while NR-1 is open — IMV will judge
+     that erratum; do not silently omit the development leg.
+
+D-5 MINOR (population note)
+     DEV keys: 2022=271, 2023=272 (543). Prior fold figures F1=268 /
+     F2=271 (539) were a different population (fold/exclusion set).
+     Total 2863 matches prior le2023 export game count — good — but the
+     package must state explicitly that DEV-COVERAGE counts schedule
+     keys (export population), not fold-n, and explain 2022=271 vs 272.
+     Fix: one clarifying paragraph in DEV-COVERAGE expected/notes with
+     cites; no silent assumption.
+
+D-6 MINOR (commit order secondhand)
+     expected_answers_commit 52879746 → harness 3f226966 is attested
+     only by inputs/*.txt and notes; IMV has no on-box git proof (no
+     GitHub). Label SECONDHAND in pins/verified-vs-claimed, or deposit
+     a format-patch / git show excerpt that does not require network.
+
+D-7 MINOR (coverage gaps — include in same resubmission)
+     T-PIT-4 lacks a before-cutoff PS promotion success case; T-PIT-9 is
+     same-process only; T-PIT-8 checks a fixture manifest not a live
+     feature pipeline. Strengthen or document as deferred with IMV
+     acceptance in the SPEC erratum path of D-4.
+
+==========================================================================================
+SHORTEST PATH TO PASS (t4317u)
+==========================================================================================
+One Cursor resubmission that closes D-1..D-4 (and addresses D-5..D-7 in
+the same pass). Then IMV re-reviews Step 3 only. Step 4 remains blocked
+until that PASS. NR-1 still Needs-Ryan (no spend). Odds API ON HOLD.
+
+Evidence classes:
+  IMV-inspected: integrity; SPEC/scoring text; code helpers; expected vs
+    actuals JSON equality; vacuous-helper probe; harness_commit absence
+    in deposited main(); DEV key season counts; lock absent.
+  Secondhand: git commit order; PR #629; agent-store path; Cursor's
+    claim that receipts came from harness 3f226966.
+
+NO-GO, Coming Soon ON.

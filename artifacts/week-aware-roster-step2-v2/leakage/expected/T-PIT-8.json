@@ -1,0 +1,24 @@
+{
+  "id": "T-PIT-8",
+  "required_classes": [
+    "injuries",
+    "rosters",
+    "depth",
+    "transactions",
+    "qb_changes",
+    "odds",
+    "weather"
+  ],
+  "undeclared_allowed": false,
+  "all_have_availability_ts_or_ryan_exempt": true,
+  "live_scan": {
+    "injuries": true,
+    "rosters": true,
+    "depth": true,
+    "transactions": true,
+    "qb_changes": false,
+    "odds": false,
+    "weather": false
+  },
+  "live_scan_deferred": ["qb_changes", "odds", "weather"]
+}

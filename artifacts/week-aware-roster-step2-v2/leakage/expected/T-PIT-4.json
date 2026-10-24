@@ -1,0 +1,14 @@
+{
+  "id": "T-PIT-4",
+  "player_id": "00-SYN-PS",
+  "after_cutoff": {
+    "member_53": false,
+    "promoted_role": false,
+    "missingness": "MISSING_ROW"
+  },
+  "before_cutoff": {
+    "member_53": true,
+    "promoted_role": true,
+    "missingness": "OK"
+  }
+}
