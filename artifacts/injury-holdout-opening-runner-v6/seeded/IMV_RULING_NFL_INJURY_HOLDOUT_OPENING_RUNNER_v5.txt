@@ -1,0 +1,127 @@
+IMV RULING: NFL INJURY HOLDOUT OPENING RUNNER - v5
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v5.txt
+Filed: 2026-10-24 12:28:56 EDT
+Author: IMV (Model Validation Lead).
+Scope: changes-only one-pass review of
+  /workspace/ops/nfl_injury_audit_t4274u/injury-holdout-opening-runner-v5/ against RETURN 0505e492.
+Method: text only. No project code was run (no fixture, no checker, no builder); IMV used read-only
+  sha256sum/cmp/diff/grep/ls and python json reads of package files. No network, no git, no 2024/25
+  data, exact paths, no lock written. Hex masked except the one V62 line.
+Cycle record: 15th submission. One-pass acceptance: NO (RETURN).
+
+0. RYAN SCORER DECISION (inspected)
+  - /workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_SCORER_V6_2.txt is 0444, 731 bytes, and
+    matches its sidecar: 592e0bb9<HEX>.
+  - The seeded copy is byte-identical (cmp), with the same sidecar value.
+  - It quotes verbatim: "Yes: allow scorer v6.2 for the opening, only if IMV passes the diff as
+    holdout-allowance-only with no metric change" (card t4340s14953). It is dated 2026-10-24 12:16 ET
+    and amends CLEAR fabf8732 only as to the scorer pin.
+  - It requires the FINAL sha's diff to be re-passed if the sha changes from 1129354a.
+  GRADE: VALID AS A DECISION FILE.
+  - Exact path, sidecar OK, verbatim condition, scope stated.
+  - Its authorship by Ryan is SECONDHAND to IMV (card t4340s14953 not seen by IMV).
+  - It is CONDITIONAL: effective only on an IMV diff pass of the sha actually pinned.
+
+1. INTEGRITY (IMV-computed)
+  - MANIFEST = 5bdad961 (matches MANIFEST.sha256).
+  - SHA256SUMS has 89 lines, all OK. MANIFEST has 88 lines; SUMS = MANIFEST + its own hash line.
+  - Files:
+      runner 1611dded; builder aa9d512b; producer 6409dcb8; method 76aac887 (unchanged);
+      injury_paths seed ebd3dac0; v6.2 final 755d30a8; ca98ae0e seed unchanged.
+  - Expected answers: the FILE is 5521961d (sidecar present). 4de6c955 is a COMMIT id (inputs/
+    expected_answers_commit.txt); secondhand. runner_sha in the expected answers is null.
+  - /workspace/ops/nfl_injury_audit_t4274u/holdout-once.lock* is absent, and there is no holdout
+    output (package out/ = le2023 guards + synthetic only).
+
+2. SCORER v6.2 FINAL 755d30a8 - DIFF VERDICT (inspected)
+  - vs the 1129354a draft: exactly one line differs, L1663, the report text. It now reads "- 2026 is
+    never scored. 2024/2025 are scored only after a production lock and a verified opening-runner
+    PASS." S-2 is CLOSED.
+  - vs ca98ae0e:
+    - the docstring;
+    - _HOLDOUT_ALLOWANCE, permit_holdout_scoring and _season_blocked (2026 always blocked;
+      2024/2025 only if lock_is_production AND pass_verified);
+    - the 4 guard sites (L529/1412/1488/1575);
+    - L1663 text.
+    Nothing else: no metric, Holm, bootstrap, fold, seed or sigma change.
+  - Ryan's condition, holdout-allowance-only with no metric change: MET by the code content of
+    755d30a8.
+  - S-1 is acceptable. The runner pins exactly one scorer (ACTIVE_SCORER_SHA = 755d30a8), the
+    runtime switch is removed, and the flags are derived from the verified lock and PASS.
+V62_DIFF_VERDICT: PASS (holdout-allowance-only, no metric change)
+V62_SHA: 755d30a8ce0dde7cd31b2e5ded9d4e06240e73f963b68a6ae4bd9af30d90ea5f
+  L-1 PROVENANCE-LABEL DEFECT (blocking for the runner pin):
+  - The pinned file still says "v6.2 DRAFT" and "PENDING_RYAN" in its docstring, and it sits at
+    seeded/v6.2-draft/. A one-shot opening must not score with a file that labels itself unapproved.
+  - Fix: change the docstring only (e.g. "v6.2 FINAL - Ryan t4340s14953 / 592e0bb9"). Optionally
+    move it to seeded/v6.2/.
+  - The new sha needs only an IMV changes-only diff check that the change is docstring-only. The
+    verdict above then carries over to it.
+
+3. RUNNER 1611dded vs a6365ee1 (full diff read; builder and producer read in full)
+  B-14 CLOSED. ryan_scorer_v62_authorized and AUTHORIZE_V62_LINE are removed.
+       active_scorer_spec() returns the constant pair. The decision path is the audit dir.
+       expected["runtime_scorer_switch"] is False. The lock and receipt carry the scorer, decision
+       and builder shas.
+  B-12 CLOSED IN CODE. The pin is 755d30a8, but the label L-1 still has to be fixed (new sha, repin).
+  B-4b PARTIAL.
+       Met:
+       - The builder builds value/x_continuity via frozen 8d188da2 precompute_games under the seeded
+         injury_paths ebd3dac0. That file states QB1_INDEX_UNITS = 0.12, QB1_POINTS_PER_INDEX_UNIT =
+         12.5 and floor = units x ppu; IMV read it, so QB1 is now INSPECTED (seed copy).
+         Seed == HEAD 8e2a15ac is secondhand.
+       - games.json values, x_continuity and deltas are refused (with a fixture).
+       - The builder sha is checked before import.
+       - le2023 raw roster/listing/schedule shas are pinned.
+       - as_of <= kickoff is checked on built rows.
+       Open:
+       (R) The le2023 rebuild claim, a38a55bb with 2863 games / 0 diffs, is NOT VERIFIED.
+           - IMV confirmed only that a38a55bb holds 2863 games.
+           - No output artifact carries rebuilt per-game deltas.
+           - reproduce_le2023_a38a55bb() exists in the builder but is never called by the runner,
+             and no log or receipt records its result. The "0 diffs" in the expected answers and
+             notes is a claim.
+           - IMV may not run project code. Grade: SECONDHAND / NOT REPRODUCED FROM OUTPUTS.
+       (P) The production raw inputs (audit-dir listings/, schedule.csv, rosters/) are NOT
+           sha-pinned. The raw pins apply only to le2023 (pin_le2023_raw=False in production), and
+           the lock records no raw-input sha.
+       (n) load_rosters_dir globs every roster_*.csv with no year filter. That is acceptable only if
+           the production rosters/ holds exactly the declared years. State it in the expected
+           answers.
+  B-4c CLOSED. Naive or zoneless timestamps STOP in the builder (listings date_modified) and in the
+       producer (kickoff_utc, listing_as_of); fixture F-NAIVE-TIMESTAMP. The ff8e6527 naive->UTC
+       coercion is unreachable by the producer's stated design (secondhand beyond the code read).
+  B-15 CLOSED. The S-2 text is fixed in 755d30a8; i3_holm_adjusted_p is renamed i3_holm_scorer, and
+       the fixture rejects the old name.
+  B-1, B-6, B-8a, B-13: re-confirmed. The diff touches none of their logic. B-13 adds rosters/ to
+       the pre-lock existence check and gameday/gametime to the schedule headers.
+  B-11: commits 4de6c955 / 57453a0e are SECONDHAND.
+
+4. DEFECTS (complete)
+  L-1  (BLOCKER) The pinned v6.2 carries the "DRAFT"/"PENDING_RYAN" label.
+  B-4b(R) (BLOCKER) The le2023 rebuild is not evidenced by outputs. Emit pinned rebuilt per-game
+       deltas (game_id, delta_margin, delta_total) for all 2863 games as a package file; IMV
+       compares it field-wise with a38a55bb.
+  B-4b(P) (BLOCKER) Production raw inputs are unpinned. The lock must record the sha256 of every
+       production raw input file (listings_*.csv, schedule.csv, roster_*.csv, close.csv,
+       games.json), computed before any row is parsed; the receipt repeats them.
+  B-4b(n) (minor) The roster year set must be declared in the expected answers.
+
+VERDICT: RETURN
+  LOCK + SINGLE OPENING MAY NOT PROCEED. No runner sha is approved; there is no PASS. No gate is
+  changed.
+  Accepted, no re-review needed:
+    - B-1, B-2, B-3, B-5, B-6, B-7, B-8a, B-9, B-10, B-12 (logic), B-13, B-14, B-4c, B-15;
+    - the v6.2 diff content (V62_DIFF_VERDICT above).
+
+5. SHORTEST PATH
+  1 Relabel the v6.2 docstring only, giving a new sha. IMV checks that it is docstring-only.
+  2 Builder output: a le2023 rebuilt-deltas file (2863 rows), listed in MANIFEST/SUMS.
+  3 The runner records production raw-input shas in the lock and receipt before parsing; declare
+    the roster years.
+  4 Expected answers v6 and the commit, then one runner sha with the new scorer pin.
+  5 IMV changes-only review. A passing ruling will carry exactly one anchored PASS verdict line and
+    one runner-sha line. Then production inputs at the exact paths, one opening, receipt, IMV
+    receipt review.
+
+NO-GO, Coming Soon ON.

@@ -1,0 +1,69 @@
+{
+  "holdout_years_opened": false,
+  "incomplete": {
+    "excluded_game_ids": [
+      "2013_1_CIN_CHI",
+      "2013_1_NYG_DAL",
+      "2014_15_SF_SEA",
+      "2015_1_NO_ARI",
+      "2017_1_IND_LA",
+      "2020_1_GB_MIN",
+      "2020_6_KC_BUF",
+      "2022_2_IND_JAX",
+      "2022_7_CHI_NE",
+      "2022_12_BAL_JAX",
+      "2023_5_HOU_ATL"
+    ],
+    "n_incomplete": 11,
+    "n_incomplete_by_season": {
+      "2013": 2,
+      "2014": 1,
+      "2015": 1,
+      "2017": 1,
+      "2020": 2,
+      "2022": 3,
+      "2023": 1
+    },
+    "n_kept": 2852
+  },
+  "joined": false,
+  "kind": "le2023_guards",
+  "le2023_rebuild": {
+    "deposit_le2023_rebuild": "already deposited; not rewritten",
+    "deposited_compare_relpath": "out/le2023/rebuilt_le2023_compare.json",
+    "deposited_compare_sha": "bc89721f170be3c5b4435c70597565e515d52fd662eb522516c35e1087be7501",
+    "deposited_deltas_relpath": "out/le2023/rebuilt_le2023_deltas.json",
+    "deposited_deltas_sha": "8af44a7eaa96ff695e10a61c827f942020c534f578ee36893701409857429394",
+    "export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+    "live_vs_a38a55bb": "0_DIFF",
+    "live_vs_deposited": "0_DIFF",
+    "n_rows": 2863,
+    "verdict": "0_DIFF"
+  },
+  "opening_permitted": false,
+  "pin": {
+    "blob_sha_not_a_pin": "46d2a5657d1b5a5eb1af03f4d643afbfaa4762f31260daff439b5df1ac1456eb",
+    "on_disk_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8"
+  },
+  "tz": {
+    "n_empty": 0,
+    "n_listings": 58653,
+    "n_naive": 0,
+    "n_offset": 0,
+    "n_other": 0,
+    "n_z": 58653,
+    "years_opened": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  }
+}

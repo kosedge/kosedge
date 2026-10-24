@@ -1,0 +1,66 @@
+STOP: O-1 opening blocked: IMV has not passed this opening runner; real lock not written; 2024/25 not opened
+pins ok before lock method=76aac887 producer=ae8f9585 folds=2024/2025 b9=45.3563 scorer=8b482cb9
+STOP: B-13 production input: missing /workspace/ops/nfl_injury_audit_t4274u/games.json
+STOP: O-3 lock: production lock requires verified IMV opening-runner PASS sha
+pins ok before lock method=76aac887 producer=ae8f9585 folds=2024/2025 b9=45.3563 scorer=8b482cb9
+B-13 workspace input size /tmp/opening-v6-e2e-ltwop93c/e2e/games.json=398 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-ltwop93c/e2e/close.csv=245 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-ltwop93c/e2e/schedule.csv=308 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-ltwop93c/e2e/listings=4096 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-ltwop93c/e2e/rosters=4096 (stat, not opened)
+B-4b(P) raw_input_shas n=7 before any row parse production=False
+B-13 workspace input size listings_2098.csv=473 (stat, not opened)
+B-13 workspace input size listings_2099.csv=470 (stat, not opened)
+B-13 workspace input ok before lock production=False raw_shas=7
+lock written /tmp/opening-v6-e2e-ltwop93c/e2e/holdout-once.lock sha=e94e691f mode=0444
+writer.main present and not invoked (B-10 le2023 Path 1 entrypoint)
+writer invoked sha=9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f
+export written /tmp/opening-v6-e2e-ltwop93c/e2e/export.json on_disk=ac6b5c2f producer=apply_params writer=9947b880
+week1 identity ok before receipt
+lock consumed sidecar /tmp/opening-v6-e2e-ltwop93c/e2e/holdout-once.lock.consumed reason=opened once lock_sha=e94e691f
+receipt written /tmp/opening-v6-e2e-ltwop93c/e2e/receipt.json mode=0444 manifest_after=true not_rewritten=true
+sequence ok: pins inputs lock export guards join score week1 consumed receipt
+F-E2E lock export guards join score week1 receipt ok; F-MARKER-NO-2024 F-SCORER-PINNED-V62 F-B8A F-SCORER-GUARDS F-NAIVE F-GAMES-JSON ok
+pins ok before lock method=76aac887 producer=ae8f9585 folds=2024/2025 b9=45.3563 scorer=8b482cb9
+STOP: O-3 lock: existing lock /tmp/opening-v6-lock-present-4tjd0dj1/lock-present/holdout-once.lock
+pins ok before lock method=76aac887 producer=ae8f9585 folds=2024/2025 b9=45.3563 scorer=8b482cb9
+B-13 workspace input size /tmp/opening-v6-e2e-7tl913dq/e2e/games.json=398 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-7tl913dq/e2e/close.csv=245 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-7tl913dq/e2e/schedule.csv=308 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-7tl913dq/e2e/listings=4096 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-7tl913dq/e2e/rosters=4096 (stat, not opened)
+B-4b(P) raw_input_shas n=7 before any row parse production=False
+B-13 workspace input size listings_2098.csv=473 (stat, not opened)
+B-13 workspace input size listings_2099.csv=470 (stat, not opened)
+B-13 workspace input ok before lock production=False raw_shas=7
+lock written /tmp/opening-v6-e2e-7tl913dq/e2e/holdout-once.lock sha=3583e662 mode=0444
+writer.main present and not invoked (B-10 le2023 Path 1 entrypoint)
+writer invoked sha=9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f
+export written /tmp/opening-v6-e2e-7tl913dq/e2e/export.json on_disk=ac6b5c2f producer=apply_params writer=9947b880
+week1 identity ok before receipt
+lock consumed sidecar /tmp/opening-v6-e2e-7tl913dq/e2e/holdout-once.lock.consumed reason=opened once lock_sha=3583e662
+receipt written /tmp/opening-v6-e2e-7tl913dq/e2e/receipt.json mode=0444 manifest_after=true not_rewritten=true
+sequence ok: pins inputs lock export guards join score week1 consumed receipt
+pins ok before lock method=76aac887 producer=ae8f9585 folds=2024/2025 b9=45.3563 scorer=8b482cb9
+STOP: O-3 lock: existing lock /tmp/opening-v6-e2e-7tl913dq/e2e/holdout-once.lock
+STOP: O-1 refuse: no tuning or refit path
+STOP: O-5 incomplete: complete row has a null per-side timestamp game_id=2022_1_BBB_AAA field=source_ts_home
+pins ok before lock method=76aac887 producer=ae8f9585 folds=2024/2025 b9=45.3563 scorer=8b482cb9
+B-13 workspace input size /tmp/opening-v6-e2e-fxzsp1f3/e2e/games.json=398 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-fxzsp1f3/e2e/close.csv=245 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-fxzsp1f3/e2e/schedule.csv=308 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-fxzsp1f3/e2e/listings=4096 (stat, not opened)
+B-13 workspace input size /tmp/opening-v6-e2e-fxzsp1f3/e2e/rosters=4096 (stat, not opened)
+B-4b(P) raw_input_shas n=7 before any row parse production=False
+B-13 workspace input size listings_2098.csv=473 (stat, not opened)
+B-13 workspace input size listings_2099.csv=470 (stat, not opened)
+B-13 workspace input ok before lock production=False raw_shas=7
+lock written /tmp/opening-v6-e2e-fxzsp1f3/e2e/holdout-once.lock sha=4143fd6e mode=0444
+writer.main present and not invoked (B-10 le2023 Path 1 entrypoint)
+writer invoked sha=9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f
+export written /tmp/opening-v6-e2e-fxzsp1f3/e2e/export.json on_disk=ac6b5c2f producer=apply_params writer=9947b880
+lock consumed sidecar /tmp/opening-v6-e2e-fxzsp1f3/e2e/holdout-once.lock.consumed reason=STOP after lock lock_sha=4143fd6e
+receipt written /tmp/opening-v6-e2e-fxzsp1f3/e2e/receipt.json mode=0444 manifest_after=true not_rewritten=true
+lock consumed sidecar already 0444; not rewritten /tmp/opening-v6-e2e-fxzsp1f3/e2e/holdout-once.lock.consumed
+fixtures: F-DEFAULT-HOLDOUT F-PRODUCTION-INPUTS-MISSING F-PRODUCTION-LOCK-BLOCKED F-LOCK-PRESENT F-DOUBLE-OPEN F-REFIT F-PER-SIDE F-POST-LOCK-BASEEXCEPTION STOP; F-E2E F-MARKER-NO-2024 F-SCORER-PINNED-V62 F-B8A-SUBSTRING-REJECT F-SCORER-GUARDS-CLOSED F-NAIVE-TIMESTAMP F-GAMES-JSON-VALUES recorded
+le2023 guards: listings=58653 Z=58653 n_incomplete=11 rebuild=0_DIFF n=2863

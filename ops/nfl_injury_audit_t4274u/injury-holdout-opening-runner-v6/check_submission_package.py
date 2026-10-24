@@ -38,7 +38,7 @@ REQUIRED_PRODUCER = "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8
 REAL_LOCK = Path("/workspace/ops/nfl_injury_audit_t4274u/holdout-once.lock")
 RYAN_SCORER_DECISION = Path("/workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_SCORER_V6_2.txt")
 SKIP_DIRS = {".git", "__pycache__"}
-SKIP_NAMES = {"MANIFEST", "SHA256SUMS", "MANIFEST.sha256", "checker.log", "checker.stdout.txt"}
+SKIP_NAMES = {"MANIFEST", "SHA256SUMS", "MANIFEST.sha256", "checker.log", "checker.stdout.txt", "checker.stderr.txt"}
 SEEDED = (
     ("ruling_v4", "seeded/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v4.txt", REQUIRED_OPENING_RETURN_V4),
     ("ruling_v5", "seeded/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v5.txt", REQUIRED_OPENING_RETURN_V5),

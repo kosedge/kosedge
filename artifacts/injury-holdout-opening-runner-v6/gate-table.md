@@ -1,0 +1,48 @@
+# Holdout gate table (no values) — opening-runner v6
+
+**RETURN:** `2c71e4d0baa0da16ef48f5f4560f1b151c742bb176226335b922d649aebf7a66`  
+**Prior RETURN:** `0505e492` / `4fd6cfbe` + erratum `b746e5eb` / `77d9c00a` / `a8958e85`  
+**D-2:** `b7364186cc2aa900fd39e2dd22e78e2e69b63d2cac11fd6fa6b234997494b6b8`  
+**Decision:** `fabf8732` / `t4335s14919`  
+**Scorer decision:** `592e0bb9` / `t4340s14953`  
+**Request:** `35cbb56e` §2 `season ∈ {2024, 2025}` + record/HFA  
+**Active scorer:** `8b482cb9` (exactly one pin; v6.2 FINAL docstring-only vs `755d30a8`; seed 20261023; σ 13.5 / 14.0)  
+**V62 content:** `V62_DIFF_VERDICT PASS` on `755d30a8` (holdout-allowance-only, no metric change)  
+**L-1 DIFF:** `280d9785` vs `755d30a8` (docstring only; IMV changes-only re-check)  
+**Builder:** `holdout_frozen_row_builder.py` `247744d2`  
+**Producer:** `holdout_delta_producer.py` `ae8f9585` (`QB1_INDEX_UNITS=0.12` from `ebd3dac0`)  
+**B-4b(R):** `out/le2023/rebuilt_le2023_deltas.json` `8af44a7e` (2863) + `rebuilt_le2023_compare.json` `bc89721f` (`0_DIFF` vs `a38a55bb`)  
+**Holdout values:** none. Opening is not permitted. Real lock not written.
+
+Verbatim from `a156459b` s6/s7:
+
+```
+I-1  Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against
+     the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.
+I-2  Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and
+     >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).
+I-3  Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family
+     alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.
+I-4  Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95%
+     block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.
+I-5  Soft, borderline or insignificant results cannot become a product claim, marketing
+     copy, or a "improves accuracy" statement. Report them as null results.
+```
+
+```
+K-2  Metrics, base vs adjusted on the same games: Brier and log loss (win prob);
+     cover reliability for spread and total (predicted cover prob vs actual);
+     reliability diagram in 10 bins with counts.
+K-3  CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.
+K-4  Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss
+     <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1].
+     Failing = layer stays off.
+```
+
+VALUE PROVEN also requires primary CI **lo > 0**. No-pick ATS is **None**.
+I-1 “CLV” is scored as **close vs outcome**. Label: **comparative research, not certified CLV**.
+
+Folds: F1=2024, F2=2025, pooled (from the request). Fixture stand-ins 2098/2099.
+Allowed roster years: le2023 2012–2023; production {2023,2024,2025}; synthetic {2098,2099}; 2026 never.
+Base = record/HFA method in `t_expected/HOLDOUT_EXPECTED.json` `baseline_method`.
+Receipt reports the scorer holm list only as `i3_holm_scorer`.
