@@ -1794,23 +1794,41 @@ def run_le2023(expected: Dict[str, Any], out_dir: Path) -> Dict[str, Any]:
         "tz": tz,
         "incomplete": incomplete,
     }
-    builder = import_builder()
-    compare = builder.deposit_le2023_rebuild(HERE, out_dir)
     deltas_path = out_dir / "rebuilt_le2023_deltas.json"
     compare_path = out_dir / "rebuilt_le2023_compare.json"
     deltas_sha = sha256_file(deltas_path)
     compare_sha = sha256_file(compare_path)
     if deltas_sha != REQUIRED_LE2023_DELTAS:
-        die(f"B-4b(R) rebuilt deltas sha {deltas_sha} != {REQUIRED_LE2023_DELTAS}")
+        die(f"B-4b(R) deposited deltas sha {deltas_sha} != {REQUIRED_LE2023_DELTAS}")
     if compare_sha != REQUIRED_LE2023_COMPARE:
-        die(f"B-4b(R) compare sha {compare_sha} != {REQUIRED_LE2023_COMPARE}")
-    if compare.get("verdict") != "0_DIFF":
-        die(f"B-4b(R) compare verdict {compare.get('verdict')} != 0_DIFF")
-    if int(compare.get("n_delta_margin_diff") or 1) or int(compare.get("n_delta_total_diff") or 1):
-        die("B-4b(R) compare is not 0-diff")
+        die(f"B-4b(R) deposited compare sha {compare_sha} != {REQUIRED_LE2023_COMPARE}")
     deposited = json.loads(deltas_path.read_text(encoding="utf-8"))
+    compare = json.loads(compare_path.read_text(encoding="utf-8"))
     if deposited.get("n") != 2863 or len(deposited.get("games") or []) != 2863:
         die(f"B-4b(R) deposited n={deposited.get('n')} games={len(deposited.get('games') or [])}")
+    if compare.get("verdict") != "0_DIFF":
+        die(f"B-4b(R) deposited compare verdict {compare.get('verdict')} != 0_DIFF")
+    if int(compare.get("n_delta_margin_diff") or 1) or int(compare.get("n_delta_total_diff") or 1):
+        die("B-4b(R) deposited compare is not 0-diff")
+    builder = import_builder()
+    live = builder.reproduce_le2023_a38a55bb(HERE)
+    applied = live.pop("applied")
+    by_dep = {row["game_id"]: row for row in deposited["games"]}
+    n_dm = n_dt = n_miss = 0
+    for game in applied:
+        gid = f"{int(game['season'])}_{game['week']}_{game['away']}_{game['home']}"
+        row = by_dep.get(gid)
+        if row is None:
+            n_miss += 1
+            continue
+        dm, edm = game.get("delta_margin"), row.get("delta_margin")
+        dt, edt = game.get("delta_total"), row.get("delta_total")
+        if (dm is None) != (edm is None) or (dm is not None and abs(float(dm) - float(edm)) > 1e-12):
+            n_dm += 1
+        if (dt is None) != (edt is None) or (dt is not None and abs(float(dt) - float(edt)) > 1e-12):
+            n_dt += 1
+    if n_miss or n_dm or n_dt or len(applied) != 2863:
+        die(f"B-4b(R) live rebuild vs deposited 8af44a7e miss={n_miss} dm={n_dm} dt={n_dt} n={len(applied)}")
     payload["le2023_rebuild"] = {
         "deposited_deltas_relpath": "out/le2023/rebuilt_le2023_deltas.json",
         "deposited_deltas_sha": deltas_sha,
@@ -1819,6 +1837,9 @@ def run_le2023(expected: Dict[str, Any], out_dir: Path) -> Dict[str, Any]:
         "verdict": compare.get("verdict"),
         "n_rows": deposited.get("n"),
         "export_sha": compare.get("export_sha"),
+        "live_vs_deposited": "0_DIFF",
+        "live_vs_a38a55bb": "0_DIFF",
+        "deposit_le2023_rebuild": "already deposited; not rewritten",
     }
     (out_dir / "d2_results.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (out_dir / "provenance.md").write_text(

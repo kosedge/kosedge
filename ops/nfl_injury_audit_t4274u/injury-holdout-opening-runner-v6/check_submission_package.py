@@ -178,8 +178,8 @@ def main() -> int:
         errors.append("B-4b(P) hash_raw_inputs_before_parse missing")
     if "raw_input_shas" not in src:
         errors.append("B-4b(P) raw_input_shas missing from runner")
-    if "deposit_le2023_rebuild" not in src:
-        errors.append("B-4b(R) deposit_le2023_rebuild not called")
+    if "reproduce_le2023_a38a55bb" not in src:
+        errors.append("B-4b(R) reproduce_le2023_a38a55bb not called")
     if "float(raw_p) * (9" in src or "min(1.0, float(raw_p)" in src:
         errors.append("B-6 runner Holm formula still present")
     if re.search(r"^def ryan_scorer_v62_authorized\(", src, re.M):
