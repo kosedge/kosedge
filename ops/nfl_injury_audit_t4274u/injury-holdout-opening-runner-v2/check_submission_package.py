@@ -71,6 +71,7 @@ def write_manifest(root: Path) -> None:
 
 
 def main() -> int:
+    sys.dont_write_bytecode = True
     root = Path(__file__).resolve().parent
     errors: List[str] = []
     if REAL_LOCK.exists():

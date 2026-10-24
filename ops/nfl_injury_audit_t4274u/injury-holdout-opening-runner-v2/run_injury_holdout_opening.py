@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 HERE = Path(__file__).resolve().parent
+sys.dont_write_bytecode = True
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 import record_hfa_baseline_method as baseline_method
@@ -800,7 +801,9 @@ def run_holdout_workspace(workspace: Path) -> Dict[str, Any]:
         joined, missing = join_close(state, kept, workspace / "close.csv", workspace / "schedule.csv")
         folds = score_folds(joined)
         mark_lock_consumed(workspace, "opened once")
-        receipt = write_receipt(workspace, state, pin, tz, incomplete, missing, folds, None, None)
+        ws_log = workspace / "runner.log"
+        ws_log.write_text("\n".join(LOG_LINES) + ("\n" if LOG_LINES else ""), encoding="utf-8")
+        receipt = write_receipt(workspace, state, pin, tz, incomplete, missing, folds, None, sha256_file(ws_log))
         week1 = [row for row in joined if int(row["week"]) == 1 and int(row["season"]) == 2022]
         if week1:
             if abs(float(week1[0]["baseline_margin"]) - 1.05) > 1e-12:
