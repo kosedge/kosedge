@@ -1,0 +1,121 @@
+IMV RULING: NFL INJURY HOLDOUT OPENING RUNNER - v3
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v3.txt
+Filed: 2026-10-24 11:53:03 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Scope: changes-only one-pass review of
+  /workspace/ops/nfl_injury_audit_t4274u/injury-holdout-opening-runner-v3/ against RETURN 77d9c00a
+  (B-1..B-11).
+Method: text only. No project code was run; IMV used read-only sha256sum/cmp/grep/ls/python json
+  reads. No network, no git, no 2024/25 data, exact paths, no lock written. Hex masked.
+  This ruling is written in one noclobber pass and is never edited; corrections go in an erratum.
+  The PASS-verdict literal and the full runner sha are deliberately absent (see B-8a).
+Cycle record: 13th submission. One-pass acceptance: NO (RETURN).
+
+INTEGRITY (IMV-computed)
+  - MANIFEST = 8f3e18ce (matches its sidecar). SHA256SUMS: 63 entries, all OK.
+  - Runner = e6e103de (FILE sha, read in full; diffed by content against bd97ff00).
+  - Producer = 57df9a50. Method = 76aac887. runner.log = e5f31be8.
+  - Expected answers: the FILE is cda0... no; the FILE is 1cffb979 (sidecar OK). fd2ed658 is the
+    COMMIT; secondhand. runner_commit.txt = 7a4171e9 (a commit id; secondhand).
+  - The expected answers have holdout_values = null, fold_years 2024/2025, synthetic years 2098/2099,
+    method sha 76aac887 and producer sha 57df9a50.
+  - Scorer: sha ca98ae0e, cmp byte-identical to v6.1. Seeded RETURN v1/v2 are byte-identical to the
+    IMV originals. inputs/nflverse_close_le2023.csv is byte-identical to v6.1.
+  - On the box: /workspace/ops/nfl_injury_audit_t4274u/holdout-once.lock* is absent, and there is no
+    holdout output. The fixtures ran under /tmp only.
+
+B-ITEMS
+  B-1 NOT MET.
+      - Met: in run_holdout_workspace, assert_pins_before_lock runs all 18 pins, the
+        method/producer shas vs expected, the B-9 CSV reproduction, the Week-1 identity and the
+        request fold parse. The existing-lock check runs before write_lock, and write_lock checks
+        the PASS before writing the real lock.
+      - Open: the post-lock handler catches SystemExit ONLY. The producer raises AssertionError
+        (6 sites), and KeyError/ValueError/PermissionError or a scorer exception would leave the
+        lock written with no consumed record and no receipt. It must catch BaseException.
+      - Open: the Week-1 check runs AFTER the receipt is written 0444. A STOP there re-enters the
+        handler and rewrites 0444 files (PermissionError, not a clean STOP).
+  B-2 MET. Every FIXTURE_MARKER use was traced:
+      - L38 constant; workspace_is_review_fixture (L219-235, used only in write_lock to allow a
+        NON-production lock); copy_fixture_to_temp.
+      - 2024/25 rows are admitted only by holdout_season_allowed with lock_is_production AND a
+        verified PASS; lock_is_production is set only when lock path resolve() == REAL_LOCK.
+      - Listings names are gated the same way (may_open_holdout_listings), and the census refuses a
+        listings_2024/2025 entry before opening it. A marker or fixture can admit only 2098/2099.
+      - A symlinked lock that resolves to the REAL_LOCK takes the production branch and needs the
+        PASS.
+  B-3 MET IN CODE. Folds are parsed from request 35cbb56e ("season ∈ {2024, 2025}") and
+      cross-checked against expected. dry_run_label=False with label "opening-runner v3" applies
+      only under production + PASS. BUT see B-12.
+  B-4 PARTIAL.
+      - Met: raw deltas in games.json are refused; post-kickoff fields are refused; deltas come from
+        apply_params(8d188da2) with selected_params from 6a5490db (both sha-verified, with
+        ff8e6527 loaded).
+      - Open: the producer stubs the src import graph and injects QB1_INDEX_UNITS = 1.0, a constant
+        that is not in fit_object (only qb1_floor 1.5 and points-per-unit 12.5 are). This is
+        secondhand vs the real injury_paths value and must be pinned. The "extra player keys" loop
+        is a no-op. Point-in-time depends on the writer's timestamps; the producer checks no
+        as_of <= kickoff.
+  B-5 MET. The method and producer shas are checked against expected BEFORE import.
+  B-6 PARTIAL.
+      - Met: opening_permitted / holdout_years_opened are computed; the receipt is 0444; top-level
+        runner/scorer/producer/method/writer shas are present; a RECEIPT_MANIFEST/SUMS exists; the
+        I-1 nine metrics, Holm list and K-2 fields are included.
+      - Open: i3_holm_adjusted_p is the runner's own formula p*(9-rank+1), without the step-down
+        cumulative max. That is a metric re-implementation; report the scorer's holm list only, or
+        the proper monotone Holm.
+      - Open: RECEIPT_MANIFEST hashes receipt.json and then the receipt is rewritten, so the
+        receipt's MANIFEST line is stale. RECEIPT_MANIFEST/SUMS are not 0444, and MANIFEST and SUMS
+        are identical.
+  B-7 MET (fixtures). The E2E on 2098/2099 ran pins -> lock -> producer -> writer -> guards -> join
+      -> score -> consumed -> receipt. F1 n=2, F2 n=3, pooled n=5, all INCONCLUSIVE. F-MARKER-NO-2024
+      was recorded.
+  B-8 PARTIAL.
+      - Met: the exact IMV dir is read; the .abs.sha256 sidecar must match the file sha and the file
+        must be 0444; seeded/ is not read; there is no constant.
+      - B-8a (BLOCKER): a substring test. Any ruling in the glob containing the PASS-verdict
+        substring anywhere (e.g. one QUOTING the requirement, as RETURN v2 line 96 does) plus the
+        full runner sha would count as a PASS. Require an anchored line, exactly one line matching
+        ^VERDICT: (PASS|RETURN|...)$ and equal to the PASS line, plus a dedicated
+        "RUNNER_SHA: <64hex>" line equal to runner_sha().
+      - IMV will put both lines in any passing ruling.
+  B-9 MET. ROUND_HALF_UP Decimal, an in-code reproduction of 502110cf across 2992 rows, and
+      DAL-CAR 45.3563 asserted before the lock.
+  B-10 MET AS STATED. Path 1 holdout = producer + writer timestamps_for_game + write_sidecar_chain,
+      stated and pinned in the expected answers and the lock. writer.main is not invoked.
+  B-11 SECONDHAND: commits fd2ed658 and 7a4171e9.
+
+NEW DEFECTS
+  B-12 (BLOCKER, structural) The frozen scorer ca98ae0e has FORBIDDEN = {2024, 2025, 2026} (L86) and
+      dies on any such season (L507 and others). The expected answers admit "still dies on real
+      holdout years ... never scores 2024/25".
+      - The production opening would therefore lock, export and then STOP at scoring.
+      - The holdout would be consumed with no result.
+      - This cannot be fixed in the runner without modifying or relabelling the scorer, and both
+        are forbidden.
+      - Resolution needs a pre-registered scorer v6.2 identical to ca98ae0e except for a
+        lock+PASS-gated holdout allowance. It must get an IMV diff review, a new pinned sha and
+        updated expected answers. CoS/Ryan should note this is a scorer change, not a gate change.
+  B-13 The production inputs are unspecified. In production the workspace is the audit dir, from
+      which games.json, close.csv, schedule.csv and listings/ are read. Their exact paths and
+      provenance are not in the expected answers, and no pre-lock existence or schema check is
+      done. A missing file STOPs after the lock and burns the holdout. Pre-lock checks (existence,
+      headers, no-open size) and exact paths in the expected answers are required.
+
+VERDICT: RETURN
+  LOCK + SINGLE OPENING MAY NOT PROCEED. No runner sha is approved, and there is no PASS file. The
+  lock must carry nothing yet; opening_runner_pass_sha stays null. No gate is changed.
+  Accepted, no re-review needed: B-2, B-3 (code), B-5, B-7, B-9, B-10.
+
+SHORTEST PATH
+  1 Scorer v6.2 (B-12): minimal diff vs ca98ae0e, a lock+PASS-gated holdout allowance only, no
+    metric change. IMV diff review and new sha.
+  2 Expected answers v4: scorer v6.2 sha; the QB1_INDEX_UNITS pin; exact production input paths;
+    the anchored VERDICT/RUNNER_SHA rule.
+  3 One runner sha fixing B-1, B-4, B-6, B-8a and B-13.
+  4 IMV changes-only review. A passing ruling will contain an anchored VERDICT line and a
+    RUNNER_SHA line. The lock then carries that runner sha and that ruling's path + file sha.
+  Ryan's CLEAR fabf8732 still covers this unless CoS judges the v6.2 scorer to be a scope change
+  needing Ryan's word.
+
+NO-GO, Coming Soon ON.
