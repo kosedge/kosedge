@@ -1,0 +1,121 @@
+{
+  "T-PIT-1": {
+    "id": "T-PIT-1",
+    "player_id": "00-SYN-JOIN",
+    "member": false,
+    "missingness": "MISSING_ROW",
+    "silent_include": false,
+    "qb1": false
+  },
+  "T-PIT-2": {
+    "id": "T-PIT-2",
+    "week": 6,
+    "qba_depth_order": 1,
+    "qbb_depth_order": 2,
+    "qba_is_qb1": true,
+    "qbb_is_qb1": false
+  },
+  "T-PIT-3": {
+    "id": "T-PIT-3",
+    "player_id": "00-SYN-TRD",
+    "membership": [
+      {
+        "week": 7,
+        "team": "AAA",
+        "member": true
+      },
+      {
+        "week": 8,
+        "team": "AAA",
+        "member": true
+      },
+      {
+        "week": 8,
+        "team": "BBB",
+        "member": false
+      },
+      {
+        "week": 9,
+        "team": "AAA",
+        "member": false
+      },
+      {
+        "week": 9,
+        "team": "BBB",
+        "member": true
+      }
+    ]
+  },
+  "T-PIT-4": {
+    "id": "T-PIT-4",
+    "player_id": "00-SYN-PS",
+    "member_53": false,
+    "promoted_role": false,
+    "missingness": "MISSING_ROW"
+  },
+  "T-PIT-5": {
+    "id": "T-PIT-5",
+    "player_id": "00-SYN-BEN",
+    "week1_roster_status_applied": false,
+    "week1_member": false,
+    "injury_status_from_listing": "active",
+    "listing_as_of_ok": true,
+    "season_union_would_mark_res": true
+  },
+  "T-PIT-6": {
+    "id": "T-PIT-6",
+    "player_id": "00-SYN-NTS",
+    "member": false,
+    "missingness": "MISSING_TS",
+    "imputed_from_season": false,
+    "default_depth_2": false,
+    "x_continuity": null
+  },
+  "T-PIT-7": {
+    "id": "T-PIT-7",
+    "closed_at_cutoff": false,
+    "rows": [
+      {
+        "player_id": "00-SYN-LT",
+        "eligible": true,
+        "missingness": "OK"
+      },
+      {
+        "player_id": "00-SYN-EQ",
+        "eligible": false,
+        "missingness": "TS_EQUAL_CUTOFF"
+      },
+      {
+        "player_id": "00-SYN-GT",
+        "eligible": false,
+        "missingness": "TS_AFTER_CUTOFF"
+      }
+    ]
+  },
+  "T-PIT-8": {
+    "id": "T-PIT-8",
+    "required_classes": [
+      "injuries",
+      "rosters",
+      "depth",
+      "transactions",
+      "qb_changes",
+      "odds",
+      "weather"
+    ],
+    "undeclared_allowed": false,
+    "all_have_availability_ts_or_ryan_exempt": true
+  },
+  "T-PIT-9": {
+    "id": "T-PIT-9",
+    "bit_identical": true,
+    "n_runs": 2
+  },
+  "T-PIT-10": {
+    "id": "T-PIT-10",
+    "gpit_mode": "1",
+    "season_level_loader": "HARD_STOP",
+    "exit_code": 2,
+    "stderr_contains": "G-PIT STOP: season-level roster loader forbidden"
+  }
+}

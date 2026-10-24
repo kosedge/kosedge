@@ -1,0 +1,35 @@
+{
+  "package": "week-aware-roster-step2-v1",
+  "kind": "development_coverage",
+  "expected_answers_commit": "528797468b860cde2f9e39e88a8e2d0e8decc29a",
+  "harness_commit": "3f2269669a92aa072e91daedfddc1ea529074ed9",
+  "pass": true,
+  "actual": {
+    "id": "DEV-COVERAGE",
+    "n_dev_games": 2863,
+    "seasons": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "holdout_years_read": [],
+    "n_reconstructible": 0,
+    "n_ineligible": 2863,
+    "w1_packs_2019_2023_eligible": false,
+    "w1_reason": "INELIGIBLE_WEEK_LABEL",
+    "b2b_2024_2025_opened": false,
+    "refit": false
+  },
+  "refit": false,
+  "holdout_years_read": [],
+  "b2b_2024_2025_opened": false,
+  "source_sot_pin": false
+}
