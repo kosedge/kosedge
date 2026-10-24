@@ -1,0 +1,37 @@
+DECISION_RYAN_t4344u_OPTION_B_WEEK_AWARE_ROSTERS_v1
+Filed: 2026-10-24 (America/New_York)
+Source: Ryan t4344u (machine 65706b41-312c-46ba-acef-a524150396b4)
+Against: IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v6.txt (sha8 0feec57e), B-4b(n)-PIT
+
+VERDICT: OPTION B — Week-aware roster reconstruction. Do NOT open the 2024–25 holdout on the current season-level roster implementation.
+
+SUPERSEDES for the defective opening route:
+- DECISION_RYAN_t4335s14919_HOLDOUT_CLEAR_v3_1_v1.txt (sha fabf8732…) — CLEAR for build/open under season-level rosters
+- DECISION_RYAN_SCORER_V6_2.txt (sha 592e0bb9…) — allowance tied to that opening route
+A new explicit Ryan authorization is required for any corrected holdout opening.
+
+REQUIREMENTS (verbatim intent from t4344u):
+1. Preserve the 2024–25 holdout unopened. Do not consume the one-time opening authorization under the defective methodology.
+2. Identify and document all affected uses of season-level roster information in the injury builder, replacement-quality calculation and historical fit.
+3. Reconstruct week-aware roster inputs with source timestamps and provenance. Never infer historical availability from later roster states.
+4. Mark records with insufficient historical roster evidence as missing or ineligible rather than inventing assignments.
+5. Refit using only the approved pre-2024 development data.
+6. Reevaluate the earlier pre-2024 findings. Do not carry forward results invalidated by this leakage.
+7. Cursor tests the revised implementation on synthetic and approved development data before IMV's independent review.
+8. IMV must approve the revised specification, leakage controls, frozen scoring rules and final execution package before presenting another holdout request.
+
+STANDING CONSTRAINTS UNCHANGED:
+- Injury overlays disabled
+- Affected research claims unpromoted
+- Holdout sealed
+- No merges, deployments or publication
+- NFL NO-GO; Coming Soon ON
+- No production credential access from the box; kosedge-ops register commits remain the push exception
+
+PERMANENT AUTOMATED TEST (new requirement):
+No historical model input may contain information with an availability timestamp later than the prediction cutoff.
+Applies to: injuries, rosters, depth charts, transactions, quarterback changes, odds, weather, and every other time-sensitive feature.
+NFL also requires historical roster membership and player-role tests around trades, injuries, starter replacements and practice-squad promotions.
+Intent: prevent the same leakage class in NBA, MLB and college models.
+
+Ryan's assessment (context): engineering still making too many pre-IMV mistakes; IMV catching look-ahead before holdout burn is the validation system working. Priority is clean evaluation, not an artificial PASS.

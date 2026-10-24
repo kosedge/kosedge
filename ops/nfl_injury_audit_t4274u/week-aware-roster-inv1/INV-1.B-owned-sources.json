@@ -1,0 +1,22 @@
+{
+  "drive_mounted": false,
+  "drive_mcp_hits_for_named_queries": 0,
+  "research_store_on_box": false,
+  "data_assets_md_on_box": false,
+  "inventory_v1_md_on_box": false,
+  "holdout_years_read": [],
+  "candidates": [
+    {"id": "B1", "name": "season-level roster_YYYY.csv", "classification": "SUPERSEDED", "also": "EXISTING AND VERIFIED as leak source", "availability_ts": null, "usable_pre2024_week_aware": false},
+    {"id": "B2", "name": "historical W1 depth packs 2019-2023", "classification": "EXISTING AND VERIFIED", "availability_ts": "week-label only (YYYY-W1-REG)", "usable_pre2024_week_aware": false},
+    {"id": "B2b", "name": "historical W1 depth packs 2024-2025", "classification": "EXISTING BUT UNVERIFIED", "availability_ts": "unread", "usable_pre2024_week_aware": false, "contents_read": false},
+    {"id": "B3", "name": "2026 W1 capture-time snapshots", "classification": "EXISTING AND VERIFIED", "availability_ts": "2026-08-13T12:00:00Z (wrong era)", "usable_pre2024_week_aware": false},
+    {"id": "B4", "name": "nfl_dp_* NDJSON 20260705", "classification": "EXISTING AND VERIFIED", "availability_ts": "ingest updated_at 2026-07 only", "coverage": "2025 W1 only", "usable_pre2024_week_aware": false},
+    {"id": "B5", "name": "listings le2023 date_modified", "classification": "EXISTING AND VERIFIED", "availability_ts": "listing report_time", "usable_pre2024_week_aware": false},
+    {"id": "B6", "name": "nfl.load_rosters ingest path", "classification": "EXISTING AND VERIFIED", "availability_ts": "none (season grain)", "usable_pre2024_week_aware": false},
+    {"id": "B7", "name": "KosEdgeData volume / Drive", "classification": "EXISTING BUT UNVERIFIED", "availability_ts": "unknown", "usable_pre2024_week_aware": null},
+    {"id": "B8", "name": "research-store", "classification": "MISSING", "note": "MISSING on box; EXISTING BUT UNVERIFIED if Mac-only", "usable_pre2024_week_aware": null},
+    {"id": "B9", "name": "DATA_ASSETS week-aware register", "classification": "MISSING", "usable_pre2024_week_aware": false},
+    {"id": "B10", "name": "T-PIT automated suite", "classification": "MISSING", "usable_pre2024_week_aware": null},
+    {"id": "B11", "name": "txn / odds / weather PIT archives", "classification": "MISSING", "usable_pre2024_week_aware": false}
+  ]
+}

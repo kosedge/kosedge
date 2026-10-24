@@ -1,0 +1,27 @@
+{
+  "package": "week-aware-roster-inv1",
+  "imv_spec_sha256": "8eb532c1936b055bcea0084beb1d0f07291ab7da452af0e26380f74b0f6850e7",
+  "imv_spec_sha8": "8eb532c1",
+  "ryan_option_b_sha256": "47afd7f631bb1685c2768f95720656d4d9442835274f90c7731afd3028605098",
+  "ryan_option_b_sha8": "47afd7f6",
+  "imv_root_cause_cited": "0feec57e B-4b(n)-PIT",
+  "superseded_opening_route": {
+    "ryan_clear": "fabf8732",
+    "scorer_v6_2_allowance": "592e0bb9"
+  },
+  "frozen_context_not_reauthorized": {
+    "fit_object": "6a5490db",
+    "frozen_export": "d87e6129",
+    "le2023_export": "a38a55bb",
+    "frozen_script": "8d188da2",
+    "builder": "247744d2",
+    "writer": "9947b880",
+    "producer": "ae8f9585",
+    "null_contract": "ff8e6527"
+  },
+  "holdout_once_lock_written": false,
+  "holdout_years_read": [],
+  "refit_started": false,
+  "sources_pinned_as_sot": false,
+  "leakage_pass_claimed": false
+}
