@@ -1,0 +1,105 @@
+{
+  "filed_before_run": true,
+  "filed_note": "D-2 expected answers. Filed and hashed before the runner exists. Ryan CLEAR fabf8732 (t4335s14919). IMV 8ca00bc4 + erratum 14ac1819. Request v3.1 35cbb56e. No 2024/25 open. D-2 only.",
+  "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+  "decision_sha8": "fabf8732",
+  "ryan_message_id": "t4335s14919",
+  "ryan_verbatim": "CLEAR: build the runner, IMV reviews, then open once",
+  "readiness_v6_sha": "8ca00bc49b412c1524b4a0d5a1ebacdd7bc4fe26f3e6354d52cb549812dbb012",
+  "erratum_v6_sha": "14ac18190c89d3620a6f27d0a0be64fc8147c321063ca4aeaa459faa31fcde41",
+  "request_v3_1_sha": "35cbb56e10cfe0ec3730441a453f171bda917e7c58ad3e5eb2fe2c573de5ef7b",
+  "sot_spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+  "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+  "export_on_disk_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+  "export_blob_sha_not_a_pin": "46d2a5657d1b5a5eb1af03f4d643afbfaa4762f31260daff439b5df1ac1456eb",
+  "frozen_head": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "opening_permitted": false,
+  "holdout_years_opened": false,
+  "F-NAIVE": {
+    "stop": true,
+    "must_contain": "D-2 listings TZ: naive/zoneless"
+  },
+  "F-INC-TS": {
+    "stop": true,
+    "must_contain": "D-2 incomplete: incomplete row has a timestamp"
+  },
+  "F-INC-DELTA": {
+    "stop": true,
+    "must_contain": "D-2 incomplete: incomplete row has non-null delta_margin"
+  },
+  "F-COMP-NULL": {
+    "stop": true,
+    "must_contain": "D-2 incomplete: complete row has a null timestamp"
+  },
+  "F-V2-MISSING": {
+    "stop": true,
+    "must_contain": "D-2 export pin: missing on-disk .v2 sidecar"
+  },
+  "F-V2-BLOB": {
+    "stop": true,
+    "must_contain": "D-2 export pin: sidecar uses blob hash"
+  },
+  "F-V2-MISMATCH": {
+    "stop": true,
+    "must_contain": "D-2 export pin: sidecar sha != on-disk sha"
+  },
+  "F-JOIN-FIRST": {
+    "stop": true,
+    "must_contain": "D-2 order: incomplete-row count must be taken before any join"
+  },
+  "F-NAME": {
+    "stop": true,
+    "must_contain": "D-2 refuse: holdout year 2024 in path",
+    "file_opened": false
+  },
+  "F-HOLDOUT": {
+    "stop": true,
+    "must_contain": "D-2 opening blocked",
+    "holdout_years_opened": false
+  },
+  "F-OK": {
+    "stop": false,
+    "n_incomplete": 1,
+    "n_incomplete_by_season": {"2022": 1},
+    "excluded_game_ids": ["2022_2_CCC_DDD"],
+    "n_listings": 2,
+    "n_z": 1,
+    "n_offset": 1,
+    "n_naive": 0,
+    "export_pin_is_on_disk": true
+  },
+  "le2023": {
+    "stop": false,
+    "n_listings": 58653,
+    "n_z": 58653,
+    "n_offset": 0,
+    "n_naive": 0,
+    "n_empty": 0,
+    "n_other": 0,
+    "n_incomplete": 11,
+    "n_incomplete_by_season": {
+      "2013": 2,
+      "2014": 1,
+      "2015": 1,
+      "2017": 1,
+      "2020": 2,
+      "2022": 3,
+      "2023": 1
+    },
+    "excluded_game_ids": [
+      "2013_1_CIN_CHI",
+      "2013_1_NYG_DAL",
+      "2014_15_SF_SEA",
+      "2015_1_NO_ARI",
+      "2017_1_IND_LA",
+      "2020_1_GB_MIN",
+      "2020_6_KC_BUF",
+      "2022_2_IND_JAX",
+      "2022_7_CHI_NE",
+      "2022_12_BAL_JAX",
+      "2023_5_HOU_ATL"
+    ],
+    "export_on_disk_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+    "years_opened": [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+  }
+}
