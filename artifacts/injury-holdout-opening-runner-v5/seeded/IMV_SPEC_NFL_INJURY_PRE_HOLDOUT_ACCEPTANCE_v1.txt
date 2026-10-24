@@ -1,0 +1,145 @@
+IMV SPEC: NFL INJURY SCORER PRE-HOLDOUT ACCEPTANCE TEST - v1
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_SPEC_NFL_INJURY_PRE_HOLDOUT_ACCEPTANCE_v1.txt
+Filed: Fri Oct 23 13:26:12 EDT 2026
+Author: IMV (Model Validation Lead), independent validator. IMV builds nothing it validates.
+Method: text only (cat/sed/grep/sha256sum on exact paths). No code run, no git, no network, no 2024/25 data.
+Authority: Ryan t4315u (DECISION ..._HOLDOUT_STOP_AND_CORRECT_v1.txt d6fca6f0) and t4317u
+  (DECISION_RYAN_t4317u_IMV_ASSESSMENT_AND_READINESS_GATE_v1.txt 5c4e6578, both re-hashed MATCH).
+Sources (re-hashed on box, MATCH):
+  SoT spec  /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_SPEC_NFL_INJURY_ADJUSTMENT_TESTS_v1.txt  a156459b
+  gap fills IMV_SPEC_NFL_INJURY_ADJUSTMENT_TESTS_v2.txt c7917106; design ruling v2 a3dac17a; D4v2 ack 9e106128;
+  fit ruling 09636bec; conditions ruling 0ad8aca9; holdout rulings 52c72095 (v1), 37565942 (v2).
+NATURE: this file adds NO gate and changes NO gate, threshold, split or rule. It defines the TEST the scorer
+  must pass on synthetic + <=2023 data before any holdout request (v3+) may be filed. a156459b remains SoT.
+
+==========================================================================================
+(a) GATE TABLE - quoted VERBATIM from a156459b (line numbers = that file)
+==========================================================================================
+K-2 (L125-127) "Metrics, base vs adjusted on the same games: Brier and log loss (win prob);
+     cover reliability for spread and total (predicted cover prob vs actual);
+     reliability diagram in 10 bins with counts."
+K-3 (L128) "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired."
+K-4 (L129-131) "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss
+     <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1].
+     Failing = layer stays off."
+I-1 (L136-137) "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against
+     the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta."
+I-2 (L138-139) "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and
+     >= 2 full seasons; below that the result is INCONCLUSIVE (no claim)."
+I-3 (L140-141) "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family
+     alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later."
+I-4 (L142-143) "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95%
+     block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM."
+I-5 (L144-145) "Soft, borderline or insignificant results cannot become a product claim, marketing
+     copy, or a "improves accuracy" statement. Report them as null results."
+
+Operational reading (IMV; derived from the quoted text, not new gates):
+ gate | direction                         | formula / unit                                   | n req          | threshold              | INCONCLUSIVE / fail
+ K-2  | report only (inputs to K-4)       | Brier=mean((p-y)^2); LL=-mean(y ln p+(1-y)ln(1-p)), nats; cover reliability 10 bins w/ counts | same games both arms | none | n/a; missing metric = FAIL readiness
+ K-3  | method                            | paired week-block bootstrap of mean(adj-base), 10,000 resamples, 2.5/97.5 pct | all scored weeks | n/a | seed must be fixed (see b-3)
+ K-4  | adj not worse; lower delta better | UCI95(LL_adj-LL_base) and UCI95(Brier_adj-Brier_base); slope b of logit(y)~logit(p_adj) | same as K-2 | LL UCI<=0.002 nats; Brier UCI<=0.0005; b in [0.9,1.1] | any fails = layer off; absent/uncomputable = FAIL (fail closed)
+ I-1  | adj minus base, higher CLV better | per game CLV_pts(arm), CLV_prob(arm), ATS win(arm), LL(arm); delta = adj - base | identical game set | n/a | arm-specific missing rows counted, not imputed
+ I-2  | sample sufficiency                | count games with adjustment delta != 0 (NOT edge != 0); count full seasons | >=500 and >=2 full seasons | as quoted | below = INCONCLUSIVE (no claim)
+ I-3  | multiplicity                      | 9 tests = {spread,total,moneyline} x {CLV, ATS win rate, log-loss delta}; Holm at alpha 0.05 | as I-2 | p_(i) <= 0.05/(9-i+1) step-down | primary = mean CLV delta (spread)
+ I-4  | REJECTION OF H0 = SIGNIFICANT = support | primary Holm-significant AND bootstrap CI excludes 0 (in the favourable direction, delta>0) AND K-4 PASS | as I-2 | as quoted | anything else = NO CLAIM (never "FAIL because a test rejected")
+ I-5  | claims restriction                | text rule | - | - | soft/null -> reported as null result
+ Holdout only: I-2's ">=500 ... in the sealed holdout" binds only at the opening. On le2023 the I-2 count is
+ computed and reported as a dry-run figure; it is not a pass condition here.
+ Close (t4315u, 37565942 F-3): provider close = nflverse REG spread_line, book/consensus and timing UNSPECIFIED;
+ comparative research only, never certified CLV.
+
+==========================================================================================
+(b) SCORER UNIT TESTS - synthetic fixtures, known answers, all must pass (one failure = FAIL)
+==========================================================================================
+Fixtures are Cursor-built, deposited with shas and the expected answers written BEFORE the run.
+ T-1 Paired CLV sign: 3 games, close spread -3.0; base -3.0, adj -4.5 (home fav, adj moves toward close
+     direction of later market?) Rule fixed: CLV_pts(arm) = signed points the arm's pick beats the close;
+     fixture where adj beats close by 1.5 and base by 0 => delta = +1.5 exactly; mirrored fixture => -1.5.
+     Implied-prob CLV computed both arms; delta sign must match points sign.
+ T-2 Holm direction: p = [0.001,0.01,0.02,0.03,0.04,0.2,0.3,0.5,0.9] -> step-down at 0.05/9..: reject only
+     p=0.001 (0.001<=0.00556; 0.01>0.00625 stops). Primary set to p=0.001 => "significant". A rejection
+     must be reported as SIGNIFICANT; any code mapping rejection -> FAIL = test FAIL.
+ T-3 Week-block bootstrap: fixed seed = 20261023 (PRE-REGISTERED NOW; numpy default_rng(20261023)), 10,000
+     resamples, resampling whole weeks with replacement, paired (same weeks both arms). Fixture: 10 weeks,
+     constant delta 0.01 per game => CI exactly [0.01,0.01]. Second fixture: deposit result, re-run must be
+     bit-identical; seed None or unseeded = FAIL. Bootstrapping games instead of weeks = FAIL (fixture
+     with within-week correlation where game-level CI is visibly narrower must show the week CI).
+ T-4 Brier/LL/reliability: p=[0.8,0.6,0.3], y=[1,0,0]: Brier=(0.04+0.36+0.09)/3=0.163333..; LL=
+     -(ln0.8+ln0.4+ln0.7)/3=0.498434 (nats, tol 1e-6). Reliability: 10 equal-width bins with counts
+     (bins 3,6,8 count 1). Calibration slope on a fixture generated from p (perfect) -> 1 within tol set
+     in fixture; p clipped to [1e-15,1-1e-15] and clip count reported.
+ T-5 Phi formula: P(home cover) = Phi((pred_margin - line_margin)/sigma), win = Phi(pred_margin/sigma) with
+     the UNSHRUNK sigma from the frozen fit_object (6a5490db); fixture pred 3, line 0, sigma 13 =>
+     Phi(0.230769)=0.591253 (tol 1e-6). Any shrink/rescale of sigma = FAIL. (Design condition T-*, not K-2/K-3.)
+ T-6 I-2 count: 2 synthetic FULL seasons (272 REG games each) with delta_margin != 0 on exactly 251 + 250
+     = 501 games, and edge_base != 0 on all 544 => count = 501 (PASS n). Variant with 499 => INCONCLUSIVE.
+     Variant with 501 games but 1 season + partial => INCONCLUSIVE. Counting edge != 0 = FAIL.
+ T-7 Missing-close exclusion: 10 games, close missing on 2 BEFORE scoring => both arms scored on the same
+     8 game_ids; report n_missing_close=2 (per season), n_identical=8, n_edge0 per arm. Any arm-specific
+     drop by edge or result, or different id sets = FAIL.
+ T-8 NULL never zero: components with NULL (each input removed in turn, a156459b P-3) => adj NULL + flag,
+     game excluded from the adjusted arm AND counted; any 0.0 substitution = FAIL (silent zero substitution).
+ T-9 Planted leak: fixture with one injury row source_ts > as_of_ts and one closing/outcome value joined
+     before freeze => scorer must detect, mark LEAKAGE, and fail the run (a156459b P-2b). Not detected = FAIL.
+ T-10 Reversed gate: fixture where primary is Holm-significant, CI > 0, K-4 PASS => must return VALUE PROVEN;
+     a second where CI includes 0 => NO CLAIM; a third with K-4 LL UCI = 0.0021 => layer off/NO CLAIM. A
+     scorer that returns FAIL on rejection, or PASS when K-4 fails, or reads thresholds other than the
+     quoted ones = FAIL. Gate constants must be read from / checked against a156459b text, and the run
+     dies if the spec file is absent or its sha != a156459b.
+
+==========================================================================================
+(c) le2023 DRY RUN - end to end, no holdout
+==========================================================================================
+ Data: inner folds only, F1 <=2021->2022 (n=268) and F2 <=2022->2023 (n=271) per 09636bec, frozen
+ fit_object 6a5490db / script 8d188da2 / export d87e6129 / HEAD 8e2a15ac / config 0d491abe. No 2024+.
+ Output (one deposited table per fold and pooled): n_games, n_missing_close (per season), n_identical,
+ n_edge0 per arm, I-2 nonzero-delta count + full-season count; K-2 Brier/LL/cover reliability spread+total
+ (10 bins, counts) base and adj; K-3 paired CIs (seed 20261023); K-4 evaluation with each number; all 9 I-3
+ tests with raw and Holm p; I-4 outcome label (labelled DRY RUN - NOT A RESULT); clip counts; NULL counts.
+ Readiness gate (t4317u), proved by Cursor, checked complete by CoS BEFORE IMV review:
+  R1 exact files present with sha256 (SHA256SUMS + full-path sidecars, 0444);
+  R2 runs successfully on approved non-holdout fixtures (T-1..T-10 + le2023) with logs;
+  R3 every metric above computed (no "absent", no stub);
+  R4 gate text matches a156459b verbatim (diff vs L125-145 = empty);
+  R5 complete provenance: code sha, config hash, data file shas, seed, command line, timestamps.
+ Missing any item = not reviewable (returned by CoS, not IMV).
+
+==========================================================================================
+(d) MODELING-ASSUMPTION CHALLENGES - descriptive, NOT gates (t4317u item 4)
+==========================================================================================
+ M-1 Large-margin bias: residual (actual - pred margin) mean/sd by |close spread| buckets [0,3),[3,7),
+     [7,10),[10+), base and adj, with counts; also by |adj delta| bucket.
+ M-2 Accuracy: does adj beat base on le2023 folds (MAE/RMSE margin, LL, Brier) - with CIs; null = say so.
+ M-3 Calibration: reliability tables + slope/intercept per fold; 80% interval coverage (V gate) reported.
+ M-4 Information beyond market: corr(adj delta, close - open movement) where a timestamped open exists for
+     <=2023 (drive data: 2020-22 partial weeks, 2023 complete; earliest price is NOT a true open - label
+     as pre7d); also residual of adj vs close. High correlation = likely already priced; report, no gate.
+     If no usable open exists for a season, report NOT RUN with reason.
+ M-5 OOS edge survival: DEFERRED to the single holdout opening; le2023 numbers are in-sample-adjacent and
+     may not be cited as edge.
+
+==========================================================================================
+(e) RUNNER REQUIREMENTS (for any v3 holdout runner)
+==========================================================================================
+ E-1 Full scoring path in the reviewed sha; no stub, no "later execution continues". Same code as (c).
+ E-2 Once-only lock (O_CREAT|O_EXCL) written before the first holdout byte is read; declared path.
+ E-3 Any abort after the lock = holdout CONSUMED; reuse only by new IMV ruling + Ryan.
+ E-4 CLEAR token must cite Ryan's recorded statement id (tNNNNu) and the exact approved shas; the builder
+     never creates it. IMV token written only by IMV after PASS. A token without a resolvable reference = die.
+ E-5 SoT spec missing or sha != a156459b => die with error (never "K-4 absent").
+ E-6 Every path constant exists on this box at review time (37565942 F-8); a non-resolving path = RETURN.
+ E-7 Seed 20261023, 10,000 resamples; gate logic identical to the T-10-tested code.
+
+==========================================================================================
+(f) SHORTEST PATH TO PASS
+==========================================================================================
+ 1 Cursor builds scorer v3 implementing (a) and E-1..E-7 (one code sha, outside holdout).
+ 2 Cursor builds fixtures T-1..T-10 with expected answers filed first; runs them; deposits logs.
+ 3 Cursor runs the (c) le2023 dry run; deposits full table + M-1..M-5 + provenance (0444, sidecars).
+ 4 CoS checks readiness R1-R5; incomplete = back to Cursor.
+ 5 IMV one-pass review of scorer + fixtures + dry run (full defect list in one RETURN if any).
+ 6 On IMV PASS of the scorer, Cursor files holdout request v3 on the same sha; IMV text review.
+ 7 Ryan's explicit CLEAR (his own recorded words) -> single opening.
+ Until then: holdout SEALED; PR #611 draft; overlays off; NFL NO-GO.
+
+NO-GO, Coming Soon ON.
