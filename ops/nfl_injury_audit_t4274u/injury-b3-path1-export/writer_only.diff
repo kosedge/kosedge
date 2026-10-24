@@ -1,0 +1,32 @@
+--- frozen 8d188da2 run_injury_residual_fit.py L963-975
++++ write_sealed_injury_export_ts_v1.py (export-writer extension only)
+@@
+     for game, row in zip(games, applied):
+         games_export.append(
+             {
+                 "game_id": f"{row['season']}_{row['week']}_{row['away']}_{row['home']}",
+                 "season": row["season"],
+                 "week": row["week"],
+                 "applied": False,
+                 "complete": row.get("complete"),
+                 "continuity_source_home": row.get("continuity_source_home") or "UNKNOWN",
+                 "continuity_source_away": row.get("continuity_source_away") or "UNKNOWN",
+                 "delta_margin": row.get("delta_margin"),
+                 "delta_total": row.get("delta_total"),
++                "source_ts": source_ts,
++                "source_ts_home": source_ts_home,
++                "source_ts_away": source_ts_away,
++                "as_of_ts": as_of_ts,
++                "kickoff_utc": kickoff_utc,
+             }
+         )
+
+Writer-only fields (ruling 88da5f42 Path 1):
+- as_of_ts        = max(listing_as_of home, away); null if incomplete
+- source_ts_home  = listing_as_of home; null if incomplete
+- source_ts_away  = listing_as_of away; null if incomplete
+- source_ts       = min of available per-side listing_as_of (scorer leak field)
+- kickoff_utc     = frozen precompute kickoff; retained on complete rows
+
+No other frozen functions are patched. Frozen main() is not called.
+d87e6129 is never opened for write.

@@ -1,0 +1,15 @@
+cmd=python3 run_injury_residual_evaluator.py --mode all
+STOP: LEAKAGE row0 source_ts<=as_of_ts<kickoff_utc violated src=2022-09-12T18:00:00Z asof=2022-09-11T17:00:00Z ko=2022-09-11T18:00:00Z
+STOP: LEAKAGE row0 source_ts<=as_of_ts<kickoff_utc violated src=2022-09-11T16:00:00Z asof=2022-09-11T17:00:00Z ko=2022-09-11T17:00:00Z
+STOP: LEAKAGE row0 source_ts<=as_of_ts<kickoff_utc violated src=2022-09-11T16:00:00Z asof=2022-09-11T18:00:00Z ko=2022-09-11T17:00:00Z
+STOP: LEAKAGE row0 missing_or_unparseable source_ts/as_of_ts/kickoff_utc
+STOP: LEAKAGE row0 missing_or_unparseable source_ts/as_of_ts/kickoff_utc
+STOP: P-4: naive/zoneless timestamp STOP
+STOP: LEAKAGE row0 joined_before_freeze
+STOP: P-2: complete row has a null timestamp c5 game_id=2022_1_BBB_AAA
+STOP: P-2: incomplete row has a timestamp c5 game_id=2022_2_IND_JAX
+STOP: B-3: cannot join close/outcome without source_ts/as_of_ts/kickoff_utc game_id=2018_1_BBB_AAA
+T-1..T-10 PASS
+F1 n=268 i4=INCONCLUSIVE
+F2 n=271 i4=INCONCLUSIVE
+pooled n=539 i4=NO CLAIM
