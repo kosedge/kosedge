@@ -1,0 +1,17 @@
+{
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "fit_object_has_sigma_field": false,
+  "fit_object_keys_checked": [
+    "bound_hash",
+    "code_sha",
+    "config_hash",
+    "selected_params",
+    "spec_C"
+  ],
+  "sigma_margin": 13.5,
+  "sigma_total": 14.0,
+  "sigma_margin_citation": "C-10 default in services/model-service/src/services/nfl_injury_null_contract.py at frozen HEAD 8e2a15ac L339-341 (sigma=13.5 when baseline_stdev missing) and L410 (residual must not shrink σ).",
+  "sigma_total_citation": "Pre-registered in inputs/sigma_preregistration.md (C-N1 / ruling 1a090e3b). 14.0 totals residual scale. Affects total tests only, not the I-3 primary.",
+  "t5_fixture_sigma": 13.0,
+  "t5_note": "T-5 unit test uses σ=13 as written. Production scoring uses sigma_margin=13.5 and sigma_total=14.0. T-5 forbids √2 rescale."
+}
