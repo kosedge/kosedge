@@ -1,0 +1,21 @@
+STOP: O-1 opening blocked: IMV has not passed this opening runner; real lock not written; 2024/25 not opened
+STOP: O-3 lock: production lock requires verified IMV opening-runner PASS sha
+lock written /tmp/opening-v2-e2e-yc7fnwv7/e2e/holdout-once.lock sha=c4ab2969 mode=0444
+writer invoked sha=9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f
+export written /tmp/opening-v2-e2e-yc7fnwv7/e2e/export.json on_disk=2934808f writer=9947b880
+lock consumed sidecar /tmp/opening-v2-e2e-yc7fnwv7/e2e/holdout-once.lock.consumed reason=opened once lock_sha=c4ab2969
+receipt written /tmp/opening-v2-e2e-yc7fnwv7/e2e/receipt.json
+sequence ok: lock export guards join score receipt
+F-E2E lock export guards join score receipt ok
+STOP: O-3 lock: existing lock /tmp/opening-v2-lock-present-f_x1priy/lock-present/holdout-once.lock
+lock written /tmp/opening-v2-e2e-f0ocxc5o/e2e/holdout-once.lock sha=99ab3b87 mode=0444
+writer invoked sha=9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f
+export written /tmp/opening-v2-e2e-f0ocxc5o/e2e/export.json on_disk=2934808f writer=9947b880
+lock consumed sidecar /tmp/opening-v2-e2e-f0ocxc5o/e2e/holdout-once.lock.consumed reason=opened once lock_sha=99ab3b87
+receipt written /tmp/opening-v2-e2e-f0ocxc5o/e2e/receipt.json
+sequence ok: lock export guards join score receipt
+STOP: O-3 lock: existing lock /tmp/opening-v2-e2e-f0ocxc5o/e2e/holdout-once.lock
+STOP: O-1 refuse: no tuning or refit path
+STOP: O-5 incomplete: complete row has a null per-side timestamp game_id=2022_1_BBB_AAA field=source_ts_home
+fixtures: F-DEFAULT-HOLDOUT F-PRODUCTION-LOCK-BLOCKED F-LOCK-PRESENT F-DOUBLE-OPEN F-REFIT F-PER-SIDE STOP; F-E2E recorded
+le2023 guards: listings=58653 Z=58653 n_incomplete=11

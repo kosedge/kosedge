@@ -1,0 +1,158 @@
+{
+  "baseline_method_sha": "d8cc9b70f969254b6d88cc35a90c10d258cdc3723def71ac15968faeceb6a2d1",
+  "consumed": true,
+  "export_on_disk_sha": "2934808fc2a833a5c0acb964385d0de944866e71e707ac31d1402c4d2f4e951b",
+  "folds": {
+    "F1": {
+      "i2": "INCONCLUSIVE",
+      "i4": "INCONCLUSIVE",
+      "k4": {
+        "brier_delta_ci_hi": -0.0266694759678478,
+        "logloss_delta_ci_hi": -0.05380073245592809,
+        "notes": [
+          "slope undefined"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "n": 1,
+      "primary": {
+        "ci_hi": 0.0,
+        "ci_lo": 0.0,
+        "ci_lo_gt_0": false,
+        "holm": false
+      }
+    },
+    "F2": {
+      "i2": "INCONCLUSIVE",
+      "i4": "INCONCLUSIVE",
+      "k4": {
+        "brier_delta_ci_hi": null,
+        "logloss_delta_ci_hi": null,
+        "notes": [
+          "no close-present rows"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "n": 0,
+      "primary": {
+        "ci_hi": null,
+        "ci_lo": null,
+        "ci_lo_gt_0": false,
+        "holm": false
+      }
+    },
+    "pooled": {
+      "i2": "INCONCLUSIVE",
+      "i4": "INCONCLUSIVE",
+      "k4": {
+        "brier_delta_ci_hi": -0.0266694759678478,
+        "logloss_delta_ci_hi": -0.05380073245592809,
+        "notes": [
+          "slope undefined"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "n": 1,
+      "primary": {
+        "ci_hi": 0.0,
+        "ci_lo": 0.0,
+        "ci_lo_gt_0": false,
+        "holm": false
+      }
+    }
+  },
+  "holdout_years_opened": false,
+  "incomplete": {
+    "excluded_game_ids": [
+      "2022_2_CCC_DDD"
+    ],
+    "n_incomplete": 1,
+    "n_incomplete_by_season": {
+      "2022": 1
+    }
+  },
+  "kind": "opening_receipt",
+  "lock": {
+    "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+    "baseline_method_sha": "d8cc9b70f969254b6d88cc35a90c10d258cdc3723def71ac15968faeceb6a2d1",
+    "code_tag": "e73c05b61fe84ee9f9aa5fb2c878bfffc689e607",
+    "consumed": false,
+    "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+    "erratum_sha": "14ac18190c89d3620a6f27d0a0be64fc8147c321063ca4aeaa459faa31fcde41",
+    "expected_commit": "73b537b2e394def333e2ad5ce22a24ecc42d9ff2",
+    "expected_sha": "cda0da90a18db4872a784f3ae245d5047e05eb03af0579749e5a1bcef248e441",
+    "fit_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+    "frozen_export_sha": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+    "frozen_script_sha": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+    "head_sha": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+    "imv_d2_ruling_sha": "b7364186cc2aa900fd39e2dd22e78e2e69b63d2cac11fd6fa6b234997494b6b8",
+    "le2023_export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+    "mode": "0444",
+    "null_contract_sha": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+    "opening_runner_pass_sha": null,
+    "operator": "fixture",
+    "path": "/tmp/opening-v2-e2e-yc7fnwv7/e2e/holdout-once.lock",
+    "readiness_sha": "8ca00bc49b412c1524b4a0d5a1ebacdd7bc4fe26f3e6354d52cb549812dbb012",
+    "request_sha": "35cbb56e10cfe0ec3730441a453f171bda917e7c58ad3e5eb2fe2c573de5ef7b",
+    "runner_sha": "bd97ff0043d3df035e548eff7926d79d54b395251b3f885a5b00feb46fd6038d",
+    "ryan_message_id": "t4335s14919",
+    "ryan_verbatim": "CLEAR: build the runner, IMV reviews, then open once",
+    "scorer_sha": "ca98ae0e70fcdee77d46aed3c4f9be5644079da6adf08411891e1d5b7970e6c6",
+    "sha256": "c4ab2969c35ec4ada2fb8f3825475b7d5969d31fc590892a854137d3a74ebbcb",
+    "spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+    "statement": "opened once",
+    "status": "consumed",
+    "utc": "2026-10-24T15:31:17Z",
+    "writer_sha": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f"
+  },
+  "log_sha": "b612f2c7923afda5c506cae103910120e6d2a223e0051935b41564d026b00e9a",
+  "manifest_sha": "0950d1ea8e8806369bb2c5c44f955abcadca1abd67ced8d4a36e45fea2accde1",
+  "n_missing_close": 0,
+  "n_missing_close_by_season": {},
+  "opening_permitted": false,
+  "stop": null,
+  "sums_sha": null,
+  "tz": {
+    "n_empty": 0,
+    "n_listings": 4,
+    "n_naive": 0,
+    "n_offset": 0,
+    "n_other": 0,
+    "n_z": 4,
+    "years_opened": [
+      2022
+    ]
+  },
+  "writer_invoked": true,
+  "writer_sha": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f"
+}

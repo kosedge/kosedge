@@ -1,0 +1,4 @@
+IMV ERRATUM v1 to IMV_RULING_NFL_INJURY_EVALUATOR_READINESS_v6.txt (sha8 8ca00bc4)
+Filed: Sat Oct 24 09:53:35 EDT 2026
+Correction (E-02: original bytes kept): v6 states the D-3 mechanism matches the REG filter IMV read earlier in the frozen script (0ad8aca9). That earlier read covered load_schedule, not load_listings. The REG-only explanation for the 2116 rows (WC 1010, DIV 669, CON 324, SB 113) is plausible and arithmetically consistent, but it is SECONDHAND, not independently inspected. D-3 disposition is unchanged (closed, counts secondhand). The verdict is unchanged: PASS on v3.1 35cbb56e as a document. Opening is still blocked by D-2 and needs Ryan's CLEAR.
+NO-GO, Coming Soon ON.
