@@ -1,0 +1,19 @@
+{
+  "built_by": "8d188da2.precompute_games+injury_paths_8e2a15ac.QB1_INDEX_UNITS=0.12",
+  "export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+  "first_game_id": "2013_10_BUF_PIT",
+  "frozen_script": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+  "injury_paths_8e2a15ac": "ebd3dac083562afb4928e2ed756f617248894e636356f7426f0bc6ae58344e8b",
+  "kind": "le2023_rebuild_compare",
+  "last_game_id": "2023_9_WAS_NE",
+  "n_delta_margin_diff": 0,
+  "n_delta_total_diff": 0,
+  "n_games_export": 2863,
+  "n_games_rebuilt": 2863,
+  "n_missing": 0,
+  "n_rows_deposited": 2863,
+  "qb1_index_units": 0.12,
+  "rebuilt_deltas_relpath": "out/le2023/rebuilt_le2023_deltas.json",
+  "rebuilt_deltas_sha": "8af44a7eaa96ff695e10a61c827f942020c534f578ee36893701409857429394",
+  "verdict": "0_DIFF"
+}

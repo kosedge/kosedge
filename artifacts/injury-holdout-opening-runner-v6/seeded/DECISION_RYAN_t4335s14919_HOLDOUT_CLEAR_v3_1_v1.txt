@@ -1,0 +1,5 @@
+DECISION RECORD: Ryan Kos, 2026-10-24 11:01 ET
+Answering card t4335s14919: "Do you clear the 2024-25 injury holdout request (v3.1, 35cbb56e)?"
+Ryan verbatim: "CLEAR: build the runner, IMV reviews, then open once"
+Scope: request v3.1 sha8 35cbb56e; IMV ruling READINESS_v6 8ca00bc4 + erratum 14ac1819.
+Conditions: D-2 runner built with fixtures; IMV one-pass review; lock; single opening. No 2024/25 read before IMV passes the runner. NFL NO-GO, Coming Soon ON. No merge/deploy.

@@ -1,0 +1,124 @@
+IMV RULING: NFL INJURY HOLDOUT OPENING RUNNER - v2
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v2.txt
+Filed: 2026-10-24 11:35:58 EDT (-0400)
+Author: IMV (Model Validation Lead).
+Scope: changes-only one-pass review of
+  /workspace/ops/nfl_injury_audit_t4274u/injury-holdout-opening-runner-v2/ against RETURN a8958e85.
+Method: text only. No project code was run. IMV used read-only sha256sum/cmp/ls, plus its own
+  independent python reimplementation of the baseline over the le2023 nflverse close CSV.
+  No network, no git, no 2024/25 data, exact paths, no lock written. Hex masked.
+Cycle record: 12th submission. One-pass acceptance: NO (RETURN).
+
+INTEGRITY (IMV-computed)
+  - MANIFEST = fe2d48b2 (matches its sidecar). SHA256SUMS: 62 entries, all OK.
+  - Runner = bd97ff00 (FILE sha, read in full; diffed by content against a064f9ca).
+  - Method record_hfa_baseline_method.py = d8cc9b70.
+  - Expected answers: the FILE is cda0da90 (sidecar OK). 73b537b2 is the COMMIT; secondhand.
+    runner_commit.txt = e73c05b6 (a commit id; secondhand). The expected answers have
+    holdout_values = null, and no holdout values were found.
+  - runner.log = ffea30d0.
+  - Seeded scorer: sha ca98ae0e, cmp byte-identical to injury-evaluator-v6.1. No -3.0 / 45.0 literal
+    exists in the runner or the method (grep). residual_complete is computed (complete AND both deltas
+    non-null), not constant. The CoS condition is MET.
+  - On the box: /workspace/ops/nfl_injury_audit_t4274u/holdout-once.lock* is absent, and there is no
+    holdout output. The fixture runs wrote under /tmp only.
+
+R-ITEMS
+  R-1 PARTIAL.
+      - Met: writer 9947b880 is sha-verified, imported and called (timestamps_for_game,
+        write_sidecar_chain); the log shows "writer invoked".
+      - Open: the export body is assembled by the runner (applied=False hardcoded), not by a frozen
+        writer export routine.
+  R-2 PARTIAL. The post-lock chain (export -> .v2 pin -> TZ -> incomplete -> join -> score -> receipt)
+      is wired, and E2E ran. Allowance defects: see B-2 and B-1.
+  R-3 MET IN SUBSTANCE.
+      - The method is point-in-time: prior weeks' W-L only, same-week results are added after
+        pricing, and ties are ignored.
+      - Week-1 identity by hand: 0.90 / 0.92 - 1 = -0.021739 per side.
+        Margin = 0 + HFA 1.05 = 1.05. Total = 45.3 - 0.4565 = 44.8435. Both match.
+      - IMV's independent reimplementation over nflverse_close_le2023.csv reproduces
+        record_baseline_le2023.csv (502110cf, byte-equal to v6.1) on 2991 of 2992 rows.
+        The one difference is 2015 wk12 DAL-CAR total: 45.3562 vs 45.3563. This is a half-up float
+        rounding tie (B-9).
+  R-4 NOT MET: see B-1 and B-8.
+  R-5 MET. Consumption is a separate 0444 holdout-once.lock.consumed carrying the lock sha. The lock is
+      never chmodded, and its mode is re-asserted.
+  R-6 MET (fields). Every a8958e85 pin is present, including spec, acceptance, readiness, erratum,
+      D-2, frozen export/script, null contract, fit, HEAD, expected file+commit, baseline-method sha,
+      code_tag, utc and operator. opening_runner_pass_sha is null because no PASS exists.
+  R-7 PARTIAL: see B-6.
+  R-8 PARTIAL. E2E runs on synthetic 2022-only data, so the 2024/25 allowance branch is never
+      exercised (B-7).
+  R-9 MET: temp-dir copies, no unlink, dont_write_bytecode, no __pycache__.
+  R-10 SECONDHAND (commit order 73b537b2 / e73c05b6).
+
+DEFECTS (complete)
+  B-1 (BLOCKER) Production branch. When the workspace is the audit dir, main() calls write_lock BEFORE
+      assert_pins_before_lock. Once a PASS exists it would write the REAL lock and then die
+      "production lock path reached without PASS", with no export, no consumed file and no receipt.
+      The holdout would be burned. Production must run the same run_holdout_workspace sequence:
+      pins -> lock -> chain -> consumed -> receipt.
+  B-2 (BLOCKER) Allowance bypass.
+      - Any directory containing .opening_fixture_workspace counts as a review fixture, and a lock
+        written there sets lock_written, so holdout_season_allowed() admits 2024/25 ROWS in
+        games/export/schedule/close.
+      - Only listings FILENAMES are gated on production + PASS.
+      - So a marker dir pointed at real 2024/25 data opens them without the production lock.
+      - Fix: tie the 2024/25 allowance to lock_is_production AND a verified PASS. Fixtures use
+        synthetic out-of-range years injected by the test harness, never 2024/25.
+  B-3 (BLOCKER, gate deviation) score_folds hardcodes F1 = 2022 and F2 = 2023, and calls the scorer
+      with the label "synthetic" and dry_run_label=True. For the opening, F1 = 2024, F2 = 2025, pooled.
+      Fold years must come from request v3.1, not literals.
+  B-4 (BLOCKER) Deltas have an unpinned source. delta_margin/delta_total are read from workspace
+      games.json, an input of unknown origin. No step derives them from fit_object 6a5490db under null
+      contract ff8e6527 using pre-kickoff information only, and nothing sha-pins games.json. The source
+      and producer of the holdout deltas must be specified, pinned in expected answers and the lock,
+      and reviewed.
+  B-5 record_hfa_baseline_method.py is imported at module load and never asserted. d8cc9b70 is only
+      recorded, not checked against the expected answers. Add it to assert_pins_before_lock, verified
+      before import.
+  B-6 Receipt gaps.
+      - opening_permitted / holdout_years_opened are hardcoded False.
+      - fold_slim drops the I-1 test values, the 9 Holm-adjusted p-values and the K-2 metrics
+        (Brier, LL, reliability bins); a8958e85 required all I/K values.
+      - The receipt is not chmod 0444, and there is no top-level runner/scorer sha.
+      - No receipt MANIFEST/SUMS exists for the opening outputs.
+  B-7 There is no E2E test of the post-lock holdout-season path (see B-2); a synthetic-year fixture
+      is needed.
+  B-8 PASS mechanism.
+      - REQUIRED_OPENING_PASS = "" is a constant. Setting it changes the runner sha, so the PASS can
+        never cover the runner that carries it (circular).
+      - The PASS file is read from seeded/ inside the performer's package, which the performer
+        controls.
+      - It cannot be self-asserted only to the extent that the code edit is reviewed.
+      - Fix: read the exact IMV path
+        /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_vN.txt.
+        Verify its .abs.sha256 sidecar and 0444 mode. Require the text to contain "VERDICT: PASS" and
+        the runner's own runner_sha(). No constant edit is then needed: the runner sha IMV passes is
+        the sha that runs.
+  B-9 (minor) Baseline rounding: use Decimal ROUND_HALF_UP (or a documented 1e-4 tolerance) so the
+      method reproduces 502110cf exactly. Add an in-code method-vs-CSV assertion on le2023.
+  B-10 (minor) R-1: either call the frozen writer's own export routine, or state and pin that the
+      Path 1 export = this composition.
+  B-11 (evidence) Commits 73b537b2 and e73c05b6 are secondhand.
+
+VERDICT: RETURN. LOCK + SINGLE OPENING MAY NOT PROCEED. No runner sha is approved for the lock, and no
+  PASS sha exists (opening_runner_pass_sha must remain null). No gate is changed.
+  Accepted, no re-review needed:
+  - R-5, R-6 field set, R-9;
+  - the baseline method's point-in-time logic and the Week-1 identity;
+  - the scorer being byte-identical, with no literals in the runner.
+
+SHORTEST PATH
+  1 File expected answers v3 first. Include:
+    - fold years 2024/2025;
+    - the holdout delta producer and its pins (B-4);
+    - the PASS-file verification rule (B-8);
+    - the receipt field list (B-6);
+    - the baseline rounding rule.
+  2 One new runner sha fixing B-1..B-8, with B-9/B-10 alongside.
+  3 IMV changes-only review. On PASS, the lock carries the IMV-passed runner sha and that PASS
+    ruling's file sha. Then one opening, the receipt, and the IMV receipt review.
+  Ryan's CLEAR fabf8732 still covers this; no new CLEAR is needed.
+
+NO-GO, Coming Soon ON.

@@ -1,0 +1,5 @@
+DECISION RECORD: Ryan Kos, 2026-10-24 12:16 ET
+Answering card t4340s14953: "Allow scorer v6.2 (holdout-season allowance only, no metric change, IMV diff-reviewed) in place of ca98ae0e for the single opening?"
+Ryan verbatim: "Yes: allow scorer v6.2 for the opening, only if IMV passes the diff as holdout-allowance-only with no metric change"
+Scope: scorer v6.2 draft sha8 1129354a (IMV diff verdict acceptable in ruling 0505e492, conditions S-1/S-2). If v6.2 sha changes, the condition requires IMV to re-pass the diff of the final sha as holdout-allowance-only, no metric change.
+Amends CLEAR fabf8732 (t4335s14919) only as to the scorer pin; all other terms unchanged. Single opening; NFL NO-GO; Coming Soon ON; no merge/deploy.

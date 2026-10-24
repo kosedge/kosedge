@@ -1,0 +1,558 @@
+{
+  "filed_before_run": true,
+  "filed_note": "Holdout opening-runner v6 expected answers. Filed and hashed BEFORE the v6 runner exists. Ruling 2c71e4d0 RETURN. V62_DIFF_VERDICT PASS on 755d30a8. L-1 relabel to 8b482cb9 at seeded/v6.2/ (docstring-only vs 755d30a8; DIFF 280d9785). B-4b(R) deposited 8af44a7e (2863 rows) + bc89721f (0_DIFF vs a38a55bb). B-4b(P) lock+receipt raw_input_shas before any row parse. B-4b(n) allowed roster years declared here. Ryan CLEAR fabf8732. Ryan scorer decision t4340s14953 / 592e0bb9. Request 35cbb56e. Real lock not written. No 2024/25 byte. holdout_values null. opening_runner_pass_sha null.",
+  "opening_permitted": false,
+  "holdout_years_opened": false,
+  "holdout_values": null,
+  "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+  "ryan_message_id": "t4335s14919",
+  "ryan_verbatim": "CLEAR: build the runner, IMV reviews, then open once",
+  "d2_ruling_sha": "b7364186cc2aa900fd39e2dd22e78e2e69b63d2cac11fd6fa6b234997494b6b8",
+  "opening_runner_return_v1_sha": "a8958e850cd75cce5a24feda95a865e86ca39a2afaff5144748f70cfe4dcbeaa",
+  "opening_runner_return_v2_sha": "77d9c00a306d1399aeeab6558a522182aa52d63c42c0b1f8cc4d350c1b0c3d0d",
+  "opening_runner_return_v3_sha": "4fd6cfbe0adeaa7ff0152d8833e15d6b4e49a64cf47350fe595f3d35acef2867",
+  "opening_runner_return_v3_erratum_sha": "b746e5eba9c781f5f0586161b42d942a546b94224c24be8253f9cdd6a6d9ccf0",
+  "opening_runner_return_v4_sha": "0505e49295df6c0d3b3ddd2256607325da67baf561cc5d3b8a5a477fb669d508",
+  "opening_runner_pass_sha": null,
+  "request_v3_1_sha": "35cbb56e10cfe0ec3730441a453f171bda917e7c58ad3e5eb2fe2c573de5ef7b",
+  "readiness_v6_sha": "8ca00bc49b412c1524b4a0d5a1ebacdd7bc4fe26f3e6354d52cb549812dbb012",
+  "erratum_v6_sha": "14ac18190c89d3620a6f27d0a0be64fc8147c321063ca4aeaa459faa31fcde41",
+  "sot_spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+  "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+  "scorer_sha": "8b482cb9ddf46ea3bfb80cbfc429978467cbccc126fb0d9d7ca8013ef2f34b37",
+  "scorer_pin_active": "8b482cb9ddf46ea3bfb80cbfc429978467cbccc126fb0d9d7ca8013ef2f34b37",
+  "scorer_ca98ae0e_diff_baseline": "ca98ae0e70fcdee77d46aed3c4f9be5644079da6adf08411891e1d5b7970e6c6",
+  "scorer_v6_2_relpath": "seeded/v6.2/run_injury_residual_evaluator.py",
+  "scorer_v6_2_sha": "8b482cb9ddf46ea3bfb80cbfc429978467cbccc126fb0d9d7ca8013ef2f34b37",
+  "scorer_v6_2_prior_sha_imv_v4": "1129354a06c7c747d7021e1448ff028163314c81c3eee35cc0fb6345deddb9be",
+  "scorer_v6_2_status": "AUTHORIZED",
+  "scorer_v6_2_imv_diff": "DOCSTRING_ONLY_RECHECK",
+  "scorer_v6_2_note": "Ryan t4340s14953 authorized v6.2 for the opening only if IMV passes the diff as holdout-allowance-only with no metric change. IMV V62_DIFF_VERDICT PASS on 755d30a8 (inspected in 2c71e4d0). L-1: 8b482cb9 is 755d30a8 plus docstring-only relabel (no DRAFT/PENDING_RYAN) at seeded/v6.2/. Deposited DIFF 280d9785. IMV changes-only check that the change is docstring-only; the PASS then carries over. No runtime switch. Runner pins exactly 8b482cb9.",
+  "ryan_scorer_decision": {
+    "exact_path": "/workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_SCORER_V6_2.txt",
+    "sha": "592e0bb9e57ef4c7d997d48b336cb37594f7353a891b8ab56d6a70b55492e021",
+    "message_id": "t4340s14953",
+    "verbatim": "Yes: allow scorer v6.2 for the opening, only if IMV passes the diff as holdout-allowance-only with no metric change",
+    "seeded_copy": "seeded/DECISION_RYAN_SCORER_V6_2.txt",
+    "amends": "fabf8732 only as to the scorer pin",
+    "status": "AUTHORIZED"
+  },
+  "runtime_scorer_switch": false,
+  "writer_sha": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f",
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "frozen_export_sha": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+  "frozen_script_sha": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+  "null_contract_sha": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+  "injury_paths_8e2a15ac_sha": "ebd3dac083562afb4928e2ed756f617248894e636356f7426f0bc6ae58344e8b",
+  "le2023_export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+  "head_sha": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "record_baseline_le2023_sha": "502110cfc9293d96fd5635fbfdd3fad2c19367fa043ce3770cfbae05f2cdbe12",
+  "nflverse_close_le2023_sha": "634d8e730b20c31cafe925ab674a38076d124d619242efdfae140347ff212fc9",
+  "baseline_method_relpath": "record_hfa_baseline_method.py",
+  "baseline_method_sha": "76aac887eddc67f19aaa3236d89fbcd51d2f1675e1416761dd70756df5d1a311",
+  "frozen_row_builder_relpath": "holdout_frozen_row_builder.py",
+  "frozen_row_builder_sha": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
+  "delta_producer_relpath": "holdout_delta_producer.py",
+  "delta_producer_sha": "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8dd630",
+  "qb1_index_units": 0.12,
+  "qb1_index_units_source": {
+    "file": "seeded/injury_paths_8e2a15ac.py",
+    "file_sha": "ebd3dac083562afb4928e2ed756f617248894e636356f7426f0bc6ae58344e8b",
+    "head": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+    "lines": [
+      "QB1_INDEX_UNITS = 0.12",
+      "QB1_POINTS_PER_INDEX_UNIT = 12.5",
+      "QB1_FLOOR_SPREAD_POINTS = QB1_INDEX_UNITS * QB1_POINTS_PER_INDEX_UNIT"
+    ],
+    "comment": "QB1 out = 0.12 index units \u00d7 12.5 pts/unit = 1.5 (D-2 a-priori floor). Not a fit coefficient."
+  },
+  "runner_sha": null,
+  "expected_sha": null,
+  "expected_commit": null,
+  "code_tag": null,
+  "seed": 20261023,
+  "sigma_margin": 13.5,
+  "sigma_total": 14.0,
+  "fold_years": {
+    "source": "request v3.1 \u00a72 parse of `season \u2208 {2024, 2025}` \u2014 not literals in the runner",
+    "request_sha": "35cbb56e10cfe0ec3730441a453f171bda917e7c58ad3e5eb2fe2c573de5ef7b",
+    "request_pattern": "season \u2208 {YYYY, YYYY}",
+    "F1": 2024,
+    "F2": 2025,
+    "pooled": [
+      2024,
+      2025
+    ],
+    "post_dropped": true,
+    "year_2026_excluded": true,
+    "note": "Active pin 8b482cb9 still dies on 2024/2025 until lock_is_production AND verified PASS. This package never scores real 2024/25."
+  },
+  "synthetic_holdout_years": {
+    "purpose": "B-2/B-7 fixture stand-ins. Out-of-range. Injected by the harness. Never 2024/25.",
+    "F1": 2098,
+    "F2": 2099,
+    "pooled": [
+      2098,
+      2099
+    ],
+    "allowed_only_after_lock_written": true,
+    "cannot_admit_real_holdout": true
+  },
+  "frozen_row_builder": {
+    "cite": "B-4b",
+    "module": "holdout_frozen_row_builder.py",
+    "sha": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
+    "function": "build_rows + apply_built_rows",
+    "built_by": "8d188da2.precompute_games+injury_paths_8e2a15ac.QB1_INDEX_UNITS=0.12",
+    "uses": [
+      "precompute_games",
+      "_structural_index",
+      "continuity_for_team",
+      "apply_params"
+    ],
+    "games_json_values_forbidden": true,
+    "naive_timestamp": "STOP",
+    "le2023_reproduction": {
+      "cite": "B-4b(R)",
+      "claim_source": "deposited output files, not this JSON",
+      "deposited_deltas_relpath": "out/le2023/rebuilt_le2023_deltas.json",
+      "deposited_deltas_sha": "8af44a7eaa96ff695e10a61c827f942020c534f578ee36893701409857429394",
+      "n_rows": 2863,
+      "fields": [
+        "game_id",
+        "season",
+        "week",
+        "home",
+        "away",
+        "delta_margin",
+        "delta_total"
+      ],
+      "deposited_compare_relpath": "out/le2023/rebuilt_le2023_compare.json",
+      "deposited_compare_sha": "bc89721f170be3c5b4435c70597565e515d52fd662eb522516c35e1087be7501",
+      "export": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+      "n_games": 2863,
+      "n_delta_margin_diff": 0,
+      "n_delta_total_diff": 0,
+      "n_missing": 0,
+      "verdict": "0_DIFF",
+      "first_game_id": "2013_10_BUF_PIT",
+      "last_game_id": "2023_9_WAS_NE"
+    },
+    "raw_input_pins": {
+      "schedule_le2023": "ce80fe92982c1efdc78fc28a5429539c5a19cc061fc34ff979d57020841c5e0f",
+      "injury_paths_8e2a15ac": "ebd3dac083562afb4928e2ed756f617248894e636356f7426f0bc6ae58344e8b",
+      "rosters": {
+        "2012": "90628fcdadd9f2dde083bc77d41139cedc9fefd1fcc09f2ce8675823de23291b",
+        "2013": "abf73c2b1ef10914af78f6b7397338508bd0c9f0372d2f0667a630e06a4484ed",
+        "2014": "f3c3e9cced60d99ebdcb410b76ffeda72b207b7045983b7a63f677ad9a34814f",
+        "2015": "63807a50226a94f6724b3694198b41661c76211707115b2d52975237ebc4ecb6",
+        "2016": "c7a57a4816d05ef651f4c56b8209c38b98e3d60582ddd60cb8048ef657472ca1",
+        "2017": "22584ad80445611edff6dcbc6dce9ab596bdc484430d8aac298725da15697fd4",
+        "2018": "60c7f1dabb508acc800ef81b4f69892511b1f78246bdb2cca6115a506c523b0a",
+        "2019": "b00259cfddf2146512569423275dc17e142d31ddb13bfba6b0b826c9d3d810da",
+        "2020": "dcf25143db7b54ac488d042b6c24142340effced1d6c8599b2084a9f412b3ed2",
+        "2021": "a95e57ebe1df25224a4d19ed43aaffc5c2097a8b369954178b8592537ff77d34",
+        "2022": "864719595d14909c73bd14110adcdcfc304c6621de9ba34feafb83666fac43c9",
+        "2023": "f98283e6ef420babc597092b5483109a4570f9b5f63b7bfcce69643290960b6c"
+      },
+      "listings_le2023": {
+        "2013": "b84c71cf23be81375bbca62f7d2c51d53fa75330fbcf9f598ec4ac17fea7d8be",
+        "2014": "e675fd5d86c3451d76e7c5d530095db1641347eb3f9796c9a30dd7a75e3ba634",
+        "2015": "fbca54ef42594cc52facc0d8c8dd74802b812771b9e33032e44ae8c7e21b0360",
+        "2016": "504e05968cb9c54ddc730fd9b6e7d1dd16a62db8029cc784d3d7bafcea7ff7cb",
+        "2017": "0d5139fbf41b0866517bd2bd5fd85bb20dbd4dd9bc36a706fed030a88731de6f",
+        "2018": "4724e1f37cc3076f564e997fbf269190e7dbe795a39315b903788e0a9c40065e",
+        "2019": "daddfe8e04ddc3a29bce14f362e774fbadfb274c807f1f0fde7b5bf32aaf6cdf",
+        "2020": "706cca82824214f6b73ba0c6e537d3ee39766a50c644b8974b9fc28d7518de90",
+        "2021": "1049fb9ff0fe7cfcf3ba8bfe1f5a35d3aba985c461c8fb7bf5201735b6d34254",
+        "2022": "5f0d60324e597edd1a2ced8540b04e40b51dd440591dd1df11b8d96343387c9e",
+        "2023": "16b04e21da5aa3944cfa9c22cafcc84ed7e6d9866eaddf0344e9b8cbf2f63afe"
+      }
+    }
+  },
+  "delta_producer": {
+    "cite": "B-4 / B-4b / B-4c",
+    "module": "holdout_delta_producer.py",
+    "sha": "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8dd630",
+    "function": "produce_deltas",
+    "qb1_index_units": 0.12,
+    "as_of_le_kickoff": true,
+    "naive_timestamp": "STOP",
+    "games_json_raw_deltas_forbidden": true,
+    "games_json_values_forbidden": true,
+    "pins": {
+      "fit_object": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+      "frozen_script": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+      "null_contract": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+      "writer": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f",
+      "builder": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
+      "injury_paths_8e2a15ac": "ebd3dac083562afb4928e2ed756f617248894e636356f7426f0bc6ae58344e8b",
+      "qb1_index_units": 0.12
+    }
+  },
+  "path1_export_composition": {
+    "statement": "Path 1 holdout export = build_rows(8d188da2.precompute_games from pinned raw) + apply_params(8d188da2, selected_params from 6a5490db) + timestamps_for_game(9947b880) + write_sidecar_chain(9947b880). writer.main() is the le2023 Path 1 entrypoint and is not invoked on holdout. games.json is not a source of value, x_continuity, or deltas.",
+    "writer_main_not_invoked_on_holdout": true,
+    "on_disk_pin": ".sha256.v2"
+  },
+  "pass_file_rule": {
+    "cite": "B-8a",
+    "exact_dir": "/workspace/fg-repair/imv-gate1-review-2026-10-02",
+    "name_pattern": "IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v*.txt",
+    "exact_path_described": "/workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_vN.txt",
+    "sidecar_suffix": ".abs.sha256",
+    "mode": "0444",
+    "anchored_verdict": "^VERDICT: (PASS|RETURN|PASS WITH CONDITIONS|FAIL)$",
+    "exactly_one_verdict_line": true,
+    "pass_line_must_equal": "VERDICT: PASS",
+    "runner_sha_line": "^RUNNER_SHA: [0-9a-f]{64}$",
+    "runner_sha_must_equal_runner_sha": true,
+    "no_substring_PASS": true,
+    "no_REQUIRED_OPENING_PASS_constant": true,
+    "do_not_read_from_seeded": true,
+    "absent_or_unverified_returns": null
+  },
+  "production_inputs": {
+    "cite": "B-13 + B-4b + B-4b(P)",
+    "workspace": "/workspace/ops/nfl_injury_audit_t4274u",
+    "listings_dir": "/workspace/ops/nfl_injury_audit_t4274u/listings",
+    "schedule_csv": "/workspace/ops/nfl_injury_audit_t4274u/schedule.csv",
+    "schedule_requires": [
+      "gameday",
+      "gametime"
+    ],
+    "rosters_dir": "/workspace/ops/nfl_injury_audit_t4274u/rosters",
+    "close_csv": "/workspace/ops/nfl_injury_audit_t4274u/close.csv",
+    "games_json": "/workspace/ops/nfl_injury_audit_t4274u/games.json",
+    "games_json_role": "identity-only; value / x_continuity / deltas forbidden",
+    "pre_lock_checks": [
+      "existence",
+      "headers",
+      "no-open size"
+    ],
+    "no_data_rows_before_lock": true,
+    "missing_file_stops_before_lock": true,
+    "raw_input_shas_before_parse": true,
+    "raw_input_shas_in_lock_and_receipt": true
+  },
+  "post_lock_exception_handler": {
+    "cite": "B-1",
+    "catches": "BaseException",
+    "on_any_exception_after_lock": [
+      "mark_lock_consumed",
+      "write_receipt if not already 0444"
+    ],
+    "week1_identity_before_receipt": true,
+    "does_not_rewrite_0444": true
+  },
+  "holdout_season_allowance": {
+    "year_2026": "never",
+    "years_2024_2025": "only when lock_is_production AND verified_opening_pass_sha() is non-null",
+    "synthetic_2098_2099": "after any lock_written, fixture harness only",
+    "years_2013_2023": "always",
+    "fixture_marker_cannot_admit_2024_2025": true
+  },
+  "production_sequence": {
+    "cite": "B-1",
+    "main_holdout_path": "run_holdout_workspace only",
+    "order": [
+      "assert_pins_before_lock",
+      "assert_production_inputs_pre_lock",
+      "write_lock",
+      "export",
+      "guards",
+      "join",
+      "score",
+      "week1_identity",
+      "consumed",
+      "receipt"
+    ],
+    "write_lock_never_before_pins": true,
+    "post_lock_catches_BaseException": true
+  },
+  "naive_timestamp": "STOP",
+  "i3_field_name": "i3_holm_scorer",
+  "i3_field_holds": "scorer holm list (raw p + holm_rank + holm_threshold + significant); not Holm-adjusted p",
+  "gates_verbatim": {
+    "I-1": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+    "I-2": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+    "I-3": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+    "I-4": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+    "I-5": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+    "K-2": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+    "K-3": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+    "K-4": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off."
+  },
+  "i4_operational": {
+    "VALUE_PROVEN_requires": [
+      "I-2 MET",
+      "primary Holm-significant",
+      "primary CI lo>0",
+      "K-4 pass"
+    ],
+    "else": "NO CLAIM",
+    "I-2_shortfall": "INCONCLUSIVE",
+    "no_product_claim": true
+  },
+  "baseline_method": {
+    "cite": "request v3.1 \u00a72 + B-5 + B-9",
+    "sha": "76aac887eddc67f19aaa3236d89fbcd51d2f1675e1416761dd70756df5d1a311",
+    "assert_before_import": true,
+    "rounding": {
+      "rule": "Decimal ROUND_HALF_UP to 4 decimals",
+      "tolerance_vs_502110cf": 0.0001,
+      "cited_case": "2015 wk12 DAL-CAR record_total = 45.3563 exactly"
+    },
+    "week1_0_0_identity": {
+      "record_spread": -1.05,
+      "record_total": 44.8435,
+      "baseline_margin": 1.05,
+      "baseline_total": 44.8435
+    },
+    "hardcoded_minus_3_45_forbidden": true
+  },
+  "lock_fields": {
+    "path": "workspace-relative lock path, or /workspace/ops/nfl_injury_audit_t4274u/holdout-once.lock for production",
+    "mode": "0444",
+    "status": "open",
+    "statement": "opened once",
+    "consumed": false,
+    "decision_sha": "fabf87320453c274b2b8ec8e443b8af4709d8d24ff8fb6baa449fe3d739d4bd0",
+    "ryan_scorer_decision_path": "/workspace/ops/nfl_injury_audit_t4274u/DECISION_RYAN_SCORER_V6_2.txt",
+    "ryan_scorer_decision_sha": "592e0bb9e57ef4c7d997d48b336cb37594f7353a891b8ab56d6a70b55492e021",
+    "opening_runner_return_v4_sha": "0505e49295df6c0d3b3ddd2256607325da67baf561cc5d3b8a5a477fb669d508",
+    "opening_runner_pass_sha": "null until IMV PASS; RETURN 2c71e4d0 is not a PASS",
+    "scorer_sha": "8b482cb9ddf46ea3bfb80cbfc429978467cbccc126fb0d9d7ca8013ef2f34b37",
+    "scorer_v6_2_status": "AUTHORIZED",
+    "scorer_v6_2_imv_diff": "DOCSTRING_ONLY_RECHECK",
+    "delta_producer_sha": "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8dd630",
+    "frozen_row_builder_sha": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
+    "qb1_index_units": 0.12,
+    "baseline_method_sha": "76aac887eddc67f19aaa3236d89fbcd51d2f1675e1416761dd70756df5d1a311",
+    "opening_runner_return_v5_sha": "2c71e4d0baa0da16ef48f5f4560f1b151c742bb176226335b922d649aebf7a66",
+    "raw_input_shas": "sha256 of every listings_*.csv, schedule.csv, roster_*.csv, close.csv, games.json, computed before any row is parsed"
+  },
+  "lock_consumption": {
+    "lock_stays_0444": true,
+    "lock_not_rewritten": true,
+    "sidecar": "holdout-once.lock.consumed",
+    "sidecar_mode": "0444",
+    "sidecar_fields": [
+      "reason",
+      "utc",
+      "lock_sha"
+    ]
+  },
+  "production_lock": {
+    "path": "/workspace/ops/nfl_injury_audit_t4274u/holdout-once.lock",
+    "enabled_only_by": "verified IMV PASS at the B-8a anchored VERDICT + RUNNER_SHA rule",
+    "not_a_flag_or_env": true,
+    "this_package": "PASS sha absent; production path must STOP after pins and pre-lock input checks, before lock write"
+  },
+  "receipt_schema": {
+    "kind": "opening_receipt",
+    "mode": "0444",
+    "opening_permitted": "computed",
+    "holdout_years_opened": "computed",
+    "runner_sha": "top-level",
+    "scorer_sha": "single pin 8b482cb9",
+    "i3_holm_scorer": "scorer holm list only; renamed from i3_holm_adjusted_p; not adjusted p",
+    "receipt_manifest": "written AFTER receipt 0444; not rewritten into receipt",
+    "receipt_sums": "MANIFEST lines plus the MANIFEST file hash (not identical to MANIFEST)",
+    "receipt_manifest_mode": "0444",
+    "receipt_sums_mode": "0444",
+    "raw_input_shas": "repeats lock.raw_input_shas"
+  },
+  "F-DEFAULT-HOLDOUT": {
+    "stop": true,
+    "via": "main(['--mode','holdout'])",
+    "must_contain": "O-1 opening blocked",
+    "lock_written": false,
+    "real_lock_written": false
+  },
+  "F-E2E": {
+    "stop": false,
+    "covers": [
+      "lock",
+      "export",
+      "guards",
+      "join",
+      "score",
+      "receipt"
+    ],
+    "fixture_seasons": [
+      2098,
+      2099
+    ],
+    "fold_years_used": {
+      "F1": 2098,
+      "F2": 2099
+    },
+    "cite": "B-7 synthetic holdout-season post-lock E2E"
+  },
+  "F-LOCK-PRESENT": {
+    "stop": true,
+    "must_contain": "O-3 lock: existing lock"
+  },
+  "F-DOUBLE-OPEN": {
+    "stop": true,
+    "must_contain": "O-3 lock: existing lock"
+  },
+  "F-REFIT": {
+    "stop": true,
+    "must_contain": "O-1 refuse: no tuning or refit path",
+    "lock_written": false
+  },
+  "F-PER-SIDE": {
+    "stop": true,
+    "must_contain": "O-5 incomplete: complete row has a null per-side timestamp"
+  },
+  "F-PRODUCTION-LOCK-BLOCKED": {
+    "stop": true,
+    "via": "write_lock(REAL_LOCK.parent) after pins",
+    "must_contain": "O-3 lock: production lock requires verified IMV opening-runner PASS sha",
+    "pins_checked_before_lock_attempt": true,
+    "real_lock_written": false
+  },
+  "F-PRODUCTION-INPUTS-MISSING": {
+    "stop": true,
+    "via": "main(['--mode','holdout','--workspace', REAL_LOCK.parent]) when production inputs absent",
+    "must_contain": "B-13 production input: missing",
+    "pins_checked_before_lock_attempt": true,
+    "real_lock_written": false
+  },
+  "F-MARKER-NO-2024": {
+    "assert": "fixture marker + lock_written does not admit 2024/25"
+  },
+  "F-SCORER-PINNED-V62": {
+    "assert": "exactly one active scorer sha 8b482cb9; no DRAFT/PENDING_RYAN in active docstring; no runtime switch; decision path+sha 592e0bb9; DIFF 280d9785 docstring-only vs 755d30a8"
+  },
+  "F-B8A-SUBSTRING-REJECT": {
+    "assert": "text containing VERDICT: PASS as a substring, or more than one VERDICT line, is not a PASS"
+  },
+  "F-SCORER-GUARDS-CLOSED": {
+    "assert": "ca98ae0e dies on 2024/2025/2026; v6.2 default dies on 2024/2025/2026; v6.2 permit admits 2024/2025 only; 2026 never; no 2024/25 bytes read"
+  },
+  "F-POST-LOCK-BASEEXCEPTION": {
+    "assert": "post-lock BaseException marks consumed and writes receipt if not already 0444; does not rewrite 0444"
+  },
+  "F-NAIVE-TIMESTAMP": {
+    "assert": "zoneless date_modified STOPs (B-4c)"
+  },
+  "F-GAMES-JSON-VALUES": {
+    "assert": "games.json value / x_continuity / deltas are refused (B-4b)"
+  },
+  "le2023_guards": {
+    "n_listings": 58653,
+    "n_z": 58653,
+    "n_naive": 0,
+    "n_incomplete": 11,
+    "excluded_game_ids": [
+      "2013_1_CIN_CHI",
+      "2013_1_NYG_DAL",
+      "2014_15_SF_SEA",
+      "2015_1_NO_ARI",
+      "2017_1_IND_LA",
+      "2020_1_GB_MIN",
+      "2020_6_KC_BUF",
+      "2022_2_IND_JAX",
+      "2022_7_CHI_NE",
+      "2022_12_BAL_JAX",
+      "2023_5_HOU_ATL"
+    ]
+  },
+  "opening_runner_return_v5_sha": "2c71e4d0baa0da16ef48f5f4560f1b151c742bb176226335b922d649aebf7a66",
+  "scorer_v6_2_baseline_755d30a8": "755d30a8ce0dde7cd31b2e5ded9d4e06240e73f963b68a6ae4bd9af30d90ea5f",
+  "scorer_v6_2_baseline_relpath": "seeded/v6.2-755d30a8/run_injury_residual_evaluator.py",
+  "scorer_v6_2_prior_sha_imv_v5": "755d30a8ce0dde7cd31b2e5ded9d4e06240e73f963b68a6ae4bd9af30d90ea5f",
+  "v62_diff_verdict_on_755d30a8": "PASS",
+  "v62_diff_verdict_line": "V62_DIFF_VERDICT: PASS (holdout-allowance-only, no metric change)",
+  "v62_sha_755d30a8": "755d30a8ce0dde7cd31b2e5ded9d4e06240e73f963b68a6ae4bd9af30d90ea5f",
+  "scorer_v6_2_diff_vs_755d30a8_relpath": "seeded/v6.2/DIFF_vs_755d30a8.txt",
+  "scorer_v6_2_diff_vs_755d30a8_sha": "280d9785ffc1a313e9415e0b3cf8f75f7d0156908aba29a9902e4bb8a8788c55",
+  "l1_relabel": {
+    "cite": "L-1",
+    "evidence_file": "seeded/v6.2/DIFF_vs_755d30a8.txt",
+    "evidence_sha": "280d9785ffc1a313e9415e0b3cf8f75f7d0156908aba29a9902e4bb8a8788c55",
+    "baseline_relpath": "seeded/v6.2-755d30a8/run_injury_residual_evaluator.py",
+    "baseline_sha": "755d30a8ce0dde7cd31b2e5ded9d4e06240e73f963b68a6ae4bd9af30d90ea5f",
+    "final_relpath": "seeded/v6.2/run_injury_residual_evaluator.py",
+    "final_sha": "8b482cb9ddf46ea3bfb80cbfc429978467cbccc126fb0d9d7ca8013ef2f34b37",
+    "draft_dir_removed": true,
+    "change": "docstring header only (3 lines). No metric, Holm, bootstrap, fold, seed, or sigma change.",
+    "no_DRAFT_in_final_docstring": true,
+    "no_PENDING_RYAN_in_final_docstring": true,
+    "imv_action": "changes-only docstring-only check; V62_DIFF_VERDICT PASS on 755d30a8 then carries over"
+  },
+  "allowed_roster_years": {
+    "cite": "B-4b(n)",
+    "le2023": [
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "production": [
+      2023,
+      2024,
+      2025
+    ],
+    "synthetic": [
+      2098,
+      2099
+    ],
+    "year_2026": "never",
+    "enforced_by": "holdout_frozen_row_builder.load_rosters_dir(allowed_years) STOP on year not in the declared set",
+    "builder_constants": {
+      "ALLOWED_ROSTER_YEARS_LE2023": "frozenset(range(2012, 2024))",
+      "ALLOWED_ROSTER_YEARS_PRODUCTION": "frozenset({2023, 2024, 2025})",
+      "ALLOWED_ROSTER_YEARS_SYNTHETIC": "frozenset({2098, 2099})"
+    }
+  },
+  "production_raw_input_shas": {
+    "cite": "B-4b(P)",
+    "computed": "sha256 of each whole file before any csv/json data row is parsed",
+    "not_a_row_parse": "whole-file sha256",
+    "hashed_before": [
+      "csv.DictReader of listings_*.csv",
+      "csv.DictReader of schedule.csv",
+      "csv.DictReader of roster_*.csv",
+      "csv.DictReader of close.csv",
+      "json.loads of games.json data rows"
+    ],
+    "header_only_b13_after_hash": true,
+    "recorded_in": [
+      "lock.raw_input_shas",
+      "receipt.raw_input_shas"
+    ],
+    "patterns": [
+      "listings_*.csv",
+      "schedule.csv",
+      "roster_*.csv",
+      "close.csv",
+      "games.json"
+    ],
+    "production_paths": {
+      "listings_dir": "/workspace/ops/nfl_injury_audit_t4274u/listings",
+      "schedule_csv": "/workspace/ops/nfl_injury_audit_t4274u/schedule.csv",
+      "rosters_dir": "/workspace/ops/nfl_injury_audit_t4274u/rosters",
+      "close_csv": "/workspace/ops/nfl_injury_audit_t4274u/close.csv",
+      "games_json": "/workspace/ops/nfl_injury_audit_t4274u/games.json"
+    },
+    "this_package": "no production raw files present; runner hashes whatever exists at those paths (or the fixture workspace) into lock+receipt before parse; this package never writes REAL_LOCK"
+  },
+  "F-RAW-INPUT-SHAS": {
+    "assert": "F-E2E lock and receipt carry raw_input_shas for listings_*.csv, schedule.csv, roster_*.csv, close.csv, games.json hashed before any row parse"
+  },
+  "F-LE2023-REBUILD": {
+    "assert": "deposited out/le2023/rebuilt_le2023_deltas.json n=2863 sha 8af44a7e and rebuilt_le2023_compare.json verdict 0_DIFF sha bc89721f vs a38a55bb"
+  }
+}

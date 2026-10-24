@@ -1,0 +1,14 @@
+--- seeded/v6.2-755d30a8/run_injury_residual_evaluator.py
++++ seeded/v6.2/run_injury_residual_evaluator.py
+@@ -1,8 +1,8 @@
+ #!/usr/bin/env python3
+-"""Injury residual evaluator v6.2 DRAFT — lock+PASS holdout allowance only.
++"""Injury residual evaluator v6.2 FINAL — Ryan t4340s14953 / 592e0bb9.
+ 
+-PENDING_RYAN. Diff vs ca98ae0e is the season guard only. No metric change.
+-v6.1 body: e7a0d737 D-1/D-3/D-4/D-5.
++V62_DIFF_VERDICT PASS on 755d30a8 (holdout-allowance-only, no metric change).
++This file is 755d30a8 plus this docstring only.
+ 
+ Holdout STOPPED. No CLEAR/IMV tokens. No 2024–25. No D-2 runner.
+ Authoritative rulings: e7a0d737 / 1ef1f0a7 / d18ebf22 / 501e8a99. Copy 0e0d54bc is non-authoritative.

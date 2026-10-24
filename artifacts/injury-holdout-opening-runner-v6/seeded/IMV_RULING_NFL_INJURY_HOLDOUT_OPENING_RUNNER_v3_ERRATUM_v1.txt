@@ -1,0 +1,9 @@
+IMV ERRATUM v1 to IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v3.txt (file sha 4fd6cfbe)
+File: /workspace/fg-repair/imv-gate1-review-2026-10-02/IMV_RULING_NFL_INJURY_HOLDOUT_OPENING_RUNNER_v3_ERRATUM_v1.txt
+Filed: 2026-10-24 11:53:12 EDT (-0400)
+Correction (wording only): the INTEGRITY line "the FILE is cda0... no; the FILE is 1cffb979"
+  contains stray drafting text.
+  Read it as: "Expected answers: the FILE is 1cffb979 (sidecar OK)."
+  cda0da90 was the v2 expected-answers file and is not part of the v3 package.
+No verdict, defect, condition or gate is changed. The ruling stays RETURN.
+NO-GO, Coming Soon ON.

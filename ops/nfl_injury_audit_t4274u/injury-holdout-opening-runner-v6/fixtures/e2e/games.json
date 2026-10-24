@@ -1,0 +1,10 @@
+{
+  "games": [
+    {"season": 2098, "week": 1, "home": "AAA", "away": "BBB"},
+    {"season": 2098, "week": 2, "home": "DDD", "away": "CCC"},
+    {"season": 2098, "week": 3, "home": "EEE", "away": "FFF"},
+    {"season": 2099, "week": 1, "home": "GGG", "away": "HHH"},
+    {"season": 2099, "week": 2, "home": "III", "away": "JJJ"},
+    {"season": 2099, "week": 3, "home": "KKK", "away": "LLL"}
+  ]
+}
