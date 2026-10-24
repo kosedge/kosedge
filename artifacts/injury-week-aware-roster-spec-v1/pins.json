@@ -1,0 +1,31 @@
+{
+  "package": "injury-week-aware-roster-spec-v1",
+  "phase": 1,
+  "decision_sha8": "47afd7f6",
+  "decision_sha256": "47afd7f631bb1685c2768f95720656d4d9442835274f90c7731afd3028605098",
+  "inventory_package": "artifacts/injury-roster-leakage-inventory-v1",
+  "imv_root_cause_cited": "0feec57e B-4b(n)-PIT",
+  "superseded_for_season_level_roster_route": {
+    "ryan_clear": "fabf8732",
+    "scorer_v6_2_allowance": "592e0bb9"
+  },
+  "frozen_untouched": {
+    "head": "8e2a15ac",
+    "config": "0d491abe",
+    "bound": "049f97d6",
+    "fit_object": "6a5490db",
+    "script": "8d188da2",
+    "export": "d87e6129"
+  },
+  "leakage_invalidated_do_not_carry": {
+    "fit_object": "6a5490db",
+    "path1_export": "a38a55bb",
+    "builder": "247744d2",
+    "le2023_rebuild_deltas": "8af44a7e",
+    "le2023_compare": "bc89721f"
+  },
+  "holdout_once_lock_written": false,
+  "holdout_years_read": [],
+  "refit_started": false,
+  "opening_runner_paused": true
+}

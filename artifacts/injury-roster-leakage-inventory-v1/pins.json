@@ -1,0 +1,36 @@
+{
+  "package": "injury-roster-leakage-inventory-v1",
+  "phase": 0,
+  "decision_sha8": "47afd7f6",
+  "decision_sha256": "47afd7f631bb1685c2768f95720656d4d9442835274f90c7731afd3028605098",
+  "imv_root_cause_cited": "0feec57e B-4b(n)-PIT",
+  "imv_ruling_file_hashed_in_this_package": false,
+  "superseded_for_season_level_roster_route": {
+    "ryan_clear": "fabf8732",
+    "scorer_v6_2_allowance": "592e0bb9"
+  },
+  "code_pins_from_v6_branch": {
+    "frozen_script": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+    "builder": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
+    "writer": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f",
+    "null_contract": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+    "producer": "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8dd630"
+  },
+  "roster_source_shas_le2023": {
+    "2013": "abf73c2b1ef10914af78f6b7397338508bd0c9f0372d2f0667a630e06a4484ed",
+    "2014": "f3c3e9cced60d99ebdcb410b76ffeda72b207b7045983b7a63f677ad9a34814f",
+    "2015": "63807a50226a94f6724b3694198b41661c76211707115b2d52975237ebc4ecb6",
+    "2016": "c7a57a4816d05ef651f4c56b8209c38b98e3d60582ddd60cb8048ef657472ca1",
+    "2017": "22584ad80445611edff6dcbc6dce9ab596bdc484430d8aac298725da15697fd4",
+    "2018": "60c7f1dabb508acc800ef81b4f69892511b1f78246bdb2cca6115a506c523b0a",
+    "2019": "b00259cfddf2146512569423275dc17e142d31ddb13bfba6b0b826c9d3d810da",
+    "2020": "dcf25143db7b54ac488d042b6c24142340effced1d6c8599b2084a9f412b3ed2",
+    "2021": "a95e57ebe1df25224a4d19ed43aaffc5c2097a8b369954178b8592537ff77d34",
+    "2022": "864719595d14909c73bd14110adcdcfc304c6621de9ba34feafb83666fac43c9",
+    "2023": "f98283e6ef420babc597092b5483109a4570f9b5f63b7bfcce69643290960b6c"
+  },
+  "holdout_once_lock_written": false,
+  "holdout_years_read": [],
+  "opening_runner_paused": true,
+  "deploy_vercel_head_when_filed": "20d51f22"
+}

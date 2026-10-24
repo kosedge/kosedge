@@ -1,0 +1,1161 @@
+{
+  "holdout_years_read": [],
+  "source_branch": "origin/cursor/nfl-injury-holdout-opening-runner-v6-1a07",
+  "source_path": "artifacts/injury-holdout-opening-runner-v6/seeded/raw-le2023/rosters/roster_YYYY.csv",
+  "structure": "exactly one row per (team, gsis_id); week/game_type/status present and unused by load_rosters",
+  "collapse_rule": "key=(year,team,pid); d=1 if depth_chart_position in STARTER_SLOTS else 2; week ignored",
+  "years": [
+    {
+      "season": 2013,
+      "source_sha256": "abf73c2b1ef10914af78f6b7397338508bd0c9f0372d2f0667a630e06a4484ed",
+      "n_rows": 2136,
+      "n_unique_team_pid": 2136,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 21,
+      "n_not_week1_reg": 2115,
+      "n_playoff_game_type": 643,
+      "n_starter_slot": 0,
+      "n_starter_slot_not_week1_reg": 0,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1066
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 217
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 214
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 106
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 106
+        },
+        {
+          "week": 15,
+          "game_type": "REG",
+          "n": 34
+        }
+      ],
+      "n_pit": 68,
+      "n_pit_not_week1_reg": 65,
+      "n_pit_qb": 3,
+      "pit_qbs": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0024408",
+          "name": "Bruce Gradkowski",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0030524",
+          "name": "Landry Jones",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2014,
+      "source_sha256": "f3c3e9cced60d99ebdcb410b76ffeda72b207b7045983b7a63f677ad9a34814f",
+      "n_rows": 2152,
+      "n_unique_team_pid": 2152,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 24,
+      "n_not_week1_reg": 2128,
+      "n_playoff_game_type": 643,
+      "n_starter_slot": 0,
+      "n_starter_slot_not_week1_reg": 0,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1066
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 216
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 215
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 106
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 106
+        },
+        {
+          "week": 15,
+          "game_type": "REG",
+          "n": 41
+        }
+      ],
+      "n_pit": 58,
+      "n_pit_not_week1_reg": 58,
+      "n_pit_qb": 3,
+      "pit_qbs": [
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0024408",
+          "name": "Bruce Gradkowski",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0030524",
+          "name": "Landry Jones",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2015,
+      "source_sha256": "63807a50226a94f6724b3694198b41661c76211707115b2d52975237ebc4ecb6",
+      "n_rows": 2189,
+      "n_unique_team_pid": 2189,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 19,
+      "n_not_week1_reg": 2170,
+      "n_playoff_game_type": 641,
+      "n_starter_slot": 0,
+      "n_starter_slot_not_week1_reg": 0,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1067
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 215
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 214
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 106
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 106
+        },
+        {
+          "week": 16,
+          "game_type": "REG",
+          "n": 49
+        }
+      ],
+      "n_pit": 63,
+      "n_pit_not_week1_reg": 63,
+      "n_pit_qb": 3,
+      "pit_qbs": [
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0020245",
+          "name": "Michael Vick",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0030524",
+          "name": "Landry Jones",
+          "position": "QB",
+          "slot": "",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2016,
+      "source_sha256": "c7a57a4816d05ef651f4c56b8209c38b98e3d60582ddd60cb8048ef657472ca1",
+      "n_rows": 3061,
+      "n_unique_team_pid": 3061,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 390,
+      "n_not_week1_reg": 2671,
+      "n_playoff_game_type": 1128,
+      "n_starter_slot": 1713,
+      "n_starter_slot_not_week1_reg": 1511,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1357
+        },
+        {
+          "week": 1,
+          "game_type": "REG",
+          "n": 390
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 379
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 369
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 200
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 180
+        }
+      ],
+      "n_pit": 112,
+      "n_pit_not_week1_reg": 112,
+      "n_pit_qb": 6,
+      "pit_qbs": [
+        {
+          "week": 2,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0020245",
+          "name": "Mike Vick",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "team": "PIT",
+          "pid": "00-0024408",
+          "name": "Bruce Gradkowski",
+          "position": "QB",
+          "slot": "QB",
+          "status": "CUT"
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "team": "PIT",
+          "pid": "00-0030524",
+          "name": "Landry Jones",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "team": "PIT",
+          "pid": "00-0030673",
+          "name": "Bryn Renner",
+          "position": "QB",
+          "slot": "QB",
+          "status": "CUT"
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "team": "PIT",
+          "pid": "00-0031266",
+          "name": "Zach Mettenberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2017,
+      "source_sha256": "22584ad80445611edff6dcbc6dce9ab596bdc484430d8aac298725da15697fd4",
+      "n_rows": 3082,
+      "n_unique_team_pid": 3082,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 0,
+      "n_not_week1_reg": 3082,
+      "n_playoff_game_type": 1145,
+      "n_starter_slot": 1732,
+      "n_starter_slot_not_week1_reg": 1732,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1936
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 389
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 372
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 198
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 186
+        },
+        {
+          "week": 5,
+          "game_type": "REG",
+          "n": 1
+        }
+      ],
+      "n_pit": 84,
+      "n_pit_not_week1_reg": 84,
+      "n_pit_qb": 4,
+      "pit_qbs": [
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0030524",
+          "name": "Landry Jones",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0033866",
+          "name": "Bart Houston",
+          "position": "QB",
+          "slot": "QB",
+          "status": "CUT"
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "team": "PIT",
+          "pid": "00-0033949",
+          "name": "Joshua Dobbs",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2018,
+      "source_sha256": "60c7f1dabb508acc800ef81b4f69892511b1f78246bdb2cca6115a506c523b0a",
+      "n_rows": 3141,
+      "n_unique_team_pid": 3141,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 0,
+      "n_not_week1_reg": 3141,
+      "n_playoff_game_type": 1146,
+      "n_starter_slot": 1804,
+      "n_starter_slot_not_week1_reg": 1804,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1995
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 403
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 358
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 195
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 190
+        }
+      ],
+      "n_pit": 95,
+      "n_pit_not_week1_reg": 95,
+      "n_pit_qb": 3,
+      "pit_qbs": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0033949",
+          "name": "Joshua Dobbs",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0034771",
+          "name": "Mason Rudolph",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2019,
+      "source_sha256": "b00259cfddf2146512569423275dc17e142d31ddb13bfba6b0b826c9d3d810da",
+      "n_rows": 3113,
+      "n_unique_team_pid": 3113,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 1,
+      "n_not_week1_reg": 3112,
+      "n_playoff_game_type": 1120,
+      "n_starter_slot": 1692,
+      "n_starter_slot_not_week1_reg": 1691,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1990
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 375
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 367
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 195
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 183
+        },
+        {
+          "week": 7,
+          "game_type": "REG",
+          "n": 1
+        }
+      ],
+      "n_pit": 102,
+      "n_pit_not_week1_reg": 102,
+      "n_pit_qb": 6,
+      "pit_qbs": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "RES"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0033108",
+          "name": "Paxton Lynch",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0034126",
+          "name": "J.T. Barrett",
+          "position": "QB",
+          "slot": "QB",
+          "status": "DEV"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0034771",
+          "name": "Mason Rudolph",
+          "position": "QB",
+          "slot": "QB",
+          "status": "RES"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0035087",
+          "name": "Taryn Christion",
+          "position": "QB",
+          "slot": "QB",
+          "status": "CUT"
+        },
+        {
+          "week": 17,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0035577",
+          "name": "Devlin Hodges",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2020,
+      "source_sha256": "dcf25143db7b54ac488d042b6c24142340effced1d6c8599b2084a9f412b3ed2",
+      "n_rows": 3067,
+      "n_unique_team_pid": 3067,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 273,
+      "n_not_week1_reg": 2794,
+      "n_playoff_game_type": 1174,
+      "n_starter_slot": 1814,
+      "n_starter_slot_not_week1_reg": 1656,
+      "week_game_type_top": [
+        {
+          "week": 17,
+          "game_type": "REG",
+          "n": 1494
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "n": 503
+        },
+        {
+          "week": 19,
+          "game_type": "DIV",
+          "n": 337
+        },
+        {
+          "week": 1,
+          "game_type": "REG",
+          "n": 273
+        },
+        {
+          "week": 21,
+          "game_type": "SB",
+          "n": 168
+        },
+        {
+          "week": 20,
+          "game_type": "CON",
+          "n": 166
+        }
+      ],
+      "n_pit": 88,
+      "n_pit_not_week1_reg": 79,
+      "n_pit_qb": 5,
+      "pit_qbs": [
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 1,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0033108",
+          "name": "Paxton Lynch",
+          "position": "QB",
+          "slot": "QB",
+          "status": "CUT"
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0033949",
+          "name": "Joshua Dobbs",
+          "position": "QB",
+          "slot": "QB",
+          "status": "INA"
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0034771",
+          "name": "Mason Rudolph",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 18,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0035577",
+          "name": "Devlin Hodges",
+          "position": "QB",
+          "slot": "QB",
+          "status": "DEV"
+        }
+      ]
+    },
+    {
+      "season": 2021,
+      "source_sha256": "a95e57ebe1df25224a4d19ed43aaffc5c2097a8b369954178b8592537ff77d34",
+      "n_rows": 2960,
+      "n_unique_team_pid": 2960,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 130,
+      "n_not_week1_reg": 2830,
+      "n_playoff_game_type": 1167,
+      "n_starter_slot": 1749,
+      "n_starter_slot_not_week1_reg": 1691,
+      "week_game_type_top": [
+        {
+          "week": 18,
+          "game_type": "REG",
+          "n": 1545
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "n": 508
+        },
+        {
+          "week": 20,
+          "game_type": "DIV",
+          "n": 321
+        },
+        {
+          "week": 21,
+          "game_type": "CON",
+          "n": 170
+        },
+        {
+          "week": 22,
+          "game_type": "SB",
+          "n": 168
+        },
+        {
+          "week": 1,
+          "game_type": "REG",
+          "n": 130
+        }
+      ],
+      "n_pit": 95,
+      "n_pit_not_week1_reg": 88,
+      "n_pit_qb": 4,
+      "pit_qbs": [
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0022924",
+          "name": "Ben Roethlisberger",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0033949",
+          "name": "Joshua Dobbs",
+          "position": "QB",
+          "slot": "QB",
+          "status": "RES"
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0034771",
+          "name": "Mason Rudolph",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0035232",
+          "name": "Dwayne Haskins",
+          "position": "QB",
+          "slot": "QB",
+          "status": "INA"
+        }
+      ]
+    },
+    {
+      "season": 2022,
+      "source_sha256": "864719595d14909c73bd14110adcdcfc304c6621de9ba34feafb83666fac43c9",
+      "n_rows": 3133,
+      "n_unique_team_pid": 3133,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 365,
+      "n_not_week1_reg": 2768,
+      "n_playoff_game_type": 1141,
+      "n_starter_slot": 1782,
+      "n_starter_slot_not_week1_reg": 1600,
+      "week_game_type_top": [
+        {
+          "week": 18,
+          "game_type": "REG",
+          "n": 1489
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "n": 494
+        },
+        {
+          "week": 1,
+          "game_type": "REG",
+          "n": 365
+        },
+        {
+          "week": 20,
+          "game_type": "DIV",
+          "n": 324
+        },
+        {
+          "week": 22,
+          "game_type": "SB",
+          "n": 165
+        },
+        {
+          "week": 21,
+          "game_type": "CON",
+          "n": 158
+        }
+      ],
+      "n_pit": 106,
+      "n_pit_not_week1_reg": 87,
+      "n_pit_qb": 3,
+      "pit_qbs": [
+        {
+          "week": 18,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0033869",
+          "name": "Mitchell Trubisky",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 18,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0034771",
+          "name": "Mason Rudolph",
+          "position": "QB",
+          "slot": "QB",
+          "status": "INA"
+        },
+        {
+          "week": 18,
+          "game_type": "REG",
+          "team": "PIT",
+          "pid": "00-0038102",
+          "name": "Kenny Pickett",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        }
+      ]
+    },
+    {
+      "season": 2023,
+      "source_sha256": "f98283e6ef420babc597092b5483109a4570f9b5f63b7bfcce69643290960b6c",
+      "n_rows": 3089,
+      "n_unique_team_pid": 3089,
+      "one_row_per_team_pid": true,
+      "n_week1_reg": 342,
+      "n_not_week1_reg": 2747,
+      "n_playoff_game_type": 1138,
+      "n_starter_slot": 1892,
+      "n_starter_slot_not_week1_reg": 1671,
+      "week_game_type_top": [
+        {
+          "week": 18,
+          "game_type": "REG",
+          "n": 1470
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "n": 480
+        },
+        {
+          "week": 1,
+          "game_type": "REG",
+          "n": 342
+        },
+        {
+          "week": 20,
+          "game_type": "DIV",
+          "n": 325
+        },
+        {
+          "week": 22,
+          "game_type": "SB",
+          "n": 167
+        },
+        {
+          "week": 21,
+          "game_type": "CON",
+          "n": 166
+        }
+      ],
+      "n_pit": 101,
+      "n_pit_not_week1_reg": 85,
+      "n_pit_qb": 4,
+      "pit_qbs": [
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0033869",
+          "name": "Mitchell Trubisky",
+          "position": "QB",
+          "slot": "QB",
+          "status": "INA"
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0034771",
+          "name": "Mason Rudolph",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0035146",
+          "name": "Trace McSorley",
+          "position": "QB",
+          "slot": "QB",
+          "status": "CUT"
+        },
+        {
+          "week": 19,
+          "game_type": "WC",
+          "team": "PIT",
+          "pid": "00-0038102",
+          "name": "Kenny Pickett",
+          "position": "QB",
+          "slot": "QB",
+          "status": "ACT"
+        }
+      ]
+    }
+  ],
+  "totals_2013_2023": {
+    "n_rows": 31123,
+    "n_not_week1_reg": 29558,
+    "n_playoff_game_type": 11086,
+    "n_starter_slot_not_week1_reg": 13356,
+    "n_week1_reg": 1565
+  },
+  "named_pit_qb_lookahead": [
+    {
+      "season": 2019,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0022924",
+      "name": "Ben Roethlisberger",
+      "position": "QB",
+      "slot": "QB",
+      "status": "RES",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2019,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0033108",
+      "name": "Paxton Lynch",
+      "position": "QB",
+      "slot": "QB",
+      "status": "ACT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2019,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0034126",
+      "name": "J.T. Barrett",
+      "position": "QB",
+      "slot": "QB",
+      "status": "DEV",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2019,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0034771",
+      "name": "Mason Rudolph",
+      "position": "QB",
+      "slot": "QB",
+      "status": "RES",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2019,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0035087",
+      "name": "Taryn Christion",
+      "position": "QB",
+      "slot": "QB",
+      "status": "CUT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2019,
+      "week": 17,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0035577",
+      "name": "Devlin Hodges",
+      "position": "QB",
+      "slot": "QB",
+      "status": "ACT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2022,
+      "week": 18,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0033869",
+      "name": "Mitchell Trubisky",
+      "position": "QB",
+      "slot": "QB",
+      "status": "ACT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2022,
+      "week": 18,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0034771",
+      "name": "Mason Rudolph",
+      "position": "QB",
+      "slot": "QB",
+      "status": "INA",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2022,
+      "week": 18,
+      "game_type": "REG",
+      "team": "PIT",
+      "pid": "00-0038102",
+      "name": "Kenny Pickett",
+      "position": "QB",
+      "slot": "QB",
+      "status": "ACT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2023,
+      "week": 19,
+      "game_type": "WC",
+      "team": "PIT",
+      "pid": "00-0033869",
+      "name": "Mitchell Trubisky",
+      "position": "QB",
+      "slot": "QB",
+      "status": "INA",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2023,
+      "week": 19,
+      "game_type": "WC",
+      "team": "PIT",
+      "pid": "00-0034771",
+      "name": "Mason Rudolph",
+      "position": "QB",
+      "slot": "QB",
+      "status": "ACT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2023,
+      "week": 19,
+      "game_type": "WC",
+      "team": "PIT",
+      "pid": "00-0035146",
+      "name": "Trace McSorley",
+      "position": "QB",
+      "slot": "QB",
+      "status": "CUT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    },
+    {
+      "season": 2023,
+      "week": 19,
+      "game_type": "WC",
+      "team": "PIT",
+      "pid": "00-0038102",
+      "name": "Kenny Pickett",
+      "position": "QB",
+      "slot": "QB",
+      "status": "ACT",
+      "leaks_into_all_weeks": true,
+      "used_as_qb1_candidate": true
+    }
+  ]
+}

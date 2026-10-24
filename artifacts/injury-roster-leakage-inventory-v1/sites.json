@@ -1,0 +1,203 @@
+{
+  "package": "injury-roster-leakage-inventory-v1",
+  "decision_sha8": "47afd7f6",
+  "imv_root_cause": "0feec57e B-4b(n)-PIT",
+  "source_of_line_numbers": {
+    "frozen_script": {
+      "sha256": "8d188da27d3c9f802acdca76763e1ca05e714040cc5ea3722e4922853f28167c",
+      "sha8": "8d188da2",
+      "v6_path": "artifacts/injury-holdout-opening-runner-v6/seeded/run_injury_residual_fit.py",
+      "note": "not present on deploy-vercel HEAD 20d51f22; line numbers from this pin"
+    },
+    "builder": {
+      "sha256": "247744d23fef6f289e11da78523bdb007ada136f070916cf66a2bfee161e9cad",
+      "sha8": "247744d2",
+      "v6_path": "artifacts/injury-holdout-opening-runner-v6/holdout_frozen_row_builder.py"
+    },
+    "writer": {
+      "sha256": "9947b880bc789192a26b850ee53dc89d4c43a4c107bdf3fc549c65730739d58f",
+      "sha8": "9947b880",
+      "v6_path": "artifacts/injury-holdout-opening-runner-v6/seeded/write_sealed_injury_export_ts_v1.py"
+    },
+    "null_contract": {
+      "sha256": "ff8e6527f63b0afd727eed30444436ceae320cc336d9113a2634fd66d4aebad2",
+      "sha8": "ff8e6527",
+      "v6_path": "artifacts/injury-holdout-opening-runner-v6/seeded/nfl_injury_null_contract_8e2a15ac.py"
+    },
+    "producer": {
+      "sha256": "ae8f9585cca6400fe1f9c73b71c480bea1fb77ff75467b9d5536f614ac8dd630",
+      "sha8": "ae8f9585",
+      "v6_path": "artifacts/injury-holdout-opening-runner-v6/holdout_delta_producer.py"
+    }
+  },
+  "sites": [
+    {
+      "id": "F-LOAD",
+      "file": "run_injury_residual_fit.py",
+      "function": "load_rosters",
+      "lines": "289-314",
+      "role": "historical fit / precompute root",
+      "future_information": "Ignores week, game_type, status. Season-union membership. Any later-week starter slot upgrades depth to 1 for the whole season. Playoff (WC/DIV/CON/SB) rows enter REG week-1 books.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["membership", "depth", "value", "identity_books", "x_continuity_inputs"]
+    },
+    {
+      "id": "F-CONT",
+      "file": "run_injury_residual_fit.py",
+      "function": "continuity_for_team",
+      "lines": "355-396",
+      "role": "historical fit continuity feature",
+      "future_information": "current_ids is the current-season union. A later signing or playoff-only active hides a week-1 departure. Prior-year book is season-union of season-1 (temporally complete; not current-season look-ahead).",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["x_continuity"]
+    },
+    {
+      "id": "F-IDENT",
+      "file": "run_injury_residual_fit.py",
+      "function": "precompute_games",
+      "lines": "458-464",
+      "role": "historical fit identity",
+      "future_information": "resolve_fit_player_identity against roster_by_team[season] and roster_season[season] season-unions.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["identity_rule", "identity_resolved", "whether listing units apply"]
+    },
+    {
+      "id": "F-VAL",
+      "file": "run_injury_residual_fit.py",
+      "function": "precompute_games",
+      "lines": "466-485",
+      "role": "replacement-quality",
+      "future_information": "depth.get((season,team,pid)) from F-LOAD. value=_structural_index(pos, depth_n). is_qb1_out_candidate if pos==QB and depth_n==1. STARTER_SLOTS includes token QB so every QB-slot player is depth 1.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["depth", "value", "is_qb1_out_candidate"]
+    },
+    {
+      "id": "F-CUR",
+      "file": "run_injury_residual_fit.py",
+      "function": "precompute_games",
+      "lines": "489-497",
+      "role": "historical fit continuity wiring",
+      "future_information": "current_ids = set(roster_by_team[season][team]) season-union.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["x_continuity"]
+    },
+    {
+      "id": "F-UNITS",
+      "file": "run_injury_residual_fit.py",
+      "function": "side_units",
+      "lines": "534-562",
+      "role": "replacement-quality application",
+      "future_information": "Does not read rosters itself. Multiplies listing missing-availability by leaked player['value']. QB1 floor uses leaked is_qb1_out_candidate.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["off/def/ol units", "qb1_out"]
+    },
+    {
+      "id": "F-APPLY",
+      "file": "run_injury_residual_fit.py",
+      "function": "apply_params / residual_from_units",
+      "lines": "565-718",
+      "role": "historical fit deltas",
+      "future_information": "Consumes leaked units and x_continuity. Spec C is selected on these residuals.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["delta_margin", "delta_total", "Spec C selection", "fit_object 6a5490db", "export a38a55bb"]
+    },
+    {
+      "id": "F-MAIN",
+      "file": "run_injury_residual_fit.py",
+      "function": "main",
+      "lines": "774-778",
+      "role": "historical fit entry",
+      "future_information": "roster_by_team, roster_season, depth = load_rosters(); precompute_games(...).",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["entire fit run"]
+    },
+    {
+      "id": "B-LOAD",
+      "file": "holdout_frozen_row_builder.py",
+      "function": "load_rosters_dir",
+      "lines": "267-302",
+      "role": "injury builder",
+      "future_information": "Same collapse as F-LOAD. week never read. Allowed-year sets do not make the collapse week-aware.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["builder value", "builder x_continuity"]
+    },
+    {
+      "id": "B-BUILD",
+      "file": "holdout_frozen_row_builder.py",
+      "function": "build_rows",
+      "lines": "327-329",
+      "role": "injury builder",
+      "future_information": "Calls script.precompute_games with leaked maps. games.json is refused as a value source; the leak is the builder itself.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["opening-runner le2023 rebuild"]
+    },
+    {
+      "id": "W-MAIN",
+      "file": "write_sealed_injury_export_ts_v1.py",
+      "function": "main / export path",
+      "lines": "338-345",
+      "role": "precompute that feeds the sealed export",
+      "future_information": "fit.load_rosters(); fit.precompute_games(...). Export a38a55bb is a product of F-LOAD.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["export a38a55bb"]
+    },
+    {
+      "id": "P-CLAIM",
+      "file": "holdout_delta_producer.py",
+      "function": "_pre_kickoff_only / _assert_as_of_before_kickoff",
+      "lines": "12, 78-99, 128-129",
+      "role": "false leakage-control claim",
+      "future_information": "Checks listing_as_of <= kickoff and rejects post-game scores. Does not inspect roster week/game_type/availability.",
+      "le2023_fit_evidence_invalidated": false,
+      "invalidates": ["the 'pre-kickoff information only' claim"]
+    },
+    {
+      "id": "I-IDENT",
+      "file": "nfl_injury_null_contract_8e2a15ac.py",
+      "function": "resolve_fit_player_identity",
+      "lines": "658-688",
+      "role": "identity helper (books are the leak)",
+      "future_information": "Helper is week-agnostic. Leak occurs when callers pass season-union books from F-LOAD / B-LOAD.",
+      "le2023_fit_evidence_invalidated": true,
+      "invalidates": ["identity_rule counts when books are season-unions"]
+    },
+    {
+      "id": "H-V3",
+      "file": "ops/nfl_injury_audit_t4274u/injury-holdout-request-2024-2025-v3/run_injury_residual_holdout_v3.py",
+      "function": "load_holdout_rosters",
+      "lines": "812-840",
+      "role": "leftover untracked holdout script — do not execute",
+      "future_information": "Same collapse. Iterates years (2023, 2024, 2025). Would read holdout roster bytes if run.",
+      "le2023_fit_evidence_invalidated": false,
+      "invalidates": [],
+      "do_not_execute": true,
+      "holdout_years_in_loop": [2023, 2024, 2025]
+    }
+  ],
+  "adjacent_not_residual_fit_feeders": [
+    {
+      "id": "P-INJPATH",
+      "file": "services/model-service/src/services/nfl_season_engine/injury_paths.py",
+      "note": "No load_rosters / STARTER_SLOTS / _structural_index. Production overlays stay disabled. Not a feeder of the residual fit."
+    },
+    {
+      "id": "P-CONT",
+      "file": "services/model-service/src/services/nfl_roster_continuity.py",
+      "note": "Human-curated offseason multipliers. Not residual-fit x_continuity."
+    },
+    {
+      "id": "P-PACK",
+      "file": "services/model-service/src/services/nfl_season_engine/loaders.py",
+      "function": "load_packaged_depth_chart",
+      "lines": "620+",
+      "note": "Season pack for the live season engine. Official weekly query is week<=as_of_week when used. Not a residual-fit input."
+    },
+    {
+      "id": "P-MAT",
+      "file": "services/data-platform-nfl/src/data_platform_nfl/ingest.py",
+      "function": "materialize_depth_chart_weekly",
+      "lines": "1735-1795",
+      "note": "SELECT FROM nfl_dp_rosters WHERE season=:season (no week). Adjacent leakage class. Not a feeder of run_injury_residual_fit.py."
+    }
+  ]
+}
