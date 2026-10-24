@@ -1,0 +1,3170 @@
+{
+  "acceptance_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+  "b3": {
+    "export_blob_not_a_pin": "46d2a5657d1b5a5eb1af03f4d643afbfaa4762f31260daff439b5df1ac1456eb",
+    "export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+    "message": "B-3 export timestamp census present_keys=['applied', 'as_of_ts', 'complete', 'continuity_source_away', 'continuity_source_home', 'delta_margin', 'delta_total', 'game_id', 'kickoff_utc', 'season', 'source_ts', 'source_ts_away', 'source_ts_home', 'week'] n_source_ts=2852 n_as_of_ts=2852 n_kickoff_utc=2852 n_games=2863",
+    "missing": false,
+    "n_as_of_ts": 2852,
+    "n_c5_excluded": 11,
+    "n_c5_excluded_by_season": {
+      "2013": 2,
+      "2014": 1,
+      "2015": 1,
+      "2017": 1,
+      "2020": 2,
+      "2022": 3,
+      "2023": 1
+    },
+    "n_games": 2863,
+    "n_kickoff_utc": 2852,
+    "n_source_ts": 2852,
+    "present_keys": [
+      "applied",
+      "as_of_ts",
+      "complete",
+      "continuity_source_away",
+      "continuity_source_home",
+      "delta_margin",
+      "delta_total",
+      "game_id",
+      "kickoff_utc",
+      "season",
+      "source_ts",
+      "source_ts_away",
+      "source_ts_home",
+      "week"
+    ]
+  },
+  "clip_count": 0,
+  "close_label": "comparative research, not certified CLV",
+  "command": "python3 run_injury_residual_evaluator.py --mode all",
+  "expected_answers_commit": "852fe21c638532f45fd57ea55668716b49266e49",
+  "expected_sha": "df516feda5ac8a1d4db26a397af83f7bb9c33db2dc11a3df38e31d9bbfbdcbb8",
+  "export_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "folds": [
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": 0.036231884057971016,
+          "ci_lo": -0.11026615969581749,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.03731343283582089,
+          "p": 0.3352,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": 0.02936763365611917,
+          "ci_lo": -0.038847119670919174,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.005103637212005794,
+          "p": 0.7588,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "ml_logloss_delta": {
+          "ci_hi": 0.03480947942922621,
+          "ci_lo": 0.008487186264003061,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.02171296031395593,
+          "p": 0.0018,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_ats_delta": {
+          "ci_hi": 0.045112781954887216,
+          "ci_lo": -0.029304029304029304,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.007462686567164179,
+          "p": 0.7858,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_clv_delta": {
+          "ci_hi": 0.7153291506055387,
+          "ci_lo": -1.0406017651594426,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.15298507462686567,
+          "p": 0.7322,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_logloss_delta": {
+          "ci_hi": 0.023783003583877794,
+          "ci_lo": 0.002524317603777131,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.013239128511571099,
+          "p": 0.0154,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_ats_delta": {
+          "ci_hi": 0.05555555555555555,
+          "ci_lo": -0.03333333333333333,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.014925373134328358,
+          "p": 0.5432,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_clv_delta": {
+          "ci_hi": 1.664179792917332,
+          "ci_lo": -0.33339694656488544,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.6305970149253731,
+          "p": 0.2296,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_logloss_delta": {
+          "ci_hi": 0.03599369142664686,
+          "ci_lo": 0.019598532604369705,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.027679762202454782,
+          "p": 0.0,
+          "seed": 20261023,
+          "undefined_draws": 0
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "dry_run_not_a_result": true,
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0018,
+          "significant": true,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0154,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.2296,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.3352,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.5432,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.7322,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.7588,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 0.7858,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "INCONCLUSIVE",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "INCONCLUSIVE",
+        "decision_label": "DRY RUN - NOT A RESULT",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": false,
+        "primary_ci_excludes_0": false,
+        "primary_ci_lo_gt_0": false,
+        "primary_significant_after_holm": false,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": 0.017059275671194085,
+        "logloss_delta_ci_hi": 0.03480947942922621,
+        "notes": [
+          "logloss_CI_hi 0.03480947942922621 > 0.002",
+          "brier_CI_hi 0.017059275671194085 > 0.0005",
+          "slope -0.047850059564470554 outside [0.9,1.1]"
+        ],
+        "pass": false,
+        "slope_adj": -0.047850059564470554,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_label": "close vs outcome",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": null,
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": 0.010585559444986152,
+        "logloss_delta_adj_minus_base": 0.02171296031395593,
+        "mean_brier_adj": 0.2531568385716413,
+        "mean_brier_base": 0.2425712791266551,
+        "mean_logloss_adj": 0.7001068349796248,
+        "mean_logloss_base": 0.6783938746656688,
+        "ml_ats_delta": -0.03731343283582089,
+        "ml_clv_implied_prob_delta": -0.005103637212005794,
+        "ml_logloss_delta": 0.02171296031395593,
+        "slope_adj": -0.047850059564470554,
+        "spread_ats_delta": 0.007462686567164179,
+        "spread_clv_delta": -0.15298507462686567,
+        "spread_logloss_delta": 0.013239128511571099,
+        "total_ats_delta": 0.014925373134328358,
+        "total_clv_delta": 0.6305970149253731,
+        "total_logloss_delta": 0.027679762202454782
+      },
+      "missing": {
+        "n_close_present": 268,
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 268,
+        "n_incomplete_by_season": {},
+        "n_incomplete_residual": 0,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_nopick_ats": {
+          "ml_ats_adj": 0,
+          "ml_ats_base": 0,
+          "spread_ats_adj": 0,
+          "spread_ats_base": 0,
+          "total_ats_adj": 0,
+          "total_ats_base": 0
+        },
+        "n_null_flag": 0,
+        "n_paired_cvo": 268,
+        "n_universe": 268,
+        "n_universe_by_season": {
+          "2022": 268
+        }
+      },
+      "modeling": {
+        "M-1": {
+          "by_abs_close": [
+            {
+              "hi": 3,
+              "lo": 0,
+              "mean_adj": -1.128300694444445,
+              "mean_base": -0.909463888888889,
+              "n": 72,
+              "sd_adj": 12.356566428784364,
+              "sd_base": 11.95049838865598
+            },
+            {
+              "hi": 7,
+              "lo": 3,
+              "mean_adj": 0.3749807692307694,
+              "mean_base": 0.4401538461538462,
+              "n": 130,
+              "sd_adj": 12.027853365247946,
+              "sd_base": 11.65179224786087
+            },
+            {
+              "hi": 10,
+              "lo": 7,
+              "mean_adj": 0.9772266666666664,
+              "mean_base": 0.9626433333333334,
+              "n": 30,
+              "sd_adj": 12.75646715621297,
+              "sd_base": 12.53543385188379
+            },
+            {
+              "hi": 1000000000.0,
+              "lo": 10,
+              "mean_adj": 6.865667361111111,
+              "mean_base": 6.296483333333333,
+              "n": 36,
+              "sd_adj": 12.596008295340205,
+              "sd_base": 12.267276386840841
+            }
+          ],
+          "by_abs_delta": [
+            {
+              "hi": 3,
+              "lo": 0,
+              "mean_adj": 0.9104129664179104,
+              "mean_base": 0.9227287313432835,
+              "n": 268,
+              "sd_adj": 12.450430401942404,
+              "sd_base": 12.053097732940197
+            },
+            {
+              "hi": 7,
+              "lo": 3,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            },
+            {
+              "hi": 10,
+              "lo": 7,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            },
+            {
+              "hi": 1000000000.0,
+              "lo": 10,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            }
+          ]
+        },
+        "M-2": {
+          "adj_beats_base": false,
+          "brier_adj": 0.2531568385716413,
+          "brier_base": 0.2425712791266551,
+          "ll_adj": 0.7001068349796248,
+          "ll_base": 0.6783938746656688,
+          "mae_delta_ci": {
+            "hi": 0.5104875150593008,
+            "lo": 0.11295054698336851,
+            "obs": 0.3159711753731343
+          },
+          "mae_margin_adj": 9.689705130597016,
+          "mae_margin_base": 9.37373395522388,
+          "null": "null",
+          "rmse_margin_adj": 12.460483996867525,
+          "rmse_margin_base": 12.065923681911961
+        },
+        "M-3": {
+          "coverage_80": 0.8283582089552238,
+          "intercept": {
+            "note": "logistic intercept not a gate; slope is K-4"
+          },
+          "reliability": {
+            "ml": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.2905249292492693,
+                "mean_y": 1.0,
+                "n": 1,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.38529801849262224,
+                "mean_y": 0.5555555555555556,
+                "n": 9,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.46491666112308255,
+                "mean_y": 0.5,
+                "n": 86,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5500301964636254,
+                "mean_y": 0.6015625,
+                "n": 128,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6300402557506104,
+                "mean_y": 0.525,
+                "n": 40,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7331765182111385,
+                "mean_y": 0.5,
+                "n": 4,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ],
+            "spread": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": 0.09182016538844762,
+                "mean_y": 1.0,
+                "n": 1,
+                "nan_reason": null
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": 0.16996521281571614,
+                "mean_y": 0.125,
+                "n": 8,
+                "nan_reason": null
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.2609294336182289,
+                "mean_y": 0.42857142857142855,
+                "n": 28,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.3608144639182473,
+                "mean_y": 0.543859649122807,
+                "n": 57,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.4486153755338559,
+                "mean_y": 0.44680851063829785,
+                "n": 47,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5422786940116964,
+                "mean_y": 0.4576271186440678,
+                "n": 59,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6460437390254883,
+                "mean_y": 0.42857142857142855,
+                "n": 42,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7486382005597283,
+                "mean_y": 0.631578947368421,
+                "n": 19,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": 0.8337313007316081,
+                "mean_y": 0.5714285714285714,
+                "n": 7,
+                "nan_reason": null
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ],
+            "total": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.2996054163401123,
+                "mean_y": 0.0,
+                "n": 1,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.35378800695352236,
+                "mean_y": 0.42105263157894735,
+                "n": 19,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.45600018341827675,
+                "mean_y": 0.42857142857142855,
+                "n": 42,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5548616719219727,
+                "mean_y": 0.4939759036144578,
+                "n": 83,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6505828739521253,
+                "mean_y": 0.4,
+                "n": 85,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7373064752958225,
+                "mean_y": 0.45714285714285713,
+                "n": 35,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": 0.8301551084325215,
+                "mean_y": 0.0,
+                "n": 3,
+                "nan_reason": null
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ]
+          },
+          "slope": -0.047850059564470554,
+          "v_note": "80% interval = pred_margin \u00b1 1.28155 \u03c3_margin; V gate reported, not a pass cut here"
+        },
+        "M-4": {
+          "adj_vs_close_residual": {
+            "definition": "pred_m_adj + close_spread_home",
+            "mean": -0.5969801305970147,
+            "n": 268,
+            "needs_open": false,
+            "sd": 5.949185372378284
+          },
+          "open_corr": {
+            "cited": "634fdb52",
+            "reason": "drive pre7d 634fdb52 EXISTING BUT UNVERIFIED (IMV 1a090e3b); not a usable timestamped open. Earliest price is not a true open.",
+            "status": "NOT RUN"
+          }
+        },
+        "M-5": {
+          "reason": "OOS edge survival deferred to the single holdout opening; le2023 is in-sample-adjacent and may not be cited as edge (I-5)",
+          "status": "DEFERRED"
+        }
+      },
+      "n_full_seasons": 1,
+      "n_ids": 268,
+      "n_nonzero_adjustment": 268,
+      "n_nonzero_by_season": {
+        "2022": 268
+      },
+      "name": "F1",
+      "notes": "inner fold (2022,)",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2905249292492693,
+            "mean_y": 1.0,
+            "n": 1,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.38529801849262224,
+            "mean_y": 0.5555555555555556,
+            "n": 9,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.46491666112308255,
+            "mean_y": 0.5,
+            "n": 86,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5500301964636254,
+            "mean_y": 0.6015625,
+            "n": 128,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6300402557506104,
+            "mean_y": 0.525,
+            "n": 40,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7331765182111385,
+            "mean_y": 0.5,
+            "n": 4,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.09182016538844762,
+            "mean_y": 1.0,
+            "n": 1,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.16996521281571614,
+            "mean_y": 0.125,
+            "n": 8,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2609294336182289,
+            "mean_y": 0.42857142857142855,
+            "n": 28,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3608144639182473,
+            "mean_y": 0.543859649122807,
+            "n": 57,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4486153755338559,
+            "mean_y": 0.44680851063829785,
+            "n": 47,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5422786940116964,
+            "mean_y": 0.4576271186440678,
+            "n": 59,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6460437390254883,
+            "mean_y": 0.42857142857142855,
+            "n": 42,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7486382005597283,
+            "mean_y": 0.631578947368421,
+            "n": 19,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8337313007316081,
+            "mean_y": 0.5714285714285714,
+            "n": 7,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2996054163401123,
+            "mean_y": 0.0,
+            "n": 1,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.35378800695352236,
+            "mean_y": 0.42105263157894735,
+            "n": 19,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.45600018341827675,
+            "mean_y": 0.42857142857142855,
+            "n": 42,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5548616719219727,
+            "mean_y": 0.4939759036144578,
+            "n": 83,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6505828739521253,
+            "mean_y": 0.4,
+            "n": 85,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7373064752958225,
+            "mean_y": 0.45714285714285713,
+            "n": 35,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8301551084325215,
+            "mean_y": 0.0,
+            "n": 3,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ]
+      },
+      "same_ids_both_arms": true,
+      "weeks": {
+        "2022": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        }
+      }
+    },
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": 0.036231884057971016,
+          "ci_lo": -0.07692307692307693,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.01845018450184502,
+          "p": 0.5658,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": 0.0683688691554922,
+          "ci_lo": 0.007986160999802872,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.038148612755319146,
+          "p": 0.0118,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "ml_logloss_delta": {
+          "ci_hi": 0.021462832035445082,
+          "ci_lo": -0.007837396891679844,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.006745745652908767,
+          "p": 0.368,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_ats_delta": {
+          "ci_hi": 0.07913669064748201,
+          "ci_lo": 0.018315018315018316,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.04797047970479705,
+          "p": 0.0022,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_clv_delta": {
+          "ci_hi": 1.2899747840586047,
+          "ci_lo": -0.2362016988094409,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.5498154981549815,
+          "p": 0.1744,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_logloss_delta": {
+          "ci_hi": 0.024698861591516658,
+          "ci_lo": -0.010382989237077547,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.007229004946995051,
+          "p": 0.4068,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_ats_delta": {
+          "ci_hi": 0.03787878787878788,
+          "ci_lo": -0.037037037037037035,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0,
+          "p": 1.0,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_clv_delta": {
+          "ci_hi": 1.2243442132695346,
+          "ci_lo": -0.9278036456624001,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.15867158671586715,
+          "p": 0.78,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_logloss_delta": {
+          "ci_hi": 0.04841225020139867,
+          "ci_lo": 0.012307008673622853,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 18,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.030427157582727696,
+          "p": 0.0012,
+          "seed": 20261023,
+          "undefined_draws": 0
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "dry_run_not_a_result": true,
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0012,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0022,
+          "significant": true,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0118,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.1744,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.368,
+          "significant": false,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.4068,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.5658,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.78,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "INCONCLUSIVE",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "INCONCLUSIVE",
+        "decision_label": "DRY RUN - NOT A RESULT",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": false,
+        "primary_ci_excludes_0": false,
+        "primary_ci_lo_gt_0": false,
+        "primary_significant_after_holm": false,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": 0.010546895580558336,
+        "logloss_delta_ci_hi": 0.021462832035445082,
+        "notes": [
+          "logloss_CI_hi 0.021462832035445082 > 0.002",
+          "brier_CI_hi 0.010546895580558336 > 0.0005",
+          "slope 0.518638484330571 outside [0.9,1.1]"
+        ],
+        "pass": false,
+        "slope_adj": 0.518638484330571,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_label": "close vs outcome",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": null,
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": 0.003436720418477954,
+        "logloss_delta_adj_minus_base": 0.006745745652908767,
+        "mean_brier_adj": 0.24763339798862027,
+        "mean_brier_base": 0.24419667757014232,
+        "mean_logloss_adj": 0.6882135498768686,
+        "mean_logloss_base": 0.6814678042239597,
+        "ml_ats_delta": -0.01845018450184502,
+        "ml_clv_implied_prob_delta": 0.038148612755319146,
+        "ml_logloss_delta": 0.006745745652908767,
+        "slope_adj": 0.518638484330571,
+        "spread_ats_delta": 0.04797047970479705,
+        "spread_clv_delta": 0.5498154981549815,
+        "spread_logloss_delta": 0.007229004946995051,
+        "total_ats_delta": 0.0,
+        "total_clv_delta": 0.15867158671586715,
+        "total_logloss_delta": 0.030427157582727696
+      },
+      "missing": {
+        "n_close_present": 271,
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 271,
+        "n_incomplete_by_season": {},
+        "n_incomplete_residual": 0,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_nopick_ats": {
+          "ml_ats_adj": 0,
+          "ml_ats_base": 0,
+          "spread_ats_adj": 0,
+          "spread_ats_base": 0,
+          "total_ats_adj": 0,
+          "total_ats_base": 0
+        },
+        "n_null_flag": 0,
+        "n_paired_cvo": 271,
+        "n_universe": 271,
+        "n_universe_by_season": {
+          "2023": 271
+        }
+      },
+      "modeling": {
+        "M-1": {
+          "by_abs_close": [
+            {
+              "hi": 3,
+              "lo": 0,
+              "mean_adj": -1.4425982142857146,
+              "mean_base": -1.0650357142857143,
+              "n": 70,
+              "sd_adj": 12.159830404298827,
+              "sd_base": 12.299344017149219
+            },
+            {
+              "hi": 7,
+              "lo": 3,
+              "mean_adj": 2.380263419117647,
+              "mean_base": 2.2983838235294116,
+              "n": 136,
+              "sd_adj": 15.298555930165348,
+              "sd_base": 15.021992552241139
+            },
+            {
+              "hi": 10,
+              "lo": 7,
+              "mean_adj": 3.2767296052631583,
+              "mean_base": 2.6137526315789477,
+              "n": 38,
+              "sd_adj": 13.738150184394609,
+              "sd_base": 14.059383520619164
+            },
+            {
+              "hi": 1000000000.0,
+              "lo": 10,
+              "mean_adj": 4.2801583333333335,
+              "mean_base": 4.103329629629629,
+              "n": 27,
+              "sd_adj": 15.141270721523076,
+              "sd_base": 14.777911158701455
+            }
+          ],
+          "by_abs_delta": [
+            {
+              "hi": 3,
+              "lo": 0,
+              "mean_adj": 1.707800553505535,
+              "mean_base": 1.6536538745387455,
+              "n": 271,
+              "sd_adj": 14.372175567380241,
+              "sd_base": 14.228910368382294
+            },
+            {
+              "hi": 7,
+              "lo": 3,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            },
+            {
+              "hi": 10,
+              "lo": 7,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            },
+            {
+              "hi": 1000000000.0,
+              "lo": 10,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            }
+          ]
+        },
+        "M-2": {
+          "adj_beats_base": false,
+          "brier_adj": 0.24763339798862027,
+          "brier_base": 0.24419667757014232,
+          "ll_adj": 0.6882135498768686,
+          "ll_base": 0.6814678042239597,
+          "mae_delta_ci": {
+            "hi": 0.37138799562043817,
+            "lo": -0.12161103509679434,
+            "obs": 0.12198099630996319
+          },
+          "mae_margin_adj": 11.126509409594096,
+          "mae_margin_base": 11.004528413284133,
+          "null": "null",
+          "rmse_margin_adj": 14.446930516526514,
+          "rmse_margin_base": 14.29857928474763
+        },
+        "M-3": {
+          "coverage_80": 0.7822878228782287,
+          "intercept": {
+            "note": "logistic intercept not a gate; slope is K-4"
+          },
+          "reliability": {
+            "ml": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.2941620770817184,
+                "mean_y": 0.0,
+                "n": 2,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.3863231190632268,
+                "mean_y": 0.5,
+                "n": 12,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.4624883810135488,
+                "mean_y": 0.5421686746987951,
+                "n": 83,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5515365659583279,
+                "mean_y": 0.5488721804511278,
+                "n": 133,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6338071393910526,
+                "mean_y": 0.6052631578947368,
+                "n": 38,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7189381010989969,
+                "mean_y": 1.0,
+                "n": 3,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ],
+            "spread": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": 0.17102712120602273,
+                "mean_y": 0.5714285714285714,
+                "n": 7,
+                "nan_reason": null
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.25311252492604375,
+                "mean_y": 0.375,
+                "n": 24,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.3613554456692789,
+                "mean_y": 0.5423728813559322,
+                "n": 59,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.45426054041753255,
+                "mean_y": 0.421875,
+                "n": 64,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5506238434928341,
+                "mean_y": 0.5,
+                "n": 50,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6522763524506926,
+                "mean_y": 0.49019607843137253,
+                "n": 51,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7300942015341315,
+                "mean_y": 0.4166666666666667,
+                "n": 12,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": 0.821639787624737,
+                "mean_y": 0.25,
+                "n": 4,
+                "nan_reason": null
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ],
+            "total": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.35687036447544546,
+                "mean_y": 0.2,
+                "n": 10,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.4682499607238759,
+                "mean_y": 0.43902439024390244,
+                "n": 41,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.554982029823809,
+                "mean_y": 0.4782608695652174,
+                "n": 69,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6434307175395928,
+                "mean_y": 0.49411764705882355,
+                "n": 85,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7415956285606474,
+                "mean_y": 0.45454545454545453,
+                "n": 55,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": 0.8331951502356336,
+                "mean_y": 0.4,
+                "n": 10,
+                "nan_reason": null
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": 0.9069777509451635,
+                "mean_y": 0.0,
+                "n": 1,
+                "nan_reason": null
+              }
+            ]
+          },
+          "slope": 0.518638484330571,
+          "v_note": "80% interval = pred_margin \u00b1 1.28155 \u03c3_margin; V gate reported, not a pass cut here"
+        },
+        "M-4": {
+          "adj_vs_close_residual": {
+            "definition": "pred_m_adj + close_spread_home",
+            "mean": -0.6764352398523984,
+            "n": 271,
+            "needs_open": false,
+            "sd": 5.37454507977909
+          },
+          "open_corr": {
+            "cited": "634fdb52",
+            "reason": "drive pre7d 634fdb52 EXISTING BUT UNVERIFIED (IMV 1a090e3b); not a usable timestamped open. Earliest price is not a true open.",
+            "status": "NOT RUN"
+          }
+        },
+        "M-5": {
+          "reason": "OOS edge survival deferred to the single holdout opening; le2023 is in-sample-adjacent and may not be cited as edge (I-5)",
+          "status": "DEFERRED"
+        }
+      },
+      "n_full_seasons": 1,
+      "n_ids": 271,
+      "n_nonzero_adjustment": 271,
+      "n_nonzero_by_season": {
+        "2023": 271
+      },
+      "name": "F2",
+      "notes": "inner fold (2023,)",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2941620770817184,
+            "mean_y": 0.0,
+            "n": 2,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3863231190632268,
+            "mean_y": 0.5,
+            "n": 12,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4624883810135488,
+            "mean_y": 0.5421686746987951,
+            "n": 83,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5515365659583279,
+            "mean_y": 0.5488721804511278,
+            "n": 133,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6338071393910526,
+            "mean_y": 0.6052631578947368,
+            "n": 38,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7189381010989969,
+            "mean_y": 1.0,
+            "n": 3,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.17102712120602273,
+            "mean_y": 0.5714285714285714,
+            "n": 7,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.25311252492604375,
+            "mean_y": 0.375,
+            "n": 24,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3613554456692789,
+            "mean_y": 0.5423728813559322,
+            "n": 59,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.45426054041753255,
+            "mean_y": 0.421875,
+            "n": 64,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5506238434928341,
+            "mean_y": 0.5,
+            "n": 50,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6522763524506926,
+            "mean_y": 0.49019607843137253,
+            "n": 51,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7300942015341315,
+            "mean_y": 0.4166666666666667,
+            "n": 12,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.821639787624737,
+            "mean_y": 0.25,
+            "n": 4,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.35687036447544546,
+            "mean_y": 0.2,
+            "n": 10,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4682499607238759,
+            "mean_y": 0.43902439024390244,
+            "n": 41,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.554982029823809,
+            "mean_y": 0.4782608695652174,
+            "n": 69,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6434307175395928,
+            "mean_y": 0.49411764705882355,
+            "n": 85,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7415956285606474,
+            "mean_y": 0.45454545454545453,
+            "n": 55,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8331951502356336,
+            "mean_y": 0.4,
+            "n": 10,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.9069777509451635,
+            "mean_y": 0.0,
+            "n": 1,
+            "nan_reason": null
+          }
+        ]
+      },
+      "same_ids_both_arms": true,
+      "weeks": {
+        "2023": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        }
+      }
+    },
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": 0.016454135444080586,
+          "ci_lo": -0.07462686567164178,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.027829313543599257,
+          "p": 0.2438,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": 0.04006630016820378,
+          "ci_lo": -0.007259086445353292,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.01664285581423736,
+          "p": 0.1648,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "ml_logloss_delta": {
+          "ci_hi": 0.02430623563514729,
+          "ci_lo": 0.004044385992772699,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.014187700252464684,
+          "p": 0.0048,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_ats_delta": {
+          "ci_hi": 0.05223880597014925,
+          "ci_lo": 0.003669724770642202,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.027829313543599257,
+          "p": 0.0316,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_clv_delta": {
+          "ci_hi": 0.7837401081520186,
+          "ci_lo": -0.39518385166084924,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.20037105751391465,
+          "p": 0.499,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "spread_logloss_delta": {
+          "ci_hi": 0.020339822491193933,
+          "ci_lo": -5.396847502983039e-05,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.010217340967971639,
+          "p": 0.0512,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_ats_delta": {
+          "ci_hi": 0.03551401869158879,
+          "ci_lo": -0.023595615192116337,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0074211502782931356,
+          "p": 0.6484,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_clv_delta": {
+          "ci_hi": 1.1326087641535196,
+          "ci_lo": -0.3440468960014951,
+          "excludes_0": false,
+          "lo_gt_0": false,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.39332096474953615,
+          "p": 0.2926,
+          "seed": 20261023,
+          "undefined_draws": 0
+        },
+        "total_logloss_delta": {
+          "ci_hi": 0.03885308614900071,
+          "ci_lo": 0.019012100237191736,
+          "excludes_0": true,
+          "lo_gt_0": true,
+          "n_blocks": 36,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.029061105705337823,
+          "p": 0.0,
+          "seed": 20261023,
+          "undefined_draws": 0
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "dry_run_not_a_result": true,
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0048,
+          "significant": true,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0316,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.0512,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.1648,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.2438,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.2926,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.499,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 0.6484,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "MET",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "NO CLAIM",
+        "decision_label": "DRY RUN - NOT A RESULT",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": false,
+        "primary_ci_excludes_0": false,
+        "primary_ci_lo_gt_0": false,
+        "primary_significant_after_holm": false,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": 0.011948360682218759,
+        "logloss_delta_ci_hi": 0.02430623563514729,
+        "notes": [
+          "logloss_CI_hi 0.02430623563514729 > 0.002",
+          "brier_CI_hi 0.011948360682218759 > 0.0005",
+          "slope 0.24282994807772681 outside [0.9,1.1]"
+        ],
+        "pass": false,
+        "slope_adj": 0.24282994807772681,
+        "slope_definition": "logit(y)~logit(p_adj) logistic IRLS",
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_label": "close vs outcome",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": null,
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": 0.006991245203457912,
+        "logloss_delta_adj_minus_base": 0.014187700252464684,
+        "mean_brier_adj": 0.2503797469241483,
+        "mean_brier_base": 0.24338850172069046,
+        "mean_logloss_adj": 0.6941270942322278,
+        "mean_logloss_base": 0.6799393939797632,
+        "ml_ats_delta": -0.027829313543599257,
+        "ml_clv_implied_prob_delta": 0.01664285581423736,
+        "ml_logloss_delta": 0.014187700252464684,
+        "slope_adj": 0.24282994807772681,
+        "spread_ats_delta": 0.027829313543599257,
+        "spread_clv_delta": 0.20037105751391465,
+        "spread_logloss_delta": 0.010217340967971639,
+        "total_ats_delta": 0.0074211502782931356,
+        "total_clv_delta": 0.39332096474953615,
+        "total_logloss_delta": 0.029061105705337823
+      },
+      "missing": {
+        "n_close_present": 539,
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 539,
+        "n_incomplete_by_season": {},
+        "n_incomplete_residual": 0,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_nopick_ats": {
+          "ml_ats_adj": 0,
+          "ml_ats_base": 0,
+          "spread_ats_adj": 0,
+          "spread_ats_base": 0,
+          "total_ats_adj": 0,
+          "total_ats_base": 0
+        },
+        "n_null_flag": 0,
+        "n_paired_cvo": 539,
+        "n_universe": 539,
+        "n_universe_by_season": {
+          "2022": 268,
+          "2023": 271
+        }
+      },
+      "modeling": {
+        "M-1": {
+          "by_abs_close": [
+            {
+              "hi": 3,
+              "lo": 0,
+              "mean_adj": -1.2832360915492962,
+              "mean_base": -0.9861542253521128,
+              "n": 142,
+              "sd_adj": 12.217463379852125,
+              "sd_base": 12.080867829470616
+            },
+            {
+              "hi": 7,
+              "lo": 3,
+              "mean_adj": 1.4002380639097747,
+              "mean_base": 1.3902263157894736,
+              "n": 266,
+              "sd_adj": 13.808090315646064,
+              "sd_base": 13.487553160025447
+            },
+            {
+              "hi": 10,
+              "lo": 7,
+              "mean_adj": 2.2622430147058825,
+              "mean_base": 1.8853220588235293,
+              "n": 68,
+              "sd_adj": 13.265938681093001,
+              "sd_base": 13.336254626906507
+            },
+            {
+              "hi": 1000000000.0,
+              "lo": 10,
+              "mean_adj": 5.757592063492063,
+              "mean_base": 5.356560317460318,
+              "n": 63,
+              "sd_adj": 13.688308952362197,
+              "sd_base": 13.331551107048703
+            }
+          ],
+          "by_abs_delta": [
+            {
+              "hi": 3,
+              "lo": 0,
+              "mean_adj": 1.3113258348794063,
+              "mean_base": 1.2902254174397032,
+              "n": 539,
+              "sd_adj": 13.444450650055549,
+              "sd_base": 13.184824383569905
+            },
+            {
+              "hi": 7,
+              "lo": 3,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            },
+            {
+              "hi": 10,
+              "lo": 7,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            },
+            {
+              "hi": 1000000000.0,
+              "lo": 10,
+              "mean": null,
+              "n": 0,
+              "nan_reason": "empty bucket",
+              "sd": null
+            }
+          ]
+        },
+        "M-2": {
+          "adj_beats_base": false,
+          "brier_adj": 0.2503797469241483,
+          "brier_base": 0.24338850172069046,
+          "ll_adj": 0.6941270942322278,
+          "ll_base": 0.6799393939797632,
+          "mae_delta_ci": {
+            "hi": 0.3786169867231902,
+            "lo": 0.05876133097627729,
+            "obs": 0.21843622448979597
+          },
+          "mae_margin_adj": 10.412105797773656,
+          "mae_margin_base": 10.193669573283858,
+          "null": "null",
+          "rmse_margin_adj": 13.495831929267185,
+          "rmse_margin_base": 13.235624398398878
+        },
+        "M-3": {
+          "coverage_80": 0.8051948051948052,
+          "intercept": {
+            "note": "logistic intercept not a gate; slope is K-4"
+          },
+          "reliability": {
+            "ml": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.292949694470902,
+                "mean_y": 0.3333333333333333,
+                "n": 3,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.3858837902472534,
+                "mean_y": 0.5238095238095238,
+                "n": 21,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.4637240738503529,
+                "mean_y": 0.5207100591715976,
+                "n": 169,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5507978100375541,
+                "mean_y": 0.5747126436781609,
+                "n": 261,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6318754041908259,
+                "mean_y": 0.5641025641025641,
+                "n": 78,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7270743394487921,
+                "mean_y": 0.7142857142857143,
+                "n": 7,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ],
+            "spread": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": 0.09182016538844762,
+                "mean_y": 1.0,
+                "n": 1,
+                "nan_reason": null
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": 0.17046077006452587,
+                "mean_y": 0.3333333333333333,
+                "n": 15,
+                "nan_reason": null
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.2573216296064511,
+                "mean_y": 0.40384615384615385,
+                "n": 52,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.36108961842954784,
+                "mean_y": 0.5431034482758621,
+                "n": 116,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.45187024537669646,
+                "mean_y": 0.43243243243243246,
+                "n": 111,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.5461067442324018,
+                "mean_y": 0.47706422018348627,
+                "n": 109,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6494616238070519,
+                "mean_y": 0.46236559139784944,
+                "n": 93,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7414598783562715,
+                "mean_y": 0.5483870967741935,
+                "n": 31,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": 0.8293343868745641,
+                "mean_y": 0.45454545454545453,
+                "n": 11,
+                "nan_reason": null
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              }
+            ],
+            "total": [
+              {
+                "bin": 0,
+                "hi": 0.1,
+                "lo": 0.0,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 1,
+                "hi": 0.2,
+                "lo": 0.1,
+                "mean_p": null,
+                "mean_y": null,
+                "n": 0,
+                "nan_reason": "bin empty; not a stub"
+              },
+              {
+                "bin": 2,
+                "hi": 0.3,
+                "lo": 0.2,
+                "mean_p": 0.2996054163401123,
+                "mean_y": 0.0,
+                "n": 1,
+                "nan_reason": null
+              },
+              {
+                "bin": 3,
+                "hi": 0.4,
+                "lo": 0.3,
+                "mean_p": 0.3548508888576338,
+                "mean_y": 0.3448275862068966,
+                "n": 29,
+                "nan_reason": null
+              },
+              {
+                "bin": 4,
+                "hi": 0.5,
+                "lo": 0.4,
+                "mean_p": 0.46205127823188596,
+                "mean_y": 0.43373493975903615,
+                "n": 83,
+                "nan_reason": null
+              },
+              {
+                "bin": 5,
+                "hi": 0.6,
+                "lo": 0.5,
+                "mean_p": 0.55491630807478,
+                "mean_y": 0.4868421052631579,
+                "n": 152,
+                "nan_reason": null
+              },
+              {
+                "bin": 6,
+                "hi": 0.7,
+                "lo": 0.6,
+                "mean_p": 0.6470067957458591,
+                "mean_y": 0.4470588235294118,
+                "n": 170,
+                "nan_reason": null
+              },
+              {
+                "bin": 7,
+                "hi": 0.8,
+                "lo": 0.7,
+                "mean_p": 0.7399276245132155,
+                "mean_y": 0.45555555555555555,
+                "n": 90,
+                "nan_reason": null
+              },
+              {
+                "bin": 8,
+                "hi": 0.9,
+                "lo": 0.8,
+                "mean_p": 0.8324936021272232,
+                "mean_y": 0.3076923076923077,
+                "n": 13,
+                "nan_reason": null
+              },
+              {
+                "bin": 9,
+                "hi": 1.0,
+                "lo": 0.9,
+                "mean_p": 0.9069777509451635,
+                "mean_y": 0.0,
+                "n": 1,
+                "nan_reason": null
+              }
+            ]
+          },
+          "slope": 0.24282994807772681,
+          "v_note": "80% interval = pred_margin \u00b1 1.28155 \u03c3_margin; V gate reported, not a pass cut here"
+        },
+        "M-4": {
+          "adj_vs_close_residual": {
+            "definition": "pred_m_adj + close_spread_home",
+            "mean": -0.6369288033395175,
+            "n": 539,
+            "needs_open": false,
+            "sd": 5.6624174213087395
+          },
+          "open_corr": {
+            "cited": "634fdb52",
+            "reason": "drive pre7d 634fdb52 EXISTING BUT UNVERIFIED (IMV 1a090e3b); not a usable timestamped open. Earliest price is not a true open.",
+            "status": "NOT RUN"
+          }
+        },
+        "M-5": {
+          "reason": "OOS edge survival deferred to the single holdout opening; le2023 is in-sample-adjacent and may not be cited as edge (I-5)",
+          "status": "DEFERRED"
+        }
+      },
+      "n_full_seasons": 2,
+      "n_ids": 539,
+      "n_nonzero_adjustment": 539,
+      "n_nonzero_by_season": {
+        "2022": 268,
+        "2023": 271
+      },
+      "name": "pooled",
+      "notes": "inner fold (2022, 2023)",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.292949694470902,
+            "mean_y": 0.3333333333333333,
+            "n": 3,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3858837902472534,
+            "mean_y": 0.5238095238095238,
+            "n": 21,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4637240738503529,
+            "mean_y": 0.5207100591715976,
+            "n": 169,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5507978100375541,
+            "mean_y": 0.5747126436781609,
+            "n": 261,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6318754041908259,
+            "mean_y": 0.5641025641025641,
+            "n": 78,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7270743394487921,
+            "mean_y": 0.7142857142857143,
+            "n": 7,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.09182016538844762,
+            "mean_y": 1.0,
+            "n": 1,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.17046077006452587,
+            "mean_y": 0.3333333333333333,
+            "n": 15,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2573216296064511,
+            "mean_y": 0.40384615384615385,
+            "n": 52,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.36108961842954784,
+            "mean_y": 0.5431034482758621,
+            "n": 116,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.45187024537669646,
+            "mean_y": 0.43243243243243246,
+            "n": 111,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5461067442324018,
+            "mean_y": 0.47706422018348627,
+            "n": 109,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6494616238070519,
+            "mean_y": 0.46236559139784944,
+            "n": 93,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7414598783562715,
+            "mean_y": 0.5483870967741935,
+            "n": 31,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8293343868745641,
+            "mean_y": 0.45454545454545453,
+            "n": 11,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2996054163401123,
+            "mean_y": 0.0,
+            "n": 1,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3548508888576338,
+            "mean_y": 0.3448275862068966,
+            "n": 29,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.46205127823188596,
+            "mean_y": 0.43373493975903615,
+            "n": 83,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.55491630807478,
+            "mean_y": 0.4868421052631579,
+            "n": 152,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6470067957458591,
+            "mean_y": 0.4470588235294118,
+            "n": 170,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7399276245132155,
+            "mean_y": 0.45555555555555555,
+            "n": 90,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8324936021272232,
+            "mean_y": 0.3076923076923077,
+            "n": 13,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.9069777509451635,
+            "mean_y": 0.0,
+            "n": 1,
+            "nan_reason": null
+          }
+        ]
+      },
+      "same_ids_both_arms": true,
+      "weeks": {
+        "2022": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        "2023": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        }
+      }
+    }
+  ],
+  "frozen_fit_head": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "holdout": "STOPPED",
+  "kind": "evaluator_v5",
+  "metric_label": "close vs outcome",
+  "n_boot": 10000,
+  "ruling_sha": "0e0d54bc14e47bb3ef817b4e2dd135baa24ccff2a686eccbf5f5cab38fc1130c",
+  "seed": 20261023,
+  "sigma_margin": 13.5,
+  "sigma_margin_source": "C-10 services/model-service/src/services/nfl_injury_null_contract.py L339-341; L410 HEAD 8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "sigma_total": 14.0,
+  "sigma_total_source": "inputs/sigma_preregistration.md",
+  "spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+  "tests": {
+    "T-1": {
+      "ats_adj": 1.0,
+      "ats_base": null,
+      "delta": 1.5,
+      "label": "close vs outcome",
+      "mirror": -1.5,
+      "n_nopick_spread_ats_base": 3,
+      "p_half_ats_none": true,
+      "pass": true
+    },
+    "T-10": {
+      "a": "VALUE PROVEN",
+      "b": "NO CLAIM",
+      "b_ci": [
+        -0.6176470588235294,
+        0.4411764705882353
+      ],
+      "b_n_unique_deltas": 2,
+      "c": "NO CLAIM",
+      "c_k4_computed": false,
+      "c_ll_uci": 0.0020999999999999908,
+      "pass": true
+    },
+    "T-2": {
+      "pass": true,
+      "rejection_means": "SIGNIFICANT",
+      "significant": [
+        "spread_clv_delta"
+      ]
+    },
+    "T-3": {
+      "bit_identical": true,
+      "ci": [
+        0.01,
+        0.01
+      ],
+      "pass": true
+    },
+    "T-4": {
+      "bins": [
+        3,
+        6,
+        8
+      ],
+      "brier": 0.16333333333333333,
+      "clip_count": 0,
+      "logloss": 0.49870307570903244,
+      "pass": true,
+      "perfect_slope": 1.0000000000000002
+    },
+    "T-5": {
+      "pass": true,
+      "phi": 0.5912529568183097
+    },
+    "T-6": {
+      "i2_499": "INCONCLUSIVE",
+      "i2_partial": "INCONCLUSIVE",
+      "i2_pass": "MET",
+      "n_pass": 501,
+      "pass": true
+    },
+    "T-7": {
+      "n_identical": 8,
+      "n_missing_close": 2,
+      "pass": true
+    },
+    "T-8": {
+      "flags": [
+        "FLAG_MISSING_delta_margin",
+        "FLAG_MISSING_delta_total",
+        "FLAG_MISSING_baseline_margin",
+        "FLAG_MISSING_baseline_total",
+        "FLAG_MISSING_close_spread_home",
+        "FLAG_MISSING_close_total",
+        "FLAG_MISSING_actual_margin",
+        "FLAG_MISSING_actual_total"
+      ],
+      "pass": true
+    },
+    "T-9": {
+      "b3_carry": true,
+      "detected": "LEAKAGE",
+      "kinds": [
+        "source_after_as_of",
+        "as_of_equals_kickoff",
+        "as_of_after_kickoff",
+        "unparseable",
+        "missing",
+        "naive_zoneless"
+      ],
+      "p2_exclude": true,
+      "p4_naive_stop": true,
+      "pass": true
+    }
+  }
+}

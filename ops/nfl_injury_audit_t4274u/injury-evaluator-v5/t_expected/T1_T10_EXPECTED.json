@@ -1,0 +1,203 @@
+{
+  "filed_before_run": true,
+  "filed_note": "Independent expected answers for T-1..T-10 plus P-1..P-4 / W-1 / W-4. Written and hashed before any v5 scorer run. Cited ruling d18ebf22 + erratum 501e8a99. Holdout CLOSED. Pin on-disk export a38a55bb; 46d2a565 is blob only.",
+  "acceptance_spec_sha": "54bc78ecc70e6a440481253b9c7eeef0e749690e893f501862f5dd5c54444574",
+  "ruling_cited_sha8": "d18ebf22",
+  "erratum_cited_sha8": "501e8a99",
+  "prior_ruling_sha": "88da5f42d918a9462da01ac01fd8260f7a0d9c2cad6a587492e5b9caf41cca6b",
+  "export_on_disk_sha": "a38a55bb765e977ed88f8808d76715faddf50098b2354b122a5499f0ec706ac8",
+  "export_blob_sha_not_a_pin": "46d2a5657d1b5a5eb1af03f4d643afbfaa4762f31260daff439b5df1ac1456eb",
+  "sot_spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881",
+  "seed": 20261023,
+  "n_boot": 10000,
+  "rng": "numpy.random.default_rng(20261023)",
+  "T-1": {
+    "n_games": 3,
+    "close": -3.0,
+    "base_spread": -3.0,
+    "adj_spread": -4.5,
+    "actual_spread": -4.5,
+    "v1_hand_clv_adj": -1.5,
+    "v1_inverted": true,
+    "cvo_pts_base": 0.0,
+    "cvo_pts_adj": 1.5,
+    "delta_pts": 1.5,
+    "mirror_adj_spread": -1.5,
+    "mirror_delta_pts": -1.5,
+    "prob_delta_sign_matches_pts": true,
+    "label": "close vs outcome",
+    "ats_base": null,
+    "ats_adj": 1.0,
+    "nopick_ats_scored_as": null,
+    "nopick_is_not_loss": true,
+    "n_nopick_spread_ats_base": 3,
+    "n_nopick_spread_ats_adj": 0,
+    "p_half": {
+      "n_games": 4,
+      "pred_margin": 0.0,
+      "pred_total_equals_close": true,
+      "ml_ats_base": null,
+      "ml_ats_adj": null,
+      "total_ats_base": null,
+      "total_ats_adj": null
+    }
+  },
+  "T-2": {
+    "p": [0.001, 0.01, 0.02, 0.03, 0.04, 0.2, 0.3, 0.5, 0.9],
+    "reject_only": ["p0"],
+    "n_significant": 1,
+    "primary_p": 0.001,
+    "primary_significant": true,
+    "rejection_means": "SIGNIFICANT",
+    "stop_at": "0.01 > 0.05/8 = 0.00625"
+  },
+  "T-3": {
+    "seed": 20261023,
+    "n_weeks": 10,
+    "constant_delta": 0.01,
+    "ci": [0.01, 0.01],
+    "rerun_bit_identical": true,
+    "unseeded_is_fail": true,
+    "must_resample_weeks_not_games": true
+  },
+  "T-4": {
+    "p": [0.8, 0.6, 0.3],
+    "y": [1, 0, 0],
+    "brier": 0.16333333333333333,
+    "logloss_nats": 0.49870307570903244,
+    "logloss_registered": 0.498703,
+    "logloss_formula": "-(ln(0.8)+ln(0.4)+ln(0.7))/3",
+    "logloss_erratum": "IMV ruling 1a090e3b: 54bc78ec printed 0.498434; that printed value is wrong. The formula governs. 0.49870307 is correct. No other change to 54bc78ec.",
+    "tol": 1e-6,
+    "reliability_occupied_bins": [3, 6, 8],
+    "reliability_counts": { "3": 1, "6": 1, "8": 1 },
+    "perfect_slope": 1.0,
+    "clip_lo": 1e-15,
+    "clip_hi": 1e-15
+  },
+  "T-5": {
+    "pred_margin": 3.0,
+    "line_margin": 0.0,
+    "sigma": 13.0,
+    "phi": 0.5912529568183097,
+    "formula": "Phi((pred_margin-line_margin)/sigma) = Phi(3/13)",
+    "no_sqrt2": true,
+    "tol": 1e-6
+  },
+  "T-6": {
+    "full_seasons": [2018, 2019],
+    "games_per_full_season": 272,
+    "n_nonzero_pass": 501,
+    "n_nonzero_inconclusive": 499,
+    "edge_nonzero_all": 544,
+    "count_is_adjustment_not_edge": true,
+    "pass_i2": "MET",
+    "variant_499": "INCONCLUSIVE",
+    "variant_one_season_partial": "INCONCLUSIVE"
+  },
+  "T-7": {
+    "n_universe": 10,
+    "n_missing_close": 2,
+    "n_identical": 8,
+    "same_game_ids_both_arms": true
+  },
+  "T-8": {
+    "null_never_zero": true,
+    "inputs_removed_in_turn": [
+      "delta_margin",
+      "delta_total",
+      "baseline_margin",
+      "baseline_total",
+      "close_spread_home",
+      "close_total",
+      "actual_margin",
+      "actual_total"
+    ],
+    "expected": "adj NULL + flag; game excluded from adjusted scoring; counted; never 0.0"
+  },
+  "T-9": {
+    "rule": "source_ts <= as_of_ts < kickoff_utc on parsed UTC datetimes; fail closed on missing or unparseable; P-4 naive/zoneless timestamp = STOP (do not interpret as ET)",
+    "must_detect": "LEAKAGE",
+    "must_fail_run": true,
+    "violations": [
+      {
+        "kind": "source_after_as_of",
+        "source_ts": "2022-09-12T18:00:00Z",
+        "as_of_ts": "2022-09-11T17:00:00Z",
+        "kickoff_utc": "2022-09-11T18:00:00Z"
+      },
+      {
+        "kind": "as_of_equals_kickoff",
+        "source_ts": "2022-09-11T16:00:00Z",
+        "as_of_ts": "2022-09-11T17:00:00Z",
+        "kickoff_utc": "2022-09-11T17:00:00Z"
+      },
+      {
+        "kind": "as_of_after_kickoff",
+        "source_ts": "2022-09-11T16:00:00Z",
+        "as_of_ts": "2022-09-11T18:00:00Z",
+        "kickoff_utc": "2022-09-11T17:00:00Z"
+      },
+      {
+        "kind": "unparseable",
+        "source_ts": "not-a-timestamp",
+        "as_of_ts": "2022-09-11T17:00:00Z",
+        "kickoff_utc": "2022-09-11T18:00:00Z"
+      },
+      {
+        "kind": "missing",
+        "source_ts": null,
+        "as_of_ts": "2022-09-11T17:00:00Z",
+        "kickoff_utc": "2022-09-11T18:00:00Z"
+      },
+      {
+        "kind": "naive_zoneless",
+        "source_ts": "2022-09-11T12:00:00",
+        "as_of_ts": "2022-09-11T13:00:00",
+        "kickoff_utc": "2022-09-11T17:00:00Z",
+        "expected": "STOP P-4"
+      }
+    ],
+    "p2_c5": {
+      "exclude_complete_false_identically_both_arms": true,
+      "n_incomplete_total": 11,
+      "n_incomplete_2022": 3,
+      "n_incomplete_2023": 1,
+      "complete_null_timestamp": "STOP",
+      "incomplete_with_timestamp": "STOP"
+    },
+    "p4_naive": "zoneless ISO-8601 is STOP; do not treat as America/New_York",
+    "b3_carry": {
+      "join_must_copy_source_ts_as_of_ts_kickoff_utc": true,
+      "export_pin": "a38a55bb on-disk sealed_injury_export_ts_v1.json; 46d2a565 blob only"
+    }
+  },
+  "T-10": {
+    "a_value_proven": {
+      "primary_holm": true,
+      "ci_lo_gt_0": true,
+      "k4": true,
+      "i4": "VALUE PROVEN"
+    },
+    "b_ci_includes_0": {
+      "ci_includes_0": true,
+      "has_variance": true,
+      "spread_delta_not_identically_zero": true,
+      "fixture": "two full seasons; delta_margin=1.5; cvo_adj alternates +1.5 and -1.5 so mean~0 with real variance; I-4 NO CLAIM",
+      "i4": "NO CLAIM"
+    },
+    "c_k4_ll_uci_0_0021": {
+      "ll_delta_constant": 0.0021,
+      "k4_ll_uci": 0.0021,
+      "k4": false,
+      "k4_from_computed": true,
+      "i4": "NO CLAIM"
+    },
+    "value_proven_requires_lo_gt_0": true,
+    "gate_constants_from_a156459b": {
+      "ll_upper": 0.002,
+      "brier_upper": 0.0005,
+      "slope": [0.9, 1.1]
+    }
+  }
+}
