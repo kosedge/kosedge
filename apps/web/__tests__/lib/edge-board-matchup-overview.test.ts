@@ -110,11 +110,12 @@ describe("matchup overview + season honesty", () => {
       awayAbbr: "SF",
     });
     expect(site?.city).toBe("Melbourne");
-    // Pair-only fallback when week is missing on the board row.
+    // Option A (Ryan t4401u / IMV packet 3199cbda): null week is insufficient
+    // identity — no site from the LAR/SF pair alone. EXPECTED RED vs current
+    // L120 pair fallback until that separately scoped runtime change lands.
     expect(
-      lookupNflNeutralSite({ week: null, homeAbbr: "LAR", awayAbbr: "SF" })
-        ?.city,
-    ).toBe("Melbourne");
+      lookupNflNeutralSite({ week: null, homeAbbr: "LAR", awayAbbr: "SF" }),
+    ).toBeNull();
 
     const ctx = buildMatchupContext({
       gameId: "SF@LAR-2026w1-melbourne",
