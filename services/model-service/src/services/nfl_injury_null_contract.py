@@ -184,6 +184,52 @@ def refuse_raw_injury_source(name: Any) -> bool:
     return stem in REFUSED_RAW_INJURY_NAMES or raw in REFUSED_RAW_INJURY_NAMES
 
 
+# t4359u program lock — overlays stay OFF. Not a hash input (K-2 pins stay).
+T4359U_OVERLAYS_OFF = True
+T4359U_STEP3 = "FROZEN"
+T4359U_STEP4 = "BLOCKED"
+T4359U_NR1 = "CLOSED_MISSING"
+T4359U_HOLDOUT_2024_25 = "SEALED"
+HOLDOUT_SEASONS_SEALED = frozenset({2024, 2025})
+REASON_UNKNOWN_INJURY_AS_ZERO = "UNKNOWN_INJURY_AS_ZERO_REFUSED"
+
+
+def refuse_unknown_injury_as_zero(
+    value: Any,
+    *,
+    source: Optional[str] = None,
+    key: str = "injury",
+) -> None:
+    """Unknown / missing injury is not healthy-zero. Overlays stay off.
+
+    Injury-free baseline is a separate IMV scope question (t4359u). Do not
+    silently represent unknown injury as 0.0.
+    """
+    tagged = str(source or "").strip().lower()
+    if value in (0, 0.0, "0", "0.0") and tagged != "explicit_named_value":
+        raise ValueError(
+            f"{REASON_UNKNOWN_INJURY_AS_ZERO}: {key}={value!r} is not a sourced healthy-zero"
+        )
+
+
+def t4359u_injury_program_lock() -> Dict[str, Any]:
+    return {
+        "decision": "DECISION_RYAN_t4359u",
+        "overlays_off": True,
+        "force_overlays_off": True,
+        "unlock_overlays": False,
+        "apply_injury_overlay": False,
+        "step3": T4359U_STEP3,
+        "step4": T4359U_STEP4,
+        "nr1": T4359U_NR1,
+        "holdout_2024_25": T4359U_HOLDOUT_2024_25,
+        "holdout_seasons_sealed": sorted(HOLDOUT_SEASONS_SEALED),
+        "unknown_injury_as_zero": False,
+        "injury_free_baseline_is_separate_imv_scope": True,
+        "pr": 611,
+    }
+
+
 def game_line_guards(*, applied: bool = False) -> Dict[str, bool]:
     guards = dict(GAME_LINE_INJURY_GUARDS)
     if applied and any(guards.values()):

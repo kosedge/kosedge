@@ -46,6 +46,7 @@ from src.services.nfl_injury_null_contract import (
     resolve_fit_player_identity,
     resolve_nfl_totals_env,
     resolve_unscaled_indices,
+    stamp_projection_injury_accounting,
     write_sealed_injury_export,
 )
 from pathlib import Path
@@ -501,3 +502,60 @@ def test_k2_bound_hash_reproduces_d4_v1_inputs(monkeypatch) -> None:
         "638198a551ad192180d635a8edd1406b5aa8f1f47fbb026a98332ffee09e7db5"
     )
     assert FIT_PROTOCOL_ID == "injury-residual-cal-v2"
+
+
+def test_t4359u_overlays_remain_off_and_unknown_injury_is_not_zero() -> None:
+    from src.services.nfl_epa_authority import overlays_must_stay_off
+    from src.services.nfl_injury_null_contract import (
+        HOLDOUT_SEASONS_SEALED,
+        REASON_UNKNOWN_INJURY_AS_ZERO,
+        T4359U_OVERLAYS_OFF,
+        refuse_unknown_injury_as_zero,
+        t4359u_injury_program_lock,
+    )
+
+    lock = t4359u_injury_program_lock()
+    assert T4359U_OVERLAYS_OFF is True
+    assert lock["overlays_off"] is True
+    assert lock["unlock_overlays"] is False
+    assert lock["apply_injury_overlay"] is False
+    assert lock["step3"] == "FROZEN"
+    assert lock["step4"] == "BLOCKED"
+    assert lock["nr1"] == "CLOSED_MISSING"
+    assert lock["holdout_2024_25"] == "SEALED"
+    assert lock["unknown_injury_as_zero"] is False
+    assert lock["injury_free_baseline_is_separate_imv_scope"] is True
+    assert HOLDOUT_SEASONS_SEALED == {2024, 2025}
+    assert overlays_must_stay_off(force_overlays_off=True, unlock_overlays=False) is True
+    with pytest.raises(ValueError, match=REASON_UNKNOWN_INJURY_AS_ZERO):
+        refuse_unknown_injury_as_zero(0.0, key="injury_nowcast_impact_home")
+    refuse_unknown_injury_as_zero(0.0, source="explicit_named_value", key="injury_nowcast_impact_home")
+
+
+def test_e2_stale_baseline_not_mutated_when_injury_null() -> None:
+    """E-2: frozen baseline markets stay the published numbers while overlays are off."""
+    baseline = {
+        "spread_home": -3.5,
+        "total_mean": 46.0,
+        "home_win_prob": 0.61,
+        "away_win_prob": 0.39,
+    }
+    frozen = dict(baseline)
+    projection = {
+        "markets": dict(baseline),
+        "diagnostics": {},
+    }
+    ledger = build_injury_accounting_ledger(
+        baseline_markets=baseline,
+        home_nowcast=empty_nowcast_payload(),
+        away_nowcast=empty_nowcast_payload(),
+    )
+    stamped = stamp_projection_injury_accounting(projection, ledger)
+    assert stamped["markets"] == frozen
+    assert stamped["baseline_markets"]["spread_home"] == -3.5
+    assert stamped["baseline_markets"]["total_mean"] == 46.0
+    assert ledger["applied"] is False
+    assert ledger["adjusted_markets"] is None
+    assert stamped["diagnostics"]["injury_nowcast"]["applied"] is False
+    assert stamped["diagnostics"]["injury_nowcast"]["disclosure"] == MISSING_DISCLOSURE
+    assert baseline == frozen
