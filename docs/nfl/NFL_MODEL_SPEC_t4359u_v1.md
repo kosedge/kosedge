@@ -224,3 +224,22 @@ Platform Reliability owns any future production schedule restore. Engineering Le
 See `data/ops/nfl_enterprise_green_t4359u/EVIDENCE_PACKAGE_v1.md`.
 
 Pin this spec file’s sha256 in the PR body after each revision.
+
+---
+
+## 13. t4366u Stage 1–2 addendum (T7 frozen)
+
+Ryan t4366u: T7 is first in the decision queue. **Do not change §5** until Ryan authorizes after the IMV packet. Independent Stage 1–2 engineering continues.
+
+| Addendum | `t4366u-stage12` |
+|----------|------------------|
+| Weekly pipeline | Manual only: `run_local_week` / `--fixture week6` |
+| Scheduling | Still off (GitHub cron commented; local path refuses Beat) |
+| Neutral / T7 | Unchanged: `NEUTRAL` → `T7_BLOCKED_NEUTRAL_SITE`. No option A or B |
+| Overview null-week | Unchanged: `test_prior_season_null_week_cap_sql_is_typed` not edited. Card `week=null` → `MISSING_REQUIRED_INPUT` |
+| Boundary HOME | Explicit short/long rest is legal; missing EPA / missing required fields BLOCK |
+| Injury | PR 611 overlays OFF; no holdout; no deploy; no spend |
+
+```bash
+python3 scripts/nfl/run_nfl_enterprise_green_local.py --fixture week6
+```

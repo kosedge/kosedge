@@ -29,6 +29,7 @@ from src.services.nfl_simulator import NflGameInputs, simulate_nfl_game
 
 SPEC_ID = "nfl-model-spec-t4359u-v1"
 SPEC_VERSION = "1.0.0"
+SPEC_ADDENDUM = "t4366u-stage12"
 SPEC_DOC = Path(__file__).resolve().parents[4] / "docs" / "nfl" / "NFL_MODEL_SPEC_t4359u_v1.md"
 DEFAULT_MODEL_VERSION = "nfl-v1.5-matchup-sim"
 DEFAULT_SEED = 4359
@@ -479,6 +480,28 @@ def demo_home_card() -> Dict[str, Any]:
     }
 
 
+def attach_slate_defaults(
+    card: Mapping[str, Any],
+    slate: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Copy season/week from the slate only when the card omits the key.
+
+    An explicit null week stays missing (fail-closed). This does not change
+    the frozen overview null-week SQL assertion.
+    """
+    out = dict(card)
+    for key in ("season", "week"):
+        if key in out:
+            continue
+        if slate.get(key) in (None, ""):
+            continue
+        out[key] = slate[key]
+    for key in ("seed", "simulations", "model_version"):
+        if key not in out and slate.get(key) not in (None, ""):
+            out[key] = slate[key]
+    return out
+
+
 def run_local_slate(
     cards: Sequence[Mapping[str, Any]],
     *,
@@ -488,21 +511,127 @@ def run_local_slate(
     rows = [run_local_fair_line(card, priors=priors, spec_path=spec_path) for card in cards]
     ready = [r for r in rows if r.get("status") == "READY"]
     blocked = [r for r in rows if r.get("status") != "READY"]
+    by_reason: Dict[str, int] = {}
+    for row in blocked:
+        for reason in row.get("reason_codes") or []:
+            by_reason[str(reason)] = by_reason.get(str(reason), 0) + 1
     summary = {
         "spec_id": SPEC_ID,
         "spec_version": SPEC_VERSION,
+        "spec_addendum": SPEC_ADDENDUM,
         "n_cards": len(rows),
         "n_ready": len(ready),
         "n_blocked": len(blocked),
+        "blocked_by_reason": by_reason,
         "overlays_off": True,
         "schedule_enabled": False,
         "publication": "NFL_NO_GO",
+        "t7_status": "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET",
         "rows": rows,
     }
     summary["fingerprint"] = fingerprint(
-        {k: summary[k] for k in ("spec_id", "spec_version", "n_cards", "n_ready", "n_blocked", "rows")}
+        {
+            k: summary[k]
+            for k in (
+                "spec_id",
+                "spec_version",
+                "n_cards",
+                "n_ready",
+                "n_blocked",
+                "blocked_by_reason",
+                "rows",
+            )
+        }
     )
     return summary
+
+
+def run_local_week(
+    slate: Mapping[str, Any],
+    *,
+    priors: Optional[Mapping[str, Mapping[str, float]]] = None,
+    spec_path: Optional[Path] = None,
+) -> Dict[str, Any]:
+    """Manual weekly pipeline. Scheduling stays off. T7 expectation unchanged."""
+    if not isinstance(slate, Mapping):
+        raise FailClosed(REASON_MISSING, "week slate is not an object")
+    assert_schedule_disabled()
+    cards = slate.get("cards")
+    if not isinstance(cards, list) or not cards:
+        raise FailClosed(REASON_MISSING, "week slate cards")
+    materialized = [attach_slate_defaults(card, slate) for card in cards]
+    summary = run_local_slate(materialized, priors=priors, spec_path=spec_path)
+    summary["season"] = slate.get("season")
+    summary["week"] = slate.get("week")
+    summary["pipeline"] = "local_weekly_manual"
+    summary["schedule_enabled"] = False
+    return summary
+
+
+def week6_boundary_slate() -> Dict[str, Any]:
+    """HOME + fail-closed boundary cards. Neutral stays T7-blocked (frozen)."""
+    home = demo_home_card()
+    short = {
+        "game_id": "t4366u-BOUNDARY-GB@DET",
+        "home_team": "DET",
+        "away_team": "GB",
+        "season": 2026,
+        "week": 6,
+        "site_class": "HOME",
+        "kickoff_utc": "2026-10-18T20:25:00Z",
+        "rest_days_home": 4.0,
+        "rest_days_away": 10.0,
+        "seed": DEFAULT_SEED,
+        "simulations": 2000,
+        "model_version": DEFAULT_MODEL_VERSION,
+    }
+    neutral = {
+        "game_id": "t4366u-T7-NEUTRAL-XXX",
+        "home_team": "PHI",
+        "away_team": "DAL",
+        "season": 2026,
+        "week": 6,
+        "site_class": "NEUTRAL",
+        "kickoff_utc": "2026-10-18T13:30:00Z",
+        "rest_days_home": 6.0,
+        "rest_days_away": 6.0,
+        "seed": DEFAULT_SEED,
+        "simulations": 2000,
+    }
+    missing_week = {
+        "game_id": "t4366u-NULL-WEEK-NO@GO",
+        "home_team": "PHI",
+        "away_team": "DAL",
+        "season": 2026,
+        "week": None,
+        "site_class": "HOME",
+        "kickoff_utc": "2026-10-18T17:00:00Z",
+        "rest_days_home": 6.0,
+        "rest_days_away": 6.0,
+        "seed": DEFAULT_SEED,
+        "simulations": 2000,
+    }
+    missing_strength = {
+        "game_id": "t4366u-NO-EPA-ZZ@BUF",
+        "home_team": "BUF",
+        "away_team": "ZZZ",
+        "season": 2026,
+        "week": 6,
+        "site_class": "HOME",
+        "kickoff_utc": "2026-10-18T17:00:00Z",
+        "rest_days_home": 6.0,
+        "rest_days_away": 6.0,
+        "seed": DEFAULT_SEED,
+        "simulations": 2000,
+    }
+    return {
+        "season": 2026,
+        "week": 6,
+        "schedule_enabled": False,
+        "publication": "NFL_NO_GO",
+        "t7_status": "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET",
+        "cards": [home, short, neutral, missing_week, missing_strength],
+    }
 
 
 def load_cards(path: Path) -> List[Dict[str, Any]]:

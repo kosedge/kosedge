@@ -26,15 +26,21 @@ from src.services.nfl_enterprise_green_path import (  # noqa: E402
     packaged_epa_sha256,
     run_local_fair_line,
     run_local_slate,
+    run_local_week,
     spec_sha256,
+    week6_boundary_slate,
     weekly_pipeline_schedule_enabled,
 )
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="t4359u local NFL fair-line path")
-    parser.add_argument("--fixture", choices=("demo",), help="Built-in HOME demo card")
-    parser.add_argument("--card", type=Path, help="JSON game card or {cards:[...]}")
+    parser = argparse.ArgumentParser(description="t4359u/t4366u local NFL fair-line path")
+    parser.add_argument(
+        "--fixture",
+        choices=("demo", "week6"),
+        help="demo = one HOME card; week6 = local weekly slate (T7 neutrals stay blocked)",
+    )
+    parser.add_argument("--card", type=Path, help="JSON game card, slate, or {cards:[...]}")
     parser.add_argument("--out", type=Path, help="Write JSON receipt")
     args = parser.parse_args()
 
@@ -46,18 +52,25 @@ def main() -> int:
         )
         return 2
 
-    cards = []
-    if args.fixture == "demo":
-        cards.append(demo_home_card())
-    if args.card:
-        cards.extend(load_cards(args.card))
-    if not cards:
-        parser.error("pass --fixture demo and/or --card PATH")
-
-    if len(cards) == 1:
-        payload = run_local_fair_line(cards[0])
+    payload: dict
+    if args.fixture == "week6":
+        payload = run_local_week(week6_boundary_slate())
+    elif args.card and args.card.is_file():
+        raw = json.loads(args.card.read_text(encoding="utf-8"))
+        if isinstance(raw, dict) and isinstance(raw.get("cards"), list) and (
+            "week" in raw or "season" in raw
+        ):
+            payload = run_local_week(raw)
+        else:
+            cards = load_cards(args.card)
+            if args.fixture == "demo":
+                cards = [demo_home_card(), *cards]
+            payload = run_local_fair_line(cards[0]) if len(cards) == 1 else run_local_slate(cards)
+    elif args.fixture == "demo":
+        payload = run_local_fair_line(demo_home_card())
     else:
-        payload = run_local_slate(cards)
+        parser.error("pass --fixture demo|week6 and/or --card PATH")
+
     payload = dict(payload)
     payload["packaged_epa_sha256"] = packaged_epa_sha256()
     payload.setdefault("spec_id", SPEC_ID)
@@ -69,7 +82,12 @@ def main() -> int:
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(text + "\n", encoding="utf-8")
-    return 0 if payload.get("status") in {"READY", None} and payload.get("n_blocked", 0) == 0 else 1
+    if payload.get("status") == "BLOCKED":
+        return 1
+    # Weekly slate: blocked T7 / missing-input rows are expected fail-closed.
+    if payload.get("pipeline") == "local_weekly_manual":
+        return 0 if int(payload.get("n_ready") or 0) >= 1 else 1
+    return 0 if payload.get("status") == "READY" or int(payload.get("n_blocked") or 0) == 0 else 1
 
 
 if __name__ == "__main__":

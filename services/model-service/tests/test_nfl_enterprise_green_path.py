@@ -24,8 +24,10 @@ from src.services.nfl_enterprise_green_path import (
     fingerprint,
     run_local_fair_line,
     run_local_slate,
+    run_local_week,
     spec_sha256,
     validate_game_card,
+    week6_boundary_slate,
     weekly_pipeline_schedule_enabled,
 )
 from src.services.nfl_epa_authority import overlays_must_stay_off
@@ -208,3 +210,50 @@ def test_schedule_env_refuses_local_path(monkeypatch: pytest.MonkeyPatch) -> Non
 def test_demo_receipt_is_json_serializable() -> None:
     out = run_local_fair_line(demo_home_card())
     json.dumps(out)
+
+
+def test_t7_expectation_stays_frozen() -> None:
+    """t4366u: do not pick A or B until Ryan authorizes after the IMV packet."""
+    text = SPEC.read_text(encoding="utf-8")
+    assert "This spec does not pick A or B." in text
+    assert (
+        "| `NEUTRAL` | Refuse. Reason `T7_BLOCKED_NEUTRAL_SITE`. No invented 0.0 HFA |"
+        in text
+    )
+    assert REASON_T7_NEUTRAL == "T7_BLOCKED_NEUTRAL_SITE"
+
+
+def test_overview_null_week_assertion_untouched() -> None:
+    """Frozen overview/SQL null-week bind. Do not edit that test for t4366u."""
+    week_cap = (
+        Path(__file__).resolve().parent / "test_nfl_week_cap_bind.py"
+    ).read_text(encoding="utf-8")
+    assert "def test_prior_season_null_week_cap_sql_is_typed() -> None:" in week_cap
+    assert "CAST(:week_cap AS int) IS NULL" in week_cap
+    assert "params[\"week_cap\"] is None" in week_cap
+
+
+def test_week6_manual_pipeline_home_ready_t7_and_null_week_block() -> None:
+    slate = run_local_week(week6_boundary_slate())
+    assert slate["schedule_enabled"] is False
+    assert slate["pipeline"] == "local_weekly_manual"
+    assert slate["n_ready"] == 2
+    assert slate["n_blocked"] == 3
+    by_id = {row.get("game_id"): row for row in slate["rows"]}
+    assert by_id["t4359u-DEMO-KC@BUF"]["status"] == "READY"
+    assert by_id["t4366u-BOUNDARY-GB@DET"]["status"] == "READY"
+    assert by_id["t4366u-T7-NEUTRAL-XXX"]["reason_codes"] == [REASON_T7_NEUTRAL]
+    assert by_id["t4366u-NULL-WEEK-NO@GO"]["reason_codes"] == [REASON_MISSING]
+    assert by_id["t4366u-NO-EPA-ZZ@BUF"]["status"] == "BLOCKED"
+    assert slate["t7_status"] == "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET"
+    again = run_local_week(week6_boundary_slate())
+    assert again["fingerprint"] == slate["fingerprint"]
+
+
+def test_explicit_null_week_does_not_inherit_from_slate() -> None:
+    card = demo_home_card()
+    card["game_id"] = "t4366u-NULL-WEEK-CARD"
+    card["week"] = None
+    slate = run_local_week({"season": 2026, "week": 6, "cards": [card]})
+    assert slate["n_ready"] == 0
+    assert slate["rows"][0]["reason_codes"] == [REASON_MISSING]
