@@ -12,6 +12,11 @@ os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/tes
 import pytest
 
 from src.services.nfl_enterprise_green_path import (
+    CERT_STATUS_NOT_CERTIFIED,
+    DISCLOSURE,
+    FIXTURE_CLASS_ENGINEERING,
+    GATE_MATRIX_SHA8,
+    IFB_SCOPE_SHA8,
     REASON_MISSING,
     REASON_SILENT_DEFAULT,
     REASON_T7_NEUTRAL,
@@ -87,6 +92,22 @@ def test_demo_home_card_is_deterministic() -> None:
     assert a["hfa_points"] == LOCKED_SCORING["home_field_points"]
     assert a["schedule_enabled"] is False
     assert a["publication"] == "NFL_NO_GO"
+    assert a["reason_codes"] == []
+    assert a["ifb_candidate"] is False
+    assert a["injury_model_none_by_design"] is False
+    assert a["cert_status_spread"] == CERT_STATUS_NOT_CERTIFIED
+    assert a["cert_status_total"] == CERT_STATUS_NOT_CERTIFIED
+    assert a["cert_status_ml"] == CERT_STATUS_NOT_CERTIFIED
+    assert a["markets_certified_separately"] == GATE_MATRIX_SHA8
+    assert a["ifb_scope_sha8"] == IFB_SCOPE_SHA8
+    assert a["total_play_enabled"] is False
+    assert a["total_product_claim"] is False
+    assert a["fixture_class"] == FIXTURE_CLASS_ENGINEERING
+    assert a["no_holdout_tuning"] is True
+    assert a["independent_repro"] == "MISSING"
+    assert a["week_cap_null_postgres"] == "NOT_EVIDENCED"
+    assert a["disclosure"] == DISCLOSURE
+    assert "do not account for injuries" in a["disclosure"].lower()
     assert a["coming_soon"] is True
     assert a["market_blend"] is False
     assert a["totals_calibration"] is False
@@ -106,7 +127,10 @@ def test_missing_required_input_blocks() -> None:
     out = run_local_fair_line(card)
     assert out["status"] == "BLOCKED"
     assert REASON_MISSING in out["reason_codes"]
+    assert out["reason_codes"]
     assert out["markets"] is None
+    assert out["ifb_candidate"] is False
+    assert out["cert_status_spread"] == CERT_STATUS_NOT_CERTIFIED
 
 
 def test_unknown_hfa_blocks() -> None:
@@ -150,6 +174,18 @@ def test_unknown_injury_zero_refused() -> None:
     out = run_local_fair_line(card)
     assert out["status"] == "BLOCKED"
     assert REASON_UNKNOWN_INJURY_ZERO in out["reason_codes"]
+    assert out["reason_codes"]
+
+
+def test_injury_zero_even_explicit_is_fail_closed_not_ifb() -> None:
+    card = demo_home_card()
+    card["injury_impact"] = 0.0
+    card["injury_impact_source"] = "explicit_named_value"
+    out = run_local_fair_line(card)
+    assert out["status"] == "BLOCKED"
+    assert REASON_UNKNOWN_INJURY_ZERO in out["reason_codes"]
+    assert out["ifb_candidate"] is False
+    assert out["injury_model_none_by_design"] is False
 
 
 def test_unlock_overlays_refused() -> None:
@@ -196,6 +232,16 @@ def test_spec_file_is_versioned() -> None:
     assert "Do not reopen or rerun accepted W4–W6 seals" in text or "does **not** reopen" in text
     assert "T7" in text
     assert "ADD141" in text
+    assert "Not the IFB candidate" in text or "not the IFB candidate" in text
+    assert "41effd43" in text
+    assert "6f1a95b9" in text
+    assert "test_nfl_week_cap_bind.py" in text
+    assert "NOT EVIDENCED" in text
+    assert "MISSING" in text
+    assert "ENGINEERING FIXTURE" in text
+    assert "TOTAL_PLAY" in text
+    assert "no_holdout_tuning" in text
+    assert "non-empty" in text
     sha = spec_sha256()
     assert len(sha) == 64
 
@@ -245,7 +291,15 @@ def test_week6_manual_pipeline_home_ready_t7_and_null_week_block() -> None:
     assert by_id["t4366u-T7-NEUTRAL-XXX"]["reason_codes"] == [REASON_T7_NEUTRAL]
     assert by_id["t4366u-NULL-WEEK-NO@GO"]["reason_codes"] == [REASON_MISSING]
     assert by_id["t4366u-NO-EPA-ZZ@BUF"]["status"] == "BLOCKED"
+    assert by_id["t4366u-NO-EPA-ZZ@BUF"]["reason_codes"]
     assert slate["t7_status"] == "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET"
+    assert slate["fixture_class"] == FIXTURE_CLASS_ENGINEERING
+    assert slate["ifb_candidate"] is False
+    for row in slate["rows"]:
+        if row["status"] == "READY":
+            assert row["reason_codes"] == []
+        else:
+            assert row["reason_codes"]
     again = run_local_week(week6_boundary_slate())
     assert again["fingerprint"] == slate["fingerprint"]
 
@@ -257,3 +311,4 @@ def test_explicit_null_week_does_not_inherit_from_slate() -> None:
     slate = run_local_week({"season": 2026, "week": 6, "cards": [card]})
     assert slate["n_ready"] == 0
     assert slate["rows"][0]["reason_codes"] == [REASON_MISSING]
+    assert slate["rows"][0]["reason_codes"]

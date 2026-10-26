@@ -1,9 +1,10 @@
 # NFL Model Specification — t4359u v1
 
 **Spec id:** `nfl-model-spec-t4359u-v1`  
-**Spec version:** `1.0.0`  
+**Spec version:** `1.0.1`  
+**Addendum:** `imv-textcheck-7c02313d`  
 **Authority:** `DECISION_RYAN_t4359u_NFL_ENTERPRISE_GREEN_EXECUTION_PROGRAM_v1`  
-**Class:** Engineering execution spec (not predictive GREEN; not production GREEN)  
+**Class:** Engineering spec candidate only (IMV text-check PASS WITH CONDITIONS, sha256 `7c02313d4087ca25f5f359eacf31805fc8418096e8b7474fe7857bde2d699bf8`). Not predictive GREEN. Not production GREEN. **Not the IFB candidate.**  
 **Publication:** NFL NO-GO. Coming Soon ON. Do not merge, deploy, or publish without required authorization.
 
 This document is the single versioned model specification for producing **fair spreads, totals, and moneyline probabilities** from approved inputs. It reconciles already-accepted components. It does **not** reopen or rerun accepted W4–W6 seals.
@@ -26,16 +27,20 @@ approved game card
 **Local entrypoints (scheduling off):**
 
 ```bash
-# Single game or slate (fixture or JSON file). No Beat. No cron.
+# ENGINEERING FIXTURE only (demo / week6). No Beat. No cron.
 python3 scripts/nfl/run_nfl_enterprise_green_local.py --fixture demo
+python3 scripts/nfl/run_nfl_enterprise_green_local.py --fixture week6
 python3 scripts/nfl/run_nfl_enterprise_green_local.py --card path/to/card.json
 
-# Tests for the path this spec claims
+# Tests for the path this spec claims (includes week-cap bind)
 cd services/model-service && PYTHONPATH=. python3 -m pytest \
   tests/test_nfl_enterprise_green_path.py \
   tests/test_nfl_simulator.py \
   tests/test_nfl_regression_decompose.py \
-  tests/test_nfl_564_remediation.py -q
+  tests/test_nfl_564_remediation.py \
+  tests/test_nfl_week_cap_bind.py -q
+# Independent reproduction: MISSING.
+# test_untyped_null_week_bind_raises_ambiguous_parameter skip (no local Postgres) is NOT EVIDENCED.
 ```
 
 Implementation: `services/model-service/src/services/nfl_enterprise_green_path.py`.
@@ -114,7 +119,9 @@ Missing, empty, NaN, or placeholder (`0` digest, `PLACEHOLDER_*`) → **BLOCKED*
 
 Weather, travel, KAV, personnel, coach, info-velocity, market lines: if absent, the factor is **UNAVAILABLE** and is not applied. Do not write `0.0` as a sourced value.
 
-Injury: overlays **OFF**. Unknown / missing injury is **UNAVAILABLE**, never healthy-zero. Injury-free baseline is a separate IMV scope question — this spec does not treat unknown injury as zero.
+Injury: overlays **OFF**. Unknown / missing injury is **UNAVAILABLE**, never healthy-zero. `injury_impact=0.0` (sourced or not) is **fail-closed** (`UNKNOWN_INJURY_AS_ZERO_REFUSED`) — it is unreachable as a sourced healthy-zero on this path.
+
+This path is **not** the injury-free baseline (IFB) candidate. Forcing injury weights to 0 is overlay suppress, not `injury_model=NONE_BY_DESIGN`. IFB scope `41effd43` still needs a **separate spec + S-6 + F-8**. Gate matrix `6f1a95b9` certifies markets separately.
 
 ---
 
@@ -138,7 +145,9 @@ Neutral-site and disputed-site games stay out of the local fair-line slate until
 - Step 3 frozen. Step 4 blocked. 2024–25 holdout sealed.
 - NR-1 CLOSED MISSING — do not repeat that search.
 - PR 611 continues the NULL contract **on a separate branch**. This spec path does not enable overlays and does not apply nowcast multipliers.
-- Injury weights are forced to 0 for the local run so leftover `or 1.0` / `or 0.0` in the production framework cannot move the line. The stamp is `OVERLAY_OFF_UNAVAILABLE`, not `injury=0 healthy`.
+- Injury weights are forced to 0 for the local run so leftover `or 1.0` / `or 0.0` in the production framework cannot move the line. The stamp is `OVERLAY_OFF_UNAVAILABLE` / `injury_model=OVERLAY_OFF_WEIGHTS_ZERO_NOT_IFB`. This is **not** `injury_model=NONE_BY_DESIGN` and **not** the IFB candidate (`41effd43`).
+- `ifb_candidate=false`. IFB still requires a separate spec + S-6 + F-8.
+- `injury_impact` / nowcast keys are not accepted. `0.0` is fail-closed, not a sourced healthy-zero.
 
 ---
 
@@ -150,28 +159,47 @@ Neutral-site and disputed-site games stay out of the local fair-line slate until
 - Raw `injuries_2026` / nflverse injury maps as sourced zero
 - Beat / GitHub cron / Railway deploy
 - Holdout open, PLAY/LEAN stake tags, Coming Soon OFF
+- Holdout-tuning: this path does **not** tune, select, fit, or certify any parameter against the 2024–25 holdout. Holdout remains sealed. `no_holdout_tuning=true`.
+- Claim IFB / `injury_model=NONE_BY_DESIGN` (requires separate spec + S-6 + F-8; scope `41effd43`)
+- Claim a certified spread, total, or ML product (markets certified separately; gate matrix `6f1a95b9`)
+- Enable `TOTAL_PLAY` or claim a total product
 
-Monte Carlo seed is required (`seed` integer). Same card + seed ⇒ same fingerprint.
+Monte Carlo seed is required (`seed` integer). Same card + seed ⇒ same fingerprint. Demo/week6 outputs remain ENGINEERING FIXTURE only.
 
 ---
 
 ## 8. Outputs
 
+**Disclosure:** Outputs do not account for injuries or lineup news. Overlays OFF. This path is not the IFB candidate. TOTAL_PLAY disabled. Markets are NOT_CERTIFIED.
+
+Demo / week6 numbers are **ENGINEERING FIXTURE** only. They are not certified lines and not a product claim.
+
 On **READY**:
 
+- `reason_codes` is empty (`[]`) — empty reason_codes is allowed **only** on READY
 - `fair_spread_home` (home points; negative = home favored)
-- `fair_total`
+- `fair_total` (engineering-fixture mean; **not** a total product)
 - `home_win_prob`, `away_win_prob`
 - `fair_home_ml`, `fair_away_ml`
+- `cert_status_spread=NOT_CERTIFIED`
+- `cert_status_total=NOT_CERTIFIED`
+- `cert_status_ml=NOT_CERTIFIED`
+- Markets are certified separately (gate matrix `6f1a95b9`)
+- `total_play_enabled=false` / `total_product_claim=false` (`TOTAL_PLAY` disabled)
 - `spec_id`, `spec_version`, `spec_sha256`
 - `fingerprint` (sha256 of canonical payload)
 - `overlays_off: true`
+- `ifb_candidate: false`
 - `injury_status: OVERLAY_OFF_UNAVAILABLE`
 - `hfa_status: LOCKED_HOME_1_05` (HOME only)
 - `schedule_enabled: false`
 - `publication: NFL_NO_GO`
+- `fixture_class: ENGINEERING_FIXTURE`
+- `no_holdout_tuning: true`
+- `independent_repro: MISSING`
+- `disclosure` (same string as above)
 
-On **BLOCKED**: no numbers. `status=BLOCKED`, `reason_codes=[]`, empty markets.
+On **BLOCKED**: no numbers. `status=BLOCKED`, `reason_codes` is a **non-empty** list of reason strings, empty markets. Empty `reason_codes` on BLOCKED is a defect.
 
 ---
 
@@ -199,7 +227,9 @@ Platform Reliability owns any future production schedule restore. Engineering Le
 | Predictive MAE/bias/calibration/CLV | Not certified | IMV after frozen eval defs |
 | Injury Step 4 / 2024–25 holdout | Sealed; reconstructible=0 | IMV + Ryan CLEAR |
 | Injury overlays ON | Needs IMV + Ryan CLEAR | Ryan |
-| Injury-free baseline as cert scope | IMV must approve scope first | IMV |
+| Injury-free baseline as cert scope | IMV must approve scope first (`41effd43`); this path is **not** the IFB candidate; needs separate spec + S-6 + F-8 | IMV |
+| Independent reproduction | **MISSING** | IMV |
+| Local-Postgres null-week skip | **NOT EVIDENCED** (`test_untyped_null_week_bind_raises_ambiguous_parameter`) | — |
 | W8 capture | HELD t4196u | IMV |
 | W6 acceptance DECISION file | EU — none on file | Ryan |
 | Model-service restore / deploy | NO-GO | Ryan |
@@ -243,3 +273,24 @@ Ryan t4366u: T7 is first in the decision queue. **Do not change §5** until Ryan
 ```bash
 python3 scripts/nfl/run_nfl_enterprise_green_local.py --fixture week6
 ```
+
+Week6 / demo numbers are **ENGINEERING FIXTURE** only.
+
+---
+
+## 14. IMV text-check 7c02313d (T-01..T-10)
+
+IMV ruling: **PASS WITH CONDITIONS** (engineering spec candidate only). sha256 `7c02313d4087ca25f5f359eacf31805fc8418096e8b7474fe7857bde2d699bf8`. §5 T7 expectation is unchanged.
+
+| ID | Amendment |
+|----|-----------|
+| T-01 | Not the IFB candidate. Injury weights=0 ≠ `injury_model=NONE_BY_DESIGN`. `injury_impact=0.0` fail-closed / unreachable as sourced. IFB scope `41effd43`. |
+| T-02 | BLOCKED emits non-empty `reason_codes`. Empty `reason_codes` only on READY. §8 contradiction closed. |
+| T-03 | `cert_status_{spread,total,ml}=NOT_CERTIFIED`. Markets certified separately (`6f1a95b9`). |
+| T-04 | `TOTAL_PLAY` disabled. No total product claim. |
+| T-05 | Demo / week6 labeled ENGINEERING FIXTURE only. |
+| T-06 | IFB scope `41effd43` and gate matrix `6f1a95b9` cited by sha. IFB still needs separate spec + S-6 + F-8. |
+| T-07 | Disclosure: outputs do not account for injuries or lineup news. |
+| T-08 | `test_nfl_week_cap_bind.py` in the claimed test list. Local-Postgres null-week skip is **NOT EVIDENCED**. Independent repro **MISSING**. |
+| T-09 | Simulator frozen-version pin v1→v3.1 justified in the evidence package (tracks locked production framework; not a scoring/holdout change). |
+| T-10 | No holdout-tuning. 2024–25 holdout stays sealed. |

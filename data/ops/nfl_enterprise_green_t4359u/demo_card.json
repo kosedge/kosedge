@@ -12,5 +12,6 @@
   "rest_days_away_source": "explicit_named_value",
   "seed": 4359,
   "simulations": 2000,
-  "model_version": "nfl-v1.5-matchup-sim"
+  "model_version": "nfl-v1.5-matchup-sim",
+  "fixture_class": "ENGINEERING_FIXTURE"
 }

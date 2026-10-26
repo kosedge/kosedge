@@ -28,8 +28,23 @@ from src.services.nfl_regression_diagnose import (
 from src.services.nfl_simulator import NflGameInputs, simulate_nfl_game
 
 SPEC_ID = "nfl-model-spec-t4359u-v1"
-SPEC_VERSION = "1.0.0"
-SPEC_ADDENDUM = "t4366u-stage12"
+SPEC_VERSION = "1.0.1"
+SPEC_ADDENDUM = "imv-textcheck-7c02313d"
+IFB_SCOPE_SHA8 = "41effd43"
+GATE_MATRIX_SHA8 = "6f1a95b9"
+IMV_TEXTCHECK_SHA256 = (
+    "7c02313d4087ca25f5f359eacf31805fc8418096e8b7474fe7857bde2d699bf8"
+)
+CERT_STATUS_NOT_CERTIFIED = "NOT_CERTIFIED"
+INJURY_MODEL_THIS_PATH = "OVERLAY_OFF_WEIGHTS_ZERO_NOT_IFB"
+DISCLOSURE = (
+    "Outputs do not account for injuries or lineup news. "
+    "Overlays OFF. This path is not the injury-free baseline (IFB) candidate "
+    "(injury weights=0 is not injury_model=NONE_BY_DESIGN; IFB scope 41effd43). "
+    "TOTAL_PLAY disabled. Markets are NOT_CERTIFIED and certified separately "
+    "(gate matrix 6f1a95b9). Engineering fixture / spec candidate only."
+)
+FIXTURE_CLASS_ENGINEERING = "ENGINEERING_FIXTURE"
 SPEC_DOC = Path(__file__).resolve().parents[4] / "docs" / "nfl" / "NFL_MODEL_SPEC_t4359u_v1.md"
 DEFAULT_MODEL_VERSION = "nfl-v1.5-matchup-sim"
 DEFAULT_SEED = 4359
@@ -182,25 +197,56 @@ def _site_class(card: Mapping[str, Any]) -> str:
     raise FailClosed(REASON_UNKNOWN_HFA, f"site_class={site}")
 
 
+INJURY_INPUT_KEYS = (
+    "injury_impact",
+    "injury_nowcast_impact_home",
+    "injury_nowcast_impact_away",
+    "home_injury_impact",
+    "away_injury_impact",
+)
+
+
 def _refuse_unknown_injury_zero(card: Mapping[str, Any]) -> None:
-    for key in (
-        "injury_impact",
-        "injury_nowcast_impact_home",
-        "injury_nowcast_impact_away",
-        "home_injury_impact",
-        "away_injury_impact",
-    ):
+    """Injury 0.0 is fail-closed on this path. This is not the IFB candidate.
+
+    injury weights=0 (overlay suppress) ≠ injury_model=NONE_BY_DESIGN (41effd43).
+    A sourced or unsourced 0.0 injury_impact is unreachable here.
+    """
+    for key in INJURY_INPUT_KEYS:
         if key not in card:
             continue
         raw = card.get(key)
-        source = _as_str(card.get(f"{key}_source")).lower()
-        if raw in (0, 0.0, "0", "0.0") and source != "explicit_named_value":
-            raise FailClosed(
-                REASON_UNKNOWN_INJURY_ZERO,
-                f"{key}={raw!r} is not a sourced healthy-zero; overlays stay off",
-            )
+        raise FailClosed(
+            REASON_UNKNOWN_INJURY_ZERO,
+            f"{key}={raw!r} is not accepted on this path "
+            "(not IFB; overlays OFF; injury_impact 0.0 is fail-closed, not sourced)",
+        )
     if bool(card.get("unlock_overlays")) or bool(card.get("apply_injury_overlay")):
         raise FailClosed(REASON_OVERLAY, "overlays stay OFF on t4359u")
+
+
+def _cert_and_disclosure_fields() -> Dict[str, Any]:
+    return {
+        "ifb_candidate": False,
+        "injury_model": INJURY_MODEL_THIS_PATH,
+        "injury_model_none_by_design": False,
+        "ifb_scope_sha8": IFB_SCOPE_SHA8,
+        "gate_matrix_sha8": GATE_MATRIX_SHA8,
+        "ifb_requires_separate_spec_s6_f8": True,
+        "cert_status_spread": CERT_STATUS_NOT_CERTIFIED,
+        "cert_status_total": CERT_STATUS_NOT_CERTIFIED,
+        "cert_status_ml": CERT_STATUS_NOT_CERTIFIED,
+        "markets_certified_separately": GATE_MATRIX_SHA8,
+        "total_play_enabled": False,
+        "total_product_claim": False,
+        "disclosure": DISCLOSURE,
+        "fixture_class": FIXTURE_CLASS_ENGINEERING,
+        "no_holdout_tuning": True,
+        "holdout_2024_25": "SEALED",
+        "independent_repro": "MISSING",
+        "week_cap_null_postgres": "NOT_EVIDENCED",
+        "imv_textcheck_sha256": IMV_TEXTCHECK_SHA256,
+    }
 
 
 def _strength_pair(
@@ -334,7 +380,9 @@ def _overlay_off_config() -> Dict[str, Any]:
 
 
 def _blocked(reason: str, detail: str, card: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
-    return {
+    if not str(reason or "").strip():
+        reason = REASON_MISSING
+    out = {
         "status": "BLOCKED",
         "reason_codes": [reason],
         "detail": detail,
@@ -347,6 +395,8 @@ def _blocked(reason: str, detail: str, card: Optional[Mapping[str, Any]] = None)
         "publication": "NFL_NO_GO",
         "game_id": (card or {}).get("game_id"),
     }
+    out.update(_cert_and_disclosure_fields())
+    return out
 
 
 def run_local_fair_line(
@@ -450,18 +500,18 @@ def run_local_fair_line(
         "mean_away_points": (raw.get("diagnostics") or {}).get("mean_away_points"),
         "t7_status": "RYAN_BLOCKED_NEUTRAL_REFUSED",
         "add141_q9_status": "RYAN_BLOCKED",
-        "holdout_2024_25": "SEALED",
         "step3": "FROZEN",
         "step4": "BLOCKED",
         "nr1": "CLOSED_MISSING",
     }
+    stamp.update(_cert_and_disclosure_fields())
     fp_body = deepcopy(stamp)
     stamp["fingerprint"] = fingerprint(fp_body)
     return stamp
 
 
 def demo_home_card() -> Dict[str, Any]:
-    """Deterministic HOME card. Strength from packaged EPA. Rest tagged explicit."""
+    """ENGINEERING FIXTURE only. Strength from packaged EPA. Rest tagged explicit."""
     return {
         "game_id": "t4359u-DEMO-KC@BUF",
         "home_team": "BUF",
@@ -477,6 +527,7 @@ def demo_home_card() -> Dict[str, Any]:
         "seed": DEFAULT_SEED,
         "simulations": 2000,
         "model_version": DEFAULT_MODEL_VERSION,
+        "fixture_class": FIXTURE_CLASS_ENGINEERING,
     }
 
 
@@ -529,6 +580,7 @@ def run_local_slate(
         "t7_status": "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET",
         "rows": rows,
     }
+    summary.update(_cert_and_disclosure_fields())
     summary["fingerprint"] = fingerprint(
         {
             k: summary[k]
@@ -630,6 +682,7 @@ def week6_boundary_slate() -> Dict[str, Any]:
         "schedule_enabled": False,
         "publication": "NFL_NO_GO",
         "t7_status": "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET",
+        "fixture_class": FIXTURE_CLASS_ENGINEERING,
         "cards": [home, short, neutral, missing_week, missing_strength],
     }
 
