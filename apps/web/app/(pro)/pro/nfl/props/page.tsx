@@ -1,5 +1,8 @@
 import Link from "next/link";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
+import SportHubShell from "@/components/pro/SportHubShell";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import {
   fetchNflPropsBoard,
   formatAmericanOdds,
@@ -63,6 +66,21 @@ export default async function NflPropsBoardPage({
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        badge="NFL Betting Desk"
+        title="NFL Props"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Props" />
+      </SportHubShell>
+    );
+  }
+
   const search = await searchParams;
   const seasonRaw = Number(firstValue(search.season));
   const weekRaw = Number(firstValue(search.week));

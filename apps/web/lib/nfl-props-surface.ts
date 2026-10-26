@@ -1,8 +1,12 @@
 /**
  * One Props ↔ Edges availability contract.
  * Edges must not present a full prop-edge sheet when Props is gated/empty.
+ *
+ * Dual gate (Coming Soon / NO-GO): LIVE=false AND the football public
+ * numbers kill switch. Either control alone must keep fair/edge dark.
  */
 
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import {
   NFL_WEEKLY_PROPS_GATE_BODY,
   NFL_WEEKLY_PROPS_GATE_TITLE,
@@ -26,10 +30,27 @@ export type NflPropsSurfaceSnapshot = {
   };
 };
 
+/**
+ * True only when weekly props may hit model-service / paint fair/edge.
+ * LIVE and the public-numbers kill switch are independent: either one
+ * dark keeps the board from fetching or showing subscriber numbers.
+ */
+export function nflWeeklyPropsBoardMayFetch(opts?: {
+  live?: boolean;
+  publicNumbersDisabled?: boolean;
+}): boolean {
+  const live = opts?.live ?? NFL_WEEKLY_PROPS_LIVE;
+  const publicNumbersDisabled =
+    opts?.publicNumbersDisabled ?? isFootballPublicNumbersDisabled("nfl");
+  return live && !publicNumbersDisabled;
+}
+
 export function nflPropsSurfaceState(
   board: NflPropsSurfaceSnapshot,
 ): NflPropsSurfaceState {
-  if (!NFL_WEEKLY_PROPS_LIVE || board.diagnostics.notLive) return "gated";
+  if (!nflWeeklyPropsBoardMayFetch() || board.diagnostics.notLive) {
+    return "gated";
+  }
   if (board.error) return "unreachable";
   const joined =
     board.diagnostics.marketJoinedCount ??

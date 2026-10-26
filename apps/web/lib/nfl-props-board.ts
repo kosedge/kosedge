@@ -1,6 +1,7 @@
 import "server-only";
 import { env } from "@/lib/config/env";
 import { isInvestableProp } from "@/lib/nfl-props-eligibility";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import {
   NFL_WEEKLY_PROPS_LIVE,
   NFL_WEEKLY_PROPS_PATH_COHERENT,
@@ -165,17 +166,20 @@ export async function fetchNflPropsBoard(params: {
   minAbsEdge?: number;
   limit?: number;
 }): Promise<NflPropsBoardResponse> {
-  const base = env.MODEL_SERVICE_URL;
+  // Dual gate: LIVE=false OR Coming Soon kill switch. Either one must
+  // keep this from hitting /nfl/props/board and painting fair/edge.
+  const boardDark =
+    !NFL_WEEKLY_PROPS_LIVE || isFootballPublicNumbersDisabled("nfl");
   const emptyDiagnostics = {
     marketJoinedCount: 0,
     kosedgeOnly: true,
     rawCount: 0,
     eligibilityDropped: 0,
-    notLive: !NFL_WEEKLY_PROPS_LIVE,
-    pathCoherent: NFL_WEEKLY_PROPS_PATH_COHERENT,
+    notLive: boardDark,
+    pathCoherent: boardDark ? "gated" : NFL_WEEKLY_PROPS_PATH_COHERENT,
   };
 
-  if (!NFL_WEEKLY_PROPS_LIVE) {
+  if (boardDark) {
     return {
       count: 0,
       rows: [],
@@ -183,6 +187,7 @@ export async function fetchNflPropsBoard(params: {
     };
   }
 
+  const base = env.MODEL_SERVICE_URL;
   if (!base) {
     return {
       count: 0,
