@@ -6,7 +6,6 @@
 import { NFL_STRUCTURAL_PACE_2026 } from "@/lib/nfl-structural-pace-2026";
 import {
   NFL_STANDARD_HFA_POINTS,
-  lookupNflNeutralSite,
   resolveNflSiteContext,
 } from "@/lib/nfl-neutral-sites-2026";
 import {
@@ -148,7 +147,7 @@ export function buildMatchupContext(
     input.week != null && input.week !== ("" as unknown)
       ? Number(input.week)
       : NaN;
-  let week = Number.isFinite(weekRaw) ? Math.trunc(weekRaw) : null;
+  const week = Number.isFinite(weekRaw) ? Math.trunc(weekRaw) : null;
 
   const site = resolveNflSiteContext({
     week,
@@ -159,11 +158,6 @@ export function buildMatchupContext(
     neutralVenue: input.neutralVenue,
     hfaPoints: input.hfaPoints,
   });
-  // If week was missing but this pair is a known 2026 international game, adopt that week.
-  if (week == null && site.isNeutral) {
-    const looked = lookupNflNeutralSite({ week: null, homeAbbr, awayAbbr });
-    if (looked?.week != null) week = looked.week;
-  }
 
   const awayStruct = structuralPaceFor(awayAbbr);
   const homeStruct = structuralPaceFor(homeAbbr);
