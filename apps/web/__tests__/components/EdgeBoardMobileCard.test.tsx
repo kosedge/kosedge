@@ -256,14 +256,12 @@ describe("Mobile M1 card honesty", () => {
         onToggle={() => undefined}
       />,
     );
-    expect(screen.getByText("PASS").closest("[data-total-cert-status]")).toHaveAttribute(
-      "data-total-cert-status",
-      "NOT_CERTIFIABLE",
-    );
-    expect(screen.getByText("PASS").closest("[data-total-certified]")).toHaveAttribute(
-      "data-total-certified",
-      "0",
-    );
+    expect(
+      screen.getByText("PASS").closest("[data-total-cert-status]"),
+    ).toHaveAttribute("data-total-cert-status", "NOT_CERTIFIABLE");
+    expect(
+      screen.getByText("PASS").closest("[data-total-certified]"),
+    ).toHaveAttribute("data-total-certified", "0");
 
     rerender(
       <EdgeBoardMobileCard

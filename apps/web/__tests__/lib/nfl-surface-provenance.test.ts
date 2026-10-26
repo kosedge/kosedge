@@ -182,9 +182,10 @@ describe("NFL Edges cert slots + shared Fair Lines bind", () => {
       sha256: FIXTURE_SHA256,
       at: "2026-09-17T13:00:00.000Z",
     };
-    expect(
-      bindNflFairLinesCertifiedRun(observedOk, expected),
-    ).toMatchObject({ ok: true, reason: "ok" });
+    expect(bindNflFairLinesCertifiedRun(observedOk, expected)).toMatchObject({
+      ok: true,
+      reason: "ok",
+    });
     expect(
       bindNflEdgesToFairLinesCertifiedRun({
         runId: "other",
@@ -229,9 +230,7 @@ describe("NFL Edges cert slots + shared Fair Lines bind", () => {
     expect(resolveNflCertStatus({ total: "CERTIFIED" }).total).toBe(
       "NOT_CERTIFIABLE",
     );
-    expect(isNflFairLinesCertifiedPublicPaintAllowed({}, "total")).toBe(
-      false,
-    );
+    expect(isNflFairLinesCertifiedPublicPaintAllowed({}, "total")).toBe(false);
     expect(isNflFairLinesCertifiedPublicPaintAllowed({}, "ml")).toBe(false);
     expect(isNflMarketCustomerPaintAllowed("total")).toBe(false);
     expect(isNflMarketCustomerPaintAllowed("ml")).toBe(false);
@@ -332,9 +331,9 @@ describe("NflSurfaceProvenance envelope + fail-closed equality", () => {
         observed: fixtureObserved(),
       }).reason,
     ).toBe("unbound_certified_slot");
-    expect(
-      resolveNflRowLinesAsOf({ rowLinesAsOf: null }).reason,
-    ).toBe("missing_lines_as_of");
+    expect(resolveNflRowLinesAsOf({ rowLinesAsOf: null }).reason).toBe(
+      "missing_lines_as_of",
+    );
     expect(
       resolveNflRowLinesAsOf({
         rowLinesAsOf: "2026-09-10T16:00:00.000Z",
@@ -347,6 +346,29 @@ describe("NflSurfaceProvenance envelope + fail-closed equality", () => {
         deskLinesAsOf: FIXTURE_LINES,
       }),
     ).toEqual({ linesAsOf: FIXTURE_LINES, reason: "ok" });
+  });
+
+  it("fail-closes omitted row linesAsOf and does not inherit desk as-of (E-3)", () => {
+    expect(
+      resolveNflRowLinesAsOf({
+        deskLinesAsOf: FIXTURE_LINES,
+      }),
+    ).toEqual({ linesAsOf: null, reason: "missing_lines_as_of" });
+    expect(
+      resolveNflRowLinesAsOf({
+        rowLinesAsOf: undefined,
+        deskLinesAsOf: FIXTURE_LINES,
+      }),
+    ).toEqual({ linesAsOf: null, reason: "missing_lines_as_of" });
+    expect(
+      resolveNflRowLinesAsOf({
+        rowLinesAsOf: null,
+        deskLinesAsOf: FIXTURE_LINES,
+      }),
+    ).toEqual({ linesAsOf: null, reason: "missing_lines_as_of" });
+    const src = readWeb("lib/nfl-surface-provenance.ts");
+    expect(src).not.toContain("opts.rowLinesAsOf ?? opts.observed.linesAsOf");
+    expect(src).toContain("rowLinesAsOf: opts.rowLinesAsOf,");
   });
 
   it("never substitutes governed.linesAsOf (X-3)", () => {
@@ -496,7 +518,7 @@ describe("Edges desk omit-props + E-2 edge-row block", () => {
     expect(page).toContain("FootballNumbersUnavailable");
     expect(page).not.toContain("isFootballPublicNumbersDisabled");
     expect(api).toContain("isNflEdgesCustomerSurfaceClosed");
-    expect(api).toContain('propsStatus: NFL_EDGES_PROPS_STATUS');
+    expect(api).toContain("propsStatus: NFL_EDGES_PROPS_STATUS");
     expect(api).toContain("deskComplete: false");
     expect(client).toContain("edges-desk-incomplete");
     expect(client).toContain("nflEdgesDeskIncompleteCopy");

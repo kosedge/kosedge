@@ -32,10 +32,7 @@ import {
 } from "@/lib/cfb-edge-board-public";
 
 /** Allowed cert_status values. No silent defaults. Missing ⇒ NOT_CERTIFIED. */
-export type NflCertStatus =
-  | "CERTIFIED"
-  | "NOT_CERTIFIED"
-  | "NOT_CERTIFIABLE";
+export type NflCertStatus = "CERTIFIED" | "NOT_CERTIFIED" | "NOT_CERTIFIABLE";
 
 export type NflCertStatusByMarket = {
   spread: NflCertStatus;
@@ -56,11 +53,7 @@ export type NflSurfaceProvenance = {
   certStatus: NflCertStatusByMarket;
 };
 
-export type NflSurfaceProvenanceSource =
-  | "fair"
-  | "desk"
-  | "assemble"
-  | "props";
+export type NflSurfaceProvenanceSource = "fair" | "desk" | "assemble" | "props";
 
 export type NflCrossSurfaceReason =
   | "ok"
@@ -237,11 +230,7 @@ export function resolveNflRowLinesAsOf(opts: {
   if (desk) {
     const rowMs = Date.parse(row);
     const deskMs = Date.parse(desk);
-    if (
-      Number.isFinite(rowMs) &&
-      Number.isFinite(deskMs) &&
-      rowMs < deskMs
-    ) {
+    if (Number.isFinite(rowMs) && Number.isFinite(deskMs) && rowMs < deskMs) {
       return { linesAsOf: null, reason: "lines_as_of_mismatch" };
     }
   }
@@ -349,9 +338,7 @@ export function bindNflEdgesToFairLinesCertifiedRun(
   return bindNflFairLinesCertifiedRun(observed);
 }
 
-export function isNflMarketHardBlocked(
-  market: NflFairLinesMarket,
-): boolean {
+export function isNflMarketHardBlocked(market: NflFairLinesMarket): boolean {
   return market === "total" || market === "ml";
 }
 
@@ -510,7 +497,7 @@ export function checkNflObservedAgainstCertifiedSlot(opts: {
   }
 
   const row = resolveNflRowLinesAsOf({
-    rowLinesAsOf: opts.rowLinesAsOf ?? opts.observed.linesAsOf,
+    rowLinesAsOf: opts.rowLinesAsOf,
     deskLinesAsOf: opts.observed.linesAsOf,
   });
   if (row.reason !== "ok" || !row.linesAsOf) {
@@ -570,10 +557,12 @@ export function selectNflEdgesCustomerPaintRows<T extends NflEdgesCustomerRow>(
     });
     if (!rowAsOf.linesAsOf) continue;
     if (!bindOk) continue;
-    if (!isNflEdgesCertifiedPublicPaintAllowed(
-      { runId: observed.runId, sha256: observed.sha256 },
-      row.marketType,
-    )) {
+    if (
+      !isNflEdgesCertifiedPublicPaintAllowed(
+        { runId: observed.runId, sha256: observed.sha256 },
+        row.marketType,
+      )
+    ) {
       continue;
     }
     const slot = checkNflObservedAgainstCertifiedSlot({
