@@ -643,3 +643,26 @@ beat_schedule.update(
         },
     }
 )
+
+
+def nfl_weekly_pipeline_schedule_enabled() -> bool:
+    """t4359u local path: Beat/cron stay off unless explicitly enabled.
+
+    Production ``beat_schedule`` is unchanged (Platform Reliability). The
+    local fair-line runner refuses to start when this flag is on.
+    """
+    return os.getenv("NFL_WEEKLY_PIPELINE_SCHEDULE_ENABLED", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "y",
+        "on",
+    }
+
+
+def nfl_jobs_in_beat_schedule() -> Dict[str, Dict[str, Any]]:
+    return {
+        name: entry
+        for name, entry in beat_schedule.items()
+        if "nfl" in name.lower() or "nfl" in str(entry.get("task", "")).lower()
+    }
