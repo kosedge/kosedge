@@ -103,7 +103,7 @@ describe("NFL weekly props Coming Soon fail-closed", () => {
       fetchSrc.indexOf("MODEL_SERVICE_URL"),
     );
     expect(fetchSrc.indexOf("boardDark")).toBeLessThan(
-      fetchSrc.indexOf("/nfl/props/board"),
+      fetchSrc.indexOf("/nfl/props/board`"),
     );
     expect(fetchSrc).not.toContain("NFL_EDGE_BOARD_PUBLIC_ENABLED");
   });
