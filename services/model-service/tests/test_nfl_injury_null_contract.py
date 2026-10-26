@@ -532,6 +532,34 @@ def test_t4359u_overlays_remain_off_and_unknown_injury_is_not_zero() -> None:
     refuse_unknown_injury_as_zero(0.0, source="explicit_named_value", key="injury_nowcast_impact_home")
 
 
+def test_t4366u_overlays_off_and_apply_does_not_publish() -> None:
+    from src.services.nfl_injury_null_contract import t4366u_injury_program_lock
+
+    lock = t4366u_injury_program_lock()
+    assert lock["overlays_off"] is True
+    assert lock["t7_expectation"] == "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET"
+    assert lock["overview_null_week_assertion"] == "UNTOUCHED"
+    assert lock["no_holdout"] is True
+    assert lock["no_deploy"] is True
+    shadow = apply_injury_residual_once(
+        baseline_markets={
+            "predicted_margin": 3.0,
+            "predicted_total": 46.0,
+            "spread_home": -3.0,
+            "total_mean": 46.0,
+            "home_win_prob": 0.58,
+        },
+        components=COMPLETE_RESIDUAL,
+        applied=True,
+    )
+    assert shadow["applied"] is False
+    week_cap = (Path(__file__).resolve().parent / "test_nfl_week_cap_bind.py").read_text(
+        encoding="utf-8"
+    )
+    assert "def test_prior_season_null_week_cap_sql_is_typed() -> None:" in week_cap
+    assert "CAST(:week_cap AS int) IS NULL" in week_cap
+
+
 def test_e2_stale_baseline_not_mutated_when_injury_null() -> None:
     """E-2: frozen baseline markets stay the published numbers while overlays are off."""
     baseline = {

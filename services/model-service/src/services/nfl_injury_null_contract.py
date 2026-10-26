@@ -230,6 +230,18 @@ def t4359u_injury_program_lock() -> Dict[str, Any]:
     }
 
 
+def t4366u_injury_program_lock() -> Dict[str, Any]:
+    """Stage 1–2 continue. T7 / overview null-week stay frozen (not this PR)."""
+    lock = t4359u_injury_program_lock()
+    lock["t4366u"] = True
+    lock["t7_expectation"] = "FROZEN_PENDING_RYAN_AFTER_IMV_PACKET"
+    lock["overview_null_week_assertion"] = "UNTOUCHED"
+    lock["no_holdout"] = True
+    lock["no_deploy"] = True
+    lock["no_spend"] = True
+    return lock
+
+
 def game_line_guards(*, applied: bool = False) -> Dict[str, bool]:
     guards = dict(GAME_LINE_INJURY_GUARDS)
     if applied and any(guards.values()):

@@ -34,3 +34,7 @@ Code: `t4359u_injury_program_lock()` and `refuse_unknown_injury_as_zero()` in `n
 - Does not invent T7 / ADD141 Q9 answers (those live on the spec/pipeline PR)
 
 Spec/pipeline work is a **separate** PR so injury overlays-off stays reviewable on its own.
+
+## t4366u
+
+T7 is first in Ryan’s queue. This PR does **not** change the frozen T7 expectation or the overview null-week assertion (`test_prior_season_null_week_cap_sql_is_typed`). Continue overlays-off groundwork only. No holdout, no deploy, no spend.
