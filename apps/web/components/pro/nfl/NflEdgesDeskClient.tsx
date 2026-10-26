@@ -13,7 +13,7 @@ import {
   NFL_EDGES_DESK_SUMMARY,
   NFL_EDGES_DESK_TITLE,
 } from "@/lib/edges-desk-honesty";
-import { nflPropsSurfaceCopy } from "@/lib/nfl-props-surface";
+import { nflEdgesDeskIncompleteCopy } from "@/lib/nfl-surface-provenance";
 import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
@@ -22,7 +22,7 @@ import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { bookDisplay } from "@/lib/odds-api";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
-const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];
+const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total"];
 const MIN_EDGE_OPTIONS = [
   { label: "1pp / 0.5pt", prob: 0.01, line: 0.5 },
   { label: "2pp / 1pt", prob: 0.02, line: 1.0 },
@@ -58,7 +58,7 @@ function marketLabel(market: DeskMarketType): string {
     case "total":
       return "Total";
     case "props":
-      return "Props";
+      return "Props (unavailable)";
   }
 }
 
@@ -126,17 +126,12 @@ export default function NflEdgesDeskClient({
   const deskReady = state.status === "ready" ? state.desk : null;
 
   const fetchError =
-    deskReady &&
-    deskReady.diagnostics.fairLinesError &&
-    deskReady.diagnostics.edgesTodayError &&
-    deskReady.diagnostics.propsError
+    deskReady && deskReady.diagnostics.fairLinesError
       ? deskReady.diagnostics.fairLinesError
       : state.status === "error"
         ? "Unable to reach edges desk."
         : undefined;
-  const propsCopy = deskReady
-    ? nflPropsSurfaceCopy(deskReady.propsSurface)
-    : null;
+  const incompleteCopy = nflEdgesDeskIncompleteCopy();
   const headerAsOf =
     state.status === "loading"
       ? "…"
@@ -289,36 +284,22 @@ export default function NflEdgesDeskClient({
           </div>
         ) : null}
 
-        {deskReady && deskReady.propsSurface !== "book-joined" && propsCopy ? (
-          <p className="mt-3 text-xs text-kos-text/55">
-            Props: {propsCopy.title}. {propsCopy.body}{" "}
-            <Link
-              href="/pro/nfl/props"
-              className="text-kos-gold/80 hover:text-kos-gold hover:underline"
-            >
-              Props board
-            </Link>
+        {deskReady ? (
+          <p
+            className="mt-3 text-xs text-kos-text/55"
+            data-testid="edges-desk-incomplete"
+            data-props-status={deskReady.propsStatus}
+            data-desk-complete={deskReady.deskComplete ? "1" : "0"}
+          >
+            {incompleteCopy.title}. {incompleteCopy.body}
           </p>
         ) : null}
 
         {deskReady && !fetchError && deskReady.rows.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">
-            No edges clear the current thresholds. Lower min edge / confidence,
-            widen market type, or check{" "}
-            <Link
-              href="/pro/nfl/fair-lines"
-              className="text-kos-gold underline-offset-2 hover:underline"
-            >
-              KEI Lines
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/pro/nfl/props"
-              className="text-kos-gold underline-offset-2 hover:underline"
-            >
-              Props
-            </Link>{" "}
-            for the full boards.
+            No customer edge rows on this desk. Edge language is not adopted,
+            totals and moneyline stay not certifiable, and props are omitted.
+            This desk is not a complete slate.
           </div>
         ) : null}
 

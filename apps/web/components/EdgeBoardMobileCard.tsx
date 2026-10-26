@@ -27,10 +27,14 @@ function statusClassName(label: PublishActionLabel): string {
 }
 
 function Juice({ value }: { value: string | null }) {
-  if (!value) return null;
+  // M-1: missing juice is "—". Never invent 0 / −110.
+  const shown = value && value !== "0" ? value : "—";
   return (
-    <span className="ml-1.5 text-[11px] font-normal text-gray-400 tabular-nums">
-      {value}
+    <span
+      className="ml-1.5 text-[11px] font-normal text-gray-400 tabular-nums"
+      data-juice={shown === "—" ? "missing" : "present"}
+    >
+      {shown}
     </span>
   );
 }
@@ -69,7 +73,7 @@ function InterpRow({
         <span className={statusClassName(interp.status)}>{interp.status}</span>
       ) : null}
       {interp.sideLabel ? (
-        <span className="text-[13px] font-semibold truncate">
+        <span className="text-[13px] font-semibold whitespace-normal break-words">
           {interp.sideLabel}
         </span>
       ) : null}
@@ -274,7 +278,14 @@ export default function EdgeBoardMobileCard({
             />
           ) : null}
           {model.totalInterp ? (
-            <InterpRow label="total" interp={model.totalInterp} />
+            <div
+              data-total-cert-status={model.totalCertStatus ?? "n/a"}
+              data-total-certified={
+                model.totalCertStatus === "CERTIFIED" ? "1" : "0"
+              }
+            >
+              <InterpRow label="total" interp={model.totalInterp} />
+            </div>
           ) : null}
           {model.confidence ? (
             <div className="text-[11px] text-gray-400">{model.confidence}</div>

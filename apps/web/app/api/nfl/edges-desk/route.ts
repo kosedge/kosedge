@@ -8,16 +8,18 @@ import {
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import { nflEdgeBoardAssembleUnavailablePayload } from "@/lib/cfb-edge-board-public";
 import {
-  isFootballPublicNumbersDisabled,
-  nflEdgeBoardAssembleUnavailablePayload,
-} from "@/lib/cfb-edge-board-public";
+  NFL_EDGES_PROPS_STATUS,
+  emptyNflSurfaceProvenance,
+  isNflEdgesCustomerSurfaceClosed,
+} from "@/lib/nfl-surface-provenance";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
 export const maxDuration = 30;
 
-const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];
+const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total"];
 const MIN_EDGE_OPTIONS = [
   { prob: 0.01, line: 0.5 },
   { prob: 0.02, line: 1.0 },
@@ -27,7 +29,8 @@ const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
 /**
  * Page-data for /pro/nfl/edges.
- * Desk already Promise.all's fair-lines ∥ edges/today ∥ props/board.
+ * First build fetches Fair Lines only (N-1 / E-2). Props omitted;
+ * edges-today not fanned out.
  * Client-fetch so HTML is not held open on that waterfall (Alex).
  * Uses pageData timeout (25s); fair-lines transport failures → 503/504.
  * Cache-Control s-maxage=45 on non-empty 200 only (never 503/504/count=0).
@@ -41,11 +44,19 @@ export async function GET(req: Request) {
     );
   }
 
-  if (isFootballPublicNumbersDisabled("nfl")) {
-    return NextResponse.json(nflEdgeBoardAssembleUnavailablePayload(), {
-      status: 503,
-      headers: pageDataCacheHeaders({ cacheable: false }),
-    });
+  if (isNflEdgesCustomerSurfaceClosed()) {
+    return NextResponse.json(
+      {
+        ...nflEdgeBoardAssembleUnavailablePayload(),
+        observed: emptyNflSurfaceProvenance("desk"),
+        propsStatus: NFL_EDGES_PROPS_STATUS,
+        deskComplete: false,
+      },
+      {
+        status: 503,
+        headers: pageDataCacheHeaders({ cacheable: false }),
+      },
+    );
   }
 
   const url = new URL(req.url);
@@ -75,7 +86,7 @@ export async function GET(req: Request) {
     : 0;
 
   try {
-    // Parallel fan-out lives inside fetchNflEdgesDesk (fair ∥ today ∥ props).
+    // First-build desk: Fair Lines only. Props omitted; edge rows blocked.
     const desk = await fetchNflEdgesDesk({
       season,
       week,

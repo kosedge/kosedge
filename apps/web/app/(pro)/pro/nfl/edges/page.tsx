@@ -1,6 +1,6 @@
 import SportHubShell from "@/components/pro/SportHubShell";
 import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
-import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import { isNflEdgesCustomerSurfaceClosed } from "@/lib/nfl-surface-provenance";
 import NflEdgesDeskClient from "@/components/pro/nfl/NflEdgesDeskClient";
 import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import type { DeskMarketType } from "@/lib/nfl-edges-desk-types";
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
-const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];
+const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total"];
 const MIN_EDGE_OPTIONS_LEN = 3;
 const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
@@ -22,15 +22,16 @@ function firstValue(value: SearchValue): string | undefined {
 
 /**
  * Edges desk — SSR shell parses filters only.
- * Desk data client-fetches /api/nfl/edges-desk (fair ∥ today ∥ props) so HTML
- * is not held open on model-service (Alex waterfall).
+ * Desk data client-fetches /api/nfl/edges-desk (Fair Lines derive-only;
+ * props omitted, edge rows blocked) so HTML is not held open on
+ * model-service (Alex waterfall).
  */
 export default async function NflEdgesDeskPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
-  if (isFootballPublicNumbersDisabled("nfl")) {
+  if (isNflEdgesCustomerSurfaceClosed()) {
     return (
       <SportHubShell
         sportKey="nfl"

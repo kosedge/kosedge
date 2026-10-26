@@ -54,6 +54,21 @@ export const NFL_FAIR_LINES_CERTIFIED_AT: string | null = null;
 export const NFL_FAIR_LINES_CERT_MAX_AGE_HOURS = 168;
 
 /**
+ * Edges cert slots — Fair-Lines-equivalent, default unbound.
+ * Q1: Edges binds the SAME Fair Lines certified run (derive-only).
+ * These slots stay null and are NOT a bind target. Do not invent a hash.
+ * Do not bind pe_drive_poss_v1 (rejected practice) or pe_drive_poss_v2
+ * (DIAGNOSTIC_STOP). Independent market toggles AND-restrict only (Q2).
+ */
+export const NFL_EDGES_CERTIFIED_RUN_ID: string | null = null;
+export const NFL_EDGES_CERTIFIED_SHA256: string | null = null;
+export const NFL_EDGES_CERTIFIED_AT: string | null = null;
+export const NFL_EDGES_CERT_MAX_AGE_HOURS = NFL_FAIR_LINES_CERT_MAX_AGE_HOURS;
+export const NFL_EDGES_PUBLIC_SPREAD_ENABLED = false;
+export const NFL_EDGES_PUBLIC_ML_ENABLED = false;
+export const NFL_EDGES_PUBLIC_TOTAL_ENABLED = false;
+
+/**
  * War-room practice artifact (Alex 2026-09-17). All five gates FAIL.
  * Recorded for fail-closed / provenance smoke only. Not a production bind.
  */
@@ -590,6 +605,8 @@ export function isNflFairLinesCertifiedPublicPaintAllowed(
   market?: NflFairLinesMarket,
 ): boolean {
   if (!NFL_EDGE_BOARD_PUBLIC_ENABLED) return false;
+  // E-1.4 / Q2: total + ML are NOT CERTIFIABLE irrespective of switches.
+  if (market === "total" || market === "ml") return false;
   if (market) {
     if (!isNflFairLinesMarketPublicEnabled(market)) return false;
   } else if (!isNflFairLinesAnyMarketPublicEnabled()) {

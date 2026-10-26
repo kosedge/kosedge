@@ -31,6 +31,11 @@ import {
   footballPublicNumbersAssembleUnavailablePayload,
   isFootballPublicNumbersDisabled,
 } from "@/lib/cfb-edge-board-public";
+import {
+  emptyNflSurfaceProvenance,
+  nflSurfaceProvenanceFromAssemble,
+  resolveNflAssembleLinesAsOfFromCapture,
+} from "@/lib/nfl-surface-provenance";
 import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-suppress";
 import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
 
@@ -95,8 +100,14 @@ export async function GET(
 
   // P0: NFL/CFB public number surfaces fail-closed — no rows, no tags, no assemble.
   if (isFootballPublicNumbersDisabled(sport)) {
+    const unavailable = footballPublicNumbersAssembleUnavailablePayload(sport);
     return NextResponse.json(
-      footballPublicNumbersAssembleUnavailablePayload(sport),
+      sport === "nfl"
+        ? {
+            ...unavailable,
+            observed: emptyNflSurfaceProvenance("assemble"),
+          }
+        : unavailable,
       {
         status: 503,
         headers: pageDataCacheHeaders({ cacheable: false }),
@@ -129,8 +140,26 @@ export async function GET(
           1,
         );
         const week1Rows = filterNflStrictWeekRows(assembled, 1);
-        const linesAsOf =
-          resolveEdgeBoardBoardLinesAsOf(assembled) ?? governed.linesAsOf;
+        // X-3: capture-only. NEVER substitute governed.linesAsOf to keep a board lit.
+        const capturedLinesAsOf = resolveEdgeBoardBoardLinesAsOf(assembled);
+        const resolvedAsOf = resolveNflAssembleLinesAsOfFromCapture(
+          capturedLinesAsOf,
+          governed.linesAsOf,
+        );
+        if (!resolvedAsOf.linesAsOf) {
+          return NextResponse.json(
+            {
+              ...footballPublicNumbersAssembleUnavailablePayload("nfl"),
+              observed: emptyNflSurfaceProvenance("assemble"),
+              provenanceReason: resolvedAsOf.reason,
+            },
+            {
+              status: 503,
+              headers: pageDataCacheHeaders({ cacheable: false }),
+            },
+          );
+        }
+        const linesAsOf = resolvedAsOf.linesAsOf;
         // SOP v1.1: full-slate snapshot bypasses assembleEdgeBoardRows —
         // still evaluate suppress on this assemble so TTL/revoke apply.
         const suppressed = applyNflInactiveFairSuppressToRows(
@@ -150,6 +179,10 @@ export async function GET(
           games: gameCount(assembled),
           // Observe-friendly provenance (not invent as-of).
           fullSlateSource: governed.source,
+          observed: nflSurfaceProvenanceFromAssemble({
+            linesAsOf,
+            source: governed.source,
+          }),
         });
       }
 
@@ -181,6 +214,10 @@ export async function GET(
         weeks,
         linesAsOf,
         games: gameCount(week1Rows),
+        observed: nflSurfaceProvenanceFromAssemble({
+          linesAsOf,
+          source: "assemble",
+        }),
       });
     }
 

@@ -7,6 +7,7 @@ import {
 } from "@/lib/flat-rows-to-legacy";
 import {
   UNICODE_MINUS,
+  cleanJuice,
   composeEdgeBoardMobileCard,
   formatTeamLabeledSpread,
   presentationAbbr,
@@ -241,6 +242,7 @@ describe("book badge = decision book of the displayed price", () => {
     expect(model.truthFlags).toContain("spread_decision_vs_best_mismatch");
     expect(model.marketSpread?.teamLabeled).toBe(`SEA ${UNICODE_MINUS}2.5`);
     expect(model.marketSpread?.bookKey).toBeNull();
+    expect(model.marketSpread?.trustFootnote).toBe("no book");
     expect(model.marketSpread?.juice).toBeNull();
   });
 });
@@ -527,5 +529,90 @@ describe("locked chrome — no banned customer copy on mobile path", () => {
     expect(board).toContain("lg:hidden");
     expect(board).toContain("EdgeBoardMobileCard");
     expect(board).toContain("Lean to");
+  });
+});
+
+describe("Mobile M1 honesty — juice / book / as-of / cert", () => {
+  it("never invents 0 or −110 juice; missing stays null", () => {
+    expect(cleanJuice(null)).toBeNull();
+    expect(cleanJuice(undefined)).toBeNull();
+    expect(cleanJuice("")).toBeNull();
+    expect(cleanJuice("—")).toBeNull();
+    expect(cleanJuice("0")).toBeNull();
+    expect(cleanJuice("-110")).toBe("-110");
+    expect(cleanJuice("+105")).toBe("+105");
+  });
+
+  it("lifts as-of unavailable to every sport and stamps NFL cert status", () => {
+    const cfb = composeEdgeBoardMobileCard({
+      sportKey: "cfb",
+      row: baseRow({
+        teamA: { name: "North Carolina Tar Heels", site: "Away" },
+        teamB: { name: "TCU Horned Frogs", site: "Home" },
+      }),
+    });
+    const mlb = composeEdgeBoardMobileCard({
+      sportKey: "mlb",
+      row: baseRow({
+        teamA: { name: "New York Yankees", site: "Away" },
+        teamB: { name: "Chicago Cubs", site: "Home" },
+      }),
+    });
+    const nfl = composeEdgeBoardMobileCard({
+      sportKey: "nfl",
+      row: baseRow({ linesAsOf: undefined }),
+    });
+    expect(cfb.asOfUnavailable).toBe(true);
+    expect(mlb.asOfUnavailable).toBe(true);
+    expect(nfl.asOfUnavailable).toBe(true);
+    expect(nfl.spreadCertStatus).toBe("NOT_CERTIFIED");
+    expect(nfl.totalCertStatus).toBe("NOT_CERTIFIABLE");
+    expect(nfl.mlCertStatus).toBe("NOT_CERTIFIABLE");
+    expect(cfb.totalCertStatus).toBeNull();
+    expect(mlb.mlCertStatus).toBeNull();
+  });
+
+  it("does not paint NFL moneyline and does not let NFL totals look certified", () => {
+    const nfl = composeEdgeBoardMobileCard({
+      sportKey: "nfl",
+      row: baseRow({
+        marketOUCurrent: 44.5,
+        fairOUKei: 47.0,
+        bestOU: {
+          top: { label: "o44.5", juice: "-105" },
+          bottom: { label: "u44.5", juice: "-115" },
+        },
+        edgeMagnitudeOU: 2.5,
+        edgeOUFavor: "Over",
+        tagOU: "PLAY",
+        actionLabelOU: "PLAY",
+        bestLine: {
+          top: { label: "+120", juice: "-110" },
+          bottom: { label: "-140", juice: "-110" },
+        },
+      }),
+    });
+    expect(nfl.isMoneyline).toBe(false);
+    expect(nfl.marketMlAway).toBeNull();
+    expect(nfl.marketMlHome).toBeNull();
+    expect(nfl.totalInterp?.status).not.toBe("PLAY");
+    expect(nfl.totalCertStatus).toBe("NOT_CERTIFIABLE");
+    expect(nfl.marketTotal?.overJuice).toBe("-105");
+    expect(nfl.marketTotal?.underJuice).toBe("-115");
+  });
+
+  it("always pairs a painted market book slot with a badge XOR footnote", () => {
+    const missingBook = composeEdgeBoardMobileCard({
+      sportKey: "nfl",
+      row: baseRow({
+        marketLineCurrent: -2.5,
+        bestLine: {
+          top: { label: "+2.5", juice: "-108" },
+          bottom: { label: "-2.5", juice: "-108" },
+        },
+      }),
+    });
+    expect(missingBook.marketSpread?.bookKey).toBeNull();
+    expect(missingBook.marketSpread?.trustFootnote).toBe("no book");
   });
 });

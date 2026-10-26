@@ -11,6 +11,7 @@ import {
   isNflFairLinesCustomerSurfaceClosed,
   nflEdgeBoardAssembleUnavailablePayload,
 } from "@/lib/cfb-edge-board-public";
+import { nflSurfaceProvenanceFromFairLines } from "@/lib/nfl-surface-provenance";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -65,7 +66,12 @@ export async function GET(req: Request) {
       // Read-only subscriber path — beat/worker owns odds_snapshots persist.
       persistOdds: false,
     });
-    return pageDataJsonResponse(board);
+    return pageDataJsonResponse({
+      ...board,
+      observed: nflSurfaceProvenanceFromFairLines({
+        oddsAsOf: board.oddsAsOf,
+      }),
+    });
   } catch (err) {
     return pageDataUpstreamErrorResponse(err);
   }

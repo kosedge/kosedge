@@ -213,6 +213,83 @@ describe("EdgeBoardMobileCard composition", () => {
   });
 });
 
+describe("Mobile M1 card honesty", () => {
+  it("does not truncate sideLabel and shows — for missing juice", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../components/EdgeBoardMobileCard.tsx"),
+      "utf8",
+    );
+    expect(src).not.toMatch(/sideLabel[\s\S]{0,80}truncate/);
+    expect(src).toContain("whitespace-normal break-words");
+    expect(src).toContain('data-juice={shown === "—" ? "missing" : "present"}');
+
+    render(
+      <EdgeBoardMobileCard
+        row={nflLeanRow({
+          bestLine: {
+            top: { label: "+2.5", juice: "—" },
+            bottom: { label: "-2.5", juice: "—" },
+          },
+        })}
+        sportKey="nfl"
+        overviewOpen={false}
+        statsOpen={false}
+        onToggle={() => undefined}
+      />,
+    );
+    const juices = screen.getAllByText("—");
+    expect(juices.length).toBeGreaterThan(0);
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
+    expect(
+      screen.getByTestId("edge-board-mobile-card").textContent,
+    ).not.toMatch(/(?:^|[^\d])-110(?:[^\d]|$)/);
+    expect(screen.getByText("SEA")).toBeInTheDocument();
+  });
+
+  it("marks NFL totals not certified and shows as-of unavailable for CFB", () => {
+    const { rerender } = render(
+      <EdgeBoardMobileCard
+        row={nflLeanRow()}
+        sportKey="nfl"
+        overviewOpen={false}
+        statsOpen={false}
+        onToggle={() => undefined}
+      />,
+    );
+    expect(screen.getByText("PASS").closest("[data-total-cert-status]")).toHaveAttribute(
+      "data-total-cert-status",
+      "NOT_CERTIFIABLE",
+    );
+    expect(screen.getByText("PASS").closest("[data-total-certified]")).toHaveAttribute(
+      "data-total-certified",
+      "0",
+    );
+
+    rerender(
+      <EdgeBoardMobileCard
+        row={{
+          id: "cfb-asof",
+          teamA: { name: "North Carolina Tar Heels", site: "Away" },
+          teamB: { name: "TCU Horned Frogs", site: "Home" },
+          awayAbbr: "UNC",
+          homeAbbr: "TCU",
+          openOU: EMPTY_PAIR,
+          openLine: EMPTY_PAIR,
+          bestLine: EMPTY_PAIR,
+          bestOU: EMPTY_PAIR,
+          kickoffDate: "08/29",
+          kickoffTime: "12:00 PM",
+        }}
+        sportKey="cfb"
+        overviewOpen={false}
+        statsOpen={false}
+        onToggle={() => undefined}
+      />,
+    );
+    expect(screen.getByText("Market as-of unavailable")).toBeInTheDocument();
+  });
+});
+
 describe("mobile source lock", () => {
   it("EdgeBoard wires the dedicated card below lg only", () => {
     const src = readFileSync(
