@@ -437,13 +437,30 @@ function normalizeDecision(raw: unknown): NflFairLineDecision | null {
   };
 }
 
-function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
+export function normalizeFairLine(
+  raw: Record<string, unknown>,
+  requestSeason?: number | null,
+): NflFairLineRow {
   const week = toNumberOrNull(raw.week);
   const homeAbbr = String(raw.home_abbr ?? "—");
   const awayAbbr = String(raw.away_abbr ?? "—");
+  const rawSeason = toNumberOrNull(raw.season);
+  const rawSeasonType =
+    typeof raw.season_type === "string"
+      ? raw.season_type.trim().toUpperCase()
+      : "";
   const packed = canonicalKickoffForMatchup({
     gameId: typeof raw.game_id === "string" ? raw.game_id : null,
-    season: toNumberOrNull(raw.season),
+    season:
+      rawSeason == null || rawSeason === 0
+        ? (requestSeason ?? null)
+        : rawSeason,
+    seasonType:
+      rawSeasonType === "PRE" ||
+      rawSeasonType === "REG" ||
+      rawSeasonType === "POST"
+        ? rawSeasonType
+        : null,
     week,
     awayAbbr,
     homeAbbr,
@@ -769,7 +786,7 @@ export async function fetchNflFairLines(params: {
       };
     };
     const lines = Array.isArray(payload.lines)
-      ? payload.lines.map(normalizeFairLine)
+      ? payload.lines.map((line) => normalizeFairLine(line, params.season))
       : [];
     const persisted = payload.diagnostics?.odds_persisted;
     const ledgerHealth = normalizeOddsLedgerHealth(

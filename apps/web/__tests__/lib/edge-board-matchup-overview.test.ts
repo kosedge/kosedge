@@ -105,13 +105,14 @@ describe("matchup overview + season honesty", () => {
 
   it("neutral Melbourne game labels site and zeros HFA language", () => {
     const site = lookupNflNeutralSite({
+      season: 2026,
+      seasonType: "REG",
       week: 1,
       homeAbbr: "LAR",
       awayAbbr: "SF",
     });
     expect(site?.city).toBe("Melbourne");
-    // Option A (Ryan t4401u / IMV packet 3199cbda): null week is insufficient
-    // identity — no site from the LAR/SF pair alone.
+    // T7 Option A (t4401u): week-null must not invent Melbourne from LAR/SF pair.
     expect(
       lookupNflNeutralSite({ week: null, homeAbbr: "LAR", awayAbbr: "SF" }),
     ).toBeNull();
@@ -123,6 +124,7 @@ describe("matchup overview + season honesty", () => {
       awayAbbr: "SF",
       homeAbbr: "LAR",
       week: 1,
+      season: 2026,
       keiSpreadHome: -2.5,
       marketSpreadHome: -2.5,
       keiTotal: 45.5,

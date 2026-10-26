@@ -111,7 +111,10 @@ type RowExtra = EdgeBoardRow & {
  */
 export function enrichNflEdgeBoardMatchupFields(
   rows: EdgeBoardRow[],
-  options?: { powerByAbbr?: MatchupPowerMap | null },
+  options?: {
+    powerByAbbr?: MatchupPowerMap | null;
+    season?: number | null;
+  },
 ): EdgeBoardRow[] {
   if (!rows.length) return rows;
   const power = options?.powerByAbbr ?? null;
@@ -160,6 +163,7 @@ export function enrichNflEdgeBoardMatchupFields(
       (total?.best ? parseTotal(total.best) : null);
 
     const site = resolveNflSiteContext({
+      season: options?.season ?? null,
       week,
       homeAbbr,
       awayAbbr,
@@ -189,6 +193,7 @@ export function enrichNflEdgeBoardMatchupFields(
       awayAbbr,
       homeAbbr,
       week,
+      season: options?.season ?? null,
       seasonType: spread.seasonType ?? total?.seasonType ?? null,
       gamesPlayedAway: spread.gamesPlayedAway ?? null,
       gamesPlayedHome: spread.gamesPlayedHome ?? null,
@@ -232,7 +237,7 @@ export function enrichNflEdgeBoardMatchupFields(
       row.neutralSite = ctx.isNeutral;
       row.neutralCity = ctx.siteCity ?? undefined;
       row.neutralVenue = ctx.siteVenue ?? undefined;
-      row.hfaPoints = ctx.hfaPoints;
+      row.hfaPoints = ctx.hfaPoints ?? undefined;
       row.paceAway = awayStruct.pace ?? undefined;
       row.paceHome = homeStruct.pace ?? undefined;
       row.structuralTagAway = awayStruct.tag ?? undefined;

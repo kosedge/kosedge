@@ -1,7 +1,8 @@
 /**
  * 2026 NFL international / neutral-site slate (league release).
- * Keyed by week + sorted team pair so home/away listing order does not matter.
- * Week is required identity — pair-only lookup must not invent a site.
+ * Keyed by season + exact week + away-then-home order.
+ * teams[0] is the away team and teams[1] is the home team.
+ * A game that cannot be identified fails closed as UNKNOWN.
  */
 
 export type NflNeutralSite = {
@@ -88,34 +89,70 @@ function canon(abbr: string): string {
   return a;
 }
 
-function pairKey(a: string, b: string): string {
-  return [canon(a), canon(b)].sort().join("|");
+/** This slate is the 2026 regular season only. */
+const NEUTRAL_SITE_SEASON = 2026;
+
+type NeutralIdentity = {
+  season: number;
+  week: number;
+  away: string;
+  home: string;
+};
+
+function neutralIdentity(args: {
+  season?: number | null;
+  week: number | null | undefined;
+  homeAbbr: string;
+  awayAbbr: string;
+}): NeutralIdentity | null {
+  const season =
+    args.season == null || args.season === ("" as unknown)
+      ? NaN
+      : Number(args.season);
+  const weekNum =
+    args.week == null || args.week === ("" as unknown)
+      ? NaN
+      : Number(args.week);
+  const away = canon(args.awayAbbr);
+  const home = canon(args.homeAbbr);
+  if (
+    season !== NEUTRAL_SITE_SEASON ||
+    !Number.isInteger(weekNum) ||
+    !away ||
+    !home
+  ) {
+    return null;
+  }
+  return { season, week: weekNum, away, home };
 }
 
-const BY_WEEK_PAIR = new Map<string, NflNeutralSite>();
+function identityKey(identity: NeutralIdentity): string {
+  return `${identity.season}|${identity.week}|${identity.away}|${identity.home}`;
+}
+
+const BY_IDENTITY = new Map<string, NflNeutralSite>();
 for (const site of SITES) {
-  const pk = pairKey(site.teams[0], site.teams[1]);
-  BY_WEEK_PAIR.set(`${site.week}|${pk}`, site);
+  const away = canon(site.teams[0]);
+  const home = canon(site.teams[1]);
+  BY_IDENTITY.set(`${NEUTRAL_SITE_SEASON}|${site.week}|${away}|${home}`, site);
 }
 
 /** Standard home HFA when the game is not neutral (framework prior). */
 export const NFL_STANDARD_HFA_POINTS = 1.05;
 
 export function lookupNflNeutralSite(args: {
+  season?: number | null;
   week: number | null | undefined;
   homeAbbr: string;
   awayAbbr: string;
 }): NflNeutralSite | null {
-  const pk = pairKey(args.homeAbbr, args.awayAbbr);
-  const weekNum =
-    args.week == null || args.week === ("" as unknown)
-      ? NaN
-      : Number(args.week);
-  if (!Number.isFinite(weekNum)) return null;
-  return BY_WEEK_PAIR.get(`${Math.trunc(weekNum)}|${pk}`) ?? null;
+  const identity = neutralIdentity(args);
+  if (!identity) return null;
+  return BY_IDENTITY.get(identityKey(identity)) ?? null;
 }
 
 export function resolveNflSiteContext(args: {
+  season?: number | null;
   week: number | null | undefined;
   homeAbbr: string;
   awayAbbr: string;
@@ -128,15 +165,12 @@ export function resolveNflSiteContext(args: {
   isNeutral: boolean;
   city: string | null;
   venue: string | null;
-  hfaPoints: number;
-  siteLabel: "Home" | "Road" | "Neutral";
+  hfaPoints: number | null;
+  siteLabel: "Home" | "Road" | "Neutral" | "UNKNOWN";
 } {
   const looked = lookupNflNeutralSite(args);
-  const isNeutral =
-    args.neutralSite === true ||
-    looked != null ||
-    (typeof args.neutralCity === "string" && args.neutralCity.trim() !== "");
-  if (isNeutral) {
+  // A stamp counts only on an exact table identity. Otherwise ignore it.
+  if (looked != null) {
     const hfa =
       args.hfaPoints != null && Number.isFinite(args.hfaPoints)
         ? Number(args.hfaPoints)
@@ -147,6 +181,19 @@ export function resolveNflSiteContext(args: {
       venue: (args.neutralVenue || looked?.venue || null)?.trim() || null,
       hfaPoints: hfa,
       siteLabel: "Neutral",
+    };
+  }
+  const identity = neutralIdentity(args);
+  if (identity == null) {
+    return {
+      isNeutral: false,
+      city: null,
+      venue: null,
+      hfaPoints:
+        args.hfaPoints != null && Number.isFinite(args.hfaPoints)
+          ? Number(args.hfaPoints)
+          : null,
+      siteLabel: "UNKNOWN",
     };
   }
   return {

@@ -37,8 +37,8 @@ export type EdgeBoardMatchupContext = {
   isNeutral: boolean;
   siteCity: string | null;
   siteVenue: string | null;
-  hfaPoints: number;
-  siteLabel: "Home" | "Road" | "Neutral";
+  hfaPoints: number | null;
+  siteLabel: "Home" | "Road" | "Neutral" | "UNKNOWN";
 
   restDaysAway: number | null;
   restDaysHome: number | null;
@@ -113,6 +113,7 @@ export type BuildMatchupContextInput = {
   awayAbbr?: string | null;
   homeAbbr?: string | null;
   week?: number | null;
+  season?: number | null;
   seasonType?: string | null;
   gamesPlayedAway?: number | null;
   gamesPlayedHome?: number | null;
@@ -150,6 +151,7 @@ export function buildMatchupContext(
   const week = Number.isFinite(weekRaw) ? Math.trunc(weekRaw) : null;
 
   const site = resolveNflSiteContext({
+    season: input.season ?? null,
     week,
     homeAbbr,
     awayAbbr,
@@ -158,13 +160,15 @@ export function buildMatchupContext(
     neutralVenue: input.neutralVenue,
     hfaPoints: input.hfaPoints,
   });
-
   const awayStruct = structuralPaceFor(awayAbbr);
   const homeStruct = structuralPaceFor(homeAbbr);
-  const keiPow = keiRelativePower({
-    keiSpreadHome: input.keiSpreadHome ?? null,
-    hfaPoints: site.hfaPoints,
-  });
+  const keiPow =
+    site.hfaPoints == null
+      ? null
+      : keiRelativePower({
+          keiSpreadHome: input.keiSpreadHome ?? null,
+          hfaPoints: site.hfaPoints,
+        });
   const hasModel =
     input.modelPowerAway != null &&
     input.modelPowerHome != null &&

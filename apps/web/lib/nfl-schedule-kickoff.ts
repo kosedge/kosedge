@@ -3,11 +3,15 @@
  * Canonical REG pack wins over odds commence / fair-lines start_time.
  */
 
-import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
+import {
+  canonicalKickoffForMatchup,
+  type CanonicalNflGame,
+} from "@/lib/nfl-canonical-schedule";
 
 export type NflKickoffSourceRow = {
   gameId: string;
   season?: number | null;
+  seasonType?: CanonicalNflGame["game_type"] | null;
   week?: number | null;
   awayAbbr?: string | null;
   homeAbbr?: string | null;
@@ -23,6 +27,7 @@ export function resolveNflKickoffIso(
   const packed = canonicalKickoffForMatchup({
     gameId: row.gameId,
     season: row.season,
+    seasonType: row.seasonType,
     week: row.week,
     awayAbbr: row.awayAbbr,
     homeAbbr: row.homeAbbr,

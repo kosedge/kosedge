@@ -76,14 +76,27 @@ function fairLineDeskConfidence(
 /** Pure: turn a fair-lines row into zero or more actionable desk edges. */
 export function deskEdgesFromFairLine(
   row: NflFairLineRow,
-  opts: { minProbEdge: number; minLineEdge: number },
+  opts: {
+    minProbEdge: number;
+    minLineEdge: number;
+    requestSeason?: number | null;
+  },
 ): DeskEdgeRow[] {
   const { minProbEdge, minLineEdge } = opts;
   if (!row.marketJoined) return [];
   const matchup = `${row.awayAbbr} @ ${row.homeAbbr}`;
+  const payloadSeason = row.season;
+  const seasonType = row.seasonType;
   const kickoff = resolveNflKickoffIso({
     gameId: row.gameId,
-    season: row.season,
+    season:
+      payloadSeason == null || payloadSeason === 0
+        ? (opts.requestSeason ?? payloadSeason)
+        : payloadSeason,
+    seasonType:
+      seasonType === "PRE" || seasonType === "REG" || seasonType === "POST"
+        ? seasonType
+        : null,
     week: row.week,
     awayAbbr: row.awayAbbr,
     homeAbbr: row.homeAbbr,
@@ -422,7 +435,11 @@ export async function fetchNflEdgesDesk(params: {
     (line) => line.week == null || line.week === params.week,
   );
   const fairEdges = weekLines.flatMap((line) =>
-    deskEdgesFromFairLine(line, { minProbEdge, minLineEdge }),
+    deskEdgesFromFairLine(line, {
+      minProbEdge,
+      minLineEdge,
+      requestSeason: params.season,
+    }),
   );
   const todayIds = new Set(
     todayBoard.rows.map((row) => row.id.replace("-today-ml", "-ml")),
