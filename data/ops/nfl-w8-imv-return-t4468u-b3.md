@@ -18,7 +18,7 @@ Hypothesis verified: `record_credit_use` raised before save; `fetch.py` estimate
 
 - Pytest: `bash scripts/ci/run-nfl-w8-capture-tests.sh`
 - Required case: ledger 2990 + real cost 30 → cumulative 3020 recorded, next call refused.
-- Tip SHA: see PR #640 head / report after this commit lands.
+- Tip SHA: `a23e5db3dd3f990c5212a84ae4b83f5e564d2c1f` (B3 code+docs). A docs-only receipt after this line may move HEAD; greens for the B3 fix belong to this SHA unless CI is reported on a later receipt.
 
 ## Remains for IMV re-grade
 
