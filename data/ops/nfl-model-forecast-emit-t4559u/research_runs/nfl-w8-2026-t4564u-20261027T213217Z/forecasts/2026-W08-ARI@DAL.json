@@ -1,0 +1,101 @@
+{
+  "away_team": "ARI",
+  "cert_candidate": 0,
+  "close_anchor": {
+    "close_captured_at": null,
+    "close_ml_home": null,
+    "close_source": null,
+    "close_spread_home": null,
+    "close_total": null,
+    "status": "reserved_empty"
+  },
+  "code_tip_sha": "67c817ad8671824e985479f3f1dce035f2f552c3",
+  "config_sha256": "0e1eee4b4366e8663a3ef13323e6c20e75f46ca09ea6dd8d299d7434fcf3ac25",
+  "cos_order_sha8": "c1b16cf1",
+  "decision_sha8": "872558e4",
+  "emitted_at_et": "2026-10-27T17:32:17-04:00",
+  "emitted_at_utc": "2026-10-27T21:32:17Z",
+  "eval_record_paper_sha8": "f1fa86e7",
+  "forecast_ts_utc": "2026-10-27T21:32:17Z",
+  "game_id": "2026-W08-ARI@DAL",
+  "grades": {
+    "ats": null,
+    "ou": null,
+    "su": null
+  },
+  "home_team": "DAL",
+  "input_provenance": {
+    "depth_role": "provenance_only",
+    "fingerprints": {
+      "canonical_schedule": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe",
+      "depth_parquet": "522bc45820f21375f2df92b8d8776c6a2242305c6183e7b6b8509888c7c787cf",
+      "injuries_parquet": "2adbdd6b4fee93eb14525959e858d1bea78072af84c71726fc37aaca1452871a",
+      "team_week_parquet": "5ef5a28ad1a6f263c94232df5e8a454476abd2bcfc238ff85d9f33d7996165e3"
+    },
+    "injury_overlay": "week7_or_latest_official_designations_only",
+    "missing_inputs": [
+      "injury_as_of_week8",
+      "injury_as_of_week8_away",
+      "kav_5g_warehouse",
+      "market_ml",
+      "market_spread",
+      "market_total",
+      "nfl_dp_team_rolling_features_weekly",
+      "w8_official_injury_report",
+      "weather"
+    ],
+    "odds_api": false,
+    "pr641_tip_untouched": "385767a2"
+  },
+  "kickoff_utc": "2026-11-01T18:00:00Z",
+  "label": "RESEARCH",
+  "latest_input_as_of": "2026-10-27T13:08:56Z",
+  "lead_seconds": 419263,
+  "markets": {
+    "moneyline": {
+      "away_ml": 127,
+      "away_win_prob": 0.4403,
+      "home_ml": -127,
+      "market_book_line": "MISSING",
+      "orientation": "home",
+      "prediction": 0.5597,
+      "ref_line": 0.5597,
+      "ref_line_source": "model_unblended_research_no_market_line"
+    },
+    "spread": {
+      "market_book_line": "MISSING",
+      "orientation": "home",
+      "prediction": -1.84,
+      "ref_line": -1.84,
+      "ref_line_source": "model_unblended_research_no_market_line",
+      "sign_convention": "home_negative_favored"
+    },
+    "total": {
+      "market_book_line": "MISSING",
+      "orientation": "game",
+      "prediction": 49.38,
+      "ref_line": 49.38,
+      "ref_line_source": "model_unblended_research_no_market_line"
+    }
+  },
+  "model": {
+    "engine_version": "nfl-season-engine-v1.27-kicker-layer",
+    "framework": "nfl-handicap-core-v3.1",
+    "identity": "nfl-simulator+efficiency_backbone",
+    "version": "nfl-v1.5-matchup-sim"
+  },
+  "orientation": {
+    "sign_convention": "home_negative_favored",
+    "spread": "home"
+  },
+  "pre_kickoff": true,
+  "purpose": "research_eng_only",
+  "record_sha256": "8f86823ff11974220bd708619dc42b7c41a540a8c59afc2a28272c49a714222d",
+  "schema_version": "nfl-model-forecast-artifact-v1",
+  "seal_binding": {
+    "hook": "game_id+forecast_ts_utc+record_sha256",
+    "status": "unbound"
+  },
+  "sport": "nfl",
+  "ticket": "t4564u"
+}
