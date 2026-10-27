@@ -4,6 +4,8 @@
 **Owner (build):** Cursor per `DECISION_RYAN_t4445u_RD7_CURSOR_W8_BUILDER_v1` (ops path cite `91aebe69`).  
 **Parallel:** t4447u (not this PR).  
 **PR:** draft `#640`. Paper-verify continue vs receipt sha8 `2a9164bc`.  
+**t4450u:** decision sha8 `20ea635f` — Post-Merge Execution. ACCEPT #634–#636 / receipt `6685ba74`.  
+**IMV package:** `data/ops/nfl-w8-imv-package-t4450u/INDEX.md`  
 **Module:** `services/model-service/src/services/nfl_w8_capture/`
 
 Cited sha8 (authority; files not in this checkout — do not invent bodies):

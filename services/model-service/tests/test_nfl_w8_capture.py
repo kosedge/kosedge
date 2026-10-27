@@ -43,6 +43,7 @@ from src.services.nfl_w8_capture.hold import (
     OddsApiHoldError,
     refuse_odds_fetch,
 )
+from src.services.nfl_w8_capture.imv_package import prove_hard_stops, write_imv_package
 from src.services.nfl_w8_capture.pin import (
     UNSET_SHA,
     build_pin_manifest,
@@ -568,6 +569,23 @@ def test_tick_schedules_due_close_window_without_odds_fetch(tmp_path: Path) -> N
             kickoffs=games,
             attempt_fetch=True,
         )
+
+
+def test_imv_package_proves_hard_stops_and_is_not_a_seal(tmp_path: Path) -> None:
+    proof = prove_hard_stops()
+    assert proof["refuse_odds_fetch"] == "OddsApiHoldError"
+    assert proof["refuse_seal"] == "PermissionError"
+    repo = Path(__file__).resolve().parents[3]
+    out = write_imv_package(repo, tmp_path / "imv", tip_sha="")
+    assert out["seal_ack"] == "CURSOR_CANNOT_SEAL_ACK"
+    assert (tmp_path / "imv" / "FILELIST.txt").is_file()
+    assert (tmp_path / "imv" / "INVENTORY.SHA256SUMS").is_file()
+    assert (tmp_path / "imv" / "HARD_STOPS.json").is_file()
+    hard = json.loads((tmp_path / "imv" / "HARD_STOPS.json").read_text(encoding="utf-8"))
+    assert hard["odds_api_hold"] is True
+    assert hard["nfl_no_go"] is True
+    assert hard["coming_soon"] is True
+    BundleStore(tmp_path / "imv").verify()
 
 
 def test_redact_nested_secret_keys() -> None:

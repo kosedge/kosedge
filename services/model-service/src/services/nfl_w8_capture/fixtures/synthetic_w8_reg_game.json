@@ -17,8 +17,16 @@
           "key": "spreads",
           "last_update": "2026-10-29T23:08:00Z",
           "outcomes": [
-            {"name": "Los Angeles Chargers", "point": -3.0, "price": -110},
-            {"name": "Minnesota Vikings", "point": 3.0, "price": -110}
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.0,
+              "price": -110
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.0,
+              "price": -110
+            }
           ]
         }
       ]
@@ -30,8 +38,16 @@
           "key": "spreads",
           "last_update": "2026-10-29T23:09:00Z",
           "outcomes": [
-            {"name": "Los Angeles Chargers", "point": -3.0, "price": -108},
-            {"name": "Minnesota Vikings", "point": 3.0, "price": -112}
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.0,
+              "price": -108
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.0,
+              "price": -112
+            }
           ]
         }
       ]
@@ -43,8 +59,16 @@
           "key": "spreads",
           "last_update": "2026-10-29T23:07:30Z",
           "outcomes": [
-            {"name": "Los Angeles Chargers", "point": -3.5, "price": -105},
-            {"name": "Minnesota Vikings", "point": 3.5, "price": -115}
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.5,
+              "price": -105
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.5,
+              "price": -115
+            }
           ]
         }
       ]
@@ -56,8 +80,16 @@
           "key": "spreads",
           "last_update": "2026-10-29T23:06:00Z",
           "outcomes": [
-            {"name": "Los Angeles Chargers", "point": -2.5, "price": -110},
-            {"name": "Minnesota Vikings", "point": 2.5, "price": -110}
+            {
+              "name": "Los Angeles Chargers",
+              "point": -2.5,
+              "price": -110
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 2.5,
+              "price": -110
+            }
           ]
         }
       ]
@@ -69,8 +101,16 @@
           "key": "spreads",
           "last_update": "2026-10-29T23:08:45Z",
           "outcomes": [
-            {"name": "Los Angeles Chargers", "point": -3.0, "price": -105},
-            {"name": "Minnesota Vikings", "point": 3.0, "price": -115}
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.0,
+              "price": -105
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.0,
+              "price": -115
+            }
           ]
         }
       ]
