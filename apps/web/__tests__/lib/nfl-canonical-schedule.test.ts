@@ -34,7 +34,10 @@ describe("canonical NFL schedule", () => {
 
   it("locks Week 1 primetime / Melbourne anchors", () => {
     for (const anchor of NFL_WEEK1_KICKOFF_ANCHORS) {
-      const game = lookupCanonicalNflGame({ gameId: anchor.game_id, season: 2026 });
+      const game = lookupCanonicalNflGame({
+        gameId: anchor.game_id,
+        season: 2026,
+      });
       expect(game?.kickoff_utc).toBe(anchor.kickoff_utc);
       expect(formatKickoffEt(game?.kickoff_utc)).toBe(anchor.kickoff_et);
       expect(game?.venue).toBe(anchor.venue);

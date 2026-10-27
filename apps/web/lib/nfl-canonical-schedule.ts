@@ -120,7 +120,10 @@ function suppliedTeamAgrees(
   return canonicalizeNflTeam(supplied) === actual;
 }
 
-function identityAgrees(game: CanonicalNflGame, args: CanonicalLookupArgs): boolean {
+function identityAgrees(
+  game: CanonicalNflGame,
+  args: CanonicalLookupArgs,
+): boolean {
   if (args.season == null || Number(args.season) !== game.season) return false;
   if (!seasonTypeAgrees(game, args.seasonType)) return false;
   if (!suppliedTeamAgrees(args.awayAbbr, game.away_team_id)) return false;

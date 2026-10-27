@@ -21,9 +21,7 @@ export type NflKickoffSourceRow = {
 };
 
 /** Canonical kickoff ISO for display — pack first, then fair-lines / odds. */
-export function resolveNflKickoffIso(
-  row: NflKickoffSourceRow,
-): string | null {
+export function resolveNflKickoffIso(row: NflKickoffSourceRow): string | null {
   const packed = canonicalKickoffForMatchup({
     gameId: row.gameId,
     season: row.season,

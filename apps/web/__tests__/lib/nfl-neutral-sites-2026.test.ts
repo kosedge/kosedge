@@ -116,9 +116,7 @@ describe("2026 NFL neutral-site identity", () => {
         venue: game.venue,
         hfaPoints: 0,
       });
-      expect(
-        resolveNflSiteContext({ season: 2026, ...game }),
-      ).toMatchObject({
+      expect(resolveNflSiteContext({ season: 2026, ...game })).toMatchObject({
         isNeutral: true,
         city: game.city,
         venue: game.venue,

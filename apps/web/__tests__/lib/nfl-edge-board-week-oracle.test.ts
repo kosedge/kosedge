@@ -160,9 +160,7 @@ describe("NFL schedule week-inference oracle", () => {
   it("E3c: ordered pairs of distinct 2026 teams that never meet return null", () => {
     const games = regGames();
     const meeting = new Set(
-      games.map((game) =>
-        sortedTeamPair(game.away_team_id, game.home_team_id),
-      ),
+      games.map((game) => sortedTeamPair(game.away_team_id, game.home_team_id)),
     );
     let nonmeeting = 0;
     for (let left = 0; left < NFL_CANONICAL_TEAMS.length; left += 1) {
