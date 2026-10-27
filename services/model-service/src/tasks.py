@@ -126,6 +126,7 @@ from .services.nfl_model_handicap import annotate_projection_model_handicap
 from .services.nfl_matchup_features import (
     fetch_latest_matchup_feature_pack,
     matchup_pack_to_sim_input_kwargs,
+    priors_from_matchup_pack,
 )
 from .services.nfl_simulator import (
     DEFAULT_NFL_MODEL_VERSION,
@@ -625,39 +626,12 @@ def _epa_to_strength_indices(
 def _priors_from_matchup_pack(
     matchup_pack: Optional[Dict[str, Any]],
 ) -> Optional[Tuple[Dict[str, float], Dict[str, float]]]:
-    """Build home/away strength priors from the week-aligned matchup pack.
+    """Re-export: week-aligned priors live on ``nfl_matchup_features``.
 
-    Season-max-week rolling priors can be OOD on a not-yet-played season
-    (hydrated week-18 shape). The matchup pack is already keyed to the game
-    week, so its EPA is the correct prior source when present.
+    Scoring is unchanged — ``priors_from_matchup_pack`` uses the same
+    ``epa_to_strength_indices`` contract this module already wraps.
     """
-    if not isinstance(matchup_pack, dict):
-        return None
-    home_off = _to_float(matchup_pack.get("home_off_epa_5g"))
-    away_off = _to_float(matchup_pack.get("away_off_epa_5g"))
-    home_def = _to_float(matchup_pack.get("home_def_epa_allowed_5g"))
-    away_def = _to_float(matchup_pack.get("away_def_epa_allowed_5g"))
-    if home_off is None or away_off is None or home_def is None or away_def is None:
-        return None
-    season = _to_float(matchup_pack.get("season")) or 0.0
-    week = _to_float(matchup_pack.get("week")) or 0.0
-    home = _epa_to_strength_indices(
-        off_epa=float(home_off),
-        def_epa_allowed=float(home_def),
-        pressure_generated=_to_float(matchup_pack.get("home_pressure_generated_5g")) or 0.0,
-        pressure_allowed=_to_float(matchup_pack.get("home_pressure_allowed_5g")) or 0.0,
-    )
-    away = _epa_to_strength_indices(
-        off_epa=float(away_off),
-        def_epa_allowed=float(away_def),
-        pressure_generated=_to_float(matchup_pack.get("away_pressure_generated_5g")) or 0.0,
-        pressure_allowed=_to_float(matchup_pack.get("away_pressure_allowed_5g")) or 0.0,
-    )
-    home["_season"] = float(season)
-    away["_season"] = float(season)
-    home["_week"] = float(week)
-    away["_week"] = float(week)
-    return home, away
+    return priors_from_matchup_pack(matchup_pack)
 
 
 def _count_completed_reg_games_season(session: Any, season_year: int) -> int:

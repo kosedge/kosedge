@@ -1,0 +1,4 @@
+...s                                                                     [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_nfl_week_cap_bind.py:109: local Postgres not available
+3 passed, 1 skipped in 1.56s
