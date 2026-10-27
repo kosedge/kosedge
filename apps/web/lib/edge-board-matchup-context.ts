@@ -175,11 +175,13 @@ export function buildMatchupContext(
     String(input.gameId || "").trim() ||
     `${awayAbbr}@${homeAbbr}-w${week ?? "?"}`;
   let gamesPlayedAway =
-    input.gamesPlayedAway != null && Number.isFinite(Number(input.gamesPlayedAway))
+    input.gamesPlayedAway != null &&
+    Number.isFinite(Number(input.gamesPlayedAway))
       ? Math.max(0, Math.trunc(Number(input.gamesPlayedAway)))
       : null;
   let gamesPlayedHome =
-    input.gamesPlayedHome != null && Number.isFinite(Number(input.gamesPlayedHome))
+    input.gamesPlayedHome != null &&
+    Number.isFinite(Number(input.gamesPlayedHome))
       ? Math.max(0, Math.trunc(Number(input.gamesPlayedHome)))
       : null;
   if (week === 1) {
@@ -232,7 +234,10 @@ export function buildMatchupContext(
   };
 }
 
-export function shortTeam(ctx: EdgeBoardMatchupContext, side: "away" | "home"): string {
+export function shortTeam(
+  ctx: EdgeBoardMatchupContext,
+  side: "away" | "home",
+): string {
   return shortName(side === "away" ? ctx.awayName : ctx.homeName);
 }
 

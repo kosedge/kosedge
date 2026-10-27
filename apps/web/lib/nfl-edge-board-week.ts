@@ -24,7 +24,12 @@ const ABBR_TO_NAME = new Map(
 );
 
 function canonAbbr(raw: string): string {
-  return canonicalizeNflTeam(raw) || String(raw || "").trim().toUpperCase();
+  return (
+    canonicalizeNflTeam(raw) ||
+    String(raw || "")
+      .trim()
+      .toUpperCase()
+  );
 }
 
 /** Pack / nflverse often emit LA for Rams; product id prefers LAR. */
@@ -54,9 +59,7 @@ function abbrFromLabel(label: string): string {
 }
 
 function parseGameTeams(game: string): { away: string; home: string } {
-  const parts = game.includes(" @ ")
-    ? game.split(" @ ")
-    : game.split(" vs ");
+  const parts = game.includes(" @ ") ? game.split(" @ ") : game.split(" vs ");
   return {
     away: (parts[0] ?? "Away").trim() || "Away",
     home: (parts[1] ?? "Home").trim() || "Home",
@@ -265,9 +268,7 @@ export function diffNflBoardVsScheduleWeek(
     (g) => !present.has(orientedPairKey(g.awayAbbr, g.homeAbbr)),
   );
   const boardCount = new Set(
-    rows
-      .map(rowOrientedPairKey)
-      .filter((k): k is string => Boolean(k)),
+    rows.map(rowOrientedPairKey).filter((k): k is string => Boolean(k)),
   ).size;
   return {
     week: coerceNflWeek(week) ?? week,
