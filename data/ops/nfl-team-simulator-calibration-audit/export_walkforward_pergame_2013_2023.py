@@ -1,25 +1,22 @@
 #!/usr/bin/env python3
-"""t4422u P3 — walk-forward per-game unblended engine export (2013–2023).
+"""t4450u / t4422u — RESEARCH_DIAGNOSTIC walk-forward export (2013–2023).
 
-Research prep only. Does not open holdout, does not change frozen tests,
-does not write production publish paths, does not fit candidates, does not
-burn Odds API, does not enable IFB / injury / personnel overlays, and does
-not invent HFA or sites.
+RESEARCH_DIAGNOSTIC only. CERT_CANDIDATE=0. Not a CERT. Not CLV / true-close.
+NFL NO-GO. Coming soon ON. Do not merge. Do not deploy. No Odds API.
 
-Extends the existing calibration-audit / historical-OOS schedule spine:
-  data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv
+t4422u sealed the unblended RECORD per-game means + SU win probs.
+t4450u adds cover/over from unblended samples vs filed MS-9 lines
+(historical_oos_games.csv market_spread_home / market_total).
 
-RECORD path: walk-forward same-season W-L updated AFTER each game (identical
-rule to backtest_record_vs_epa_signal.py). Strength indices use the exact
-nfl_data.team_strength_from_record formula (copied here to avoid the
-requests import). Engine call is simulate_nfl_game with market lines omitted
-(unblended).
+Engine: simulate_nfl_game(..., apply_market_blend=False) so the baseline
+stays unblended while scoring
+  cover_prob_home = P(margin + market_spread_home > 0)
+  over_prob       = P(total > market_total)
 
-EPA path: not rematerialized. Trailing EPA rolling features are warehouse-
-only (nfl_dp_team_rolling_features_weekly, present 2023–2026). This tip has
-DATABASE_URL unset. Repo OOS already filed 2023 trailing *decompose*
-spread/total (no win probs). Those decompose means are copied through as
-repo-available EPA point estimates; epa_home_win_prob is MISSING.
+Does not open holdout, does not change frozen tests, does not write
+production publish paths, does not fit candidates, does not burn Odds API,
+does not enable IFB / injury / personnel overlays, and does not invent
+HFA, sites, EPA win probs, or true-close.
 
 Usage:
   python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame_2013_2023.py
@@ -59,8 +56,12 @@ END_SEASON = 2023  # inclusive; holdout 2024+ is NOT opened
 SIMULATIONS_PER_GAME = 4000  # engine default; stable win-prob grain
 EXPORT_ID = "t4422u-walkforward-pergame-unblended-2013-2023"
 SEED_NAMESPACE = "t4422u-unblended-record"
+RESEARCH_LABEL = "RESEARCH_DIAGNOSTIC"
+CERT_CANDIDATE = 0
+MARKET_LINE_SOURCE = "historical_oos_ms9_nflverse_close"
 NFLVERSE_GAMES_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
-# Clock / identity only — do not persist nflverse closes into this artifact (MS-9).
+# Clock / identity only. Cover/over lines come from filed OOS MS-9 columns,
+# not a fresh nflverse close and not owned true-close.
 NFLVERSE_KEEP_COLS = (
     "game_id",
     "season",
@@ -252,6 +253,16 @@ def _epa_fields(oos: Dict[str, str]) -> Dict[str, str]:
     }
 
 
+def _optional_float(raw: Any) -> Optional[float]:
+    text = str(raw or "").strip()
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
 def _load_oos_rows() -> List[Dict[str, str]]:
     rows: List[Dict[str, str]] = []
     with OOS_SCHEDULE.open(newline="", encoding="utf-8") as fh:
@@ -296,7 +307,14 @@ FIELDNAMES = [
     "home_win_prob",
     "away_win_prob",
     "cover_prob",
+    "cover_prob_home",
     "over_prob",
+    "market_spread_home",
+    "market_total",
+    "market_line_source",
+    "apply_market_blend",
+    "research_label",
+    "cert_candidate",
     "epa_trailing_spread_home",
     "epa_trailing_total",
     "epa_home_win_prob",
@@ -326,8 +344,11 @@ def main() -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     nflverse_path = OUT_DIR / "nflverse_games_2013_2023_join.csv"
-    print(f"Downloading nflverse games.csv → {nflverse_path}")
-    _download_nflverse_games(nflverse_path)
+    if nflverse_path.exists() and nflverse_path.stat().st_size > 0:
+        print(f"Reusing sealed nflverse join → {nflverse_path}")
+    else:
+        print(f"Downloading nflverse games.csv → {nflverse_path}")
+        _download_nflverse_games(nflverse_path)
     nflverse_sha = _sha256_file(nflverse_path)
     _write_sha256_sidecar(nflverse_path)
     nflverse_idx = _load_nflverse_index(nflverse_path)
@@ -346,6 +367,9 @@ def main() -> None:
     out_rows: List[Dict[str, Any]] = []
     join_hits = 0
     kickoff_hits = 0
+    cover_hits = 0
+    over_hits = 0
+    line_hits = 0
     by_season: Dict[int, int] = defaultdict(int)
     epa_by_status: Dict[str, int] = defaultdict(int)
 
@@ -387,6 +411,10 @@ def main() -> None:
         rec_off_home, rec_def_home = team_strength_from_record(home_rec)
         rec_off_away, rec_def_away = team_strength_from_record(away_rec)
         seed = _stable_seed(game_id or f"{season}|{week}|{away}|{home}")
+        ms9_spread = _optional_float(oos.get("market_spread_home"))
+        ms9_total = _optional_float(oos.get("market_total"))
+        if ms9_spread is not None and ms9_total is not None:
+            line_hits += 1
 
         inputs = NflGameInputs(
             game_id=game_id or f"{season}_{week:02d}_{away}_{home}",
@@ -410,19 +438,28 @@ def main() -> None:
             seed=seed,
             apply_linear_totals_calibration=True,
             totals_calibration=None,
-            market_spread_home=None,
-            market_total=None,
+            market_spread_home=ms9_spread,
+            market_total=ms9_total,
+            apply_market_blend=False,
         )
         markets = projection["markets"]
         decomp = projection["decomposition"]
         blend = (projection.get("diagnostics") or {}).get("market_blend") or {}
         if blend.get("spread_applied") or blend.get("total_applied"):
             raise RuntimeError(f"market blend leaked on {game_id}")
+        if blend.get("apply_market_blend") is not False and (ms9_spread is not None or ms9_total is not None):
+            raise RuntimeError(f"no-blend eval flag missing on {game_id}")
 
         decomp_margin = float(decomp["predicted_margin"])
         decomp_total = float(decomp["predicted_total"])
         mc_spread = float(markets["spread_home"])
         mc_total = float(markets["total_mean"])
+        cover = markets.get("cover_prob_home")
+        over = markets.get("over_prob")
+        if cover is not None:
+            cover_hits += 1
+        if over is not None:
+            over_hits += 1
         epa = _epa_fields(oos)
 
         out_rows.append(
@@ -451,8 +488,15 @@ def main() -> None:
                 "record_decomp_total": f"{decomp_total:.4f}",
                 "home_win_prob": f"{float(markets['home_win_prob']):.4f}",
                 "away_win_prob": f"{float(markets['away_win_prob']):.4f}",
-                "cover_prob": "",
-                "over_prob": "",
+                "cover_prob": "" if cover is None else f"{float(cover):.4f}",
+                "cover_prob_home": "" if cover is None else f"{float(cover):.4f}",
+                "over_prob": "" if over is None else f"{float(over):.4f}",
+                "market_spread_home": "" if ms9_spread is None else f"{ms9_spread:.4f}",
+                "market_total": "" if ms9_total is None else f"{ms9_total:.4f}",
+                "market_line_source": MARKET_LINE_SOURCE if (ms9_spread is not None or ms9_total is not None) else "",
+                "apply_market_blend": "false",
+                "research_label": RESEARCH_LABEL,
+                "cert_candidate": str(CERT_CANDIDATE),
                 **epa,
                 "market_blend_applied": "false",
                 "injury_overlay": "false",
@@ -498,11 +542,17 @@ def main() -> None:
 
     missing = {
         "artifact": EXPORT_ID,
+        "label": RESEARCH_LABEL,
+        "cert_candidate": CERT_CANDIDATE,
         "authority": {
             "DECISION_RYAN_t4422u": "sha8 dbb35c04",
             "ALEX_PREDICTIVE_BASELINE_STATUS_t4422u_v1": "sha8 7f16f829",
             "IMV_gates_packet_t4422u": "sha8 7af96335",
-            "note": "Authority filings not in this worktree; cited as given. Research prep only — adopt IMV gates before graded results.",
+            "note": (
+                "Authority filings not in this worktree; cited as given. "
+                f"{RESEARCH_LABEL} only — CERT_CANDIDATE={CERT_CANDIDATE}. "
+                "RESEARCH_DIAGNOSTIC is not CERT. Adopt IMV gates before graded results."
+            ),
         },
         "probability_columns": {
             "home_win_prob": {
@@ -515,21 +565,29 @@ def main() -> None:
                 "source": "simulate_nfl_game markets.away_win_prob (RECORD walk-forward, unblended)",
                 "n": len(out_rows),
             },
-            "cover_prob": {
-                "status": "MISSING",
-                "blocker": (
-                    "nfl_simulator.simulate_nfl_game does not emit cover probability. "
-                    "Cover would require a market spread line; this export is unblended "
-                    "and does not pass market_spread_home (MS-9 nflverse close is Alex-side)."
+            "cover_prob_home": {
+                "status": "PRESENT" if cover_hits else "MISSING",
+                "source": (
+                    "simulate_nfl_game markets.cover_prob_home = "
+                    "P(margin + market_spread_home > 0) on unblended samples "
+                    f"(apply_market_blend=False). Line = filed OOS {MARKET_LINE_SOURCE}."
                 ),
+                "n": cover_hits,
+                "formula": "P(margin + market_spread_home > 0)",
+            },
+            "cover_prob": {
+                "status": "PRESENT" if cover_hits else "MISSING",
+                "source": "alias of cover_prob_home for the existing export column",
+                "n": cover_hits,
             },
             "over_prob": {
-                "status": "MISSING",
-                "blocker": (
-                    "nfl_simulator.simulate_nfl_game does not emit over probability. "
-                    "Over would require a market total; this export is unblended and "
-                    "does not pass market_total."
+                "status": "PRESENT" if over_hits else "MISSING",
+                "source": (
+                    "simulate_nfl_game markets.over_prob = P(total > market_total) "
+                    f"on unblended samples. Line = filed OOS {MARKET_LINE_SOURCE}."
                 ),
+                "n": over_hits,
+                "formula": "P(total > market_total)",
             },
             "epa_home_win_prob": {
                 "status": "MISSING",
@@ -559,8 +617,18 @@ def main() -> None:
             "status": "OUT_OF_SCOPE",
             "blocker": (
                 "Owned odds lake / true-close JSONL not mounted (DATABASE_URL unset; "
-                "no HD drive). Market columns intentionally omitted (MS-9 nflverse "
-                "close is Alex-side diagnostic). No Odds API spend."
+                "no HD drive). MS-9 columns here are filed historical_oos_games.csv "
+                "nflverse closes (home-spread convention), not owned true-close and "
+                "not CLV. No Odds API spend. RESEARCH_DIAGNOSTIC ≠ CERT."
+            ),
+        },
+        "ms9_lines": {
+            "status": "PRESENT",
+            "source": MARKET_LINE_SOURCE,
+            "n_spread_and_total": line_hits,
+            "note": (
+                "Filed OOS market_spread_home / market_total only. "
+                "Do not invent EPA or true-close from these lines."
             ),
         },
         "epa_trailing_pre_2023": {
@@ -588,6 +656,9 @@ def main() -> None:
 
     manifest = {
         "artifact": EXPORT_ID,
+        "label": RESEARCH_LABEL,
+        "cert_candidate": CERT_CANDIDATE,
+        "research_diagnostic_not_cert": True,
         "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git_sha": tip,
         "git_sha12": tip_short,
@@ -597,6 +668,9 @@ def main() -> None:
         "n_by_season": {str(k): by_season[k] for k in sorted(by_season)},
         "nflverse_join_hits": join_hits,
         "kickoff_utc_n": kickoff_hits,
+        "ms9_line_hits": line_hits,
+        "cover_prob_home_n": cover_hits,
+        "over_prob_n": over_hits,
         "epa_status_counts": dict(epa_by_status),
         "simulations_per_game": SIMULATIONS_PER_GAME,
         "seed_namespace": SEED_NAMESPACE,
@@ -608,6 +682,11 @@ def main() -> None:
             "base_total_points": priors.get("base_total_points"),
             "base_score_stdev": priors.get("base_score_stdev"),
             "market_blend": False,
+            "apply_market_blend": False,
+            "eval_unblended": True,
+            "cover_prob_home_formula": "P(margin + market_spread_home > 0)",
+            "over_prob_formula": "P(total > market_total)",
+            "market_line_source": MARKET_LINE_SOURCE,
             "injury_overlay": False,
             "ifb_overlay": False,
             "personnel_overlay": False,
@@ -633,6 +712,11 @@ def main() -> None:
             "no_protected_results": True,
             "no_candidate_fitting": True,
             "no_frozen_test_changes": True,
+            "research_diagnostic": True,
+            "cert_candidate": CERT_CANDIDATE,
+            "no_cert_claim": True,
+            "no_clv_true_close": True,
+            "no_odds_api": True,
         },
         "command": (
             "python3 data/ops/nfl-team-simulator-calibration-audit/"
@@ -649,8 +733,10 @@ def main() -> None:
     _write_sha256_sidecar(readme_path)
 
     print(f"Wrote {games_path} n={len(out_rows)} sha256={games_sha}")
+    print(f"label={RESEARCH_LABEL} CERT_CANDIDATE={CERT_CANDIDATE}")
     print(f"by_season={dict(sorted(by_season.items()))}")
     print(f"nflverse_join={join_hits}/{len(out_rows)} kickoff_utc={kickoff_hits}")
+    print(f"ms9_lines={line_hits} cover={cover_hits} over={over_hits}")
     print(f"epa_status={dict(epa_by_status)}")
 
 
@@ -660,10 +746,12 @@ def _readme(manifest: Dict[str, Any], missing: Dict[str, Any], games_sha: str) -
         for season, n in manifest["n_by_season"].items()
     )
     eng = manifest["engine"]
-    return f"""# t4422u — walk-forward per-game unblended engine export (2013–2023)
+    return f"""# t4450u / t4422u — RESEARCH_DIAGNOSTIC walk-forward export (2013–2023)
 
+**`RESEARCH_DIAGNOSTIC` only. `CERT_CANDIDATE=0`.**  
+`RESEARCH_DIAGNOSTIC` ≠ CERT. No cert eligibility. No CLV. No true-close.  
 Research prep for Alex baseline. **Not a CLEAR. Not graded results.**  
-NFL board **NO-GO**. Coming soon **ON**. No merge / deploy / spend.
+NFL board **NO-GO**. Coming soon **ON**. No merge / deploy / spend / Odds API.
 
 Authority cited (filings not in this worktree):  
 `DECISION_RYAN_t4422u` sha8 `dbb35c04` ·  
@@ -691,8 +779,9 @@ python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame
 | IFB overlays | **OFF** (no IFB module on this tip; no inputs passed) |
 | Injury overlays | **OFF** |
 | Personnel overlays | **OFF** |
-| Market blend | **OFF** (`market_spread_home` / `market_total` omitted) |
-| Market columns | **not in this file** (nflverse close is Alex-side MS-9) |
+| Market blend | **OFF** (`apply_market_blend=False` no-blend eval flag) |
+| MS-9 lines | filed OOS `market_spread_home` / `market_total` (`{eng.get("market_line_source")}`) |
+| Label | `{manifest.get("label")}` · `CERT_CANDIDATE={manifest.get("cert_candidate")}` |
 | Holdout 2024+ | **not opened** |
 | Rest days | `7.0` / `7.0` (same hardcoded rest as `historical_market_backtest.py` / record-vs-EPA audit; do not invent rest from incomplete clocks) |
 
@@ -712,8 +801,9 @@ python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame
 | Column | Status | Notes |
 | --- | --- | --- |
 | `home_win_prob` / `away_win_prob` | **PRESENT** | RECORD unblended Monte Carlo (`simulate_nfl_game`) |
-| `cover_prob` | **MISSING** | Engine does not emit cover; would need a market spread |
-| `over_prob` | **MISSING** | Engine does not emit over; would need a market total |
+| `cover_prob_home` / `cover_prob` | **PRESENT** | `P(margin + market_spread_home > 0)` on unblended samples |
+| `over_prob` | **PRESENT** | `P(total > market_total)` on unblended samples |
+| `market_spread_home` / `market_total` | **PRESENT** | MS-9 filed OOS nflverse close (not true-close / not CLV) |
 | `epa_home_win_prob` / `epa_away_win_prob` | **MISSING** | See `MISSING.json` — rolling-feature table not mounted |
 | `epa_trailing_spread_home` / `epa_trailing_total` | repo decompose only, 2023 | Copied from historical OOS; **not** engine win probs |
 
@@ -743,7 +833,9 @@ nflverse join hits: {manifest["nflverse_join_hits"]} / {manifest["n_games"]}.
 
 ## True-close / CLV
 
-**Out of scope.** Owned odds lake / true-close JSONL not mounted (`DATABASE_URL` unset). Market columns omitted on purpose.
+**Out of scope.** Owned odds lake / true-close JSONL not mounted (`DATABASE_URL` unset).  
+MS-9 lines are filed OOS nflverse closes used only to score unblended cover/over.  
+They are **not** owned true-close and **not** a CLV claim.
 
 ## Non-actions honored
 
