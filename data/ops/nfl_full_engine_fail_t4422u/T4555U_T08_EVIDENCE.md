@@ -2,7 +2,8 @@
 
 **Draft. Do not merge. Do not deploy. NFL NO-GO. Coming Soon ON.**
 
-Stacked on #637 tip `b752c038`. Does **not** touch W8 capture tip `385767a2` / PR #641.
+Stacked on #637 tip `b752c038`. This tip `3d9b6097`. Draft PR **#643**.
+Does **not** touch W8 capture tip `385767a2` / PR #641.
 Does **not** call Odds API. Predictive FAIL `f4c61237` still stands.
 
 ## Slate vs T-08 (t4559u)
