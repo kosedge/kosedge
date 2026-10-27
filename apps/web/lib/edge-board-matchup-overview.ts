@@ -62,9 +62,10 @@ function leanTotal(ctx: EdgeBoardMatchupContext): "over" | "under" | "push" {
   return d > 0 ? "over" : "under";
 }
 
-function siteClause(ctx: EdgeBoardMatchupContext): string | null {
+export function siteClause(ctx: EdgeBoardMatchupContext): string | null {
   if (!ctx.isNeutral) return null;
   const city = ctx.siteCity || "a neutral site";
+  if (ctx.hfaPoints === null) return null;
   if (ctx.hfaPoints === 0) {
     return `Neutral site in ${city} — no home-crowd edge for the nominal home side`;
   }

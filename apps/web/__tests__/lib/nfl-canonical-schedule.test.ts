@@ -34,7 +34,10 @@ describe("canonical NFL schedule", () => {
 
   it("locks Week 1 primetime / Melbourne anchors", () => {
     for (const anchor of NFL_WEEK1_KICKOFF_ANCHORS) {
-      const game = lookupCanonicalNflGame({ gameId: anchor.game_id });
+      const game = lookupCanonicalNflGame({
+        gameId: anchor.game_id,
+        season: 2026,
+      });
       expect(game?.kickoff_utc).toBe(anchor.kickoff_utc);
       expect(formatKickoffEt(game?.kickoff_utc)).toBe(anchor.kickoff_et);
       expect(game?.venue).toBe(anchor.venue);
@@ -64,6 +67,7 @@ describe("canonical NFL schedule", () => {
     expect(
       resolveNflKickoffIso({
         gameId: "odds-uuid",
+        season: 2026,
         week: 1,
         awayAbbr: "NE",
         homeAbbr: "SEA",
@@ -74,6 +78,8 @@ describe("canonical NFL schedule", () => {
     expect(
       resolveNflKickoffIso({
         gameId: "odds-uuid",
+        season: 2026,
+        seasonType: "REG",
         awayAbbr: "NE",
         homeAbbr: "SEA",
         startTime: "2026-09-13T20:00:00.000Z",
@@ -94,6 +100,7 @@ describe("canonical NFL schedule", () => {
 
   it("treats flex TBD as honest null, not an odds fallback", () => {
     const hit = canonicalKickoffForMatchup({
+      season: 2026,
       week: 18,
       awayAbbr: "MIA",
       homeAbbr: "NE",
@@ -103,6 +110,7 @@ describe("canonical NFL schedule", () => {
     expect(
       resolveNflKickoffIso({
         gameId: "x",
+        season: 2026,
         week: 18,
         awayAbbr: "MIA",
         homeAbbr: "NE",

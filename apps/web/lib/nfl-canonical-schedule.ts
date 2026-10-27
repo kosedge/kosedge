@@ -91,31 +91,71 @@ export function listCanonicalNflGames(): CanonicalNflGame[] {
  * (fail-closed in-season rule — never a silent Week 1 pin).
  */
 
-export function lookupCanonicalNflGame(args: {
+type CanonicalLookupArgs = {
   gameId?: string | null;
   season?: number | null;
   week?: number | null;
   awayAbbr?: string | null;
   homeAbbr?: string | null;
-}): CanonicalNflGame | null {
+  /**
+   * Week and id lookups apply PRE / REG / POST only when the caller sets it.
+   * Directed-unique lookup requires "REG". Null is not REG.
+   */
+  seasonType?: CanonicalNflGame["game_type"] | null;
+};
+
+function seasonTypeAgrees(
+  game: CanonicalNflGame,
+  seasonType: CanonicalNflGame["game_type"] | null | undefined,
+): boolean {
+  if (seasonType == null) return true;
+  return game.game_type === seasonType;
+}
+
+function suppliedTeamAgrees(
+  supplied: string | null | undefined,
+  actual: string,
+): boolean {
+  if (supplied == null || String(supplied).trim() === "") return true;
+  return canonicalizeNflTeam(supplied) === actual;
+}
+
+function identityAgrees(
+  game: CanonicalNflGame,
+  args: CanonicalLookupArgs,
+): boolean {
+  if (args.season == null || Number(args.season) !== game.season) return false;
+  if (!seasonTypeAgrees(game, args.seasonType)) return false;
+  if (!suppliedTeamAgrees(args.awayAbbr, game.away_team_id)) return false;
+  if (!suppliedTeamAgrees(args.homeAbbr, game.home_team_id)) return false;
+  return true;
+}
+
+export function lookupCanonicalNflGame(
+  args: CanonicalLookupArgs,
+): CanonicalNflGame | null {
   const id = String(args.gameId ?? "").trim();
   if (id) {
     const hit = BY_PRODUCT_ID.get(id) ?? BY_ENGINE_ID.get(id);
-    if (hit) return hit;
+    if (hit) return identityAgrees(hit, args) ? hit : null;
   }
-  const week = args.week == null ? NaN : Number(args.week);
   const away = canonicalizeNflTeam(args.awayAbbr);
   const home = canonicalizeNflTeam(args.homeAbbr);
   if (!away || !home) return null;
-  if (args.season != null && Number(args.season) !== PACK.season) return null;
-  if (Number.isFinite(week)) {
-    return (
-      BY_WEEK_PAIR.get(pairKey(Math.trunc(week), away, home)) ??
-      BY_WEEK_PAIR.get(pairKey(Math.trunc(week), home, away)) ??
-      null
-    );
+  if (args.season == null || Number(args.season) !== PACK.season) return null;
+  const weekProvided = args.week != null && args.week !== ("" as unknown);
+  if (weekProvided) {
+    const week = Number(args.week);
+    if (!Number.isInteger(week)) return null;
+    const hit = BY_WEEK_PAIR.get(pairKey(week, away, home)) ?? null;
+    if (!hit || hit.season !== Number(args.season)) return null;
+    if (!seasonTypeAgrees(hit, args.seasonType)) return null;
+    return hit;
   }
-  const directed = BY_PAIR.get(pairTeams(away, home)) ?? [];
+  if (args.seasonType !== "REG") return null;
+  const directed = (BY_PAIR.get(pairTeams(away, home)) ?? []).filter(
+    (game) => game.season === Number(args.season) && game.game_type === "REG",
+  );
   if (directed.length === 1) return directed[0];
   return null;
 }
@@ -140,6 +180,7 @@ export function canonicalKickoffForMatchup(args: {
   week?: number | null;
   awayAbbr?: string | null;
   homeAbbr?: string | null;
+  seasonType?: CanonicalNflGame["game_type"] | null;
 }): {
   found: boolean;
   kickoffUtc: string | null;

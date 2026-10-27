@@ -35,7 +35,8 @@ function abbrFromLabel(label: string): string {
   const raw = String(label || "").trim();
   if (!raw) return "";
   const asAbbr = canonAbbr(raw);
-  if (ABBR_SET.has(asAbbr) || asAbbr === "LAR") return asAbbr === "LA" ? "LAR" : asAbbr;
+  if (ABBR_SET.has(asAbbr) || asAbbr === "LAR")
+    return asAbbr === "LA" ? "LAR" : asAbbr;
   const byName = NAME_TO_ABBR.get(raw.toLowerCase());
   if (byName) return canonAbbr(byName);
   const words = raw.split(/\s+/);
@@ -51,9 +52,7 @@ function abbrFromLabel(label: string): string {
 }
 
 function parseGameTeams(game: string): { away: string; home: string } {
-  const parts = game.includes(" @ ")
-    ? game.split(" @ ")
-    : game.split(" vs ");
+  const parts = game.includes(" @ ") ? game.split(" @ ") : game.split(" vs ");
   return {
     away: (parts[0] ?? "Away").trim() || "Away",
     home: (parts[1] ?? "Home").trim() || "Home",
@@ -111,7 +110,10 @@ type RowExtra = EdgeBoardRow & {
  */
 export function enrichNflEdgeBoardMatchupFields(
   rows: EdgeBoardRow[],
-  options?: { powerByAbbr?: MatchupPowerMap | null },
+  options?: {
+    powerByAbbr?: MatchupPowerMap | null;
+    season?: number | null;
+  },
 ): EdgeBoardRow[] {
   if (!rows.length) return rows;
   const power = options?.powerByAbbr ?? null;
@@ -129,12 +131,8 @@ export function enrichNflEdgeBoardMatchupFields(
     const { away, home } = parseGameTeams(game);
     const spread = group.find((r) => r.market === "Spread") ?? group[0]!;
     const total = group.find((r) => r.market === "Total");
-    const awayAbbr = canonAbbr(
-      spread.awayAbbr || abbrFromLabel(away),
-    );
-    const homeAbbr = canonAbbr(
-      spread.homeAbbr || abbrFromLabel(home),
-    );
+    const awayAbbr = canonAbbr(spread.awayAbbr || abbrFromLabel(away));
+    const homeAbbr = canonAbbr(spread.homeAbbr || abbrFromLabel(home));
     const week =
       coerceNflWeek(spread.week ?? total?.week) ??
       lookupNflScheduleWeek({ homeAbbr, awayAbbr });
@@ -154,12 +152,13 @@ export function enrichNflEdgeBoardMatchupFields(
     const keiTotal =
       total?.keiTotal ??
       (total ? parseTotal(total.kei) : null) ??
-      (spread.keiTotal ?? null);
+      spread.keiTotal ??
+      null;
     const marketTotal =
-      total?.marketTotal ??
-      (total?.best ? parseTotal(total.best) : null);
+      total?.marketTotal ?? (total?.best ? parseTotal(total.best) : null);
 
     const site = resolveNflSiteContext({
+      season: options?.season ?? null,
       week,
       homeAbbr,
       awayAbbr,
@@ -171,8 +170,10 @@ export function enrichNflEdgeBoardMatchupFields(
     const awayStruct = structuralPaceFor(awayAbbr);
     const homeStruct = structuralPaceFor(homeAbbr);
 
-    const modelPowerAway = power?.get(awayAbbr) ?? spread.modelPowerAway ?? null;
-    const modelPowerHome = power?.get(homeAbbr) ?? spread.modelPowerHome ?? null;
+    const modelPowerAway =
+      power?.get(awayAbbr) ?? spread.modelPowerAway ?? null;
+    const modelPowerHome =
+      power?.get(homeAbbr) ?? spread.modelPowerHome ?? null;
 
     const edgeSpreadAbs =
       keiSpreadHome != null && marketSpreadHome != null
@@ -180,15 +181,15 @@ export function enrichNflEdgeBoardMatchupFields(
         : null;
 
     const ctx = buildMatchupContext({
-      gameId: String(spread.id || `${awayAbbr}@${homeAbbr}-w${week ?? "?"}`).replace(
-        /-spread$|-total$/,
-        "",
-      ),
+      gameId: String(
+        spread.id || `${awayAbbr}@${homeAbbr}-w${week ?? "?"}`,
+      ).replace(/-spread$|-total$/, ""),
       awayName: away,
       homeName: home,
       awayAbbr,
       homeAbbr,
       week,
+      season: options?.season ?? null,
       seasonType: spread.seasonType ?? total?.seasonType ?? null,
       gamesPlayedAway: spread.gamesPlayedAway ?? null,
       gamesPlayedHome: spread.gamesPlayedHome ?? null,
@@ -232,7 +233,7 @@ export function enrichNflEdgeBoardMatchupFields(
       row.neutralSite = ctx.isNeutral;
       row.neutralCity = ctx.siteCity ?? undefined;
       row.neutralVenue = ctx.siteVenue ?? undefined;
-      row.hfaPoints = ctx.hfaPoints;
+      row.hfaPoints = ctx.hfaPoints ?? undefined;
       row.paceAway = awayStruct.pace ?? undefined;
       row.paceHome = homeStruct.pace ?? undefined;
       row.structuralTagAway = awayStruct.tag ?? undefined;

@@ -148,6 +148,7 @@ function nflLaunchPowerByAbbr(): Map<string, number> {
 function withMatchupEnrichment(rows: EdgeBoardRow[]): EdgeBoardRow[] {
   return enrichNflEdgeBoardMatchupFields(rows, {
     powerByAbbr: nflLaunchPowerByAbbr(),
+    season: NFL_EDGE_BOARD_SEASON,
   });
 }
 

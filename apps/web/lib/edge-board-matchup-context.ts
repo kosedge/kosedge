@@ -37,8 +37,8 @@ export type EdgeBoardMatchupContext = {
   isNeutral: boolean;
   siteCity: string | null;
   siteVenue: string | null;
-  hfaPoints: number;
-  siteLabel: "Home" | "Road" | "Neutral";
+  hfaPoints: number | null;
+  siteLabel: "Home" | "Road" | "Neutral" | "UNKNOWN";
 
   restDaysAway: number | null;
   restDaysHome: number | null;
@@ -81,17 +81,26 @@ function shortName(name: string): string {
   return parts[parts.length - 1]!;
 }
 
-/** KEI-relative power points (home-positive), stripping HFA. */
+/**
+ * KEI-relative power points (home-positive), stripping HFA.
+ * Always computable when a KEI spread exists. Site UNKNOWN (null HFA)
+ * uses the standard home prior for the proxy only — it does not invent
+ * a site identity or restore week-null pair fallback.
+ */
 export function keiRelativePower(args: {
   keiSpreadHome: number | null;
-  hfaPoints: number;
+  hfaPoints: number | null;
 }): { away: number; home: number } | null {
   if (args.keiSpreadHome == null || !Number.isFinite(args.keiSpreadHome)) {
     return null;
   }
+  const hfa =
+    args.hfaPoints != null && Number.isFinite(args.hfaPoints)
+      ? args.hfaPoints
+      : NFL_STANDARD_HFA_POINTS;
   // Home favored when spread negative. Power gap excludes HFA already priced in.
   const homeMargin = -args.keiSpreadHome;
-  const pureHomeEdge = homeMargin - args.hfaPoints;
+  const pureHomeEdge = homeMargin - hfa;
   const home = Math.round(pureHomeEdge * 5) / 10; // half of gap each side
   const away = Math.round(-pureHomeEdge * 5) / 10;
   return { away, home };
@@ -113,6 +122,7 @@ export type BuildMatchupContextInput = {
   awayAbbr?: string | null;
   homeAbbr?: string | null;
   week?: number | null;
+  season?: number | null;
   seasonType?: string | null;
   gamesPlayedAway?: number | null;
   gamesPlayedHome?: number | null;
@@ -150,6 +160,7 @@ export function buildMatchupContext(
   const week = Number.isFinite(weekRaw) ? Math.trunc(weekRaw) : null;
 
   const site = resolveNflSiteContext({
+    season: input.season ?? null,
     week,
     homeAbbr,
     awayAbbr,
@@ -158,9 +169,10 @@ export function buildMatchupContext(
     neutralVenue: input.neutralVenue,
     hfaPoints: input.hfaPoints,
   });
-
   const awayStruct = structuralPaceFor(awayAbbr);
   const homeStruct = structuralPaceFor(homeAbbr);
+  // Frozen Stat Drop: KEI spread ⇒ hasPower. Do not drop the proxy when
+  // 1A-D site identity is UNKNOWN (hfaPoints null).
   const keiPow = keiRelativePower({
     keiSpreadHome: input.keiSpreadHome ?? null,
     hfaPoints: site.hfaPoints,

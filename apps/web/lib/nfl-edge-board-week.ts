@@ -77,17 +77,19 @@ export function coerceNflWeek(raw: unknown): number | null {
 
 type MatchupWeekIndex = Map<string, number>;
 
-let cachedIndex: MatchupWeekIndex | null = null;
+let cachedDirected: MatchupWeekIndex | null = null;
+let pairMeetings: Map<string, readonly number[]> | null = null;
 
 function pairKey(a: string, b: string): string {
   return [canonAbbr(a), canonAbbr(b)].sort().join("|");
 }
 
-/** Build away|home → week and sorted-pair → week from wall-chart pack. */
+/** Build away|home → week from the wall-chart pack. Pair meetings stay separate. */
 export function buildNflScheduleWeekIndex(): MatchupWeekIndex {
-  if (cachedIndex) return cachedIndex;
+  if (cachedDirected) return cachedDirected;
   const schedule = getWallChartSchedule();
-  const index: MatchupWeekIndex = new Map();
+  const directed: MatchupWeekIndex = new Map();
+  const meetings = new Map<string, Set<number>>();
 
   for (const [team, weeks] of Object.entries(schedule)) {
     const teamAbbr = canonAbbr(team);
@@ -103,19 +105,48 @@ export function buildNflScheduleWeekIndex(): MatchupWeekIndex {
       const isAway = String(label).trim().startsWith("@");
       const away = isAway ? teamAbbr : oppAbbr;
       const home = isAway ? oppAbbr : teamAbbr;
-      index.set(`${away}|${home}`, week);
-      index.set(pairKey(away, home), week);
+      directed.set(`${away}|${home}`, week);
+      const key = pairKey(away, home);
+      const bucket = meetings.get(key);
+      if (bucket) bucket.add(week);
+      else meetings.set(key, new Set([week]));
     }
   }
 
-  cachedIndex = index;
-  return index;
+  const builtPairMeetings = new Map<string, readonly number[]>();
+  for (const [key, weeks] of meetings) {
+    builtPairMeetings.set(
+      key,
+      [...weeks].sort((left, right) => left - right),
+    );
+  }
+  pairMeetings = builtPairMeetings;
+  cachedDirected = directed;
+  return cachedDirected;
+}
+
+/**
+ * Oriented week if present; otherwise the single meeting week if the pair meets exactly once; otherwise null.
+ * No module state, I/O, or mutation.
+ * @internal exported for the 1A-E oracle test only
+ */
+export function pickNflScheduleWeek(
+  orientedWeek: number | null | undefined,
+  pairMeetingWeeks: readonly number[] | null | undefined,
+): number | null {
+  if (orientedWeek != null) return orientedWeek;
+  if (pairMeetingWeeks == null || pairMeetingWeeks.length === 0) return null;
+  let sole: number | null = null;
+  for (const week of pairMeetingWeeks) {
+    if (sole == null) sole = week;
+    else if (sole !== week) return null;
+  }
+  return sole;
 }
 
 /**
  * Look up REG week for a matchup from the schedule pack.
- * Prefers oriented away@home; falls back to unordered pair.
- * Does not invent week from a pair-only neutral-site lookup.
+ * Directed away|home wins. Otherwise the week when the teams meet once.
  */
 export function lookupNflScheduleWeek(args: {
   homeAbbr: string;
@@ -124,10 +155,11 @@ export function lookupNflScheduleWeek(args: {
   const home = canonAbbr(args.homeAbbr);
   const away = canonAbbr(args.awayAbbr);
   if (!home || !away) return null;
-  const index = buildNflScheduleWeekIndex();
-  const oriented = index.get(`${away}|${home}`);
-  if (oriented != null) return oriented;
-  return index.get(pairKey(away, home)) ?? null;
+  const directed = buildNflScheduleWeekIndex();
+  return pickNflScheduleWeek(
+    directed.get(`${away}|${home}`),
+    pairMeetings?.get(pairKey(away, home)),
+  );
 }
 
 type RowWeekFields = EdgeBoardRow & {
