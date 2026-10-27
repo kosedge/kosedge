@@ -751,6 +751,50 @@ def _week_cap_bindparam() -> Any:
     return bindparam("week_cap", type_=Integer)
 
 
+FULL_ENGINE_INPUT_MISSING = "MISSING"
+
+
+def _prior_has_epa_indices(prior: Any) -> bool:
+    if not isinstance(prior, dict) or not prior:
+        return False
+    return (
+        _to_float(prior.get("offense_index")) is not None
+        and _to_float(prior.get("defense_index")) is not None
+    )
+
+
+def _full_engine_input_status(
+    *,
+    home_prior: Any,
+    away_prior: Any,
+    context_offense_home: Any = None,
+    context_offense_away: Any = None,
+    context_defense_home: Any = None,
+    context_defense_away: Any = None,
+    prior_source: str = "",
+) -> str:
+    """Fail-closed label for remat strength inputs.
+
+    After packaged / true-PR / matchup-pack fallback, both sides need EPA
+    indices. Context (record) indices remain a valid cold-start fallback.
+    Anything else is ``MISSING`` — do not invent 1.0/1.0.
+    """
+    if _prior_has_epa_indices(home_prior) and _prior_has_epa_indices(away_prior):
+        return str(prior_source or "ok")
+    context_ok = all(
+        _to_float(v) is not None
+        for v in (
+            context_offense_home,
+            context_offense_away,
+            context_defense_home,
+            context_defense_away,
+        )
+    )
+    if context_ok:
+        return str(prior_source or "context_indices")
+    return FULL_ENGINE_INPUT_MISSING
+
+
 def _fetch_rolling_feature_latest_rows(
     session: Any,
     *,
@@ -4522,6 +4566,7 @@ def run_nfl_market_simulations(
     session = SessionLocal()
     processed = 0
     inserted = 0
+    missing_input_rows: List[Dict[str, Any]] = []
     pending_projections: List[Dict[str, Any]] = []
     try:
         _assert_tables_present(
@@ -4740,6 +4785,30 @@ def run_nfl_market_simulations(
                         home_prior = pack_home
                     if not away_prior:
                         away_prior = pack_away
+            raw_offense_home = _to_float(m.get("offense_index_home"))
+            raw_offense_away = _to_float(m.get("offense_index_away"))
+            raw_defense_home = _to_float(m.get("defense_index_home"))
+            raw_defense_away = _to_float(m.get("defense_index_away"))
+            input_status = _full_engine_input_status(
+                home_prior=home_prior,
+                away_prior=away_prior,
+                context_offense_home=raw_offense_home,
+                context_offense_away=raw_offense_away,
+                context_defense_home=raw_defense_home,
+                context_defense_away=raw_defense_away,
+                prior_source=prior_source,
+            )
+            if input_status == FULL_ENGINE_INPUT_MISSING:
+                missing_input_rows.append(
+                    {
+                        "game_id": str(m.get("game_id") or ""),
+                        "home_abbr": str(m.get("home_abbr") or ""),
+                        "away_abbr": str(m.get("away_abbr") or ""),
+                        "status": FULL_ENGINE_INPUT_MISSING,
+                        "prior_source": prior_source,
+                    }
+                )
+                continue
             if season_year is not None and season_year not in tendency_proe_cache:
                 try:
                     from .services.nfl_tendency_pricing import fetch_team_proe_map
@@ -5332,6 +5401,8 @@ def run_nfl_market_simulations(
         return {
             "games_processed": processed,
             "projections_inserted": inserted,
+            "games_missing_inputs": len(missing_input_rows),
+            "missing_inputs": missing_input_rows,
             "slate_pre_mean": round(float(slate_pre_mean), 4) if slate_pre_mean is not None else None,
             "worker_build_id": worker_build_id,
             "sample_early_season_gate": sample_gate,

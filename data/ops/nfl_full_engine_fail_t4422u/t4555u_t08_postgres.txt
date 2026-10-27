@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /workspace/services/model-service
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 7 items
+
+tests/test_nfl_week_cap_bind.py::test_week_cap_predicate_is_explicitly_cast PASSED [ 14%]
+tests/test_nfl_week_cap_bind.py::test_prior_season_null_week_cap_sql_is_typed PASSED [ 28%]
+tests/test_nfl_week_cap_bind.py::test_fail_closed_overlay_defaults_unchanged PASSED [ 42%]
+tests/test_nfl_week_cap_bind.py::test_untyped_null_week_bind_raises_ambiguous_parameter PASSED [ 57%]
+tests/test_nfl_week_cap_bind.py::test_full_engine_input_status_ok_when_both_sides_have_epa PASSED [ 71%]
+tests/test_nfl_week_cap_bind.py::test_full_engine_input_status_context_fallback_not_missing PASSED [ 85%]
+tests/test_nfl_week_cap_bind.py::test_full_engine_input_status_explicit_missing PASSED [100%]
+
+============================== 7 passed in 1.62s ===============================

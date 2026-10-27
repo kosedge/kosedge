@@ -59,7 +59,7 @@ bash scripts/nfl/nfl-fair-lines-production-cert-smoke.sh
 | FE-1 identity | live `framework_version == nfl-handicap-core-v3.1` | pin drifted or test deleted |
 | FE-2 week-1 pack | `test_week1_pack_aligned_indices_stay_dog_side_of_market` collected and asserted (spread `> -1.5` / dog-side) | skipped, deleted, or import-blocked |
 | Cert smoke | 43/43 and public flags false | any public/market/stake true or cert bound |
-| T-08 | local Postgres proof run **or** still labeled NOT EVIDENCED | skip claimed as PASS |
+| T-08 | local/CI Postgres proof 4+ passed / 0 skipped **or** `BLOCKED_WITH_REPRO` | skip claimed as PASS |
 | Predictive gates | still report committed RED/GREEN honestly | floors edited or artifact rewritten to GREEN |
 
 IMV may reject this pre-register if the memo `f4c61237` required a different unused window or a sealed feature-store pin. **Do not invent that window here.**
@@ -72,7 +72,7 @@ IMV may reject this pre-register if the memo `f4c61237` required a different unu
 |------|---------------------|-------------|
 | § engineering pytest | **55 passed / 1 skipped** | same IDs expected |
 | Cert smoke | **43/43** | same |
-| T-08 Postgres proof | SKIP / NOT EVIDENCED | required for T-08 close |
+| T-08 Postgres proof | t4555u: local `postgres:16` + fail-closed skip; CI wire on #637 | see `T4555U_T08_EVIDENCE.md` |
 | IMV sealed W4–W6 | scripts not on `deploy-vercel` (PR #609) | Mac runbook v2.4.10; no cert data in git |
 | Memo `f4c61237` body | **absent** | IMV private box |
 
