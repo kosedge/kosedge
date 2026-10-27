@@ -1,8 +1,11 @@
 {
   "artifact": "t4422u-walkforward-pergame-unblended-2013-2023",
-  "generated_at_utc": "2026-10-27T13:30:55Z",
-  "git_sha": "a0f583d31b956ba0e7db9fd858e59014c0335600",
-  "git_sha12": "a0f583d31b95",
+  "label": "RESEARCH_DIAGNOSTIC",
+  "cert_candidate": 0,
+  "research_diagnostic_not_cert": true,
+  "generated_at_utc": "2026-10-27T14:38:56Z",
+  "git_sha": "f58ff3cd26998fa6239b746ec5879332a10cfc99",
+  "git_sha12": "f58ff3cd2699",
   "seasons": [
     2013,
     2023
@@ -24,6 +27,9 @@
   },
   "nflverse_join_hits": 2992,
   "kickoff_utc_n": 2992,
+  "ms9_line_hits": 2992,
+  "cover_prob_home_n": 2992,
+  "over_prob_n": 2992,
   "epa_status_counts": {
     "MISSING": 2707,
     "repo_decompose_only": 285
@@ -38,6 +44,11 @@
     "base_total_points": 45.3,
     "base_score_stdev": 9.8,
     "market_blend": false,
+    "apply_market_blend": false,
+    "eval_unblended": true,
+    "cover_prob_home_formula": "P(margin + market_spread_home > 0)",
+    "over_prob_formula": "P(total > market_total)",
+    "market_line_source": "historical_oos_ms9_nflverse_close",
     "injury_overlay": false,
     "ifb_overlay": false,
     "personnel_overlay": false,
@@ -53,7 +64,7 @@
   },
   "outputs": {
     "games_csv": "data/ops/nfl-t4422u-walkforward-pergame-unblended-2013-2023/games.csv",
-    "games_csv_sha256": "07c89418ab55a6c4c781ece669ad062cbe2ebeb5de26c65d0ab57dca06db34eb"
+    "games_csv_sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8"
   },
   "constraints": {
     "nfl_no_go": true,
@@ -62,7 +73,12 @@
     "no_holdout": true,
     "no_protected_results": true,
     "no_candidate_fitting": true,
-    "no_frozen_test_changes": true
+    "no_frozen_test_changes": true,
+    "research_diagnostic": true,
+    "cert_candidate": 0,
+    "no_cert_claim": true,
+    "no_clv_true_close": true,
+    "no_odds_api": true
   },
   "command": "python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame_2013_2023.py"
 }

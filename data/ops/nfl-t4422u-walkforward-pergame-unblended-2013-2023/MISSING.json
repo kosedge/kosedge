@@ -1,10 +1,12 @@
 {
   "artifact": "t4422u-walkforward-pergame-unblended-2013-2023",
+  "label": "RESEARCH_DIAGNOSTIC",
+  "cert_candidate": 0,
   "authority": {
     "DECISION_RYAN_t4422u": "sha8 dbb35c04",
     "ALEX_PREDICTIVE_BASELINE_STATUS_t4422u_v1": "sha8 7f16f829",
     "IMV_gates_packet_t4422u": "sha8 7af96335",
-    "note": "Authority filings not in this worktree; cited as given. Research prep only \u2014 adopt IMV gates before graded results."
+    "note": "Authority filings not in this worktree; cited as given. RESEARCH_DIAGNOSTIC only \u2014 CERT_CANDIDATE=0. RESEARCH_DIAGNOSTIC is not CERT. Adopt IMV gates before graded results."
   },
   "probability_columns": {
     "home_win_prob": {
@@ -17,13 +19,22 @@
       "source": "simulate_nfl_game markets.away_win_prob (RECORD walk-forward, unblended)",
       "n": 2992
     },
+    "cover_prob_home": {
+      "status": "PRESENT",
+      "source": "simulate_nfl_game markets.cover_prob_home = P(margin + market_spread_home > 0) on unblended samples (apply_market_blend=False). Line = filed OOS historical_oos_ms9_nflverse_close.",
+      "n": 2992,
+      "formula": "P(margin + market_spread_home > 0)"
+    },
     "cover_prob": {
-      "status": "MISSING",
-      "blocker": "nfl_simulator.simulate_nfl_game does not emit cover probability. Cover would require a market spread line; this export is unblended and does not pass market_spread_home (MS-9 nflverse close is Alex-side)."
+      "status": "PRESENT",
+      "source": "alias of cover_prob_home for the existing export column",
+      "n": 2992
     },
     "over_prob": {
-      "status": "MISSING",
-      "blocker": "nfl_simulator.simulate_nfl_game does not emit over probability. Over would require a market total; this export is unblended and does not pass market_total."
+      "status": "PRESENT",
+      "source": "simulate_nfl_game markets.over_prob = P(total > market_total) on unblended samples. Line = filed OOS historical_oos_ms9_nflverse_close.",
+      "n": 2992,
+      "formula": "P(total > market_total)"
     },
     "epa_home_win_prob": {
       "status": "MISSING",
@@ -39,7 +50,13 @@
   },
   "true_close_clv": {
     "status": "OUT_OF_SCOPE",
-    "blocker": "Owned odds lake / true-close JSONL not mounted (DATABASE_URL unset; no HD drive). Market columns intentionally omitted (MS-9 nflverse close is Alex-side diagnostic). No Odds API spend."
+    "blocker": "Owned odds lake / true-close JSONL not mounted (DATABASE_URL unset; no HD drive). MS-9 columns here are filed historical_oos_games.csv nflverse closes (home-spread convention), not owned true-close and not CLV. No Odds API spend. RESEARCH_DIAGNOSTIC \u2260 CERT."
+  },
+  "ms9_lines": {
+    "status": "PRESENT",
+    "source": "historical_oos_ms9_nflverse_close",
+    "n_spread_and_total": 2992,
+    "note": "Filed OOS market_spread_home / market_total only. Do not invent EPA or true-close from these lines."
   },
   "epa_trailing_pre_2023": {
     "status": "MISSING",

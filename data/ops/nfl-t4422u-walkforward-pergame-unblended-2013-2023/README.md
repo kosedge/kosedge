@@ -1,7 +1,9 @@
-# t4422u — walk-forward per-game unblended engine export (2013–2023)
+# t4450u / t4422u — RESEARCH_DIAGNOSTIC walk-forward export (2013–2023)
 
+**`RESEARCH_DIAGNOSTIC` only. `CERT_CANDIDATE=0`.**  
+`RESEARCH_DIAGNOSTIC` ≠ CERT. No cert eligibility. No CLV. No true-close.  
 Research prep for Alex baseline. **Not a CLEAR. Not graded results.**  
-NFL board **NO-GO**. Coming soon **ON**. No merge / deploy / spend.
+NFL board **NO-GO**. Coming soon **ON**. No merge / deploy / spend / Odds API.
 
 Authority cited (filings not in this worktree):  
 `DECISION_RYAN_t4422u` sha8 `dbb35c04` ·  
@@ -17,7 +19,7 @@ python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame
 | Pin | Value |
 | --- | --- |
 | Command | `python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame_2013_2023.py` |
-| Git tip at generation | `a0f583d31b956ba0e7db9fd858e59014c0335600` (`a0f583d31b95`) |
+| Git tip at generation | `f58ff3cd26998fa6239b746ec5879332a10cfc99` (`f58ff3cd2699`) |
 | Python | `3.12.3` |
 | Engine | `src.services.nfl_simulator.simulate_nfl_game` |
 | `model_version` | `nfl-v1.5-matchup-sim` |
@@ -29,8 +31,9 @@ python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame
 | IFB overlays | **OFF** (no IFB module on this tip; no inputs passed) |
 | Injury overlays | **OFF** |
 | Personnel overlays | **OFF** |
-| Market blend | **OFF** (`market_spread_home` / `market_total` omitted) |
-| Market columns | **not in this file** (nflverse close is Alex-side MS-9) |
+| Market blend | **OFF** (`apply_market_blend=False` no-blend eval flag) |
+| MS-9 lines | filed OOS `market_spread_home` / `market_total` (`historical_oos_ms9_nflverse_close`) |
+| Label | `RESEARCH_DIAGNOSTIC` · `CERT_CANDIDATE=0` |
 | Holdout 2024+ | **not opened** |
 | Rest days | `7.0` / `7.0` (same hardcoded rest as `historical_market_backtest.py` / record-vs-EPA audit; do not invent rest from incomplete clocks) |
 
@@ -50,8 +53,9 @@ python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame
 | Column | Status | Notes |
 | --- | --- | --- |
 | `home_win_prob` / `away_win_prob` | **PRESENT** | RECORD unblended Monte Carlo (`simulate_nfl_game`) |
-| `cover_prob` | **MISSING** | Engine does not emit cover; would need a market spread |
-| `over_prob` | **MISSING** | Engine does not emit over; would need a market total |
+| `cover_prob_home` / `cover_prob` | **PRESENT** | `P(margin + market_spread_home > 0)` on unblended samples |
+| `over_prob` | **PRESENT** | `P(total > market_total)` on unblended samples |
+| `market_spread_home` / `market_total` | **PRESENT** | MS-9 filed OOS nflverse close (not true-close / not CLV) |
 | `epa_home_win_prob` / `epa_away_win_prob` | **MISSING** | See `MISSING.json` — rolling-feature table not mounted |
 | `epa_trailing_spread_home` / `epa_trailing_total` | repo decompose only, 2023 | Copied from historical OOS; **not** engine win probs |
 
@@ -84,14 +88,16 @@ nflverse join hits: 2992 / 2992.
 | File | Role |
 | --- | --- |
 | `games.csv` | one row per game 2013–2023 |
-| `games.csv.sha256` | `07c89418ab55a6c4c781ece669ad062cbe2ebeb5de26c65d0ab57dca06db34eb` |
+| `games.csv.sha256` | `4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8` |
 | `manifest.json` | machine pins |
 | `MISSING.json` | blockers (do not fabricate) |
 | `nflverse_games_2013_2023_join.csv` | join input copy |
 
 ## True-close / CLV
 
-**Out of scope.** Owned odds lake / true-close JSONL not mounted (`DATABASE_URL` unset). Market columns omitted on purpose.
+**Out of scope.** Owned odds lake / true-close JSONL not mounted (`DATABASE_URL` unset).  
+MS-9 lines are filed OOS nflverse closes used only to score unblended cover/over.  
+They are **not** owned true-close and **not** a CLV claim.
 
 ## Non-actions honored
 
