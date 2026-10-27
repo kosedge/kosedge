@@ -17,7 +17,10 @@ REPO_RELATIVE_INVENTORY = (
     "services/model-service/src/services/nfl_w8_capture/archive.py",
     "services/model-service/src/services/nfl_w8_capture/books.py",
     "services/model-service/src/services/nfl_w8_capture/cadence.py",
+    "services/model-service/src/services/nfl_w8_capture/carveouts.py",
     "services/model-service/src/services/nfl_w8_capture/close.py",
+    "services/model-service/src/services/nfl_w8_capture/credits.py",
+    "services/model-service/src/services/nfl_w8_capture/fetch.py",
     "services/model-service/src/services/nfl_w8_capture/evidence.py",
     "services/model-service/src/services/nfl_w8_capture/fixture_load.py",
     "services/model-service/src/services/nfl_w8_capture/fixtures/synthetic_w8_reg_game.json",
@@ -26,6 +29,7 @@ REPO_RELATIVE_INVENTORY = (
     "services/model-service/src/services/nfl_w8_capture/pin.py",
     "services/model-service/src/services/nfl_w8_capture/redact.py",
     "services/model-service/src/services/nfl_w8_capture/restore.py",
+    "services/model-service/src/services/nfl_w8_capture/seal.py",
     "services/model-service/src/services/nfl_w8_capture/snapshots.py",
     "services/model-service/src/services/nfl_w8_capture/store.py",
     "services/model-service/src/services/nfl_w8_capture/streams.py",
@@ -40,8 +44,8 @@ REPO_RELATIVE_INVENTORY = (
 )
 
 HARD_STOPS = (
-    "refuse_odds_fetch ALWAYS raises (H-1a/H-1c). No Odds API network. No key use.",
-    "refuse_seal ALWAYS raises (AC-12). Cursor cannot seal-ack.",
+    "refuse_odds_fetch raises while hold is default-on. Lift needs cite 89fdd45f + PR rotate-confirm. No live Odds call in this draft.",
+    "refuse_seal ALWAYS raises (AC-12). Cursor cannot seal-ack. produce_seal is AC-1/AC-2 only.",
     "Draft only. No merge. No deploy. Coming Soon ON. NFL NO-GO stays.",
     "Production NFL_ODDS_API_CARRIED_BOOKMAKERS is not edited.",
 )

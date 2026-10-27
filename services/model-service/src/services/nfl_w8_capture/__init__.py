@@ -1,7 +1,7 @@
 """Week-8 prospective NFL capture — paper/code draft (t4445u RD-7).
 
 Isolated from production Odds pull / fair-lines / Coming Soon. Does not call
-The Odds API. Seal-ack is out of scope (AC-12: Cursor cannot seal-ack).
+The Odds API (no default live HTTP). Seal-ack is out of scope (AC-12).
 
 Spec cites (sha8, not invented):
 - IMV_SPEC_W8_PROSPECTIVE_CAPTURE_ACCEPTANCE_t4191u_v2 ``08808adf``
@@ -34,6 +34,8 @@ from src.services.nfl_w8_capture.evidence import (
     append_evidence_entry,
     verify_evidence_chain,
 )
+from src.services.nfl_w8_capture.carveouts import explicit_carve_outs
+from src.services.nfl_w8_capture.credits import CREDIT_CEILING, pre_call_check
 from src.services.nfl_w8_capture.hold import (
     OddsApiHoldError,
     assert_odds_api_hold,

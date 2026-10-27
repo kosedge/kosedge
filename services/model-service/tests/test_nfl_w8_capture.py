@@ -24,12 +24,38 @@ from src.services.nfl_w8_capture.books import (
 from src.services.nfl_w8_capture.alerts import deliver_alert
 from src.services.nfl_w8_capture.archive import archive_forecasts
 from src.services.nfl_w8_capture.cadence import (
+    F8_CUTOFF,
+    F8CutoffError,
     GameKickoff,
+    assert_slate_join_before_f8,
     close_window_guaranteed,
     due_sample_windows,
+    f8_cutoff_utc,
+    past_f8_cutoff,
     plan_pre_kickoff_samples,
     review_sample_coverage,
 )
+from src.services.nfl_w8_capture.carveouts import (
+    explicit_carve_outs,
+    require_explicit_carve_out,
+)
+from src.services.nfl_w8_capture.credits import (
+    CREDIT_CEILING,
+    CreditCeilingError,
+    CreditHeaderError,
+    CreditPurchaseError,
+    pre_call_check,
+    read_cumulative,
+    record_credit_use,
+    refuse_credit_purchase,
+)
+from src.services.nfl_w8_capture.fetch import (
+    OddsFetchError,
+    OddsTransportResult,
+    fetch_odds_with_provenance,
+    raw_body_sha256,
+)
+from src.services.nfl_w8_capture.seal import SealWindowError, produce_seal
 from src.services.nfl_w8_capture.close import (
     BookMarketCell,
     evaluate_game_market_close,
@@ -40,7 +66,9 @@ from src.services.nfl_w8_capture.evidence import (
     verify_evidence_chain,
 )
 from src.services.nfl_w8_capture.hold import (
+    H1_AUTH_CITE,
     OddsApiHoldError,
+    odds_api_hold_is_on,
     refuse_odds_fetch,
 )
 from src.services.nfl_w8_capture.imv_package import prove_hard_stops, write_imv_package
@@ -609,3 +637,183 @@ def test_synthetic_fixture_file_yields_part_b_close() -> None:
     assert result.primary_fresh_count == 5
     assert result.selected is not None
     assert result.selected.book in PRIMARY_BOOKS
+
+
+def _lift_env(**extra: str) -> dict[str, str]:
+    env = {
+        "NFL_W8_H1_AUTH_CITE": H1_AUTH_CITE,
+        "NFL_W8_PR_ROTATE_CONFIRM": "1",
+    }
+    env.update(extra)
+    return env
+
+
+def test_hold_lift_requires_cite_and_rotate_confirm(tmp_path: Path) -> None:
+    assert odds_api_hold_is_on({}) is True
+    assert odds_api_hold_is_on({"NFL_W8_ODDS_API_HOLD": "0"}) is True
+    assert odds_api_hold_is_on({"NFL_W8_H1_AUTH_CITE": H1_AUTH_CITE}) is True
+    assert odds_api_hold_is_on({"NFL_W8_PR_ROTATE_CONFIRM": "1"}) is True
+    assert odds_api_hold_is_on(_lift_env()) is False
+
+    store = BundleStore(tmp_path)
+    with pytest.raises(OddsApiHoldError, match="89fdd45f"):
+        fetch_odds_with_provenance(
+            store=store,
+            env={"NFL_W8_H1_AUTH_CITE": H1_AUTH_CITE, "ODDS_API_KEY": "unit-test-not-live"},
+        )
+    with pytest.raises(OddsApiHoldError):
+        fetch_odds_with_provenance(
+            store=store,
+            env={"NFL_W8_PR_ROTATE_CONFIRM": "1", "ODDS_API_KEY": "unit-test-not-live"},
+        )
+    alerts = (tmp_path / "alerts.jsonl").read_text(encoding="utf-8")
+    assert '"kind":"hold"' in alerts
+    assert "unit-test-not-live" not in alerts
+    with pytest.raises(OddsApiHoldError, match="H-1a/H-1c"):
+        refuse_odds_fetch(env={"NFL_W8_ODDS_API_HOLD": "0"})
+    refuse_odds_fetch(env=_lift_env())  # lifted: refuse path no longer raises
+
+
+def test_credit_ledger_edges_2999_3000_3001(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    assert CREDIT_CEILING == 3000
+    pre_call_check(2999, 1)
+    with pytest.raises(CreditCeilingError):
+        pre_call_check(3000, 1)
+    with pytest.raises(CreditCeilingError):
+        pre_call_check(3001, 1)
+    first = record_credit_use(
+        store,
+        {
+            "x-requests-last": "2999",
+            "x-requests-used": "2999",
+            "x-requests-remaining": "1",
+        },
+    )
+    assert first["cumulative"] == 2999
+    second = record_credit_use(
+        store,
+        {
+            "x-requests-last": "1",
+            "x-requests-used": "3000",
+            "x-requests-remaining": "0",
+        },
+    )
+    assert second["cumulative"] == 3000
+    assert read_cumulative(store) == 3000
+    with pytest.raises(CreditCeilingError):
+        record_credit_use(
+            store,
+            {
+                "x-requests-last": "1",
+                "x-requests-used": "3001",
+                "x-requests-remaining": "0",
+            },
+        )
+    with pytest.raises(CreditHeaderError, match="missing"):
+        record_credit_use(store, {"x-requests-used": "10"})
+    with pytest.raises(CreditPurchaseError, match="not authorized"):
+        refuse_credit_purchase()
+    store.verify()
+
+
+def test_fetch_provenance_envelope_redacts_key_no_live_http(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    body = b'{"ok":true,"bookmakers":[]}'
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        assert "apiKey" not in dict(params)  # type: ignore[arg-type]
+        assert dict(headers)["x-api-key"] == "unit-test-not-live"
+        return OddsTransportResult(
+            status_code=200,
+            headers={
+                "x-requests-last": "1",
+                "x-requests-used": "1",
+                "x-requests-remaining": "999",
+                "Date": "Wed, 28 Oct 2026 22:00:00 GMT",
+            },
+            body=body,
+            provider_server_ts="2026-10-28T22:00:00Z",
+        )
+
+    result = fetch_odds_with_provenance(
+        store=store,
+        env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+        transport=transport,
+        game_id="2026-W08-MIN@LAC",
+    )
+    envelope = result["envelope"]
+    assert envelope["raw_body_sha256"] == raw_body_sha256(body)
+    assert envelope["request_headers"]["x-api-key"] == "[REDACTED]"
+    assert "unit-test-not-live" not in json.dumps(result)
+    assert (tmp_path / "provenance.jsonl").is_file()
+    with pytest.raises(OddsFetchError, match="no transport"):
+        fetch_odds_with_provenance(
+            store=store,
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+        )
+    store.verify()
+
+
+def test_produce_seal_ac1_ac2_and_refuse_seal_ack(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    ok = produce_seal(
+        store,
+        game_id="2026-W08-MIN@LAC",
+        kickoff_utc=KICKOFF,
+        now_utc=KICKOFF - timedelta(minutes=61),
+        artifact_shas={"snapshot": "a" * 64},
+    )
+    assert ok["ac_1"] is True
+    assert ok["custodian_receipt"]["slot"] == "AC-2"
+    assert ok["custodian_receipt"]["receipt_id"] == "UNSET"
+    assert ok["seal_ack"] == "CURSOR_CANNOT_SEAL_ACK"
+    with pytest.raises(SealWindowError, match="60"):
+        produce_seal(
+            store,
+            game_id="2026-W08-LATE",
+            kickoff_utc=KICKOFF,
+            now_utc=KICKOFF - timedelta(minutes=59),
+        )
+    with pytest.raises(PermissionError, match="AC-12"):
+        refuse_seal([])
+    store.verify()
+
+
+def test_f8_90m_cutoff_encoded() -> None:
+    assert F8_CUTOFF == timedelta(minutes=90)
+    cutoff = f8_cutoff_utc(KICKOFF)
+    assert cutoff == KICKOFF - timedelta(minutes=90)
+    assert past_f8_cutoff(KICKOFF - timedelta(minutes=90), KICKOFF) is False
+    assert past_f8_cutoff(KICKOFF - timedelta(minutes=89), KICKOFF) is True
+    assert_slate_join_before_f8(KICKOFF - timedelta(minutes=90), KICKOFF)
+    with pytest.raises(F8CutoffError):
+        assert_slate_join_before_f8(KICKOFF - timedelta(minutes=89), KICKOFF)
+    plan = plan_pre_kickoff_samples([GameKickoff("2026-W08-MIN@LAC", KICKOFF, "REG")])
+    offsets = {KICKOFF - w.sample_at for w in plan.windows}
+    assert timedelta(minutes=90) in offsets
+    assert close_window_guaranteed(plan, "2026-W08-MIN@LAC")
+
+
+def test_ac8_ac10_are_explicit_carve_outs() -> None:
+    ids = {item["id"]: item for item in explicit_carve_outs()}
+    assert ids["AC-8"]["status"] == "EXPLICIT_CARVE_OUT"
+    assert ids["AC-10"]["status"] == "EXPLICIT_CARVE_OUT"
+    assert require_explicit_carve_out("AC-8")["status"] == "EXPLICIT_CARVE_OUT"
+    assert "invent" not in ids["AC-8"]["reason"].lower() or "not" in ids["AC-8"]["reason"].lower()
+
+
+def test_control_alerts_ceiling_hold_fetch_fail(tmp_path: Path) -> None:
+    from src.services.nfl_w8_capture.alerts import control_alert, deliver_alert
+
+    store = BundleStore(tmp_path)
+    for kind in ("ceiling", "hold", "fetch_fail"):
+        delivery = deliver_alert(
+            control_alert(kind=kind, detail=f"{kind} test", market=kind),
+            store,
+            env={},
+        )
+        assert delivery.status == "disabled"
+    text = (tmp_path / "alerts.jsonl").read_text(encoding="utf-8")
+    assert "ceiling" in text and "hold" in text and "fetch_fail" in text
+    store.verify()

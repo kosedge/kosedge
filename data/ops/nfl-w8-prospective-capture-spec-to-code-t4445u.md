@@ -5,7 +5,9 @@
 **Parallel:** t4447u (not this PR).  
 **PR:** draft `#640`. Paper-verify continue vs receipt sha8 `2a9164bc`.  
 **t4450u:** decision sha8 `20ea635f` — Post-Merge Execution. ACCEPT #634–#636 / receipt `6685ba74`.  
+**t4455u:** H-1 auth `89fdd45f`. IMV RETURN sealing-controls (sha8 `d831`). ENG PASS `86c6dbce` stands for eng-package only — not sealing ACCEPT.  
 **IMV package:** `data/ops/nfl-w8-imv-package-t4450u/INDEX.md`  
+**RETURN close map:** `data/ops/nfl-w8-imv-return-t4455u-b1-b7.md`  
 **Module:** `services/model-service/src/services/nfl_w8_capture/`
 
 Cited sha8 (authority; files not in this checkout — do not invent bodies):
@@ -26,8 +28,8 @@ Cited sha8 (authority; files not in this checkout — do not invent bodies):
 
 | Hold | This PR |
 | --- | --- |
-| Odds API hold (H-1a / H-1c) | **Still blocking.** `hold.refuse_odds_fetch` always raises. No key use. |
-| Seal-ack (AC-12) | **Still blocking.** `streams.refuse_seal` always raises. |
+| Odds API hold (H-1a / H-1c) | **Default ON.** `refuse_odds_fetch` raises unless `NFL_W8_H1_AUTH_CITE=89fdd45f` **and** `NFL_W8_PR_ROTATE_CONFIRM`. No live Odds call in this draft (transport required; none default). |
+| Seal-ack (AC-12) | **Still blocking.** `streams.refuse_seal` always raises. `seal.produce_seal` is AC-1/AC-2 only. |
 | Merge / deploy / Railway / Coming Soon / public NFL numbers | **Not in scope.** Draft PR only. |
 
 ---
@@ -49,16 +51,16 @@ Cited sha8 (authority; files not in this checkout — do not invent bodies):
 
 | ID | Requirement | Status | Code |
 | --- | --- | --- | --- |
-| AC-1 | Seal >= 60 min pre-kickoff | **Stubbed** | Documented in pin manifest `seal_ack`. No seal runner. |
-| AC-2 | Independent seal timestamp / custodian receipt | **Stubbed** | Cursor cannot mint seal time of record. Layout is custodian-ready; receipt is not. |
+| AC-1 | Seal >= 60 min pre-kickoff | **Implemented (producer)** | `seal.produce_seal` refuses inside 60m. Not a seal-ack. |
+| AC-2 | Independent seal timestamp / custodian receipt | **Implemented (slot)** | `custodian_receipt.slot=AC-2`; `receipt_id=UNSET` until custodian. Cursor cannot ack. |
 | AC-3 | as_of < kickoff and < seal; no default fill | **Partial** | Close / cell logic fail-closed on missing stamps. Full feature as_of proofs not wired to production features. |
 | AC-4 | Manifest: code / weights / schema / input shas / interpreter / host | **Implemented (shape)** | `pin.build_pin_manifest` / `validate_pin_manifest`. Empty sha = UNSET. No fake shas. |
 | AC-5 | Odds snapshots: book, market, price/line, provider captured_at, received_at, raw sha | **Implemented (offline)** | Snapshot payload + close cells. Live source pull blocked on H-1a/H-1c. |
 | AC-6 | SHA256SUMS + append-only hash-chain log | **Implemented** | `store.BundleStore` + `evidence.*`. Secrets redacted. |
 | AC-7 | S-MKT vs S-IND; forbidden-input check | **Implemented** | Scaffold + archiver. No invented predictions. |
-| AC-8 | Filing-E baselines | **Stubbed** | Not adopted in this draft; no baseline numbers. |
+| AC-8 | Filing-E baselines | **EXPLICIT_CARVE_OUT** | `carveouts.AC8_FILING_E_BASELINES`. No invented baselines. Surfaced in PR body. |
 | AC-9 | No post-seal edits | **Partial** | No seal; store refuses artifact overwrite. |
-| AC-10 | Blind grading | **Out of scope** | Performers do not grade. Restore sets `eval=not_run`. |
+| AC-10 | Blind grading | **EXPLICIT_CARVE_OUT** | `carveouts.AC10_BLIND_GRADING`. Restore stays `eval=not_run`. Surfaced in PR body. |
 | AC-11 | Missing/late = FAIL, counted | **Partial** | Close/cadence/alerts mark MISSING; no grader. |
 | AC-12 | Cursor cannot seal-ack | **Implemented (refuse)** | `streams.refuse_seal`. |
 | AC-13 | Isolated from PIT historical rebuild | **Implemented** | New package; P-evidence restore is a read-only copy, not a shared mutable store. |
@@ -72,13 +74,9 @@ Unchanged from first draft (close definition, five PRIMARY books including circa
 
 ---
 
-## Still blocked on H-1a / H-1c (Odds hold) — Needs-Ryan
+## Still blocked on H-1 live (Needs-IMV ACCEPT + rotate)
 
-- Live `bookmakers=` pull including `circa`
-- Provider HTTP Date / API server timestamp from a real response
-- Real W8 REG snapshots
-- Credit-consuming dry-run
-- Seal bundle against live odds vintage
-- Webhook POST (hold fail-closes delivery)
-
-Remaining paper stubs (not 1–6): AC-1/2/8/10 seal, custodian receipt, baselines, grading.
+- Live Odds HTTP (not wired; transport injection only)
+- Condition 5 first sealed capture independent verify
+- Webhook live POST (path present, unwired)
+- AC-8 / AC-10 remain **EXPLICIT_CARVE_OUT**

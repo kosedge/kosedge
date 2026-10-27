@@ -14,17 +14,32 @@ from src.services.nfl_w8_capture.books import PRIMARY_BOOKS
 from src.services.nfl_w8_capture.close import CLOSE_MAX_AGE, PRIMARY_K_REQUIRED
 from src.services.nfl_w8_capture.timestamps import parse_utc
 
-AlertKind = Literal["missing", "stale", "partial", "unknown", "ok"]
+AlertKind = Literal[
+    "missing",
+    "stale",
+    "partial",
+    "unknown",
+    "ok",
+    "ceiling",
+    "hold",
+    "fetch_fail",
+]
 
-# Suggested offsets before kickoff. The last slot is inside the S=10 window.
+# Suggested offsets before kickoff. F-8 T=90m cutoff is encoded; last slot is S=10.
+F8_CUTOFF = timedelta(minutes=90)
 SAMPLE_OFFSETS = (
     timedelta(hours=24),
     timedelta(hours=3),
+    F8_CUTOFF,
     timedelta(hours=1),
     timedelta(minutes=30),
     timedelta(minutes=15),
     timedelta(minutes=8),
 )
+
+
+class F8CutoffError(RuntimeError):
+    """Raised when a game joins the slate after the F-8 T=90m cutoff."""
 
 
 @dataclass(frozen=True)
@@ -104,6 +119,29 @@ def due_sample_windows(
         if delta <= slack.total_seconds():
             due.append(window)
     return due
+
+
+def f8_cutoff_utc(kickoff_utc: datetime) -> datetime:
+    kickoff = parse_utc(kickoff_utc)
+    if kickoff is None:
+        raise F8CutoffError("kickoff_utc is not parseable")
+    return kickoff - F8_CUTOFF
+
+
+def past_f8_cutoff(now_utc: datetime, kickoff_utc: datetime) -> bool:
+    """True when now is after T-90 (too late to join the slate). T-90 exact is on time."""
+    now = parse_utc(now_utc)
+    cutoff = f8_cutoff_utc(kickoff_utc)
+    if now is None:
+        raise F8CutoffError("now_utc is not parseable")
+    return now > cutoff
+
+
+def assert_slate_join_before_f8(registered_at: datetime, kickoff_utc: datetime) -> None:
+    if past_f8_cutoff(registered_at, kickoff_utc):
+        raise F8CutoffError(
+            "F-8 T=90m cutoff: game cannot join the slate after kickoff−90m"
+        )
 
 
 def close_window_guaranteed(plan: SamplePlan, game_id: str) -> bool:

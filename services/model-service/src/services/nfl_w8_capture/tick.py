@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping, Optional, Sequence
 
-from src.services.nfl_w8_capture.alerts import deliver_alert
+from src.services.nfl_w8_capture.alerts import control_alert, deliver_alert
 from src.services.nfl_w8_capture.cadence import (
     GameKickoff,
     due_sample_windows,
@@ -16,7 +16,7 @@ from src.services.nfl_w8_capture.cadence import (
     review_sample_coverage,
 )
 from src.services.nfl_w8_capture.fixture_load import SYNTHETIC_W8_REG, load_json_fixture
-from src.services.nfl_w8_capture.hold import refuse_odds_fetch
+from src.services.nfl_w8_capture.hold import odds_api_hold_is_on, refuse_odds_fetch
 from src.services.nfl_w8_capture.store import BundleStore
 from src.services.nfl_w8_capture.timestamps import parse_utc
 
@@ -91,6 +91,16 @@ def run_capture_tick(
     store = BundleStore(root)
 
     if attempt_fetch:
+        if odds_api_hold_is_on(source):
+            deliver_alert(
+                control_alert(
+                    kind="hold",
+                    detail="tick attempt_fetch refused: hold default-on",
+                    market="hold",
+                ),
+                store,
+                env=source,
+            )
         refuse_odds_fetch(env=source)
 
     deliveries: list[dict[str, Any]] = []

@@ -25,6 +25,8 @@ from src.services.nfl_w8_capture.redact import redact_secrets
 
 SNAPSHOTS_NAME = "snapshots.jsonl"
 ALERTS_NAME = "alerts.jsonl"
+CREDITS_NAME = "credits.jsonl"
+PROVENANCE_NAME = "provenance.jsonl"
 MANIFEST_NAME = "MANIFEST.json"
 FORECASTS_MKT = Path("forecasts") / "s_mkt"
 FORECASTS_IND = Path("forecasts") / "s_ind"
@@ -93,9 +95,10 @@ class BundleStore:
     def verify(self) -> dict[str, Any]:
         chain = verify_evidence_chain(self.root)
         self._verify_chained_jsonl(self.snapshots_path())
-        alerts = self.root / ALERTS_NAME
-        if alerts.exists():
-            self._verify_chained_jsonl(alerts)
+        for name in (ALERTS_NAME, CREDITS_NAME, PROVENANCE_NAME):
+            path = self.root / name
+            if path.exists():
+                self._verify_chained_jsonl(path)
         return chain
 
     def _verify_chained_jsonl(self, path: Path) -> None:
