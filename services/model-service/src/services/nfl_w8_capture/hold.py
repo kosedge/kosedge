@@ -18,6 +18,12 @@ ENV_PR_ROTATE_CONFIRM = "NFL_W8_PR_ROTATE_CONFIRM"
 # DECISION_RYAN_t4455u_H1_LIVE_CAPTURE_AUTH_v1 sha8
 H1_AUTH_CITE = "89fdd45f"
 
+# TODO(S2): Ryan has not ruled NFL_W8_PR_ROTATE_CONFIRM vs KEEP existing key.
+# Decision a9ae5ae6 KEEP supersedes rotate-first; VERIFY PASS e64e73ac stands.
+# Setting NFL_W8_PR_ROTATE_CONFIRM asserts a rotation that did not happen
+# (semantic falsehood). Paper reinterpret as key-verify e64e73ac, OR rename
+# this flag — Ryan/CoS ruling required. Do NOT change this lift policy here.
+
 
 class OddsApiHoldError(RuntimeError):
     """Raised when any Odds API network path is attempted under hold."""
@@ -48,7 +54,12 @@ def hold_lift_state(env: Optional[Mapping[str, str]] = None) -> dict[str, Any]:
 
 
 def odds_api_hold_is_on(env: Optional[Mapping[str, str]] = None) -> bool:
-    """Default ON. Lift only when cite 89fdd45f AND PR rotate-confirm are set."""
+    """Default ON. Lift only when cite 89fdd45f AND PR rotate-confirm are set.
+
+    TODO(S2): rotate-confirm vs KEEP (a9ae5ae6) is pending Ryan. This function
+    is unchanged. Single-invocation lift is process-scoped env only — never a
+    CLI flag and never a Railway-global write.
+    """
     source = _source(env)
     _ = source.get(HOLD_ENV)
     _ = source.get(GLOBAL_HOLD_ENV)

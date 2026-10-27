@@ -25,7 +25,10 @@ REPO_RELATIVE_INVENTORY = (
     "services/model-service/src/services/nfl_w8_capture/fixture_load.py",
     "services/model-service/src/services/nfl_w8_capture/fixtures/synthetic_w8_reg_game.json",
     "services/model-service/src/services/nfl_w8_capture/hold.py",
+    "services/model-service/src/services/nfl_w8_capture/http_transport.py",
     "services/model-service/src/services/nfl_w8_capture/imv_package.py",
+    "services/model-service/src/services/nfl_w8_capture/oneshot.py",
+    "services/model-service/src/services/nfl_w8_capture/__main__.py",
     "services/model-service/src/services/nfl_w8_capture/pin.py",
     "services/model-service/src/services/nfl_w8_capture/redact.py",
     "services/model-service/src/services/nfl_w8_capture/restore.py",
@@ -44,10 +47,11 @@ REPO_RELATIVE_INVENTORY = (
 )
 
 HARD_STOPS = (
-    "refuse_odds_fetch raises while hold is default-on. Lift needs cite 89fdd45f + PR rotate-confirm. No live Odds call in this draft.",
-    "refuse_seal ALWAYS raises (AC-12). Cursor cannot seal-ack. produce_seal is AC-1/AC-2 only.",
+    "refuse_odds_fetch raises while hold is default-on. Lift needs cite 89fdd45f + PR rotate-confirm. No CLI lift flag. S2 rotate vs KEEP pending Ryan. Tick never fetches.",
+    "refuse_seal ALWAYS raises (AC-12). Cursor cannot seal-ack. produce_seal is AC-1/AC-2 only. Custodian receipt required for AC-2.",
     "Draft only. No merge. No deploy. Coming Soon ON. NFL NO-GO stays.",
     "Production NFL_ODDS_API_CARRIED_BOOKMAKERS is not edited.",
+    "One-shot argv: cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture --game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>",
 )
 
 

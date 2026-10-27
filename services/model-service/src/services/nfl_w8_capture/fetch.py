@@ -2,12 +2,19 @@
 
 Key is read from env only and never persisted. refuse_odds_fetch remains
 the fail-closed default until H-1 cite 89fdd45f + PR rotate-confirm.
-This module does not call The Odds API network.
+
+Library default (transport=None) still refuses to open a socket. Production
+HTTP lives in http_transport.OddsHttpTransport and is injected by the
+one-shot CLI. Celery tick must not use that transport.
+
+TODO(S2): NFL_W8_PR_ROTATE_CONFIRM vs KEEP existing key (a9ae5ae6 /
+VERIFY e64e73ac) is pending Ryan. hold.py lift policy is unchanged.
 """
 
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -120,7 +127,10 @@ def fetch_odds_with_provenance(
     params: Optional[Mapping[str, str]] = None,
     game_id: str = "",
 ) -> dict[str, Any]:
-    """Hold-gated fetch. Requires an injected transport. Never defaults to HTTP."""
+    """Hold-gated fetch. Requires an injected transport. Never defaults to HTTP.
+
+    Production path: inject OddsHttpTransport (oneshot CLI). Tests inject fakes.
+    """
     source = env if env is not None else os.environ
     request_params = dict(params or build_w8_odds_request_params())
     if odds_api_hold_is_on(source):
@@ -163,8 +173,9 @@ def fetch_odds_with_provenance(
             market="fetch",
         )
         raise OddsFetchError(
-            "no transport; live HTTP is not wired. Inject a test transport. "
-            "Do not call The Odds API from this package."
+            "no transport; library default does not open a socket. "
+            "Inject OddsHttpTransport (python -m src.services.nfl_w8_capture) "
+            "or a test fake. Do not call The Odds API from tick."
         )
 
     try:
@@ -219,4 +230,9 @@ def fetch_odds_with_provenance(
         actor="nfl_w8_capture",
         note=f"provenance:{game_id or 'slate'}",
     )
-    return {"envelope": envelope, "credits": ledger}
+    payload: Any = None
+    try:
+        payload = json.loads(bytes(result.body).decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        payload = None
+    return {"envelope": envelope, "credits": ledger, "payload": payload}

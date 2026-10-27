@@ -1,4 +1,10 @@
-"""Beat tick: due REG close-window samples. Never fetches Odds API."""
+"""Beat tick: due REG close-window samples. Never fetches Odds API.
+
+First sealed capture is NOT this tick. Use the one-shot CLI
+``python -m src.services.nfl_w8_capture`` (fetch→snapshot→close→seal).
+attempt_fetch stays default False; when True it only refuse_odds_fetch.
+Do not wire this tick to OddsHttpTransport or produce_seal.
+"""
 
 from __future__ import annotations
 
@@ -71,7 +77,10 @@ def run_capture_tick(
     kickoffs: Optional[Sequence[GameKickoff]] = None,
     attempt_fetch: bool = False,
 ) -> dict[str, Any]:
-    """Plan due close-window samples. Hold blocks any fetch."""
+    """Plan due close-window samples. Hold blocks any fetch.
+
+    Not the first-seal path. Live fetch/seal stays on the one-shot CLI.
+    """
     source = env if env is not None else os.environ
     now = now_utc or datetime.now(timezone.utc)
     if now.tzinfo is None:

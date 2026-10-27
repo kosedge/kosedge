@@ -6,6 +6,9 @@ No Odds API network. No keys. No seal-ack.
 from __future__ import annotations
 
 import json
+import os
+import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -40,12 +43,14 @@ from src.services.nfl_w8_capture.carveouts import (
     require_explicit_carve_out,
 )
 from src.services.nfl_w8_capture.credits import (
+    ACCOUNT_USED_BASELINE_E64E73AC,
     CREDIT_CEILING,
     CreditCeilingError,
     CreditEstimateError,
     CreditHeaderError,
     CreditPurchaseError,
     CreditReconcileError,
+    assert_operator_account_budget,
     estimate_request_credits,
     ledger_closed,
     ledger_overrun,
@@ -53,6 +58,7 @@ from src.services.nfl_w8_capture.credits import (
     read_cumulative,
     record_credit_use,
     refuse_credit_purchase,
+    seed_account_baseline_note,
 )
 from src.services.nfl_w8_capture.fetch import (
     OddsFetchError,
@@ -76,6 +82,11 @@ from src.services.nfl_w8_capture.hold import (
     odds_api_hold_is_on,
     refuse_odds_fetch,
 )
+from src.services.nfl_w8_capture.http_transport import (
+    OddsHttpTransport,
+    OddsHttpTransportError,
+)
+from src.services.nfl_w8_capture.oneshot import ONESHOT_ARGV, build_parser, main, run_oneshot_sealed_capture
 from src.services.nfl_w8_capture.imv_package import prove_hard_stops, write_imv_package
 from src.services.nfl_w8_capture.pin import (
     UNSET_SHA,
@@ -902,3 +913,234 @@ def test_control_alerts_ceiling_hold_fetch_fail(tmp_path: Path) -> None:
     text = (tmp_path / "alerts.jsonl").read_text(encoding="utf-8")
     assert "ceiling" in text and "hold" in text and "fetch_fail" in text
     store.verify()
+
+
+def test_s2_rotate_keep_todo_present_hold_policy_unchanged() -> None:
+    hold_src = Path(__file__).resolve().parents[1] / "src/services/nfl_w8_capture/hold.py"
+    text = hold_src.read_text(encoding="utf-8")
+    assert "TODO(S2)" in text
+    assert "NFL_W8_PR_ROTATE_CONFIRM vs KEEP" in text
+    assert "a9ae5ae6" in text
+    assert "e64e73ac" in text
+    # Lift policy itself is unchanged: cite + rotate-confirm, no KEEP reinterpret.
+    assert odds_api_hold_is_on({}) is True
+    assert odds_api_hold_is_on(_lift_env()) is False
+
+
+def test_operator_account_budget_and_baseline_seed_no_live_call(tmp_path: Path) -> None:
+    assert ACCOUNT_USED_BASELINE_E64E73AC == 11622
+    assert_operator_account_budget(11622, 30)
+    with pytest.raises(CreditEstimateError):
+        assert_operator_account_budget(11622, 0)
+    with pytest.raises(CreditCeilingError, match="operator account budget"):
+        assert_operator_account_budget(14622, 1)
+    with pytest.raises(CreditReconcileError, match="S2"):
+        assert_operator_account_budget(11621, 30)
+
+    store = BundleStore(tmp_path)
+    seeded = seed_account_baseline_note(store)
+    assert seeded is not None
+    assert seeded["note"] is True
+    assert seeded["ledger_seed"] is True
+    assert read_cumulative(store) == 0
+    assert (tmp_path / "credits_account_baseline.json").is_file()
+    note = json.loads((tmp_path / "credits_account_baseline.json").read_text(encoding="utf-8"))
+    assert note["live_call"] is False
+    assert note["account_used_baseline"] == 11622
+    assert seed_account_baseline_note(store) is None
+    store.verify()
+
+
+def test_http_transport_sends_key_as_query_never_leaks() -> None:
+    sessions: list[object] = []
+    secret = "unit-test-not-live-http-key"
+
+    class FakeResp:
+        status_code = 200
+        headers = {
+            "x-requests-last": "30",
+            "x-requests-used": "11652",
+            "x-requests-remaining": "8348",
+            "Date": "Wed, 28 Oct 2026 21:15:00 GMT",
+        }
+        content = b"[]"
+
+    class FakeSession:
+        def __init__(self) -> None:
+            self.calls: list[dict[str, object]] = []
+            self.trust_env = True
+
+        def get(self, url: str, params: object = None, timeout: object = None) -> FakeResp:
+            self.calls.append({"url": url, "params": dict(params or {}), "timeout": timeout})
+            return FakeResp()
+
+        def close(self) -> None:
+            return None
+
+    def factory() -> FakeSession:
+        session = FakeSession()
+        sessions.append(session)
+        return session
+
+    transport = OddsHttpTransport(session_factory=factory, base_url="https://example.test/v4")
+    result = transport(
+        endpoint="sports/americanfootball_nfl/odds",
+        params={"regions": "us,us2", "sport_key": "americanfootball_nfl"},
+        headers={"x-api-key": secret},
+    )
+    assert result.status_code == 200
+    assert result.provider_server_ts == "2026-10-28T21:15:00Z"
+    assert secret not in json.dumps(
+        {"headers": result.headers, "ts": result.provider_server_ts}
+    )
+    session = sessions[0]
+    sent = session.calls[0]  # type: ignore[attr-defined]
+    assert sent["params"]["apiKey"] == secret
+    assert "sport_key" not in sent["params"]
+    assert "example.test" in str(sent["url"])
+
+    def boom_factory() -> FakeSession:
+        class Boom(FakeSession):
+            def get(self, url: str, params: object = None, timeout: object = None) -> FakeResp:
+                raise RuntimeError(f"failed {url}?apiKey={(params or {}).get('apiKey')}")  # type: ignore[union-attr]
+
+        return Boom()
+
+    with pytest.raises(OddsHttpTransportError, match="http get failed") as excinfo:
+        OddsHttpTransport(session_factory=boom_factory)(
+            endpoint="sports/americanfootball_nfl/odds",
+            params={"regions": "us"},
+            headers={"x-api-key": secret},
+        )
+    assert secret not in str(excinfo.value)
+    with pytest.raises(OddsHttpTransportError, match="x-api-key missing"):
+        OddsHttpTransport(session_factory=factory)(
+            endpoint="sports/americanfootball_nfl/odds",
+            params={},
+            headers={},
+        )
+
+
+def test_oneshot_hold_default_on_and_no_cli_lift_flag(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    with pytest.raises(OddsApiHoldError, match="process-scoped"):
+        run_oneshot_sealed_capture(
+            game_id="2026-W08-MIN@LAC",
+            kickoff_utc=KICKOFF,
+            store=store,
+            env={"ODDS_API_KEY": "unit-test-not-live"},
+            now_utc=KICKOFF - timedelta(hours=2),
+            transport=lambda **kwargs: (_ for _ in ()).throw(AssertionError("no transport")),
+        )
+    parser = build_parser()
+    flags = {opt for action in parser._actions for opt in (action.option_strings or [])}
+    assert "--game-id" in flags and "--kickoff-utc" in flags
+    for banned in ("--lift", "--no-hold", "--rotate", "--rotate-confirm", "--odds-api-key"):
+        assert banned not in flags
+    assert ONESHOT_ARGV == (
+        "cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture "
+        "--game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>"
+    )
+
+
+def test_oneshot_chains_fetch_snapshot_close_seal_fake_transport(tmp_path: Path) -> None:
+    event = load_json_fixture()
+    body = json.dumps(event).encode("utf-8")
+    called = {"n": 0}
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        assert "apiKey" not in dict(params)  # type: ignore[arg-type]
+        assert dict(headers)["x-api-key"] == "unit-test-not-live"
+        return OddsTransportResult(
+            status_code=200,
+            headers={
+                "x-requests-last": "30",
+                "x-requests-used": "11652",
+                "x-requests-remaining": "8348",
+                "Date": "Wed, 28 Oct 2026 21:15:00 GMT",
+            },
+            body=body,
+            provider_server_ts=event["provider_server_ts"],
+        )
+
+    store = BundleStore(tmp_path)
+    summary = run_oneshot_sealed_capture(
+        game_id=event["game_id"],
+        kickoff_utc=event["kickoff_utc"],
+        store=store,
+        env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+        transport=transport,
+        now_utc=KICKOFF - timedelta(hours=2),
+    )
+    assert called["n"] == 1
+    assert summary["ok"] is True
+    assert summary["seal_ack"] == "CURSOR_CANNOT_SEAL_ACK"
+    assert summary["custodian_receipt"]["slot"] == "AC-2"
+    assert summary["custodian_receipt"]["receipt_id"] == "UNSET"
+    assert summary["part_b"]["books"] == "draftkings,fanduel,betmgm,fanatics,circa"
+    assert summary["part_b"]["S_minutes"] == 10
+    assert summary["part_b"]["k_required"] == 3
+    assert summary["part_b"]["f8_cutoff_minutes"] == 90
+    assert summary["part_b"]["estimate_credits"] == 30
+    assert summary["close_by_market"]["spreads"] == "CLOSE"
+    assert summary["sealed_count_claim"] == 0
+    assert "unit-test-not-live" not in json.dumps(summary)
+    assert (tmp_path / "snapshots.jsonl").is_file()
+    assert (tmp_path / summary["close_relpath"]).is_file()
+    assert (tmp_path / summary["seal_relpath"]).is_file()
+    with pytest.raises(PermissionError, match="AC-12"):
+        refuse_seal([])
+    store.verify()
+
+
+def test_oneshot_cli_help_runnable_no_network() -> None:
+    model_service = Path(__file__).resolve().parents[1]
+    clean = {
+        key: value
+        for key, value in os.environ.items()
+        if not any(token in key.upper() for token in ("KEY", "SECRET", "TOKEN", "PASSWORD"))
+    }
+    clean["PYTHONPATH"] = "."
+    proc = subprocess.run(
+        [sys.executable, "-m", "src.services.nfl_w8_capture", "--help"],
+        cwd=str(model_service),
+        env=clean,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 0
+    assert ONESHOT_ARGV in proc.stdout
+    assert "--game-id" in proc.stdout
+    assert "--lift" not in proc.stdout
+
+
+def test_oneshot_main_hold_exits_without_transport(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    code = main(
+        [
+            "--game-id",
+            "2026-W08-MIN@LAC",
+            "--kickoff-utc",
+            "2026-10-29T23:15:00Z",
+            "--bundle-dir",
+            str(tmp_path),
+            "--now-utc",
+            "2026-10-29T21:15:00Z",
+        ],
+        env={"ODDS_API_KEY": "unit-test-not-live"},
+    )
+    assert code == 2
+    err = capsys.readouterr().err
+    assert "refuse_odds_fetch" in err or "hold" in err.lower() or "process-scoped" in err
+    assert "unit-test-not-live" not in err
+
+
+def test_tick_source_does_not_import_http_or_oneshot() -> None:
+    tick_src = (
+        Path(__file__).resolve().parents[1] / "src/services/nfl_w8_capture/tick.py"
+    ).read_text(encoding="utf-8")
+    assert "from src.services.nfl_w8_capture.http_transport" not in tick_src
+    assert "from src.services.nfl_w8_capture.oneshot" not in tick_src
+    assert "import OddsHttpTransport" not in tick_src
+    assert "run_oneshot_sealed_capture" not in tick_src

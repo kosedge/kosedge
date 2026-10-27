@@ -29,7 +29,7 @@ Cited sha8 (authority; files not in this checkout — do not invent bodies):
 
 | Hold | This PR |
 | --- | --- |
-| Odds API hold (H-1a / H-1c) | **Default ON.** `refuse_odds_fetch` raises unless `NFL_W8_H1_AUTH_CITE=89fdd45f` **and** `NFL_W8_PR_ROTATE_CONFIRM`. No live Odds call in this draft (transport required; none default). |
+| Odds API hold (H-1a / H-1c) | **Default ON.** `refuse_odds_fetch` raises unless `NFL_W8_H1_AUTH_CITE=89fdd45f` **and** `NFL_W8_PR_ROTATE_CONFIRM`. No CLI lift flag. Lift is process-scoped env only (not Railway-global). **TODO(S2):** rotate-confirm vs KEEP (`a9ae5ae6` / VERIFY `e64e73ac`) pending Ryan — do not assert a rotation that did not happen. `hold.py` lift policy unchanged. |
 | Seal-ack (AC-12) | **Still blocking.** `streams.refuse_seal` always raises. `seal.produce_seal` is AC-1/AC-2 only. |
 | Merge / deploy / Railway / Coming Soon / public NFL numbers | **Not in scope.** Draft PR only. |
 
@@ -75,9 +75,24 @@ Unchanged from first draft (close definition, five PRIMARY books including circa
 
 ---
 
-## Still blocked on H-1 live (Needs-IMV ACCEPT + rotate)
+## One-shot first-seal entrypoint (t4497u successor)
 
-- Live Odds HTTP (not wired; transport injection only)
+Word-for-word argv (no secrets):
+
+```
+cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture --game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>
+```
+
+PART B constants (not argv): books `draftkings,fanduel,betmgm,fanatics,circa`; S=10; k≥3; F-8 90m.
+Production HTTP: `http_transport.OddsHttpTransport` (ODDS_API_KEY from env only). Library `transport=None` still refuses to open a socket. Celery tick still never fetches/seals.
+AC-12: `seal_ack=CURSOR_CANNOT_SEAL_ACK`. AC-2 needs a named custodian receipt; slot stays UNSET until then.
+Credit: operator `(used−11622)+estimate ≤ 3000` from response headers; cited baseline `e64e73ac` used=11622 may be seeded with last=0 (no live call).
+
+## Still blocked on H-1 live (Needs-IMV ACCEPT + Ryan S2)
+
+- S2: `NFL_W8_PR_ROTATE_CONFIRM` vs KEEP existing key (`a9ae5ae6`) — pending Ryan
 - Condition 5 first sealed capture independent verify
+- Named custodian for AC-2 receipt
 - Webhook live POST (path present, unwired)
 - AC-8 / AC-10 remain **EXPLICIT_CARVE_OUT**
+- NFL NO-GO / Coming Soon ON. sealed=0. No merge. No deploy.

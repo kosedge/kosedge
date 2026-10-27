@@ -14,6 +14,15 @@ from src.services.nfl_w8_capture.store import CREDITS_NAME, BundleStore
 
 CREDIT_CEILING = 3000
 
+# H-1 /v4/sports VERIFY PASS e64e73ac (~2026-10-27 12:38 ET):
+# used=11622 remaining=8378 last=0. Bundle-local ledger is still 3000.
+# Operator must enforce (used−11622)+estimate ≤ 3000 from response headers.
+# Do not treat this as a live reading; it is a cited baseline only.
+ACCOUNT_USED_BASELINE_E64E73AC = 11622
+ACCOUNT_REMAINING_CITED_E64E73AC = 8378
+ACCOUNT_BASELINE_CITE = "e64e73ac"
+BASELINE_NOTE_NAME = "credits_account_baseline.json"
+
 HEADER_LAST = "x-requests-last"
 HEADER_USED = "x-requests-used"
 HEADER_REMAINING = "x-requests-remaining"
@@ -226,3 +235,89 @@ def refuse_credit_purchase() -> None:
         "H-1c: additional credit purchases / plan top-up are not authorized. "
         "No purchase path exists in nfl_w8_capture."
     )
+
+
+def operator_account_spend(used_now: int, *, baseline: int = ACCOUNT_USED_BASELINE_E64E73AC) -> int:
+    """Account credits consumed since cited baseline. Not a live call."""
+    return int(used_now) - int(baseline)
+
+
+def assert_operator_account_budget(
+    used_now: int,
+    estimate: int,
+    *,
+    baseline: int = ACCOUNT_USED_BASELINE_E64E73AC,
+    ceiling: int = CREDIT_CEILING,
+) -> None:
+    """Operator rule: (used−11622)+estimate ≤ 3000 from response headers.
+
+    used_now is the Odds ``x-requests-used`` header (or a cited prior).
+    estimate is books×markets×regions (PART B = 30). Never default 1.
+    """
+    if estimate < 1:
+        raise CreditEstimateError(
+            "pre-call estimate must be >= 1 (books×markets×regions); never default 1"
+        )
+    if int(used_now) < int(baseline):
+        raise CreditReconcileError(
+            f"x-requests-used {used_now} < cited baseline {baseline} ({ACCOUNT_BASELINE_CITE}); "
+            "do not assume a rotation. S2 (NFL_W8_PR_ROTATE_CONFIRM vs KEEP) is pending Ryan."
+        )
+    spend = operator_account_spend(used_now, baseline=baseline)
+    if spend + int(estimate) > int(ceiling):
+        raise CreditCeilingError(
+            f"operator account budget: (used {used_now} − baseline {baseline}) + "
+            f"estimate {estimate} = {spend + int(estimate)} > {ceiling}"
+        )
+
+
+def seed_account_baseline_note(
+    store: BundleStore,
+    *,
+    actor: str = "nfl_w8_capture",
+) -> Optional[dict[str, Any]]:
+    """Write cited baseline 11622 without a live Odds call.
+
+    Also seeds a last=0 ledger row so the next live used-header can reconcile
+    against 11622. Does not invent current remaining as live. Skips if the
+    note or a spend row already exists.
+    """
+    note_path = store.root / BASELINE_NOTE_NAME
+    prior = read_last_credit_record(store)
+    written: dict[str, Any] = {"note": False, "ledger_seed": False}
+    if not note_path.exists():
+        store.write_new_file(
+            BASELINE_NOTE_NAME,
+            {
+                "account_used_baseline": ACCOUNT_USED_BASELINE_E64E73AC,
+                "account_remaining_cited": ACCOUNT_REMAINING_CITED_E64E73AC,
+                "cite": ACCOUNT_BASELINE_CITE,
+                "source": "H-1 /v4/sports VERIFY PASS e64e73ac",
+                "operator_rule": "(used-11622)+estimate <= 3000 from response headers",
+                "bundle_local_ceiling": CREDIT_CEILING,
+                "live_call": False,
+                "note": (
+                    "Cited account baseline only. Bundle-local ledger starts at 0 "
+                    "(seed last=0). Operator must re-check x-requests-used on the "
+                    "capture response. S2 rotate vs KEEP is pending Ryan."
+                ),
+            },
+            actor=actor,
+            note="credit-baseline-e64e73ac",
+        )
+        written["note"] = True
+    if prior is None:
+        record_credit_use(
+            store,
+            {
+                HEADER_LAST: "0",
+                HEADER_USED: str(ACCOUNT_USED_BASELINE_E64E73AC),
+                HEADER_REMAINING: str(ACCOUNT_REMAINING_CITED_E64E73AC),
+            },
+            actor=actor,
+            note="seed-baseline-e64e73ac-no-live-call",
+        )
+        written["ledger_seed"] = True
+    if not written["note"] and not written["ledger_seed"]:
+        return None
+    return written
