@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import {
   NFL_DEFAULT_N_GAME_BOX,
   NFL_SEASON_ENGINE_TEAMS,
@@ -106,6 +107,7 @@ export default function SeasonEngineGameBoxesClient({
   depthSource?: string;
   depthAsOf?: string;
 }) {
+  const publicNumbersDisabled = isFootballPublicNumbersDisabled("nfl");
   const [matchupId, setMatchupId] = useState(matchups[0]?.id ?? "manual");
   const [homeTeam, setHomeTeam] = useState(matchups[0]?.homeTeam ?? "KC");
   const [awayTeam, setAwayTeam] = useState(matchups[0]?.awayTeam ?? "BUF");
@@ -134,6 +136,7 @@ export default function SeasonEngineGameBoxesClient({
   }
 
   function run() {
+    if (publicNumbersDisabled) return;
     startTransition(async () => {
       setError(null);
       setBaseline(null);
@@ -197,6 +200,10 @@ export default function SeasonEngineGameBoxesClient({
   const synthetic =
     (active?.notes?.schedule_match || baseline?.notes?.schedule_match) ===
     "synthetic_matchup";
+
+  if (publicNumbersDisabled) {
+    return null;
+  }
 
   return (
     <div className="space-y-6">
@@ -374,7 +381,7 @@ export default function SeasonEngineGameBoxesClient({
                   : "Projected boxes"}
               </p>
             </div>
-            {active.game_script_summary ? (
+            {active.game_script_summary && !publicNumbersDisabled ? (
               <div className="text-right">
                 <p className="text-lg font-semibold tabular-nums text-kos-gold">
                   {formatPct(

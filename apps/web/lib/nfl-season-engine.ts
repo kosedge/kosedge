@@ -1,4 +1,8 @@
 import "server-only";
+import {
+  footballPublicNumbersUnavailableMessage,
+  isFootballPublicNumbersDisabled,
+} from "@/lib/cfb-edge-board-public";
 import { env } from "@/lib/config/env";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import {
@@ -372,6 +376,19 @@ export async function fetchSeasonEngineGameBoxes(input: {
   includeDiagnostics?: boolean;
   injuryPaths?: InjuryPathInput[];
 }): Promise<SeasonEngineGameBoxesResponse> {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return {
+      mode: "",
+      season: input.season ?? 2026,
+      week: input.week ?? 1,
+      home_team: input.homeTeam,
+      away_team: input.awayTeam,
+      n_replicates: 0,
+      engine_version: "",
+      players: [],
+      error: footballPublicNumbersUnavailableMessage("nfl"),
+    };
+  }
   const base = baseUrl();
   if (!base) {
     return {
@@ -877,6 +894,13 @@ export async function loadSeasonEngineMatchups(params?: {
   source?: "fair-lines" | "wall-chart";
   error?: string;
 }> {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return {
+      matchups: [],
+      currentWeek: null,
+      error: footballPublicNumbersUnavailableMessage("nfl"),
+    };
+  }
   const { matchupsFromWallChart } = await import(
     "@/lib/nfl-season-engine-format"
   );

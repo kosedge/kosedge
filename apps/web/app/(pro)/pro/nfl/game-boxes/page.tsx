@@ -1,6 +1,8 @@
 import Link from "next/link";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import SportHubShell from "@/components/pro/SportHubShell";
 import SeasonEngineGameBoxesClient from "@/components/pro/nfl/SeasonEngineGameBoxesClient";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import {
   fetchSeasonEngineStatus,
   loadSeasonEngineMatchups,
@@ -10,6 +12,20 @@ import { resolveNflProjectionDefaultWeek } from "@/lib/nfl-board-week-label";
 export const dynamic = "force-dynamic";
 
 export default async function NflGameBoxesPage() {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="Game Boxes"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Game Boxes" />
+      </SportHubShell>
+    );
+  }
+
   const [status, slate] = await Promise.all([
     fetchSeasonEngineStatus(),
     loadSeasonEngineMatchups({ season: 2026, daysAhead: 28 }),

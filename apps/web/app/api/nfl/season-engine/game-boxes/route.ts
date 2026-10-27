@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+import {
+  footballPublicNumbersAssembleUnavailablePayload,
+  isFootballPublicNumbersDisabled,
+} from "@/lib/cfb-edge-board-public";
 import { fetchSeasonEngineGameBoxes } from "@/lib/nfl-season-engine";
 import {
   NFL_DEFAULT_N_GAME_BOX,
@@ -69,7 +73,25 @@ function parseBody(raw: unknown): {
   };
 }
 
+function publicKillPayload() {
+  const unavailable = footballPublicNumbersAssembleUnavailablePayload("nfl");
+  return {
+    ...unavailable,
+    mode: "",
+    season: 2026,
+    week: 1,
+    home_team: "",
+    away_team: "",
+    n_replicates: 0,
+    engine_version: "",
+    players: [] as const,
+  };
+}
+
 export async function GET(req: Request) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return NextResponse.json(publicKillPayload(), { status: 503 });
+  }
   const url = new URL(req.url);
   const homeTeam = url.searchParams.get("home_team") ?? undefined;
   const awayTeam = url.searchParams.get("away_team") ?? undefined;
@@ -102,6 +124,9 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return NextResponse.json(publicKillPayload(), { status: 503 });
+  }
   let raw: unknown = {};
   try {
     raw = await req.json();
