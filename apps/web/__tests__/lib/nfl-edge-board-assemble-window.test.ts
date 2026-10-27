@@ -73,6 +73,10 @@ describe("INC-2026-09-07 (C) NFL assemble window + full-slate governance", () =>
   it("assemble route: full = governed snapshot; week1 = live narrow; 25s pageData", () => {
     const assemble = readRel("app/api/edge-board/[sport]/assemble/route.ts");
     expect(assemble).toContain("requireGovernedNflFullSlate");
+    expect(assemble).toContain("resolveNflAssembleLinesAsOfFromCapture");
+    expect(assemble).not.toContain(
+      "resolveEdgeBoardBoardLinesAsOf(assembled) ?? governed.linesAsOf",
+    );
     expect(assemble).toContain('slate === "full"');
     expect(assemble).toContain('slate: "week1"');
     expect(assemble).toContain("UPSTREAM_TIMEOUT_MS.pageData");

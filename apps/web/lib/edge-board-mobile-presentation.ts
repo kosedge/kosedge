@@ -23,6 +23,7 @@ import {
   reachableConfidenceBands,
 } from "@/lib/nfl-dead-tiers";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
+import type { NflCertStatus } from "@/lib/nfl-surface-provenance";
 import type {
   LegacyEdgeBoardRow,
   PricePair,
@@ -100,6 +101,10 @@ export type MobileCardModel = {
   linesAsOfLabel: string | null;
   linesStale: boolean;
   asOfUnavailable: boolean;
+  /** NFL-only cert chrome. Null for other sports (M-3 — no cert-claim expansion). */
+  spreadCertStatus: NflCertStatus | null;
+  totalCertStatus: NflCertStatus | null;
+  mlCertStatus: NflCertStatus | null;
   overview: string | null;
   /** Raw model — Overview only. */
   modelNote: string | null;
@@ -308,10 +313,12 @@ function decisionBookOrNull(args: {
         ? args.book
         : null;
   if (!args.numbersMatch) {
-    return { bookKey: null, trustFootnote: trust };
+    return { bookKey: null, trustFootnote: trust ?? "no book" };
   }
   if (trust) return { bookKey: null, trustFootnote: trust };
-  if (isBlankLabel(args.book)) return { bookKey: null, trustFootnote: null };
+  if (isBlankLabel(args.book)) {
+    return { bookKey: null, trustFootnote: "no book" };
+  }
   return { bookKey: String(args.book), trustFootnote: null };
 }
 
@@ -636,7 +643,10 @@ export function composeEdgeBoardMobileCard(args: {
   const totalFail =
     flags.includes("total_fair_market_edge_mismatch") ||
     flags.includes("total_side_disagrees_favor");
-  const totalStatus = toPublishActionLabel(row.actionLabelOU ?? row.tagOU);
+  const totalStatusRaw = toPublishActionLabel(row.actionLabelOU ?? row.tagOU);
+  // M-1: NFL totals are NOT CERTIFIABLE. PLAY chrome would look certified.
+  const totalStatus =
+    isNfl && totalStatusRaw === "PLAY" ? null : totalStatusRaw;
   let totalInterp: MobileInterpretation | null = null;
   if (totalStatus || totalReconcile?.status === "ok") {
     const totalAdv =
@@ -703,7 +713,8 @@ export function composeEdgeBoardMobileCard(args: {
     kickoffTime: kick.time,
     kickoffTz: kick.local,
     venue,
-    isMoneyline: isMlb,
+    // M-2: NFL ML is NOT_CERTIFIABLE — blocked by cert, not only MLB-only UI.
+    isMoneyline: isMlb && !isNfl,
     marketSpread,
     fairSpread,
     marketTotal,
@@ -723,7 +734,10 @@ export function composeEdgeBoardMobileCard(args: {
     openTotal,
     linesAsOfLabel: formatLinesAsOf(row.linesAsOf),
     linesStale: Boolean(row.linesStale),
-    asOfUnavailable: isNfl && !row.linesAsOf,
+    asOfUnavailable: !row.linesAsOf,
+    spreadCertStatus: isNfl ? "NOT_CERTIFIED" : null,
+    totalCertStatus: isNfl ? "NOT_CERTIFIABLE" : null,
+    mlCertStatus: isNfl ? "NOT_CERTIFIABLE" : null,
     overview: row.overview ?? null,
     modelNote: modelBits.length ? `Model ${modelBits.join(" / ")}` : null,
     sizeDown: Boolean(

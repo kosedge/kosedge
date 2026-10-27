@@ -1,5 +1,4 @@
 import "server-only";
-import { env } from "@/lib/config/env";
 import {
   fetchNflFairLines,
   formatAmericanOdds,
@@ -9,7 +8,6 @@ import {
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
 import {
-  fetchNflPropsBoard,
   formatConfidence,
   formatEdgeProb,
   formatPropNumber,
@@ -19,9 +17,13 @@ import {
 import { lookupCanonicalNflGameForTeam } from "@/lib/nfl-canonical-schedule";
 import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
 import {
-  edgesMayShowPropRows,
-  nflPropsSurfaceState,
-} from "@/lib/nfl-props-surface";
+  NFL_EDGES_PROPS_STATUS,
+  nflFairLinesObservedIdentity,
+  nflSurfaceProvenanceFromEdgesDesk,
+  selectNflEdgesCustomerPaintRows,
+  bindNflEdgesToFairLinesCertifiedRun,
+  checkNflObservedAgainstCertifiedSlot,
+} from "@/lib/nfl-surface-provenance";
 import {
   formatSelectedSideLineEdge,
   formatSelectedSideProbEdge,
@@ -45,16 +47,6 @@ import type {
   DeskMarketType,
   NflEdgesDeskResponse,
 } from "@/lib/nfl-edges-desk-types";
-
-function toNumberOrNull(value: unknown): number | null {
-  if (value === null || value === undefined) return null;
-  if (typeof value === "number") return Number.isFinite(value) ? value : null;
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-  return null;
-}
 
 function fairLineDeskConfidence(
   row: NflFairLineRow,
@@ -130,6 +122,7 @@ export function deskEdgesFromFairLine(
         confidence: fairLineDeskConfidence(row, "ml"),
         kickoff,
         source: "fair-lines",
+        linesAsOf: row.oddsCapturedAt?.trim() || null,
       });
     }
   }
@@ -170,6 +163,7 @@ export function deskEdgesFromFairLine(
         confidence: fairLineDeskConfidence(row, "spread"),
         kickoff,
         source: "fair-lines",
+        linesAsOf: row.oddsCapturedAt?.trim() || null,
       });
     }
   }
@@ -209,6 +203,7 @@ export function deskEdgesFromFairLine(
         confidence: fairLineDeskConfidence(row, "total"),
         kickoff,
         source: "fair-lines",
+        linesAsOf: row.oddsCapturedAt?.trim() || null,
       });
     }
   }
@@ -265,6 +260,7 @@ export function deskEdgeFromPropRow(
         confidence: row.confidence,
         kickoff,
         source: "props",
+        linesAsOf: null,
       };
     }
     return null;
@@ -294,88 +290,8 @@ export function deskEdgeFromPropRow(
     confidence: row.confidence,
     kickoff,
     source: "props",
+    linesAsOf: null,
   };
-}
-
-function normalizeEdgesTodayRow(
-  raw: Record<string, unknown>,
-  minProbEdge: number,
-): DeskEdgeRow | null {
-  const mlEdge = toNumberOrNull(raw.ml_edge_prob);
-  if (mlEdge === null || Math.abs(mlEdge) < minProbEdge) return null;
-  const ml = reconcileMoneylineCustomerEdge({ signedProbEdge: mlEdge });
-  if (ml.status !== "ok" || ml.advantage == null || ml.side == null)
-    return null;
-  const home = String(raw.home_team ?? "Home");
-  const away = String(raw.away_team ?? "Away");
-  const homeSide = ml.side === "Home";
-  return {
-    id: `${String(raw.game_id ?? "game")}-today-ml`,
-    marketType: "ml",
-    matchupOrPlayer: `${away} @ ${home}`,
-    detail: "Moneyline (today)",
-    kosedgeLine: formatAmericanOdds(
-      toNumberOrNull(homeSide ? raw.fair_home_ml : raw.fair_away_ml),
-    ),
-    marketLine: formatAmericanOdds(
-      toNumberOrNull(homeSide ? raw.market_home_ml : raw.market_away_ml),
-    ),
-    edge: ml.advantage,
-    edgeDisplay: formatSelectedSideProbEdge(ml.advantage),
-    side: ml.side,
-    confidence: toNumberOrNull(raw.confidence_score),
-    kickoff: typeof raw.start_time === "string" ? raw.start_time : null,
-    source: "edges-today",
-  };
-}
-
-async function fetchNflEdgesToday(params: {
-  minMlEdgeProb?: number;
-  minConfidenceScore?: number;
-}): Promise<{ rows: DeskEdgeRow[]; error?: string }> {
-  const base = env.MODEL_SERVICE_URL;
-  if (!base) return { rows: [], error: "MODEL_SERVICE_URL is not configured." };
-
-  const url = new URL(`${base.replace(/\/+$/, "")}/nfl/edges/today`);
-  if (params.minMlEdgeProb != null) {
-    url.searchParams.set("min_ml_edge_prob", String(params.minMlEdgeProb));
-  }
-  if (params.minConfidenceScore != null) {
-    url.searchParams.set(
-      "min_confidence_score",
-      String(params.minConfidenceScore),
-    );
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const response = await fetch(url.toString(), {
-      cache: "no-store",
-      signal: controller.signal,
-      headers: {
-        accept: "application/json",
-        ...(env.INTERNAL_API_SECRET
-          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
-          : {}),
-      },
-    });
-    if (!response.ok) {
-      return { rows: [], error: `Model service returned ${response.status}.` };
-    }
-    const payload = (await response.json()) as {
-      edges?: Array<Record<string, unknown>>;
-    };
-    const edges = Array.isArray(payload.edges) ? payload.edges : [];
-    const rows = edges
-      .map((raw) => normalizeEdgesTodayRow(raw, params.minMlEdgeProb ?? 0.02))
-      .filter((row): row is DeskEdgeRow => row !== null);
-    return { rows };
-  } catch {
-    return { rows: [], error: "Unable to reach model service." };
-  } finally {
-    clearTimeout(timeout);
-  }
 }
 
 export function filterDeskRows(
@@ -385,6 +301,76 @@ export function filterDeskRows(
   const filtered =
     market === "all" ? rows : rows.filter((row) => row.marketType === market);
   return [...filtered].sort((a, b) => Math.abs(b.edge) - Math.abs(a.edge));
+}
+
+/**
+ * Pure desk assembly (N-1 / E-2 / X-4). Props and edges-today rows are
+ * accepted only so tests can prove they are omitted. Customer `rows` are
+ * always filtered through selectNflEdgesCustomerPaintRows.
+ */
+export function assembleNflEdgesDeskPayload(input: {
+  season: number;
+  week: number;
+  market: DeskMarketType;
+  minProbEdge: number;
+  minLineEdge: number;
+  minConfidence: number;
+  fairOddsAsOf: string | null;
+  fairBooks?: string[];
+  fairLinesError?: string;
+  fairEdges?: DeskEdgeRow[];
+  todayEdges?: DeskEdgeRow[];
+  propEdges?: DeskEdgeRow[];
+}): NflEdgesDeskResponse {
+  const observed = nflSurfaceProvenanceFromEdgesDesk({
+    marketAsOf: input.fairOddsAsOf,
+    // Observed identity comes from the Fair Lines leg. Unbound → null.
+    // Do not invent or copy a certified-slot placeholder.
+    ...nflFairLinesObservedIdentity(),
+  });
+  const bind = bindNflEdgesToFairLinesCertifiedRun({
+    runId: observed.runId,
+    sha256: observed.sha256,
+  });
+  const slot = checkNflObservedAgainstCertifiedSlot({ observed });
+  const candidates = [
+    ...(input.fairEdges ?? []),
+    ...(input.todayEdges ?? []),
+    ...(input.propEdges ?? []),
+  ];
+  const painted = selectNflEdgesCustomerPaintRows(candidates, {
+    observed,
+    bindOk: bind.ok,
+  });
+  const rows = filterDeskRows(painted, input.market);
+
+  return {
+    season: input.season,
+    week: input.week,
+    count: rows.length,
+    rows,
+    filters: {
+      market: input.market,
+      minProbEdge: input.minProbEdge,
+      minLineEdge: input.minLineEdge,
+      minConfidence: input.minConfidence,
+    },
+    propsSurface: "gated",
+    propsStatus: NFL_EDGES_PROPS_STATUS,
+    observed,
+    marketAsOf: observed.linesAsOf,
+    marketBooks: (input.fairBooks ?? []).filter(Boolean),
+    deskComplete: false,
+    diagnostics: {
+      gameCandidates: (input.fairEdges ?? []).length,
+      propCandidates: 0,
+      fairLinesError: input.fairLinesError,
+      propsOmitted: true,
+      edgeRowsBlocked: true,
+      bindReason: bind.reason,
+      provenanceReason: slot.reason,
+    },
+  };
 }
 
 export async function fetchNflEdgesDesk(params: {
@@ -409,26 +395,16 @@ export async function fetchNflEdgesDesk(params: {
   const minLineEdge = params.minLineEdge ?? 1.0;
   const minConfidence = params.minConfidence ?? 0;
   const daysAhead = params.daysAhead ?? 120;
+  void params.propLimit;
 
-  const [fairBoard, todayBoard, propsBoard] = await Promise.all([
-    fetchNflFairLines({
-      season: params.season,
-      daysAhead,
-      timeoutMs: params.timeoutMs,
-      throwOnTransportError: params.throwOnTransportError,
-    }),
-    fetchNflEdgesToday({
-      minMlEdgeProb: minProbEdge,
-      minConfidenceScore: minConfidence > 0 ? minConfidence : undefined,
-    }),
-    fetchNflPropsBoard({
-      season: params.season,
-      week: params.week,
-      minAbsEdge: minProbEdge,
-      minConfidence: minConfidence > 0 ? minConfidence : undefined,
-      limit: params.propLimit ?? 500,
-    }),
-  ]);
+  // N-1 / X-4 / E-2: first build fetches Fair Lines only. Do not fan out
+  // to edges/today (edge-language unadopted) or props (absent / unavailable).
+  const fairBoard = await fetchNflFairLines({
+    season: params.season,
+    daysAhead,
+    timeoutMs: params.timeoutMs,
+    throwOnTransportError: params.throwOnTransportError,
+  });
 
   // Desk week is authoritative — do not mix forward-week fair-lines into W1.
   const weekLines = fairBoard.lines.filter(
@@ -441,46 +417,19 @@ export async function fetchNflEdgesDesk(params: {
       requestSeason: params.season,
     }),
   );
-  const todayIds = new Set(
-    todayBoard.rows.map((row) => row.id.replace("-today-ml", "-ml")),
-  );
-  const mergedGame = [
-    ...fairEdges,
-    ...todayBoard.rows.filter(
-      (row) => !todayIds.has(row.id.replace("-today-ml", "-ml")),
-    ),
-  ];
 
-  const propSurface = nflPropsSurfaceState(propsBoard);
-  const propEdges = edgesMayShowPropRows(propSurface)
-    ? propsBoard.rows
-        .map((row) => deskEdgeFromPropRow(row, { minProbEdge, minConfidence }))
-        .filter((row): row is DeskEdgeRow => row !== null)
-    : [];
-
-  const allRows = filterDeskRows([...mergedGame, ...propEdges], market);
-
-  // Model odds_as_of only (Aug 21 stored capture is honest; never request clock).
-  const marketAsOf = fairBoard.oddsAsOf?.trim() || null;
-  const marketBooks = (fairBoard.diagnostics.bookmakers ?? []).filter(Boolean);
-
-  return {
+  return assembleNflEdgesDeskPayload({
     season: params.season,
     week: params.week,
-    count: allRows.length,
-    rows: allRows,
-    filters: { market, minProbEdge, minLineEdge, minConfidence },
-    propsSurface: propSurface,
-    marketAsOf,
-    marketBooks,
-    diagnostics: {
-      gameCandidates: mergedGame.length,
-      propCandidates: propEdges.length,
-      fairLinesError: fairBoard.error,
-      edgesTodayError: todayBoard.error,
-      propsError: propsBoard.error,
-    },
-  };
+    market,
+    minProbEdge,
+    minLineEdge,
+    minConfidence,
+    fairOddsAsOf: fairBoard.oddsAsOf?.trim() || null,
+    fairBooks: fairBoard.diagnostics.bookmakers ?? [],
+    fairLinesError: fairBoard.error,
+    fairEdges,
+  });
 }
 
 export {

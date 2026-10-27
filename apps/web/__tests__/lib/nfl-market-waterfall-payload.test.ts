@@ -51,7 +51,7 @@ describe("NFL market page waterfall / RSC fat payload (Alex)", () => {
     expect(fairPage).not.toContain("fetchNflFairLines");
   });
 
-  it("page-data APIs exist and desk keeps parallel fair∥today∥props", () => {
+  it("page-data APIs exist and first-build desk omits today∥props fan-out", () => {
     const assemble = readFileSync(
       path.join(process.cwd(), "app/api/edge-board/[sport]/assemble/route.ts"),
       "utf8",
@@ -76,9 +76,11 @@ describe("NFL market page waterfall / RSC fat payload (Alex)", () => {
     expect(fairApi).toMatch(/export const maxDuration = 30/);
     expect(edgesApi).toMatch(/export const maxDuration = 30/);
     expect(assemble).toMatch(/export const maxDuration = 30/);
-    expect(deskLib).toMatch(
-      /await Promise\.all\(\[\s*fetchNflFairLines[\s\S]*fetchNflEdgesToday[\s\S]*fetchNflPropsBoard/,
-    );
+    expect(deskLib).toContain("fetchNflFairLines");
+    expect(deskLib).toContain("assembleNflEdgesDeskPayload");
+    expect(deskLib).not.toContain("fetchNflEdgesToday");
+    expect(deskLib).not.toContain("fetchNflPropsBoard");
+    expect(deskLib).not.toMatch(/await Promise\.all\(\[/);
   });
 
   it("as-of stamps stay wired on client boards (PR 416)", () => {

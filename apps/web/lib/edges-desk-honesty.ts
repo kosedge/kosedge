@@ -39,4 +39,4 @@ export const NFL_EDGES_DESK_TITLE = "Edges desk";
 
 /** NFL edges desk subtitle — aligns with Edge Board research-fair honesty. */
 export const NFL_EDGES_DESK_SUMMARY =
-  "Demoted desk — Edge Board is the decision center. KEI vs market separations vs the joined book. Model is research-fair; tags never use Model vs market. Empty when nothing clears the cut.";
+  "Demoted desk — Edge Board is the decision center. KEI vs market separations vs the joined book. Model is research-fair; tags never use Model vs market. Not a certified Edges surface, not CLV proof, and not PLAY authorization. Desk is incomplete while props are unavailable.";
