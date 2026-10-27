@@ -89,6 +89,11 @@ AC-12: `seal_ack=CURSOR_CANNOT_SEAL_ACK`. AC-2 needs a named custodian receipt; 
 R5 credit: (a) bundle ledger cumulative ≤3000 **and** (b) account `(used−11622)≤3000` (used≤14622). Ledger not optional.
 R6 receipt echoes KEEP STATEMENT. R7: paper ACCEPT does not authorize live lift/Odds/capture/merge/deploy.
 
+## t4520u / t4523u Option A (credit accounting)
+
+**KEEP 11622 / 14622.** Receipt `072005fe` immutable. Evidence packet sha8 `75aa28b4`.  
+Baseline note is note-only (no ledger seed of 11622). T-0 snapshot (`last=0`) is the reconcile prior. Reserve worst-case (`T-0 used + estimate`) before execute; do not ignore counter differences. After: this-request `last` vs concurrent `used_after−T-0−last` (beat/worker left running). Unexplained discrepancy or insufficient headroom → fail closed. Abort recovery = new bundle + new T-0. See `data/ops/nfl-w8-t4520u-t4523u-t0-reserve-reconcile.md`.
+
 ## Still blocked after this tip
 
 - IMV path / sealing re-grade on successor tip (R1–R7 bound)

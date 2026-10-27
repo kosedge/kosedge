@@ -43,6 +43,7 @@ REPO_RELATIVE_INVENTORY = (
     "services/model-service/src/celery_app.py",
     ".github/workflows/pr-check.yml",
     "data/ops/nfl-w8-prospective-capture-spec-to-code-t4445u.md",
+    "data/ops/nfl-w8-t4520u-t4523u-t0-reserve-reconcile.md",
     "scripts/ci/run-nfl-w8-capture-tests.sh",
 )
 

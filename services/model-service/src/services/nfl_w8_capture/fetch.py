@@ -29,12 +29,14 @@ from src.services.nfl_w8_capture.credits import (
     CreditEstimateError,
     CreditHeaderError,
     CreditReconcileError,
+    assert_t0_ready,
     estimate_request_credits,
     ledger_closed,
     ledger_overrun,
     pre_call_check,
     read_cumulative,
     record_credit_use,
+    write_reservation,
 )
 from src.services.nfl_w8_capture.hold import OddsApiHoldError, odds_api_hold_is_on, refuse_odds_fetch
 from src.services.nfl_w8_capture.redact import redact_secrets
@@ -163,8 +165,12 @@ def fetch_odds_with_provenance(
             estimate,
             overrun=ledger_overrun(store),
         )
-    except (CreditCeilingError, CreditEstimateError) as exc:
-        _alert(store, kind="ceiling", detail=str(exc), env=source, game_id=game_id, market="credits")
+        # t4520u / t4523u Option A: T-0 + worst-case reserve before any transport.
+        assert_t0_ready(store)
+        write_reservation(store, estimate)
+    except (CreditCeilingError, CreditEstimateError, CreditReconcileError) as exc:
+        kind = "ceiling" if isinstance(exc, CreditCeilingError) else "fetch_fail"
+        _alert(store, kind=kind, detail=str(exc), env=source, game_id=game_id, market="credits")
         raise
     key = _env_key(source)
     request_headers = {"x-api-key": key}
@@ -213,7 +219,13 @@ def fetch_odds_with_provenance(
         raise OddsFetchError(f"transport status {result.status_code}")
 
     try:
-        ledger = record_credit_use(store, result.headers, note="odds-fetch")
+        ledger = record_credit_use(
+            store,
+            result.headers,
+            note="odds-fetch",
+            require_t0=True,
+            expected_charge=estimate,
+        )
     except (CreditHeaderError, CreditCeilingError, CreditReconcileError) as exc:
         kind = "ceiling" if isinstance(exc, CreditCeilingError) else "fetch_fail"
         _alert(store, kind=kind, detail=str(exc), env=source, game_id=game_id, market="credits")

@@ -39,8 +39,10 @@ from src.services.nfl_w8_capture.evidence import (
 from src.services.nfl_w8_capture.carveouts import explicit_carve_outs
 from src.services.nfl_w8_capture.credits import (
     ACCOUNT_USED_BASELINE_E64E73AC,
+    ACCOUNT_USED_CEILING_E64E73AC,
     CREDIT_CEILING,
     pre_call_check,
+    seed_t0_account_snapshot,
 )
 from src.services.nfl_w8_capture.hold import (
     OddsApiHoldError,
@@ -102,6 +104,8 @@ __all__ = [
     "append_snapshot",
     "snapshot_content_sha",
     "ACCOUNT_USED_BASELINE_E64E73AC",
+    "ACCOUNT_USED_CEILING_E64E73AC",
+    "seed_t0_account_snapshot",
     "OddsHttpTransport",
     "ONESHOT_ARGV",
     "ONESHOT_SYNTHETIC_ARGV",

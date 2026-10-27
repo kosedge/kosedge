@@ -23,6 +23,9 @@ for AC-2; Cursor cannot seal-ack. Do not fake seal-ack.
 
 Credit: operator must enforce (used−11622)+estimate ≤ 3000 from response
 headers (cited baseline e64e73ac). Bundle-local ceiling remains 3000.
+t4520u / t4523u Option A: T-0 snapshot + worst-case reserve before execute;
+this-request last vs concurrent beat/worker after. Baseline 11622 / ceiling
+14622 stay immutable. Receipt 072005fe stays immutable.
 """
 
 from __future__ import annotations
@@ -50,17 +53,23 @@ from src.services.nfl_w8_capture.close import (
 )
 from src.services.nfl_w8_capture.alerts import control_alert, deliver_alert
 from src.services.nfl_w8_capture.credits import (
+    ACCOUNT_REMAINING_CITED_E64E73AC,
     ACCOUNT_USED_BASELINE_E64E73AC,
     CREDIT_CEILING,
     HEADER_USED,
     CreditCeilingError,
     CreditEstimateError,
+    CreditHeaderError,
     CreditReconcileError,
+    assert_account_used_ceiling,
     assert_dual_credit_r5,
     assert_operator_account_budget,
+    credit_headers,
     estimate_request_credits,
-    read_last_credit_record,
+    parse_credit_headers,
     seed_account_baseline_note,
+    seed_t0_account_snapshot,
+    t0_headers_from_env,
 )
 from src.services.nfl_w8_capture.fetch import (
     OddsFetchError,
@@ -164,17 +173,25 @@ def _jsonable(value: Any) -> Any:
     return value
 
 
-def _prior_used(store: BundleStore) -> Optional[int]:
-    record = read_last_credit_record(store)
-    if record is None:
-        return None
-    headers = record.get("headers") or {}
-    if not isinstance(headers, dict) or HEADER_USED not in headers:
-        return None
-    try:
-        return int(headers[HEADER_USED])
-    except (TypeError, ValueError):
-        return None
+def _resolve_t0_headers(
+    args: Any,
+    env: Mapping[str, str],
+    *,
+    synthetic: bool,
+) -> Optional[dict[str, str]]:
+    """CLI / env T-0, or synthetic default 11622/8378/last=0 (matches fixture 11652/30)."""
+    used = str(getattr(args, "t0_used", "") or env.get("NFL_W8_T0_USED") or "").strip()
+    remaining = str(getattr(args, "t0_remaining", "") or env.get("NFL_W8_T0_REMAINING") or "").strip()
+    last = str(getattr(args, "t0_last", "") or env.get("NFL_W8_T0_LAST") or "0").strip() or "0"
+    if used and remaining:
+        return credit_headers(last=last, used=used, remaining=remaining)
+    if synthetic:
+        return credit_headers(
+            last=0,
+            used=ACCOUNT_USED_BASELINE_E64E73AC,
+            remaining=ACCOUNT_REMAINING_CITED_E64E73AC,
+        )
+    return None
 
 
 def run_oneshot_sealed_capture(
@@ -188,6 +205,7 @@ def run_oneshot_sealed_capture(
     custodian_receipt_id: str = "",
     odds_event_id: str = "",
     registered_at: Optional[datetime | str] = None,
+    t0_headers: Optional[Mapping[str, Any]] = None,
 ) -> dict[str, Any]:
     """Fetch → snapshot → close → seal for ONE PART B W8 game.
 
@@ -234,9 +252,16 @@ def run_oneshot_sealed_capture(
     seed_account_baseline_note(store)
     params = build_w8_odds_request_params()
     estimate = estimate_request_credits(params)
-    prior_used = _prior_used(store)
-    if prior_used is not None:
-        assert_operator_account_budget(prior_used, estimate)
+    t0 = dict(t0_headers) if t0_headers is not None else t0_headers_from_env(source)
+    if t0 is None:
+        raise CreditReconcileError(
+            "need T-0 snapshot immediately before request "
+            "(--t0-used/--t0-remaining or NFL_W8_T0_USED/NFL_W8_T0_REMAINING)"
+        )
+    seed_t0_account_snapshot(store, t0)
+    t0_used = int(parse_credit_headers(t0)[HEADER_USED])
+    # Reserve against T-0 used, not the VERIFY 11622 cite.
+    assert_operator_account_budget(t0_used, estimate)
 
     live_transport = transport if transport is not None else OddsHttpTransport()
     fetched = fetch_odds_with_provenance(
@@ -253,7 +278,7 @@ def run_oneshot_sealed_capture(
         raise CreditReconcileError("R5: x-requests-used missing; ledger+account dual-check required")
     # R5: (a) bundle ledger cumulative ≤ 3000 AND (b) account used ≤ 14622
     dual = assert_dual_credit_r5(store, int(used_now))
-    assert_operator_account_budget(int(used_now), estimate)
+    assert_account_used_ceiling(int(used_now))
 
     envelope = fetched.get("envelope") or {}
     payload = fetched.get("payload")
@@ -383,6 +408,19 @@ def run_oneshot_sealed_capture(
             "rule": "R5 (a) ledger cumulative<=3000 AND (b) used<=14622",
             "ceiling": CREDIT_CEILING,
             "used_now": used_now,
+            "t0_used": t0_used,
+        },
+        "t0": {
+            "used": t0_used,
+            "rule": "fresh account reading immediately before request; not VERIFY 11622 seed",
+        },
+        "t4523u_option_a": {
+            "beat_worker_left_running": True,
+            "this_request_charge": (credits.get("oneshot_delta") if isinstance(credits, dict) else None),
+            "concurrent": (credits.get("concurrent") if isinstance(credits, dict) else None),
+            "concurrent_attribution": (
+                credits.get("concurrent_attribution") if isinstance(credits, dict) else None
+            ),
         },
         "snapshot_entry_sha": snapshot.get("entry_sha"),
         "close_relpath": close_relpath,
@@ -457,6 +495,21 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Optional slate-join timestamp; if set, F-8 T=90m cutoff is enforced",
     )
+    parser.add_argument(
+        "--t0-used",
+        default="",
+        help="T-0 x-requests-used immediately before the request (or NFL_W8_T0_USED)",
+    )
+    parser.add_argument(
+        "--t0-remaining",
+        default="",
+        help="T-0 x-requests-remaining immediately before the request (or NFL_W8_T0_REMAINING)",
+    )
+    parser.add_argument(
+        "--t0-last",
+        default="",
+        help="T-0 x-requests-last (must be 0). Default 0. Or NFL_W8_T0_LAST.",
+    )
     return parser
 
 
@@ -480,6 +533,7 @@ def main(argv: Optional[Sequence[str]] = None, *, env: Optional[Mapping[str, str
         env_map.setdefault(ENV_ODDS_API_KEY, SYNTHETIC_DUMMY_KEY)
     elif not game_id or not kickoff_utc:
         parser.error("--game-id and --kickoff-utc are required unless --synthetic")
+    t0_headers = _resolve_t0_headers(args, env_map, synthetic=bool(args.synthetic))
     root = Path(
         args.bundle_dir
         or env_map.get(ENV_BUNDLE_DIR)
@@ -496,6 +550,7 @@ def main(argv: Optional[Sequence[str]] = None, *, env: Optional[Mapping[str, str
             custodian_receipt_id=str(args.custodian_receipt_id or ""),
             odds_event_id=str(args.odds_event_id or ""),
             registered_at=str(args.registered_at) or None,
+            t0_headers=t0_headers,
         )
         if args.synthetic:
             summary["synthetic"] = True
@@ -507,6 +562,7 @@ def main(argv: Optional[Sequence[str]] = None, *, env: Optional[Mapping[str, str
         OneshotError,
         CreditCeilingError,
         CreditEstimateError,
+        CreditHeaderError,
         CreditReconcileError,
         F8CutoffError,
         SealWindowError,

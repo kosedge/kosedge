@@ -43,8 +43,14 @@ from src.services.nfl_w8_capture.carveouts import (
     require_explicit_carve_out,
 )
 from src.services.nfl_w8_capture.credits import (
+    ACCOUNT_REMAINING_CITED_E64E73AC,
     ACCOUNT_USED_BASELINE_E64E73AC,
+    ACCOUNT_USED_CEILING_E64E73AC,
+    CONCURRENT_ATTRIBUTION_BEAT_WORKER,
     CREDIT_CEILING,
+    T4516U_CAPTURE_LAST,
+    T4516U_CAPTURE_USED,
+    T4516U_T0_USED,
     CreditCeilingError,
     CreditEstimateError,
     CreditHeaderError,
@@ -53,14 +59,20 @@ from src.services.nfl_w8_capture.credits import (
     assert_account_used_ceiling,
     assert_dual_credit_r5,
     assert_operator_account_budget,
+    assert_t0_ready,
+    credit_headers,
     estimate_request_credits,
     ledger_closed,
     ledger_overrun,
     pre_call_check,
     read_cumulative,
+    read_last_credit_record,
     record_credit_use,
     refuse_credit_purchase,
+    reserve_worst_case_before_execute,
     seed_account_baseline_note,
+    seed_t0_account_snapshot,
+    write_reservation,
 )
 from src.services.nfl_w8_capture.fetch import (
     OddsFetchError,
@@ -822,6 +834,10 @@ def test_used_header_mismatch_fail_closed(tmp_path: Path) -> None:
 
 def test_fetch_provenance_envelope_redacts_key_no_live_http(tmp_path: Path) -> None:
     store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=ACCOUNT_USED_BASELINE_E64E73AC, remaining=ACCOUNT_REMAINING_CITED_E64E73AC),
+    )
     body = b'{"ok":true,"bookmakers":[]}'
 
     def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
@@ -831,8 +847,8 @@ def test_fetch_provenance_envelope_redacts_key_no_live_http(tmp_path: Path) -> N
             status_code=200,
             headers={
                 "x-requests-last": "30",
-                "x-requests-used": "30",
-                "x-requests-remaining": "999",
+                "x-requests-used": "11652",
+                "x-requests-remaining": "8348",
                 "Date": "Wed, 28 Oct 2026 22:00:00 GMT",
             },
             body=body,
@@ -849,10 +865,17 @@ def test_fetch_provenance_envelope_redacts_key_no_live_http(tmp_path: Path) -> N
     assert envelope["raw_body_sha256"] == raw_body_sha256(body)
     assert envelope["request_headers"]["x-api-key"] == "[REDACTED]"
     assert "unit-test-not-live" not in json.dumps(result)
+    assert result["credits"]["oneshot_delta"] == 30
+    assert result["credits"]["concurrent"] == 0
     assert (tmp_path / "provenance.jsonl").is_file()
+    empty = BundleStore(tmp_path / "no-transport")
+    seed_t0_account_snapshot(
+        empty,
+        credit_headers(last=0, used=ACCOUNT_USED_BASELINE_E64E73AC, remaining=ACCOUNT_REMAINING_CITED_E64E73AC),
+    )
     with pytest.raises(OddsFetchError, match="no transport"):
         fetch_odds_with_provenance(
-            store=store,
+            store=empty,
             env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
         )
     store.verify()
@@ -976,12 +999,15 @@ def test_operator_account_budget_and_baseline_seed_no_live_call(tmp_path: Path) 
     seeded = seed_account_baseline_note(store)
     assert seeded is not None
     assert seeded["note"] is True
-    assert seeded["ledger_seed"] is True
+    assert seeded["ledger_seed"] is False
     assert read_cumulative(store) == 0
+    assert read_last_credit_record(store) is None
     assert (tmp_path / "credits_account_baseline.json").is_file()
     note = json.loads((tmp_path / "credits_account_baseline.json").read_text(encoding="utf-8"))
     assert note["live_call"] is False
+    assert note["ledger_seed"] is False
     assert note["account_used_baseline"] == 11622
+    assert note["account_used_ceiling"] == 14622
     assert seed_account_baseline_note(store) is None
     dual = assert_dual_credit_r5(store, 11622)
     assert dual["ledger_cumulative"] == 0
@@ -1110,6 +1136,11 @@ def test_oneshot_chains_fetch_snapshot_close_seal_fake_transport(tmp_path: Path)
         env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
         transport=transport,
         now_utc=KICKOFF - timedelta(hours=2),
+        t0_headers=credit_headers(
+            last=0,
+            used=ACCOUNT_USED_BASELINE_E64E73AC,
+            remaining=ACCOUNT_REMAINING_CITED_E64E73AC,
+        ),
     )
     assert called["n"] == 1
     assert summary["ok"] is True
@@ -1127,6 +1158,10 @@ def test_oneshot_chains_fetch_snapshot_close_seal_fake_transport(tmp_path: Path)
     assert summary["keep_ack"]["ROTATION_ASSERTED"] is False
     assert summary["r7_live_not_authorized"] is True
     assert summary["r5_dual_credit"]["account_used"] == 11652
+    assert summary["t0"]["used"] == 11622
+    assert summary["t4523u_option_a"]["beat_worker_left_running"] is True
+    assert summary["t4523u_option_a"]["this_request_charge"] == 30
+    assert summary["t4523u_option_a"]["concurrent"] == 0
     assert "unit-test-not-live" not in json.dumps(summary)
     assert "apiKey=" not in json.dumps(summary)
     assert (tmp_path / "snapshots.jsonl").is_file()
@@ -1210,6 +1245,9 @@ def test_oneshot_synthetic_main_zero_live_odds(tmp_path: Path, capsys: pytest.Ca
     assert payload["keep_ack"]["KEEP_AUTH_SHA8"] == "a9ae5ae6"
     assert payload["keep_ack"]["T4500U_SHA8"] == "20325274"
     assert payload["r7_live_not_authorized"] is True
+    assert payload["t0"]["used"] == 11622
+    assert payload["t4523u_option_a"]["this_request_charge"] == 30
+    assert payload["t4523u_option_a"]["concurrent"] == 0
     assert "synthetic-not-a-key" not in out
     assert "apiKey=" not in out
 
@@ -1222,3 +1260,390 @@ def test_tick_source_does_not_import_http_or_oneshot() -> None:
     assert "from src.services.nfl_w8_capture.oneshot" not in tick_src
     assert "import OddsHttpTransport" not in tick_src
     assert "run_oneshot_sealed_capture" not in tick_src
+
+
+def _plant_stale_verify_seed(store: BundleStore) -> None:
+    """Reproduce tip-3e2f643b seed: ledger prev used=11622 last=0, no T-0 role."""
+    store.append_chained_jsonl(
+        "credits.jsonl",
+        {
+            "delta": 0,
+            "cumulative": 0,
+            "ceiling": CREDIT_CEILING,
+            "overrun": False,
+            "reconcile_ok": True,
+            "headers": {
+                "x-requests-last": 0,
+                "x-requests-used": ACCOUNT_USED_BASELINE_E64E73AC,
+                "x-requests-remaining": ACCOUNT_REMAINING_CITED_E64E73AC,
+            },
+            "purchase": False,
+        },
+        actor="test",
+        note="seed-baseline-e64e73ac-no-live-call",
+    )
+
+
+def _boom_if_called(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+    del endpoint, params, headers
+    raise AssertionError("transport must not run")
+
+
+def test_h1c_constants_11622_14622_immutable() -> None:
+    assert ACCOUNT_USED_BASELINE_E64E73AC == 11622
+    assert ACCOUNT_USED_CEILING_E64E73AC == 14622
+    assert ACCOUNT_USED_CEILING_E64E73AC == ACCOUNT_USED_BASELINE_E64E73AC + CREDIT_CEILING
+    assert ACCOUNT_REMAINING_CITED_E64E73AC == 8378
+
+
+def test_t4520u_normal_t0_then_fetch_concurrent_zero(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_account_baseline_note(store)
+    t0 = seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=ACCOUNT_USED_BASELINE_E64E73AC, remaining=8378),
+    )
+    assert t0["t0_used"] == 11622
+    assert_t0_ready(store)
+    reserved = write_reservation(store, 30)
+    assert reserved["t0_used"] == 11622
+    assert reserved["worst_case_used"] == 11652
+    assert reserved["counter_delta_from_baseline"] == 0
+    out = record_credit_use(
+        store,
+        credit_headers(last=30, used=11652, remaining=8348),
+        require_t0=True,
+        expected_charge=30,
+    )
+    assert out["oneshot_delta"] == 30
+    assert out["concurrent"] == 0
+    assert out["concurrent_attribution"] is None
+    assert out["cumulative"] == 30
+    assert read_last_credit_record(store)["role"] == "odds-fetch"
+    store.verify()
+
+
+def test_t4520u_stale_verify_seed_fail_closed_no_transport(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    _plant_stale_verify_seed(store)
+    with pytest.raises(CreditReconcileError, match="stale-need-T-0"):
+        assert_t0_ready(store)
+    called = {"n": 0}
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        return OddsTransportResult(
+            status_code=200,
+            headers=credit_headers(last=T4516U_CAPTURE_LAST, used=T4516U_CAPTURE_USED, remaining=8293),
+            body=b"[]",
+        )
+
+    with pytest.raises(CreditReconcileError, match="stale-need-T-0"):
+        fetch_odds_with_provenance(
+            store=store,
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            transport=transport,
+        )
+    assert called["n"] == 0
+    # Same numbers as t4516u PATH A: 11622+3 != 11707, now the right reason.
+    with pytest.raises(CreditReconcileError, match="stale-need-T-0"):
+        record_credit_use(
+            store,
+            credit_headers(last=3, used=11707, remaining=8293),
+            require_t0=True,
+            expected_charge=3,
+        )
+    assert ledger_closed(store) is True
+    store.verify()
+
+
+def test_t4520u_t4516u_t0_11704_plus_last_3_is_consistent(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=T4516U_T0_USED, remaining=8296),
+    )
+    reserved = write_reservation(store, T4516U_CAPTURE_LAST)
+    assert reserved["t0_used"] == 11704
+    assert reserved["counter_delta_from_baseline"] == 82
+    assert reserved["worst_case_used"] == 11707
+    out = record_credit_use(
+        store,
+        credit_headers(last=T4516U_CAPTURE_LAST, used=T4516U_CAPTURE_USED, remaining=8293),
+        require_t0=True,
+        expected_charge=T4516U_CAPTURE_LAST,
+    )
+    assert out["oneshot_delta"] == 3
+    assert out["concurrent"] == 0
+    assert out["cumulative"] == 3
+    store.verify()
+
+
+def test_t4523u_concurrent_beat_worker_not_folded_into_oneshot(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=T4516U_T0_USED, remaining=8296),
+    )
+    write_reservation(store, 30)
+    # T-0 11704 + last 30 + concurrent 2 = used 11736
+    out = record_credit_use(
+        store,
+        credit_headers(last=30, used=11736, remaining=8264),
+        require_t0=True,
+        expected_charge=30,
+    )
+    assert out["oneshot_delta"] == 30
+    assert out["delta"] == 30
+    assert out["concurrent"] == 2
+    assert out["concurrent_attribution"] == CONCURRENT_ATTRIBUTION_BEAT_WORKER
+    assert out["cumulative"] == 30  # oneshot only; concurrent is not oneshot
+    row = read_last_credit_record(store)
+    assert row["concurrent"] == 2
+    assert row["concurrent_attribution"] == CONCURRENT_ATTRIBUTION_BEAT_WORKER
+    assert "beat/worker" in str(row.get("concurrent_note") or "")
+    store.verify()
+
+
+def test_t4523u_reservation_must_not_ignore_counter_difference() -> None:
+    reserved = reserve_worst_case_before_execute(T4516U_T0_USED, 30)
+    assert reserved["t0_used"] == 11704
+    assert reserved["worst_case_used"] == 11734
+    assert reserved["counter_delta_from_baseline"] == 82
+    with pytest.raises(CreditReconcileError, match="must not ignore counter difference"):
+        reserve_worst_case_before_execute(T4516U_T0_USED, 30, used_for_reserve=11622)
+
+
+def test_t4523u_insufficient_headroom_fail_closed_no_transport(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=14600, remaining=400),
+    )
+    with pytest.raises(CreditCeilingError, match="insufficient headroom"):
+        reserve_worst_case_before_execute(14600, 30)
+    called = {"n": 0}
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        raise AssertionError("insufficient headroom must not execute")
+
+    with pytest.raises(CreditCeilingError, match="insufficient headroom"):
+        fetch_odds_with_provenance(
+            store=store,
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            transport=transport,
+        )
+    assert called["n"] == 0
+    store.verify()
+
+
+def test_t4520u_missing_headers_fail_closed(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=11622, remaining=8378),
+    )
+    write_reservation(store, 30)
+    with pytest.raises(CreditHeaderError, match="missing"):
+        record_credit_use(store, {"x-requests-used": "11652"}, require_t0=True, expected_charge=30)
+    with pytest.raises(CreditHeaderError, match="missing"):
+        seed_t0_account_snapshot(store, {"x-requests-used": "11704"})
+    store.verify()
+
+
+def test_t4520u_t0_last_must_be_zero(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    with pytest.raises(CreditReconcileError, match="last must be 0"):
+        seed_t0_account_snapshot(
+            store,
+            credit_headers(last=3, used=11704, remaining=8296),
+        )
+
+
+def test_t4523u_this_request_charge_over_reserved_fail_closed(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=11622, remaining=8378),
+    )
+    write_reservation(store, 30)
+    with pytest.raises(CreditReconcileError, match="this-request charge 31 > reserved"):
+        record_credit_use(
+            store,
+            credit_headers(last=31, used=11653, remaining=8347),
+            require_t0=True,
+            expected_charge=30,
+        )
+    assert ledger_closed(store) is True
+    store.verify()
+
+
+def test_t4520u_limit_breach_account_ceiling(tmp_path: Path) -> None:
+    with pytest.raises(CreditCeilingError, match="R5\\(b\\)"):
+        seed_t0_account_snapshot(
+            BundleStore(tmp_path),
+            credit_headers(last=0, used=14623, remaining=377),
+        )
+
+
+def test_t4520u_repeated_exec_requires_fresh_t0(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=11622, remaining=8378),
+    )
+    body = b"[]"
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        return OddsTransportResult(
+            status_code=200,
+            headers=credit_headers(last=30, used=11652, remaining=8348),
+            body=body,
+        )
+
+    first = fetch_odds_with_provenance(
+        store=store,
+        env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+        transport=transport,
+    )
+    assert first["credits"]["oneshot_delta"] == 30
+    called = {"n": 0}
+
+    def second(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        raise AssertionError("repeated exec must not transport without a new T-0")
+
+    with pytest.raises(CreditReconcileError, match="need T-0"):
+        fetch_odds_with_provenance(
+            store=store,
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            transport=second,
+        )
+    assert called["n"] == 0
+    store.verify()
+
+
+def test_t4520u_abort_recovery_closed_dest_needs_new_bundle(tmp_path: Path) -> None:
+    dirty = BundleStore(tmp_path / "dirty")
+    seed_t0_account_snapshot(
+        dirty,
+        credit_headers(last=0, used=11622, remaining=8378),
+    )
+    write_reservation(dirty, 30)
+    with pytest.raises(CreditReconcileError, match="mismatch"):
+        record_credit_use(
+            dirty,
+            credit_headers(last=30, used=11640, remaining=8360),
+            require_t0=True,
+            expected_charge=30,
+        )
+    assert ledger_closed(dirty) is True
+    with pytest.raises(CreditReconcileError, match="ledger closed"):
+        seed_t0_account_snapshot(
+            dirty,
+            credit_headers(last=0, used=11704, remaining=8296),
+        )
+    called = {"n": 0}
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        raise AssertionError("closed dest must not execute")
+
+    with pytest.raises(CreditCeilingError, match="ledger closed"):
+        fetch_odds_with_provenance(
+            store=dirty,
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            transport=transport,
+        )
+    assert called["n"] == 0
+
+    recovered = BundleStore(tmp_path / "recovered")
+    seed_t0_account_snapshot(
+        recovered,
+        credit_headers(last=0, used=T4516U_T0_USED, remaining=8296),
+    )
+    write_reservation(recovered, 3)
+    out = record_credit_use(
+        recovered,
+        credit_headers(last=3, used=11707, remaining=8293),
+        require_t0=True,
+        expected_charge=3,
+    )
+    assert out["concurrent"] == 0
+    assert out["oneshot_delta"] == 3
+    dirty.verify()
+    recovered.verify()
+
+
+def test_t4523u_fetch_concurrent_distinguished_from_this_request(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    seed_t0_account_snapshot(
+        store,
+        credit_headers(last=0, used=T4516U_T0_USED, remaining=8296),
+    )
+    called = {"n": 0}
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        return OddsTransportResult(
+            status_code=200,
+            headers=credit_headers(last=30, used=11736, remaining=8264),
+            body=b'{"bookmakers":[]}',
+        )
+
+    result = fetch_odds_with_provenance(
+        store=store,
+        env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+        transport=transport,
+    )
+    assert called["n"] == 1
+    assert result["credits"]["oneshot_delta"] == 30
+    assert result["credits"]["concurrent"] == 2
+    assert result["credits"]["concurrent_attribution"] == CONCURRENT_ATTRIBUTION_BEAT_WORKER
+    assert result["credits"]["cumulative"] == 30
+    store.verify()
+
+
+def test_t4520u_oneshot_missing_t0_fail_closed(tmp_path: Path) -> None:
+    with pytest.raises(CreditReconcileError, match="need T-0"):
+        run_oneshot_sealed_capture(
+            game_id="2026-W08-MIN@LAC",
+            kickoff_utc=KICKOFF,
+            store=BundleStore(tmp_path),
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            now_utc=KICKOFF - timedelta(hours=2),
+            transport=_boom_if_called,
+        )
+
+
+def test_t4523u_oneshot_concurrent_synthetic(tmp_path: Path) -> None:
+    event = load_json_fixture()
+    body = json.dumps(event).encode("utf-8")
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        return OddsTransportResult(
+            status_code=200,
+            headers=credit_headers(last=30, used=11736, remaining=8264),
+            body=body,
+            provider_server_ts=event["provider_server_ts"],
+        )
+
+    summary = run_oneshot_sealed_capture(
+        game_id=event["game_id"],
+        kickoff_utc=event["kickoff_utc"],
+        store=BundleStore(tmp_path),
+        env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+        transport=transport,
+        now_utc=KICKOFF - timedelta(hours=2),
+        t0_headers=credit_headers(last=0, used=T4516U_T0_USED, remaining=8296),
+    )
+    assert summary["ok"] is True
+    assert summary["t0"]["used"] == 11704
+    assert summary["t4523u_option_a"]["this_request_charge"] == 30
+    assert summary["t4523u_option_a"]["concurrent"] == 2
+    assert summary["t4523u_option_a"]["concurrent_attribution"] == CONCURRENT_ATTRIBUTION_BEAT_WORKER
+    assert summary["credits"]["cumulative"] == 30
+    assert summary["r5_dual_credit"]["account_used"] == 11736
+    assert summary["r5_dual_credit"]["account_ceiling"] == 14622
+    assert summary["seal_ack"] == "CURSOR_CANNOT_SEAL_ACK"
