@@ -34,7 +34,7 @@ import os
 import subprocess
 import sys
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.request import urlopen
@@ -60,6 +60,21 @@ SIMULATIONS_PER_GAME = 4000  # engine default; stable win-prob grain
 EXPORT_ID = "t4422u-walkforward-pergame-unblended-2013-2023"
 SEED_NAMESPACE = "t4422u-unblended-record"
 NFLVERSE_GAMES_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
+# Clock / identity only — do not persist nflverse closes into this artifact (MS-9).
+NFLVERSE_KEEP_COLS = (
+    "game_id",
+    "season",
+    "game_type",
+    "week",
+    "gameday",
+    "weekday",
+    "gametime",
+    "away_team",
+    "home_team",
+    "location",
+    "old_game_id",
+    "stadium",
+)
 
 OOS_SCHEDULE = (
     ROOT
@@ -155,8 +170,25 @@ def _kickoff_utc(gameday: str, gametime: str) -> Optional[str]:
 
 def _download_nflverse_games(dest: Path) -> Path:
     dest.parent.mkdir(parents=True, exist_ok=True)
+    raw = Path("/tmp/nflverse-games-raw.csv")
+    raw.parent.mkdir(parents=True, exist_ok=True)
     with urlopen(NFLVERSE_GAMES_URL, timeout=60) as resp:
-        dest.write_bytes(resp.read())
+        raw.write_bytes(resp.read())
+    with raw.open(newline="", encoding="utf-8") as fh, dest.open(
+        "w", newline="", encoding="utf-8"
+    ) as out:
+        reader = csv.DictReader(fh)
+        writer = csv.DictWriter(out, fieldnames=list(NFLVERSE_KEEP_COLS), extrasaction="ignore")
+        writer.writeheader()
+        for row in reader:
+            season = str(row.get("season") or "")
+            try:
+                year = int(season)
+            except ValueError:
+                continue
+            if year < START_SEASON or year > END_SEASON:
+                continue
+            writer.writerow({k: row.get(k, "") for k in NFLVERSE_KEEP_COLS})
     return dest
 
 
@@ -297,6 +329,7 @@ def main() -> None:
     print(f"Downloading nflverse games.csv → {nflverse_path}")
     _download_nflverse_games(nflverse_path)
     nflverse_sha = _sha256_file(nflverse_path)
+    _write_sha256_sidecar(nflverse_path)
     nflverse_idx = _load_nflverse_index(nflverse_path)
     print(f"  nflverse join keys={len(nflverse_idx)} sha256={nflverse_sha}")
 
@@ -555,7 +588,7 @@ def main() -> None:
 
     manifest = {
         "artifact": EXPORT_ID,
-        "generated_at_utc": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "git_sha": tip,
         "git_sha12": tip_short,
         "seasons": [START_SEASON, END_SEASON],

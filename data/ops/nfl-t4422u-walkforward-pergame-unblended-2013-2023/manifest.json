@@ -1,0 +1,68 @@
+{
+  "artifact": "t4422u-walkforward-pergame-unblended-2013-2023",
+  "generated_at_utc": "2026-10-27T13:30:55Z",
+  "git_sha": "a0f583d31b956ba0e7db9fd858e59014c0335600",
+  "git_sha12": "a0f583d31b95",
+  "seasons": [
+    2013,
+    2023
+  ],
+  "holdout_opened": false,
+  "n_games": 2992,
+  "n_by_season": {
+    "2013": 267,
+    "2014": 267,
+    "2015": 267,
+    "2016": 267,
+    "2017": 267,
+    "2018": 267,
+    "2019": 267,
+    "2020": 269,
+    "2021": 285,
+    "2022": 284,
+    "2023": 285
+  },
+  "nflverse_join_hits": 2992,
+  "kickoff_utc_n": 2992,
+  "epa_status_counts": {
+    "MISSING": 2707,
+    "repo_decompose_only": 285
+  },
+  "simulations_per_game": 4000,
+  "seed_namespace": "t4422u-unblended-record",
+  "engine": {
+    "function": "src.services.nfl_simulator.simulate_nfl_game",
+    "model_version": "nfl-v1.5-matchup-sim",
+    "framework_version": "nfl-handicap-core-v3.1",
+    "home_field_points": 1.05,
+    "base_total_points": 45.3,
+    "base_score_stdev": 9.8,
+    "market_blend": false,
+    "injury_overlay": false,
+    "ifb_overlay": false,
+    "personnel_overlay": false,
+    "rest_days": 7.0,
+    "totals_linear_cal": "identity (no historical-fit dict passed)"
+  },
+  "python": "3.12.3",
+  "inputs": {
+    "oos_schedule": "data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv",
+    "oos_schedule_sha256": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+    "nflverse_games_url": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+    "nflverse_games_sha256": "97f1c36ce77e9c3952b1ffe8cad3096171c28280cc5d0b48a89f7cceb5cb03a9"
+  },
+  "outputs": {
+    "games_csv": "data/ops/nfl-t4422u-walkforward-pergame-unblended-2013-2023/games.csv",
+    "games_csv_sha256": "07c89418ab55a6c4c781ece669ad062cbe2ebeb5de26c65d0ab57dca06db34eb"
+  },
+  "constraints": {
+    "nfl_no_go": true,
+    "coming_soon": true,
+    "no_merge_deploy_spend": true,
+    "no_holdout": true,
+    "no_protected_results": true,
+    "no_candidate_fitting": true,
+    "no_frozen_test_changes": true
+  },
+  "command": "python3 data/ops/nfl-team-simulator-calibration-audit/export_walkforward_pergame_2013_2023.py"
+}
