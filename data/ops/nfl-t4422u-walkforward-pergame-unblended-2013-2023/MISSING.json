@@ -1,0 +1,73 @@
+{
+  "artifact": "t4422u-walkforward-pergame-unblended-2013-2023",
+  "label": "RESEARCH_DIAGNOSTIC",
+  "cert_candidate": 0,
+  "authority": {
+    "DECISION_RYAN_t4422u": "sha8 dbb35c04",
+    "ALEX_PREDICTIVE_BASELINE_STATUS_t4422u_v1": "sha8 7f16f829",
+    "IMV_gates_packet_t4422u": "sha8 7af96335",
+    "note": "Authority filings not in this worktree; cited as given. RESEARCH_DIAGNOSTIC only \u2014 CERT_CANDIDATE=0. RESEARCH_DIAGNOSTIC is not CERT. Adopt IMV gates before graded results."
+  },
+  "probability_columns": {
+    "home_win_prob": {
+      "status": "PRESENT",
+      "source": "simulate_nfl_game markets.home_win_prob (RECORD walk-forward, unblended)",
+      "n": 2992
+    },
+    "away_win_prob": {
+      "status": "PRESENT",
+      "source": "simulate_nfl_game markets.away_win_prob (RECORD walk-forward, unblended)",
+      "n": 2992
+    },
+    "cover_prob_home": {
+      "status": "PRESENT",
+      "source": "simulate_nfl_game markets.cover_prob_home = P(margin + market_spread_home > 0) on unblended samples (apply_market_blend=False). Line = filed OOS historical_oos_ms9_nflverse_close.",
+      "n": 2992,
+      "formula": "P(margin + market_spread_home > 0)"
+    },
+    "cover_prob": {
+      "status": "PRESENT",
+      "source": "alias of cover_prob_home for the existing export column",
+      "n": 2992
+    },
+    "over_prob": {
+      "status": "PRESENT",
+      "source": "simulate_nfl_game markets.over_prob = P(total > market_total) on unblended samples. Line = filed OOS historical_oos_ms9_nflverse_close.",
+      "n": 2992,
+      "formula": "P(total > market_total)"
+    },
+    "epa_home_win_prob": {
+      "status": "MISSING",
+      "blocker": "Cannot call simulate_nfl_game on EPA indices for \u22642023 on this tip. Code path: scripts/nfl/historical_market_backtest.py and data/ops/nfl-team-simulator-calibration-audit/backtest_record_vs_epa_signal.py LEFT JOIN nfl_dp_team_rolling_features_weekly. Data: that table is warehouse-only (present 2023\u20132026 per HISTORICAL_OOS_DIAGNOSTIC). DATABASE_URL unset; Railway MCP unauthenticated. Do not fabricate EPA win probs from decompose spread/total.",
+      "repo_decompose_only_n": 285
+    }
+  },
+  "kickoff_utc": {
+    "status": "PRESENT_WHEN_NFLVERSE_JOINED",
+    "n_present": 2992,
+    "n_missing": 0,
+    "convention": "nflverse gameday+gametime interpreted as America/New_York (nflverse stores ET even for London 09:30). Neutral-site rows keep the same ET convention; no site-specific timezone invented."
+  },
+  "true_close_clv": {
+    "status": "OUT_OF_SCOPE",
+    "blocker": "Owned odds lake / true-close JSONL not mounted (DATABASE_URL unset; no HD drive). MS-9 columns here are filed historical_oos_games.csv nflverse closes (home-spread convention), not owned true-close and not CLV. No Odds API spend. RESEARCH_DIAGNOSTIC \u2260 CERT."
+  },
+  "ms9_lines": {
+    "status": "PRESENT",
+    "source": "historical_oos_ms9_nflverse_close",
+    "n_spread_and_total": 2992,
+    "note": "Filed OOS market_spread_home / market_total only. Do not invent EPA or true-close from these lines."
+  },
+  "epa_trailing_pre_2023": {
+    "status": "MISSING",
+    "blocker": "nfl_dp_team_rolling_features_weekly only 2023\u20132026 (HISTORICAL_OOS_DIAGNOSTIC coverage.data_insufficient)."
+  },
+  "epa_packaged_le_2023": {
+    "status": "MISSING",
+    "blocker": "nfl_dp_team_situational_weekly source=nflverse only present 2023\u20132025; cannot build season-start packaged priors for seasons before 2024."
+  },
+  "ifb_overlay": {
+    "status": "OFF",
+    "blocker": "No IFB overlay module on this tip; no IFB inputs passed."
+  }
+}

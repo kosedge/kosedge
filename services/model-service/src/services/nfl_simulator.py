@@ -510,6 +510,27 @@ def _apply_totals_linear_calibration(
     }
 
 
+def _cover_prob_home_from_samples(
+    margins: list[float],
+    market_spread_home: float,
+    sims: int,
+) -> float:
+    """P(home covers) = P(margin + market_spread_home > 0).
+
+    ``market_spread_home`` uses Odds API / OOS home-spread convention
+    (negative = home favored). Pushes (exactly 0) are not covers.
+    RESEARCH_DIAGNOSTIC only — not a cert / CLV / true-close claim.
+    """
+    line = float(market_spread_home)
+    return sum(1 for margin in margins if (margin + line) > 0) / float(sims)
+
+
+def _over_prob_from_samples(totals: list[float], market_total: float, sims: int) -> float:
+    """P(over) = P(total > market_total). Pushes are not overs."""
+    line = float(market_total)
+    return sum(1 for total in totals if total > line) / float(sims)
+
+
 def simulate_nfl_game(
     inputs: NflGameInputs,
     *,
@@ -521,6 +542,7 @@ def simulate_nfl_game(
     config_overrides: Optional[Dict[str, Any]] = None,
     market_spread_home: Optional[float] = None,
     market_total: Optional[float] = None,
+    apply_market_blend: bool = True,
 ) -> Dict[str, Any]:
     rng = random.Random(seed)
     sims = max(300, int(simulations))
@@ -601,48 +623,66 @@ def simulate_nfl_game(
 
     market_blend: Dict[str, Any] = {"spread_applied": False, "total_applied": False}
     season_week = inputs.matchup_week
+    # apply_market_blend=False is the no-blend eval flag: market lines are
+    # used only to score cover/over against unblended samples. Default True
+    # preserves the live shrinkage path. RESEARCH_DIAGNOSTIC eval must pass
+    # False so the RECORD baseline is not pulled toward the line.
     if market_spread_home is not None and margins:
-        weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_SPREAD_WEIGHT, season_week)
-        pre_blend_margin = sum(margins) / len(margins)
-        disagreement_boost = _early_season_side_disagreement_boost(
-            season_week=season_week,
-            pre_blend_margin=float(pre_blend_margin),
-            market_spread_home=float(market_spread_home),
-        )
-        if disagreement_boost > 0:
-            weight = _clamp(weight + disagreement_boost, 0.0, 0.85)
-        market_margin = -float(market_spread_home)
-        post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
-        shift = post_blend_margin - pre_blend_margin
-        margins = [m + shift for m in margins]
-        market_blend.update(
-            spread_applied=True,
-            spread_weight=round(weight, 3),
-            base_spread_weight=round(_clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0), 3),
-            side_disagreement_boost=round(float(disagreement_boost), 3),
-            season_week=season_week,
-            market_spread_home=round(float(market_spread_home), 3),
-            pre_blend_margin_mean=round(pre_blend_margin, 3),
-            post_blend_margin_mean=round(post_blend_margin, 3),
-            spread_shift=round(shift, 3),
-        )
+        if apply_market_blend:
+            weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_SPREAD_WEIGHT, season_week)
+            pre_blend_margin = sum(margins) / len(margins)
+            disagreement_boost = _early_season_side_disagreement_boost(
+                season_week=season_week,
+                pre_blend_margin=float(pre_blend_margin),
+                market_spread_home=float(market_spread_home),
+            )
+            if disagreement_boost > 0:
+                weight = _clamp(weight + disagreement_boost, 0.0, 0.85)
+            market_margin = -float(market_spread_home)
+            post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
+            shift = post_blend_margin - pre_blend_margin
+            margins = [m + shift for m in margins]
+            market_blend.update(
+                spread_applied=True,
+                spread_weight=round(weight, 3),
+                base_spread_weight=round(_clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0), 3),
+                side_disagreement_boost=round(float(disagreement_boost), 3),
+                season_week=season_week,
+                market_spread_home=round(float(market_spread_home), 3),
+                pre_blend_margin_mean=round(pre_blend_margin, 3),
+                post_blend_margin_mean=round(post_blend_margin, 3),
+                spread_shift=round(shift, 3),
+            )
+        else:
+            market_blend.update(
+                apply_market_blend=False,
+                eval_unblended=True,
+                market_spread_home=round(float(market_spread_home), 3),
+            )
 
     if market_total is not None and totals:
-        weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_TOTAL_WEIGHT, season_week)
-        pre_blend_total = sum(totals) / len(totals)
-        post_blend_total = ((1.0 - weight) * pre_blend_total) + (weight * float(market_total))
-        shift = post_blend_total - pre_blend_total
-        totals = [t + shift for t in totals]
-        market_blend.update(
-            total_applied=True,
-            total_weight=round(weight, 3),
-            base_total_weight=round(_clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0), 3),
-            season_week=season_week,
-            market_total=round(float(market_total), 3),
-            pre_blend_total_mean=round(pre_blend_total, 3),
-            post_blend_total_mean=round(post_blend_total, 3),
-            total_shift=round(shift, 3),
-        )
+        if apply_market_blend:
+            weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_TOTAL_WEIGHT, season_week)
+            pre_blend_total = sum(totals) / len(totals)
+            post_blend_total = ((1.0 - weight) * pre_blend_total) + (weight * float(market_total))
+            shift = post_blend_total - pre_blend_total
+            totals = [t + shift for t in totals]
+            market_blend.update(
+                total_applied=True,
+                total_weight=round(weight, 3),
+                base_total_weight=round(_clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0), 3),
+                season_week=season_week,
+                market_total=round(float(market_total), 3),
+                pre_blend_total_mean=round(pre_blend_total, 3),
+                post_blend_total_mean=round(post_blend_total, 3),
+                total_shift=round(shift, 3),
+            )
+        else:
+            market_blend.update(
+                apply_market_blend=False,
+                eval_unblended=True,
+                market_total=round(float(market_total), 3),
+            )
 
     home_wins = sum(1 for m in margins if m > 0)
     totals.sort()
@@ -659,6 +699,16 @@ def simulate_nfl_game(
     total_mean = float(totals_calibration_out["calibrated_total"])
     quantile_shift = float(totals_calibration_out["delta"])
 
+    cover_prob_home = None
+    over_prob = None
+    if market_spread_home is not None and margins:
+        cover_prob_home = round(
+            _cover_prob_home_from_samples(margins, float(market_spread_home), sims),
+            4,
+        )
+    if market_total is not None and totals:
+        over_prob = round(_over_prob_from_samples(totals, float(market_total), sims), 4)
+
     markets = {
         "home_win_prob": round(home_prob, 4),
         "away_win_prob": round(away_prob, 4),
@@ -669,6 +719,8 @@ def simulate_nfl_game(
         "total_p10": round(_quantile(totals, 0.10) + quantile_shift, 2),
         "total_p50": round(_quantile(totals, 0.50) + quantile_shift, 2),
         "total_p90": round(_quantile(totals, 0.90) + quantile_shift, 2),
+        "cover_prob_home": cover_prob_home,
+        "over_prob": over_prob,
     }
     diagnostics = {
         "mean_home_points": round(mean_home, 3),

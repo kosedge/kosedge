@@ -462,3 +462,81 @@ def test_simulator_environment_contributions_activate_when_available() -> None:
     assert factors["travel_schedule"]["available"] is True
     assert abs(float(factors["weather_environment"]["total_points"])) <= 2.8
     assert abs(float(factors["travel_schedule"]["margin_points"])) <= 1.75
+
+
+def test_no_blend_eval_keeps_baseline_and_emits_cover_over() -> None:
+    """RESEARCH_DIAGNOSTIC: apply_market_blend=False scores cover/over
+    against the market line without shrinking the RECORD samples."""
+    inputs = NflGameInputs(
+        game_id="g-eval-unblended",
+        home_team="KC",
+        away_team="DEN",
+        offense_index_home=1.08,
+        offense_index_away=0.94,
+        defense_index_home=1.06,
+        defense_index_away=0.96,
+    )
+    baseline = simulate_nfl_game(inputs, simulations=2000, seed=21)
+    market_spread_home = -7.5
+    market_total = 48.5
+    eval_out = simulate_nfl_game(
+        inputs,
+        simulations=2000,
+        seed=21,
+        market_spread_home=market_spread_home,
+        market_total=market_total,
+        apply_market_blend=False,
+    )
+    blended = simulate_nfl_game(
+        inputs,
+        simulations=2000,
+        seed=21,
+        market_spread_home=market_spread_home,
+        market_total=market_total,
+        apply_market_blend=True,
+    )
+
+    assert eval_out["markets"]["spread_home"] == baseline["markets"]["spread_home"]
+    assert eval_out["markets"]["total_mean"] == baseline["markets"]["total_mean"]
+    assert eval_out["markets"]["home_win_prob"] == baseline["markets"]["home_win_prob"]
+    assert eval_out["diagnostics"]["market_blend"]["spread_applied"] is False
+    assert eval_out["diagnostics"]["market_blend"]["total_applied"] is False
+    assert eval_out["diagnostics"]["market_blend"]["eval_unblended"] is True
+    assert eval_out["diagnostics"]["market_blend"]["apply_market_blend"] is False
+
+    cover = eval_out["markets"]["cover_prob_home"]
+    over = eval_out["markets"]["over_prob"]
+    assert cover is not None and over is not None
+    assert 0.0 <= cover <= 1.0
+    assert 0.0 <= over <= 1.0
+    # Home-favored line at -7.5 must be harder than SU win.
+    assert cover < eval_out["markets"]["home_win_prob"]
+    # Blend path still shrinks; eval path must not.
+    assert blended["diagnostics"]["market_blend"]["spread_applied"] is True
+    assert blended["markets"]["spread_home"] != eval_out["markets"]["spread_home"]
+
+
+def test_cover_over_sample_formulas() -> None:
+    from src.services.nfl_simulator import (
+        _cover_prob_home_from_samples,
+        _over_prob_from_samples,
+    )
+
+    margins = [10.0, 3.0, -1.0, -8.0]
+    # line -3: covers when margin > 3 → only 10.0
+    assert _cover_prob_home_from_samples(margins, -3.0, 4) == 0.25
+    # push at exactly 3 is not a cover
+    assert _cover_prob_home_from_samples([3.0, 3.1], -3.0, 2) == 0.5
+    totals = [40.0, 44.0, 47.0, 51.0]
+    assert _over_prob_from_samples(totals, 47.0, 4) == 0.25
+    assert _over_prob_from_samples(totals, 46.9, 4) == 0.5
+
+
+def test_cover_over_absent_without_market_lines() -> None:
+    out = simulate_nfl_game(
+        NflGameInputs(game_id="g-no-line", home_team="DAL", away_team="NYG"),
+        simulations=400,
+        seed=3,
+    )
+    assert out["markets"]["cover_prob_home"] is None
+    assert out["markets"]["over_prob"] is None
