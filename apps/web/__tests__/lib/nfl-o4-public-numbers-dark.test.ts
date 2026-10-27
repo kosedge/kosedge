@@ -122,9 +122,7 @@ describe("O4 NFL public-kill on season-engine/fantasy surfaces", () => {
     expect(client).toContain("publicNumbersDisabled");
     expect(client).toContain("home_win_prob_mean");
     expect(client).toContain("expected_total_mean");
-    expect(client).toMatch(
-      /game_script_summary && !publicNumbersDisabled/,
-    );
+    expect(client).toMatch(/game_script_summary && !publicNumbersDisabled/);
     expect(client.indexOf("isFootballPublicNumbersDisabled")).toBeLessThan(
       client.indexOf("home_win_prob_mean"),
     );

@@ -222,7 +222,10 @@ async function readJson(res: Response): Promise<Record<string, unknown>> {
   }
 }
 
-function detailError(payload: Record<string, unknown>, fallback: string): string {
+function detailError(
+  payload: Record<string, unknown>,
+  fallback: string,
+): string {
   const detail = payload.detail;
   if (typeof detail === "string") return detail;
   if (Array.isArray(detail)) {
@@ -258,7 +261,11 @@ export function isSeasonEngineReady(
 export function seasonEnginePackagedNotice(
   status: Pick<
     SeasonEngineStatus,
-    "schedule_source" | "depth_source" | "roster_source" | "depth_as_of" | "roster_as_of"
+    | "schedule_source"
+    | "depth_source"
+    | "roster_source"
+    | "depth_as_of"
+    | "roster_as_of"
   >,
 ): string | null {
   const sources = [
@@ -427,7 +434,9 @@ export async function fetchSeasonEngineGameBoxes(input: {
     url.searchParams.set(key, String(value));
   }
 
-  const hasBody = Boolean(input.injuryPaths?.length || input.includeDiagnostics);
+  const hasBody = Boolean(
+    input.injuryPaths?.length || input.includeDiagnostics,
+  );
   try {
     const res = await upstreamFetch(url.toString(), {
       method: hasBody ? "POST" : "GET",
@@ -735,7 +744,9 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
         payload.locked_pick_count ?? Object.keys(body.picks).length,
       ),
       avg_locked_wp:
-        typeof payload.avg_locked_wp === "number" ? payload.avg_locked_wp : null,
+        typeof payload.avg_locked_wp === "number"
+          ? payload.avg_locked_wp
+          : null,
       danger_weeks:
         typeof payload.danger_weeks === "number" ? payload.danger_weeks : 0,
       best_remaining_equity:
@@ -879,7 +890,9 @@ export async function fetchSeasonEngineSurvivorSuggestPaths(input: {
       engine_version: "",
       paths: [],
       error:
-        err instanceof Error ? err.message : "Survivor suggest-paths unreachable",
+        err instanceof Error
+          ? err.message
+          : "Survivor suggest-paths unreachable",
     };
   }
 }
@@ -901,9 +914,8 @@ export async function loadSeasonEngineMatchups(params?: {
       error: footballPublicNumbersUnavailableMessage("nfl"),
     };
   }
-  const { matchupsFromWallChart } = await import(
-    "@/lib/nfl-season-engine-format"
-  );
+  const { matchupsFromWallChart } =
+    await import("@/lib/nfl-season-engine-format");
   const season = params?.season ?? 2026;
 
   try {
@@ -923,10 +935,8 @@ export async function loadSeasonEngineMatchups(params?: {
           return Number.isFinite(ts) ? ts >= now - 3 * 60 * 60 * 1000 : true;
         })
         .map((row) => {
-          const homeTeam =
-            normalizeNflTeamCode(row.homeAbbr) || row.homeAbbr;
-          const awayTeam =
-            normalizeNflTeamCode(row.awayAbbr) || row.awayAbbr;
+          const homeTeam = normalizeNflTeamCode(row.homeAbbr) || row.homeAbbr;
+          const awayTeam = normalizeNflTeamCode(row.awayAbbr) || row.awayAbbr;
           return {
             id: row.gameId || `${awayTeam}@${homeTeam}-W${row.week ?? "?"}`,
             label: `${awayTeam} @ ${homeTeam}${
