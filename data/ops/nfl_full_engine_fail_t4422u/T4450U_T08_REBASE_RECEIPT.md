@@ -13,7 +13,8 @@ Predictive FAIL `f4c61237` **still stands**. `ed701ef3` is Mac-only non-claims b
 | Previous #637 tip | `d8aec5dc` |
 | Rebased FE-1/FE-2 commit (t4422u, no conflict) | `1af55efb` |
 | T-08 CI wire (`pr-check.yml` Postgres step) | `23a26443` |
-| This receipt commit / new tip | `86fc4861` |
+| Receipt body commit | `86fc4861` |
+| Branch tip | `e6199112` |
 
 Rebase was clean (1/1). FE-1/FE-2 files did not overlap #634–#636 site/Stat Drop work.
 
@@ -46,13 +47,25 @@ CI also runs this file in the existing PR Checks Postgres step (`MIG_TEST_DATABA
 - **FE-1:** `test_simulator_baseline_unchanged_without_matchup_features` still pins `framework_version == "nfl-handicap-core-v3.1"`.
 - **FE-2:** `test_week1_pack_aligned_indices_stay_dog_side_of_market` still imports `priors_from_matchup_pack` from `nfl_matchup_features` (not `src.tasks`).
 
-## CI run ids (this push)
+## CI run ids
 
 | Workflow | Event | Run id | Notes |
 |----------|-------|--------|-------|
-| PR Checks | `pull_request` | `40522077899` | in progress at receipt write |
-| Production Gate | `pull_request` | `40522077630` | in progress at receipt write |
+| PR Checks | `pull_request` | `40522077899` | **SUCCESS** — T-08 **4 passed / 0 skipped** in Postgres step (2.43s) |
+| Production Gate | `pull_request` | `40522077630` | cancelled by later receipt push |
 | PR Checks | `push` | `40522069591` | success (push no-op) |
+| PR Checks | `pull_request` | `40522292796` | follow-up on tip `e6199112` |
+| Production Gate | `pull_request` | `40522292537` | follow-up on tip `e6199112` |
+
+CI T-08 proof lines from `40522077899` (step “SQL migration integrity + unit + Postgres integration tests”):
+
+```
+tests/test_nfl_week_cap_bind.py::test_week_cap_predicate_is_explicitly_cast PASSED
+tests/test_nfl_week_cap_bind.py::test_prior_season_null_week_cap_sql_is_typed PASSED
+tests/test_nfl_week_cap_bind.py::test_fail_closed_overlay_defaults_unchanged PASSED
+tests/test_nfl_week_cap_bind.py::test_untyped_null_week_bind_raises_ambiguous_parameter PASSED
+========================= 4 passed, 1 warning in 2.43s =========================
+```
 
 ## Remaining gaps (honest)
 
