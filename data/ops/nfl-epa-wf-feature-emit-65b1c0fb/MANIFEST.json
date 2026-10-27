@@ -1,0 +1,65 @@
+{
+  "order_id": "65b1c0fb",
+  "label": "RESEARCH_DIAGNOSTIC",
+  "cert_candidate": 0,
+  "emitted_at_utc": "2026-10-27T21:30:46Z",
+  "pit_rule": "same_season_weeks_lt_target",
+  "feature_source": "nflverse_pbp_pass_run_agg",
+  "seasons": "2013-2022",
+  "holdout_2024_plus": "not_opened",
+  "oos_spine": "data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv",
+  "oos_games": 2707,
+  "team_week_rows": 5414,
+  "join_rows": 2707,
+  "feature_status_counts": {
+    "EMPTY_WINDOW": 161,
+    "THIN_WINDOW": 320,
+    "PRESENT": 2226
+  },
+  "join_rows_by_season": {
+    "2013": 267,
+    "2014": 267,
+    "2015": 267,
+    "2016": 267,
+    "2017": 267,
+    "2018": 267,
+    "2019": 267,
+    "2020": 269,
+    "2021": 285,
+    "2022": 284
+  },
+  "join_present_n": 2226,
+  "pbp_files": {
+    "play_by_play_2013.parquet": 19521610,
+    "play_by_play_2014.parquet": 19360792,
+    "play_by_play_2015.parquet": 19545842,
+    "play_by_play_2016.parquet": 19344382,
+    "play_by_play_2017.parquet": 19050401,
+    "play_by_play_2018.parquet": 19072097,
+    "play_by_play_2019.parquet": 19119729,
+    "play_by_play_2020.parquet": 19286459,
+    "play_by_play_2021.parquet": 20249925,
+    "play_by_play_2022.parquet": 20426548
+  },
+  "files": {
+    "team_week_rolling_pregame_2013_2022.csv": "2dc20c09d6a2592f761a61db8769dc201337cd5b8044156586cc45b70800cdf3",
+    "games_join_2013_2022.csv": "68544b0c2582c11f307c07ae9773bf0e7e3cf4f4c26ea4b04a67d22c23a6130f"
+  },
+  "join_keys": [
+    "season,week,home,away (OOS historical labels)",
+    "oos_key (AWAY@HOME)",
+    "join_game_id = {season}_{week:02d}_{away}_{home} (t4422u)"
+  ],
+  "not_emitted": [
+    "epa_home_win_prob / epa_away_win_prob (engine call out of scope)",
+    "warehouse remat of nfl_dp_team_rolling_features_weekly",
+    "2024+ holdout"
+  ],
+  "constraints": {
+    "nfl_board": "NO-GO",
+    "coming_soon": true,
+    "f2": false,
+    "odds_api": false,
+    "production_writes": false
+  }
+}

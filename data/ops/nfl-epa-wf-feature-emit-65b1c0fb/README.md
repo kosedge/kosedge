@@ -34,6 +34,18 @@ Week 1 windows are empty (`EMPTY_WINDOW`). That is honest, not a silent zero.
 
 PBP modern abbrs (`LA`/`LAC`/`LV`/`WAS`) are mapped onto OOS historical labels (`STL`≤2015, `SD`≤2016, `OAK`≤2019, `WSH`).
 
+## Sealed emit (this tip)
+
+| File | n | sha256 |
+| --- | ---: | --- |
+| `games_join_2013_2022.csv` | 2707 | `68544b0c2582c11f307c07ae9773bf0e7e3cf4f4c26ea4b04a67d22c23a6130f` |
+| `team_week_rolling_pregame_2013_2022.csv` | 5414 | `2dc20c09d6a2592f761a61db8769dc201337cd5b8044156586cc45b70800cdf3` |
+| `MANIFEST.json` |  | `fd572ba676ea16a4dbd1807c466492b7d0c7d282eb88638ae9b85b896cf70e98` |
+
+`feature_status`: PRESENT 2226 / THIN_WINDOW 320 / EMPTY_WINDOW 161.  
+Week 1 = 159 `EMPTY_WINDOW`. Two more empties are 2017 W2 `CHI@TB` and `MIA@LAC` (Irma week-1 postponements; first game of the year).  
+`pbp_game_id` filled 2707/2707. `epa_*_win_prob` left blank (`NOT_EMITTED`).
+
 ## Files
 
 | File | Role |
