@@ -43,6 +43,7 @@ cd services/model-service && python3 -m pytest tests/test_nfl_simulator.py -k "n
 | Pin | Value |
 | --- | --- |
 | Code / generation SHA | `f58ff3cd26998fa6239b746ec5879332a10cfc99` |
+| Branch tip after artifact seal | `9738b1de61c9023d67c660dc272f91f03e30c6b6` |
 | `games.csv` sha256 | `4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8` |
 | `manifest.json` sha256 | `9bda93f50f99be227f14dc9004e981ba45d6a9eb86c169a2fab013ac6db0531d` |
 | `MISSING.json` sha256 | `45c95f96be7a57924a6334a9818bef98c01a44e3a920adacf49f215c4bcfd51f` |
