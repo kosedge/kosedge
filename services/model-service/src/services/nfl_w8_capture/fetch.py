@@ -1,5 +1,9 @@
 """Gated Odds fetch + provenance envelope. No default live HTTP.
 
+After a 200 transport result and BEFORE json.loads, persist exact body
+bytes to raw/odds/<game_id>.body (IMV 91ead2d8 §A). Hash-only retention
+is a defect for NEW dests. First-seal CAR@GB dest is not written here.
+
 Key is read from env only and never persisted. refuse_odds_fetch remains
 the fail-closed default until the paper KEEP-ack (2539d916):
 R1 NFL_W8_H1_AUTH_CITE=89fdd45f plus R2 KEEP STATEMENT
@@ -123,6 +127,15 @@ def _alert(
     )
 
 
+def _tip_sha(env: Mapping[str, str]) -> str:
+    """Recorded tip only. Empty is UNSET — do not invent a commit."""
+    for key in ("NFL_W8_TIP_SHA", "GITHUB_SHA", "RAILWAY_GIT_COMMIT_SHA", "GIT_COMMIT"):
+        value = str(env.get(key) or "").strip()
+        if value:
+            return value
+    return ""
+
+
 def fetch_odds_with_provenance(
     *,
     store: BundleStore,
@@ -130,6 +143,8 @@ def fetch_odds_with_provenance(
     transport: Optional[OddsTransport] = None,
     params: Optional[Mapping[str, str]] = None,
     game_id: str = "",
+    capture_receipt_id: str = "",
+    tip_sha: str = "",
 ) -> dict[str, Any]:
     """Hold-gated fetch. Requires an injected transport. Never defaults to HTTP.
 
@@ -218,6 +233,27 @@ def fetch_odds_with_provenance(
         )
         raise OddsFetchError(f"transport status {result.status_code}")
 
+    # IMV 91ead2d8 §A: hash + persist EXACT body bytes BEFORE json.loads/parse.
+    # Lazy import avoids a fetch↔raw_body cycle; H uses this module's function.
+    from src.services.nfl_w8_capture.raw_body import persist_raw_odds_body
+
+    body_bytes = bytes(result.body)
+    body_h = raw_body_sha256(body_bytes)
+    received = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    raw_persist = persist_raw_odds_body(
+        store,
+        game_id=game_id,
+        body_bytes=body_bytes,
+        expected_h=body_h,
+        response_headers=result.headers,
+        request_params=request_params,
+        endpoint=ODDS_ENDPOINT,
+        provider_server_ts=result.provider_server_ts,
+        client_received_at=received,
+        tip_sha=str(tip_sha or "").strip() or _tip_sha(source),
+        capture_receipt_id=capture_receipt_id,
+    )
+
     try:
         ledger = record_credit_use(
             store,
@@ -236,9 +272,18 @@ def fetch_odds_with_provenance(
         params=request_params,
         request_headers=request_headers,
         response_headers=result.headers,
-        raw_body=result.body,
+        raw_body=body_bytes,
         provider_server_ts=result.provider_server_ts,
+        client_received_at=received,
     )
+    if str(envelope.get("raw_body_sha256") or "") != body_h:
+        from src.services.nfl_w8_capture.raw_body import RawBodyRetentionError
+
+        raise RawBodyRetentionError("envelope.raw_body_sha256 != H; refuse provenance")
+    if str(raw_persist.get("raw_body_sha256") or "") != body_h:
+        from src.services.nfl_w8_capture.raw_body import RawBodyRetentionError
+
+        raise RawBodyRetentionError("persisted raw_body_sha256 != H; refuse provenance")
     dumped = str(envelope)
     if key and key in dumped:
         raise OddsFetchError("refusing to persist provenance that still contains the env key")
@@ -250,7 +295,12 @@ def fetch_odds_with_provenance(
     )
     payload: Any = None
     try:
-        payload = json.loads(bytes(result.body).decode("utf-8"))
+        payload = json.loads(body_bytes.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
         payload = None
-    return {"envelope": envelope, "credits": ledger, "payload": payload}
+    return {
+        "envelope": envelope,
+        "credits": ledger,
+        "payload": payload,
+        "raw_body": raw_persist,
+    }

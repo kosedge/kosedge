@@ -30,6 +30,7 @@ REPO_RELATIVE_INVENTORY = (
     "services/model-service/src/services/nfl_w8_capture/oneshot.py",
     "services/model-service/src/services/nfl_w8_capture/__main__.py",
     "services/model-service/src/services/nfl_w8_capture/pin.py",
+    "services/model-service/src/services/nfl_w8_capture/raw_body.py",
     "services/model-service/src/services/nfl_w8_capture/redact.py",
     "services/model-service/src/services/nfl_w8_capture/restore.py",
     "services/model-service/src/services/nfl_w8_capture/seal.py",

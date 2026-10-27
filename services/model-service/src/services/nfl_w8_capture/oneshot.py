@@ -77,6 +77,7 @@ from src.services.nfl_w8_capture.fetch import (
     OddsTransportResult,
     fetch_odds_with_provenance,
 )
+from src.services.nfl_w8_capture.raw_body import RawBodyRetentionError
 from src.services.nfl_w8_capture.fixture_load import (
     cells_from_odds_shaped_event,
     load_json_fixture,
@@ -270,6 +271,7 @@ def run_oneshot_sealed_capture(
         transport=live_transport,
         params=params,
         game_id=game_id,
+        capture_receipt_id=custodian_receipt_id,
     )
     credits = fetched.get("credits") or {}
     headers = (credits.get("headers") or {}) if isinstance(credits, dict) else {}
@@ -282,6 +284,7 @@ def run_oneshot_sealed_capture(
 
     envelope = fetched.get("envelope") or {}
     payload = fetched.get("payload")
+    raw_body = fetched.get("raw_body") or {}
     event = select_odds_event(
         payload,
         game_id=game_id,
@@ -360,6 +363,8 @@ def run_oneshot_sealed_capture(
             "snapshot_entry_sha": str(snapshot.get("entry_sha") or ""),
             "close": str(close_written.get("artifact_sha") or ""),
             "provenance_raw_body_sha256": str(envelope.get("raw_body_sha256") or ""),
+            "raw_odds_body_sha256": str(raw_body.get("raw_body_sha256") or ""),
+            "raw_odds_body_relpath": str(raw_body.get("relpath") or ""),
         },
         custodian_receipt_id=receipt_id,
     )
@@ -423,6 +428,7 @@ def run_oneshot_sealed_capture(
             ),
         },
         "snapshot_entry_sha": snapshot.get("entry_sha"),
+        "raw_odds_body": raw_body,
         "close_relpath": close_relpath,
         "close_sha": close_written.get("artifact_sha"),
         "close_by_market": {name: body.get("status") for name, body in close_by_market.items()},
@@ -560,6 +566,7 @@ def main(argv: Optional[Sequence[str]] = None, *, env: Optional[Mapping[str, str
         OddsApiHoldError,
         OddsFetchError,
         OneshotError,
+        RawBodyRetentionError,
         CreditCeilingError,
         CreditEstimateError,
         CreditHeaderError,

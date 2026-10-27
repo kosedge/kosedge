@@ -80,6 +80,15 @@ from src.services.nfl_w8_capture.fetch import (
     fetch_odds_with_provenance,
     raw_body_sha256,
 )
+from src.services.nfl_w8_capture.raw_body import (
+    FIRST_SEAL_DEST_SLUG,
+    RawBodyRetentionError,
+    assert_written_body_matches,
+    persist_raw_odds_body,
+    raw_odds_body_relpath,
+    raw_odds_meta_relpath,
+    sha256sums_membership,
+)
 from src.services.nfl_w8_capture.seal import SealWindowError, produce_seal
 from src.services.nfl_w8_capture.close import (
     BookMarketCell,
@@ -868,6 +877,15 @@ def test_fetch_provenance_envelope_redacts_key_no_live_http(tmp_path: Path) -> N
     assert result["credits"]["oneshot_delta"] == 30
     assert result["credits"]["concurrent"] == 0
     assert (tmp_path / "provenance.jsonl").is_file()
+    raw_rel = raw_odds_body_relpath("2026-W08-MIN@LAC")
+    assert (tmp_path / raw_rel).read_bytes() == body
+    assert result["raw_body"]["raw_body_sha256"] == raw_body_sha256(body)
+    assert sha256sums_membership(store)[raw_rel] == raw_body_sha256(body)
+    meta = json.loads((tmp_path / raw_odds_meta_relpath("2026-W08-MIN@LAC")).read_text(encoding="utf-8"))
+    assert meta["raw_body_sha256"] == raw_body_sha256(body)
+    dumped_meta = json.dumps(meta)
+    assert "unit-test-not-live" not in dumped_meta
+    assert "apiKey" not in dumped_meta
     empty = BundleStore(tmp_path / "no-transport")
     seed_t0_account_snapshot(
         empty,
@@ -1168,6 +1186,12 @@ def test_oneshot_chains_fetch_snapshot_close_seal_fake_transport(tmp_path: Path)
     assert (tmp_path / "keep_ack_statement.json").is_file()
     assert (tmp_path / summary["close_relpath"]).is_file()
     assert (tmp_path / summary["seal_relpath"]).is_file()
+    raw_rel = raw_odds_body_relpath(event["game_id"])
+    raw_path = tmp_path / raw_rel
+    assert raw_path.is_file()
+    assert raw_path.read_bytes() == body
+    assert summary["raw_odds_body"]["raw_body_sha256"] == raw_body_sha256(body)
+    assert sha256sums_membership(store)[raw_rel] == raw_body_sha256(body)
     with pytest.raises(PermissionError, match="AC-12"):
         refuse_seal([])
     store.verify()
@@ -1250,6 +1274,12 @@ def test_oneshot_synthetic_main_zero_live_odds(tmp_path: Path, capsys: pytest.Ca
     assert payload["t4523u_option_a"]["concurrent"] == 0
     assert "synthetic-not-a-key" not in out
     assert "apiKey=" not in out
+    event = load_json_fixture()
+    raw_rel = raw_odds_body_relpath(event["game_id"])
+    assert (tmp_path / raw_rel).is_file()
+    assert sha256sums_membership(BundleStore(tmp_path))[raw_rel] == raw_body_sha256(
+        (tmp_path / raw_rel).read_bytes()
+    )
 
 
 def test_tick_source_does_not_import_http_or_oneshot() -> None:
@@ -1647,3 +1677,160 @@ def test_t4523u_oneshot_concurrent_synthetic(tmp_path: Path) -> None:
     assert summary["r5_dual_credit"]["account_used"] == 11736
     assert summary["r5_dual_credit"]["account_ceiling"] == 14622
     assert summary["seal_ack"] == "CURSOR_CANNOT_SEAL_ACK"
+
+
+def test_raw_odds_body_exact_bytes_and_sha256sums_membership(tmp_path: Path) -> None:
+    """F1: write_new_file of exact body bytes + SHA256SUMS membership."""
+    store = BundleStore(tmp_path)
+    # Non-canonical JSON: extra spaces, trailing newline. Must not be re-encoded.
+    body = b'{"z": 1, "a":2}\n'
+    expected = raw_body_sha256(body)
+    out = persist_raw_odds_body(
+        store,
+        game_id="2026-W08-CAR@GB",
+        body_bytes=body,
+        expected_h=expected,
+        response_headers={"Content-Encoding": "identity", "Content-Length": str(len(body))},
+        request_params={
+            "bookmakers": "draftkings,fanduel,betmgm,fanatics,circa",
+            "markets": "h2h,spreads,totals",
+            "regions": "us,us2",
+            "apiKey": "must-not-land-in-meta",
+        },
+        endpoint="sports/americanfootball_nfl/odds",
+        provider_server_ts="2026-10-28T22:00:00Z",
+        client_received_at="2026-10-28T22:00:01Z",
+        tip_sha="a896cfd0cf55b1b411dd4d117f5de678b066229a",
+        capture_receipt_id="unit-f1",
+    )
+    rel = raw_odds_body_relpath("2026-W08-CAR@GB")
+    path = tmp_path / rel
+    assert path.read_bytes() == body
+    assert json.dumps(json.loads(body), sort_keys=True).encode("utf-8") != body
+    assert out["raw_body_sha256"] == expected
+    assert out["artifact_sha"] == expected
+    listed = sha256sums_membership(store)
+    assert listed[rel] == expected
+    assert listed[out["meta_relpath"]] == out["meta_artifact_sha"]
+    meta = json.loads((tmp_path / out["meta_relpath"]).read_text(encoding="utf-8"))
+    assert meta["raw_body_sha256"] == expected
+    assert meta["content_encoding"] == "identity"
+    assert meta["content_length"] == len(body)
+    assert meta["tip_sha"].startswith("a896cfd0")
+    assert meta["bookmakers"] == "draftkings,fanduel,betmgm,fanatics,circa"
+    assert "must-not-land-in-meta" not in json.dumps(meta)
+    assert "apiKey" not in meta
+    store.verify()
+
+
+def test_raw_odds_body_mismatch_fail_closed(tmp_path: Path) -> None:
+    """F1: H != rehash of written file → fail closed; no raw-retention claim."""
+    path = tmp_path / "tampered.body"
+    path.write_bytes(b"original-body-bytes")
+    with pytest.raises(RawBodyRetentionError, match="mismatch"):
+        assert_written_body_matches(path, raw_body_sha256(b"different-expected"))
+
+    class TamperStore(BundleStore):
+        def write_new_file(self, relpath, payload, *, actor, note, extra=None):  # type: ignore[override]
+            result = super().write_new_file(relpath, payload, actor=actor, note=note, extra=extra)
+            if str(relpath).endswith(".body"):
+                (self.root / relpath).write_bytes(b"TAMPERED-NOT-THE-BODY")
+            return result
+
+    body = b'{"ok":true}'
+    with pytest.raises(RawBodyRetentionError, match="mismatch"):
+        persist_raw_odds_body(
+            TamperStore(tmp_path / "tamper"),
+            game_id="2026-W08-TAMPER",
+            body_bytes=body,
+            expected_h=raw_body_sha256(body),
+        )
+    # Caller H that does not match body_bytes also fail-closes before write.
+    clean = BundleStore(tmp_path / "wrong-h")
+    with pytest.raises(RawBodyRetentionError, match="caller H"):
+        persist_raw_odds_body(
+            clean,
+            game_id="2026-W08-WRONGH",
+            body_bytes=b"abc",
+            expected_h=raw_body_sha256(b"xyz"),
+        )
+    assert not (tmp_path / "wrong-h" / raw_odds_body_relpath("2026-W08-WRONGH")).exists()
+
+
+def test_oneshot_raw_body_mismatch_no_seal(tmp_path: Path) -> None:
+    """F1: persist mismatch → EXIT path, no seal JSON, no raw-retention claim."""
+    event = load_json_fixture()
+    body = json.dumps(event).encode("utf-8")
+
+    class TamperStore(BundleStore):
+        def write_new_file(self, relpath, payload, *, actor, note, extra=None):  # type: ignore[override]
+            result = super().write_new_file(relpath, payload, actor=actor, note=note, extra=extra)
+            if str(relpath).endswith(".body"):
+                (self.root / relpath).write_bytes(b"TAMPERED-NOT-THE-BODY")
+            return result
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        return OddsTransportResult(
+            status_code=200,
+            headers=credit_headers(last=30, used=11652, remaining=8348),
+            body=body,
+            provider_server_ts=event["provider_server_ts"],
+        )
+
+    dest = tmp_path / "new-dest"
+    with pytest.raises(RawBodyRetentionError, match="mismatch"):
+        run_oneshot_sealed_capture(
+            game_id=event["game_id"],
+            kickoff_utc=event["kickoff_utc"],
+            store=TamperStore(dest),
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            transport=transport,
+            now_utc=KICKOFF - timedelta(hours=2),
+            t0_headers=credit_headers(
+                last=0,
+                used=ACCOUNT_USED_BASELINE_E64E73AC,
+                remaining=ACCOUNT_REMAINING_CITED_E64E73AC,
+            ),
+        )
+    seals = dest / "seals"
+    assert not seals.exists() or not list(seals.glob("*.seal.json"))
+    assert not (dest / "keep_ack_statement.json").exists()
+
+
+def test_raw_odds_body_refuses_first_seal_dest(tmp_path: Path) -> None:
+    """First-seal CAR@GB dest stays immutable — no backfill write."""
+    forbidden = BundleStore(tmp_path / FIRST_SEAL_DEST_SLUG)
+    with pytest.raises(RawBodyRetentionError, match="first-seal"):
+        persist_raw_odds_body(
+            forbidden,
+            game_id="2026-W08-CAR@GB",
+            body_bytes=b"[]",
+            expected_h=raw_body_sha256(b"[]"),
+        )
+    assert not (tmp_path / FIRST_SEAL_DEST_SLUG / "raw").exists()
+
+
+def test_oneshot_main_raw_body_mismatch_exits_nonzero(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """F1 paper EXIT proof: mismatch → non-zero; no seal JSON."""
+    event = load_json_fixture()
+
+    class TamperStore(BundleStore):
+        def write_new_file(self, relpath, payload, *, actor, note, extra=None):  # type: ignore[override]
+            result = super().write_new_file(relpath, payload, actor=actor, note=note, extra=extra)
+            if str(relpath).endswith(".body"):
+                (self.root / relpath).write_bytes(b"TAMPERED-NOT-THE-BODY")
+            return result
+
+    monkeypatch.setattr("src.services.nfl_w8_capture.oneshot.BundleStore", TamperStore)
+    code = main(
+        ["--synthetic", "--bundle-dir", str(tmp_path / "cli-mismatch")],
+        env=keep_ack_env(),
+    )
+    assert code == 2
+    err = capsys.readouterr().err
+    assert "mismatch" in err.lower() or "raw body" in err.lower()
+    assert "synthetic-not-a-key" not in err
+    seals = tmp_path / "cli-mismatch" / "seals"
+    assert not seals.exists() or not list(seals.glob("*.seal.json"))
