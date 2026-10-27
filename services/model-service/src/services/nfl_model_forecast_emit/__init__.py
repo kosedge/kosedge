@@ -18,7 +18,10 @@ from src.services.nfl_model_forecast_emit.schema import (
     EVAL_RECORD_PAPER_SHA8,
     SCHEMA_VERSION,
 )
-from src.services.nfl_model_forecast_emit.slate import run_week_slate
+from src.services.nfl_model_forecast_emit.slate import (
+    emit_research_week_slate,
+    run_week_slate,
+)
 
 __all__ = [
     "CERT_CANDIDATE",
@@ -29,6 +32,7 @@ __all__ = [
     "audit_week_inputs",
     "bind_forecast_to_seal_hook",
     "emit_model_forecast",
+    "emit_research_week_slate",
     "inputs_from_engine_projection",
     "run_week_slate",
     "write_forecast_artifact",

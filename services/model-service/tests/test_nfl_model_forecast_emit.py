@@ -87,6 +87,8 @@ def test_emit_complete_artifact_g1_g8(tmp_path: Path) -> None:
     assert art["markets"]["spread"]["ref_line"] == -3.5
     assert art["markets"]["spread"]["ref_line_source"]
     assert art["grades"] == {"ats": None, "ou": None, "su": None}
+    assert art["missing_inputs"] == []
+    assert art["inputs_complete"] is True
     assert art["close_anchor"]["status"] == "reserved_empty"
     assert art["close_anchor"]["close_spread_home"] is None
     blob = dest.read_bytes()
@@ -159,6 +161,22 @@ def test_g7_close_input_refused() -> None:
     with pytest.raises(ForecastIncompleteError) as ei:
         emit_model_forecast(_base_inputs(close_spread_home=-3.0))
     assert ei.value.gap == "G7"
+
+
+def test_missing_input_flags_are_explicit() -> None:
+    art = emit_model_forecast(
+        _base_inputs(
+            missing_inputs=[
+                {"name": "injury_paths_current", "reason": "empty"},
+                {"name": "depth_sot_week", "reason": "week=1"},
+            ]
+        )
+    )
+    assert art["inputs_complete"] is False
+    assert [m["name"] for m in art["missing_inputs"]] == [
+        "injury_paths_current",
+        "depth_sot_week",
+    ]
 
 
 def test_g8_unset_prediction_refused() -> None:

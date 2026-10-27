@@ -87,6 +87,8 @@ REQUIRED_TOP_LEVEL = (
     "close_anchor",
     "seal_binding",
     "eval_record_paper_sha8",
+    "missing_inputs",
+    "inputs_complete",
 )
 
 REQUIRED_MODEL_FIELDS = ("identity", "version")
@@ -127,3 +129,7 @@ SCHEMA_PATH = (
 )
 FILE_MODE_READONLY = 0o444
 RECORD_SHA256_SUFFIX = ".record_sha256"
+SOP_4A017F22 = "4a017f22"
+DEFAULT_RESEARCH_RUNS_ROOT = (
+    "/workspace/ops/nfl_enterprise_green_t4359u/research_runs"
+)

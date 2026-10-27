@@ -13,7 +13,10 @@ from src.services.nfl_model_forecast_emit.emit import (
     canonicalize,
     emit_model_forecast,
 )
-from src.services.nfl_model_forecast_emit.slate import run_week_slate
+from src.services.nfl_model_forecast_emit.slate import (
+    emit_research_week_slate,
+    run_week_slate,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -29,9 +32,19 @@ def main(argv: list[str] | None = None) -> int:
     p_audit.add_argument("--week", type=int, default=8)
     p_audit.add_argument("--out")
 
-    p_slate = sub.add_parser("slate", help="full-slate emit; fails if inputs incomplete")
+    p_slate = sub.add_parser("slate", help="current-input slate; fails if inputs incomplete")
     p_slate.add_argument("--season", type=int, default=2026)
     p_slate.add_argument("--week", type=int, default=8)
+
+    p_res = sub.add_parser(
+        "research-slate",
+        help="t4564u packaged-engine emit with explicit missing-input flags",
+    )
+    p_res.add_argument("--season", type=int, default=2026)
+    p_res.add_argument("--week", type=int, default=8)
+    p_res.add_argument("--n-replicates", type=int, default=40)
+    p_res.add_argument("--seed", type=int, default=7)
+    p_res.add_argument("--dest-root")
 
     args = parser.parse_args(argv)
     try:
@@ -49,6 +62,16 @@ def main(argv: list[str] | None = None) -> int:
             return 0 if report["ok"] else 2
         if args.cmd == "slate":
             run_week_slate(season=args.season, week=args.week)
+            return 0
+        if args.cmd == "research-slate":
+            out = emit_research_week_slate(
+                season=args.season,
+                week=args.week,
+                n_replicates=args.n_replicates,
+                seed=args.seed,
+                dest_root=Path(args.dest_root) if args.dest_root else None,
+            )
+            sys.stdout.write(canonicalize(out) + "\n")
             return 0
     except ForecastIncompleteError as exc:
         sys.stderr.write(f"FAIL_CLOSED gap={exc.gap} reason={exc.reason}: {exc}\n")

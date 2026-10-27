@@ -494,6 +494,42 @@ def emit_model_forecast(
             reason="config_sha256_invalid",
         )
 
+    missing_raw = inputs.get("missing_inputs")
+    if missing_raw is None:
+        missing_list: list[Any] = []
+    elif isinstance(missing_raw, (list, tuple)):
+        missing_list = []
+        for item in missing_raw:
+            if isinstance(item, Mapping):
+                name = str(item.get("name") or "").strip()
+                if not name:
+                    raise ForecastIncompleteError(
+                        "missing_inputs[].name required",
+                        gap="G8",
+                        reason="missing_input_flag_incomplete",
+                    )
+                missing_list.append(
+                    {
+                        "name": name,
+                        "reason": str(item.get("reason") or item.get("blocker") or ""),
+                    }
+                )
+            else:
+                token = str(item).strip()
+                if not token:
+                    raise ForecastIncompleteError(
+                        "missing_inputs entry empty",
+                        gap="G8",
+                        reason="missing_input_flag_empty",
+                    )
+                missing_list.append({"name": token, "reason": ""})
+    else:
+        raise ForecastIncompleteError(
+            "missing_inputs must be a list",
+            gap="G8",
+            reason="missing_inputs_type",
+        )
+
     forecast_ts_s = format_utc(forecast_ts)
     artifact: Dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
@@ -528,6 +564,8 @@ def emit_model_forecast(
             "fingerprints": fingerprints,
             **extra_prov,
         },
+        "missing_inputs": missing_list,
+        "inputs_complete": len(missing_list) == 0,
         "grades": dict(EMPTY_GRADES),
         "close_anchor": dict(CLOSE_ANCHOR_RESERVED),
         "seal_binding": {
