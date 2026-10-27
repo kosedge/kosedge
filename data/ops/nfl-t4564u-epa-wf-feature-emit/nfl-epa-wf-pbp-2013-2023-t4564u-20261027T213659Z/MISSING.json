@@ -1,0 +1,39 @@
+{
+  "cos_order_file": {
+    "columns_in_that_order": "walkforward_export_82ffb211/games.csv 52 FIELDNAMES",
+    "name": "COS_ORDER_CURSOR_t4564u_EPA_WF_FEATURE_EMIT_v1.txt",
+    "sha8": "65b1c0fb",
+    "status": "NOT_IN_CONNECTED_SOURCES"
+  },
+  "warehouse_rolling_features_2013_2022": {
+    "blocker_sha8": "db42ad49",
+    "exact_blocker": {
+      "DATABASE_URL_present": false,
+      "LAUNCH_RESEARCH_DATABASE_URL_present": false,
+      "blocker_sha8": "db42ad49",
+      "local_5432_accepting": false,
+      "local_5432_error": "ConnectionRefusedError: [Errno 111] Connection refused",
+      "psycopg_importable": false,
+      "railway_cli": "not_installed",
+      "railway_mcp": {
+        "DATABASE_URL_name_present": true,
+        "environment_id": "4bf00465-0220-4764-8b3b-e7adce18ca64",
+        "model_service_id": "e0c54f94-3ee0-41c0-8081-e96d3e246a4a",
+        "note": "Railway list-variables returns names only for this OAuth app.",
+        "postgres_service_id": "4d1abc93-e819-4926-98a0-82feb43b3280",
+        "project": "KosEdge",
+        "project_id": "da3d68f8-d925-462f-b262-c4ef3e488245",
+        "values_readable": false
+      },
+      "repro": [
+        "echo DATABASE_URL=${DATABASE_URL:-UNSET}",
+        "python3 -c \"import socket; socket.create_connection(('127.0.0.1',5432),0.4)\"",
+        "python3 scripts/nfl/materialize_team_rolling_features.py --dry-run --seasons 2013,2014"
+      ],
+      "warehouse_known_coverage": "2023-2026 (HISTORICAL_OOS_DIAGNOSTIC)",
+      "warehouse_table": "nfl_dp_team_rolling_features_weekly"
+    },
+    "offline_bypass": "nflverse PBP \u2192 weekly situational \u2192 strict-as-of last-5 CSV. not_warehouse_table=true. Do not treat as DB SoT.",
+    "status": "BLOCKED"
+  }
+}
