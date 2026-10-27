@@ -50,6 +50,8 @@ from src.services.nfl_w8_capture.credits import (
     CreditHeaderError,
     CreditPurchaseError,
     CreditReconcileError,
+    assert_account_used_ceiling,
+    assert_dual_credit_r5,
     assert_operator_account_budget,
     estimate_request_credits,
     ledger_closed,
@@ -79,6 +81,8 @@ from src.services.nfl_w8_capture.evidence import (
 from src.services.nfl_w8_capture.hold import (
     H1_AUTH_CITE,
     OddsApiHoldError,
+    keep_ack_env,
+    keep_policy_ack_record,
     odds_api_hold_is_on,
     refuse_odds_fetch,
 )
@@ -86,7 +90,13 @@ from src.services.nfl_w8_capture.http_transport import (
     OddsHttpTransport,
     OddsHttpTransportError,
 )
-from src.services.nfl_w8_capture.oneshot import ONESHOT_ARGV, build_parser, main, run_oneshot_sealed_capture
+from src.services.nfl_w8_capture.oneshot import (
+    ONESHOT_ARGV,
+    ONESHOT_SYNTHETIC_ARGV,
+    build_parser,
+    main,
+    run_oneshot_sealed_capture,
+)
 from src.services.nfl_w8_capture.imv_package import prove_hard_stops, write_imv_package
 from src.services.nfl_w8_capture.pin import (
     UNSET_SHA,
@@ -656,19 +666,16 @@ def test_synthetic_fixture_file_yields_part_b_close() -> None:
 
 
 def _lift_env(**extra: str) -> dict[str, str]:
-    env = {
-        "NFL_W8_H1_AUTH_CITE": H1_AUTH_CITE,
-        "NFL_W8_PR_ROTATE_CONFIRM": "1",
-    }
-    env.update(extra)
-    return env
+    return keep_ack_env(**extra)
 
 
-def test_hold_lift_requires_cite_and_rotate_confirm(tmp_path: Path) -> None:
+def test_hold_lift_requires_h1_cite_plus_keep_fields(tmp_path: Path) -> None:
     assert odds_api_hold_is_on({}) is True
     assert odds_api_hold_is_on({"NFL_W8_ODDS_API_HOLD": "0"}) is True
     assert odds_api_hold_is_on({"NFL_W8_H1_AUTH_CITE": H1_AUTH_CITE}) is True
     assert odds_api_hold_is_on({"NFL_W8_PR_ROTATE_CONFIRM": "1"}) is True
+    # R3: rotate-confirm never lifts, even with complete KEEP fields.
+    assert odds_api_hold_is_on(_lift_env(NFL_W8_PR_ROTATE_CONFIRM="1")) is True
     assert odds_api_hold_is_on(_lift_env()) is False
 
     store = BundleStore(tmp_path)
@@ -915,16 +922,41 @@ def test_control_alerts_ceiling_hold_fetch_fail(tmp_path: Path) -> None:
     store.verify()
 
 
-def test_s2_rotate_keep_todo_present_hold_policy_unchanged() -> None:
+def test_r1_r7_keep_ack_gates() -> None:
     hold_src = Path(__file__).resolve().parents[1] / "src/services/nfl_w8_capture/hold.py"
     text = hold_src.read_text(encoding="utf-8")
-    assert "TODO(S2)" in text
-    assert "NFL_W8_PR_ROTATE_CONFIRM vs KEEP" in text
-    assert "a9ae5ae6" in text
-    assert "e64e73ac" in text
-    # Lift policy itself is unchanged: cite + rotate-confirm, no KEEP reinterpret.
-    assert odds_api_hold_is_on({}) is True
+    assert "R1" in text and "NFL_W8_H1_AUTH_CITE" in text
+    assert "T4500U_SHA8" in text and "20325274" in text
+    assert "91b13a45" in text
+    statement = keep_policy_ack_record()
+    assert statement["CREDENTIAL_POLICY"] == "KEEP_EXISTING"
+    assert statement["KEEP_AUTH_SHA8"] == "a9ae5ae6"
+    assert statement["VERIFY_PASS_SHA8"] == "e64e73ac"
+    assert statement["H1C_AUTH_SHA8"] == "89fdd45f"
+    assert statement["T4500U_SHA8"] == "20325274"
+    assert statement["ROTATION_ASSERTED"] is False
+    assert statement["SECRET_MATERIAL"] == "none"
+    # R1: H-1 cite alone is not enough; KEEP fields alone are not enough.
+    keep_only = {
+        "CREDENTIAL_POLICY": "KEEP_EXISTING",
+        "KEEP_AUTH_SHA8": "a9ae5ae6",
+        "VERIFY_PASS_SHA8": "e64e73ac",
+        "H1C_AUTH_SHA8": "89fdd45f",
+        "T4500U_SHA8": "20325274",
+        "ROTATION_ASSERTED": "false",
+    }
+    assert odds_api_hold_is_on(keep_only) is True
+    assert odds_api_hold_is_on({"NFL_W8_H1_AUTH_CITE": H1_AUTH_CITE}) is True
+    # Missing T4500U_SHA8 fails R2.
+    incomplete = _lift_env()
+    incomplete.pop("T4500U_SHA8")
+    assert odds_api_hold_is_on(incomplete) is True
+    # ROTATION_ASSERTED=true fails R2.
+    assert odds_api_hold_is_on(_lift_env(ROTATION_ASSERTED="true")) is True
+    # Complete KEEP + H-1 cite lifts.
     assert odds_api_hold_is_on(_lift_env()) is False
+    # R3: rotate-confirm on KEEP path FAIL CLOSED.
+    assert odds_api_hold_is_on(_lift_env(NFL_W8_PR_ROTATE_CONFIRM="1")) is True
 
 
 def test_operator_account_budget_and_baseline_seed_no_live_call(tmp_path: Path) -> None:
@@ -934,8 +966,11 @@ def test_operator_account_budget_and_baseline_seed_no_live_call(tmp_path: Path) 
         assert_operator_account_budget(11622, 0)
     with pytest.raises(CreditCeilingError, match="operator account budget"):
         assert_operator_account_budget(14622, 1)
-    with pytest.raises(CreditReconcileError, match="S2"):
+    with pytest.raises(CreditReconcileError, match="rotation"):
         assert_operator_account_budget(11621, 30)
+    assert_account_used_ceiling(14622)
+    with pytest.raises(CreditCeilingError, match="R5\\(b\\)"):
+        assert_account_used_ceiling(14623)
 
     store = BundleStore(tmp_path)
     seeded = seed_account_baseline_note(store)
@@ -948,6 +983,9 @@ def test_operator_account_budget_and_baseline_seed_no_live_call(tmp_path: Path) 
     assert note["live_call"] is False
     assert note["account_used_baseline"] == 11622
     assert seed_account_baseline_note(store) is None
+    dual = assert_dual_credit_r5(store, 11622)
+    assert dual["ledger_cumulative"] == 0
+    assert dual["account_ceiling"] == 14622
     store.verify()
 
 
@@ -1038,7 +1076,7 @@ def test_oneshot_hold_default_on_and_no_cli_lift_flag(tmp_path: Path) -> None:
     for banned in ("--lift", "--no-hold", "--rotate", "--rotate-confirm", "--odds-api-key"):
         assert banned not in flags
     assert ONESHOT_ARGV == (
-        "cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture "
+        "cd services/model-service && PYTHONPATH=. python3 -m src.services.nfl_w8_capture "
         "--game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>"
     )
 
@@ -1085,8 +1123,14 @@ def test_oneshot_chains_fetch_snapshot_close_seal_fake_transport(tmp_path: Path)
     assert summary["part_b"]["estimate_credits"] == 30
     assert summary["close_by_market"]["spreads"] == "CLOSE"
     assert summary["sealed_count_claim"] == 0
+    assert summary["keep_ack"]["CREDENTIAL_POLICY"] == "KEEP_EXISTING"
+    assert summary["keep_ack"]["ROTATION_ASSERTED"] is False
+    assert summary["r7_live_not_authorized"] is True
+    assert summary["r5_dual_credit"]["account_used"] == 11652
     assert "unit-test-not-live" not in json.dumps(summary)
+    assert "apiKey=" not in json.dumps(summary)
     assert (tmp_path / "snapshots.jsonl").is_file()
+    assert (tmp_path / "keep_ack_statement.json").is_file()
     assert (tmp_path / summary["close_relpath"]).is_file()
     assert (tmp_path / summary["seal_relpath"]).is_file()
     with pytest.raises(PermissionError, match="AC-12"):
@@ -1112,7 +1156,9 @@ def test_oneshot_cli_help_runnable_no_network() -> None:
     )
     assert proc.returncode == 0
     assert ONESHOT_ARGV in proc.stdout
+    assert ONESHOT_SYNTHETIC_ARGV in proc.stdout
     assert "--game-id" in proc.stdout
+    assert "--synthetic" in proc.stdout
     assert "--lift" not in proc.stdout
 
 
@@ -1134,6 +1180,38 @@ def test_oneshot_main_hold_exits_without_transport(tmp_path: Path, capsys: pytes
     err = capsys.readouterr().err
     assert "refuse_odds_fetch" in err or "hold" in err.lower() or "process-scoped" in err
     assert "unit-test-not-live" not in err
+
+
+def test_oneshot_r3_rotate_confirm_fail_closed_alerts(tmp_path: Path) -> None:
+    with pytest.raises(OddsApiHoldError, match="R3"):
+        run_oneshot_sealed_capture(
+            game_id="2026-W08-MIN@LAC",
+            kickoff_utc=KICKOFF,
+            store=BundleStore(tmp_path),
+            env=_lift_env(NFL_W8_PR_ROTATE_CONFIRM="1", ODDS_API_KEY="unit-test-not-live"),
+            now_utc=KICKOFF - timedelta(hours=2),
+            transport=lambda **kwargs: (_ for _ in ()).throw(AssertionError("no transport")),
+        )
+    alerts = (tmp_path / "alerts.jsonl").read_text(encoding="utf-8")
+    assert "NFL_W8_PR_ROTATE_CONFIRM" in alerts
+    assert "unit-test-not-live" not in alerts
+
+
+def test_oneshot_synthetic_main_zero_live_odds(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    code = main(
+        ["--synthetic", "--bundle-dir", str(tmp_path)],
+        env=keep_ack_env(),
+    )
+    assert code == 0
+    out = capsys.readouterr().out
+    payload = json.loads(out)
+    assert payload["synthetic"] is True
+    assert payload["live_odds"] is False
+    assert payload["keep_ack"]["KEEP_AUTH_SHA8"] == "a9ae5ae6"
+    assert payload["keep_ack"]["T4500U_SHA8"] == "20325274"
+    assert payload["r7_live_not_authorized"] is True
+    assert "synthetic-not-a-key" not in out
+    assert "apiKey=" not in out
 
 
 def test_tick_source_does_not_import_http_or_oneshot() -> None:

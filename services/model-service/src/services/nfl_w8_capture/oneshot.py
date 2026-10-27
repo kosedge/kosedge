@@ -1,20 +1,21 @@
 """One-shot PART B W8 sealed capture: fetch → snapshot → close → seal.
 
-Word-for-word argv (no secrets):
+Word-for-word live argv (no secrets; hold still default ON):
 
-  cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture --game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>
+  cd services/model-service && PYTHONPATH=. python3 -m src.services.nfl_w8_capture --game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>
+
+Word-for-word SYNTHETIC demo (no live Odds, no secrets):
+
+  cd services/model-service && PYTHONPATH=. NFL_W8_H1_AUTH_CITE=89fdd45f CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false python3 -m src.services.nfl_w8_capture --synthetic --bundle-dir /tmp/nfl-w8-synthetic-demo
 
 PART B is CONSTANTS, not argv: books draftkings,fanduel,betmgm,fanatics,circa;
 regions us,us2; markets h2h,spreads,totals; S=10; k≥3; F-8 90m.
 
 refuse_odds_fetch stays default ON. There is no CLI lift flag. Single-invocation
-lift is process-scoped env only (not Railway-global). Celery tick is not this
-path and still never fetches or seals.
-
-TODO(S2): NFL_W8_PR_ROTATE_CONFIRM vs KEEP existing key (decision a9ae5ae6;
-VERIFY PASS e64e73ac) is pending Ryan. Do not set rotate-confirm unless Ryan
-rules — that would assert a rotation that did not happen. hold.py lift policy
-is unchanged.
+lift is process-scoped KEEP-ack only (paper 2539d916; not Railway-global):
+CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac
+H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false.
+NFL_W8_PR_ROTATE_CONFIRM is stale and is rejected as a KEEP path.
 
 AC-12: produce_seal writes AC-1 + AC-2 custodian_receipt_id slot only.
 seal_ack stays CURSOR_CANNOT_SEAL_ACK. A named custodian receipt is required
@@ -31,7 +32,7 @@ import json
 import os
 import sys
 from dataclasses import asdict, is_dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Mapping, Optional, Sequence
 
@@ -47,6 +48,7 @@ from src.services.nfl_w8_capture.close import (
     PRIMARY_K_REQUIRED,
     evaluate_game_market_close,
 )
+from src.services.nfl_w8_capture.alerts import control_alert, deliver_alert
 from src.services.nfl_w8_capture.credits import (
     ACCOUNT_USED_BASELINE_E64E73AC,
     CREDIT_CEILING,
@@ -54,6 +56,7 @@ from src.services.nfl_w8_capture.credits import (
     CreditCeilingError,
     CreditEstimateError,
     CreditReconcileError,
+    assert_dual_credit_r5,
     assert_operator_account_budget,
     estimate_request_credits,
     read_last_credit_record,
@@ -62,10 +65,21 @@ from src.services.nfl_w8_capture.credits import (
 from src.services.nfl_w8_capture.fetch import (
     OddsFetchError,
     OddsTransport,
+    OddsTransportResult,
     fetch_odds_with_provenance,
 )
-from src.services.nfl_w8_capture.fixture_load import cells_from_odds_shaped_event, select_odds_event
-from src.services.nfl_w8_capture.hold import OddsApiHoldError, hold_lift_state, odds_api_hold_is_on
+from src.services.nfl_w8_capture.fixture_load import (
+    cells_from_odds_shaped_event,
+    load_json_fixture,
+    select_odds_event,
+)
+from src.services.nfl_w8_capture.hold import (
+    OddsApiHoldError,
+    hold_lift_state,
+    keep_policy_ack_record,
+    odds_api_hold_is_on,
+)
+from src.services.nfl_w8_capture.books import ENV_ODDS_API_KEY
 from src.services.nfl_w8_capture.http_transport import OddsHttpTransport
 from src.services.nfl_w8_capture.redact import redact_secrets
 from src.services.nfl_w8_capture.seal import SEAL_MIN_LEAD, SealWindowError, produce_seal
@@ -77,16 +91,54 @@ from src.services.nfl_w8_capture.timestamps import parse_utc
 
 # Exact copyable argv for IMV / CoS. No secrets. PART B not in flags.
 ONESHOT_ARGV = (
-    "cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture "
+    "cd services/model-service && PYTHONPATH=. python3 -m src.services.nfl_w8_capture "
     "--game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>"
+)
+ONESHOT_SYNTHETIC_ARGV = (
+    "cd services/model-service && PYTHONPATH=. "
+    "NFL_W8_H1_AUTH_CITE=89fdd45f CREDENTIAL_POLICY=KEEP_EXISTING "
+    "KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac "
+    "H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false "
+    "python3 -m src.services.nfl_w8_capture --synthetic --bundle-dir /tmp/nfl-w8-synthetic-demo"
 )
 
 SEAL_ACK = "CURSOR_CANNOT_SEAL_ACK"
-S2_PENDING = (
-    "S2 PENDING RYAN: NFL_W8_PR_ROTATE_CONFIRM vs KEEP existing key "
-    "(a9ae5ae6 / VERIFY e64e73ac). Do not set rotate-confirm unless Ryan rules. "
-    "hold.py lift policy is unchanged."
+KEEP_ACK_NOTE = (
+    "R1–R7 KEEP-ack (paper 2539d916 / IMV ACCEPT 91b13a45): "
+    "NFL_W8_H1_AUTH_CITE=89fdd45f PLUS CREDENTIAL_POLICY=KEEP_EXISTING "
+    "KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f "
+    "T4500U_SHA8=20325274 ROTATION_ASSERTED=false SECRET_MATERIAL=none. "
+    "R3: NFL_W8_PR_ROTATE_CONFIRM truthy is FAIL CLOSED. "
+    "R4: process-scoped env= only. R7: paper ACCEPT does not authorize live Odds."
 )
+SYNTHETIC_DUMMY_KEY = "synthetic-not-a-key"
+
+
+def synthetic_fixture_transport(event: Mapping[str, Any]) -> OddsTransport:
+    """In-process fixture transport. Opens no socket. Not The Odds API."""
+    body = json.dumps(dict(event), sort_keys=True).encode("utf-8")
+    provider_ts = str(event.get("provider_server_ts") or "")
+
+    def _transport(
+        *,
+        endpoint: str,
+        params: Mapping[str, str],
+        headers: Mapping[str, str],
+    ) -> OddsTransportResult:
+        del endpoint, params, headers
+        return OddsTransportResult(
+            status_code=200,
+            headers={
+                "x-requests-last": "30",
+                "x-requests-used": "11652",
+                "x-requests-remaining": "8348",
+                "Date": "Wed, 28 Oct 2026 21:15:00 GMT",
+            },
+            body=body,
+            provider_server_ts=provider_ts or None,
+        )
+
+    return _transport
 
 
 class OneshotError(RuntimeError):
@@ -147,11 +199,27 @@ def run_oneshot_sealed_capture(
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
 
+    lift_state = hold_lift_state(source)
+    if lift_state.get("rotate_rejected"):
+        deliver_alert(
+            control_alert(
+                kind="hold",
+                detail=(
+                    "R3: NFL_W8_PR_ROTATE_CONFIRM truthy on KEEP path — "
+                    "FAIL CLOSED (stale/conflicting; not a lift)"
+                ),
+                game_id=game_id,
+                market="hold",
+            ),
+            store,
+            env=source,
+        )
     if odds_api_hold_is_on(source):
         raise OddsApiHoldError(
-            "refuse_odds_fetch default ON. Lift is process-scoped env only "
-            "(NFL_W8_H1_AUTH_CITE + NFL_W8_PR_ROTATE_CONFIRM) — no CLI flag, "
-            f"not Railway-global. {S2_PENDING}"
+            "refuse_odds_fetch default ON. R1+R2 process-scoped KEEP-ack only "
+            "(no CLI flag, not Railway-global). R3 rotate-confirm is not a lift. "
+            "R7: paper ACCEPT does not authorize live Odds. "
+            f"{KEEP_ACK_NOTE}"
         )
 
     if registered_at is not None:
@@ -181,8 +249,11 @@ def run_oneshot_sealed_capture(
     credits = fetched.get("credits") or {}
     headers = (credits.get("headers") or {}) if isinstance(credits, dict) else {}
     used_now = headers.get(HEADER_USED)
-    if used_now is not None:
-        assert_operator_account_budget(int(used_now), estimate)
+    if used_now is None:
+        raise CreditReconcileError("R5: x-requests-used missing; ledger+account dual-check required")
+    # R5: (a) bundle ledger cumulative ≤ 3000 AND (b) account used ≤ 14622
+    dual = assert_dual_credit_r5(store, int(used_now))
+    assert_operator_account_budget(int(used_now), estimate)
 
     envelope = fetched.get("envelope") or {}
     payload = fetched.get("payload")
@@ -275,6 +346,14 @@ def run_oneshot_sealed_capture(
     else:
         raise OneshotError("AC-12 broken: refuse_seal did not raise")
 
+    statement = keep_policy_ack_record()
+    keep_receipt = store.write_new_file(
+        "keep_ack_statement.json",
+        statement,
+        actor="nfl_w8_capture",
+        note="r6-keep-statement",
+    )
+
     summary = {
         "ok": True,
         "entrypoint": ONESHOT_ARGV,
@@ -292,10 +371,16 @@ def run_oneshot_sealed_capture(
             "estimate_credits": estimate,
         },
         "credits": credits,
+        "r5_dual_credit": {
+            **dual,
+            "rule_a": "bundle ledger cumulative <= 3000",
+            "rule_b": "(used-11622) <= 3000 i.e. used <= 14622",
+            "ledger_not_optional": True,
+        },
         "operator_budget": {
             "baseline_used": ACCOUNT_USED_BASELINE_E64E73AC,
             "cite": "e64e73ac",
-            "rule": "(used-11622)+estimate <= 3000 from response headers",
+            "rule": "R5 (a) ledger cumulative<=3000 AND (b) used<=14622",
             "ceiling": CREDIT_CEILING,
             "used_now": used_now,
         },
@@ -310,8 +395,11 @@ def run_oneshot_sealed_capture(
             "AC-2 requires a named custodian receipt_id. Slot is UNSET until the "
             "custodian fills it. Cursor cannot seal-ack (AC-12)."
         ),
-        "hold_lift": hold_lift_state(source),
-        "s2": S2_PENDING,
+        "hold_lift": lift_state,
+        "keep_ack": statement,
+        "keep_ack_note": KEEP_ACK_NOTE,
+        "keep_ack_receipt": keep_receipt.get("relpath"),
+        "r7_live_not_authorized": True,
         "nfl_no_go": True,
         "coming_soon": True,
         "sealed_count_claim": 0,
@@ -325,29 +413,33 @@ def run_oneshot_sealed_capture(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="python -m src.services.nfl_w8_capture",
+        prog="python3 -m src.services.nfl_w8_capture",
         description=(
             "One-shot PART B W8 sealed capture (fetch→snapshot→close→seal). "
-            "Draft path only. No merge, no deploy, no live call unless process "
-            "env lifts hold. No CLI hold-lift flag."
+            "Draft path only. No merge, no deploy. --synthetic uses fixture "
+            "transport only (zero live Odds). No CLI hold-lift flag."
         ),
         epilog=(
-            f"Exact argv: {ONESHOT_ARGV}\n"
+            f"Live argv: {ONESHOT_ARGV}\n"
+            f"Synthetic demo: {ONESHOT_SYNTHETIC_ARGV}\n"
             "Optional: --bundle-dir <DIR> --custodian-receipt-id <ID> "
             "--now-utc <ISO> --odds-event-id <ID> --registered-at <ISO>\n"
             "PART B constants (not flags): draftkings,fanduel,betmgm,fanatics,circa; "
             "S=10; k>=3; 90m.\n"
-            "Lift (process-scoped env, not argv, not Railway-global): "
-            "NFL_W8_H1_AUTH_CITE=89fdd45f and NFL_W8_PR_ROTATE_CONFIRM. "
-            f"{S2_PENDING}\n"
-            "ODDS_API_KEY from env only — never argv, never logs.\n"
+            f"Lift (process-scoped env, not Railway-global): {KEEP_ACK_NOTE}\n"
+            "ODDS_API_KEY from env only on the live path — never argv, never logs.\n"
             "AC-12: seal_ack=CURSOR_CANNOT_SEAL_ACK. Custodian receipt required for AC-2.\n"
             "Credit: (used-11622)+estimate <= 3000 from response headers."
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--game-id", required=True, help="Capture game id (not an Odds key)")
-    parser.add_argument("--kickoff-utc", required=True, help="Kickoff UTC ISO-8601")
+    parser.add_argument("--game-id", default="", help="Capture game id (required unless --synthetic)")
+    parser.add_argument("--kickoff-utc", default="", help="Kickoff UTC ISO-8601 (required unless --synthetic)")
+    parser.add_argument(
+        "--synthetic",
+        action="store_true",
+        help="Fixture-only demo: no socket, no The Odds API. Uses package synthetic W8 REG event.",
+    )
     parser.add_argument(
         "--bundle-dir",
         default="",
@@ -371,23 +463,44 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Sequence[str]] = None, *, env: Optional[Mapping[str, str]] = None) -> int:
     parser = build_parser()
     args = parser.parse_args(list(argv) if argv is not None else None)
-    source = env if env is not None else os.environ
+    source: Mapping[str, str] = env if env is not None else os.environ
+    env_map = {str(key): str(value) for key, value in source.items()}
+    transport: Optional[OddsTransport] = None
+    game_id = str(args.game_id or "").strip()
+    kickoff_utc = str(args.kickoff_utc or "").strip()
+    now_utc = str(args.now_utc or "").strip() or None
+    if args.synthetic:
+        event = load_json_fixture()
+        game_id = game_id or str(event.get("game_id") or "")
+        kickoff_utc = kickoff_utc or str(event.get("kickoff_utc") or "")
+        if now_utc is None:
+            kickoff = _aware(kickoff_utc, field="kickoff_utc")
+            now_utc = (kickoff - timedelta(hours=2)).isoformat().replace("+00:00", "Z")
+        transport = synthetic_fixture_transport(event)
+        env_map.setdefault(ENV_ODDS_API_KEY, SYNTHETIC_DUMMY_KEY)
+    elif not game_id or not kickoff_utc:
+        parser.error("--game-id and --kickoff-utc are required unless --synthetic")
     root = Path(
         args.bundle_dir
-        or source.get(ENV_BUNDLE_DIR)
+        or env_map.get(ENV_BUNDLE_DIR)
         or (Path.cwd() / "data" / "ops" / "nfl-w8-capture-bundle")
     )
     try:
         summary = run_oneshot_sealed_capture(
-            game_id=str(args.game_id),
-            kickoff_utc=str(args.kickoff_utc),
+            game_id=game_id,
+            kickoff_utc=kickoff_utc,
             store=BundleStore(root),
-            env=source,
-            now_utc=str(args.now_utc) or None,
+            env=env_map,
+            transport=transport,
+            now_utc=now_utc,
             custodian_receipt_id=str(args.custodian_receipt_id or ""),
             odds_event_id=str(args.odds_event_id or ""),
             registered_at=str(args.registered_at) or None,
         )
+        if args.synthetic:
+            summary["synthetic"] = True
+            summary["live_odds"] = False
+            summary["entrypoint"] = ONESHOT_SYNTHETIC_ARGV
     except (
         OddsApiHoldError,
         OddsFetchError,

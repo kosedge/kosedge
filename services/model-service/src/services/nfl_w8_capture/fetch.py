@@ -1,14 +1,16 @@
 """Gated Odds fetch + provenance envelope. No default live HTTP.
 
 Key is read from env only and never persisted. refuse_odds_fetch remains
-the fail-closed default until H-1 cite 89fdd45f + PR rotate-confirm.
+the fail-closed default until the paper KEEP-ack (2539d916):
+R1 NFL_W8_H1_AUTH_CITE=89fdd45f plus R2 KEEP STATEMENT
+(CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6
+VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274
+ROTATION_ASSERTED=false).
+NFL_W8_PR_ROTATE_CONFIRM is rejected as a KEEP path.
 
 Library default (transport=None) still refuses to open a socket. Production
 HTTP lives in http_transport.OddsHttpTransport and is injected by the
 one-shot CLI. Celery tick must not use that transport.
-
-TODO(S2): NFL_W8_PR_ROTATE_CONFIRM vs KEEP existing key (a9ae5ae6 /
-VERIFY e64e73ac) is pending Ryan. hold.py lift policy is unchanged.
 """
 
 from __future__ import annotations
@@ -137,7 +139,11 @@ def fetch_odds_with_provenance(
         _alert(
             store,
             kind="hold",
-            detail="Odds hold on: refuse_odds_fetch (need 89fdd45f + PR rotate-confirm)",
+            detail=(
+                "Odds hold on: refuse_odds_fetch "
+                "(R1 NFL_W8_H1_AUTH_CITE=89fdd45f + R2 KEEP-ack; "
+                "R3 NFL_W8_PR_ROTATE_CONFIRM is not a lift)"
+            ),
             env=source,
             game_id=game_id,
             market="hold",

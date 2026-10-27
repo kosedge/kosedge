@@ -47,11 +47,11 @@ REPO_RELATIVE_INVENTORY = (
 )
 
 HARD_STOPS = (
-    "refuse_odds_fetch raises while hold is default-on. Lift needs cite 89fdd45f + PR rotate-confirm. No CLI lift flag. S2 rotate vs KEEP pending Ryan. Tick never fetches.",
+    "refuse_odds_fetch default ON. R1: NFL_W8_H1_AUTH_CITE=89fdd45f PLUS KEEP fields. R2: CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false. R3: rotate-confirm FAIL CLOSED. R4: process-scoped only. R7: paper ACCEPT ≠ live GO. Tick never fetches.",
     "refuse_seal ALWAYS raises (AC-12). Cursor cannot seal-ack. produce_seal is AC-1/AC-2 only. Custodian receipt required for AC-2.",
     "Draft only. No merge. No deploy. Coming Soon ON. NFL NO-GO stays.",
     "Production NFL_ODDS_API_CARRIED_BOOKMAKERS is not edited.",
-    "One-shot argv: cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture --game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>",
+    "Synthetic argv: cd services/model-service && PYTHONPATH=. NFL_W8_H1_AUTH_CITE=89fdd45f CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false python3 -m src.services.nfl_w8_capture --synthetic --bundle-dir /tmp/nfl-w8-synthetic-demo",
 )
 
 

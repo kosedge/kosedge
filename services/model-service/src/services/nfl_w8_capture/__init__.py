@@ -3,7 +3,7 @@
 Isolated from production Odds pull / fair-lines / Coming Soon. Library
 default does not open a socket. Production HTTP is OddsHttpTransport,
 injected by ``python -m src.services.nfl_w8_capture``. Seal-ack is out
-of scope (AC-12). TODO(S2): rotate-confirm vs KEEP is pending Ryan.
+of scope (AC-12). KEEP-ack paper 2539d916; rotate-confirm is stale.
 
 Spec cites (sha8, not invented):
 - IMV_SPEC_W8_PROSPECTIVE_CAPTURE_ACCEPTANCE_t4191u_v2 ``08808adf``
@@ -48,7 +48,12 @@ from src.services.nfl_w8_capture.hold import (
     odds_api_hold_is_on,
 )
 from src.services.nfl_w8_capture.http_transport import OddsHttpTransport
-from src.services.nfl_w8_capture.oneshot import ONESHOT_ARGV, run_oneshot_sealed_capture
+from src.services.nfl_w8_capture.oneshot import (
+    ONESHOT_ARGV,
+    ONESHOT_SYNTHETIC_ARGV,
+    run_oneshot_sealed_capture,
+)
+from src.services.nfl_w8_capture.hold import keep_ack_env, keep_policy_ack_record
 from src.services.nfl_w8_capture.pin import (
     UNSET_SHA,
     build_pin_manifest,
@@ -99,6 +104,9 @@ __all__ = [
     "ACCOUNT_USED_BASELINE_E64E73AC",
     "OddsHttpTransport",
     "ONESHOT_ARGV",
+    "ONESHOT_SYNTHETIC_ARGV",
+    "keep_ack_env",
+    "keep_policy_ack_record",
     "run_oneshot_sealed_capture",
     "STREAM_IND",
     "STREAM_MKT",

@@ -29,7 +29,7 @@ Cited sha8 (authority; files not in this checkout — do not invent bodies):
 
 | Hold | This PR |
 | --- | --- |
-| Odds API hold (H-1a / H-1c) | **Default ON.** `refuse_odds_fetch` raises unless `NFL_W8_H1_AUTH_CITE=89fdd45f` **and** `NFL_W8_PR_ROTATE_CONFIRM`. No CLI lift flag. Lift is process-scoped env only (not Railway-global). **TODO(S2):** rotate-confirm vs KEEP (`a9ae5ae6` / VERIFY `e64e73ac`) pending Ryan — do not assert a rotation that did not happen. `hold.py` lift policy unchanged. |
+| Odds API hold (H-1a / H-1c) | **Default ON.** R1: KEEP-ack replaces **only** `NFL_W8_PR_ROTATE_CONFIRM`; lift still needs `NFL_W8_H1_AUTH_CITE=89fdd45f` **plus** KEEP STATEMENT fields. R2: `CREDENTIAL_POLICY=KEEP_EXISTING` `KEEP_AUTH_SHA8=a9ae5ae6` `VERIFY_PASS_SHA8=e64e73ac` `H1C_AUTH_SHA8=89fdd45f` `T4500U_SHA8=20325274` `ROTATION_ASSERTED=false`. R3: truthy rotate-confirm FAIL CLOSED. R4: process-scoped only. Paper 2539d916 / IMV ACCEPT 91b13a45. |
 | Seal-ack (AC-12) | **Still blocking.** `streams.refuse_seal` always raises. `seal.produce_seal` is AC-1/AC-2 only. |
 | Merge / deploy / Railway / Coming Soon / public NFL numbers | **Not in scope.** Draft PR only. |
 
@@ -77,22 +77,24 @@ Unchanged from first draft (close definition, five PRIMARY books including circa
 
 ## One-shot first-seal entrypoint (t4497u successor)
 
-Word-for-word argv (no secrets):
+Word-for-word SYNTHETIC demo (zero live Odds, no secrets):
 
 ```
-cd services/model-service && PYTHONPATH=. python -m src.services.nfl_w8_capture --game-id <GAME_ID> --kickoff-utc <KICKOFF_UTC>
+cd services/model-service && PYTHONPATH=. NFL_W8_H1_AUTH_CITE=89fdd45f CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false python3 -m src.services.nfl_w8_capture --synthetic --bundle-dir /tmp/nfl-w8-synthetic-demo
 ```
 
 PART B constants (not argv): books `draftkings,fanduel,betmgm,fanatics,circa`; S=10; k≥3; F-8 90m.
-Production HTTP: `http_transport.OddsHttpTransport` (ODDS_API_KEY from env only). Library `transport=None` still refuses to open a socket. Celery tick still never fetches/seals.
+Production HTTP: `http_transport.OddsHttpTransport` (ODDS_API_KEY from env only). Library `transport=None` still refuses to open a socket. `--synthetic` injects fixture transport. Celery tick still never fetches/seals.
 AC-12: `seal_ack=CURSOR_CANNOT_SEAL_ACK`. AC-2 needs a named custodian receipt; slot stays UNSET until then.
-Credit: operator `(used−11622)+estimate ≤ 3000` from response headers; cited baseline `e64e73ac` used=11622 may be seeded with last=0 (no live call).
+R5 credit: (a) bundle ledger cumulative ≤3000 **and** (b) account `(used−11622)≤3000` (used≤14622). Ledger not optional.
+R6 receipt echoes KEEP STATEMENT. R7: paper ACCEPT does not authorize live lift/Odds/capture/merge/deploy.
 
-## Still blocked on H-1 live (Needs-IMV ACCEPT + Ryan S2)
+## Still blocked after this tip
 
-- S2: `NFL_W8_PR_ROTATE_CONFIRM` vs KEEP existing key (`a9ae5ae6`) — pending Ryan
-- Condition 5 first sealed capture independent verify
+- IMV path / sealing re-grade on successor tip (R1–R7 bound)
+- Ryan A vs B (not authorized by KEEP-ack paper ACCEPT)
 - Named custodian for AC-2 receipt
+- Condition 5 first sealed capture
 - Webhook live POST (path present, unwired)
 - AC-8 / AC-10 remain **EXPLICIT_CARVE_OUT**
-- NFL NO-GO / Coming Soon ON. sealed=0. No merge. No deploy.
+- NFL NO-GO / Coming Soon ON. sealed=0. No merge. No deploy. No live Odds.

@@ -21,6 +21,8 @@ CREDIT_CEILING = 3000
 ACCOUNT_USED_BASELINE_E64E73AC = 11622
 ACCOUNT_REMAINING_CITED_E64E73AC = 8378
 ACCOUNT_BASELINE_CITE = "e64e73ac"
+# R5(b): (used − 11622) ≤ 3000 ⇒ used ≤ 14622
+ACCOUNT_USED_CEILING_E64E73AC = ACCOUNT_USED_BASELINE_E64E73AC + CREDIT_CEILING
 BASELINE_NOTE_NAME = "credits_account_baseline.json"
 
 HEADER_LAST = "x-requests-last"
@@ -242,6 +244,50 @@ def operator_account_spend(used_now: int, *, baseline: int = ACCOUNT_USED_BASELI
     return int(used_now) - int(baseline)
 
 
+def assert_account_used_ceiling(
+    used_now: int,
+    *,
+    baseline: int = ACCOUNT_USED_BASELINE_E64E73AC,
+    ceiling: int = CREDIT_CEILING,
+) -> None:
+    """R5(b): (used − 11622) ≤ 3000 i.e. used ≤ 14622. Ledger is separate (R5a)."""
+    if int(used_now) < int(baseline):
+        raise CreditReconcileError(
+            f"x-requests-used {used_now} < cited baseline {baseline} ({ACCOUNT_BASELINE_CITE}); "
+            "do not assume a rotation. KEEP a9ae5ae6 / t4500u 20325274; "
+            "NFL_W8_PR_ROTATE_CONFIRM is stale and is rejected as a KEEP path."
+        )
+    spend = operator_account_spend(used_now, baseline=baseline)
+    if spend > int(ceiling):
+        raise CreditCeilingError(
+            f"R5(b) account ceiling: (used {used_now} − baseline {baseline}) = "
+            f"{spend} > {ceiling} (used must be <= {baseline + int(ceiling)})"
+        )
+
+
+def assert_dual_credit_r5(
+    store: BundleStore,
+    used_now: int,
+) -> dict[str, int]:
+    """R5: (a) bundle ledger cumulative ≤ 3000 AND (b) account used ≤ 14622.
+
+    Ledger is not optional. Account-only translation is not a substitute.
+    """
+    cumulative = read_cumulative(store)
+    if cumulative > CREDIT_CEILING:
+        raise CreditCeilingError(
+            f"R5(a) ledger cumulative {cumulative} > {CREDIT_CEILING}; ledger not optional"
+        )
+    assert_account_used_ceiling(int(used_now))
+    return {
+        "ledger_cumulative": cumulative,
+        "ledger_ceiling": CREDIT_CEILING,
+        "account_used": int(used_now),
+        "account_baseline": ACCOUNT_USED_BASELINE_E64E73AC,
+        "account_ceiling": ACCOUNT_USED_CEILING_E64E73AC,
+    }
+
+
 def assert_operator_account_budget(
     used_now: int,
     estimate: int,
@@ -261,7 +307,8 @@ def assert_operator_account_budget(
     if int(used_now) < int(baseline):
         raise CreditReconcileError(
             f"x-requests-used {used_now} < cited baseline {baseline} ({ACCOUNT_BASELINE_CITE}); "
-            "do not assume a rotation. S2 (NFL_W8_PR_ROTATE_CONFIRM vs KEEP) is pending Ryan."
+            "do not assume a rotation. KEEP a9ae5ae6 / t4500u 20325274; "
+            "NFL_W8_PR_ROTATE_CONFIRM is stale and is rejected as a KEEP path."
         )
     spend = operator_account_spend(used_now, baseline=baseline)
     if spend + int(estimate) > int(ceiling):
