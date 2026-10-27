@@ -6,7 +6,6 @@
 import { NFL_STRUCTURAL_PACE_2026 } from "@/lib/nfl-structural-pace-2026";
 import {
   NFL_STANDARD_HFA_POINTS,
-  lookupNflNeutralSite,
   resolveNflSiteContext,
 } from "@/lib/nfl-neutral-sites-2026";
 import {
@@ -148,7 +147,7 @@ export function buildMatchupContext(
     input.week != null && input.week !== ("" as unknown)
       ? Number(input.week)
       : NaN;
-  let week = Number.isFinite(weekRaw) ? Math.trunc(weekRaw) : null;
+  const week = Number.isFinite(weekRaw) ? Math.trunc(weekRaw) : null;
 
   const site = resolveNflSiteContext({
     week,
@@ -159,11 +158,6 @@ export function buildMatchupContext(
     neutralVenue: input.neutralVenue,
     hfaPoints: input.hfaPoints,
   });
-  // If week was missing but this pair is a known 2026 international game, adopt that week.
-  if (week == null && site.isNeutral) {
-    const looked = lookupNflNeutralSite({ week: null, homeAbbr, awayAbbr });
-    if (looked?.week != null) week = looked.week;
-  }
 
   const awayStruct = structuralPaceFor(awayAbbr);
   const homeStruct = structuralPaceFor(homeAbbr);
@@ -181,11 +175,13 @@ export function buildMatchupContext(
     String(input.gameId || "").trim() ||
     `${awayAbbr}@${homeAbbr}-w${week ?? "?"}`;
   let gamesPlayedAway =
-    input.gamesPlayedAway != null && Number.isFinite(Number(input.gamesPlayedAway))
+    input.gamesPlayedAway != null &&
+    Number.isFinite(Number(input.gamesPlayedAway))
       ? Math.max(0, Math.trunc(Number(input.gamesPlayedAway)))
       : null;
   let gamesPlayedHome =
-    input.gamesPlayedHome != null && Number.isFinite(Number(input.gamesPlayedHome))
+    input.gamesPlayedHome != null &&
+    Number.isFinite(Number(input.gamesPlayedHome))
       ? Math.max(0, Math.trunc(Number(input.gamesPlayedHome)))
       : null;
   if (week === 1) {
@@ -238,7 +234,10 @@ export function buildMatchupContext(
   };
 }
 
-export function shortTeam(ctx: EdgeBoardMatchupContext, side: "away" | "home"): string {
+export function shortTeam(
+  ctx: EdgeBoardMatchupContext,
+  side: "away" | "home",
+): string {
   return shortName(side === "away" ? ctx.awayName : ctx.homeName);
 }
 

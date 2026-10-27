@@ -15,7 +15,6 @@ import type { EdgeBoardRow } from "@kosedge/contracts";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 import { getWallChartSchedule } from "@/lib/nfl-wall-chart-2026";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
-import { lookupNflNeutralSite } from "@/lib/nfl-neutral-sites-2026";
 
 const NAME_TO_ABBR = new Map(
   NFL_TEAM_DIRECTORY.map((t) => [t.name.toLowerCase(), t.code] as const),
@@ -25,7 +24,12 @@ const ABBR_TO_NAME = new Map(
 );
 
 function canonAbbr(raw: string): string {
-  return canonicalizeNflTeam(raw) || String(raw || "").trim().toUpperCase();
+  return (
+    canonicalizeNflTeam(raw) ||
+    String(raw || "")
+      .trim()
+      .toUpperCase()
+  );
 }
 
 /** Pack / nflverse often emit LA for Rams; product id prefers LAR. */
@@ -55,9 +59,7 @@ function abbrFromLabel(label: string): string {
 }
 
 function parseGameTeams(game: string): { away: string; home: string } {
-  const parts = game.includes(" @ ")
-    ? game.split(" @ ")
-    : game.split(" vs ");
+  const parts = game.includes(" @ ") ? game.split(" @ ") : game.split(" vs ");
   return {
     away: (parts[0] ?? "Away").trim() || "Away",
     home: (parts[1] ?? "Home").trim() || "Home",
@@ -112,7 +114,8 @@ export function buildNflScheduleWeekIndex(): MatchupWeekIndex {
 
 /**
  * Look up REG week for a matchup from the schedule pack.
- * Prefers oriented away@home; falls back to unordered pair; then neutral table.
+ * Prefers oriented away@home; falls back to unordered pair.
+ * Does not invent week from a pair-only neutral-site lookup.
  */
 export function lookupNflScheduleWeek(args: {
   homeAbbr: string;
@@ -124,10 +127,7 @@ export function lookupNflScheduleWeek(args: {
   const index = buildNflScheduleWeekIndex();
   const oriented = index.get(`${away}|${home}`);
   if (oriented != null) return oriented;
-  const unordered = index.get(pairKey(away, home));
-  if (unordered != null) return unordered;
-  const neutral = lookupNflNeutralSite({ week: null, homeAbbr: home, awayAbbr: away });
-  return neutral?.week ?? null;
+  return index.get(pairKey(away, home)) ?? null;
 }
 
 type RowWeekFields = EdgeBoardRow & {
@@ -268,9 +268,7 @@ export function diffNflBoardVsScheduleWeek(
     (g) => !present.has(orientedPairKey(g.awayAbbr, g.homeAbbr)),
   );
   const boardCount = new Set(
-    rows
-      .map(rowOrientedPairKey)
-      .filter((k): k is string => Boolean(k)),
+    rows.map(rowOrientedPairKey).filter((k): k is string => Boolean(k)),
   ).size;
   return {
     week: coerceNflWeek(week) ?? week,

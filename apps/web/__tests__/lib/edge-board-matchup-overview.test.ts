@@ -111,8 +111,7 @@ describe("matchup overview + season honesty", () => {
     });
     expect(site?.city).toBe("Melbourne");
     // Option A (Ryan t4401u / IMV packet 3199cbda): null week is insufficient
-    // identity — no site from the LAR/SF pair alone. EXPECTED RED vs current
-    // L120 pair fallback until that separately scoped runtime change lands.
+    // identity — no site from the LAR/SF pair alone.
     expect(
       lookupNflNeutralSite({ week: null, homeAbbr: "LAR", awayAbbr: "SF" }),
     ).toBeNull();

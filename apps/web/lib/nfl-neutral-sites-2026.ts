@@ -1,6 +1,7 @@
 /**
  * 2026 NFL international / neutral-site slate (league release).
  * Keyed by week + sorted team pair so home/away listing order does not matter.
+ * Week is required identity — pair-only lookup must not invent a site.
  */
 
 export type NflNeutralSite = {
@@ -92,12 +93,9 @@ function pairKey(a: string, b: string): string {
 }
 
 const BY_WEEK_PAIR = new Map<string, NflNeutralSite>();
-const BY_PAIR = new Map<string, NflNeutralSite>();
 for (const site of SITES) {
   const pk = pairKey(site.teams[0], site.teams[1]);
   BY_WEEK_PAIR.set(`${site.week}|${pk}`, site);
-  // Pair-only fallback when week is missing on the row (still exact 2026 slate).
-  BY_PAIR.set(pk, site);
 }
 
 /** Standard home HFA when the game is not neutral (framework prior). */
@@ -113,11 +111,8 @@ export function lookupNflNeutralSite(args: {
     args.week == null || args.week === ("" as unknown)
       ? NaN
       : Number(args.week);
-  if (Number.isFinite(weekNum)) {
-    const hit = BY_WEEK_PAIR.get(`${Math.trunc(weekNum)}|${pk}`);
-    if (hit) return hit;
-  }
-  return BY_PAIR.get(pk) ?? null;
+  if (!Number.isFinite(weekNum)) return null;
+  return BY_WEEK_PAIR.get(`${Math.trunc(weekNum)}|${pk}`) ?? null;
 }
 
 export function resolveNflSiteContext(args: {
