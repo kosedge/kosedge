@@ -5,7 +5,8 @@
 | Field | Value |
 |-------|--------|
 | run_id | `nfl-mfe-2026-w08-20261027T212104Z-f50f15a8` |
-| dest | `/workspace/ops/nfl_enterprise_green_t4359u/research_runs/nfl-mfe-2026-w08-20261027T212104Z-f50f15a8/` |
+| dest (GitHub / CoS-fetchable) | `data/ops/nfl-model-forecast-emit-t4559u/research_runs/nfl-mfe-2026-w08-20261027T212104Z-f50f15a8/` |
+| dest (this VM only; not shared ops box) | `/workspace/ops/nfl_enterprise_green_t4359u/research_runs/nfl-mfe-2026-w08-20261027T212104Z-f50f15a8/` |
 | forecast_ts_utc | `2026-10-27T21:21:04Z` |
 | n | 14 W8 games |
 | code_tip_sha8 | `f50f15a8` |
