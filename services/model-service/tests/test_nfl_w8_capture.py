@@ -42,8 +42,13 @@ from src.services.nfl_w8_capture.carveouts import (
 from src.services.nfl_w8_capture.credits import (
     CREDIT_CEILING,
     CreditCeilingError,
+    CreditEstimateError,
     CreditHeaderError,
     CreditPurchaseError,
+    CreditReconcileError,
+    estimate_request_credits,
+    ledger_closed,
+    ledger_overrun,
     pre_call_check,
     read_cumulative,
     record_credit_use,
@@ -710,10 +715,90 @@ def test_credit_ledger_edges_2999_3000_3001(tmp_path: Path) -> None:
                 "x-requests-remaining": "0",
             },
         )
+    assert read_cumulative(store) == 3001
+    assert ledger_overrun(store) is True
+    assert ledger_closed(store) is True
+    with pytest.raises(CreditCeilingError):
+        pre_call_check(read_cumulative(store), 1, overrun=True)
     with pytest.raises(CreditHeaderError, match="missing"):
         record_credit_use(store, {"x-requests-used": "10"})
     with pytest.raises(CreditPurchaseError, match="not authorized"):
         refuse_credit_purchase()
+    store.verify()
+
+
+def test_credit_ledger_2990_plus_real_cost_30_records_then_blocks(tmp_path: Path) -> None:
+    params = build_w8_odds_request_params()
+    cost = estimate_request_credits(params)
+    assert cost == 30
+    assert cost == 5 * 3 * 2
+    with pytest.raises(CreditEstimateError, match="never default 1"):
+        estimate_request_credits({"bookmakers": "", "markets": "", "regions": ""})
+    with pytest.raises(CreditEstimateError):
+        pre_call_check(0, 0)
+
+    store = BundleStore(tmp_path)
+    seed = record_credit_use(
+        store,
+        {
+            "x-requests-last": "2990",
+            "x-requests-used": "2990",
+            "x-requests-remaining": "100",
+        },
+    )
+    assert seed["cumulative"] == 2990
+    with pytest.raises(CreditCeilingError):
+        record_credit_use(
+            store,
+            {
+                "x-requests-last": "30",
+                "x-requests-used": "3020",
+                "x-requests-remaining": "0",
+            },
+        )
+    assert read_cumulative(store) == 3020
+    assert ledger_overrun(store) is True
+    assert ledger_closed(store) is True
+    with pytest.raises(CreditCeilingError):
+        pre_call_check(3020, cost, overrun=True)
+
+    called = {"n": 0}
+
+    def transport(*, endpoint: str, params: object, headers: object) -> OddsTransportResult:
+        called["n"] += 1
+        raise AssertionError("closed ledger must not call transport")
+
+    with pytest.raises(CreditCeilingError, match="ledger closed"):
+        fetch_odds_with_provenance(
+            store=store,
+            env=_lift_env(ODDS_API_KEY="unit-test-not-live"),
+            transport=transport,
+        )
+    assert called["n"] == 0
+    store.verify()
+
+
+def test_used_header_mismatch_fail_closed(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    record_credit_use(
+        store,
+        {
+            "x-requests-last": "100",
+            "x-requests-used": "100",
+            "x-requests-remaining": "50",
+        },
+    )
+    with pytest.raises(CreditReconcileError, match="mismatch"):
+        record_credit_use(
+            store,
+            {
+                "x-requests-last": "30",
+                "x-requests-used": "110",
+                "x-requests-remaining": "40",
+            },
+        )
+    assert read_cumulative(store) == 130
+    assert ledger_closed(store) is True
     store.verify()
 
 
@@ -727,8 +812,8 @@ def test_fetch_provenance_envelope_redacts_key_no_live_http(tmp_path: Path) -> N
         return OddsTransportResult(
             status_code=200,
             headers={
-                "x-requests-last": "1",
-                "x-requests-used": "1",
+                "x-requests-last": "30",
+                "x-requests-used": "30",
                 "x-requests-remaining": "999",
                 "Date": "Wed, 28 Oct 2026 22:00:00 GMT",
             },

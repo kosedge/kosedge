@@ -16,7 +16,7 @@ AC8_FILING_E_BASELINES: dict[str, Any] = {
         "Filing-E baselines are not adopted in this W8 prospective-capture draft. "
         "No baseline numbers are invented."
     ),
-    "authority": "Ryan t4455u / IMV RETURN sealing-controls (sha8 d831) item 6",
+    "authority": "Ryan t4455u / IMV RETURN sealing-controls (sha8 e5c84d60) item 6",
 }
 
 AC10_BLIND_GRADING: dict[str, Any] = {
@@ -27,7 +27,7 @@ AC10_BLIND_GRADING: dict[str, Any] = {
         "Performers do not grade. P-evidence restore stays eval=not_run. "
         "Blind grading is IMV / custodian after first sealed capture verify."
     ),
-    "authority": "Ryan t4455u / IMV RETURN sealing-controls (sha8 d831) item 6",
+    "authority": "Ryan t4455u / IMV RETURN sealing-controls (sha8 e5c84d60) item 6",
 }
 
 EXPLICIT_CARVE_OUTS = (AC8_FILING_E_BASELINES, AC10_BLIND_GRADING)

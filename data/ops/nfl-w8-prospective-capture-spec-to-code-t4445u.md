@@ -5,7 +5,8 @@
 **Parallel:** t4447u (not this PR).  
 **PR:** draft `#640`. Paper-verify continue vs receipt sha8 `2a9164bc`.  
 **t4450u:** decision sha8 `20ea635f` — Post-Merge Execution. ACCEPT #634–#636 / receipt `6685ba74`.  
-**t4455u:** H-1 auth `89fdd45f`. IMV RETURN sealing-controls (sha8 `d831`). ENG PASS `86c6dbce` stands for eng-package only — not sealing ACCEPT.  
+**t4455u:** H-1 auth `89fdd45f`. IMV RETURN sealing-controls pin `e5c84d60` (was mis-cited as `d831`). ENG PASS `86c6dbce` stands for eng-package only — not sealing ACCEPT.  
+**t4468u:** B3 ledger RETURN `03a4caca`.  
 **IMV package:** `data/ops/nfl-w8-imv-package-t4450u/INDEX.md`  
 **RETURN close map:** `data/ops/nfl-w8-imv-return-t4455u-b1-b7.md`  
 **Module:** `services/model-service/src/services/nfl_w8_capture/`

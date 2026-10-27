@@ -17,7 +17,12 @@ from src.services.nfl_w8_capture.alerts import control_alert, deliver_alert
 from src.services.nfl_w8_capture.books import ENV_ODDS_API_KEY, build_w8_odds_request_params
 from src.services.nfl_w8_capture.credits import (
     CreditCeilingError,
+    CreditEstimateError,
     CreditHeaderError,
+    CreditReconcileError,
+    estimate_request_credits,
+    ledger_closed,
+    ledger_overrun,
     pre_call_check,
     read_cumulative,
     record_credit_use,
@@ -113,11 +118,11 @@ def fetch_odds_with_provenance(
     env: Optional[Mapping[str, str]] = None,
     transport: Optional[OddsTransport] = None,
     params: Optional[Mapping[str, str]] = None,
-    next_credits: int = 1,
     game_id: str = "",
 ) -> dict[str, Any]:
     """Hold-gated fetch. Requires an injected transport. Never defaults to HTTP."""
     source = env if env is not None else os.environ
+    request_params = dict(params or build_w8_odds_request_params())
     if odds_api_hold_is_on(source):
         _alert(
             store,
@@ -127,16 +132,24 @@ def fetch_odds_with_provenance(
             game_id=game_id,
             market="hold",
         )
-        refuse_odds_fetch(endpoint=ODDS_ENDPOINT, params=params, env=source)
+        refuse_odds_fetch(endpoint=ODDS_ENDPOINT, params=request_params, env=source)
         raise OddsApiHoldError("hold refuse")  # unreachable; refuse always raises here
 
     try:
-        pre_call_check(read_cumulative(store), next_credits)
-    except CreditCeilingError as exc:
+        if ledger_closed(store):
+            raise CreditCeilingError(
+                "H-1c ledger closed (ceiling, overrun, or used-header mismatch); "
+                "subsequent calls refuse"
+            )
+        estimate = estimate_request_credits(request_params)
+        pre_call_check(
+            read_cumulative(store),
+            estimate,
+            overrun=ledger_overrun(store),
+        )
+    except (CreditCeilingError, CreditEstimateError) as exc:
         _alert(store, kind="ceiling", detail=str(exc), env=source, game_id=game_id, market="credits")
         raise
-
-    request_params = dict(params or build_w8_odds_request_params())
     key = _env_key(source)
     request_headers = {"x-api-key": key}
 
@@ -184,7 +197,7 @@ def fetch_odds_with_provenance(
 
     try:
         ledger = record_credit_use(store, result.headers, note="odds-fetch")
-    except (CreditHeaderError, CreditCeilingError) as exc:
+    except (CreditHeaderError, CreditCeilingError, CreditReconcileError) as exc:
         kind = "ceiling" if isinstance(exc, CreditCeilingError) else "fetch_fail"
         _alert(store, kind=kind, detail=str(exc), env=source, game_id=game_id, market="credits")
         raise
