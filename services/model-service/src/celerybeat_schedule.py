@@ -84,6 +84,16 @@ TASK_NFL_DATA_FRESHNESS = os.getenv(
     "TASK_NFL_DATA_FRESHNESS",
     "src.tasks.run_nfl_data_freshness_check",
 )
+# W8 prospective capture tick — planner only; task refuses Odds API (H-1a/H-1c).
+# Config path: this file, key nfl-w8-capture-pre-kickoff-tick.
+# Override cadence with NFL_W8_CAPTURE_TICK_MINUTE (default */2 so the S=10
+# close window at T-8 is hittable). Kickoffs: NFL_W8_KICKOFFS_JSON or
+# NFL_W8_USE_SYNTHETIC_SLATE. Bundle: NFL_W8_EVIDENCE_DIR.
+TASK_NFL_W8_CAPTURE_TICK = os.getenv(
+    "TASK_NFL_W8_CAPTURE_TICK",
+    "src.tasks.run_nfl_w8_capture_tick",
+)
+NFL_W8_CAPTURE_TICK_MINUTE = os.getenv("NFL_W8_CAPTURE_TICK_MINUTE", "*/2")
 TASK_PULL_MLB_CONTEXT = os.getenv("TASK_PULL_MLB_CONTEXT", "src.tasks.pull_mlb_context_snapshot")
 TASK_RUN_MLB_SIMULATIONS = os.getenv(
     "TASK_RUN_MLB_SIMULATIONS", "src.tasks.run_mlb_market_simulations"
@@ -608,6 +618,12 @@ if os.getenv("MLB_NOWCAST_ENABLED", "true").strip().lower() in {"1", "true", "ye
 
 beat_schedule.update(
     {
+        "nfl-w8-capture-pre-kickoff-tick": {
+            "task": TASK_NFL_W8_CAPTURE_TICK,
+            "schedule": crontab(minute=NFL_W8_CAPTURE_TICK_MINUTE),
+            "kwargs": {},
+            "options": {"queue": NFL_MARKET_QUEUE},
+        },
         "run-mlb-determinism-check-midday": {
             "task": TASK_MLB_DETERMINISM_CHECK,
             "schedule": crontab(minute="5", hour="12"),

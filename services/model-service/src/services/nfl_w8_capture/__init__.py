@@ -17,8 +17,10 @@ from src.services.nfl_w8_capture.books import (
     build_w8_odds_request_params,
     classify_book_role,
 )
+from src.services.nfl_w8_capture.archive import archive_forecasts
 from src.services.nfl_w8_capture.cadence import (
     AlertKind,
+    due_sample_windows,
     plan_pre_kickoff_samples,
     review_sample_coverage,
 )
@@ -42,10 +44,13 @@ from src.services.nfl_w8_capture.pin import (
     build_pin_manifest,
     validate_pin_manifest,
 )
+from src.services.nfl_w8_capture.restore import restore_p_evidence
 from src.services.nfl_w8_capture.snapshots import (
     append_snapshot,
     snapshot_content_sha,
 )
+from src.services.nfl_w8_capture.store import BundleStore
+from src.services.nfl_w8_capture.tick import run_capture_tick
 from src.services.nfl_w8_capture.streams import (
     STREAM_IND,
     STREAM_MKT,
@@ -60,8 +65,13 @@ __all__ = [
     "build_w8_odds_request_params",
     "classify_book_role",
     "AlertKind",
+    "archive_forecasts",
+    "due_sample_windows",
     "plan_pre_kickoff_samples",
     "review_sample_coverage",
+    "restore_p_evidence",
+    "run_capture_tick",
+    "BundleStore",
     "CLOSE_MAX_AGE",
     "PRIMARY_K_REQUIRED",
     "CloseStatus",

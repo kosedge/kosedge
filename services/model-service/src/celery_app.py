@@ -132,6 +132,10 @@ celery_app.conf.task_routes = {
         "queue": QUEUE_NFL_MARKET,
         "routing_key": QUEUE_NFL_MARKET,
     },
+    "src.tasks.run_nfl_w8_capture_tick": {
+        "queue": QUEUE_NFL_MARKET,
+        "routing_key": QUEUE_NFL_MARKET,
+    },
     "src.tasks.run_nfl_clv_attribution": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.pull_nfl_outcomes": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_nfl_quality_grading": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},

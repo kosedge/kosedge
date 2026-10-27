@@ -1,9 +1,9 @@
 # W8 prospective capture — spec-to-code map (draft)
 
-**Status:** paper/code draft only. NFL NO-GO stays. Coming Soon unchanged.  
+**Status:** paper/code draft only. NFL NO-GO stays. Coming Soon ON.  
 **Owner (build):** Cursor per `DECISION_RYAN_t4445u_RD7_CURSOR_W8_BUILDER_v1` (ops path cite `91aebe69`).  
 **Parallel:** t4447u (not this PR).  
-**Base:** `deploy-vercel` `bfc89f57`.  
+**PR:** draft `#640`. Paper-verify continue vs receipt sha8 `2a9164bc`.  
 **Module:** `services/model-service/src/services/nfl_w8_capture/`
 
 Cited sha8 (authority; files not in this checkout — do not invent bodies):
@@ -14,8 +14,7 @@ Cited sha8 (authority; files not in this checkout — do not invent bodies):
 | FINAL ADOPT PART B | `0448042a` |
 | PART B freeze | `2e40ead4` |
 | PR unblock path | `0511c346` |
-
-v1 AC text was read from the IMV attachment (`IMV_SPEC_W8_PROSPECTIVE_CAPTURE_ACCEPTANCE_t4191u_v1`). v2 deltas that are not in-repo are implemented only where PART B / this ticket states them.
+| PAPER_GAPS receipt | `2a9164bc` |
 
 **no prior grades** for this capture product (`data/knowledge/` has no W8 capture cards).
 
@@ -31,59 +30,53 @@ v1 AC text was read from the IMV attachment (`IMV_SPEC_W8_PROSPECTIVE_CAPTURE_AC
 
 ---
 
+## PAPER_GAPS 1–6 (this turn)
+
+| # | Item | Status | Code / config |
+| --- | --- | --- | --- |
+| 1 | Scheduler wiring | **Closed** | Beat key `nfl-w8-capture-pre-kickoff-tick` in `services/model-service/src/celerybeat_schedule.py`. Task `src.tasks.run_nfl_w8_capture_tick` → `tick.run_capture_tick`. Default `NFL_W8_CAPTURE_TICK_MINUTE=*/2` on queue `nfl_market`. Kickoffs: `NFL_W8_KICKOFFS_JSON` or `NFL_W8_USE_SYNTHETIC_SLATE`. Bundle: `NFL_W8_EVIDENCE_DIR`. Tick never fetches Odds API. |
+| 2 | Alert delivery | **Closed (draft path)** | `alerts.deliver_alert`. File sink = hash-chained `alerts.jsonl`. `NFL_W8_ALERTS_ENABLED` default off. `NFL_W8_ALERT_WEBHOOK_URL` name only. Hold → `hold_blocked` (no POST). |
+| 3 | Tamper-proof store | **Closed** | `store.BundleStore`: chained JSONL (`prev_entry_sha`/`entry_sha`) + evidence log + `SHA256SUMS` rewritten last. Snapshot writes go through the store. Tamper / overwrite fail closed. |
+| 4 | Forecast archiver | **Closed** | `archive.archive_forecasts` writes `forecasts/s_mkt/` and `forecasts/s_ind/` with `prediction=UNSET`. S-IND forbidden-input still fail-closed. No invented predictions. |
+| 5 | Restore P-evidence | **Closed (read-only)** | `restore.restore_p_evidence` verifies chain + SHA256SUMS, copies to `p_evidence/<id>/` at 0444, `eval=not_run`. No protected eval. |
+| 6 | CI green proof | **Wired** | `.github/workflows/pr-check.yml`: `tests/test_nfl_w8_capture.py` on the NFL pytest list **and** named step `W8 prospective capture unit tests`. Local pytest is the pre-push proof; PR Checks is the CI evidence. |
+
+---
+
 ## AC-1..AC-14
 
 | ID | Requirement | Status | Code |
 | --- | --- | --- | --- |
 | AC-1 | Seal >= 60 min pre-kickoff | **Stubbed** | Documented in pin manifest `seal_ack`. No seal runner. |
-| AC-2 | Independent seal timestamp / custodian receipt | **Stubbed** | Cursor cannot mint seal time of record. |
+| AC-2 | Independent seal timestamp / custodian receipt | **Stubbed** | Cursor cannot mint seal time of record. Layout is custodian-ready; receipt is not. |
 | AC-3 | as_of < kickoff and < seal; no default fill | **Partial** | Close / cell logic fail-closed on missing stamps. Full feature as_of proofs not wired to production features. |
 | AC-4 | Manifest: code / weights / schema / input shas / interpreter / host | **Implemented (shape)** | `pin.build_pin_manifest` / `validate_pin_manifest`. Empty sha = UNSET. No fake shas. |
 | AC-5 | Odds snapshots: book, market, price/line, provider captured_at, received_at, raw sha | **Implemented (offline)** | Snapshot payload + close cells. Live source pull blocked on H-1a/H-1c. |
-| AC-6 | SHA256SUMS + append-only hash-chain log | **Implemented** | `evidence.append_evidence_entry` / `verify_evidence_chain` / `write_sha256sums`. Secrets redacted. |
-| AC-7 | S-MKT vs S-IND; forbidden-input check | **Implemented (scaffold)** | `streams.scaffold_streams` + `check_s_ind_forbidden_inputs`. No invented predictions. |
+| AC-6 | SHA256SUMS + append-only hash-chain log | **Implemented** | `store.BundleStore` + `evidence.*`. Secrets redacted. |
+| AC-7 | S-MKT vs S-IND; forbidden-input check | **Implemented** | Scaffold + archiver. No invented predictions. |
 | AC-8 | Filing-E baselines | **Stubbed** | Not adopted in this draft; no baseline numbers. |
-| AC-9 | No post-seal edits | **Stubbed** | No seal; snapshot/log files are append-only. |
-| AC-10 | Blind grading | **Out of scope** | Performers do not grade. |
-| AC-11 | Missing/late = FAIL, counted | **Partial** | Close/cadence alerts mark MISSING; no grader. |
+| AC-9 | No post-seal edits | **Partial** | No seal; store refuses artifact overwrite. |
+| AC-10 | Blind grading | **Out of scope** | Performers do not grade. Restore sets `eval=not_run`. |
+| AC-11 | Missing/late = FAIL, counted | **Partial** | Close/cadence/alerts mark MISSING; no grader. |
 | AC-12 | Cursor cannot seal-ack | **Implemented (refuse)** | `streams.refuse_seal`. |
-| AC-13 | Isolated from PIT historical rebuild | **Implemented** | New package; no shared mutable store; no hist numbers in bundle. |
-| AC-14 | No public NFL numbers; NO-GO stays | **Honored** | No web/Coming Soon/kill-switch edits. |
+| AC-13 | Isolated from PIT historical rebuild | **Implemented** | New package; P-evidence restore is a read-only copy, not a shared mutable store. |
+| AC-14 | No public NFL numbers; NO-GO stays | **Honored** | No Coming Soon / kill-switch / public number edits. |
 
 ---
 
-## PART B / RA / DR (this ticket)
+## PART B / RA / DR
 
-| ID | Rule | Status | Code / test |
-| --- | --- | --- | --- |
-| PART B books | PRIMARY exactly DK, FD, BetMGM, Fanatics, Circa; Bally Bet optional secondary | **Implemented** | `books.PRIMARY_BOOKS` / `OPTIONAL_SECONDARY_BOOKS` |
-| PART B request | `bookmakers=` must include `circa` (carried list without circa is insufficient) | **Implemented** | `books.build_w8_odds_request_params` |
-| PART B circa cell | Missing circa = MISSING, never impute | **Implemented** | `close.evaluate_game_market_close` + DR-10 test |
-| PART B stamps | Store provider server ts **and** market `last_update` | **Implemented** | `BookMarketCell` + snapshot payload |
-| PART B close | Last snap with provider server ts <= kickoff and age <= S=10 min | **Implemented** | `close.py` |
-| PART B last_update | Missing `last_update` => UNKNOWN => not a close | **Implemented** | DR-7 |
-| PART B receive | Client receive time alone is not a close | **Implemented** | DR-8 |
-| PART B k=3 | k=3 PRIMARY present + non-stale else close=MISSING | **Implemented** | DR-9 |
-| Cadence | <=10 min pre-kickoff sample for REG; alerts missing/stale/partial | **Implemented (planner)** | `cadence.py` — not wired to Celery beat |
-| RA-5 | Stale (age > S) fail-closed | **Implemented** | STALE cells do not count toward k |
-| DR-7 | missing last_update | **Tested** | `test_dr7_missing_last_update_is_unknown_not_close` |
-| DR-8 | client receive only | **Tested** | `test_dr8_client_receive_alone_is_not_a_close` |
-| DR-9 | k<3 => MISSING | **Tested** | `test_dr9_k_lt_3_close_missing` |
-| DR-10 | circa hole never imputed | **Tested** | `test_dr10_missing_circa_never_imputed` |
-| DR-2 analog | tamper breaks sha | **Tested** | evidence chain |
-| DR-5 analog | edit/delete log line breaks chain | **Tested** | evidence chain |
-| DR-6 analog | market field in S-IND fails closed | **Tested** | streams |
-
-DR-7..DR-10 labels are the fail-closed behaviors named in this ticket. Full v2 DR prose for `08808adf` is not in-repo.
+Unchanged from first draft (close definition, five PRIMARY books including circa, k=3, DR-7..DR-10, RA-5). Production `NFL_ODDS_API_CARRIED_BOOKMAKERS` is still not edited.
 
 ---
 
-## Still blocked on H-1a / H-1c (Odds hold)
+## Still blocked on H-1a / H-1c (Odds hold) — Needs-Ryan
 
 - Live `bookmakers=` pull including `circa`
 - Provider HTTP Date / API server timestamp from a real response
-- Real W8 REG slate snapshots
-- Any dry-run that consumes credits
+- Real W8 REG snapshots
+- Credit-consuming dry-run
 - Seal bundle against live odds vintage
+- Webhook POST (hold fail-closes delivery)
 
-This PR does **not** lift those holds.
+Remaining paper stubs (not 1–6): AC-1/2/8/10 seal, custodian receipt, baselines, grading.

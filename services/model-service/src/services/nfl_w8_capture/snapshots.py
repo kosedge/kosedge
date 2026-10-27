@@ -1,28 +1,25 @@
-"""Immutable timestamped append-only snapshots (AC-6). No overwrites."""
+"""Immutable timestamped snapshots via the AC-6 hash-chained store."""
 
 from __future__ import annotations
 
-import hashlib
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
 from src.services.nfl_w8_capture.redact import redact_secrets
+from src.services.nfl_w8_capture.store import SNAPSHOTS_NAME, BundleStore, _canonical
 
-SNAPSHOT_FILENAME = "snapshots.jsonl"
+SNAPSHOT_FILENAME = SNAPSHOTS_NAME
 
 
 class SnapshotImmutabilityError(RuntimeError):
     pass
 
 
-def _canonical(payload: Mapping[str, Any]) -> str:
-    return json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
-
-
 def snapshot_content_sha(payload: Mapping[str, Any]) -> str:
-    return hashlib.sha256(_canonical(redact_secrets(dict(payload))).encode("utf-8")).hexdigest()
+    from hashlib import sha256
+
+    return sha256(_canonical(redact_secrets(dict(payload))).encode("utf-8")).hexdigest()
 
 
 def append_snapshot(
@@ -30,25 +27,26 @@ def append_snapshot(
     payload: Mapping[str, Any],
     *,
     captured_at: datetime | None = None,
+    actor: str = "nfl_w8_capture",
 ) -> dict[str, Any]:
-    """Append one snapshot record. Refuses rewrite of an existing file body."""
-    path = Path(lake_dir) / SNAPSHOT_FILENAME
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if path.exists() and not path.is_file():
-        raise SnapshotImmutabilityError(f"snapshot path is not a file: {path}")
-
+    """Append one chained snapshot + evidence entry + SHA256SUMS refresh."""
     stamp = captured_at or datetime.now(timezone.utc)
     if stamp.tzinfo is None:
         stamp = stamp.replace(tzinfo=timezone.utc)
-
+    cleaned = redact_secrets(dict(payload))
     record = {
         "captured_at": stamp.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "payload": redact_secrets(dict(payload)),
+        "payload": cleaned,
+        "content_sha256": snapshot_content_sha(cleaned),
     }
-    record["content_sha256"] = snapshot_content_sha(record["payload"])
-    line = _canonical(record) + "\n"
-
-    # Append-only: open in append mode; never truncate.
-    with path.open("a", encoding="utf-8") as fh:
-        fh.write(line)
-    return record
+    store = BundleStore(lake_dir)
+    committed = store.append_chained_jsonl(
+        SNAPSHOTS_NAME,
+        record,
+        actor=actor,
+        note="snapshot",
+    )
+    out = dict(record)
+    out["entry_sha"] = committed["entry_sha"]
+    out["prev_entry_sha"] = committed["record"]["prev_entry_sha"]
+    return out

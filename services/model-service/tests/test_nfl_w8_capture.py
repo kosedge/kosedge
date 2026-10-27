@@ -21,9 +21,12 @@ from src.services.nfl_w8_capture.books import (
     build_w8_odds_request_params,
     classify_book_role,
 )
+from src.services.nfl_w8_capture.alerts import deliver_alert
+from src.services.nfl_w8_capture.archive import archive_forecasts
 from src.services.nfl_w8_capture.cadence import (
     GameKickoff,
     close_window_guaranteed,
+    due_sample_windows,
     plan_pre_kickoff_samples,
     review_sample_coverage,
 )
@@ -35,7 +38,6 @@ from src.services.nfl_w8_capture.evidence import (
     EvidenceChainError,
     append_evidence_entry,
     verify_evidence_chain,
-    write_sha256sums,
 )
 from src.services.nfl_w8_capture.hold import (
     OddsApiHoldError,
@@ -47,7 +49,10 @@ from src.services.nfl_w8_capture.pin import (
     validate_pin_manifest,
 )
 from src.services.nfl_w8_capture.redact import redact_secrets
+from src.services.nfl_w8_capture.restore import PEvidenceRestoreError, restore_p_evidence
 from src.services.nfl_w8_capture.snapshots import append_snapshot, snapshot_content_sha
+from src.services.nfl_w8_capture.store import BundleStore, StoreImmutabilityError
+from src.services.nfl_w8_capture.tick import run_capture_tick
 from src.services.nfl_w8_capture.streams import (
     STREAM_IND,
     STREAM_MKT,
@@ -334,11 +339,16 @@ def test_snapshots_append_only_and_redact_secrets(tmp_path: Path) -> None:
     assert "should-never-land" not in json.dumps(record)
     text = (tmp_path / "snapshots.jsonl").read_text(encoding="utf-8")
     assert text.count("\n") == 1
+    first_line = json.loads(text.splitlines()[0])
+    assert first_line["prev_entry_sha"] == "0" * 64
+    assert first_line["entry_sha"]
     append_snapshot(tmp_path, {"game_id": "2026-W08-MIN@LAC", "n": 2})
     assert (tmp_path / "snapshots.jsonl").read_text(encoding="utf-8").count("\n") == 2
     assert len(snapshot_content_sha(record["payload"])) == 64
-    write_sha256sums(tmp_path, [(record["content_sha256"], "snapshots.jsonl")])
     assert (tmp_path / "SHA256SUMS").is_file()
+    assert (tmp_path / "evidence.jsonl").is_file()
+    store = BundleStore(tmp_path)
+    assert store.verify()["entries"] >= 2
 
 
 def test_s_ind_forbidden_input_fail_closed() -> None:
@@ -385,6 +395,31 @@ def test_pin_manifest_shape_no_fake_shas() -> None:
     assert "odds_api_hold_must_remain_true" in validate_pin_manifest(bad)
 
 
+def test_beat_entry_wires_planner_to_celery_tick() -> None:
+    beat_src = (
+        Path(__file__).resolve().parents[1] / "src" / "celerybeat_schedule.py"
+    ).read_text(encoding="utf-8")
+    tasks_src = (Path(__file__).resolve().parents[1] / "src" / "tasks.py").read_text(
+        encoding="utf-8"
+    )
+    app_src = (Path(__file__).resolve().parents[1] / "src" / "celery_app.py").read_text(
+        encoding="utf-8"
+    )
+    ci_src = (
+        Path(__file__).resolve().parents[3] / ".github" / "workflows" / "pr-check.yml"
+    ).read_text(encoding="utf-8")
+    assert 'TASK_NFL_W8_CAPTURE_TICK = os.getenv(' in beat_src
+    assert '"nfl-w8-capture-pre-kickoff-tick"' in beat_src
+    assert "src.tasks.run_nfl_w8_capture_tick" in beat_src
+    assert 'NFL_W8_CAPTURE_TICK_MINUTE", "*/2"' in beat_src
+    assert '"queue": NFL_MARKET_QUEUE' in beat_src
+    assert '@celery_app.task(name="src.tasks.run_nfl_w8_capture_tick")' in tasks_src
+    assert "src.services.nfl_w8_capture.tick import run_capture_tick" in tasks_src
+    assert '"src.tasks.run_nfl_w8_capture_tick"' in app_src
+    assert "tests/test_nfl_w8_capture.py" in ci_src
+    assert "W8 prospective capture unit tests" in ci_src
+
+
 def test_cadence_guarantees_sub_10_min_sample_and_alerts() -> None:
     games = [
         GameKickoff("2026-W08-MIN@LAC", KICKOFF, "REG"),
@@ -421,6 +456,118 @@ def test_cadence_guarantees_sub_10_min_sample_and_alerts() -> None:
         ],
     )
     assert partial.kind == "partial"
+
+    close_at = next(w.sample_at for w in plan.windows if w.in_close_window)
+    due = due_sample_windows(plan, now_utc=close_at, slack=timedelta(minutes=2))
+    assert due
+    assert all(w.in_close_window for w in due)
+
+
+def test_alert_delivery_file_sink_hold_blocks_webhook(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    alert = review_sample_coverage(
+        game_id="2026-W08-MIN@LAC",
+        market="spreads",
+        book_statuses=[(b, "MISSING") for b in PRIMARY_BOOKS],
+    )
+    disabled = deliver_alert(alert, store, env={})
+    assert disabled.status == "disabled"
+    assert (tmp_path / "alerts.jsonl").is_file()
+    hold = deliver_alert(
+        alert,
+        store,
+        env={
+            "NFL_W8_ALERTS_ENABLED": "1",
+            "NFL_W8_ALERT_WEBHOOK_URL": "https://example.invalid/hook",
+        },
+    )
+    assert hold.status == "hold_blocked"
+    assert hold.webhook_attempted is False
+    store.verify()
+
+
+def test_forecast_archiver_writes_unset_predictions(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    written = archive_forecasts(
+        store,
+        game_id="2026-W08-MIN@LAC",
+        s_mkt_features={"epa_prior": 0.1},
+        s_ind_features={"epa_prior": 0.1, "rest_days": 7},
+    )
+    assert set(written) == {STREAM_MKT, STREAM_IND}
+    mkt = json.loads(
+        (tmp_path / "forecasts" / "s_mkt" / "2026-W08-MIN@LAC.s_mkt.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    ind = json.loads(
+        (tmp_path / "forecasts" / "s_ind" / "2026-W08-MIN@LAC.s_ind.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert mkt["prediction"] == "UNSET"
+    assert ind["prediction"] == "UNSET"
+    assert mkt["sealed"] is False
+    assert ind["seal_ack"] == "CURSOR_CANNOT_SEAL_ACK"
+    with pytest.raises(ForbiddenInputError):
+        archive_forecasts(store, game_id="g2", s_ind_features={"blend_weight": 0.3})
+    store.verify()
+
+
+def test_restore_p_evidence_read_only_no_eval(tmp_path: Path) -> None:
+    source = tmp_path / "prior_deposit"
+    prior = BundleStore(source)
+    append_snapshot(source, {"game_id": "prior", "n": 1})
+    dest = BundleStore(tmp_path / "live")
+    restored = restore_p_evidence(source, dest, deposit_id="paper-2a9164bc")
+    assert restored["eval"] == "not_run"
+    assert restored["deposit_id"] == "paper-2a9164bc"
+    copied = tmp_path / "live" / "p_evidence" / "paper-2a9164bc" / "snapshots.jsonl"
+    assert copied.is_file()
+    assert oct(copied.stat().st_mode)[-3:] == "444"
+    with pytest.raises(PEvidenceRestoreError):
+        restore_p_evidence(tmp_path / "missing", dest)
+    dest.verify()
+
+
+def test_store_refuses_overwrite_and_detects_tamper(tmp_path: Path) -> None:
+    store = BundleStore(tmp_path)
+    store.write_new_file("forecasts/s_mkt/one.json", {"prediction": "UNSET"}, actor="t", note="a")
+    with pytest.raises(StoreImmutabilityError, match="overwrite"):
+        store.write_new_file("forecasts/s_mkt/one.json", {"prediction": "UNSET"}, actor="t", note="b")
+    snap = tmp_path / "snapshots.jsonl"
+    append_snapshot(tmp_path, {"n": 1})
+    append_snapshot(tmp_path, {"n": 2})
+    lines = snap.read_text(encoding="utf-8").splitlines()
+    tampered = json.loads(lines[0])
+    tampered["record"]["payload"]["n"] = 99
+    lines[0] = json.dumps(tampered, sort_keys=True, separators=(",", ":"))
+    snap.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    with pytest.raises(StoreImmutabilityError, match="entry_sha mismatch"):
+        store.verify()
+
+
+def test_tick_schedules_due_close_window_without_odds_fetch(tmp_path: Path) -> None:
+    games = [GameKickoff("2026-W08-MIN@LAC", KICKOFF, "REG")]
+    plan = plan_pre_kickoff_samples(games)
+    close_at = next(w.sample_at for w in plan.windows if w.in_close_window)
+    result = run_capture_tick(
+        now_utc=close_at,
+        bundle_dir=tmp_path,
+        kickoffs=games,
+        env={"NFL_W8_ALERTS_ENABLED": "0"},
+    )
+    assert result["due_windows"] >= 1
+    assert result["close_window_due"] >= 1
+    assert result["odds_fetch"] == "blocked_hold"
+    assert (tmp_path / "alerts.jsonl").is_file()
+    with pytest.raises(OddsApiHoldError):
+        run_capture_tick(
+            now_utc=close_at,
+            bundle_dir=tmp_path,
+            kickoffs=games,
+            attempt_fetch=True,
+        )
 
 
 def test_redact_nested_secret_keys() -> None:

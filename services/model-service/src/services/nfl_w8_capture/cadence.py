@@ -1,6 +1,7 @@
 """Cadence so every REG game has a <=10 min pre-kickoff sample.
 
-Planner only. Does not schedule Celery beat and does not fetch Odds API.
+Planner + due-window selector. Beat wiring lives in celerybeat_schedule
+(`nfl-w8-capture-pre-kickoff-tick`) and does not fetch Odds API.
 """
 
 from __future__ import annotations
@@ -85,6 +86,24 @@ def plan_pre_kickoff_samples(
                 )
             )
     return plan
+
+
+def due_sample_windows(
+    plan: SamplePlan,
+    *,
+    now_utc: datetime,
+    slack: timedelta = timedelta(minutes=2),
+) -> list[SampleWindow]:
+    """Windows whose sample_at is within ``slack`` of ``now_utc``."""
+    now = parse_utc(now_utc)
+    if now is None:
+        return []
+    due: list[SampleWindow] = []
+    for window in plan.windows:
+        delta = abs((window.sample_at - now).total_seconds())
+        if delta <= slack.total_seconds():
+            due.append(window)
+    return due
 
 
 def close_window_guaranteed(plan: SamplePlan, game_id: str) -> bool:
