@@ -13,7 +13,7 @@ Predictive FAIL `f4c61237` **still stands**. `ed701ef3` is Mac-only non-claims b
 | Previous #637 tip | `d8aec5dc` |
 | Rebased FE-1/FE-2 commit (t4422u, no conflict) | `1af55efb` |
 | T-08 CI wire (`pr-check.yml` Postgres step) | `23a26443` |
-| This receipt commit / new tip | *(this commit)* |
+| This receipt commit / new tip | `86fc4861` |
 
 Rebase was clean (1/1). FE-1/FE-2 files did not overlap #634–#636 site/Stat Drop work.
 
