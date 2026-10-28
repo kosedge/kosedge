@@ -1,0 +1,56 @@
+{
+  "ticket": "t4643u",
+  "decision_sha8": "098da1dd",
+  "imv_criteria_sha8": "062197c0",
+  "sealed_consume_proof_sha8": ["7c2d9625", "0be23ede"],
+  "completeness_sha8": "675e1cf7",
+  "cert_candidate": 0,
+  "purpose": "engineering_correctness_not_predictive",
+  "c7_non_claims": ["MAE", "CERT", "invent_w8_official", "merge", "deploy", "Odds", "F2"],
+  "families": [
+    {
+      "name": "current_weekly_depth_db",
+      "imv": "G1",
+      "verdict": "GAP",
+      "c3_sha256": "f50ba2f07df9f92cba0ddf31fd5003f549d5e114eb3eddff0e245ef8f68c18ff"
+    },
+    {
+      "name": "depth_sot_week",
+      "imv": "G2",
+      "verdict": "READ+GATE+PROVENANCE_ONLY+GAP_SIM_VOLUME",
+      "c3_sha256": "550e1a8d3daef00ca963c91e30849ce368ec631df06302305c64faa69fab2e1d"
+    },
+    {
+      "name": "injury_paths_current",
+      "imv": "CONSUMED_baseline",
+      "verdict": "CONSUMED",
+      "component": "injury_nowcast_impact_*",
+      "c3_sha256": "0c29ceea500f34dd326e3b8879372fc6f2b6ea821ac72613ce4e35cadf013a97"
+    },
+    {
+      "name": "w8_official_injury",
+      "imv": "G3",
+      "verdict": "MISSING"
+    },
+    {
+      "name": "week_schedule_kickoffs",
+      "imv": "CONSUMED_baseline",
+      "verdict": "CONSUMED",
+      "component": "rest_travel.margin_points",
+      "c3_sha256": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe"
+    },
+    {
+      "name": "inseason_efficiency_current",
+      "imv": "CONSUMED_baseline",
+      "verdict": "CONSUMED",
+      "component": "base_efficiency.margin_points",
+      "c3_sha256": "cb1fe8c5e0495c417af3dc70f83cf4c419c1c1761b2dd233bc8546ad3face2c2"
+    }
+  ],
+  "g4_season_conflicts": [
+    {"surface": "depth", "season": "W1 2026-08-13", "game": "W8 2026-10-28", "handling": "C6b_DEFER_Needs_CLEAR"},
+    {"surface": "strength", "season": "2025 prior 2026-08-08 or rolling", "game": "W1-W7 EPA", "handling": "C6b_DEFER_Needs_CLEAR"},
+    {"surface": "injury", "season_warehouse": "max_week=3", "game": "W7 designated", "handling": "do_not_wire"}
+  ],
+  "warehouse_wire": "NOT_AUTHORIZED"
+}
