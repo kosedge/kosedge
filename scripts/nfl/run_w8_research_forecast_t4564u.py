@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""t4564u RESEARCH W8 full-slate forecast (CERT_CANDIDATE=0).
+"""t4605u P1 W8 pipeline restore + RESEARCH slate (CERT_CANDIDATE=0).
 
-Uses verified CURRENT nflverse 2026 inputs (depth snapshot today, official
-injury weeks through 7, team-week EPA weeks 1–7). Does not use packaged
-W1 depth as W8 volume. Does not silent-healthy empty camp injury_paths.
+Authority: DECISION_RYAN_t4605u sha256 e65b9c77… · COS_ORDER sha256 43d1702a…
+Unblocks #642 f50f15a8 FAIL_CLOSED inputs where verified current sources exist.
+Does not invent depth/injury/EPA. Does not use packaged W1 / 2025 prior as W8.
 Does not call The Odds API. Does not write seal dests / #641 / F2.
 
 Land path (SOP 4a017f22):
     /workspace/ops/nfl_enterprise_green_t4359u/research_runs/<run_id>/
-Git-tracked GAP #642 path:
+Git-tracked:
     data/ops/nfl-model-forecast-emit-t4559u/research_runs/<run_id>/
 """
 
@@ -51,12 +51,15 @@ CERT_CANDIDATE = 0
 LABEL = "RESEARCH"
 SCHEMA_VERSION = "nfl-model-forecast-artifact-v1"
 EVAL_RECORD_PAPER_SHA8 = "f1fa86e7"
-COS_ORDER_SHA8 = "c1b16cf1"
-DECISION_SHA8 = "872558e4"
-TICKET = "t4564u"
+COS_ORDER_SHA8 = "43d1702a"
+DECISION_SHA8 = "e65b9c77"
+TICKET = "t4605u"
 PR641_TIP = "385767a2"
 EMIT_TIP_642 = "f50f15a8"
 T08_TIP_643 = "4aaec8af"
+PRIOR_COMPLETENESS_SHA = (
+    "21b96525d4b59eb810801495723ad5c4cc84b7a64e4fc422bbeab8e8a85ace71"
+)
 SEASON = 2026
 WEEK = 8
 ET = ZoneInfo("America/New_York")
@@ -583,6 +586,135 @@ def _g18_artifact(
     }
 
 
+def _materialize_current_packs(
+    *,
+    dest: Path,
+    depth_df: Any,
+    inj_df: Any,
+    strength: Mapping[str, Mapping[str, Any]],
+    depth_meta: Mapping[str, Any],
+    fingerprints: Mapping[str, str],
+) -> Dict[str, Path]:
+    """Write verified current W8 research packs. Does not overwrite W1 production."""
+    dest.mkdir(parents=True, exist_ok=True)
+    import pandas as pd
+
+    s = pd.to_datetime(depth_df["dt"], utc=True, errors="coerce")
+    latest = s.max()
+    snap = depth_df.loc[s == latest].copy()
+    skill = {"QB", "RB", "WR", "TE"}
+    defense = {"EDGE", "DE", "DT", "DL", "LB", "ILB", "OLB", "CB", "S", "FS", "SS", "NB", "DB"}
+    rows: List[Dict[str, Any]] = []
+    for rec in snap.to_dict("records"):
+        abb = str(rec.get("pos_abb") or "").upper()
+        if abb not in skill and abb not in defense:
+            continue
+        team = str(rec.get("team") or "").upper()
+        team = {"LA": "LA", "WAS": "WAS"}.get(team, team)
+        rows.append(
+            {
+                "team": team,
+                "position": abb,
+                "depth_order": int(rec.get("pos_rank") or rec.get("pos_slot") or 0),
+                "player_id": rec.get("gsis_id"),
+                "player_name": rec.get("player_name"),
+                "pos_name": rec.get("pos_name"),
+                "pos_grp": rec.get("pos_grp"),
+            }
+        )
+    depth_as_of = _fmt_utc(latest.to_pydatetime())
+    depth_pack = {
+        "season": SEASON,
+        "week": WEEK,
+        "source": "nflverse_depth_charts_2026_latest_snapshot",
+        "upstream": "nflverse/nflverse-data depth_charts release",
+        "upstream_url": NFLVERSE["depth_charts_2026.parquet"],
+        "as_of": depth_as_of[:10],
+        "as_of_timestamp": depth_as_of,
+        "snapshot_id": f"nfl-depth-2026-w8-{latest.strftime('%Y%m%dT%H%M%SZ')}",
+        "positions": sorted(skill),
+        "defense_positions": sorted(defense),
+        "team_count": int(snap["team"].nunique()),
+        "row_count": len(rows),
+        "notes": [
+            "RESEARCH current snapshot — not packaged nfl_depth_chart_2026_w1.json.",
+            "Rows copied from latest nflverse dt; no invented players.",
+            "Used as current W8 depth SoT for completeness; team-sim volume is EPA-based.",
+        ],
+        "injury_paths": [],
+        "parquet_sha256": fingerprints.get("depth_parquet"),
+        "rows": rows,
+    }
+
+    latest_week = int(inj_df["week"].max())
+    inj_week = inj_df[inj_df["week"] == latest_week]
+    designated: List[Dict[str, Any]] = []
+    for rec in inj_week.to_dict("records"):
+        status = str(rec.get("report_status") or "").strip()
+        if status.lower() not in DESIGNATIONS:
+            continue
+        designated.append(
+            {
+                "team": rec.get("team"),
+                "week": latest_week,
+                "player_name": rec.get("full_name"),
+                "player_id": rec.get("gsis_id"),
+                "position": rec.get("position"),
+                "report_status": status,
+                "practice_status": rec.get("practice_status"),
+                "injury": rec.get("report_primary_injury"),
+            }
+        )
+    injury_pack = {
+        "season": SEASON,
+        "week": latest_week,
+        "source": "nflverse_injuries_2026",
+        "upstream_url": NFLVERSE["injuries_2026.parquet"],
+        "as_of": depth_as_of,
+        "filter": "report_status in {Out,Doubtful,Questionable} only",
+        "designated_count": len(designated),
+        "report_row_count": int(len(inj_week)),
+        "w8_official_report": "PRESENT" if latest_week >= WEEK else "MISSING",
+        "parquet_sha256": fingerprints.get("injuries_parquet"),
+        "rows": designated,
+    }
+    injury_path = dest / f"nfl_injuries_2026_w{latest_week}_designated.json"
+    depth_pack["injury_paths"] = [str(injury_path)]
+
+    teams = {}
+    for team, rec in strength.items():
+        teams[team] = {
+            "offense_index": rec.get("offense_index"),
+            "defense_index": rec.get("defense_index"),
+            "off_epa_per_play": rec.get("off_epa_per_play"),
+            "def_epa_allowed_per_play": rec.get("def_epa_allowed_per_play"),
+            "games": rec.get("games"),
+            "weeks": rec.get("weeks"),
+            "off_plays": rec.get("off_plays"),
+            "def_plays": rec.get("def_plays"),
+        }
+    eff_pack = {
+        "season": SEASON,
+        "prior_season": None,
+        "week_through": int(max((w for rec in strength.values() for w in rec.get("weeks") or [0]), default=0)),
+        "source": "nflverse_stats_team_week_2026",
+        "as_of": depth_as_of,
+        "method": "play_weighted_w1_w7_passing_plus_rushing_epa",
+        "conversion": "efficiency_backbone.epa_to_strength_indices",
+        "team_count": len(teams),
+        "parquet_sha256": fingerprints.get("team_week_parquet"),
+        "notes": "Current-season 2026 W1–W7. Not packaged 2025 prior as_of 2026-08-08.",
+        "teams": teams,
+    }
+
+    depth_path = dest / "nfl_depth_chart_2026_w8.json"
+    eff_path = dest / "nfl_team_efficiency_backbone_2026_inseason_w7.json"
+    depth_path.write_text(json.dumps(depth_pack, indent=2, sort_keys=True) + "\n")
+    injury_path.write_text(json.dumps(injury_pack, indent=2, sort_keys=True) + "\n")
+    eff_path.write_text(json.dumps(eff_pack, indent=2, sort_keys=True) + "\n")
+    return {"depth": depth_path, "injury": injury_path, "efficiency": eff_path}
+
+
 def _run_t08() -> Dict[str, Any]:
     env = os.environ.copy()
     env.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
@@ -619,7 +751,7 @@ def _run_t08() -> Dict[str, Any]:
 
 def main() -> int:
     forecast_ts = _utc_now()
-    run_id = f"nfl-w8-2026-{TICKET}-{forecast_ts.strftime('%Y%m%dT%H%M%SZ')}"
+    run_id = f"nfl-w8-2026-{TICKET}-restore-{forecast_ts.strftime('%Y%m%dT%H%M%SZ')}"
     box_root = Path("/workspace/ops/nfl_enterprise_green_t4359u/research_runs") / run_id
     repo_root = (
         ROOT
@@ -644,10 +776,8 @@ def main() -> int:
 
     for name, url in NFLVERSE.items():
         dest = cache / name
-        if dest.is_file() and dest.stat().st_size > 1000:
-            log.append(f"reuse_cache {name} sha256={_sha256_file(dest)}")
-        else:
-            _download(url, dest, log)
+        # t4605u restore: always refresh public nflverse (do not reuse stale cache).
+        _download(url, dest, log)
 
     import pandas as pd
 
@@ -840,21 +970,45 @@ def main() -> int:
             "nfl_nogo": True,
         },
     }
-    completeness = {
-        "ok": True,
-        "current_depth": True,
-        "current_injury_latest_official": True,
-        "w8_official_injury_report": False,
-        "current_inseason_epa": True,
-        "warehouse_db": False,
-        "schedule": True,
-        "t08_blocks_slate": False,
-        "failing_if_require_warehouse_only": [
-            "DATABASE_URL unset on this VM",
-            "Railway /nfl HTTP public-killed (0 paths)",
-        ],
-        "unblocked_by": "nflverse public 2026 current files (not Odds API)",
+    pack_dir = (
+        ROOT / "data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs"
+    )
+    packs = _materialize_current_packs(
+        dest=pack_dir,
+        depth_df=depth_df,
+        inj_df=inj_df,
+        strength=strength,
+        depth_meta=depth_meta,
+        fingerprints=fingerprints,
+    )
+    sys.path.insert(0, str(ROOT / "scripts" / "nfl"))
+    from audit_w8_input_completeness_t4605u import audit_week_inputs
+
+    completeness = audit_week_inputs(
+        season=SEASON,
+        week=WEEK,
+        depth_path=packs["depth"],
+        injury_paths=[packs["injury"]],
+        efficiency_path=packs["efficiency"],
+        slate_game_ids=[g["game_id"] for g in week_games],
+        now_utc=forecast_ts,
+    )
+    log.append(
+        "completeness_sha256="
+        f"{completeness['input_completeness_sha256']} "
+        f"ok={completeness['ok']} "
+        f"passed={completeness['passed']} "
+        f"failing={completeness['failing_components']}"
+    )
+    manifest["completeness_sha256"] = completeness["input_completeness_sha256"]
+    manifest["blockers_closed"] = completeness["passed"]
+    manifest["blockers_remaining"] = completeness["failing_components"]
+    manifest["current_input_packs"] = {
+        key: str(path.relative_to(ROOT)) for key, path in packs.items()
     }
+    manifest["ticket"] = TICKET
+    manifest["cos_order_sha8"] = COS_ORDER_SHA8
+    manifest["decision_sha8"] = DECISION_SHA8
 
     slate = {
         "run_id": run_id,
@@ -884,21 +1038,27 @@ def main() -> int:
         "coverage_produced": [r["game_id"] for r in rows],
         "coverage_missing_forecast": [],
         "deterministic_check": "PASS (per-game identical re-sim, same seed)",
+        "completeness_sha256": completeness["input_completeness_sha256"],
+        "completeness_sha8": completeness["input_completeness_sha256"][:8],
+        "blockers_closed": completeness["passed"],
+        "blockers_remaining": completeness["failing_components"],
         "notes": [
-            "Depth: nflverse snapshot 2026-10-27 (not packaged W1).",
-            "Injury: official weeks through 7; W8 Wed report MISSING; designations only.",
+            "t4605u restore vs #642 f50f15a8 / 21b96525.",
+            "Depth: current nflverse W8 snapshot (not packaged W1 2026-08-13).",
+            "Injury: official latest week designated only; silent healthy forbidden.",
             "EPA: in-season 2026 W1–W7 play-weighted via epa_to_strength_indices.",
+            "DATABASE_URL warehouse: exact access blocker if unset.",
             "Market lines MISSING (no Odds). ref_line is model research line.",
         ],
     }
 
-    repro = """# t4564u W8 research forecast — repro
+    repro = """# t4605u W8 pipeline restore — repro
 
 CERT_CANDIDATE=0. NFL NO-GO. No Odds. No #641 / F2.
 
 ```bash
 cd /workspace
-PYTHONPATH=services/model-service python3 scripts/nfl/run_w8_research_forecast_t4564u.py
+python3 scripts/nfl/run_w8_research_forecast_t4564u.py
 ```
 
 Requires network to nflverse GitHub releases (public). Does not read DATABASE_URL.
@@ -933,6 +1093,12 @@ Does not call The Odds API. Writes `/workspace/ops/nfl_enterprise_green_t4359u/r
                 continue
             p = dest / name
             sums[name] = _write_json(p, payload)  # type: ignore[arg-type]
+        cdir = dest / "current_inputs"
+        for path in packs.values():
+            blob = path.read_bytes()
+            out = cdir / path.name
+            _write_readonly(out, blob)
+            sums[str(out.relative_to(dest))] = _sha256_bytes(blob)
         table_path = dest / "slate_table.csv"
         buf = []
         if rows:
@@ -947,9 +1113,13 @@ Does not call The Odds API. Writes `/workspace/ops/nfl_enterprise_green_t4359u/r
             _write_readonly(table_path, blob)
             sums["slate_table.csv"] = _sha256_bytes(blob)
         report = (
-            f"# t4564u SUCCESS\n\n"
+            f"# t4605u W8 pipeline restore\n\n"
             f"run_id: `{run_id}`\n\n"
             f"tip SHA: `{code_tip}` (sha8 `{code_tip[:8]}`)\n\n"
+            f"completeness sha256: `{completeness['input_completeness_sha256']}` "
+            f"(sha8 `{completeness['input_completeness_sha256'][:8]}`)\n\n"
+            f"CLOSED: {completeness['passed']}\n\n"
+            f"REMAINING: {completeness['failing_components']}\n\n"
             f"path: `{dest}`\n\n"
             f"games: {len(rows)} / 14 produced; forecast MISSING: none\n\n"
             f"deterministic: PASS\n"
