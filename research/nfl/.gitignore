@@ -6,4 +6,5 @@ t4602u_exp_a_cache/
 # Keep H1 both-run logs (repo *.log ignore would drop them)
 !t4586u_exp_e_h1_addendum/**/*.log
 !t4602u_exp_a/**/*.log
+!t4618u_exp_dr/**/*.log
 
