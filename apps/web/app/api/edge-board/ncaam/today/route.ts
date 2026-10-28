@@ -9,7 +9,7 @@ const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
 };
 
-let ncaamCache: { rows: unknown[]; ts: number } | null = null;
+const ncaamCache: { rows: unknown[]; ts: number } | null = null;
 
 function json(
   data: unknown,
