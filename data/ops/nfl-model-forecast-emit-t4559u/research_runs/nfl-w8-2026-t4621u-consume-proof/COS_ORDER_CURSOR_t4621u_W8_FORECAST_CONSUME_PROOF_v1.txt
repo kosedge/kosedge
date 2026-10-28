@@ -1,0 +1,13 @@
+COS ORDER t4621u — W8 forecast CONSUME PROOF (DECISION 095d17df). Do NOT touch Exp D-R / #648.
+
+Authority: W8 CLOSED completeness 675e1cf7 tip 2f24c895 #645 DRAFT.
+
+DO NOW on #645 DRAFT only (no merge):
+1. Prove current W8 forecasting path reads each of the five CLOSED checks: depth_sot_week, injury_paths_current, current_weekly_depth_db, week_schedule_kickoffs, inseason_efficiency_current — evidence = file+line / call graph, or GAP with exact miss.
+2. Report official injury coverage: designated week; W8 official report MISSING impact.
+3. Compare game-level vs season/strength-selection policies; name SoT; flag stale/conflicting outputs.
+4. Land CONSUME_PROOF paper + sha8 table on tip; stop.
+
+HARD STOPS: Odds · merge · F2 · deploy · publish · CERT · invent · holdouts · Exp D-R
+NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen
+OUTCOME: CONSUME_PROOF md with CLOSED vs GAP per input.
