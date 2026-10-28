@@ -1,0 +1,51 @@
+{
+  "id": "C2_g3_last_designated",
+  "criterion": "C2",
+  "family": "injury_paths_current",
+  "imv": "G3",
+  "seed": 4643,
+  "game": {
+    "game_id": "2026-W08-CONTRACT",
+    "home_team": "GB",
+    "away_team": "CAR"
+  },
+  "strength": {
+    "GB": {
+      "offense_index": 1.0,
+      "defense_index": 1.0,
+      "off_epa_per_play": 0.0,
+      "def_epa_allowed_per_play": 0.0
+    },
+    "CAR": {
+      "offense_index": 1.0,
+      "defense_index": 1.0,
+      "off_epa_per_play": 0.0,
+      "def_epa_allowed_per_play": 0.0
+    }
+  },
+  "injuries": {
+    "GB": {
+      "as_of_week": 7,
+      "impact_score": 0.2,
+      "source": "nflverse_injuries_2026",
+      "w8_official_report": "MISSING",
+      "designated_count": 1
+    },
+    "CAR": {
+      "as_of_week": 6,
+      "impact_score": 0.1,
+      "source": "nflverse_injuries_2026",
+      "w8_official_report": "MISSING",
+      "designated_count": 1
+    }
+  },
+  "rest": [7.0, "schedule_kickoff_delta", 7.0, "schedule_kickoff_delta"],
+  "fallback": "last week with designations (not week-8 empty stubs)",
+  "required_missing": [
+    "w8_official_injury_report",
+    "injury_as_of_week8",
+    "injury_as_of_week8_away"
+  ],
+  "required_injury_as_of": {"GB": 7, "CAR": 6},
+  "forbidden": ["invent_w8_official", "as_of_week==8", "silent_healthy"]
+}

@@ -8,6 +8,19 @@ Target: IMV C0–C7 and G1–G4 exactly. See `C0_C7_CONTRACT.md`.
 This map names **which inputs move which numbers** on the two live engines.
 “Read into a struct” is not enough — see effect column.
 
+## C0 family index (file:line → component / flag)
+
+| family | SoT → builder | reaches sim? | artifact flag |
+|---|---|---|---|
+| G1 `current_weekly_depth_db` | none — `:1078` | **NO** · **GAP** | `Does not read DATABASE_URL` |
+| G2 `depth_sot_week` | `_depth_meta` `:375-388` · pack `:596-654` | **NO** · **GAP_SIM_VOLUME** | `depth_role=provenance_only` `:579` · `used_for=provenance_only_not_player_box_volume` `:386` |
+| injury overlay | `_injury_impacts` `:313-372` → `:426-432` | **YES** `impact_*` · means gated by conf | `injury_overlay=week7_or_latest_official_designations_only` |
+| G3 W8 official | always MISSING `:355` | **NO** — not invented | `w8_official_injury_report` `:461` · `injury_as_of_week8` `:465-468` |
+| schedule / rest | `_load_canonical_week` `:179-204` · `_rest_days` `:207-225` → `:419-420` | **YES** `rest_days_*` | `rest_days_*` in missing when helper returns None `:450-453` |
+| EPA / strength | `_build_current_strength` `:249-310` → `:415-418` | **YES** O/D indices | SystemExit if missing `:403-404` |
+
+Line numbers are `scripts/nfl/run_w8_research_forecast_t4564u.py` unless noted.
+
 ## Two engines (same spine rule, different SoT today)
 
 | engine | entry | outputs | used by W8 research emit? |

@@ -1,14 +1,16 @@
 """t4643u IMV C0–C7 / G1–G4 consumption contracts.
 
 Eng correctness ≠ predictive improvement. CERT=0. No Odds. No warehouse wire.
-Fixtures: data/ops/nfl-t4643u-w8-forecast-integrity/fixtures/C1_*.json
+Fixtures: data/ops/nfl-t4643u-w8-forecast-integrity/fixtures/C1_*.json C2_*.json
 """
 
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
@@ -30,6 +32,20 @@ FIXTURE_DIR = REPO / "data/ops/nfl-t4643u-w8-forecast-integrity/fixtures"
 SEED = 4643
 SIMS = 1200
 
+C1_FIXTURES = (
+    "C1_base.json",
+    "C1_epa_home_boost.json",
+    "C1_rest_home_extra.json",
+    "C1_inj_impact_only.json",
+)
+C2_FIXTURES = (
+    "C2_g3_last_designated.json",
+    "C2_rest_home_missing.json",
+    "C2_rest_days_schedule.json",
+    "C2_epa_strength_missing.json",
+    "C2_sealed_restore_oracle.json",
+)
+
 
 def _load_fixture(name: str) -> dict:
     path = FIXTURE_DIR / name
@@ -49,6 +65,29 @@ def _contrib(sim: dict, factor: str) -> dict:
     return sim["diagnostics"]["framework"]["factor_contributions"][factor]
 
 
+def _load_w8_mod():
+    spec = importlib.util.spec_from_file_location(
+        "run_w8_research_forecast_t4564u_t4643u", W8_SCRIPT
+    )
+    assert spec is not None and spec.loader is not None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+W8 = _load_w8_mod()
+
+
+def _rest_tuple(raw: list) -> tuple:
+    rest_h, src_h, rest_a, src_a = raw
+    return (
+        None if rest_h is None else float(rest_h),
+        str(src_h),
+        None if rest_a is None else float(rest_a),
+        str(src_a),
+    )
+
+
 def test_c1_epa_moves_declared_component_only() -> None:
     """C1-EPA: inseason strength CONSUMED → base_efficiency / home WP."""
     base = _sim_from_fixture("C1_base.json")
@@ -56,8 +95,6 @@ def test_c1_epa_moves_declared_component_only() -> None:
     assert _contrib(boosted, "base_efficiency")["margin_points"] > _contrib(base, "base_efficiency")["margin_points"]
     assert boosted["markets"]["home_win_prob"] > base["markets"]["home_win_prob"]
     assert boosted["markets"]["spread_home"] < base["markets"]["spread_home"]
-    assert boosted["inputs"]["rest_days_home"] == base["inputs"]["rest_days_home"] if "inputs" in boosted else True
-    # rest / injury mean terms unchanged
     assert _contrib(boosted, "rest_travel")["margin_points"] == _contrib(base, "rest_travel")["margin_points"]
     assert _contrib(boosted, "injuries_depth")["margin_points"] == _contrib(base, "injuries_depth")["margin_points"]
 
@@ -69,7 +106,6 @@ def test_c1_rest_moves_declared_component_only() -> None:
     assert _contrib(extra, "rest_travel")["margin_points"] > _contrib(base, "rest_travel")["margin_points"]
     assert extra["markets"]["home_win_prob"] > base["markets"]["home_win_prob"]
     assert extra["diagnostics"]["framework"]["factor_contributions"]["injuries_depth"]["margin_points"] == 0.0
-    # EPA indices not in extras — same base_efficiency should match before rest
     assert _contrib(extra, "base_efficiency")["margin_points"] == _contrib(base, "base_efficiency")["margin_points"]
 
 
@@ -118,19 +154,100 @@ def test_c3_g1_no_warehouse_select_in_forecast_path() -> None:
 
 
 def test_c2_g3_w8_official_missing_not_invented() -> None:
-    """G3 / C2: W8 official stays MISSING; last-designated fallback."""
-    text = W8_SCRIPT.read_text(encoding="utf-8")
-    assert "w8_official_injury_report" in text
-    assert "w8_official_report" in text
-    assert "MISSING" in text
-    assert "DESIGNATIONS" in text
-    assert "silent" in text.lower()
+    """G3 / C2: null W8 official → last-designated overlay + flags; no invent."""
+    fx = _load_fixture("C2_g3_last_designated.json")
+    out = W8._simulate_one(
+        fx["game"],
+        strength=fx["strength"],
+        injuries=fx["injuries"],
+        rest=_rest_tuple(fx["rest"]),
+        seed=int(fx["seed"]),
+    )
+    missing = set(out["missing"])
+    for flag in fx["required_missing"]:
+        assert flag in missing
+    assert out["injury_home"]["as_of_week"] == fx["required_injury_as_of"]["GB"]
+    assert out["injury_away"]["as_of_week"] == fx["required_injury_as_of"]["CAR"]
+    assert out["injury_home"]["w8_official_report"] == "MISSING"
+    assert out["injury_away"]["w8_official_report"] == "MISSING"
+    assert out["injury_home"]["as_of_week"] != 8
+    assert out["injury_away"]["as_of_week"] != 8
+
+
+def test_c2_g3_and_g2_sealed_restore_flags() -> None:
+    """C2 sealed emit: 14/14 G3 flags + G2 provenance_only; no Odds."""
+    fx = _load_fixture("C2_sealed_restore_oracle.json")
+    restore = REPO / fx["restore_run"]
+    games = sorted(restore.glob("2026-W08-*.json"))
+    assert len(games) == int(fx["n_games"])
+    for path in games:
+        rec = json.loads(path.read_text(encoding="utf-8"))
+        missing = set(rec["input_provenance"]["missing_inputs"])
+        for flag in fx["required_missing_inputs"]:
+            assert flag in missing
+        assert rec["input_provenance"]["depth_role"] == fx["required_depth_role"]
+        assert rec["input_provenance"]["injury_overlay"] == fx["required_injury_overlay"]
+        assert rec["input_provenance"]["odds_api"] is fx["required_odds_api"]
+        assert rec["cert_candidate"] == fx["required_cert_candidate"]
+
+
+def test_c2_rest_missing_uses_default_and_flags() -> None:
+    """C2 schedule: rest None → 7.0 fallback AND rest_days_home flag."""
+    fx = _load_fixture("C2_rest_home_missing.json")
+    out = W8._simulate_one(
+        fx["game"],
+        strength=fx["strength"],
+        injuries=fx["injuries"],
+        rest=_rest_tuple(fx["rest"]),
+        seed=int(fx["seed"]),
+    )
+    assert "rest_days_home" in out["missing"]
+    assert out["rest"]["home"] is None
+    assert out["rest"]["home_source"] == "MISSING"
+    assert out["engine"]["inputs"]["rest_days_home"] == fx["fallback_rest_days_home"]
+
+
+def test_c2_rest_days_helper_present_and_missing() -> None:
+    """C2 schedule helper: kickoff delta vs MISSING (no silent 7.0 at helper)."""
+    fx = _load_fixture("C2_rest_days_schedule.json")
+    present = fx["present"]
+    ko = datetime.fromisoformat(present["kickoff_utc"].replace("Z", "+00:00")).astimezone(
+        timezone.utc
+    )
+    days, src = W8._rest_days(fx["games"], team=present["team"], kickoff=ko)
+    assert days == present["expected_days"]
+    assert src == present["expected_src"]
+    miss = fx["missing"]
+    ko_m = datetime.fromisoformat(miss["kickoff_utc"].replace("Z", "+00:00")).astimezone(
+        timezone.utc
+    )
+    days_m, src_m = W8._rest_days(fx["games"], team=miss["team"], kickoff=ko_m)
+    assert days_m is None
+    assert src_m == miss["expected_src"]
+
+
+def test_c2_epa_missing_refuses_to_sim() -> None:
+    """C2 EPA: missing strength → SystemExit; no silent 2025 prior."""
+    fx = _load_fixture("C2_epa_strength_missing.json")
+    try:
+        W8._simulate_one(
+            fx["game"],
+            strength=fx["strength"],
+            injuries=fx["injuries"],
+            rest=_rest_tuple(fx["rest"]),
+            seed=int(fx["seed"]),
+        )
+    except SystemExit as exc:
+        assert fx["expected_exit_substr"] in str(exc)
+        return
+    raise AssertionError("expected SystemExit refuse-to-sim for missing EPA strength")
 
 
 def test_c2_g2_provenance_only_flag_in_builder() -> None:
     text = W8_SCRIPT.read_text(encoding="utf-8")
     assert "provenance_only" in text
     assert "packaged nfl_depth_chart_2026_w1.json" in text
+    assert "used_for" in text and "provenance_only_not_player_box_volume" in text
 
 
 def test_c4_already_consumed_paths_still_wired() -> None:
@@ -162,24 +279,19 @@ def test_c7_no_odds_no_market_blend_on_w8_path() -> None:
     assert "odds_api" in text.lower() or "Odds API" in text or "odds_api" in text
 
 
-def test_c1_fixture_hashes_are_stable() -> None:
-    """C1: fixtures are pinned; IMV can re-hash."""
-    expected = {
-        "C1_base.json": None,
-        "C1_epa_home_boost.json": None,
-        "C1_rest_home_extra.json": None,
-        "C1_inj_impact_only.json": None,
-    }
-    for name in expected:
+def test_c1_c2_fixture_hashes_are_stable() -> None:
+    """C1/C2: fixtures are pinned; IMV can re-hash."""
+    names = list(C1_FIXTURES) + list(C2_FIXTURES)
+    expected = {}
+    for name in names:
         digest = hashlib.sha256((FIXTURE_DIR / name).read_bytes()).hexdigest()
         assert len(digest) == 64
         expected[name] = digest
     manifest = FIXTURE_DIR / "FIXTURES.sha256"
-    if manifest.is_file():
-        listed = {
-            line.split()[1]: line.split()[0]
-            for line in manifest.read_text().splitlines()
-            if line.strip()
-        }
-        for name, digest in expected.items():
-            assert listed[name] == digest
+    listed = {
+        line.split()[1]: line.split()[0]
+        for line in manifest.read_text().splitlines()
+        if line.strip()
+    }
+    for name, digest in expected.items():
+        assert listed[name] == digest

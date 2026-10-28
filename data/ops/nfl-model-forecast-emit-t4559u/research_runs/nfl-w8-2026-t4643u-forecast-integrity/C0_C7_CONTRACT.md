@@ -34,9 +34,9 @@ Oracle script: `tests/test_nfl_w8_forecast_consumption_contracts_t4643u.py` · s
 
 | id | labeled | fixture pair | declared component | must NOT move | oracle |
 |---|---|---|---|---|---|
-| C1-EPA | CONSUMED `inseason_efficiency_current` | `C1_base` → `C1_epa_home_boost` | `base_efficiency.margin_points` + `mean_home_points` | `rest_days_*`; `injuries_depth.margin_points` | home offense 1.00→1.12 raises home WP / lowers spread |
-| C1-REST | CONSUMED `week_schedule_kickoffs` | `C1_base` → `C1_rest_home_extra` | `rest_travel.margin_points` | `injuries_depth.*`; EPA indices | rest 7/7 → 10/7 raises home WP |
-| C1-INJ-FIELD | CONSUMED `injury_paths_current` | `C1_base` → `C1_inj_impact_only` | `diagnostics.injury_nowcast.home_impact` identity | `injuries_depth.margin_points` stay **0** (conf=0) | impact fields set; **means unchanged** |
+| C1-EPA | CONSUMED `inseason_efficiency_current` | `C1_base` `fc0f79f8…` → `C1_epa_home_boost` `2c2cc50b…` | `base_efficiency.margin_points` + `mean_home_points` | `rest_days_*`; `injuries_depth.margin_points` | home offense 1.00→1.12 raises home WP / lowers spread |
+| C1-REST | CONSUMED `week_schedule_kickoffs` | `C1_base` → `C1_rest_home_extra` `1e5f6ce0…` | `rest_travel.margin_points` | `injuries_depth.*`; EPA indices | rest 7/7 → 10/7 raises home WP |
+| C1-INJ-FIELD | CONSUMED `injury_paths_current` | `C1_base` → `C1_inj_impact_only` `ef31a571…` | `diagnostics.injury_nowcast.home_impact` identity | `injuries_depth.margin_points` stay **0** (conf=0) | impact fields set; **means unchanged** |
 | C1-DEPTH | G2 not CONSUMED | n/a until rows reach sim | — | — | C5: cannot claim CONSUMED |
 | C1-DB | G1 not CONSUMED | n/a until SELECT | — | — | C3: GAP |
 
@@ -44,13 +44,13 @@ New exact miss (erratum-eligible, does not reopen 7c2d9625): designated overlay 
 
 ## C2 — MISSING → FALLBACK + FLAG
 
-| family | fallback if missing / irrelevant | required flags | forbidden silent |
-|---|---|---|---|
-| G3 W8 official | last week **with designations** (W7/6/5); not week-8 empty stubs | `w8_official_injury_report` · `injury_as_of_week8` · pack `w8_official_report=MISSING` | silent healthy; silent zero-as-official; invent W8 rows |
-| G2 depth | provenance-only; EPA remains volume | `depth_role=provenance_only` · `used_for=provenance_only_not_player_box_volume` | silent W1-pack as W8; claim CONSUMED |
-| G1 warehouse | refuse SELECT; completeness probe stays separate | `DATABASE_URL / nfl_dp_* warehouse` in missing_doc; `Does not read DATABASE_URL` | silent warehouse skip-as-consumed; wire-because-available |
-| schedule kickoff | rest `MISSING` → builder uses 7.0 **and** flags `rest_days_*` | `rest_days_home` / `rest_days_away` in missing_inputs when None | silent 7.0 as measured rest |
-| EPA | refuse-to-sim if <32 teams or week<7 | SystemExit in builder | silent 2025 prior pack |
+| family | fallback if missing / irrelevant | required flags | forbidden silent | fixture oracle |
+|---|---|---|---|---|
+| G3 W8 official | last week **with designations** (W7/6/5); not week-8 empty stubs | `w8_official_injury_report` · `injury_as_of_week8` · pack `w8_official_report=MISSING` | silent healthy; silent zero-as-official; invent W8 rows | `C2_g3_last_designated.json` `092d685d…` + sealed 14/14 `C2_sealed_restore_oracle.json` `6d303b90…` |
+| G2 depth | provenance-only; EPA remains volume | `depth_role=provenance_only` · `used_for=provenance_only_not_player_box_volume` | silent W1-pack as W8; claim CONSUMED | sealed restore + `test_c5_g2_depth_not_consumed_no_volume_fields` |
+| G1 warehouse | refuse SELECT; completeness probe stays separate | `DATABASE_URL / nfl_dp_* warehouse` in missing_doc; `Does not read DATABASE_URL` | silent warehouse skip-as-consumed; wire-because-available | `test_c3_g1_no_warehouse_select_in_forecast_path` |
+| schedule kickoff | rest `MISSING` → builder uses 7.0 **and** flags `rest_days_*` | `rest_days_home` / `rest_days_away` in missing_inputs when None | silent 7.0 as measured rest | `C2_rest_home_missing.json` `e45d6073…` · helper `C2_rest_days_schedule.json` `fb14d488…` |
+| EPA | refuse-to-sim if strength missing | SystemExit `MISSING current strength` | silent 2025 prior pack | `C2_epa_strength_missing.json` `43a19746…` |
 
 ## C3 — AUTHORITY / VINTAGE PIN
 

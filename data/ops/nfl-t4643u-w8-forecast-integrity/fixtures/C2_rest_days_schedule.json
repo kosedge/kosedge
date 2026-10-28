@@ -1,0 +1,29 @@
+{
+  "id": "C2_rest_days_schedule",
+  "criterion": "C2",
+  "family": "week_schedule_kickoffs",
+  "games": [
+    {
+      "home_team": "GB",
+      "away_team": "CAR",
+      "kickoff_utc": "2026-10-20T17:00:00Z"
+    },
+    {
+      "home_team": "GB",
+      "away_team": "NYJ",
+      "kickoff_utc": "2026-10-27T17:00:00Z"
+    }
+  ],
+  "present": {
+    "team": "GB",
+    "kickoff_utc": "2026-10-27T17:00:00Z",
+    "expected_days": 7.0,
+    "expected_src": "schedule_kickoff_delta"
+  },
+  "missing": {
+    "team": "NE",
+    "kickoff_utc": "2026-10-27T17:00:00Z",
+    "expected_days": null,
+    "expected_src": "MISSING"
+  }
+}

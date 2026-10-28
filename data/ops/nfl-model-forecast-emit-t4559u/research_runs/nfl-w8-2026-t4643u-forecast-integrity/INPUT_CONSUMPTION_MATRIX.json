@@ -6,51 +6,150 @@
   "completeness_sha8": "675e1cf7",
   "cert_candidate": 0,
   "purpose": "engineering_correctness_not_predictive",
+  "self_grade": "NOT_CLAIMED_STOP_FOR_COS_ACCEPT",
   "c7_non_claims": ["MAE", "CERT", "invent_w8_official", "merge", "deploy", "Odds", "F2"],
+  "oracle_script": "services/model-service/tests/test_nfl_w8_forecast_consumption_contracts_t4643u.py",
+  "seed": 4643,
   "families": [
     {
       "name": "current_weekly_depth_db",
       "imv": "G1",
       "verdict": "GAP",
-      "c3_sha256": "f50ba2f07df9f92cba0ddf31fd5003f549d5e114eb3eddff0e245ef8f68c18ff"
+      "file_line": ["scripts/nfl/run_w8_research_forecast_t4564u.py:1078"],
+      "c3_sha256": "f50ba2f07df9f92cba0ddf31fd5003f549d5e114eb3eddff0e245ef8f68c18ff",
+      "c1": null,
+      "c2_tests": ["test_c3_g1_no_warehouse_select_in_forecast_path"],
+      "repair": "T-G1-NO-SELECT"
     },
     {
       "name": "depth_sot_week",
       "imv": "G2",
       "verdict": "READ+GATE+PROVENANCE_ONLY+GAP_SIM_VOLUME",
-      "c3_sha256": "550e1a8d3daef00ca963c91e30849ce368ec631df06302305c64faa69fab2e1d"
+      "file_line": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:375-388",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:579",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:596-654"
+      ],
+      "c3_sha256": "550e1a8d3daef00ca963c91e30849ce368ec631df06302305c64faa69fab2e1d",
+      "c1": null,
+      "c2_fixtures": {
+        "C2_sealed_restore_oracle.json": "6d303b90339867cb744708fd894c84035c6b334cbc2d6ac41edef7a6e00b7103"
+      },
+      "c2_tests": [
+        "test_c2_g3_and_g2_sealed_restore_flags",
+        "test_c5_g2_depth_not_consumed_no_volume_fields"
+      ],
+      "repair": "T-G2-NO-VOLUME"
     },
     {
       "name": "injury_paths_current",
       "imv": "CONSUMED_baseline",
       "verdict": "CONSUMED",
       "component": "injury_nowcast_impact_*",
-      "c3_sha256": "0c29ceea500f34dd326e3b8879372fc6f2b6ea821ac72613ce4e35cadf013a97"
+      "file_line": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:313-372",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:426-432",
+        "services/model-service/src/services/nfl_handicapping_framework.py:311-341"
+      ],
+      "c3_sha256": "0c29ceea500f34dd326e3b8879372fc6f2b6ea821ac72613ce4e35cadf013a97",
+      "c1_fixtures": {
+        "C1_inj_impact_only.json": "ef31a571c708b782b4aa883485bcfdb7971480ebfe63f0431113ea3544a53c1e"
+      },
+      "c2_fixtures": {
+        "C2_g3_last_designated.json": "092d685dfbed9fbfc45d7a13817e81946458d617a5c59c0b42dbaa91171cc68e"
+      },
+      "c1_tests": ["test_c1_injury_impact_field_consumed_means_gated"],
+      "c2_tests": ["test_c2_g3_w8_official_missing_not_invented"]
     },
     {
       "name": "w8_official_injury",
       "imv": "G3",
-      "verdict": "MISSING"
+      "verdict": "MISSING",
+      "file_line": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:355",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:461",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:465-468"
+      ],
+      "c2_fixtures": {
+        "C2_g3_last_designated.json": "092d685dfbed9fbfc45d7a13817e81946458d617a5c59c0b42dbaa91171cc68e",
+        "C2_sealed_restore_oracle.json": "6d303b90339867cb744708fd894c84035c6b334cbc2d6ac41edef7a6e00b7103"
+      },
+      "c2_tests": [
+        "test_c2_g3_w8_official_missing_not_invented",
+        "test_c2_g3_and_g2_sealed_restore_flags"
+      ],
+      "repair": "T-G3-NO-INVENT"
     },
     {
       "name": "week_schedule_kickoffs",
       "imv": "CONSUMED_baseline",
       "verdict": "CONSUMED",
       "component": "rest_travel.margin_points",
-      "c3_sha256": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe"
+      "file_line": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:179-204",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:207-225",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:419-420",
+        "services/model-service/src/services/nfl_handicapping_framework.py:299-308"
+      ],
+      "c3_sha256": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe",
+      "c1_fixtures": {
+        "C1_rest_home_extra.json": "1e5f6ce092581abbd2ed006549939b099d8bb72902e27176c3b220adeaae4fe0"
+      },
+      "c2_fixtures": {
+        "C2_rest_home_missing.json": "e45d6073180d37fcc1cc90edac85e3bc8e492c7d3724d2b1a93764c368b7d9c2",
+        "C2_rest_days_schedule.json": "fb14d4881c9b9cd13e18c877e865817fb8110a30ce1a9b422db1c35ce82301ef"
+      },
+      "c1_tests": ["test_c1_rest_moves_declared_component_only"],
+      "c2_tests": [
+        "test_c2_rest_missing_uses_default_and_flags",
+        "test_c2_rest_days_helper_present_and_missing"
+      ]
     },
     {
       "name": "inseason_efficiency_current",
       "imv": "CONSUMED_baseline",
       "verdict": "CONSUMED",
       "component": "base_efficiency.margin_points",
-      "c3_sha256": "cb1fe8c5e0495c417af3dc70f83cf4c419c1c1761b2dd233bc8546ad3face2c2"
+      "file_line": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:249-310",
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:415-418",
+        "services/model-service/src/services/nfl_handicapping_framework.py:280-297"
+      ],
+      "c3_sha256": "cb1fe8c5e0495c417af3dc70f83cf4c419c1c1761b2dd233bc8546ad3face2c2",
+      "c1_fixtures": {
+        "C1_epa_home_boost.json": "2c2cc50b6f2678693055a6a0026a78bb7499dd23a71e6f918ada43842dd55146"
+      },
+      "c2_fixtures": {
+        "C2_epa_strength_missing.json": "43a19746bb2a557f0522cc56ea049d59b5620218522f4deb98ec4d470b9b7ae3"
+      },
+      "c1_tests": ["test_c1_epa_moves_declared_component_only"],
+      "c2_tests": ["test_c2_epa_missing_refuses_to_sim"]
     }
   ],
   "g4_season_conflicts": [
-    {"surface": "depth", "season": "W1 2026-08-13", "game": "W8 2026-10-28", "handling": "C6b_DEFER_Needs_CLEAR"},
-    {"surface": "strength", "season": "2025 prior 2026-08-08 or rolling", "game": "W1-W7 EPA", "handling": "C6b_DEFER_Needs_CLEAR"},
-    {"surface": "injury", "season_warehouse": "max_week=3", "game": "W7 designated", "handling": "do_not_wire"}
+    {
+      "surface": "depth",
+      "season": "W1 2026-08-13",
+      "game": "W8 2026-10-28",
+      "verdict": "STALE_FALLBACK",
+      "handling": "C6b_DEFER_Needs_CLEAR",
+      "test": "test_c6_g4_season_still_binds_w1_and_2025_prior"
+    },
+    {
+      "surface": "strength",
+      "season": "2025 prior 2026-08-08 or rolling",
+      "game": "W1-W7 EPA",
+      "verdict": "STALE_FALLBACK",
+      "handling": "C6b_DEFER_Needs_CLEAR"
+    },
+    {
+      "surface": "injury",
+      "season_warehouse": "max_week=3",
+      "game": "W7 designated",
+      "verdict": "STALE_FALLBACK",
+      "handling": "do_not_wire"
+    }
   ],
+  "c1_base_sha256": "fc0f79f827b2cec46a2d54ba21b6badbc380b227142b4ecdc5ee52a0c13fb19e",
   "warehouse_wire": "NOT_AUTHORIZED"
 }

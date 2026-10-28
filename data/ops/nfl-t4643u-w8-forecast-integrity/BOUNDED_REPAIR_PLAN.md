@@ -23,6 +23,7 @@ DRAFT #645. No merge/deploy/Odds/F2/CERT. Stop for CoS ACCEPT → IMV grade.
 **Needs CLEAR:** season pack retirement W1→W8; warehouse depth as SoT.
 
 **Contract:** `T-G2-NO-VOLUME`
+**C2 oracles this tip:** sealed restore `depth_role=provenance_only` · no depth fields on `NflGameInputs`.
 
 ## G3 W8 official injury — MISSING (C2)
 
@@ -35,6 +36,7 @@ DRAFT #645. No merge/deploy/Odds/F2/CERT. Stop for CoS ACCEPT → IMV grade.
 **Needs CLEAR:** publish / CERT of W7 overlay.
 
 **Contract:** `T-G3-NO-INVENT` · `T-C1-INJ-FIELD`
+**C2 oracles this tip:** `C2_g3_last_designated.json` · `C2_sealed_restore_oracle.json` (14/14 flags).
 
 ## G4 Season vs game SoT (C6b)
 
@@ -43,6 +45,7 @@ DRAFT #645. No merge/deploy/Odds/F2/CERT. Stop for CoS ACCEPT → IMV grade.
 **Repair this ticket:** **DEFER + Needs-CLEAR**. Flag conflicts. Do not rewrite `_PACKAGED_DEPTH_FILES` or prior backbone.
 
 **Contract:** `T-G4-SOT-FLAGS`
+**C2/C6 oracle:** `test_c6_g4_season_still_binds_w1_and_2025_prior` (packs still bound; not rewritten).
 
 ## C4 guard
 

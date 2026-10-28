@@ -1,0 +1,31 @@
+{
+  "id": "C2_rest_home_missing",
+  "criterion": "C2",
+  "family": "week_schedule_kickoffs",
+  "seed": 4643,
+  "game": {
+    "game_id": "2026-W08-CONTRACT",
+    "home_team": "GB",
+    "away_team": "CAR"
+  },
+  "strength": {
+    "GB": {
+      "offense_index": 1.0,
+      "defense_index": 1.0,
+      "off_epa_per_play": 0.0,
+      "def_epa_allowed_per_play": 0.0
+    },
+    "CAR": {
+      "offense_index": 1.0,
+      "defense_index": 1.0,
+      "off_epa_per_play": 0.0,
+      "def_epa_allowed_per_play": 0.0
+    }
+  },
+  "injuries": {},
+  "rest": [null, "MISSING", 7.0, "schedule_kickoff_delta"],
+  "fallback": "builder uses 7.0 AND flags rest_days_home",
+  "required_missing": ["rest_days_home"],
+  "fallback_rest_days_home": 7.0,
+  "forbidden": ["silent_7.0_as_measured_rest"]
+}
