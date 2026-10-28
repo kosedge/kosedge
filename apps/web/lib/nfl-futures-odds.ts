@@ -1,7 +1,10 @@
 import "server-only";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { bookDisplay, configuredBooksForSport } from "@/lib/odds-api";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import { oddsAcquire } from "@/lib/odds-acquire/acquire";
+import { ODDS_API_HOST } from "@/lib/odds-acquire/hosts";
+import { isPaidFetchDenied } from "@/lib/odds-acquire/errors";
+import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { isValidAmericanOdds } from "@/lib/american-odds";
 import type { PlayerFutureOddsSnap } from "@/lib/nfl-player-futures";
@@ -61,7 +64,7 @@ function pickBestAmerican(
 }
 
 export type NflFuturesOddsBundle = {
-  status: "ok" | "empty" | "unauthorized" | "error" | "no_key";
+  status: "ok" | "empty" | "unauthorized" | "error" | "no_key" | "unavailable";
   asOfUtc: string | null;
   /** Team Super Bowl winner odds by abbr. */
   superBowlByTeam: Map<string, PlayerFutureOddsSnap>;
@@ -99,20 +102,23 @@ async function fetchSuperBowlOutrights(): Promise<{
   let lastStatus: NflFuturesOddsBundle["status"] = "empty";
 
   for (const apiKey of keys) {
-    const url = new URL(
-      `https://api.the-odds-api.com/v4/sports/${SB_SPORT_KEY}/odds`,
-    );
-    url.searchParams.set("regions", "us,us2");
-    url.searchParams.set("markets", "outrights");
-    url.searchParams.set("oddsFormat", "american");
-    url.searchParams.set("bookmakers", books.join(","));
-    url.searchParams.set("apiKey", apiKey);
+    const qs = new URLSearchParams({
+      regions: "us,us2",
+      markets: "outrights",
+      oddsFormat: "american",
+      bookmakers: books.join(","),
+      apiKey,
+    });
 
     try {
-      const response = await upstreamFetch(url.toString(), {
-        next: { revalidate: 1800 },
-        headers: { accept: "application/json" },
-        timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+      const response = await oddsAcquire({
+        host: ODDS_API_HOST,
+        path: `/v4/sports/${SB_SPORT_KEY}/odds?${qs.toString()}`,
+        caller: "loadNflFuturesOdds",
+        init: {
+          headers: { accept: "application/json" },
+          timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+        },
       });
       if (response.status === 401 || response.status === 403) {
         lastStatus = "unauthorized";
@@ -165,8 +171,9 @@ async function fetchSuperBowlOutrights(): Promise<{
         status: byTeam.size > 0 ? "ok" : "empty",
         asOfUtc: latestAsOf,
       };
-    } catch {
-      lastStatus = "error";
+    } catch (err) {
+      lastStatus = isPaidFetchDenied(err) ? "unavailable" : "error";
+      if (isPaidFetchDenied(err)) break;
     }
   }
 
@@ -196,7 +203,7 @@ export async function loadNflFuturesOdds(): Promise<NflFuturesOddsBundle> {
       sb.status,
       sb.status === "no_key"
         ? `No Odds API key. ${playerNote}`
-        : `SB winner odds unavailable (${sb.status}). ${playerNote}`,
+        : `Market data unavailable / as-of. ${playerNote}`,
     ),
     asOfUtc: sb.asOfUtc,
     superBowlByTeam: sb.byTeam,

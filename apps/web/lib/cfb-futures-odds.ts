@@ -10,7 +10,10 @@ import {
 import { matchCfbFuturesTeamName } from "@/lib/cfb-futures-name-match";
 import { bookDisplay, configuredBooksForSport } from "@/lib/odds-api";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import { oddsAcquire } from "@/lib/odds-acquire/acquire";
+import { ODDS_API_HOST } from "@/lib/odds-acquire/hosts";
+import { isPaidFetchDenied } from "@/lib/odds-acquire/errors";
+import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 
 export type { CfbFutureOddsSnap };
 export { formatCfbImpliedPct, formatCfbMarketOdds, formatCfbOddsAsOf };
@@ -26,13 +29,12 @@ export { formatCfbImpliedPct, formatCfbMarketOdds, formatCfbOddsAsOf };
  * Missing markets stay empty. UI must show "—". Never rewrite sim %.
  */
 
-export const CFB_NATTY_SPORT_KEY =
-  "americanfootball_ncaaf_championship_winner";
+export const CFB_NATTY_SPORT_KEY = "americanfootball_ncaaf_championship_winner";
 export const CFB_FUTURES_ODDS_SOURCE = "The Odds API";
 export const CFB_FUTURES_ODDS_REVALIDATE_SEC = 1800;
 
 export type CfbFuturesOddsBundle = {
-  status: "ok" | "empty" | "unauthorized" | "error" | "no_key";
+  status: "ok" | "empty" | "unauthorized" | "error" | "no_key" | "unavailable";
   source: string;
   sportKey: string;
   asOfUtc: string | null;
@@ -93,8 +95,7 @@ function emptyBundle(
     nattyMatched: 0,
     nattyUnmatchedBookNames: [],
     note,
-    cfpNote:
-      "Odds API has no CFP / make-playoff outright. Market column is —.",
+    cfpNote: "Odds API has no CFP / make-playoff outright. Market column is —.",
     confNote:
       "Odds API has no conference championship outright. Market column is —.",
   };
@@ -119,20 +120,23 @@ async function fetchNattyOutrights(): Promise<{
   let lastStatus: CfbFuturesOddsBundle["status"] = "empty";
 
   for (const apiKey of keys) {
-    const url = new URL(
-      `https://api.the-odds-api.com/v4/sports/${CFB_NATTY_SPORT_KEY}/odds`,
-    );
-    url.searchParams.set("regions", "us,us2");
-    url.searchParams.set("markets", "outrights");
-    url.searchParams.set("oddsFormat", "american");
-    url.searchParams.set("bookmakers", books.join(","));
-    url.searchParams.set("apiKey", apiKey);
+    const qs = new URLSearchParams({
+      regions: "us,us2",
+      markets: "outrights",
+      oddsFormat: "american",
+      bookmakers: books.join(","),
+      apiKey,
+    });
 
     try {
-      const response = await upstreamFetch(url.toString(), {
-        next: { revalidate: CFB_FUTURES_ODDS_REVALIDATE_SEC },
-        headers: { accept: "application/json" },
-        timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+      const response = await oddsAcquire({
+        host: ODDS_API_HOST,
+        path: `/v4/sports/${CFB_NATTY_SPORT_KEY}/odds?${qs.toString()}`,
+        caller: "loadCfbFuturesOdds",
+        init: {
+          headers: { accept: "application/json" },
+          timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+        },
       });
       if (response.status === 401 || response.status === 403) {
         lastStatus = "unauthorized";
@@ -197,8 +201,9 @@ async function fetchNattyOutrights(): Promise<{
         status: byTeam.size > 0 ? "ok" : "empty",
         asOfUtc: latestAsOf,
       };
-    } catch {
-      lastStatus = "error";
+    } catch (err) {
+      lastStatus = isPaidFetchDenied(err) ? "unavailable" : "error";
+      if (isPaidFetchDenied(err)) break;
     }
   }
 
@@ -239,7 +244,7 @@ export async function loadCfbFuturesOdds(): Promise<CfbFuturesOddsBundle> {
       natty.status,
       natty.status === "no_key"
         ? "No Odds API key. National Championship market column is —."
-        : `National Championship odds unavailable (${natty.status}).`,
+        : "Market data unavailable / as-of. National Championship market column is —.",
     ),
     asOfUtc: natty.asOfUtc,
     nattyByTeam: natty.byTeam,
@@ -270,4 +275,3 @@ export function cfbConfOddsForTeam(
 ): CfbFutureOddsSnap | null {
   return bundle.confByTeam.get(String(team || "").toUpperCase()) ?? null;
 }
-

@@ -119,16 +119,24 @@ function getClientId(req: NextRequest): string {
   return `${ip}|${userAgent.slice(0, 120)}`;
 }
 
-function isCronOrWarmRequest(req: NextRequest): boolean {
-  if (req.nextUrl.pathname.startsWith("/api/cron/")) return true;
-  if (req.headers.get("x-vercel-cron") === "1") return true;
-  if (req.headers.get("x-kosedge-warm") === "1") return true;
+function timingSafeEqualString(left: string, right: string): boolean {
+  const a = Buffer.from(left);
+  const b = Buffer.from(right);
+  if (a.length !== b.length) return false;
+  let out = 0;
+  for (let i = 0; i < a.length; i += 1) out |= a[i]! ^ b[i]!;
+  return out === 0;
+}
+
+/**
+ * Rate-limit exemption only for a verified Bearer CRON_SECRET.
+ * x-kosedge-warm / x-vercel-cron / cron-like UA / query params NEVER qualify.
+ */
+function isVerifiedCronSecretRequest(req: NextRequest): boolean {
   const secret = process.env.CRON_SECRET?.trim();
-  if (secret) {
-    const auth = req.headers.get("authorization") || "";
-    if (auth === `Bearer ${secret}`) return true;
-  }
-  return false;
+  if (!secret) return false;
+  const auth = req.headers.get("authorization") || "";
+  return timingSafeEqualString(auth, `Bearer ${secret}`);
 }
 
 export async function rateLimit(
@@ -137,7 +145,7 @@ export async function rateLimit(
   const { pathname } = req.nextUrl;
   if (!pathname.startsWith("/api/")) return null;
   // Cron / CDN warm must not burn the strict edge-board bucket.
-  if (isCronOrWarmRequest(req)) return null;
+  if (isVerifiedCronSecretRequest(req)) return null;
 
   const clientId = getClientId(req);
   const { limiter, points } = getLimiterAndPoints(pathname);

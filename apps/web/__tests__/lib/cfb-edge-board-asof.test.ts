@@ -4,7 +4,14 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { resolveEdgeBoardBoardLinesAsOf } from "@/lib/nfl-edge-board-from-fair-lines";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
-import { fetchEdgeBoard } from "@/lib/odds-api";
+import { withAuthorizedOddsJob } from "@/__tests__/helpers/authorized-odds-job";
+import { fetchEdgeBoard as fetchEdgeBoardRaw } from "@/lib/odds-api";
+
+function fetchEdgeBoard(
+  ...args: Parameters<typeof fetchEdgeBoardRaw>
+): ReturnType<typeof fetchEdgeBoardRaw> {
+  return withAuthorizedOddsJob(() => fetchEdgeBoardRaw(...args));
+}
 
 function jsonResponse(body: unknown) {
   return {

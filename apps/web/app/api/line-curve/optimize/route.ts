@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
 import { optimizeTwoLegLineCurve } from "@/lib/line-curve/service";
 import { closed } from "@/lib/line-curve/guardrails";
+import { lineCurveUnavailablePayload } from "@/lib/line-curve/degrade";
 import { jointProbabilityCaption } from "@/lib/line-curve/joint-presentation";
 import {
   correlationMeta,
@@ -56,13 +57,11 @@ export async function POST(req: Request) {
   }
 
   if (!body.legA || !body.legB || !body.book) {
+    // No fixture, no interpolation, no live Odds API fetch.
     return noStore({
-      researchOnly: true,
+      ...lineCurveUnavailablePayload(),
       independenceCaption: jointProbabilityCaption(independence),
-      result: closed(
-        "missing_odds",
-        "Two-leg optimizer requires injected legA/legB snapshots bound to model runs. No fixture, no interpolation, no live Odds API fetch.",
-      ),
+      result: closed("unavailable_alt_market", "Market alt prices unavailable"),
     });
   }
 

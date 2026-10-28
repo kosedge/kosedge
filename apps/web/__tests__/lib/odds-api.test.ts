@@ -1,12 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { withAuthorizedOddsJob } from "@/__tests__/helpers/authorized-odds-job";
 import {
   ALLOWED_BOOKS,
   bookDisplay,
   bookFeedStatusForSport,
   cfbBookFeedStatus,
-  fetchEdgeBoard,
-  fetchOddsComparison,
+  fetchEdgeBoard as fetchEdgeBoardRaw,
+  fetchOddsComparison as fetchOddsComparisonRaw,
   nflBookFeedStatus,
   pickBestMoneylineEntry,
   pickBestSpreadEntry,
@@ -14,6 +15,18 @@ import {
   requestBooksForSport,
   sportUsesDesignatedBookFeedHonesty,
 } from "@/lib/odds-api";
+
+function fetchEdgeBoard(
+  ...args: Parameters<typeof fetchEdgeBoardRaw>
+): ReturnType<typeof fetchEdgeBoardRaw> {
+  return withAuthorizedOddsJob(() => fetchEdgeBoardRaw(...args));
+}
+
+function fetchOddsComparison(
+  ...args: Parameters<typeof fetchOddsComparisonRaw>
+): ReturnType<typeof fetchOddsComparisonRaw> {
+  return withAuthorizedOddsJob(() => fetchOddsComparisonRaw(...args));
+}
 
 function jsonResponse(body: unknown) {
   return {

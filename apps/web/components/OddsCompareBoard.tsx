@@ -74,6 +74,9 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
             books: Array.isArray(data.books) ? data.books : [],
             asOf: data.asOf ?? null,
             bookAsOf: Array.isArray(data.bookAsOf) ? data.bookAsOf : [],
+            source: data.source,
+            reason: data.reason,
+            availability: data.availability,
           },
         });
       } catch {
@@ -94,6 +97,9 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
   const books = state.status === "ready" ? state.data.books : [];
   const asOf = state.status === "ready" ? state.data.asOf : null;
   const bookAsOf = state.status === "ready" ? state.data.bookAsOf : [];
+  const availability =
+    state.status === "ready" ? state.data.availability : undefined;
+  const source = state.status === "ready" ? state.data.source : undefined;
   const stampBooks = bookAsOf
     .filter((b) => b.asOf && b.feedStatus !== "not_carried")
     .map((b) => b.label);
@@ -163,6 +169,25 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
           </Link>
         ))}
       </div>
+
+      {state.status === "ready" &&
+      (availability === "unavailable" || source === "none") ? (
+        <div
+          className="mt-4 rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-100"
+          data-testid="odds-compare-unavailable"
+        >
+          Market data unavailable. Showing authorized cache only — live Odds
+          acquisition is disabled on this page.
+        </div>
+      ) : null}
+      {state.status === "ready" && availability === "stale" ? (
+        <div
+          className="mt-4 rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-gray-200"
+          data-testid="odds-compare-stale"
+        >
+          STALE — cached market snapshot. As-of {asOf ?? "unknown"}.
+        </div>
+      ) : null}
 
       {books.length > 0 ? (
         <p className="mt-4 text-xs text-gray-400">
