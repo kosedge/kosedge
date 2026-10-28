@@ -1,0 +1,60 @@
+{
+  "by_season": {
+    "2023": {
+      "beats_market": false,
+      "mae_A": 10.475721349820141,
+      "mae_market": 9.98421052631579,
+      "n": 285
+    }
+  },
+  "corr_pm_m": 0.3360047595469077,
+  "delta_point": 0.20782250982898176,
+  "label": "2023_supportive",
+  "mae_A": 10.475721349820141,
+  "mae_epa": 10.683543859649122,
+  "mae_gap_A_vs_market": 0.4915108235043508,
+  "mae_gap_epa_vs_market": 0.6993333333333318,
+  "mae_market": 9.98421052631579,
+  "mean_bias_A_minus_m": -0.8867514036301581,
+  "n": 285,
+  "neutral_subset": {
+    "mae_A": 8.407438993653072,
+    "mae_epa": 6.973333333333334,
+    "mae_market": 6.5,
+    "n": 6
+  },
+  "path_a": {
+    "a": 1.2052367664635817,
+    "a_se_hc1": 0.8346414891871948,
+    "b": 1.2051099367604512,
+    "b_se_hc1": 0.23882396638267753,
+    "c": -0.21662300984234528,
+    "c_ci95_hi": 0.2931585923007958,
+    "c_ci95_lo": -0.7264046119854863,
+    "c_ci_excludes_0": false,
+    "c_gt_0": false,
+    "c_se_hc1": 0.2600926541546638,
+    "equation": "m ~ a + b*mm + c*pm_A",
+    "estimator": "OLS HC1",
+    "pass": false
+  },
+  "path_b": {
+    "B": 10000,
+    "ci": "percentile 95",
+    "ci_excludes_0": false,
+    "delta_ci95_hi": 0.6343275985251876,
+    "delta_ci95_lo": -0.20293807794459037,
+    "delta_definition": "mean(gap_epa)-mean(gap_A); gap_X=|m-pm_X|-|m-mm|",
+    "delta_point": 0.20782250982898176,
+    "pass": false,
+    "point_ge_0_10": true,
+    "seed": 4141
+  },
+  "sd_mm": 5.750483161015671,
+  "sd_pm": 5.541273306391317,
+  "sd_ratio_pm_over_mm": 0.9636187345017105,
+  "seasons_beating_market": 0,
+  "slope_m_on_pm": 0.8734215653852938,
+  "slope_pm_on_mm": 0.8399009263153943,
+  "stop_or": false
+}
