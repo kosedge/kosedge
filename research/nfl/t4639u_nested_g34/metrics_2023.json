@@ -1,0 +1,56 @@
+{
+  "MAE_mkt": 9.98421052631579,
+  "MAE_model": 10.481536511464576,
+  "MAE_ref": 10.617393420165078,
+  "beats_market_claim": false,
+  "bias": 0.8868009264316543,
+  "binding_CI": {
+    "B": 10000,
+    "ci95_hi": 0.36248980307162515,
+    "ci95_lo": -0.0971459957828792,
+    "ci_excludes_0": false,
+    "method": "paired_game_percentile_95",
+    "n": 285,
+    "point": 0.13585690870050057,
+    "seed": 4141
+  },
+  "c_report_only": {
+    "c": -0.14903770123766377,
+    "c_ci95_hi": 0.3062654751016186,
+    "c_ci95_lo": -0.6043408775769461,
+    "c_se_hc1": 0.23229753894861346,
+    "equation": "(m-mm) = c*(margin_A-mm) + e",
+    "role": "REPORT_ONLY_NOTE_HC1_diagnostic"
+  },
+  "label": "2023_supportive",
+  "market_CI_report_only": {
+    "B": 10000,
+    "ci95_hi": -0.18919228787082382,
+    "ci95_lo": -0.8171829264538959,
+    "ci_excludes_0": true,
+    "method": "paired_game_percentile_95",
+    "n": 285,
+    "point": -0.4973259851487874,
+    "seed": 4141
+  },
+  "n": 285,
+  "role": "report_only",
+  "season_block_CI_report_only": {
+    "B": 10000,
+    "ci95_hi": 0.13585690870050057,
+    "ci95_lo": 0.13585690870050057,
+    "ci_excludes_0": true,
+    "method": "season_block_percentile_95",
+    "n_seasons": 1,
+    "point": 0.13585690870050057,
+    "role": "report_only_cannot_PASS_FAIL",
+    "seed": 4141
+  },
+  "seasons": [
+    2023
+  ],
+  "\u0394MAE_mkt": -0.4973259851487857,
+  "\u0394MAE_mkt_expected_sign": "<0",
+  "\u0394MAE_mkt_role": "REPORT_ONLY_NOTE",
+  "\u0394MAE_ref": 0.13585690870050193
+}
