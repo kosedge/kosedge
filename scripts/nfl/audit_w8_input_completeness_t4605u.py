@@ -2,7 +2,8 @@
 """t4605u honest W8 input completeness (same 4 FAIL_CLOSED names as #642).
 
 Does not invent depth/injury/EPA. Does not treat packaged W1 / 2025 prior
-as current. current_weekly_depth_db stays FAIL if DATABASE_URL is unset.
+as current. current_weekly_depth_db closes only on a real warehouse RO
+SELECT (or local DATABASE_URL). Empty/missing warehouse stays FAIL.
 """
 
 from __future__ import annotations
@@ -115,7 +116,38 @@ def _railway_cli_status() -> Dict[str, Any]:
     return out
 
 
-def _db_probe() -> Dict[str, Any]:
+def _railway_exit_ok(value: Any) -> bool:
+    return str(value or "").startswith("exit=0")
+
+
+def _summarize_ro_probe(probe: Optional[Mapping[str, Any]]) -> Dict[str, Any]:
+    if not probe:
+        return {}
+    tables = probe.get("tables") if isinstance(probe.get("tables"), dict) else {}
+    depth = tables.get("nfl_dp_depth_chart_weekly") or {}
+    official = tables.get("nfl_dp_official_depth_charts") or {}
+    injuries = tables.get("nfl_dp_injuries") or {}
+    return {
+        "ok": bool(probe.get("ok")),
+        "connect_ok": bool(probe.get("connect_ok")),
+        "transaction_read_only": bool(probe.get("transaction_read_only")),
+        "read_only": bool(probe.get("read_only")),
+        "dml_ddl": bool(probe.get("dml_ddl")),
+        "invented": bool(probe.get("invented")),
+        "host_kind": probe.get("host_kind"),
+        "url_source_key": probe.get("url_source_key"),
+        "warehouse_rows_read": probe.get("warehouse_rows_read"),
+        "missing_tables": list(probe.get("missing_tables") or []),
+        "depth_n": depth.get("n"),
+        "depth_max_week": depth.get("max_week"),
+        "depth_teams": depth.get("teams"),
+        "official_n": official.get("n"),
+        "injuries_n": injuries.get("n"),
+        "injuries_max_week": injuries.get("max_week"),
+    }
+
+
+def _db_probe(ro_probe: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
     url = (os.environ.get("DATABASE_URL") or "").strip()
     launch = (os.environ.get("LAUNCH_RESEARCH_DATABASE_URL") or "").strip()
     local_ok = False
@@ -127,7 +159,21 @@ def _db_probe() -> Dict[str, Any]:
     except Exception as exc:
         local_err = f"{type(exc).__name__}: {exc}"
     railway = _railway_cli_status()
-    whoami_ok = railway.get("whoami", "").startswith("exit=0")
+    whoami_ok = _railway_exit_ok(railway.get("whoami"))
+    status_ok = _railway_exit_ok(railway.get("status"))
+    run_ok = _railway_exit_ok(railway.get("run_postgres"))
+    probe_sum = _summarize_ro_probe(ro_probe)
+    probe_ok = bool(
+        probe_sum.get("ok")
+        and probe_sum.get("transaction_read_only")
+        and int(probe_sum.get("depth_n") or 0) > 0
+    )
+    access_ok = (
+        probe_ok
+        or (bool(url) and local_ok)
+        or whoami_ok
+        or (status_ok and run_ok and probe_ok)
+    )
     return {
         "DATABASE_URL_present": bool(url),
         "DATABASE_PUBLIC_URL_present": bool(
@@ -138,9 +184,8 @@ def _db_probe() -> Dict[str, Any]:
         "local_5432_error": local_err,
         "railway_mcp_values_readable": False,
         "railway": railway,
-        "classification": (
-            "OK" if (bool(url) and local_ok) or whoami_ok else "ACCESS_BLOCKED"
-        ),
+        "ro_probe": probe_sum,
+        "classification": "OK" if access_ok else "ACCESS_BLOCKED",
         "repro": [
             "python3 -c \"import os; t=os.environ.get('RAILWAY_TOKEN'); print('RAILWAY_TOKEN', 'SET' if t else 'UNSET', 'length', len(t or ''))\"",
             "railway whoami",
@@ -159,6 +204,7 @@ def audit_week_inputs(
     efficiency_path: Path,
     slate_game_ids: List[str],
     now_utc: Optional[datetime] = None,
+    ro_probe: Optional[Mapping[str, Any]] = None,
 ) -> Dict[str, Any]:
     now = now_utc or datetime.now(timezone.utc).replace(microsecond=0)
     checks: List[Dict[str, Any]] = []
@@ -228,21 +274,44 @@ def audit_week_inputs(
         )
     )
 
-    db = _db_probe()
-    railway_ok = str(db.get("railway", {}).get("whoami") or "").startswith("exit=0")
+    db = _db_probe(ro_probe)
+    probe = db.get("ro_probe") or {}
+    railway = db.get("railway") or {}
+    railway_ok = _railway_exit_ok(railway.get("whoami"))
+    status_ok = _railway_exit_ok(railway.get("status"))
+    run_ok = _railway_exit_ok(railway.get("run_postgres"))
+    probe_ok = bool(
+        probe.get("ok")
+        and probe.get("transaction_read_only")
+        and int(probe.get("depth_n") or 0) > 0
+    )
     warehouse_ok = (
-        bool(db["DATABASE_URL_present"]) and bool(db["local_5432_accepting"])
-    ) or railway_ok
+        probe_ok
+        or (bool(db["DATABASE_URL_present"]) and bool(db["local_5432_accepting"]))
+        or railway_ok
+        or (status_ok and run_ok and probe_ok)
+    )
+    if warehouse_ok:
+        blocker = ""
+    elif "Unauthorized" in str(railway.get("status") or "") or "Unauthorized" in str(
+        railway.get("run_postgres") or ""
+    ):
+        blocker = (
+            "ACCESS_BLOCKED: RAILWAY_TOKEN present but railway status/run "
+            "Unauthorized. DATABASE_URL / DATABASE_PUBLIC_URL unset. "
+            "No SET TRANSACTION READ ONLY session. Will not invent nfl_dp_* rows. "
+            "Option B (box egress) not authorized."
+        )
+    else:
+        blocker = (
+            "ACCESS_BLOCKED: warehouse RO probe did not close current_weekly_depth_db. "
+            "Will not invent nfl_dp_* rows. Option B (box egress) not authorized."
+        )
     checks.append(
         _check(
             "current_weekly_depth_db",
             ok=warehouse_ok,
-            blocker=(
-                "ACCESS_BLOCKED: RAILWAY_TOKEN present but railway whoami/status/run "
-                "Unauthorized. DATABASE_URL / DATABASE_PUBLIC_URL unset. "
-                "No SET TRANSACTION READ ONLY session. Will not invent nfl_dp_* rows. "
-                "Option B (box egress) not authorized."
-            ),
+            blocker=blocker,
             evidence=db,
         )
     )
