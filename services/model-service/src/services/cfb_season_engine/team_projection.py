@@ -658,6 +658,9 @@ def project_game(
         "margin": f"{margin:.2f}",
         "st_total_nudge": f"{st_nudge:.3f}",
         "hfa_bucket": home.home_field.bucket if home.home_field else "n/a",
+        "qb_feature_contract_version": str(
+            universe.notes.get("qb_feature_contract_version") or ""
+        ),
         **{f"universe_{k}": v for k, v in list(universe.notes.items())[:6]},
     }
     return GameProjection(
@@ -695,6 +698,9 @@ def project_game_to_dict(proj: GameProjection) -> Dict[str, Any]:
         "home_team": proj.home_team,
         "away_team": proj.away_team,
         "engine_version": proj.engine_version,
+        "qb_feature_contract_version": str(
+            (proj.notes or {}).get("qb_feature_contract_version") or ""
+        ),
         "home_win_prob": proj.home_win_prob,
         "away_win_prob": proj.away_win_prob,
         "expected_home_score": proj.expected_home_score,
