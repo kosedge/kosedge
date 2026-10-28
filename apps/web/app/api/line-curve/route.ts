@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
-import { getLineCurve } from "@/lib/line-curve/service";
 import { closed } from "@/lib/line-curve/guardrails";
-import {
-  classifyAltSnapshot,
-  lineCurveUnavailablePayload,
-} from "@/lib/line-curve/degrade";
+import { lineCurveUnavailablePayload } from "@/lib/line-curve/degrade";
 import type {
   LineCurveSport,
   ModelMarginInput,
@@ -91,29 +87,7 @@ export async function POST(req: Request) {
     });
   }
 
-  if (!body.snapshot) {
-    return noStore(lineCurveUnavailablePayload());
-  }
-
-  const degrade = classifyAltSnapshot(body.snapshot);
-  if (degrade.tier === "none") {
-    return noStore({
-      ...lineCurveUnavailablePayload(),
-      asOf: degrade.asOf,
-    });
-  }
-
-  const curve = await getLineCurve(body.eventId, body.side, body.book, {
-    snapshot: body.snapshot,
-    model: body.model,
-  });
-  return noStore({
-    researchOnly: true,
-    reason: degrade.reason,
-    availability: degrade.tier === "stale" ? "stale" : "ok",
-    stale: degrade.tier === "stale",
-    optimizeDisabled: degrade.optimizeDisabled,
-    asOf: degrade.asOf,
-    curve,
-  });
+  // G-S6-CLIENT-SNAP: client snapshot is not a job SoT. Never price book
+  // alts from browser-minted capturedAt. Request path has no server snapshot.
+  return noStore(lineCurveUnavailablePayload());
 }

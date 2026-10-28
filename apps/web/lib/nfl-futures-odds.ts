@@ -65,6 +65,7 @@ function pickBestAmerican(
 
 export type NflFuturesOddsBundle = {
   status: "ok" | "empty" | "unauthorized" | "error" | "no_key" | "unavailable";
+  source: string;
   asOfUtc: string | null;
   /** Team Super Bowl winner odds by abbr. */
   superBowlByTeam: Map<string, PlayerFutureOddsSnap>;
@@ -81,6 +82,7 @@ function emptyBundle(
 ): NflFuturesOddsBundle {
   return {
     status,
+    source: status === "ok" ? "The Odds API" : "unavailable",
     asOfUtc: null,
     superBowlByTeam: new Map(),
     awardByPlayer: new Map(),
@@ -191,6 +193,7 @@ export async function loadNflFuturesOdds(): Promise<NflFuturesOddsBundle> {
   if (sb.status === "ok") {
     return {
       status: "ok",
+      source: "The Odds API",
       asOfUtc: sb.asOfUtc,
       superBowlByTeam: sb.byTeam,
       awardByPlayer: new Map(),

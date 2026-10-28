@@ -26,7 +26,7 @@ from src.nfl_remat_policy import (
     resolve_remat_weeks,
 )
 from src.services.nfl_canonical_teams import canonicalize_team
-from src.services.odds_api import fetch_odds
+from src.services.odds_api import fetch_odds, request_path_paid_odds_allowed
 from src.services.nfl_injury_nowcast import fetch_nfl_injury_nowcast
 from src.services.nfl_matchup_features import (
     fetch_latest_matchup_feature_pack,
@@ -3783,10 +3783,10 @@ def nfl_edges_today(
 
 
 def _normalize_nfl_fair_lines_odds_mode(raw: Optional[str]) -> str:
-    mode = str(raw or "live").strip().lower()
+    mode = str(raw or "skip").strip().lower()
     if mode in {"live", "skip", "reuse"}:
         return mode
-    return "live"
+    return "skip"
 
 
 def _odds_event_dicts(raw: Any) -> List[Dict[str, Any]]:
@@ -3816,6 +3816,9 @@ def _resolve_nfl_fair_lines_market_events(
     Returns (market_events, odds_feed_error, resolved_mode).
     """
     mode = _normalize_nfl_fair_lines_odds_mode(odds_mode)
+    # G-PROXY-LIVE: request-path live is denied unless C8 is explicitly on.
+    if mode == "live" and not request_path_paid_odds_allowed():
+        return [], None, "skip"
 
     if mode == "skip":
         return [], None, "skip"
@@ -4658,10 +4661,10 @@ def nfl_fair_lines(
         description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
     ),
     odds_mode: str = Query(
-        "live",
+        "skip",
         description=(
-            "WS-02 DUP-C: live (default HTTP), skip (never fetch_odds), "
-            "reuse (caller-supplied events/payload — no fetch_odds when valid)."
+            "t4668u / G-PROXY-LIVE: skip (default, never fetch_odds), "
+            "reuse (caller-supplied events/payload), live (C8 only)."
         ),
     ),
     persist: bool = Query(
@@ -4675,7 +4678,7 @@ def nfl_fair_lines(
         ),
     ),
 ) -> Dict[str, Any]:
-    """Customer/page-data fair-lines GET. Default odds_mode=live (one Odds HTTP)."""
+    """Customer/page-data fair-lines GET. Default odds_mode=skip (no Odds HTTP)."""
     return _nfl_fair_lines_impl(
         season=season,
         days_ahead=days_ahead,

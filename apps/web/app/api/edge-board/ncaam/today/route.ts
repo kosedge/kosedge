@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { env } from "@/lib/config/env";
-import { EdgeBoardResponseSchema } from "@kosedge/contracts";
 
 export const dynamic = "force-dynamic";
 
@@ -34,46 +33,6 @@ function getRequestId(req: Request) {
   );
 }
 
-async function tryModelService(
-  requestId: string,
-): Promise<{ ok: true; rows: unknown[] } | { ok: false }> {
-  const base = env.MODEL_SERVICE_URL;
-  if (!base) return { ok: false };
-
-  const upstream = `${base.replace(/\/+$/, "")}/edge-board/ncaam/today`;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-
-  try {
-    const res = await fetch(upstream, {
-      cache: "no-store",
-      signal: controller.signal,
-      headers: {
-        accept: "application/json",
-        "x-request-id": requestId,
-        ...(env.INTERNAL_API_SECRET
-          ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
-          : {}),
-      },
-    });
-
-    const contentType = res.headers.get("content-type") ?? "";
-    const raw = await res.text();
-
-    if (!res.ok || !contentType.includes("application/json"))
-      return { ok: false };
-
-    const parsed = EdgeBoardResponseSchema.safeParse(JSON.parse(raw));
-    if (!parsed.success) return { ok: false };
-
-    return { ok: true, rows: parsed.data.rows };
-  } catch {
-    return { ok: false };
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
 export async function GET(req: Request) {
   const requestId = getRequestId(req);
 
@@ -102,22 +61,8 @@ export async function GET(req: Request) {
     );
   }
 
-  const modelResult = await tryModelService(requestId);
-  if (modelResult.ok && modelResult.rows.length > 0) {
-    ncaamCache = { rows: modelResult.rows, ts: now };
-    return json(
-      {
-        rows: modelResult.rows,
-        source: "snapshot",
-        reason: "ok",
-        availability: "ok",
-      },
-      200,
-      { "x-request-id": requestId },
-    );
-  }
-
-  // No Odds API fallback — request path is DENIED.
+  // G-NCAAM-PROXY: user-read never proxies Railway /edge-board/ncaam/today
+  // (that route live-fetched NCAAB Odds). Cache is the only SoT read.
   return json(
     {
       rows: [],

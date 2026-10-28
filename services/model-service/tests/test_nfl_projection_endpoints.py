@@ -220,7 +220,8 @@ def test_nfl_fair_lines_returns_kosedge_board_when_odds_unavailable(monkeypatch)
     payload = response.json()
     assert payload["count"] == 1
     assert payload["diagnostics"]["kosedge_only"] is True
-    assert payload["diagnostics"]["odds_feed_status"] == "degraded"
+    assert payload["diagnostics"]["odds_feed_status"] == "skipped"
+    assert payload["diagnostics"]["odds_mode"] == "skip"
     line = payload["lines"][0]
     assert line["home_abbr"] == "SEA"
     assert line["away_abbr"] == "NE"
@@ -269,7 +270,8 @@ def test_nfl_fair_lines_uses_snapshot_current_when_odds_401(monkeypatch) -> None
     assert response.status_code == 200
     payload = response.json()
     diag = payload["diagnostics"]
-    assert diag["odds_feed_status"] == "degraded"
+    assert diag["odds_feed_status"] == "skipped"
+    assert diag["odds_mode"] == "skip"
     assert "3cf941bb" not in str(diag.get("odds_feed_error") or "")
     assert diag["snapshot_current_count"] == 1
     assert diag["market_joined_count"] == 1
@@ -407,14 +409,15 @@ def test_nfl_fair_lines_get_default_zero_persist_writes(monkeypatch) -> None:
     assert write_calls == []
     assert skipped.json()["diagnostics"]["odds_persisted"]["snapshots_inserted"] == 0
 
-    # Opt-in persist=1 — ops path may still land training snaps.
+    # persist=1 does not re-open request-path live fetch (G-PROXY-LIVE / C8 unset).
     opted = client.get(
         "/nfl/fair-lines",
         params={"season": 2026, "days_ahead": 120, "persist": "1"},
     )
     assert opted.status_code == 200
-    assert len(write_calls) == 1
-    assert opted.json()["diagnostics"]["odds_persisted"]["events_persisted"] == 1
+    assert write_calls == []
+    assert opted.json()["diagnostics"]["odds_mode"] == "skip"
+    assert opted.json()["diagnostics"]["odds_persisted"]["events_persisted"] == 0
     assert "odds_ledger_health" in opted.json()["diagnostics"]
     assert opted.json()["diagnostics"]["odds_ledger_health"]["ledger_health"] in {
         "ok",

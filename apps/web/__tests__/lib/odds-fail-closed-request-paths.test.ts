@@ -287,6 +287,10 @@ describe("I1/I2/I3/I5 request-path fail-closed (S1–S8)", () => {
     expect(cfb.status).not.toBe("no_key");
     expect(pre.status).not.toBe("no_key");
     expect(nfl.note).toMatch(/unavailable|as-of/i);
+    expect(nfl.source).toBe("unavailable");
+    expect(cfb.source).toBe("unavailable");
+    expect(nfl.source).not.toBe("The Odds API");
+    expect(cfb.source).not.toBe("The Odds API");
     expect(probe.hits).toEqual([]);
   });
 

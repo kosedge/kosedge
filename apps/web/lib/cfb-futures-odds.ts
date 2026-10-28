@@ -86,7 +86,7 @@ function emptyBundle(
 ): CfbFuturesOddsBundle {
   return {
     status,
-    source: CFB_FUTURES_ODDS_SOURCE,
+    source: status === "ok" ? CFB_FUTURES_ODDS_SOURCE : "unavailable",
     sportKey: CFB_NATTY_SPORT_KEY,
     asOfUtc: null,
     nattyByTeam: new Map(),
