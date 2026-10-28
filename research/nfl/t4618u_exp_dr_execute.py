@@ -334,11 +334,7 @@ def fit_beta_rest_only(x: "Any", y: "Any") -> Dict[str, Any]:
     """Intercept-free OLS y ~ X_rest (4 cols). HC1 diagnostic; point β used."""
     import numpy as np
 
-    xx = np.asarray(x, dtype=np.float64)
-    yy = np.asarray(y, dtype=np.float64)
-    if xx.ndim != 2 or xx.shape[1] != 4:
-        raise RuntimeError(f"X_rest must be (n, 4); got {xx.shape}")
-    if yy.size == 0:
+    if len(x) == 0 or len(y) == 0:
         zeros = [0.0] * 4
         return {
             "beta": zeros,
@@ -349,6 +345,10 @@ def fit_beta_rest_only(x: "Any", y: "Any") -> Dict[str, Any]:
             "k": 4,
             "empty_design": True,
         }
+    xx = np.asarray(x, dtype=np.float64)
+    yy = np.asarray(y, dtype=np.float64)
+    if xx.ndim != 2 or xx.shape[1] != 4:
+        raise RuntimeError(f"X_rest must be (n, 4); got {xx.shape}")
     fit = ols_hc1(xx, yy)
     beta = [float(v) for v in fit["beta"]]
     se = [float(v) for v in fit["se"]]
