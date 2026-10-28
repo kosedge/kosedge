@@ -1,16 +1,21 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { NextRequest } from "next/server";
-import { installOddsHostFailOnHit } from "@/__tests__/helpers/authorized-odds-job";
+import {
+  installOddsHostFailOnHit,
+  stubDummyOddsKeys,
+} from "@/__tests__/helpers/authorized-odds-job";
 import { rateLimit } from "@/lib/security/rate-limit";
 import { GET as compareGET } from "@/app/api/odds/[sport]/compare/route";
+
+stubDummyOddsKeys();
 
 describe("I4/I6 spoofed cron/warm headers (S5)", () => {
   const prevSecret = process.env.CRON_SECRET;
   let probe: ReturnType<typeof installOddsHostFailOnHit>;
 
   beforeEach(() => {
+    stubDummyOddsKeys();
     process.env.CRON_SECRET = "real-cron-secret";
-    process.env.ODDS_API_KEY = "dummy-odds-key-t4662u";
     delete process.env.ODDS_WEB_PAID_FETCH_ALLOW;
     probe = installOddsHostFailOnHit();
   });

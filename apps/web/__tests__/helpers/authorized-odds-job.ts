@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import {
   enterAuthorizedOddsJobContext,
   TEST_ODDS_ACQUIRE_JOB_ID,
@@ -5,6 +6,15 @@ import {
 import { isOddsPaidUrl } from "@/lib/odds-acquire/hosts";
 
 const TEST_CRON = "test-cron-secret-t4662u";
+
+/** Dummy key for I-series. Must be stubbed BEFORE `@/lib/config/env` parses. */
+export const DUMMY_ODDS_KEY = "dummy-odds-key-t4662u";
+
+export function stubDummyOddsKeys(): void {
+  vi.stubEnv("ODDS_API_KEY", DUMMY_ODDS_KEY);
+  vi.stubEnv("ODDS_API_KEY_BACKUP", DUMMY_ODDS_KEY);
+  vi.stubEnv("ODDS_WIDGET_ACCESS_KEY", DUMMY_ODDS_KEY);
+}
 
 export async function withAuthorizedOddsJob<T>(
   fn: () => T | Promise<T>,
