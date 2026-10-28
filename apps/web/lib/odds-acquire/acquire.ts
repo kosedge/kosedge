@@ -1,3 +1,5 @@
+import "server-only";
+
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { logWarn } from "@/lib/logger";
 import {

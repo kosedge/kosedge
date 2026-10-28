@@ -80,6 +80,25 @@ describe("G-PROXY-LIVE / G-CFB-RAIL-LIVE / G-S6 / G-S7 / G-NCAAM source locks", 
     expect(mlbEdges).toContain('reason": "paid_fetch_denied"');
   });
 
+  it("client boards do not import odds-api / odds-acquire (async_hooks)", () => {
+    const clients = [
+      "components/pro/nfl/NflEdgesDeskClient.tsx",
+      "components/pro/nfl/NflFairLinesClient.tsx",
+      "components/OddsCompareBoard.tsx",
+    ];
+    for (const rel of clients) {
+      const text = src(rel);
+      expect(text).toMatch(/["']use client["']/);
+      expect(text).not.toMatch(
+        /import\s+(?!type\s)[^;]*from\s+["']@\/lib\/odds-api["']/,
+      );
+      expect(text).not.toContain("@/lib/odds-acquire");
+    }
+    expect(src("lib/odds-acquire/acquire.ts")).toContain(
+      'import "server-only"',
+    );
+  });
+
   it("ncaam user-read route does not proxy Railway live Odds", () => {
     const ncaam = src("app/api/edge-board/ncaam/today/route.ts");
     expect(ncaam).not.toMatch(/fetch\([^)]*ncaam\/today/);
@@ -206,7 +225,9 @@ describe("G-NCAAM-PROXY runtime", () => {
     const fetchSpy = vi.fn(globalThis.fetch);
     vi.stubGlobal("fetch", fetchSpy);
     const { GET } = await import("@/app/api/edge-board/ncaam/today/route");
-    const res = await GET(new Request("http://localhost/api/edge-board/ncaam/today"));
+    const res = await GET(
+      new Request("http://localhost/api/edge-board/ncaam/today"),
+    );
     const body = (await res.json()) as { source?: string; reason?: string };
     expect([200, 401]).toContain(res.status);
     if (res.status === 200) {
@@ -235,12 +256,10 @@ describe("G-I3-STUB warm actually dispatches assemble", () => {
     process.env.CFB_EDGE_BOARD_INTERNAL = "true";
     process.env.NFL_EDGE_BOARD_INTERNAL = "true";
 
-    const { GET: assembleGET } = await import(
-      "@/app/api/edge-board/[sport]/assemble/route"
-    );
-    const { GET: warmGET } = await import(
-      "@/app/api/cron/warm-page-data/route"
-    );
+    const { GET: assembleGET } =
+      await import("@/app/api/edge-board/[sport]/assemble/route");
+    const { GET: warmGET } =
+      await import("@/app/api/cron/warm-page-data/route");
     const assembleHits: string[] = [];
     const oddsHits: string[] = [];
     const previous = globalThis.fetch;

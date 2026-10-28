@@ -14,8 +14,10 @@ import {
   stampOddsMarketPeriod,
 } from "@/lib/edge-board-market-identity";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import { bookDisplay } from "@/lib/odds-book-display";
 
 export { americanImpliedProb, noVigHomeProb };
+export { bookDisplay };
 
 async function paidOddsGet(
   path: string,
@@ -127,25 +129,6 @@ export function bookFeedStatusForSport(
 ): BookFeedStatus {
   if (!sportUsesDesignatedBookFeedHonesty(sportKey)) return "carried";
   return nflBookFeedStatus(bookKey);
-}
-
-const BOOK_DISPLAY: Record<string, string> = {
-  draftkings: "DraftKings",
-  fanduel: "FanDuel",
-  circa: "Circa",
-  hardrockbet: "Hard Rock Bet",
-  betmgm: "BetMGM",
-  bet365: "Bet365",
-  fanatics: "Fanatics",
-  betrivers: "BetRivers",
-  betr: "Betr",
-  bovada: "Bovada",
-  williamhill_us: "Caesars",
-  betonlineag: "BetOnline",
-};
-
-export function bookDisplay(key: string): string {
-  return BOOK_DISPLAY[key.toLowerCase()] ?? key;
 }
 
 export type OddsBookmaker = {
