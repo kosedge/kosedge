@@ -55,6 +55,31 @@ describe("G-PROXY-LIVE / G-CFB-RAIL-LIVE / G-S6 / G-S7 / G-NCAAM source locks", 
     expect(cfb).not.toMatch(/return current_cfb_odds_events\(\s*\)/);
   });
 
+  it("nfl/mlb edges/today request path is C8-gated (user-read Railway hop)", () => {
+    const nfl = readFileSync(
+      path.join(root, "../../services/model-service/src/routes/nfl.py"),
+      "utf8",
+    );
+    const mlb = readFileSync(
+      path.join(root, "../../services/model-service/src/routes/mlb.py"),
+      "utf8",
+    );
+    expect(nfl).toContain("request_path_paid_odds_allowed");
+    expect(mlb).toContain("request_path_paid_odds_allowed");
+    const nflEdges = nfl.slice(
+      nfl.indexOf("def nfl_edges_today"),
+      nfl.indexOf("def _normalize_nfl_fair_lines_odds_mode"),
+    );
+    expect(nflEdges).toContain("if not request_path_paid_odds_allowed()");
+    expect(nflEdges).toContain('odds_feed_error = "paid_fetch_denied"');
+    const mlbEdges = mlb.slice(
+      mlb.indexOf("def mlb_edges_today"),
+      mlb.indexOf("def mlb_premium_feed"),
+    );
+    expect(mlbEdges).toContain("if not request_path_paid_odds_allowed()");
+    expect(mlbEdges).toContain('reason": "paid_fetch_denied"');
+  });
+
   it("ncaam user-read route does not proxy Railway live Odds", () => {
     const ncaam = src("app/api/edge-board/ncaam/today/route.ts");
     expect(ncaam).not.toMatch(/fetch\([^)]*ncaam\/today/);

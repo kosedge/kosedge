@@ -313,3 +313,24 @@ def test_premium_feed_applies_uncertainty_guardrails(monkeypatch) -> None:
     assert payload["count"] >= 1
     assert all(x["game_id"] == "g-safe" for x in payload["recommendations"])
     assert payload["portfolio_summary"]["rejected_counts"]["uncertainty"] >= 1
+
+
+def test_mlb_edges_today_does_not_fetch_odds_when_c8_unset(monkeypatch) -> None:
+    """G-PROXY-LIVE: /mlb/edges/today user-read must not pay Odds when C8 unset.
+
+    Mutation: remove the request_path_paid_odds_allowed wrap → this raises.
+    """
+    monkeypatch.delenv("ODDS_API_REQUEST_PATH_ALLOW", raising=False)
+
+    def _boom(**_kwargs):
+        raise AssertionError("fetch_odds must not run on /mlb/edges/today when C8 unset")
+
+    monkeypatch.setattr(mlb_routes, "fetch_odds", _boom)
+    client = TestClient(app)
+    response = client.get("/mlb/edges/today")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["count"] == 0
+    assert payload["edges"] == []
+    assert payload.get("reason") == "paid_fetch_denied"
+    assert payload.get("source") == "none"
