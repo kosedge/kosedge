@@ -315,7 +315,14 @@ def _injury_impacts(inj_df: Any) -> Dict[str, Dict[str, Any]]:
 
     df = inj_df.copy()
     df["team_n"] = df["team"].map(lambda t: _nv(str(t)))
-    latest_week = {t: int(g["week"].max()) for t, g in df.groupby("team_n")}
+    latest_week: Dict[str, int] = {}
+    for team, g in df.groupby("team_n"):
+        designated_weeks = []
+        for week_n, wg in g.groupby(g["week"].astype(int)):
+            statuses = wg["report_status"].fillna("").astype(str).str.strip().str.lower()
+            if int((statuses.isin(DESIGNATIONS)).sum()) > 0:
+                designated_weeks.append(int(week_n))
+        latest_week[team] = max(designated_weeks) if designated_weeks else int(g["week"].max())
     out: Dict[str, Dict[str, Any]] = {}
     for team, as_of_week in latest_week.items():
         rows = df[(df["team_n"] == team) & (df["week"] == as_of_week)]
@@ -646,7 +653,14 @@ def _materialize_current_packs(
         "rows": rows,
     }
 
-    latest_week = int(inj_df["week"].max())
+    # Do not treat a stub week (empty report_status) as the official book.
+    latest_week = 0
+    for week_n, grp in inj_df.groupby(inj_df["week"].astype(int)):
+        statuses = grp["report_status"].fillna("").astype(str).str.strip().str.lower()
+        if int((statuses.isin(DESIGNATIONS)).sum()) > 0:
+            latest_week = max(latest_week, int(week_n))
+    if latest_week < 1:
+        latest_week = int(inj_df["week"].max())
     inj_week = inj_df[inj_df["week"] == latest_week]
     designated: List[Dict[str, Any]] = []
     for rec in inj_week.to_dict("records"):
@@ -1147,6 +1161,10 @@ Does not call The Odds API. Writes `/workspace/ops/nfl_enterprise_green_t4359u/r
             "repo_path": str(repo_root),
             "code_tip_sha8": code_tip[:8],
             "n_games": len(rows),
+            "completeness_sha256": completeness["input_completeness_sha256"],
+            "completeness_sha8": completeness["input_completeness_sha256"][:8],
+            "blockers_closed": completeness["passed"],
+            "blockers_remaining": completeness["failing_components"],
             "sha256sums_head": list(box_sums.items())[:4],
             "t08_returncode": t08["returncode"],
         },
