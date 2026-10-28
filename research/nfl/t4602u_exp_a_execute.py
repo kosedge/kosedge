@@ -386,10 +386,12 @@ def load_panel(emit_path: Path) -> Tuple[List[Dict[str, Any]], int]:
     panel.sort(key=lambda r: (r["kickoff_ts"], r["game_id"]))
     print(
         f"[panel] n={len(panel)} missing={missing} n_games_ge_2024={n_games_ge_2024} "
-        f"n_oos_ge_2024={n_oos_ge_2024}",
+        f"n_oos_dropped_ge_2024={n_oos_ge_2024}",
         flush=True,
     )
-    return panel, n_games_ge_2024 + n_oos_ge_2024
+    # 2024+ OOS rows are the protected holdout: dropped, not used. FAIL only if
+    # they enter the analysis panel (games.csv / emit / PBP used rows).
+    return panel, n_games_ge_2024, n_oos_ge_2024
 
 
 def load_team_games() -> Tuple[Dict[str, Any], int]:
@@ -1131,16 +1133,17 @@ def main() -> int:
     if manifest.get("output", {}).get("simulate_nfl_game") is True:
         raise RuntimeError("frozen output.simulate_nfl_game true")
 
-    panel, n_ge_2024_join = load_panel(Path(h1["emit_path"]))
+    panel, n_ge_2024_games, n_oos_dropped_ge_2024 = load_panel(Path(h1["emit_path"]))
     tg, n_ge_2024_pbp = load_team_games()
     obs = _obs_arrays(tg["rows"])
-    n_ge_2024 = int(n_ge_2024_join + n_ge_2024_pbp)
+    n_ge_2024 = int(n_ge_2024_games + n_ge_2024_pbp)
 
     if n_ge_2024 > 0:
         counts = {
             "verdict": "FAIL",
             "fail_reasons": [f"n_rows_season_ge_2024={n_ge_2024}"],
             "n_rows_season_ge_2024": n_ge_2024,
+            "n_oos_dropped_ge_2024": n_oos_dropped_ge_2024,
             "cert_candidate": 0,
             "ticket": TICKET,
         }
@@ -1308,6 +1311,7 @@ def main() -> int:
         "n_2023": sup["n"],
         "n_neutral": sum(1 for g in panel if g["neutral"]),
         "n_rows_season_ge_2024": n_ge_2024,
+        "n_oos_dropped_ge_2024": n_oos_dropped_ge_2024,
         "n_missing_rd": result["n_missing_rd"],
         "n_team_games": int(len(obs["y"])),
         "selected_cfg_id": winner["cfg_id"],
