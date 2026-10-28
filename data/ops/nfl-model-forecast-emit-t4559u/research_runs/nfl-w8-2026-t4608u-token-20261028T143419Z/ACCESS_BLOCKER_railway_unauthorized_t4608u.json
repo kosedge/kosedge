@@ -1,0 +1,33 @@
+{
+  "RAILWAY_TOKEN": "SET",
+  "RAILWAY_TOKEN_length": 36,
+  "blocker_md": "data/ops/nfl-t4608u-w8-depth-db-token-unblock/ACCESS_BLOCKER_railway_unauthorized_t4608u.md",
+  "blocker_sha256": "fc9c97a8443ea9c6974aa314debc3432fd8569f48dec844a133a8a123ce0d411",
+  "blocker_sha8": "fc9c97a8",
+  "cert_candidate": 0,
+  "classification": "ACCESS_BLOCKED",
+  "closed": [
+    "depth_sot_week",
+    "injury_paths_current",
+    "inseason_efficiency_current",
+    "week_schedule_kickoffs"
+  ],
+  "completeness_file_sha256": "554db013c3f4b60599c8dfb400972b7701a6006fb976e632b12e17d1bc28bd34",
+  "completeness_sha256": "02ba06ac819486d478acfdcd30fb2b0015d6101b9ddccf32153a462cde937c70",
+  "completeness_sha8": "02ba06ac",
+  "component": "current_weekly_depth_db",
+  "cos_order_sha256": "889fd7643226953bb6bd7d0eb867a157abe840c45966b4df5537249f8c1f16ad",
+  "decision_sha256": "5357266707b5555e96b746dce91435f862884db92b2124215f0d65d9ac435904",
+  "filed_at_utc": "2026-10-28T14:34:19Z",
+  "invented": false,
+  "option_b_attempted": false,
+  "prior_blocker_sha256": "125b264a2456d2701924f01e44c8ea18c892775bd2e10eeadd93bbca979a6065",
+  "railway_run": "Unauthorized",
+  "railway_status": "Unauthorized",
+  "railway_whoami": "Unauthorized",
+  "remaining": [
+    "current_weekly_depth_db"
+  ],
+  "ticket": "t4608u",
+  "warehouse_rows_read": 0
+}

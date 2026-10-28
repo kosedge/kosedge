@@ -50,6 +50,71 @@ def _load(path: Path) -> Dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _railway_cli_status() -> Dict[str, Any]:
+    """whoami / status / run — never print tokens or DATABASE_* values."""
+    import shutil
+    import subprocess
+
+    token = (os.environ.get("RAILWAY_TOKEN") or "").strip()
+    cli = shutil.which("railway") or str(Path.home() / ".railway/bin/railway")
+    out: Dict[str, Any] = {
+        "RAILWAY_TOKEN_present": bool(token),
+        "RAILWAY_TOKEN_length": len(token),
+        "railway_cli": cli if Path(cli).is_file() else "",
+        "whoami": "",
+        "status": "",
+        "run_postgres": "",
+    }
+    env = os.environ.copy()
+    base = [
+        cli,
+        "--project",
+        "da3d68f8-d925-462f-b262-c4ef3e488245",
+        "--environment",
+        "production",
+    ]
+    for key, args in (
+        ("whoami", [cli, "whoami"]),
+        (
+            "status",
+            [cli, "status", "--project", "da3d68f8-d925-462f-b262-c4ef3e488245", "--environment", "production"],
+        ),
+        (
+            "run_postgres",
+            [
+                cli,
+                "run",
+                "--project",
+                "da3d68f8-d925-462f-b262-c4ef3e488245",
+                "--environment",
+                "production",
+                "--service",
+                "Postgres",
+                "--",
+                "python3",
+                "-c",
+                "import os; print('url_present', bool(os.environ.get('DATABASE_PUBLIC_URL') or os.environ.get('DATABASE_URL')))",
+            ],
+        ),
+    ):
+        try:
+            proc = subprocess.run(
+                args,
+                capture_output=True,
+                text=True,
+                timeout=20,
+                env=env,
+            )
+            text = (proc.stderr or proc.stdout or "").strip().splitlines()
+            first = text[0] if text else f"exit_{proc.returncode}"
+            if token and token in first:
+                first = "REDACTED"
+            out[key] = f"exit={proc.returncode} {first[:160]}"
+        except Exception as exc:
+            out[key] = f"{type(exc).__name__}"
+    return out
+
+
 def _db_probe() -> Dict[str, Any]:
     url = (os.environ.get("DATABASE_URL") or "").strip()
     launch = (os.environ.get("LAUNCH_RESEARCH_DATABASE_URL") or "").strip()
@@ -61,15 +126,26 @@ def _db_probe() -> Dict[str, Any]:
         local_ok = True
     except Exception as exc:
         local_err = f"{type(exc).__name__}: {exc}"
+    railway = _railway_cli_status()
+    whoami_ok = railway.get("whoami", "").startswith("exit=0")
     return {
         "DATABASE_URL_present": bool(url),
+        "DATABASE_PUBLIC_URL_present": bool(
+            (os.environ.get("DATABASE_PUBLIC_URL") or "").strip()
+        ),
         "LAUNCH_RESEARCH_DATABASE_URL_present": bool(launch),
         "local_5432_accepting": local_ok,
         "local_5432_error": local_err,
         "railway_mcp_values_readable": False,
+        "railway": railway,
+        "classification": (
+            "OK" if (bool(url) and local_ok) or whoami_ok else "ACCESS_BLOCKED"
+        ),
         "repro": [
-            "echo DATABASE_URL=${DATABASE_URL:-UNSET}",
-            "python3 -c \"import socket; socket.create_connection(('127.0.0.1',5432),0.4)\"",
+            "python3 -c \"import os; t=os.environ.get('RAILWAY_TOKEN'); print('RAILWAY_TOKEN', 'SET' if t else 'UNSET', 'length', len(t or ''))\"",
+            "railway whoami",
+            "railway status --project da3d68f8-d925-462f-b262-c4ef3e488245 --environment production",
+            "railway run --project da3d68f8-d925-462f-b262-c4ef3e488245 --environment production --service Postgres -- python3 -c \"import os; print('url_present', bool(os.environ.get('DATABASE_PUBLIC_URL') or os.environ.get('DATABASE_URL')))\"",
         ],
     }
 
@@ -153,15 +229,19 @@ def audit_week_inputs(
     )
 
     db = _db_probe()
+    railway_ok = str(db.get("railway", {}).get("whoami") or "").startswith("exit=0")
+    warehouse_ok = (
+        bool(db["DATABASE_URL_present"]) and bool(db["local_5432_accepting"])
+    ) or railway_ok
     checks.append(
         _check(
             "current_weekly_depth_db",
-            ok=bool(db["DATABASE_URL_present"]) and bool(db["local_5432_accepting"]),
+            ok=warehouse_ok,
             blocker=(
-                "DATABASE_URL unset on this VM; 127.0.0.1:5432 not accepting; "
-                "Railway MCP returns DATABASE_URL name only (values hidden). "
-                "Cannot load nfl_dp_depth_chart_weekly / injury nowcast. "
-                "Will not invent a current book from W1 pack."
+                "ACCESS_BLOCKED: RAILWAY_TOKEN present but railway whoami/status/run "
+                "Unauthorized. DATABASE_URL / DATABASE_PUBLIC_URL unset. "
+                "No SET TRANSACTION READ ONLY session. Will not invent nfl_dp_* rows. "
+                "Option B (box egress) not authorized."
             ),
             evidence=db,
         )
