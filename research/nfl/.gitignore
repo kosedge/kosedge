@@ -2,3 +2,6 @@
 t4586u_exp_e_cache/
 *.parquet
 *.parquet.part
+# Keep H1 both-run logs (repo *.log ignore would drop them)
+!t4586u_exp_e_h1_addendum/**/*.log
+
