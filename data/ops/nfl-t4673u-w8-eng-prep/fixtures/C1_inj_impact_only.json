@@ -1,0 +1,27 @@
+{
+  "id": "C1_inj_impact_only",
+  "seed": 4643,
+  "simulations": 1200,
+  "inputs": {
+    "game_id": "2026-W08-CONTRACT",
+    "home_team": "GB",
+    "away_team": "CAR",
+    "offense_index_home": 1.0,
+    "offense_index_away": 1.0,
+    "defense_index_home": 1.0,
+    "defense_index_away": 1.0,
+    "rest_days_home": 7.0,
+    "rest_days_away": 7.0,
+    "injury_nowcast_impact_home": 0.45,
+    "injury_nowcast_impact_away": 0.05
+  },
+  "declared_component": "diagnostics.injury_nowcast.home_impact",
+  "must_not_move": [
+    "injuries_depth.margin_points",
+    "mean_home_points",
+    "markets.spread_home",
+    "markets.home_win_prob",
+    "markets.total_mean",
+    "error_regime.stdev_widen"
+  ]
+}
