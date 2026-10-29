@@ -12,8 +12,8 @@ CoS seal destination after this tip: `ops/nfl_enterprise_green_t4359u/` (not wri
 |---|---|
 | Branch | `cursor/handicap-clear-a-if-ledger-ed4b` |
 | Base | `deploy-vercel` @ `209e90aa4a3f7edca15592af4cdd2f3c44f8b4c4` |
-| Tip SHA | `161df079c1c9ff8f752718c35933097e342fab0b` (implementation commit on this branch) |
-| DRAFT PR | *(filled after draft PR opens; branch HEAD may add a stamp commit)* |
+| Tip SHA | `3e29a0a7da78d9f47be63ca7387eac6b3b8c30f9` (branch HEAD at DRAFT open; implementation `161df079c1c9ff8f752718c35933097e342fab0b`) |
+| DRAFT PR | https://github.com/kosedge/kosedge/pull/657 |
 | Agent run | https://cursor.com/agents/bc-727fa738-c4c8-596c-934f-86d7241eed4b |
 
 ## What landed (CLEAR-A only)
