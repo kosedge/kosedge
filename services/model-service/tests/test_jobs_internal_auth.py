@@ -2,6 +2,11 @@
 
 No network. Celery send_task is monkeypatched. Route inventory comes from
 app.routes so a new job path cannot skip the matrix.
+
+Inventory pin: `_EXPECTED_JOB_ROUTE_COUNT` is the exact reviewed count (76
+method+path pairs at tip 3d3a4152). When a `/api/jobs` route is added or
+removed, update that constant in the same change so the pin cannot drift
+quietly below the reviewed set.
 """
 
 from __future__ import annotations
@@ -27,7 +32,8 @@ from src.ops_auth import require_kosedge_internal
 SECRET = "test-internal-secret"
 MAIN_PY = Path(__file__).resolve().parents[1] / "src" / "main.py"
 OPS_AUTH = Path(__file__).resolve().parents[1] / "src" / "ops_auth.py"
-_UNGATED_APP_JOBS = re.compile(r'@app\.(?:get|post)\("/api/jobs')
+_UNGATED_APP_JOBS = re.compile(r'@app\.(?:get|post|put|delete|patch)\("/api/jobs')
+_EXPECTED_JOB_ROUTE_COUNT = 76
 _PAID_PULLS = (
     "/api/jobs/pull-odds-snapshot",
     "/api/jobs/pull-historical-odds-backfill",
@@ -100,7 +106,11 @@ def test_jobs_no_ungated_app_decorator_in_main() -> None:
 
 
 def test_jobs_route_inventory_covers_paid_pulls() -> None:
-    assert len(_JOB_ROUTE_CALLS) >= 40
+    assert len(_JOB_ROUTE_CALLS) == _EXPECTED_JOB_ROUTE_COUNT, (
+        f"job route inventory is {len(_JOB_ROUTE_CALLS)}, "
+        f"expected exactly {_EXPECTED_JOB_ROUTE_COUNT}; "
+        "update _EXPECTED_JOB_ROUTE_COUNT when adding or removing /api/jobs routes"
+    )
     paths = {path for path, _method in _JOB_ROUTE_CALLS}
     missing = [path for path in _PAID_PULLS if path not in paths]
     assert missing == [], missing
