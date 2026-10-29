@@ -55,6 +55,54 @@ def _field_from(row: Mapping[str, Any], name: str) -> Any:
     return None
 
 
+def _values_conflict(left: Any, right: Any, name: str) -> bool:
+    if name in {"as_of_ts", "decision_ts", "captured_at"}:
+        try:
+            return canonicalize_as_of_ts(left) != canonicalize_as_of_ts(right)
+        except HandicapLedgerReject:
+            return True
+    if (
+        isinstance(left, (int, float))
+        and isinstance(right, (int, float))
+        and not isinstance(left, bool)
+        and not isinstance(right, bool)
+    ):
+        return left != right
+    return left != right
+
+
+def reject_top_level_payload_conflicts(row: Mapping[str, Any]) -> None:
+    """R7: top-level must not mask a different payload value (no precedence)."""
+    payload = row.get("payload")
+    if not isinstance(payload, Mapping):
+        return
+    for key, payload_value in payload.items():
+        if key == "payload" or key not in row:
+            continue
+        top_value = row.get(key)
+        if not _present(top_value) or not _present(payload_value):
+            continue
+        if _values_conflict(top_value, payload_value, str(key)):
+            raise HandicapLedgerReject(
+                f"REJECT top-level {key!r} conflicts with payload.{key} (no precedence)"
+            )
+
+
+def reject_contaminated_market_blend(row: Mapping[str, Any]) -> None:
+    """Every present market_blend (top-level and payload) must be exact 0."""
+    values: list[Any] = []
+    if "market_blend" in row and row.get("market_blend") is not None:
+        values.append(row.get("market_blend"))
+    payload = row.get("payload")
+    if isinstance(payload, Mapping) and "market_blend" in payload and payload.get("market_blend") is not None:
+        values.append(payload.get("market_blend"))
+    for value in values:
+        if not is_exact_zero(value):
+            raise HandicapLedgerReject(
+                "L0 REJECT market_blend MUST = 0 (top-level and payload; no precedence)"
+            )
+
+
 def _require_number(value: Any, name: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise HandicapLedgerReject(f"REJECT {name} must be numeric (no impute)")
@@ -67,6 +115,7 @@ def validate_l1_row(
     decision_ts: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """D3(iii) + 243a384e L1: missing required field or as_of > decision ⇒ REJECT."""
+    reject_top_level_payload_conflicts(row)
     missing = [name for name in L1_REQUIRED_FIELDS if not _present(_field_from(row, name))]
     # delta/uncertainty may be 0.0 — _present(0.0) is True. Missing key rejects.
     if missing:
@@ -96,6 +145,8 @@ def validate_l1_row(
 
 
 def validate_l0_row(row: Mapping[str, Any]) -> Dict[str, Any]:
+    reject_top_level_payload_conflicts(row)
+    reject_contaminated_market_blend(row)
     missing = [name for name in L0_REQUIRED_FIELDS if not _present(_field_from(row, name))]
     if missing:
         raise HandicapLedgerReject(
@@ -115,6 +166,7 @@ def validate_l0_row(row: Mapping[str, Any]) -> Dict[str, Any]:
 
 
 def validate_l4_row(row: Mapping[str, Any], *, decision_ts: Optional[Any] = None) -> Dict[str, Any]:
+    reject_top_level_payload_conflicts(row)
     missing = [name for name in L4_REQUIRED_FIELDS if not _present(_field_from(row, name))]
     if missing:
         raise HandicapLedgerReject(
