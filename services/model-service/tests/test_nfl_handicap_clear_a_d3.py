@@ -19,7 +19,7 @@ import pytest
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
 
 from src.services.nfl_handicap_ledger import (
-    FORECAST_HANDICAPPED_FAIR,
+    FORECAST_HANDICAP_DELTA,
     FORECAST_INDEPENDENT_FAIR,
     FORECAST_MARKET_INFORMED_FAIR,
     L0_LAYER,
@@ -107,6 +107,8 @@ def test_d3_i_if_mus_match_pre_blend_helper_within_tol() -> None:
     assert derived_if is not None
     assert abs(margin_mu - (-float(derived_if["spread_home"]))) <= 0.01
     assert abs(total_mu - float(derived_if["total_mean"])) <= 0.01
+    # R1/F8 residual (NON_BLOCKING): oracle does not lock if_out["markets"]
+    # or weeks 1–4 disagreement boost. Not closed in D1–D4 remotion.
 
 
 def test_d3_ii_flag_off_prod_path_byte_identical_to_baseline() -> None:
@@ -219,9 +221,16 @@ def test_if_hf_mif_coexist_without_overwrite(tmp_path: Path) -> None:
         "margin_mu": 0.16,
         "total_mu": 43.82,
         "sigma": 9.1,
+        "off_eff_h": 1.0,
+        "off_eff_a": 1.0,
+        "def_eff_h": 1.0,
+        "def_eff_a": 1.0,
+        "pace_h": 1.0,
+        "pace_a": 1.0,
     }
     l1 = {
         **shared,
+        "forecast_label": FORECAST_HANDICAP_DELTA,
         "factor": "weather",
         "entry_point": "points",
         "delta": 0.0,
@@ -246,7 +255,7 @@ def test_if_hf_mif_coexist_without_overwrite(tmp_path: Path) -> None:
     store.append_layer(
         l1,
         layer=L1_LAYER,
-        forecast_label=FORECAST_HANDICAPPED_FAIR,
+        forecast_label=FORECAST_HANDICAP_DELTA,
         decision_ts=decision_ts,
     )
     store.append_layer(
@@ -259,7 +268,7 @@ def test_if_hf_mif_coexist_without_overwrite(tmp_path: Path) -> None:
     layers = {row["layer"] for row in store.rows()}
     assert labels == {
         FORECAST_INDEPENDENT_FAIR,
-        FORECAST_HANDICAPPED_FAIR,
+        FORECAST_HANDICAP_DELTA,
         FORECAST_MARKET_INFORMED_FAIR,
     }
     assert layers == {L0_LAYER, L1_LAYER, L4_LAYER}
@@ -272,5 +281,4 @@ def test_if_hf_mif_coexist_without_overwrite(tmp_path: Path) -> None:
         as_of_ts="2026-10-29T15:00:00Z",
         capture_id="cap-triple",
         schema_version=LEDGER_SCHEMA_VERSION,
-        payload=l0,
     ).startswith("hl_")

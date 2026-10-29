@@ -853,11 +853,25 @@ def simulate_nfl_game(
         "market_blend": 0,
         "market_blend_weight_spread": 0.0,
         "market_blend_weight_total": 0.0,
-        "margin_mu": float(if_margin_mu if if_margin_mu is not None else 0.0),
-        "total_mu": float(if_total_mu if if_total_mu is not None else 0.0),
+        "margin_mu": float(_require_if_mu(if_margin_mu, "margin_mu")),
+        "total_mu": float(_require_if_mu(if_total_mu, "total_mu")),
         "sigma": float(stdev),
     }
     return result
+
+
+def _is_exact_zero_blend(value: Any) -> bool:
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, (int, float)):
+        return value == 0
+    return False
+
+
+def _require_if_mu(value: Optional[float], name: str) -> float:
+    if value is None:
+        raise RuntimeError(f"Independent Fair {name} missing (no impute to 0.0)")
+    return float(value)
 
 
 def simulate_nfl_game_independent_fair(
@@ -892,7 +906,7 @@ def simulate_nfl_game_independent_fair(
     if out.get("forecast_label") != INDEPENDENT_FAIR_FORECAST_LABEL:
         raise RuntimeError("Independent Fair path failed to label forecast")
     blend = out.get("independent_fair") if isinstance(out.get("independent_fair"), dict) else {}
-    if int(blend.get("market_blend", 1)) != 0:
+    if not _is_exact_zero_blend(blend.get("market_blend")):
         raise RuntimeError("Independent Fair path must assert market_blend=0")
     return out
 
@@ -902,6 +916,10 @@ def independent_fair_mus(projection: Dict[str, Any]) -> tuple[float, float]:
     block = projection.get("independent_fair")
     if not isinstance(block, dict):
         raise ValueError("projection is not labeled Independent Fair")
-    if int(block.get("market_blend", 1)) != 0:
+    if not _is_exact_zero_blend(block.get("market_blend")):
         raise ValueError("Independent Fair market_blend must be 0")
+    if "margin_mu" not in block or "total_mu" not in block:
+        raise ValueError("Independent Fair mus missing (no impute to 0.0)")
+    if block.get("margin_mu") is None or block.get("total_mu") is None:
+        raise ValueError("Independent Fair mus missing (no impute to 0.0)")
     return float(block["margin_mu"]), float(block["total_mu"])

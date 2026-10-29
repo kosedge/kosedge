@@ -1,13 +1,14 @@
--- DEVELOPMENT_ONLY CLEAR-A schema (t4740u).
+-- DEVELOPMENT_ONLY CLEAR-A schema (t4740u remotion D1–D4).
 -- NOT a numbered infra/db migration. Do not apply on any env.
 -- Paper 243a384e L0/L1/L4 + Spec 2 (908b21b4): append-only IF/HF/MIF.
--- No UPDATE/DELETE. Duplicate prediction_id is a hard reject.
+-- Python identity == this unique key (no payload hash).
+-- F10 residual: REVOKE FROM PUBLIC is not an owner lock; do not apply.
 
 CREATE TABLE IF NOT EXISTS nfl_handicap_forecast_ledger (
   prediction_id text PRIMARY KEY,
   layer text NOT NULL CHECK (layer IN ('L0', 'L1', 'L4')),
   forecast_label text NOT NULL CHECK (
-    forecast_label IN ('independent_fair', 'handicapped_fair', 'market_informed_fair')
+    forecast_label IN ('independent_fair', 'handicapped_fair', 'market_informed_fair', 'handicap_delta')
   ),
   game_id text NOT NULL,
   as_of_ts timestamptz NOT NULL,
