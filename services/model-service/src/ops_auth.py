@@ -19,6 +19,8 @@ def require_kosedge_internal(request: Request) -> str:
     got = (request.headers.get("x-kosedge-secret") or "").strip()
     if not expected:
         raise HTTPException(status_code=503, detail="INTERNAL_API_SECRET not configured")
-    if not got or not hmac.compare_digest(got, expected):
+    # Compare UTF-8 bytes. CPython hmac.compare_digest(str, str) raises
+    # TypeError on non-ASCII, which FastAPI would surface as 500.
+    if not got or not hmac.compare_digest(got.encode("utf-8"), expected.encode("utf-8")):
         raise HTTPException(status_code=401, detail="internal auth required")
     return "internal"

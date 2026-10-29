@@ -15,6 +15,8 @@ def test_ops_auth_helper_contract() -> None:
     assert 'os.environ.get("INTERNAL_API_SECRET")' in text
     assert 'headers.get("x-kosedge-secret")' in text
     assert "hmac.compare_digest" in text
+    assert 'got.encode("utf-8")' in text
+    assert 'expected.encode("utf-8")' in text
     assert 'status_code=503' in text
     assert 'status_code=401' in text
 
