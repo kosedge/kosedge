@@ -31,6 +31,12 @@ DEFAULT_NFL_MODEL_VERSION = "nfl-v1.5-matchup-sim"
 # because it averages out each side's idiosyncratic misses.
 NFL_MARKET_BLEND_SPREAD_WEIGHT = float(os.getenv("NFL_MARKET_BLEND_SPREAD_WEIGHT", "0.30"))
 NFL_MARKET_BLEND_TOTAL_WEIGHT = float(os.getenv("NFL_MARKET_BLEND_TOTAL_WEIGHT", "0.30"))
+# CLEAR-A (t4740u): labeled Independent Fair path. Default / flag-OFF is the
+# existing blended forecast. This constant is documentation + an explicit
+# opt-in name only — simulate_nfl_game does NOT read an env kill-switch, so a
+# stray NFL_INDEPENDENT_FAIR_PATH cannot silently replace live outputs.
+INDEPENDENT_FAIR_FORECAST_LABEL = "independent_fair"
+NFL_INDEPENDENT_FAIR_PATH = False
 # Extra market weight in weeks 1–4 while in-season sample is thin / hydrated.
 # Base 0.30 + boost → week-1 ~0.55. Env: NFL_EARLY_SEASON_MARKET_BLEND_BOOST_W1 etc.
 _EARLY_SEASON_MARKET_BLEND_BOOST = {
@@ -521,6 +527,7 @@ def simulate_nfl_game(
     config_overrides: Optional[Dict[str, Any]] = None,
     market_spread_home: Optional[float] = None,
     market_total: Optional[float] = None,
+    independent_fair: bool = False,
 ) -> Dict[str, Any]:
     rng = random.Random(seed)
     sims = max(300, int(simulations))
@@ -601,48 +608,79 @@ def simulate_nfl_game(
 
     market_blend: Dict[str, Any] = {"spread_applied": False, "total_applied": False}
     season_week = inputs.matchup_week
-    if market_spread_home is not None and margins:
-        weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_SPREAD_WEIGHT, season_week)
-        pre_blend_margin = sum(margins) / len(margins)
-        disagreement_boost = _early_season_side_disagreement_boost(
-            season_week=season_week,
-            pre_blend_margin=float(pre_blend_margin),
-            market_spread_home=float(market_spread_home),
-        )
-        if disagreement_boost > 0:
-            weight = _clamp(weight + disagreement_boost, 0.0, 0.85)
-        market_margin = -float(market_spread_home)
-        post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
-        shift = post_blend_margin - pre_blend_margin
-        margins = [m + shift for m in margins]
-        market_blend.update(
-            spread_applied=True,
-            spread_weight=round(weight, 3),
-            base_spread_weight=round(_clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0), 3),
-            side_disagreement_boost=round(float(disagreement_boost), 3),
-            season_week=season_week,
-            market_spread_home=round(float(market_spread_home), 3),
-            pre_blend_margin_mean=round(pre_blend_margin, 3),
-            post_blend_margin_mean=round(post_blend_margin, 3),
-            spread_shift=round(shift, 3),
-        )
+    # Independent Fair (CLEAR-A): explicitly labeled opt-in. market_blend=0;
+    # Monte Carlo draws are not shifted. Flag-OFF keeps the historical blend.
+    if_margin_mu: Optional[float] = None
+    if_total_mu: Optional[float] = None
+    if independent_fair:
+        if_margin_mu = (sum(margins) / len(margins)) if margins else 0.0
+        if_total_mu = (sum(totals) / len(totals)) if totals else 0.0
+        if market_spread_home is not None and margins:
+            market_blend.update(
+                spread_applied=True,
+                spread_weight=0.0,
+                base_spread_weight=0.0,
+                side_disagreement_boost=0.0,
+                season_week=season_week,
+                market_spread_home=round(float(market_spread_home), 3),
+                pre_blend_margin_mean=round(if_margin_mu, 3),
+                post_blend_margin_mean=round(if_margin_mu, 3),
+                spread_shift=0.0,
+            )
+        if market_total is not None and totals:
+            market_blend.update(
+                total_applied=True,
+                total_weight=0.0,
+                base_total_weight=0.0,
+                season_week=season_week,
+                market_total=round(float(market_total), 3),
+                pre_blend_total_mean=round(if_total_mu, 3),
+                post_blend_total_mean=round(if_total_mu, 3),
+                total_shift=0.0,
+            )
+    else:
+        if market_spread_home is not None and margins:
+            weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_SPREAD_WEIGHT, season_week)
+            pre_blend_margin = sum(margins) / len(margins)
+            disagreement_boost = _early_season_side_disagreement_boost(
+                season_week=season_week,
+                pre_blend_margin=float(pre_blend_margin),
+                market_spread_home=float(market_spread_home),
+            )
+            if disagreement_boost > 0:
+                weight = _clamp(weight + disagreement_boost, 0.0, 0.85)
+            market_margin = -float(market_spread_home)
+            post_blend_margin = ((1.0 - weight) * pre_blend_margin) + (weight * market_margin)
+            shift = post_blend_margin - pre_blend_margin
+            margins = [m + shift for m in margins]
+            market_blend.update(
+                spread_applied=True,
+                spread_weight=round(weight, 3),
+                base_spread_weight=round(_clamp(NFL_MARKET_BLEND_SPREAD_WEIGHT, 0.0, 1.0), 3),
+                side_disagreement_boost=round(float(disagreement_boost), 3),
+                season_week=season_week,
+                market_spread_home=round(float(market_spread_home), 3),
+                pre_blend_margin_mean=round(pre_blend_margin, 3),
+                post_blend_margin_mean=round(post_blend_margin, 3),
+                spread_shift=round(shift, 3),
+            )
 
-    if market_total is not None and totals:
-        weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_TOTAL_WEIGHT, season_week)
-        pre_blend_total = sum(totals) / len(totals)
-        post_blend_total = ((1.0 - weight) * pre_blend_total) + (weight * float(market_total))
-        shift = post_blend_total - pre_blend_total
-        totals = [t + shift for t in totals]
-        market_blend.update(
-            total_applied=True,
-            total_weight=round(weight, 3),
-            base_total_weight=round(_clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0), 3),
-            season_week=season_week,
-            market_total=round(float(market_total), 3),
-            pre_blend_total_mean=round(pre_blend_total, 3),
-            post_blend_total_mean=round(post_blend_total, 3),
-            total_shift=round(shift, 3),
-        )
+        if market_total is not None and totals:
+            weight = _market_blend_weight_for_week(NFL_MARKET_BLEND_TOTAL_WEIGHT, season_week)
+            pre_blend_total = sum(totals) / len(totals)
+            post_blend_total = ((1.0 - weight) * pre_blend_total) + (weight * float(market_total))
+            shift = post_blend_total - pre_blend_total
+            totals = [t + shift for t in totals]
+            market_blend.update(
+                total_applied=True,
+                total_weight=round(weight, 3),
+                base_total_weight=round(_clamp(NFL_MARKET_BLEND_TOTAL_WEIGHT, 0.0, 1.0), 3),
+                season_week=season_week,
+                market_total=round(float(market_total), 3),
+                pre_blend_total_mean=round(pre_blend_total, 3),
+                post_blend_total_mean=round(post_blend_total, 3),
+                total_shift=round(shift, 3),
+            )
 
     home_wins = sum(1 for m in margins if m > 0)
     totals.sort()
@@ -738,7 +776,7 @@ def simulate_nfl_game(
             },
         },
     }
-    return {
+    result: Dict[str, Any] = {
         "game_id": inputs.game_id,
         "model_version": model_version,
         "simulation_count": sims,
@@ -806,3 +844,64 @@ def simulate_nfl_game(
         "diagnostics": diagnostics,
         "decomposition": decomposition,
     }
+    if not independent_fair:
+        return result
+    # Labeled Independent Fair payload — never attached on the default path.
+    result["forecast_label"] = INDEPENDENT_FAIR_FORECAST_LABEL
+    result["independent_fair"] = {
+        "forecast_label": INDEPENDENT_FAIR_FORECAST_LABEL,
+        "market_blend": 0,
+        "market_blend_weight_spread": 0.0,
+        "market_blend_weight_total": 0.0,
+        "margin_mu": float(if_margin_mu if if_margin_mu is not None else 0.0),
+        "total_mu": float(if_total_mu if if_total_mu is not None else 0.0),
+        "sigma": float(stdev),
+    }
+    return result
+
+
+def simulate_nfl_game_independent_fair(
+    inputs: NflGameInputs,
+    *,
+    simulations: int = 4000,
+    seed: Optional[int] = None,
+    model_version: str = DEFAULT_NFL_MODEL_VERSION,
+    totals_calibration: Optional[Dict[str, Any]] = None,
+    apply_linear_totals_calibration: bool = True,
+    config_overrides: Optional[Dict[str, Any]] = None,
+    market_spread_home: Optional[float] = None,
+    market_total: Optional[float] = None,
+) -> Dict[str, Any]:
+    """Explicit Independent Fair entrypoint (market_blend=0).
+
+    Never the live default. Production callers must keep using
+    ``simulate_nfl_game`` without this flag.
+    """
+    out = simulate_nfl_game(
+        inputs,
+        simulations=simulations,
+        seed=seed,
+        model_version=model_version,
+        totals_calibration=totals_calibration,
+        apply_linear_totals_calibration=apply_linear_totals_calibration,
+        config_overrides=config_overrides,
+        market_spread_home=market_spread_home,
+        market_total=market_total,
+        independent_fair=True,
+    )
+    if out.get("forecast_label") != INDEPENDENT_FAIR_FORECAST_LABEL:
+        raise RuntimeError("Independent Fair path failed to label forecast")
+    blend = out.get("independent_fair") if isinstance(out.get("independent_fair"), dict) else {}
+    if int(blend.get("market_blend", 1)) != 0:
+        raise RuntimeError("Independent Fair path must assert market_blend=0")
+    return out
+
+
+def independent_fair_mus(projection: Dict[str, Any]) -> tuple[float, float]:
+    """Return (margin_mu, total_mu) from an Independent Fair projection."""
+    block = projection.get("independent_fair")
+    if not isinstance(block, dict):
+        raise ValueError("projection is not labeled Independent Fair")
+    if int(block.get("market_blend", 1)) != 0:
+        raise ValueError("Independent Fair market_blend must be 0")
+    return float(block["margin_mu"]), float(block["total_mu"])
