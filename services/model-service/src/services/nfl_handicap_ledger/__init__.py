@@ -6,6 +6,7 @@ to capture, overlays, scoring, migrate, or any production caller.
 
 from src.services.nfl_handicap_ledger.identity import (
     business_identity_key,
+    canonicalize_as_of_ts,
     make_prediction_id,
 )
 from src.services.nfl_handicap_ledger.schema import (
@@ -51,6 +52,7 @@ __all__ = [
     "HandicapLedgerEnvelope",
     "HandicapLedgerReject",
     "business_identity_key",
+    "canonicalize_as_of_ts",
     "commit_l1_stage",
     "is_exact_zero",
     "make_prediction_id",

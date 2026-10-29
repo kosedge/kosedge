@@ -1,7 +1,7 @@
-# HANDICAP CLEAR-A evidence packet (t4740u) — remotion D1–D4
+# HANDICAP CLEAR-A evidence packet (t4740u) — remotion v3 N1–N4
 
 **Status:** DRAFT PR only · not merged · not deployed  
-**Authority:** COS_ORDER_CURSOR_t4740u v2 · DECISION d744fa87 · IMV RETURN **5c616db5** · Codex **3aa21f63** · CoS ACCEPT  
+**Authority:** COS_ORDER_CURSOR_t4740u v3 · DECISION d744fa87 · IMV RETURN **dafa4f94** · Codex deltas **5cc4fcc1**  
 **Locks:** NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen · C10 HOLD · overlays OFF
 
 CoS seal destination after this tip: `ops/nfl_enterprise_green_t4359u/` (not written here).
@@ -12,91 +12,43 @@ CoS seal destination after this tip: `ops/nfl_enterprise_green_t4359u/` (not wri
 |---|---|
 | Branch | `cursor/handicap-clear-a-if-ledger-ed4b` |
 | Base | `deploy-vercel` @ `209e90aa4a3f7edca15592af4cdd2f3c44f8b4c4` |
-| Challenged tip | `c525210170fd09864b7232974b37dfc56f2ef4ab` |
-| Remotion SHA | `e1bf070c96e53c08d045f06740a1e636b43dc0d4` |
-| Sealed tip (F12) | this stamp commit on `cursor/handicap-clear-a-if-ledger-ed4b` (parent remotion `e1bf070c`); confirm with `git rev-parse HEAD` / PR `headRefOid` |
+| Parent tip | `10fe917534254b94307dcbb1b47ffa250cde5c9e` |
+| Remotion v3 SHA | `N3_SHA_PENDING` |
+| Sealed tip | `git rev-parse HEAD` after the remotion stamp |
 | DRAFT PR | https://github.com/kosedge/kosedge/pull/657 |
-| Agent run | https://cursor.com/agents/bc-727fa738-c4c8-596c-934f-86d7241eed4b |
 
-## What closed (D1–D4 only)
+## Closed this remotion (N1–N4)
 
-| Defect | Codex | Close |
-|---|---|---|
-| D1 L0 blend gate | F1 | `is_exact_zero`: accept `0`/`0.0` only; reject `0.3`, `False`, `True`. `int(blend)` removed. |
-| D2 append-only / identity | F2 F3 F4 F13 | Validated-only append; always re-derive `prediction_id`; JSONL load rejects duplicate id (no last-wins); Python identity = DDL unique key (no payload hash); `commit_l1_stage` validate+dup-check all before any write (rollback). |
-| D3 as-of / no-impute / L1 set | F5 F6 F7 | Naive timestamps REJECT; mixed-offset tests; no as_of←captured_at, no baseline_ref←baseline_personnel_ref, no empty-string refs, no IF mu→0.0; L1 requires factor, entry_point, delta, uncertainty + original five; L0 required set matches 243a384e. |
-| D4 hygiene | F9 F11 F12 | L1 label = `handicap_delta` (not HF); L4 forced `market_informed_fair`; `make_prediction_id` raises `HandicapLedgerReject`; this packet restamped. |
-
-## Residuals (NON_BLOCKING — not closed)
-
-| Residual | Note |
+| Item | Close |
 |---|---|
-| R1 / F8 | D3(i) oracle still payload-vs-helper at week 8; does not lock `if_out["markets"]` or weeks 1–4. |
-| R2 / F10 | DDL `REVOKE FROM PUBLIC` is not an owner lock. Not in `infra/db`. Do not apply. |
-| created_at / schema_version defaults | Documented write metadata only; not as-of identity. |
+| N1 | `append` / `append_many` run `validate_envelope` (layer/label + aware ts + validate_l0/l1/l4 + re-derive). Envelope L1/HF/naive/empty REJECT; L0 payload `market_blend=0.3` REJECT. |
+| N2 | `append_many` checks intra-batch prediction_id and business identity before any write. `[e,e]` REJECT, len unchanged. |
+| N3 | `as_of_ts` canonicalized to UTC `YYYY-MM-DDTHH:MM:SSZ` before identity/id. Z / `+00:00` / `-04:00` same instant share one id; 2nd+3rd REJECT. |
+| N4 | JSONL load re-validates layer + re-derives `prediction_id`; forged id REJECT. |
 
-## Files touched (remotion)
+## Still closed (do not regress)
 
-- `services/model-service/src/services/nfl_simulator.py` — no IF mu impute; exact blend=0 assert
-- `services/model-service/src/services/nfl_handicap_ledger/*`
-- `services/model-service/tests/test_nfl_handicap_clear_a_d3.py`
-- `services/model-service/tests/test_nfl_handicap_clear_a_d1_d4_remotion.py` — new
-- `docs/ops/NFL_HANDICAP_CLEAR_A_EVIDENCE_t4740u.md`
+D1 (F1 exact blend=0) · D3 (F5/F6/F7) · D4 (F9/F11/F12) on validator path. D3(i)(ii)(iii) still PASS.
 
-Not touched: `tasks.py`, `routes.py`, `infra/db/*`, web/F2/CERT/Coming Soon, Railway #655, capture, overlays.
+## Residuals (NON_BLOCKING)
 
-## Test commands + results
+R1/F8 D3(i) oracle · R2/F10 DDL owner lock (not applied) · created_at/schema_version defaults
+
+## Tests
 
 ```bash
 cd services/model-service
-python3 -m pytest tests/test_nfl_handicap_clear_a_d3.py tests/test_nfl_handicap_clear_a_d1_d4_remotion.py -q
+python3 -m pytest tests/test_nfl_handicap_clear_a_d3.py tests/test_nfl_handicap_clear_a_d1_d4_remotion.py tests/test_nfl_handicap_clear_a_n1_n4_remotion.py -q
 ```
 
-**15 passed** (5 D3 + 10 remotion probes).
+**20 passed** (5 D3 + 10 D1–D4 remotion + 5 N1–N4).
 
-### D3 (still required)
+D3(ii) pin unchanged: `75ee2ee90dfb423c21cd66c8caab999cea20fda7277676e4944416596fac6224`
 
-| Test | Result | Hash / delta |
-|---|---|---|
-| (i) IF vs pre_blend ≤ 0.01 | **PASS** | margin abs 0.00285; total abs 0.00352 |
-| (ii) flag OFF sha256 | **PASS** | `75ee2ee90dfb423c21cd66c8caab999cea20fda7277676e4944416596fac6224` |
-| (iii) missing L1 / future as_of | **PASS** | REJECT, no impute |
+## Hard stops
 
-### D1–D4 Codex probe regressions
-
-| Probe | Result |
-|---|---|
-| F1 exact blend=0 | **PASS** |
-| F2 attacker id bypass | **PASS** |
-| F3 JSONL last-wins | **PASS** |
-| F4 payload-hash overwrite | **PASS** |
-| F5 naive / mixed-offset TZ | **PASS** |
-| F6 no-impute as_of/refs/IF mu | **PASS** |
-| F7 L1+L0 required sets | **PASS** |
-| F9 HF/MIF smear | **PASS** |
-| F11 ValueError→HandicapLedgerReject | **PASS** |
-| F13 atomic stage | **PASS** |
-
-## Default path unchanged
-
-- `NFL_INDEPENDENT_FAIR_PATH is False`
-- D3(ii) pin reproduced
-- Live callers unwired
-- No `infra/db` migration
-
-## Hard-stop checklist
-
-| Stop | Held |
-|---|---|
-| data capture | yes |
-| vendor purchases | yes |
-| overlays ON any env | yes |
-| scoring / experiment / promotion | yes |
-| merge / deploy | yes — DRAFT only |
-| API / CERT / F2 / Coming Soon | yes |
-| S1/EPA · H-QB · Lane B · KEI · #655 | yes |
-| tasks/routes wiring · infra/db apply | yes |
+No capture · no overlay ON · no infra/db apply · no live caller wiring · no merge · no deploy.
 
 ## Next
 
-Stop for Codex deltas re-challenge + IMV re-grade. **Do not merge. Do not deploy.**
+Stop for Codex deltas + IMV re-grade. **Do not merge.**

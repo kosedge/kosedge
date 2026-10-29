@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import Any, Dict, Iterable, List, Mapping, Optional
 
-from src.services.nfl_handicap_ledger.identity import make_prediction_id
+from src.services.nfl_handicap_ledger.identity import (
+    canonicalize_as_of_ts,
+    make_prediction_id,
+    parse_ledger_ts,
+)
 from src.services.nfl_handicap_ledger.schema import (
     FORECAST_HANDICAP_DELTA,
     FORECAST_INDEPENDENT_FAIR,
@@ -32,25 +35,6 @@ def is_exact_zero(value: Any) -> bool:
     if isinstance(value, (int, float)):
         return value == 0
     return False
-
-
-def parse_ledger_ts(value: Any) -> datetime:
-    if value is None:
-        raise HandicapLedgerReject("timestamp missing (no impute)")
-    raw = str(value).strip()
-    if not raw:
-        raise HandicapLedgerReject("timestamp empty (no impute)")
-    if raw.endswith("Z"):
-        raw = raw[:-1] + "+00:00"
-    try:
-        dt = datetime.fromisoformat(raw)
-    except ValueError as exc:
-        raise HandicapLedgerReject(f"timestamp unparseable: {value!r}") from exc
-    if dt.tzinfo is None:
-        raise HandicapLedgerReject(
-            "naive timestamp rejected (no impute to UTC); offset or Z required"
-        )
-    return dt
 
 
 def _present(value: Any) -> bool:
@@ -170,6 +154,30 @@ def _require_layer_label(layer: str, forecast_label: str) -> None:
         raise HandicapLedgerReject("L4 REJECT forecast_label must be market_informed_fair")
 
 
+def validate_envelope(env: HandicapLedgerEnvelope) -> HandicapLedgerEnvelope:
+    """N1: public Envelope inputs take the same layer/label/ts/field gates."""
+    if not isinstance(env, HandicapLedgerEnvelope):
+        raise HandicapLedgerReject("envelope REJECT unvalidated row")
+    _require_layer_label(env.layer, env.forecast_label)
+    parse_ledger_ts(env.as_of_ts)
+    parse_ledger_ts(env.decision_ts)
+    row = env.to_dict()
+    if env.layer == L1_LAYER:
+        validate_l1_row(row, decision_ts=env.decision_ts)
+    elif env.layer == L0_LAYER:
+        validate_l0_row(row)
+    elif env.layer == L4_LAYER:
+        validate_l4_row(row, decision_ts=env.decision_ts)
+    else:
+        raise HandicapLedgerReject(f"unknown layer: {env.layer!r}")
+    return envelope_from_row(
+        row,
+        layer=env.layer,
+        forecast_label=env.forecast_label,
+        decision_ts=env.decision_ts,
+    )
+
+
 def envelope_from_row(
     row: Mapping[str, Any],
     *,
@@ -187,7 +195,7 @@ def envelope_from_row(
         raise HandicapLedgerReject(
             "envelope REJECT missing game_id/as_of_ts/capture_id (no impute)"
         )
-    parse_ledger_ts(as_of_ts)
+    as_of_ts = canonicalize_as_of_ts(as_of_ts)
 
     if layer == L1_LAYER:
         baseline_ref = _field_from(row, "baseline_ref")

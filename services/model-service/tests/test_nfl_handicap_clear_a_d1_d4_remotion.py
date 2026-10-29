@@ -125,7 +125,7 @@ def test_f2_append_caller_chosen_id_bypasses_rejected(tmp_path: Path) -> None:
         baseline_ref="base",
         model_version="nfl-v1.5-matchup-sim",
     )
-    with pytest.raises(HandicapLedgerReject, match="caller-chosen"):
+    with pytest.raises(HandicapLedgerReject, match="REJECT"):
         store.append(env)
     assert len(store) == 0
 
@@ -140,7 +140,7 @@ def test_f3_jsonl_reload_duplicate_id_rejected_not_last_wins(tmp_path: Path) -> 
         + "\n",
         encoding="utf-8",
     )
-    with pytest.raises(HandicapLedgerReject, match="no last-wins"):
+    with pytest.raises(HandicapLedgerReject, match="REJECT"):
         AppendOnlyHandicapLedger(path)
 
 

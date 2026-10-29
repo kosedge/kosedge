@@ -7,10 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple, Union
 
-from src.services.nfl_handicap_ledger.identity import (
-    business_identity_key,
-    make_prediction_id,
-)
+from src.services.nfl_handicap_ledger.identity import business_identity_key
 from src.services.nfl_handicap_ledger.schema import (
     L0_LAYER,
     L1_LAYER,
@@ -21,6 +18,7 @@ from src.services.nfl_handicap_ledger.schema import (
 )
 from src.services.nfl_handicap_ledger.validate import (
     envelope_from_row,
+    validate_envelope,
     validate_l0_row,
     validate_l1_row,
     validate_l4_row,
@@ -72,22 +70,51 @@ class AppendOnlyHandicapLedger:
             if not line:
                 continue
             row = json.loads(line)
-            pid = str(row.get("prediction_id") or "").strip()
-            if not pid:
-                raise HandicapLedgerReject("JSONL load REJECT missing prediction_id")
-            if pid in self._ids:
+            if not isinstance(row, dict):
+                raise HandicapLedgerReject("JSONL load REJECT non-object row")
+            layer = str(row.get("layer") or "").strip()
+            forecast_label = str(row.get("forecast_label") or "").strip()
+            decision_ts = str(row.get("decision_ts") or "").strip()
+            if not layer or not forecast_label or not decision_ts:
                 raise HandicapLedgerReject(
-                    f"JSONL load REJECT duplicate prediction_id {pid} (no last-wins)"
+                    "JSONL load REJECT missing layer/forecast_label/decision_ts"
                 )
-            biz = _biz_from_row(row)
+            if layer == L1_LAYER:
+                validate_l1_row(row, decision_ts=decision_ts)
+            elif layer == L0_LAYER:
+                validate_l0_row(row)
+            elif layer == L4_LAYER:
+                validate_l4_row(row, decision_ts=decision_ts)
+            else:
+                raise HandicapLedgerReject(f"JSONL load REJECT unknown layer: {layer!r}")
+            env = envelope_from_row(
+                row,
+                layer=layer,
+                forecast_label=forecast_label,
+                decision_ts=decision_ts,
+            )
+            derived = env.prediction_id
+            stored = str(row.get("prediction_id") or "").strip()
+            if not stored:
+                raise HandicapLedgerReject("JSONL load REJECT missing prediction_id")
+            if stored != derived:
+                raise HandicapLedgerReject(
+                    f"JSONL load REJECT forged prediction_id {stored} != {derived}"
+                )
+            if derived in self._ids:
+                raise HandicapLedgerReject(
+                    f"JSONL load REJECT duplicate prediction_id {derived} (no last-wins)"
+                )
+            biz = _biz_from_row(env.to_dict())
             if biz is not None and biz in self._biz:
                 raise HandicapLedgerReject(
                     "JSONL load REJECT duplicate business identity (no last-wins)"
                 )
-            self._ids[pid] = row
+            payload = env.to_dict()
+            self._ids[derived] = payload
             if biz is not None:
-                self._biz[biz] = pid
-            self._rows.append(row)
+                self._biz[biz] = derived
+            self._rows.append(payload)
 
     def __len__(self) -> int:
         return len(self._rows)
@@ -156,25 +183,29 @@ class AppendOnlyHandicapLedger:
 
     def append_many(self, envelopes: Iterable[HandicapLedgerEnvelope]) -> List[Dict[str, Any]]:
         prepared: List[Dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        seen_biz: set[BizKey] = set()
         for env in envelopes:
-            if isinstance(env, HandicapLedgerEnvelope):
-                derived = make_prediction_id(
-                    layer=env.layer,
-                    forecast_label=env.forecast_label,
-                    game_id=env.game_id,
-                    as_of_ts=env.as_of_ts,
-                    capture_id=env.capture_id,
-                    schema_version=env.schema_version,
-                )
-                if env.prediction_id != derived:
-                    raise HandicapLedgerReject(
-                        "append REJECT caller-chosen prediction_id does not match re-derived identity"
-                    )
-                prepared.append(env.to_dict())
-            else:
+            if not isinstance(env, HandicapLedgerEnvelope):
                 raise HandicapLedgerReject("append_many REJECT unvalidated row")
-        for payload in prepared:
-            self._check_unique(payload)
+            validated = validate_envelope(env)
+            payload = validated.to_dict()
+            pid = str(payload.get("prediction_id") or "").strip()
+            biz = _biz_from_row(payload)
+            if not pid:
+                raise HandicapLedgerReject("append REJECT missing prediction_id (no impute)")
+            if pid in self._ids or pid in seen_ids:
+                raise HandicapLedgerReject(
+                    f"append REJECT duplicate prediction_id ({pid}); never overwrite"
+                )
+            if biz is not None and (biz in self._biz or biz in seen_biz):
+                raise HandicapLedgerReject(
+                    "append REJECT duplicate business identity; never overwrite"
+                )
+            seen_ids.add(pid)
+            if biz is not None:
+                seen_biz.add(biz)
+            prepared.append(payload)
         snapshot_rows = list(self._rows)
         snapshot_ids = dict(self._ids)
         snapshot_biz = dict(self._biz)
