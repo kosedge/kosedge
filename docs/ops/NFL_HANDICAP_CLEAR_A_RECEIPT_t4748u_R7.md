@@ -2,14 +2,14 @@
 
 **DRAFT #657 only. Not merged. Not deployed.**
 
-| | |
-|---|---|
-| Authority | DECISION 39fe2d9d · IMV PASS_CONTROLS a9d44516 |
-| Parent tip | `1443d567277b7e97271536dbe63871dbf194b00c` |
-| R7 remotion | `b2cc5d666b391559fa040e0b716cc1628cb6b383` |
-| Sealed tip | this stamp HEAD (confirm `git rev-parse HEAD`) |
-| Branch | `cursor/handicap-clear-a-if-ledger-ed4b` |
-| PR | https://github.com/kosedge/kosedge/pull/657 |
+|             |                                                               |
+| ----------- | ------------------------------------------------------------- |
+| Authority   | DECISION 39fe2d9d · IMV PASS_CONTROLS a9d44516                |
+| Parent tip  | `1443d567277b7e97271536dbe63871dbf194b00c`                    |
+| R7 remotion | `b2cc5d666b391559fa040e0b716cc1628cb6b383`                    |
+| Sealed tip  | this stamp HEAD (R7 + Prettier; confirm `git rev-parse HEAD`) |
+| Branch      | `cursor/handicap-clear-a-if-ledger-ed4b`                      |
+| PR          | https://github.com/kosedge/kosedge/pull/657                   |
 
 ## Close
 

@@ -8,20 +8,20 @@ CoS seal destination after this tip: `ops/nfl_enterprise_green_t4359u/` (not wri
 
 ## Identity
 
-| Field | Value |
-|---|---|
-| Branch | `cursor/handicap-clear-a-if-ledger-ed4b` |
-| Base | `deploy-vercel` @ `209e90aa4a3f7edca15592af4cdd2f3c44f8b4c4` |
-| Parent tip | `1443d567277b7e97271536dbe63871dbf194b00c` |
-| R7 remotion SHA | `b2cc5d666b391559fa040e0b716cc1628cb6b383` |
-| Sealed tip | stamp commit on this branch (parent R7 remotion `b2cc5d66`); confirm `git rev-parse HEAD` / PR `headRefOid` |
-| DRAFT PR | https://github.com/kosedge/kosedge/pull/657 |
+| Field           | Value                                                                                                           |
+| --------------- | --------------------------------------------------------------------------------------------------------------- |
+| Branch          | `cursor/handicap-clear-a-if-ledger-ed4b`                                                                        |
+| Base            | `deploy-vercel` @ `209e90aa4a3f7edca15592af4cdd2f3c44f8b4c4`                                                    |
+| Parent tip      | `1443d567277b7e97271536dbe63871dbf194b00c`                                                                      |
+| R7 remotion SHA | `b2cc5d666b391559fa040e0b716cc1628cb6b383`                                                                      |
+| Sealed tip      | stamp commit on this branch (R7 remotion `b2cc5d66` + Prettier); confirm `git rev-parse HEAD` / PR `headRefOid` |
+| DRAFT PR        | https://github.com/kosedge/kosedge/pull/657                                                                     |
 
 ## Closed this remotion (R7 only)
 
-| Item | Close |
-|---|---|
-| R7 | JSONL load no longer prefers top-level over payload. `validate_l0/l1/l4` reject top-level vs payload conflicts (no precedence). L0 rejects any present `market_blend` that is not exact 0 (top-level **and** payload). Contaminated disk row `top=0` + `payload=0.3` REJECT. Clean write+reload ACCEPT; identity unchanged. |
+| Item | Close                                                                                                                                                                                                                                                                                                                       |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R7   | JSONL load no longer prefers top-level over payload. `validate_l0/l1/l4` reject top-level vs payload conflicts (no precedence). L0 rejects any present `market_blend` that is not exact 0 (top-level **and** payload). Contaminated disk row `top=0` + `payload=0.3` REJECT. Clean write+reload ACCEPT; identity unchanged. |
 
 ## Still closed (do not regress)
 
