@@ -702,9 +702,13 @@ def test_nfl_walkforward_job_endpoint_shape(monkeypatch) -> None:
     class _AsyncResult:
         id = "task-123"
 
+    monkeypatch.setenv("INTERNAL_API_SECRET", "test-internal-secret")
     monkeypatch.setattr(main_module.celery_app, "send_task", lambda *_args, **_kwargs: _AsyncResult())
     client = TestClient(app)
-    response = client.post("/api/jobs/run-nfl-walkforward-backtest")
+    response = client.post(
+        "/api/jobs/run-nfl-walkforward-backtest",
+        headers={"x-kosedge-secret": "test-internal-secret"},
+    )
     assert response.status_code == 200
     payload = response.json()
     assert payload["task_id"] == "task-123"

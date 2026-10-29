@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from sqlalchemy import text
@@ -15,6 +15,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from src.celery_app import QUEUE_MODELS, QUEUE_NFL_MARKET, celery_app, celery_healthcheck
 from src.db import engine
 from src.nfl_remat_policy import resolve_remat_weeks
+from src.ops_auth import require_kosedge_internal
 from src.routes import (
     book_router,
     cfb_router,
@@ -778,7 +779,14 @@ def get_odds_snapshots(
         raise HTTPException(status_code=500, detail=f"db_error: {e}")
 
 
-@app.post("/api/jobs/pull-odds-snapshot")
+
+job_router = APIRouter(
+    prefix="/api/jobs",
+    dependencies=[Depends(require_kosedge_internal)],
+)
+
+
+@job_router.post("/pull-odds-snapshot")
 def job_pull_odds_snapshot(
     nfl_bookmakers: Optional[str] = Query(
         None,
@@ -811,7 +819,7 @@ def job_pull_odds_snapshot(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-historical-odds-backfill")
+@job_router.post("/pull-historical-odds-backfill")
 def job_pull_historical_odds_backfill(
     sport_key: str = Query("americanfootball_nfl"),
     bookmakers: str = Query("draftkings,fanduel"),
@@ -840,7 +848,7 @@ def job_pull_historical_odds_backfill(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-mlb-context")
+@job_router.post("/pull-mlb-context")
 def job_pull_mlb_context(days_ahead: int = Query(5, ge=0, le=14)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(TASK_PULL_MLB_CONTEXT, kwargs={"days_ahead": days_ahead})
@@ -850,7 +858,7 @@ def job_pull_mlb_context(days_ahead: int = Query(5, ge=0, le=14)) -> Dict[str, s
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-mlb-simulations")
+@job_router.post("/run-mlb-simulations")
 def job_run_mlb_simulations(
     game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
     simulations: int = Query(4000, ge=500, le=20000),
@@ -871,7 +879,7 @@ def job_run_mlb_simulations(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nba-context")
+@job_router.post("/pull-nba-context")
 def job_pull_nba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(
@@ -883,7 +891,7 @@ def job_pull_nba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, s
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nba-ingest")
+@job_router.post("/pull-nba-ingest")
 def job_pull_nba_ingest(
     days_back: int = Query(7, ge=0, le=60),
     days_ahead: int = Query(3, ge=0, le=14),
@@ -899,7 +907,7 @@ def job_pull_nba_ingest(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nba-season-ingest")
+@job_router.post("/pull-nba-season-ingest")
 def job_pull_nba_season_ingest(
     seasons: Optional[str] = Query(
         None, description="Comma-separated NBA seasons, e.g. 2021-22,2022-23"
@@ -919,7 +927,7 @@ def job_pull_nba_season_ingest(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/materialize-nba-rolling-features")
+@job_router.post("/materialize-nba-rolling-features")
 def job_materialize_nba_rolling_features(
     days_back: int = Query(2000, ge=1, le=4000),
     window_games: int = Query(10, ge=1, le=40),
@@ -942,7 +950,7 @@ def job_materialize_nba_rolling_features(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nba-historical-odds-densify")
+@job_router.post("/pull-nba-historical-odds-densify")
 def job_pull_nba_historical_odds_densify(
     max_credit_spend: int = Query(300000, ge=0, le=400000),
     max_requests: int = Query(200, ge=1, le=2000),
@@ -963,7 +971,7 @@ def job_pull_nba_historical_odds_densify(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nba-walkforward-sample")
+@job_router.post("/run-nba-walkforward-sample")
 def job_run_nba_walkforward_sample(
     limit_games: int = Query(60, ge=5, le=400),
     simulations: int = Query(800, ge=300, le=5000),
@@ -979,7 +987,7 @@ def job_run_nba_walkforward_sample(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nba-phase1-bootstrap")
+@job_router.post("/run-nba-phase1-bootstrap")
 def job_run_nba_phase1_bootstrap(
     densify_odds: bool = Query(True),
     max_credit_spend: int = Query(300000, ge=0, le=400000),
@@ -1000,7 +1008,7 @@ def job_run_nba_phase1_bootstrap(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nba-phase3-props-bootstrap")
+@job_router.post("/run-nba-phase3-props-bootstrap")
 def job_run_nba_phase3_props_bootstrap(
     lookback_games: int = Query(8, ge=3, le=20),
     limit_players: int = Query(200, ge=20, le=500),
@@ -1019,7 +1027,7 @@ def job_run_nba_phase3_props_bootstrap(
         raise HTTPException(status_code=500, detail="enqueue_failed")
 
 
-@app.post("/api/jobs/materialize-nba-player-props")
+@job_router.post("/materialize-nba-player-props")
 def job_materialize_nba_player_props(
     lookback_games: int = Query(8, ge=3, le=20),
     limit_players: int = Query(200, ge=20, le=500),
@@ -1038,7 +1046,7 @@ def job_materialize_nba_player_props(
         raise HTTPException(status_code=500, detail="enqueue_failed")
 
 
-@app.post("/api/jobs/run-nba-phase2-calibrate")
+@job_router.post("/run-nba-phase2-calibrate")
 def job_run_nba_phase2_calibrate(
     walkforward_games: int = Query(80, ge=5, le=400),
     simulations: int = Query(1000, ge=300, le=5000),
@@ -1062,7 +1070,7 @@ def job_run_nba_phase2_calibrate(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/repair-nba-odds-team-abbrs")
+@job_router.post("/repair-nba-odds-team-abbrs")
 def job_repair_nba_odds_team_abbrs() -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(TASK_NBA_REPAIR_ABBRS)
@@ -1072,7 +1080,7 @@ def job_repair_nba_odds_team_abbrs() -> Dict[str, str]:
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nba-daily-cycle")
+@job_router.post("/run-nba-daily-cycle")
 def job_run_nba_daily_cycle(
     days_ahead: int = Query(3, ge=0, le=14),
     simulations: int = Query(4000, ge=300, le=20000),
@@ -1088,7 +1096,7 @@ def job_run_nba_daily_cycle(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.get("/api/jobs/nba-inventory")
+@job_router.get("/nba-inventory")
 def job_nba_inventory_sync() -> Dict[str, Any]:
     """Synchronous inventory against model-service DATABASE_URL."""
     try:
@@ -1100,7 +1108,7 @@ def job_nba_inventory_sync() -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"inventory_failed: {e}")
 
 
-@app.post("/api/jobs/run-nba-simulations")
+@job_router.post("/run-nba-simulations")
 def job_run_nba_simulations(
     game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
     simulations: int = Query(4000, ge=300, le=20000),
@@ -1121,7 +1129,7 @@ def job_run_nba_simulations(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-wnba-ingest")
+@job_router.post("/pull-wnba-ingest")
 def job_pull_wnba_ingest(
     days_back: int = Query(7, ge=0, le=60),
     days_ahead: int = Query(7, ge=0, le=21),
@@ -1137,7 +1145,7 @@ def job_pull_wnba_ingest(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-wnba-season-ingest")
+@job_router.post("/pull-wnba-season-ingest")
 def job_pull_wnba_season_ingest(
     seasons: Optional[str] = Query(
         None, description="Comma-separated tip years, e.g. 2025,2026"
@@ -1163,7 +1171,7 @@ def job_pull_wnba_season_ingest(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/materialize-wnba-rolling-features")
+@job_router.post("/materialize-wnba-rolling-features")
 def job_materialize_wnba_rolling_features(
     days_back: int = Query(120, ge=7, le=2000),
     window_games: int = Query(10, ge=3, le=40),
@@ -1179,7 +1187,7 @@ def job_materialize_wnba_rolling_features(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-wnba-context")
+@job_router.post("/pull-wnba-context")
 def job_pull_wnba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(
@@ -1191,7 +1199,7 @@ def job_pull_wnba_context(days_ahead: int = Query(3, ge=0, le=14)) -> Dict[str, 
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-wnba-simulations")
+@job_router.post("/run-wnba-simulations")
 def job_run_wnba_simulations(
     game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
     simulations: int = Query(4000, ge=300, le=20000),
@@ -1212,7 +1220,7 @@ def job_run_wnba_simulations(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-wnba-phase1-bootstrap")
+@job_router.post("/run-wnba-phase1-bootstrap")
 def job_run_wnba_phase1_bootstrap(
     densify_odds: bool = Query(True),
     max_credit_spend: int = Query(200000, ge=0, le=400000),
@@ -1233,7 +1241,7 @@ def job_run_wnba_phase1_bootstrap(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-wnba-phase2-calibrate")
+@job_router.post("/run-wnba-phase2-calibrate")
 def job_run_wnba_phase2_calibrate(
     walkforward_games: int = Query(60, ge=5, le=400),
     simulations: int = Query(1000, ge=300, le=5000),
@@ -1256,7 +1264,7 @@ def job_run_wnba_phase2_calibrate(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-wnba-phase3-props-bootstrap")
+@job_router.post("/run-wnba-phase3-props-bootstrap")
 def job_run_wnba_phase3_props_bootstrap(
     lookback_games: int = Query(8, ge=3, le=20),
     limit_players: int = Query(200, ge=20, le=500),
@@ -1275,7 +1283,7 @@ def job_run_wnba_phase3_props_bootstrap(
         raise HTTPException(status_code=500, detail="enqueue_failed")
 
 
-@app.post("/api/jobs/run-wnba-daily-cycle")
+@job_router.post("/run-wnba-daily-cycle")
 def job_run_wnba_daily_cycle(
     days_ahead: int = Query(3, ge=0, le=14),
     simulations: int = Query(4000, ge=300, le=20000),
@@ -1291,7 +1299,7 @@ def job_run_wnba_daily_cycle(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.get("/api/jobs/wnba-inventory")
+@job_router.get("/wnba-inventory")
 def job_wnba_inventory_sync() -> Dict[str, Any]:
     try:
         from src.services.wnba_jobs import wnba_db_inventory
@@ -1302,7 +1310,7 @@ def job_wnba_inventory_sync() -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"inventory_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nfl-context")
+@job_router.post("/pull-nfl-context")
 def job_pull_nfl_context(days_ahead: int = Query(14, ge=0, le=45)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(TASK_PULL_NFL_CONTEXT, kwargs={"days_ahead": days_ahead})
@@ -1312,7 +1320,7 @@ def job_pull_nfl_context(days_ahead: int = Query(14, ge=0, le=45)) -> Dict[str, 
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-simulations")
+@job_router.post("/run-nfl-simulations")
 def job_run_nfl_simulations(
     game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
     simulations: int = Query(4000, ge=300, le=20000),
@@ -1354,7 +1362,7 @@ def job_run_nfl_simulations(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/backfill-nfl-historical-projections")
+@job_router.post("/backfill-nfl-historical-projections")
 def job_backfill_nfl_historical_projections(
     start_date: str = Query(..., description="YYYY-MM-DD"),
     end_date: str = Query(..., description="YYYY-MM-DD"),
@@ -1379,7 +1387,7 @@ def job_backfill_nfl_historical_projections(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/materialize-nfl-market-history")
+@job_router.post("/materialize-nfl-market-history")
 def job_materialize_nfl_market_history(
     lookback_days: int = Query(45, ge=1, le=3650),
 ) -> Dict[str, str]:
@@ -1395,7 +1403,7 @@ def job_materialize_nfl_market_history(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-clv-attribution")
+@job_router.post("/run-nfl-clv-attribution")
 def job_run_nfl_clv_attribution(
     lookback_days: int = Query(45, ge=7, le=365),
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
@@ -1411,7 +1419,7 @@ def job_run_nfl_clv_attribution(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nfl-outcomes")
+@job_router.post("/pull-nfl-outcomes")
 def job_pull_nfl_outcomes(days_back: int = Query(60, ge=1, le=365)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(TASK_PULL_NFL_OUTCOMES, kwargs={"days_back": days_back})
@@ -1421,7 +1429,7 @@ def job_pull_nfl_outcomes(days_back: int = Query(60, ge=1, le=365)) -> Dict[str,
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-quality-grading")
+@job_router.post("/run-nfl-quality-grading")
 def job_run_nfl_quality_grading(
     lookback_days: int = Query(60, ge=7, le=365),
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
@@ -1437,7 +1445,7 @@ def job_run_nfl_quality_grading(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-walkforward-backtest")
+@job_router.post("/run-nfl-walkforward-backtest")
 def job_run_nfl_walkforward_backtest(
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
     lookback_days: int = Query(240, ge=30, le=1460),
@@ -1462,7 +1470,7 @@ def job_run_nfl_walkforward_backtest(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/evaluate-nfl-promotion")
+@job_router.post("/evaluate-nfl-promotion")
 def job_evaluate_nfl_promotion(
     challenger_model_version: str = Query(..., min_length=3, max_length=128),
     lookback_days: int = Query(45, ge=7, le=365),
@@ -1485,7 +1493,7 @@ def job_evaluate_nfl_promotion(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-framework-tuning")
+@job_router.post("/run-nfl-framework-tuning")
 def job_run_nfl_framework_tuning(
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
     lookback_days: int = Query(240, ge=45, le=1460),
@@ -1510,7 +1518,7 @@ def job_run_nfl_framework_tuning(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-supervised-retrain")
+@job_router.post("/run-nfl-supervised-retrain")
 def job_run_nfl_supervised_retrain(
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
     start_season: int = Query(2013, ge=2000, le=2100),
@@ -1531,7 +1539,7 @@ def job_run_nfl_supervised_retrain(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-decomposition-drift")
+@job_router.post("/run-nfl-decomposition-drift")
 def job_run_nfl_decomposition_drift(
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
     lookback_days: int = Query(120, ge=21, le=730),
@@ -1552,7 +1560,7 @@ def job_run_nfl_decomposition_drift(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-launch-hardening")
+@job_router.post("/run-nfl-launch-hardening")
 def job_run_nfl_launch_hardening(
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
     days_ahead: int = Query(14, ge=1, le=45),
@@ -1585,7 +1593,7 @@ def job_run_nfl_launch_hardening(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-player-baselines")
+@job_router.post("/run-nfl-player-baselines")
 def job_run_nfl_player_baselines(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1608,7 +1616,7 @@ def job_run_nfl_player_baselines(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-player-features")
+@job_router.post("/run-nfl-player-features")
 def job_run_nfl_player_features(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1625,7 +1633,7 @@ def job_run_nfl_player_features(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-player-box-sims")
+@job_router.post("/run-nfl-player-box-sims")
 def job_run_nfl_player_box_sims(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1641,7 +1649,7 @@ def job_run_nfl_player_box_sims(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-props-layer-rebuild")
+@job_router.post("/run-nfl-props-layer-rebuild")
 def job_run_nfl_props_layer_rebuild(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1680,7 +1688,7 @@ def job_run_nfl_props_layer_rebuild(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-player-props")
+@job_router.post("/run-nfl-player-props")
 def job_run_nfl_player_props(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1697,7 +1705,7 @@ def job_run_nfl_player_props(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-nfl-player-prop-markets")
+@job_router.post("/pull-nfl-player-prop-markets")
 def job_pull_nfl_player_prop_markets(
     season: int = Query(..., ge=2010, le=2100),
     week: int = Query(..., ge=1, le=25),
@@ -1713,7 +1721,7 @@ def job_pull_nfl_player_prop_markets(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-fantasy-projections")
+@job_router.post("/run-nfl-fantasy-projections")
 def job_run_nfl_fantasy_projections(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1730,7 +1738,7 @@ def job_run_nfl_fantasy_projections(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-player-cycle")
+@job_router.post("/run-nfl-player-cycle")
 def job_run_nfl_player_cycle(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1747,7 +1755,7 @@ def job_run_nfl_player_cycle(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-identity-refresh")
+@job_router.post("/run-nfl-identity-refresh")
 def job_run_nfl_identity_refresh(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1764,7 +1772,7 @@ def job_run_nfl_identity_refresh(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-identity-manual-resolutions")
+@job_router.post("/run-nfl-identity-manual-resolutions")
 def job_run_nfl_identity_manual_resolutions(
     limit: int = Query(200, ge=1, le=5000),
     reviewer: str = Query("system-weekly-identity-sync", min_length=2, max_length=128),
@@ -1780,7 +1788,7 @@ def job_run_nfl_identity_manual_resolutions(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-identity-quality-snapshot")
+@job_router.post("/run-nfl-identity-quality-snapshot")
 def job_run_nfl_identity_quality_snapshot(
     season: Optional[int] = Query(None, ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1797,7 +1805,7 @@ def job_run_nfl_identity_quality_snapshot(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-weekly-resilience-cycle")
+@job_router.post("/run-nfl-weekly-resilience-cycle")
 def job_run_nfl_weekly_resilience_cycle(
     season: Optional[int] = Query(None, ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
@@ -1823,7 +1831,7 @@ def job_run_nfl_weekly_resilience_cycle(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-dr-backup")
+@job_router.post("/run-nfl-dr-backup")
 def job_run_nfl_dr_backup(skip_verify: bool = Query(False)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(
@@ -1836,7 +1844,7 @@ def job_run_nfl_dr_backup(skip_verify: bool = Query(False)) -> Dict[str, str]:
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-nfl-data-freshness-check")
+@job_router.post("/run-nfl-data-freshness-check")
 def job_run_nfl_data_freshness_check(
     persist_alert: bool = Query(True),
 ) -> Dict[str, str]:
@@ -1854,7 +1862,7 @@ def job_run_nfl_data_freshness_check(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-mlb-outcomes")
+@job_router.post("/pull-mlb-outcomes")
 def job_pull_mlb_outcomes(days_back: int = Query(30, ge=1, le=365)) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(TASK_PULL_MLB_OUTCOMES, kwargs={"days_back": days_back})
@@ -1864,7 +1872,7 @@ def job_pull_mlb_outcomes(days_back: int = Query(30, ge=1, le=365)) -> Dict[str,
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/pull-mlb-data-lake")
+@job_router.post("/pull-mlb-data-lake")
 def job_pull_mlb_data_lake(
     days_back: int = Query(60, ge=1, le=365),
     days_ahead: int = Query(7, ge=0, le=30),
@@ -1889,7 +1897,7 @@ def job_pull_mlb_data_lake(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/run-mlb-daily-cycle")
+@job_router.post("/run-mlb-daily-cycle")
 def job_run_mlb_daily_cycle(
     days_ahead: int = Query(5, ge=0, le=14),
     outcomes_lookback_days: int = Query(60, ge=7, le=365),
@@ -1918,7 +1926,7 @@ def job_run_mlb_daily_cycle(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/evaluate-mlb-promotion")
+@job_router.post("/evaluate-mlb-promotion")
 def job_evaluate_mlb_promotion(
     base_model_version: str = Query("mlb-v1-pa-sim"),
     challenger_model_version: str = Query("mlb-v2-pitch-sim"),
@@ -1941,7 +1949,7 @@ def job_evaluate_mlb_promotion(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-lineup-nowcast-repricing")
+@job_router.post("/mlb-lineup-nowcast-repricing")
 def job_mlb_lineup_nowcast_repricing(
     horizon_hours: int = Query(18, ge=1, le=48),
     simulations: int = Query(3000, ge=200, le=20000),
@@ -1966,7 +1974,7 @@ def job_mlb_lineup_nowcast_repricing(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-walkforward-backtest")
+@job_router.post("/mlb-walkforward-backtest")
 def job_mlb_walkforward_backtest(
     model_version: str = Query("mlb-v1-pa-sim"),
     lookback_days: int = Query(180, ge=30, le=730),
@@ -1992,7 +2000,7 @@ def job_mlb_walkforward_backtest(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-feature-ablation")
+@job_router.post("/mlb-feature-ablation")
 def job_mlb_feature_ablation(
     game_date: Optional[str] = Query(None),
     model_version: str = Query("mlb-v1-pa-sim"),
@@ -2013,7 +2021,7 @@ def job_mlb_feature_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-historical-odds-densify")
+@job_router.post("/mlb-historical-odds-densify")
 def job_mlb_historical_odds_densify(
     start_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
     end_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
@@ -2042,7 +2050,7 @@ def job_mlb_historical_odds_densify(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-clv-attribution")
+@job_router.post("/mlb-clv-attribution")
 def job_mlb_clv_attribution(
     model_version: str = Query("mlb-v1-pa-sim"),
     lookback_days: int = Query(45, ge=7, le=365),
@@ -2061,7 +2069,7 @@ def job_mlb_clv_attribution(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-quality-grading")
+@job_router.post("/mlb-quality-grading")
 def job_mlb_quality_grading(
     model_version: str = Query("mlb-v1-pa-sim"),
     lookback_days: int = Query(60, ge=7, le=365),
@@ -2080,7 +2088,7 @@ def job_mlb_quality_grading(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-historical-resim")
+@job_router.post("/mlb-historical-resim")
 def job_mlb_historical_resim(
     start_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
     end_date: Optional[str] = Query(None, description="YYYY-MM-DD"),
@@ -2115,7 +2123,7 @@ def job_mlb_historical_resim(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-stack-ablation")
+@job_router.post("/mlb-stack-ablation")
 def job_mlb_stack_ablation(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2149,7 +2157,7 @@ def job_mlb_stack_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-sp-talent-ablation")
+@job_router.post("/mlb-sp-talent-ablation")
 def job_mlb_sp_talent_ablation(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2183,7 +2191,7 @@ def job_mlb_sp_talent_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-lineup-timing-ablation")
+@job_router.post("/mlb-lineup-timing-ablation")
 def job_mlb_lineup_timing_ablation(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2217,7 +2225,7 @@ def job_mlb_lineup_timing_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-late-info-stamp-ablation")
+@job_router.post("/mlb-late-info-stamp-ablation")
 def job_mlb_late_info_stamp_ablation(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2251,7 +2259,7 @@ def job_mlb_late_info_stamp_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-pitch-matchup-ablation")
+@job_router.post("/mlb-pitch-matchup-ablation")
 def job_mlb_pitch_matchup_ablation(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2288,7 +2296,7 @@ def job_mlb_pitch_matchup_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-live-late-info-clv")
+@job_router.post("/mlb-live-late-info-clv")
 def job_mlb_live_late_info_clv(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2314,7 +2322,7 @@ def job_mlb_live_late_info_clv(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-totals-park-wind-ablation")
+@job_router.post("/mlb-totals-park-wind-ablation")
 def job_mlb_totals_park_wind_ablation(
     start_date: str = Query("2026-05-20", description="YYYY-MM-DD densify start"),
     end_date: str = Query("2026-07-17", description="YYYY-MM-DD densify end"),
@@ -2351,7 +2359,7 @@ def job_mlb_totals_park_wind_ablation(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.post("/api/jobs/mlb-determinism-check")
+@job_router.post("/mlb-determinism-check")
 def job_mlb_determinism_check(
     game_date: Optional[str] = Query(None),
     model_version: str = Query("mlb-v1-pa-sim"),
@@ -2372,7 +2380,7 @@ def job_mlb_determinism_check(
         raise HTTPException(status_code=500, detail=f"enqueue_failed: {e}")
 
 
-@app.get("/api/jobs/{task_id}")
+@job_router.get("/{task_id}")
 def job_status(task_id: str) -> Dict[str, Any]:
     res = celery_app.AsyncResult(task_id)
     payload: Dict[str, Any] = {"task_id": task_id, "state": res.state}
@@ -2385,7 +2393,7 @@ def job_status(task_id: str) -> Dict[str, Any]:
     return payload
 
 
-@app.post("/api/jobs/{task_id}/revoke")
+@job_router.post("/{task_id}/revoke")
 def job_revoke(
     task_id: str,
     terminate: bool = Query(True, description="Send SIGTERM to running worker child"),
@@ -2402,3 +2410,6 @@ def job_revoke(
     except Exception as e:
         log.exception("Failed to revoke task %s", task_id)
         raise HTTPException(status_code=500, detail=f"revoke_failed: {e}") from e
+
+
+app.include_router(job_router)

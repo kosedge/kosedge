@@ -7,6 +7,7 @@ Empty env → 503; mismatch → 401.
 
 from __future__ import annotations
 
+import hmac
 import os
 
 from fastapi import HTTPException, Request
@@ -18,6 +19,6 @@ def require_kosedge_internal(request: Request) -> str:
     got = (request.headers.get("x-kosedge-secret") or "").strip()
     if not expected:
         raise HTTPException(status_code=503, detail="INTERNAL_API_SECRET not configured")
-    if not got or got != expected:
+    if not got or not hmac.compare_digest(got, expected):
         raise HTTPException(status_code=401, detail="internal auth required")
     return "internal"
