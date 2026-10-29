@@ -13,8 +13,8 @@ CoS seal destination after this tip: `ops/nfl_enterprise_green_t4359u/` (not wri
 | Branch | `cursor/handicap-clear-a-if-ledger-ed4b` |
 | Base | `deploy-vercel` @ `209e90aa4a3f7edca15592af4cdd2f3c44f8b4c4` |
 | Challenged tip | `c525210170fd09864b7232974b37dfc56f2ef4ab` |
-| Remotion SHA | `REMOTION_SHA_PENDING` |
-| Sealed tip | `git rev-parse HEAD` on this branch after the remotion stamp (F12) |
+| Remotion SHA | `e1bf070c96e53c08d045f06740a1e636b43dc0d4` |
+| Sealed tip (F12) | this stamp commit on `cursor/handicap-clear-a-if-ledger-ed4b` (parent remotion `e1bf070c`); confirm with `git rev-parse HEAD` / PR `headRefOid` |
 | DRAFT PR | https://github.com/kosedge/kosedge/pull/657 |
 | Agent run | https://cursor.com/agents/bc-727fa738-c4c8-596c-934f-86d7241eed4b |
 
