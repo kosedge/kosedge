@@ -8,11 +8,11 @@
 
 Daily subscription ships go through **`deploy-vercel` only**. Do not mix branches.
 
-| Platform                                                 | Production branch            | How it ships                                                          |
-| -------------------------------------------------------- | ---------------------------- | --------------------------------------------------------------------- |
-| **Vercel** project `kosedge` (www.kosedge.com)           | **`deploy-vercel`**          | Git integration; Root Directory `apps/web`.                           |
-| **Railway** model-service (`brave-art`, api/worker/beat) | **`deploy-vercel`**          | `.github/workflows/deploy-railway.yml` on model-service path changes. |
-| **GitHub**                                               | PRs **into `deploy-vercel`** | Production Gate must be green before merge.                           |
+| Platform                                                 | Production branch            | How it ships                                                                                                                                                     |
+| -------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Vercel** project `kosedge` (www.kosedge.com)           | **`deploy-vercel`**          | Git integration; Root Directory `apps/web`.                                                                                                                      |
+| **Railway** model-service (`brave-art`, api/worker/beat) | **`deploy-vercel`**          | `.github/workflows/deploy-railway.yml` **workflow_dispatch + CLEAR only** (C10 HOLD). Bare push / model-service merge must **not** `railway up` api/worker/beat. |
+| **GitHub**                                               | PRs **into `deploy-vercel`** | Production Gate must be green before merge.                                                                                                                      |
 
 **Critical:** Never set the Vercel Production Branch to `restore-working-ui`. That branch is a thinner UI shell. Shipping it makes hubs look empty / “coming soon”.
 
@@ -23,7 +23,7 @@ Ignore **`kosedge-vercel-push`** — leftover second Vercel Git project. Product
 ## How they talk
 
 1. **GitHub → Vercel**: push/merge to `deploy-vercel` auto-deploys project `kosedge`.
-2. **GitHub → Railway**: same branch, `deploy-railway.yml` (`RAILWAY_TOKEN`).
+2. **GitHub → Railway**: `deploy-railway.yml` is **not** push-triggered while C10 holds. Production `railway up` of api/worker/beat requires Actions `workflow_dispatch` with `confirm_c10_clear=CLEAR` and `confirm_services=api,worker,beat`, plus a later independent Railway CLEAR. Do not restore the API from a model-service merge.
 3. **Vercel → Railway**: `MODEL_SERVICE_URL` + matching `INTERNAL_API_SECRET`.
 
 ## Required checks (do not merge red)

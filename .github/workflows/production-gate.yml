@@ -22,12 +22,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  railway-deploy-isolation:
+    name: Railway deploy isolation (C10 / G4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assert no auto railway-up on push
+        run: python3 scripts/ci/check_railway_deploy_isolation.py
+
   web-typecheck:
     name: Web typecheck
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - name: Railway deploy isolation (C10 / G4)
+        run: python3 scripts/ci/check_railway_deploy_isolation.py
 
       - uses: pnpm/action-setup@v4
         with:

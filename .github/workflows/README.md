@@ -4,6 +4,21 @@ This directory contains GitHub Actions workflows for automated testing, building
 
 ## Workflows
 
+### `deploy-railway.yml` — Railway api/worker/beat (C10 HOLD / G4)
+
+**Not** push-triggered. A model-service path change on `deploy-vercel` (including merge of DRAFT #655) must not `railway up` api/worker/beat.
+
+Production deploy is **workflow_dispatch** with hard-gate inputs:
+
+- `confirm_c10_clear` = `CLEAR`
+- `confirm_services` = `api,worker,beat`
+
+That is a repo-side authorization gate only. It does **not** restore the intentional C10 API Offline shutdown; Railway CLEAR is a later independent action.
+
+Static check: `python3 scripts/ci/check_railway_deploy_isolation.py` (Production Gate + PR Checks).
+
+**Vercel residual:** project `kosedge` Git integration still production-rebuilds www on merge to `deploy-vercel`. This isolation does not add an `ignoreCommand`. Document that rebuild; do not confuse it with Railway.
+
 ### `production-gate.yml` — subscription ship bar
 
 Runs on pull requests and pushes to **`deploy-vercel`**.

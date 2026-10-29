@@ -201,6 +201,9 @@ jobs:
         if: steps.paths.outputs.web != '1'
         run: echo "No web changes — skipping pnpm typecheck (Production Gate still runs typecheck+build)."
 
+      - name: Railway deploy isolation (C10 / G4)
+        run: python3 scripts/ci/check_railway_deploy_isolation.py
+
       - name: Enforce web Python boundary policy
         run: pnpm check:web-python-boundary
 
