@@ -11,8 +11,9 @@ for **`deploy-vercel`**:
 - Production Gate / Web Next build (Vercel-identical)
 
 Do not require the full model-service pytest suite on this branch — it still
-carries historical NFL assertion drift. Railway path deploys stay on
-`deploy-railway.yml`.
+carries historical NFL assertion drift. Railway api/worker/beat deploys are
+**dispatch + CLEAR only** on `deploy-railway.yml` (C10 HOLD). Bare push of
+model-service paths must not `railway up`.
 
 **Restrictions:**
 

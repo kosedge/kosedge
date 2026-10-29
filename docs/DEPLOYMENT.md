@@ -1,8 +1,11 @@
 # Deployment Guide
 
 > **Production branch for Vercel + Railway:** **`deploy-vercel`**.
-> Vercel project `kosedge` (www.kosedge.com) and Railway model-service (`deploy-railway.yml`)
-> both ship from that branch. Do **not** point Vercel Production at `restore-working-ui` —
+> Vercel project `kosedge` (www.kosedge.com) still auto-rebuilds production on merge
+> to that branch (Git integration; no `ignoreCommand` in this isolation). Railway
+> model-service (`deploy-railway.yml`) is **workflow_dispatch + CLEAR only** while
+> C10 holds — a model-service push must not `railway up` api/worker/beat. Do **not**
+> point Vercel Production at `restore-working-ui` —
 > that branch is a thinner UI shell (missing Pro hubs / NFL boards).
 > Merge only when **Production Gate** is green. After merge, **Production Smoke** must pass.
 

@@ -16,7 +16,7 @@
 | -------------- | --------------------------------------------------------------------------------- |
 | `DATABASE_URL` | Only if web routes need direct Postgres (most NFL boards use `MODEL_SERVICE_URL`) |
 
-### 2) Railway model-service (api + worker + beat) — one-push
+### 2) Railway model-service (api + worker + beat) — dispatch + CLEAR only
 
 **Project:** `brave-art`  
 **Services:** `model-service` (api), `model-service-worker`, `model-service-beat`  
@@ -24,7 +24,7 @@
 **Process roles:** `PROCESS_TYPE=api|worker|beat` on each service  
 **Deploy shape:** `railway up services/model-service --path-as-root` (vendors `data_platform_nfl` in the image)
 
-**Preferred:** GitHub Actions on `deploy-vercel` (`.github/workflows/deploy-railway.yml`).
+**Preferred (C10 HOLD):** GitHub Actions **workflow_dispatch + CLEAR** (`.github/workflows/deploy-railway.yml`). Bare push to `deploy-vercel` must not deploy.
 
 One-time GitHub secret (Settings → Secrets and variables → Actions):
 
@@ -34,7 +34,7 @@ One-time GitHub secret (Settings → Secrets and variables → Actions):
 
 Optional overrides (defaults match brave-art): `RAILWAY_SERVICE_API`, `RAILWAY_SERVICE_WORKER`, `RAILWAY_SERVICE_BEAT`, `RAILWAY_ENVIRONMENT`.
 
-After `RAILWAY_TOKEN` is set, any push to `deploy-vercel` that touches `services/model-service/**` deploys all three.
+After `RAILWAY_TOKEN` is set, production `railway up` still requires Actions `workflow_dispatch` with `confirm_c10_clear=CLEAR` and `confirm_services=api,worker,beat`. A push that touches `services/model-service/**` does **not** deploy api/worker/beat while C10 holds.
 
 ### 3) Production warehouse
 
