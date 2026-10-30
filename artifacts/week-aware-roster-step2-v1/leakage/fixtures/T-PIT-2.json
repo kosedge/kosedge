@@ -1,0 +1,42 @@
+{
+  "id": "T-PIT-2",
+  "game": {
+    "season": 2098,
+    "week": 6,
+    "team": "AAA",
+    "game_type": "REG",
+    "kickoff_utc": "2098-10-12T17:00:00+00:00"
+  },
+  "depth_rows": [
+    {
+      "season": 2098,
+      "week": 6,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-QBA",
+      "position": "QB",
+      "depth_order": 1,
+      "availability_ts": "2098-10-12T12:00:00+00:00"
+    },
+    {
+      "season": 2098,
+      "week": 6,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-QBB",
+      "position": "QB",
+      "depth_order": 2,
+      "availability_ts": "2098-10-12T12:00:00+00:00"
+    },
+    {
+      "season": 2098,
+      "week": 7,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-QBB",
+      "position": "QB",
+      "depth_order": 1,
+      "availability_ts": "2098-10-19T12:00:00+00:00"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "T-PIT-6",
+  "game": {
+    "season": 2098,
+    "week": 4,
+    "team": "AAA",
+    "game_type": "REG",
+    "kickoff_utc": "2098-09-28T17:00:00+00:00"
+  },
+  "roster_rows": [
+    {
+      "season": 2098,
+      "week": 4,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-NTS",
+      "status": "ACT",
+      "availability_ts": null
+    }
+  ],
+  "depth_rows": []
+}

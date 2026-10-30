@@ -1,0 +1,11 @@
+{
+  "id": "T-PIT-3",
+  "player_id": "00-SYN-TRD",
+  "membership": [
+    {"week": 7, "team": "AAA", "member": true},
+    {"week": 8, "team": "AAA", "member": true},
+    {"week": 8, "team": "BBB", "member": false},
+    {"week": 9, "team": "AAA", "member": false},
+    {"week": 9, "team": "BBB", "member": true}
+  ]
+}

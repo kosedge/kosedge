@@ -1,0 +1,54 @@
+{
+  "package": "week-aware-roster-step2-v1",
+  "kind": "synthetic",
+  "expected_answers_commit": "528797468b860cde2f9e39e88a8e2d0e8decc29a",
+  "harness_commit": "3f2269669a92aa072e91daedfddc1ea529074ed9",
+  "all_pass": true,
+  "n_pass": 10,
+  "n_tests": 10,
+  "results": [
+    {
+      "id": "T-PIT-1",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-2",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-3",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-4",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-5",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-6",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-7",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-8",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-9",
+      "pass": true
+    },
+    {
+      "id": "T-PIT-10",
+      "pass": true
+    }
+  ],
+  "refit": false,
+  "holdout_read": false,
+  "opening": false
+}

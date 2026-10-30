@@ -1,0 +1,30 @@
+{
+  "id": "T-PIT-1",
+  "game": {
+    "season": 2098,
+    "week": 3,
+    "team": "AAA",
+    "game_type": "REG",
+    "kickoff_utc": "2098-09-21T17:00:00+00:00"
+  },
+  "roster_rows": [
+    {
+      "season": 2098,
+      "week": 10,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-JOIN",
+      "status": "ACT",
+      "availability_ts": "2098-11-09T12:00:00+00:00"
+    },
+    {
+      "season": 2098,
+      "week": 19,
+      "game_type": "WC",
+      "team": "AAA",
+      "player_id": "00-SYN-JOIN",
+      "status": "ACT",
+      "availability_ts": "2099-01-10T12:00:00+00:00"
+    }
+  ]
+}
