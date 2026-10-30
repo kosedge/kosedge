@@ -166,7 +166,16 @@ LICENSE_NOTE = (
 
 SEASON = 2026
 TARGET_THROUGH_WEEK = 8
-CONSISTENT_PANEL_WEEK = 7
+PARTIAL_PANEL_WEEK = 7
+READY_PANEL_WEEK = 8
+CONSISTENT_PANEL_WEEK = PARTIAL_PANEL_WEEK  # through-W7 PARTIAL; lift only when 14/14 W8
+
+
+def panel_week_from_coverage(coverage: Dict[str, Any]) -> int:
+    """READY panel is week 8 only after all 14 W8 games are final. Else 7."""
+    if coverage.get("through_w8_complete"):
+        return READY_PANEL_WEEK
+    return PARTIAL_PANEL_WEEK
 MIN_SCRIMMAGE_PLAYS = 80
 ENGINE_TEAMS = list(NFL_TEAMS)
 TEAM_TO_ENGINE = {"LAR": "LA", "WSH": "WAS"}
@@ -316,6 +325,85 @@ def fetch_pbp(dest: Path) -> Dict[str, Any]:
         "license": LICENSE_NOTE,
         "access": "public HTTPS; no credential; no paid vendor",
         "hash_before_parse": True,
+        "archived": False,
+    }
+
+
+def archive_pbp(raw_path: Path, source: Dict[str, Any]) -> Dict[str, Any]:
+    """O-a: persist fetched bytes + fetched_at_utc. Public nflverse file mutates."""
+    archive_dir = RAW_DIR / "archive"
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    digest = str(source["sha256"])
+    fetched = str(source.get("fetched_at_utc") or "unknown")
+    stamp = fetched.replace(":", "").replace("-", "")
+    dest = archive_dir / f"play_by_play_2026_{stamp}_{digest[:16]}.parquet"
+    dest.write_bytes(raw_path.read_bytes())
+    if sha256_file(dest) != digest:
+        raise RuntimeError("archived PBP sha256 mismatch vs fetched bytes")
+    sidecar = {
+        "url": source.get("url"),
+        "fetched_at_utc": source.get("fetched_at_utc"),
+        "sha256": digest,
+        "bytes": source.get("bytes"),
+        "archive_path": str(dest.relative_to(ROOT)),
+        "working_path": str(raw_path.relative_to(ROOT)),
+    }
+    write_json(archive_dir / f"{dest.stem}.json", sidecar)
+    source = dict(source)
+    source["archived"] = True
+    source["archive_path"] = sidecar["archive_path"]
+    source["archive_sidecar"] = str((archive_dir / f"{dest.stem}.json").relative_to(ROOT))
+    return source
+
+
+def rest_days_spotcheck(games: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """O-d: record DOW heuristic + short-week rows. Function is UTC weekday."""
+    rows = []
+    for game in games:
+        kick = str(game.get("kickoff_utc") or "")
+        days = rest_days_from_schedule(kick)
+        dow_utc = None
+        dow_et = None
+        try:
+            dt = _parse_iso(kick)
+            dow_utc = dt.weekday()
+            try:
+                from zoneinfo import ZoneInfo
+
+                dow_et = dt.astimezone(ZoneInfo("America/New_York")).weekday()
+            except Exception:
+                dow_et = None
+        except Exception:
+            dt = None
+        expected = {3: 4.0, 0: 6.0}.get(dow_utc, 7.0) if dow_utc is not None else 7.0
+        rows.append(
+            {
+                "game_id": game.get("game_id"),
+                "kickoff_utc": kick,
+                "dow_utc": dow_utc,
+                "dow_et": dow_et,
+                "utc_et_dow_mismatch": (
+                    dow_utc is not None and dow_et is not None and dow_utc != dow_et
+                ),
+                "rest_days_home": game.get("rest_days_home", days),
+                "rest_days_away": game.get("rest_days_away", days),
+                "heuristic_days": days,
+                "heuristic_matches_function": days == expected,
+                "short_week": days < 7.0,
+                "source": "nfl_data.rest_days_from_schedule",
+            }
+        )
+    return {
+        "function": "nfl_data.rest_days_from_schedule",
+        "heuristic": "UTC weekday: Thu=4, Mon=6, else=7",
+        "note": (
+            "O-d: heuristic is UTC DOW. TNF/MNF kickoffs near midnight UTC can "
+            "disagree with America/New_York DOW; record mismatch, do not invent rest."
+        ),
+        "n": len(rows),
+        "n_short_week": sum(1 for r in rows if r.get("short_week")),
+        "n_utc_et_dow_mismatch": sum(1 for r in rows if r.get("utc_et_dow_mismatch")),
+        "rows": rows,
     }
 
 
@@ -1120,6 +1208,7 @@ def dq_checks(
     current: Dict[str, Dict[str, Any]],
     situational: List[Dict[str, Any]],
     pack: Dict[str, Any],
+    panel_week: int = CONSISTENT_PANEL_WEEK,
 ) -> Dict[str, Any]:
     checks = []
 
@@ -1148,8 +1237,8 @@ def dq_checks(
     )
     add(
         "situational_weeks_le_7_in_panel",
-        all(int(r["week"]) <= CONSISTENT_PANEL_WEEK for r in situational),
-        {"max_week": max((int(r["week"]) for r in situational), default=None)},
+        all(int(r["week"]) <= panel_week for r in situational),
+        {"max_week": max((int(r["week"]) for r in situational), default=None), "panel_week": panel_week},
     )
     add(
         "t5_ok_32",
@@ -1191,8 +1280,8 @@ def dq_checks(
     )
     add(
         "no_future_week_in_current",
-        all(int(row.get("as_of_week") or 0) <= CONSISTENT_PANEL_WEEK for row in current.values()),
-        "as_of_week<=7",
+        all(int(row.get("as_of_week") or 0) <= panel_week for row in current.values()),
+        f"as_of_week<={panel_week}",
     )
     add(
         "v2_catchall_nfl_game_inputs_none",
@@ -1247,32 +1336,45 @@ def main() -> int:
             "hash_before_parse": True,
         }
     else:
-        source = fetch_pbp(raw_path)
+        source = archive_pbp(raw_path, fetch_pbp(raw_path))
 
     frame = load_pbp_frame(raw_path)
     pbp_games = complete_games_from_pbp(frame)
     coverage = classify_schedule_games(schedule["w1_w8"], pbp_games, now)
+    panel_week = panel_week_from_coverage(coverage)
+    if coverage.get("through_w8_complete") and source.get("skip_fetch"):
+        raise RuntimeError(
+            "DATA_READY requires re-fetch + archive + fetched_at_utc (O-a); "
+            "refuse --skip-fetch when W8 is 14/14"
+        )
 
-    # Consistent through-W7 panel only. W8 TNF may exist; do not fold into through-W8.
-    situational = build_situational(frame, CONSISTENT_PANEL_WEEK)
+    # Through-W7 while W8 incomplete. Lift to W8 only after 14/14 including MNF.
+    situational = build_situational(frame, panel_week)
     rolling = build_rolling(situational)
-    as_of_label = (
-        f"2026 through W{CONSISTENT_PANEL_WEEK} final; W8 incomplete as_of {coverage['as_of_utc']}"
-    )
+    if panel_week >= READY_PANEL_WEEK:
+        as_of_label = f"2026 through W8 final as_of {coverage['as_of_utc']}"
+    else:
+        as_of_label = (
+            f"2026 through W{panel_week} final; W8 incomplete as_of {coverage['as_of_utc']}"
+        )
     completed_sched = [
         g
         for g in coverage["games"]
-        if g["status"] == "COMPLETE" and int(g["week"]) <= CONSISTENT_PANEL_WEEK
+        if g["status"] == "COMPLETE" and int(g["week"]) <= panel_week
     ]
-    records = records_from_completed(completed_sched, CONSISTENT_PANEL_WEEK)
+    records = records_from_completed(completed_sched, panel_week)
     current = build_current_efficiency(
-        situational, rolling, records, CONSISTENT_PANEL_WEEK, as_of_label
+        situational, rolling, records, panel_week, as_of_label
     )
     pack = build_w09_pack(
-        current, schedule["w9"], CONSISTENT_PANEL_WEEK, as_of_label
+        current, schedule["w9"], panel_week, as_of_label
     )
     dq = dq_checks(
-        coverage=coverage, current=current, situational=situational, pack=pack
+        coverage=coverage,
+        current=current,
+        situational=situational,
+        pack=pack,
+        panel_week=panel_week,
     )
     status = decide_status(coverage, dq, current)
 
@@ -1369,8 +1471,8 @@ def main() -> int:
         "imv_d1": "CLOSED — IMV PASS_CONTRACT 1a53bbd3 on v2 b41f4b43. PASS_CONTRACT ≠ DATA ACCEPT.",
         "status": status,
         "season": SEASON,
-        "consistent_panel_through_week": CONSISTENT_PANEL_WEEK,
-        "through_w8_declared_complete": False,
+        "consistent_panel_through_week": panel_week,
+        "through_w8_declared_complete": bool(coverage["through_w8_complete"]),
         "week8_missing": coverage["week8_missing"],
         "week8_complete_count": coverage["week8_complete_count"],
         "week8_expected_count": coverage["week8_expected_count"],
@@ -1412,32 +1514,41 @@ def main() -> int:
         "STATUS.json": report,
         "team_situational_weekly.json": {
             "season": SEASON,
-            "max_week": CONSISTENT_PANEL_WEEK,
+            "max_week": panel_week,
             "n": len(situational),
             "source": "nflverse",
             "rows": situational,
         },
         "team_rolling_features_weekly.json": {
             "season": SEASON,
-            "max_week": CONSISTENT_PANEL_WEEK,
+            "max_week": panel_week,
             "n": len(rolling),
             "source": "nflverse",
             "window": "5g/3g matching ingest.py",
             "rows": rolling,
         },
-        "team_efficiency_current_through_w7.json": {
-            "season": SEASON,
-            "as_of_week": CONSISTENT_PANEL_WEEK,
-            "as_of": as_of_label,
-            "n": len(current),
-            "2025_prior_used": False,
-            "teams": current,
-        },
         "w09_consume_pack.json": pack,
+        "rest_days_spotcheck.json": rest_days_spotcheck(pack.get("games") or []),
+    }
+    current_name = (
+        "team_efficiency_current_through_w8.json"
+        if panel_week >= READY_PANEL_WEEK
+        else "team_efficiency_current_through_w7.json"
+    )
+    artifacts[current_name] = {
+        "season": SEASON,
+        "as_of_week": panel_week,
+        "as_of": as_of_label,
+        "n": len(current),
+        "2025_prior_used": False,
+        "teams": current,
     }
     for name, obj in artifacts.items():
         hashes[name] = write_json(OUT_DIR / name, obj)
-
+    # Reseal the whole packet so authority copies / STANDBY notes stay listed.
+    for path in sorted(OUT_DIR.iterdir()):
+        if path.is_file() and path.name != "SHA256SUMS":
+            hashes[path.name] = sha256_file(path)
     sums = "".join(f"{digest}  {name}\n" for name, digest in sorted(hashes.items()))
     (OUT_DIR / "SHA256SUMS").write_text(sums, encoding="utf-8")
     print(json.dumps({"status": status, "out": str(OUT_DIR), "hashes": hashes}, indent=2))

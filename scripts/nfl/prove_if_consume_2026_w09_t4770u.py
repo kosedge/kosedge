@@ -618,6 +618,10 @@ def main() -> int:
         "call_graph": call_graph["chain"],
         "fields": field_proofs,
     }
+    sys.path.insert(0, str(ROOT / "scripts" / "nfl"))
+    from build_efficiency_2026_w1_w8_t4770u import rest_days_spotcheck
+
+    _write_json(OPS / "rest_days_spotcheck.json", rest_days_spotcheck(pack.get("games") or []))
     _write_json(OUT_CONSUMED, consume_doc)
 
     proof = {

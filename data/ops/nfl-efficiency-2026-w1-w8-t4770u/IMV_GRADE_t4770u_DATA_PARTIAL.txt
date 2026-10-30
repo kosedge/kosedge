@@ -1,0 +1,59 @@
+IMV_GRADE_t4770u_DATA_PARTIAL — grade Cursor DATA_PARTIAL tip ba9e8426 (DATA ONLY)
+Graded 2026-10-30 ET by IMV (Model Validation Lead). Fail closed. Independent re-measure; Cursor claims not accepted on assertion.
+
+A. AUTHORITY (sha256 recomputed this session — all MATCH)
+- COS_ORDER_IMV_t4770u_DATA_PARTIAL_GRADE.txt  b8cc56d9090b2d7ed967f8b7ef4aa0ba844726f5ff553423712b01553e6c7e78 MATCH
+- DECISION_RYAN_t4770u_HIFT1_EFFICIENCY_RECOVERY.md  751dd63c34c5ac815e10fc92ed2fe61daf99fb6741bde891ce7091df9de2913a MATCH
+- ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md  b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4 MATCH
+- IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt (PASS_CONTRACT)  1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8 MATCH
+- Tip ba9e842631b6c3421fedbd9baa819e1aef571b37 DRAFT #663 path data/ops/nfl-efficiency-2026-w1-w8-t4770u/ (RO worktree /tmp/imv663)
+- Tip copies of contract v2 + PASS_CONTRACT 1a53bbd3 byte-identical to ops authority (tip copies ≠ authority)
+
+B. VERDICT: DATA_PARTIAL_ACCEPT
+Accepts a sealed through-W7 efficiency panel + diagnostic IF consume proof bound to PASS_CONTRACT 1a53bbd3 / contract b41f4b43.
+DATA_PARTIAL_ACCEPT ≠ DATA_READY ≠ through-W8 complete ≠ scoring-admissible ≠ authorize emit ≠ merge #663 ≠ E2 ≠ C10 ≠ CERT.
+Incomplete W8 correctly fail-closed (through_w8_declared_complete=false). E1 stays FAIL_CLOSED for O4 emit until separate through-W8 DATA_READY grade + IMV ACCEPT + paper gates + new CoS CLEAR.
+
+C. INTEGRITY
+- SHA256SUMS: 18/18 listed files MATCH (recomputed). All dir files except SHA256SUMS itself are listed.
+- STATUS: DATA_PARTIAL; through_w8_declared_complete=false; through_w7_complete=true; consistent_panel_through_week=7; week8 1/14; scoring_admissible_now=false; bind BOUND_TO_V2_PASS_CONTRACT_1a53bbd3; contract b41f4b43; PASS_CONTRACT 1a53bbd3.
+
+D. COVERAGE (independent vs schedule d88ae734 + re-fetched nflverse PBP)
+- W1–W7: 16+16+16+16+15+14+14 = 107/107 COMPLETE. MATCH.
+- W8: 1/14 COMPLETE — only 2026-W08-CAR@GB (TNF). PBP has exactly one week-8 game 2026_08_CAR_GB.
+- W8 missing 13 NOT_YET_KICKED incl MNF CHI@SEA 2026-11-03T01:15:00Z — kickoffs match packaged schedule; none invented.
+- Situational weekly has 0 week-8 rows (CAR@GB not folded into through-W7 panel). Honest PARTIAL.
+
+E. PROVENANCE / TEMPORAL / LEAKAGE
+- Source: nflverse play_by_play_2026.parquet public HTTPS; recomputed sha256 b790f399… MATCH claim; bytes 8068642 MATCH. DATABASE_URL/C10 unused.
+- 2025_prior_used=false for all 32 teams; forbidden priors 4cd45f85/a4e3fa90 not used as substitute.
+- Rolling features weeks {1..7} only (214 rows). Team panel rolling_as_of_week ∈ {6,7} (W7 bye → 6); none 8/9.
+- W09 consume pack as_of_week=7 / rolling_as_of_week=7 for 15/15. No unplayed W8 feeds panel.
+- Spot recompute off_epa_5g KC/DET from PBP MATCH; W-L through W7 MATCH 32/32; games_in_window_5=5 for 32/32.
+
+F. CONTRACT CONSUME (diagnostic only)
+- if_required_20_consumed.json: exactly 20 contract fields; call graph simulate_nfl_game_independent_fair → matchup/totals/decomposition @1b39f4e9; nfl_simulator.py sha 52d9e909 MATCH prior pin; market_blend=0; NFL_INDEPENDENT_FAIR_PATH=false; DATABASE_URL/C10 false; labeled DIAGNOSTIC / scoring_admissible=false.
+- Perturbation record present (input+output hash moves). Presence-only not accepted; record complete/consistent. Full sim re-run deferred to DATA_READY (O-c).
+- w09_consume_pack.json: 15/15 rows — 20/20 required finite; travel_*/info_velocity_*/hours_since_change_*/injury/weather/kav/personnel/tendency/coach/second_order None (v2 catch-all). week_scoring_admissible=false.
+
+G. DQ
+DQ.json pass with through_w8_not_declared / no_future_week_in_current / catch-all checks. Missing W8 listed as missing — not filled.
+
+H. DEFECTS
+Blocking: none.
+
+I. OBSERVATIONS (non-blocking; bind DATA_READY)
+O-a: fetched_at_utc=null; raw PBP not archived in tip — READY must pin fetch timestamp + archived bytes (public file mutates).
+O-b: T5 W-L is through W7 for PARTIAL — recompute through W8 for READY.
+O-c: Re-run 20-field perturbation / IF consume at READY (this grade checked record completeness, not a fresh sim).
+O-d: rest_days mostly 7.0 (code default / Sunday heuristic) — spot-check short weeks at READY.
+O-e: Tip-bundled authority copies match today but are not authority.
+
+J. SCOPE
+Read: tip ba9e8426 dataset + proofs; authority hashes; schedule; independent PBP re-fetch for coverage/EPA/W-L spot checks. NOT opened: outcomes/closes as betting labels, holdouts, G34 predictions.csv, books.py, register edits. No tip edits; #663 not merged; no emit/C10/Odds.
+≠emit ≠DATA_READY ≠merge ≠E2 ≠CERT.
+
+K. BOARD
+Cursor tip ba9e8426 DRAFT #663: DATA_PARTIAL_ACCEPT · through-W7 only · through-W8 OPEN
+Next: after W8 final (incl MNF CHI@SEA) + PBP re-fetch → Cursor DATA_READY seal → IMV through-W8 DATA grade vs b41f4b43 → then paper gates + new CoS CLEAR before any E1 emit in Tue–Wed window (or slip W10).
+Locks: NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen · C10 HOLD · Odds HOLD 70c56700 · overlays OFF · #663 DRAFT ≠merge

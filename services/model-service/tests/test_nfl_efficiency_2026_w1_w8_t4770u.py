@@ -231,6 +231,33 @@ def test_required_20_consumed_by_if_path_call_graph_and_input_hash() -> None:
     assert proof["scoring_admissible"] is False
 
 
+def test_data_partial_accept_standby_does_not_claim_ready() -> None:
+    accept = _load("ACCEPT.json")
+    status = _load("STATUS.json")
+    assert accept["verdict"] == "DATA_PARTIAL_ACCEPT"
+    assert accept["imv_data_partial_accept"] == "c674da77"
+    assert accept["accepted_tip_sha8"] == "ba9e8426"
+    assert accept["panel"] == "through-W7 only"
+    assert accept["status_remains"] == "DATA_PARTIAL"
+    assert "DATA_READY" in accept["do_not_claim"]
+    assert status["status"] == "DATA_PARTIAL"
+    assert status["through_w8_declared_complete"] is False
+    assert _sha256("STATUS.json") == (
+        "81d7dd9f4b028ea65386cfa277f714ce4ce4ffdf103481efa4aa9093d6cce445"
+    )
+    assert _sha256("IMV_GRADE_t4770u_DATA_PARTIAL.txt").startswith("c674da77")
+
+
+def test_rest_days_spotcheck_records_heuristic() -> None:
+    spot = _load("rest_days_spotcheck.json")
+    assert spot["function"] == "nfl_data.rest_days_from_schedule"
+    assert spot["n"] == 15
+    assert spot["scoring_admissible"] is False
+    short = [row for row in spot["rows"] if row["short_week"]]
+    assert short
+    assert all(row["game_id"].startswith("2026-W09-") for row in spot["rows"])
+
+
 def test_sha256sums_cover_sealed_json_and_authority() -> None:
     sums = (ART / "SHA256SUMS").read_text(encoding="utf-8").strip().splitlines()
     names = {line.split()[-1] for line in sums if line.strip()}
@@ -243,6 +270,11 @@ def test_sha256sums_cover_sealed_json_and_authority() -> None:
         "ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md",
         "IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt",
         "COS_ORDER_CURSOR_t4770u_BIND_PASS_CONTRACT.txt",
+        "ACCEPT.json",
+        "STANDBY.md",
+        "IMV_GRADE_t4770u_DATA_PARTIAL.txt",
+        "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY.txt",
+        "rest_days_spotcheck.json",
     }
     assert required <= names
     for line in sums:
