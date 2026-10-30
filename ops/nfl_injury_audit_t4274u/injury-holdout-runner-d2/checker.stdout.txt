@@ -1,0 +1,20 @@
+{
+  "behavior": {
+    "F-COMP-NULL": "stop",
+    "F-HOLDOUT": "stop",
+    "F-INC-DELTA": "stop",
+    "F-INC-TS": "stop",
+    "F-JOIN-FIRST": "stop",
+    "F-NAIVE": "stop",
+    "F-NAME": "stop",
+    "F-OK": "ok",
+    "F-V2-BLOB": "stop",
+    "F-V2-MISMATCH": "stop",
+    "F-V2-MISSING": "stop",
+    "holdout_mode": "stop"
+  },
+  "errors": [],
+  "n_errors": 0,
+  "ok": true,
+  "package": "."
+}
