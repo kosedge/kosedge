@@ -8,9 +8,9 @@
 | Parent paper | **7b4d70ac UNTOUCHED** (not opened, not edited) |
 | Base | `deploy-vercel` @ `1b39f4e9` |
 | Branch | `cursor/t4791u-hhl1-capture-plumbing-2bde` |
-| Implementation SHA | _filled at seal_ |
-| Tip SHA | _filled at seal_ |
-| Receipt file sha256 | _sidecar after seal_ |
+| Implementation SHA | `1cc2dcd8382c292b3d7bc2c7ce92aa0c07b85041` (`1cc2dcd8`) |
+| Tip SHA | branch HEAD after receipt seal; recorded in sibling `.sha256` sidecar |
+| Receipt file sha256 | sibling `.sha256` sidecar (content hash of this file) |
 
 Full authority digests (recomputed on the filed packets this turn — MATCH):
 
