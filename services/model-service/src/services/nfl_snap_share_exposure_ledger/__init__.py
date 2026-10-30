@@ -34,6 +34,12 @@ from src.services.nfl_snap_share_exposure_ledger.schema import (
     SituationalWeekRow,
     SnapFact,
 )
+from src.services.nfl_pregame_asof import (
+    IF_MATCHUP_ASOF_CONTRACT,
+    contiguous_pregame_rating_week,
+    resolve_if_matchup_rolling_row,
+    resolve_pregame_rating_week,
+)
 from src.services.nfl_snap_share_exposure_ledger.window import (
     latest_five_schedule_game_ids,
     resolve_if_5g_window,
@@ -43,6 +49,7 @@ __all__ = [
     "ALLOWED_SNAP_SOURCE_IDS",
     "FORBIDDEN_IMPORT_NAMES",
     "IF_5G_WINDOW_CONTRACT",
+    "IF_MATCHUP_ASOF_CONTRACT",
     "LEDGER_SCHEMA_VERSION",
     "SOURCE_NFLVERSE_SNAP_COUNTS",
     "SOURCE_SYNTH_SNAP_COUNTS",
@@ -56,10 +63,13 @@ __all__ = [
     "SnapFact",
     "assert_builder_isolated",
     "build_snap_share_5g_exposure_ledger",
+    "contiguous_pregame_rating_week",
     "canonical_json",
     "canonicalize_as_of_ts",
     "fingerprint_payload",
     "latest_five_schedule_game_ids",
     "make_ledger_id",
     "resolve_if_5g_window",
+    "resolve_if_matchup_rolling_row",
+    "resolve_pregame_rating_week",
 ]

@@ -1197,6 +1197,15 @@ def materialize_usage_features_from_pbp(
 def materialize_matchup_features_from_usage(
     *, seasons: List[int], replace_existing: bool = False
 ) -> Dict[str, Any]:
+    """Materialize team rolling + per-game matchup `_5g` features.
+
+    Rolling rows keep the pin ``ROWS … CURRENT ROW`` frame at the
+    completed-data week. Matchup join is pregame (t4822u):
+    ``rolling.week = schedule.week - 1``. Pin ``1b39f4e9`` L1497–1501
+    joined the same week as the schedule game (target leakage). Missing
+    prior-week rolling rows stay NULL — no latest-week substitute.
+    This function does not rematerialize stored history by itself.
+    """
     session = SessionLocal()
     run_id = None
     metrics = {
@@ -1469,9 +1478,9 @@ def materialize_matchup_features_from_usage(
                       NOW()
                     FROM nfl_dp_schedules s
                     LEFT JOIN nfl_dp_team_rolling_features_weekly h
-                      ON h.season = s.season AND h.week = s.week AND h.team = s.home_team
+                      ON h.season = s.season AND h.week = (s.week - 1) AND h.team = s.home_team
                     LEFT JOIN nfl_dp_team_rolling_features_weekly a
-                      ON a.season = s.season AND a.week = s.week AND a.team = s.away_team
+                      ON a.season = s.season AND a.week = (s.week - 1) AND a.team = s.away_team
                     WHERE s.season = :season
                     ON CONFLICT (season, week, game_id) DO UPDATE SET
                       game_date = EXCLUDED.game_date,

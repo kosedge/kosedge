@@ -4,6 +4,10 @@ Authority: DECISION d48d15bc · ORDER 4f5811dc · contract 0614bdcc · IF window
 
 **Status:** DRAFT engineering only. Not wired. Not admitted. Not scored.
 
+t4822u as-of correction (separate DRAFT): `data/ops/nfl-if-665-asof-correction-t4822u.md`.
+Pin `1b39f4e9` same-week matchup join is preserved as the original reference;
+do not treat this t4818u note as the corrected join.
+
 ## What was built
 
 Isolated package (no IF / nowcast / index / #664 activate / routes / tasks imports):
@@ -112,7 +116,7 @@ Coverage: IF `_5g` situational frame ≠ latest-five schedule; verified 0 kept i
 
 ## Residuals (do not silently resolve)
 
-1. **CURRENT ROW vs “weeks &lt; target week”.** Builder follows the IF-consumed SQL frame (includes `rating_week`). If owner wants a strictly prior-to-target window, that is a different contract.
+1. **CURRENT ROW vs “weeks &lt; target week”.** t4818u followed the pin join (CURRENT ROW at the consumed `rating_week`, which was same-week). t4822u DRAFT binds `rating_week = target_week − 1` and keeps CURRENT ROW only as completed-data. See `nfl-if-665-asof-correction-t4822u.md`.
 2. **offense_index / defense_index lookback** still untraced (205f33e0 residual). Ledger must not be applied to those indices.
 3. **injury_nowcast overlap** if anyone later applies this ledger as a second personnel Δ.
 4. **Railway runtime bytes** UNVERIFIED.

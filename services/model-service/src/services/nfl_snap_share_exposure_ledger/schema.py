@@ -5,7 +5,7 @@ their participation, are represented in each team's Independent Fair
 `_5g` historical rating window. Does not estimate player point value.
 
 Authority: DECISION d48d15bc · ORDER 4f5811dc · contract 0614bdcc ·
-IF window 205f33e0 (5G_ONLY) · RATIFY d4acc170.
+IF window 205f33e0 (5G_ONLY) · RATIFY d4acc170 · as-of 312d4c65.
 """
 
 from __future__ import annotations
@@ -13,8 +13,10 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, Literal, Optional, Tuple
 
+from src.services.nfl_pregame_asof import IF_5G_SQL_FRAME, IF_MATCHUP_ASOF_CONTRACT
 
-LEDGER_SCHEMA_VERSION = "snap-share-exposure-ledger-v0-t4818u"
+
+LEDGER_SCHEMA_VERSION = "snap-share-exposure-ledger-v0-t4822u"
 WINDOW_LABEL_5G = "5g"
 WINDOW_SIZE_5G = 5
 STARTER_LABEL_THRESHOLD = 0.50
@@ -24,13 +26,14 @@ STARTER_LABEL_THRESHOLD = 0.50
 # persisted on nfl_dp_team_rolling_features_weekly; they must be reconstructed
 # from the same situational grain + schedule join. Do not substitute
 # "latest five completed games from the schedule."
-IF_5G_WINDOW_CONTRACT = (
-    "nfl_dp_team_situational_weekly WHERE season=:season; "
-    "PARTITION BY team ORDER BY season, week "
-    "ROWS BETWEEN 4 PRECEDING AND CURRENT ROW"
-)
+#
+# t4822u: the frame still includes CURRENT ROW at rating_week (completed-data
+# week). The matchup / ledger join is pregame: rating_week = target_week - 1.
+# Pin 1b39f4e9 L1497-1501 joined rolling.week to schedule.week (same-week).
+IF_5G_WINDOW_CONTRACT = f"{IF_5G_SQL_FRAME}; {IF_MATCHUP_ASOF_CONTRACT}"
 IF_5G_WINDOW_CONTRACT_CITE = (
-    "services/model-service/data_platform_nfl/ingest.py@1b39f4e9 L1305-1314"
+    "services/model-service/data_platform_nfl/ingest.py@1b39f4e9 L1305-1314 "
+    "(frame) + t4822u pregame join rating_week = target_week - 1"
 )
 
 # Contract 0614bdcc §2 + snap_depth_ingest source label. Synthetic is tests only.
@@ -49,6 +52,10 @@ REJECT_WINDOW_INCOMPLETE = "WINDOW_INCOMPLETE"
 REJECT_WINDOW_SHORT = "WINDOW_SHORT"
 REJECT_WINDOW_MISMATCH = "WINDOW_MISMATCH"
 REJECT_RATING_WEEK_UNRESOLVED = "RATING_WEEK_UNRESOLVED"
+REJECT_TARGET_WEEK_INVALID = "TARGET_WEEK_INVALID"
+REJECT_RATING_WEEK_NOT_LAGGED = "RATING_WEEK_NOT_LAGGED"
+REJECT_RATING_WEEK_STALE = "RATING_WEEK_STALE"
+REJECT_FUTURE_GAME_IN_WINDOW = "FUTURE_GAME_IN_WINDOW"
 REJECT_GRAIN_MISMATCH = "GRAIN_MISMATCH"
 REJECT_SCHEDULE_UNRESOLVED = "SCHEDULE_UNRESOLVED"
 REJECT_GAME_NOT_COMPLETED = "GAME_NOT_COMPLETED"
@@ -157,6 +164,8 @@ class ScheduleGameRow:
     home_team: str
     away_team: str
     completed: bool = True
+    game_date: Optional[str] = None
+    kickoff_ts: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -220,11 +229,13 @@ class ResolvedWindowGame:
 class ResolvedIf5gWindow:
     season: int
     rating_week: int
+    target_week: int
     team: str
     window: str
     contract: str
     games: Tuple[ResolvedWindowGame, ...]
     window_fingerprint: str
+    target_game_id: Optional[str] = None
 
     @property
     def game_ids(self) -> Tuple[str, ...]:
@@ -245,6 +256,7 @@ class ExposureLedgerRow:
     window: str
     season: int
     rating_week: int
+    target_week: int
     team: str
     player_gsis_id: str
     player_pfr_ids: Tuple[str, ...]
@@ -273,6 +285,7 @@ class ExposureLedger:
     window: str
     season: int
     rating_week: int
+    target_week: int
     team: str
     window_contract: str
     window_game_ids: Tuple[str, ...]
@@ -290,6 +303,7 @@ class ExposureLedger:
             "window": self.window,
             "season": self.season,
             "rating_week": self.rating_week,
+            "target_week": self.target_week,
             "team": self.team,
             "window_contract": self.window_contract,
             "window_game_ids": list(self.window_game_ids),

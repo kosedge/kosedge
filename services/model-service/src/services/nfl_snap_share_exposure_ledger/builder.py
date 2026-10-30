@@ -16,12 +16,14 @@ from src.services.nfl_snap_share_exposure_ledger.identity import (
     fingerprint_payload,
     make_ledger_id,
     mapping_to_sorted_pairs,
+    parse_ledger_ts,
 )
 from src.services.nfl_snap_share_exposure_ledger.schema import (
     ALLOWED_SNAP_SOURCE_IDS,
     FORBIDDEN_IMPORT_NAMES,
     IF_5G_WINDOW_CONTRACT,
     LEDGER_SCHEMA_VERSION,
+    REJECT_AS_OF_VIOLATION,
     REJECT_ID_UNMAPPED,
     REJECT_IDENTITY_COLLISION,
     REJECT_INPUT_INVALID,
@@ -55,30 +57,46 @@ from src.services.nfl_snap_share_exposure_ledger.window import resolve_if_5g_win
 def build_snap_share_5g_exposure_ledger(
     *,
     season: int,
-    rating_week: int,
+    target_week: int,
     team: str,
     situational_rows: Sequence[SituationalWeekRow],
     schedule_rows: Sequence[ScheduleGameRow],
     participation_bundles: Sequence[GameParticipationBundle],
     identity_links: Sequence[IdentityLink],
     as_of_ts: str,
+    rating_week: Optional[int] = None,
     declared_games_in_window_5: Optional[int] = None,
+    target_game_id: Optional[str] = None,
+    forecast_cutoff_ts: Optional[str] = None,
 ) -> ExposureLedger:
     """Return the `_5g` snap-share exposure ledger or raise fail-closed."""
     as_of = canonicalize_as_of_ts(as_of_ts)
+    if forecast_cutoff_ts is not None:
+        cutoff = canonicalize_as_of_ts(forecast_cutoff_ts)
+        if parse_ledger_ts(as_of) > parse_ledger_ts(cutoff):
+            raise ExposureLedgerReject(
+                REJECT_AS_OF_VIOLATION,
+                f"as_of_ts {as_of} is after forecast_cutoff_ts {cutoff}",
+            )
+        bound_ts = cutoff
+    else:
+        bound_ts = as_of
     window = resolve_if_5g_window(
         season=season,
-        rating_week=rating_week,
+        target_week=target_week,
         team=team,
         situational_rows=situational_rows,
         schedule_rows=schedule_rows,
+        rating_week=rating_week,
         declared_games_in_window_5=declared_games_in_window_5,
+        target_game_id=target_game_id,
+        forecast_cutoff_ts=forecast_cutoff_ts,
     )
     pfr_to_gsis = _identity_index(identity_links)
     bundles = _index_bundles(
         window=window,
         bundles=participation_bundles,
-        as_of_ts=as_of,
+        as_of_ts=bound_ts,
     )
     players = _collect_player_sides(window=window, bundles=bundles, pfr_to_gsis=pfr_to_gsis)
     rows = tuple(
@@ -93,9 +111,12 @@ def build_snap_share_5g_exposure_ledger(
     input_fingerprint = fingerprint_payload(
         {
             "as_of_ts": as_of,
+            "forecast_cutoff_ts": forecast_cutoff_ts,
             "bundles": [_bundle_fingerprint_payload(bundles[g.game_id]) for g in window.games],
             "identity_links": mapping_to_sorted_pairs(pfr_to_gsis),
             "schema_version": LEDGER_SCHEMA_VERSION,
+            "target_week": window.target_week,
+            "target_game_id": window.target_game_id,
             "window_fingerprint": window.window_fingerprint,
         }
     )
@@ -104,6 +125,7 @@ def build_snap_share_5g_exposure_ledger(
             "ledger": {
                 "as_of_ts": as_of,
                 "rating_week": window.rating_week,
+                "target_week": window.target_week,
                 "rows": [r.to_public_dict() for r in rows],
                 "schema_version": LEDGER_SCHEMA_VERSION,
                 "season": window.season,
@@ -115,7 +137,8 @@ def build_snap_share_5g_exposure_ledger(
         }
     )
     notes = (
-        "window=5g; IF contract includes CURRENT ROW at rating_week",
+        "window=5g; CURRENT ROW at rating_week (completed-data week)",
+        "pregame as-of: rating_week = target_week - 1; target/future games excluded",
         "verified_zero != UNKNOWN; incomplete source fails closed",
         "starter_label_derived is descriptive only (e_p >= 0.50)",
         "no player_impact / no point estimation / not wired to Independent Fair",
@@ -125,6 +148,7 @@ def build_snap_share_5g_exposure_ledger(
         window=WINDOW_LABEL_5G,
         season=window.season,
         rating_week=window.rating_week,
+        target_week=window.target_week,
         team=window.team,
         window_contract=IF_5G_WINDOW_CONTRACT,
         window_game_ids=window.game_ids,
@@ -437,6 +461,7 @@ def _build_player_row(
         "player_pfr_ids": list(pfr_ids),
         "position": position,
         "rating_week": window.rating_week,
+        "target_week": window.target_week,
         "schema_version": LEDGER_SCHEMA_VERSION,
         "season": window.season,
         "side": side,
@@ -451,6 +476,7 @@ def _build_player_row(
         window=WINDOW_LABEL_5G,
         season=window.season,
         rating_week=window.rating_week,
+        target_week=window.target_week,
         team=window.team,
         player_gsis_id=gsis,
         player_pfr_ids=pfr_ids,
