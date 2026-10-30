@@ -1,0 +1,13 @@
+commit 1643d3ca65877f20472c6f4f9fa0a0ae2d12c8da
+Author:     Cursor Agent <cursoragent@cursor.com>
+AuthorDate: Sat Oct 24 22:18:25 2026 +0000
+Commit:     Cursor Agent <cursoragent@cursor.com>
+CommitDate: Sat Oct 24 22:18:25 2026 +0000
+
+    docs(nfl): file week-aware Step 2 v2 expected answers before harness
+    
+    IMV RETURN da9a95b6 on v1 d6484094. D-4 path (ii) SPEC erratum.
+    Expected T-PIT-1..10 + DEV-COVERAGE (export keys, not fold-n).
+    No .py harness in this commit. No refit, no opening, no lock.
+    
+    Co-authored-by: kosedge <kosedge@users.noreply.github.com>

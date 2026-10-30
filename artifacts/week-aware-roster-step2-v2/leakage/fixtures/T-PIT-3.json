@@ -1,0 +1,18 @@
+{
+  "id": "T-PIT-3",
+  "player_id": "00-SYN-TRD",
+  "games": [
+    {"season": 2098, "week": 7, "team": "AAA", "game_type": "REG", "kickoff_utc": "2098-10-19T17:00:00+00:00"},
+    {"season": 2098, "week": 8, "team": "AAA", "game_type": "REG", "kickoff_utc": "2098-10-26T17:00:00+00:00"},
+    {"season": 2098, "week": 8, "team": "BBB", "game_type": "REG", "kickoff_utc": "2098-10-26T17:00:00+00:00"},
+    {"season": 2098, "week": 9, "team": "AAA", "game_type": "REG", "kickoff_utc": "2098-11-02T17:00:00+00:00"},
+    {"season": 2098, "week": 9, "team": "BBB", "game_type": "REG", "kickoff_utc": "2098-11-02T17:00:00+00:00"}
+  ],
+  "roster_rows": [
+    {"season": 2098, "week": 7, "game_type": "REG", "team": "AAA", "player_id": "00-SYN-TRD", "status": "ACT", "availability_ts": "2098-10-19T12:00:00+00:00"},
+    {"season": 2098, "week": 8, "game_type": "REG", "team": "AAA", "player_id": "00-SYN-TRD", "status": "ACT", "availability_ts": "2098-10-26T12:00:00+00:00"}
+  ],
+  "transactions": [
+    {"player_id": "00-SYN-TRD", "from_team": "AAA", "to_team": "BBB", "event_type": "trade", "availability_ts": "2098-10-27T12:00:00+00:00"}
+  ]
+}

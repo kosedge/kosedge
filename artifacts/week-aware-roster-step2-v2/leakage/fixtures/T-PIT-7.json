@@ -1,0 +1,43 @@
+{
+  "id": "T-PIT-7",
+  "game": {
+    "season": 2098,
+    "week": 1,
+    "team": "AAA",
+    "game_type": "REG",
+    "kickoff_utc": "2098-09-07T17:00:00+00:00"
+  },
+  "closed_at_cutoff": false,
+  "roster_rows": [
+    {
+      "label": "lt",
+      "season": 2098,
+      "week": 1,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-LT",
+      "status": "ACT",
+      "availability_ts": "2098-09-07T16:59:59+00:00"
+    },
+    {
+      "label": "eq",
+      "season": 2098,
+      "week": 1,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-EQ",
+      "status": "ACT",
+      "availability_ts": "2098-09-07T17:00:00+00:00"
+    },
+    {
+      "label": "gt",
+      "season": 2098,
+      "week": 1,
+      "game_type": "REG",
+      "team": "AAA",
+      "player_id": "00-SYN-GT",
+      "status": "ACT",
+      "availability_ts": "2098-09-07T17:00:01+00:00"
+    }
+  ]
+}

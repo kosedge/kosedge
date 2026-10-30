@@ -1,0 +1,9 @@
+{
+  "id": "T-PIT-7",
+  "closed_at_cutoff": false,
+  "rows": [
+    {"player_id": "00-SYN-LT", "eligible": true, "missingness": "OK"},
+    {"player_id": "00-SYN-EQ", "eligible": false, "missingness": "TS_EQUAL_CUTOFF"},
+    {"player_id": "00-SYN-GT", "eligible": false, "missingness": "TS_AFTER_CUTOFF"}
+  ]
+}
