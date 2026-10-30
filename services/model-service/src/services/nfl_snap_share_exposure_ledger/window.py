@@ -10,28 +10,47 @@ on `nfl_dp_team_situational_weekly` filtered to that season
 (`ingest.py@1b39f4e9` L1283–1314). The rolling table stores only aggregates
 plus `games_in_window_5` — not game IDs.
 
-Reconstruction:
-  1. Take the caller's situational team-week rows (the same grain as ingest).
-  2. Apply the same partition / order / frame.
-  3. Map each selected week to exactly one completed schedule game_id.
+`rating_week` is the completed-data week (CURRENT ROW), not the forecast
+target. t4822u requires an explicit `target_week` and binds
+`rating_week = target_week - 1`. The pin matchup join at
+`ingest.py@1b39f4e9` L1497–1501 used the same week as the schedule game.
 
-Bye weeks with no situational row are skipped by the row frame (same as SQL).
-A "latest five scheduled games" query can therefore disagree — that disagreement
-is a reject, not something this resolver papers over.
+Reconstruction:
+  1. Require target_week; resolve rating_week = target_week - 1.
+  2. Take the caller's situational team-week rows (the same grain as ingest).
+  3. Apply the same partition / order / frame at rating_week.
+  4. Map each selected week to exactly one completed schedule game_id.
+  5. Reject any target-week or future game (week, game_id, or date).
+
+Bye weeks with no situational row are skipped by the row frame (same as SQL)
+inside the rating window. A missing `target_week - 1` row is not filled
+from an earlier week. A "latest five scheduled games" query can therefore
+disagree — that disagreement is a reject, not something this resolver
+papers over.
 """
 
 from __future__ import annotations
 
 from typing import Iterable, Optional, Sequence
 
+from src.services.nfl_pregame_asof import (
+    PregameAsofReject,
+    reject_if_not_pregame_game,
+    resolve_pregame_rating_week,
+)
 from src.services.nfl_snap_share_exposure_ledger.identity import fingerprint_payload
 from src.services.nfl_snap_share_exposure_ledger.schema import (
     IF_5G_WINDOW_CONTRACT,
+    REJECT_AS_OF_VIOLATION,
+    REJECT_FUTURE_GAME_IN_WINDOW,
     REJECT_GAME_NOT_COMPLETED,
     REJECT_GRAIN_MISMATCH,
     REJECT_INPUT_INVALID,
+    REJECT_RATING_WEEK_NOT_LAGGED,
+    REJECT_RATING_WEEK_STALE,
     REJECT_RATING_WEEK_UNRESOLVED,
     REJECT_SCHEDULE_UNRESOLVED,
+    REJECT_TARGET_WEEK_INVALID,
     REJECT_WINDOW_INCOMPLETE,
     REJECT_WINDOW_MISMATCH,
     REJECT_WINDOW_SHORT,
@@ -47,46 +66,84 @@ from src.services.nfl_snap_share_exposure_ledger.schema import (
 )
 
 
+def _raise_asof(exc: PregameAsofReject) -> None:
+    code = exc.code
+    if code == REJECT_TARGET_WEEK_INVALID:
+        mapped = REJECT_TARGET_WEEK_INVALID
+    elif code == REJECT_RATING_WEEK_NOT_LAGGED:
+        mapped = REJECT_RATING_WEEK_NOT_LAGGED
+    elif code == REJECT_RATING_WEEK_STALE:
+        mapped = REJECT_RATING_WEEK_STALE
+    elif code == REJECT_RATING_WEEK_UNRESOLVED:
+        mapped = REJECT_RATING_WEEK_UNRESOLVED
+    elif code == REJECT_FUTURE_GAME_IN_WINDOW:
+        mapped = REJECT_FUTURE_GAME_IN_WINDOW
+    elif code == REJECT_AS_OF_VIOLATION:
+        mapped = REJECT_AS_OF_VIOLATION
+    else:
+        mapped = REJECT_INPUT_INVALID
+    raise ExposureLedgerReject(mapped, exc.message) from exc
+
+
 def resolve_if_5g_window(
     *,
     season: int,
-    rating_week: int,
+    target_week: int,
     team: str,
     situational_rows: Sequence[SituationalWeekRow],
     schedule_rows: Sequence[ScheduleGameRow],
+    rating_week: Optional[int] = None,
     declared_games_in_window_5: Optional[int] = None,
+    target_game_id: Optional[str] = None,
+    forecast_cutoff_ts: str,
 ) -> ResolvedIf5gWindow:
     """Return the exact five games feeding the IF `_5g` row at rating_week."""
     if not isinstance(season, int) or season < 1:
         raise ExposureLedgerReject(REJECT_INPUT_INVALID, "season must be a positive int")
-    if not isinstance(rating_week, int) or rating_week < 1:
+    if forecast_cutoff_ts is None or not str(forecast_cutoff_ts).strip():
         raise ExposureLedgerReject(
-            REJECT_INPUT_INVALID, "rating_week must be a positive int"
+            REJECT_AS_OF_VIOLATION, "forecast_cutoff_ts required (no silent pass)"
         )
     team_n = normalize_team(require_nonempty_str(team, field_name="team"))
+    target_id = (
+        require_nonempty_str(target_game_id, field_name="target_game_id")
+        if target_game_id is not None
+        else None
+    )
 
     by_week = _situational_index(
         season=season, team=team_n, rows=situational_rows
     )
-    ordered_weeks = sorted(by_week)
-    if rating_week not in by_week:
-        raise ExposureLedgerReject(
-            REJECT_RATING_WEEK_UNRESOLVED,
-            f"no situational row for {team_n} {season}w{rating_week} "
-            f"(IF `_5g` CURRENT ROW missing; not filled from a later/earlier week)",
+    try:
+        resolved_rating_week = resolve_pregame_rating_week(
+            target_week=target_week,
+            rating_week=rating_week,
+            available_rating_weeks=by_week.keys(),
         )
-    idx = ordered_weeks.index(rating_week)
+    except PregameAsofReject as exc:
+        _raise_asof(exc)
+
+    target_schedule = _lookup_target_schedule(
+        season=season,
+        team=team_n,
+        target_week=int(target_week),
+        target_game_id=target_id,
+        schedule_rows=schedule_rows,
+    )
+
+    ordered_weeks = sorted(by_week)
+    idx = ordered_weeks.index(resolved_rating_week)
     start = max(0, idx - (WINDOW_SIZE_5G - 1))
     selected_weeks = ordered_weeks[start : idx + 1]
     if len(selected_weeks) != WINDOW_SIZE_5G:
         code = (
             REJECT_WINDOW_SHORT
-            if rating_week < WINDOW_SIZE_5G
+            if resolved_rating_week < WINDOW_SIZE_5G
             else REJECT_WINDOW_INCOMPLETE
         )
         raise ExposureLedgerReject(
             code,
-            f"{team_n} {season}w{rating_week} IF `_5g` frame has "
+            f"{team_n} {season}w{resolved_rating_week} IF `_5g` frame has "
             f"{len(selected_weeks)} situational rows {selected_weeks}; "
             f"{WINDOW_SIZE_5G} required (fail closed, no 2025 prior fill)",
         )
@@ -95,6 +152,10 @@ def resolve_if_5g_window(
         _bind_schedule_game(
             row=by_week[week],
             schedule_rows=schedule_rows,
+            target_week=int(target_week),
+            target_game_id=target_id,
+            target_game_date=target_schedule.game_date,
+            forecast_cutoff_ts=forecast_cutoff_ts,
         )
         for week in selected_weeks
     )
@@ -111,7 +172,9 @@ def resolve_if_5g_window(
         {
             "contract": IF_5G_WINDOW_CONTRACT,
             "season": season,
-            "rating_week": rating_week,
+            "rating_week": resolved_rating_week,
+            "target_week": int(target_week),
+            "target_game_id": target_id,
             "team": team_n,
             "window": WINDOW_LABEL_5G,
             "games": [
@@ -128,12 +191,14 @@ def resolve_if_5g_window(
     )
     return ResolvedIf5gWindow(
         season=season,
-        rating_week=rating_week,
+        rating_week=resolved_rating_week,
+        target_week=int(target_week),
         team=team_n,
         window=WINDOW_LABEL_5G,
         contract=IF_5G_WINDOW_CONTRACT,
         games=games,
         window_fingerprint=window_fingerprint,
+        target_game_id=target_id,
     )
 
 
@@ -189,10 +254,73 @@ def _situational_index(
     return index
 
 
+def _lookup_target_schedule(
+    *,
+    season: int,
+    team: str,
+    target_week: int,
+    target_game_id: Optional[str],
+    schedule_rows: Sequence[ScheduleGameRow],
+) -> ScheduleGameRow:
+    if target_game_id is None:
+        matches = [
+            s
+            for s in schedule_rows
+            if int(s.season) == int(season)
+            and int(s.week) == int(target_week)
+            and team
+            in {normalize_team(s.home_team), normalize_team(s.away_team)}
+        ]
+        if not matches:
+            raise ExposureLedgerReject(
+                REJECT_SCHEDULE_UNRESOLVED,
+                f"no schedule game for {team} {season}w{target_week} "
+                f"(target context required; date guard cannot be skipped)",
+            )
+        ids = {str(s.game_id) for s in matches}
+        if len(ids) != 1:
+            raise ExposureLedgerReject(
+                REJECT_GRAIN_MISMATCH,
+                f"{team} {season}w{target_week} target maps to game_ids "
+                f"{sorted(ids)}; exactly one target game required",
+            )
+        return matches[0]
+    matches = [
+        s
+        for s in schedule_rows
+        if require_nonempty_str(s.game_id, field_name="game_id") == target_game_id
+    ]
+    if not matches:
+        raise ExposureLedgerReject(
+            REJECT_SCHEDULE_UNRESOLVED,
+            f"target_game_id {target_game_id} is not on the supplied schedule",
+        )
+    chosen = matches[0]
+    if int(chosen.week) != int(target_week) or int(chosen.season) != int(season):
+        raise ExposureLedgerReject(
+            REJECT_INPUT_INVALID,
+            f"target_game_id {target_game_id} is {chosen.season}w{chosen.week}, "
+            f"not {season}w{target_week}",
+        )
+    if team not in {
+        normalize_team(chosen.home_team),
+        normalize_team(chosen.away_team),
+    }:
+        raise ExposureLedgerReject(
+            REJECT_INPUT_INVALID,
+            f"target_game_id {target_game_id} does not include team {team}",
+        )
+    return chosen
+
+
 def _bind_schedule_game(
     *,
     row: SituationalWeekRow,
     schedule_rows: Sequence[ScheduleGameRow],
+    target_week: int,
+    target_game_id: Optional[str],
+    target_game_date: Optional[str],
+    forecast_cutoff_ts: str,
 ) -> ResolvedWindowGame:
     if row.games_played is not None and int(row.games_played) != 1:
         raise ExposureLedgerReject(
@@ -228,6 +356,19 @@ def _bind_schedule_game(
             f"schedule game {chosen.game_id} for {row.team} {row.season}w{row.week} "
             f"is not completed (IF `_5g` uses completed situational rows only)",
         )
+    try:
+        reject_if_not_pregame_game(
+            game_week=int(row.week),
+            target_week=int(target_week),
+            game_id=str(chosen.game_id),
+            target_game_id=target_game_id,
+            game_date=chosen.game_date,
+            target_game_date=target_game_date,
+            game_kickoff_ts=chosen.kickoff_ts,
+            forecast_cutoff_ts=forecast_cutoff_ts,
+        )
+    except PregameAsofReject as exc:
+        _raise_asof(exc)
     return ResolvedWindowGame(
         season=int(row.season),
         week=int(row.week),
