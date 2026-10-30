@@ -87,3 +87,10 @@ PYTHONPATH=. python3 -m pytest -q \
 No IF wiring, nowcast, index, #664 activate, Odds, C10, CERT, E1, snap admit,
 or historical rematerialize. Ledger package still does not import simulator /
 tasks / routes / data_platform_nfl.
+
+## t4833u research materialize (same DRAFT; ≠admit)
+
+OWNER CLEAR t4833u sealed a research-only snap-share `_5g` exposure ledger on
+this branch. Production builder / as-of contract above are unchanged. Receipt:
+`data/ops/nfl-research-5g-exposure-ledger-t4833u.md`. Artifact sha256
+`2454f0948a649e02f4319a4ae07fa173327a7a895fae6d3be0b2397318001f88`.
