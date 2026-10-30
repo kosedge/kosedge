@@ -1479,8 +1479,26 @@ def materialize_matchup_features_from_usage(
                     FROM nfl_dp_schedules s
                     LEFT JOIN nfl_dp_team_rolling_features_weekly h
                       ON h.season = s.season AND h.week = (s.week - 1) AND h.team = s.home_team
+                     AND NOT EXISTS (
+                       SELECT 1 FROM nfl_dp_schedules g
+                       WHERE g.season = s.season
+                         AND g.week <= (s.week - 1)
+                         AND (g.home_team = s.home_team OR g.away_team = s.home_team)
+                         AND (g.game_date IS NULL OR s.game_date IS NULL
+                              OR g.game_date >= s.game_date
+                              OR g.home_score IS NULL OR g.away_score IS NULL)
+                     )
                     LEFT JOIN nfl_dp_team_rolling_features_weekly a
                       ON a.season = s.season AND a.week = (s.week - 1) AND a.team = s.away_team
+                     AND NOT EXISTS (
+                       SELECT 1 FROM nfl_dp_schedules g
+                       WHERE g.season = s.season
+                         AND g.week <= (s.week - 1)
+                         AND (g.home_team = s.away_team OR g.away_team = s.away_team)
+                         AND (g.game_date IS NULL OR s.game_date IS NULL
+                              OR g.game_date >= s.game_date
+                              OR g.home_score IS NULL OR g.away_score IS NULL)
+                     )
                     WHERE s.season = :season
                     ON CONFLICT (season, week, game_id) DO UPDATE SET
                       game_date = EXCLUDED.game_date,

@@ -66,6 +66,8 @@ Closed on this DRAFT lineage (not a new PR):
 3. Executed sqlite fixture runs `IF_MATCHUP_PREGAME_FROM_SQL`: Week-W gets the W−1 rolling row; target-week stats cannot enter; W−1 bye → NULL.
 4. `fetch_latest_matchup_feature_pack` no longer has the priority-1 latest-week `UNION ALL`. Missing `game_id` or NULL core `_5g` raises `MatchupFeatureReject`.
 
+5. **GAP-E (ORDER 00a22509 / Alex `4980baf4`):** `IF_MATCHUP_PREGAME_FROM_SQL` joins the W−1 rolling row only when every `week <= target−1` schedule game for that team is completed (`home_score`/`away_score` present) and `game_date <` the target `game_date`. A rescheduled W−1 kickoff after the target does not enter. Week−1 arithmetic alone is not sufficient.
+
 ## Tests
 
 ```bash
@@ -77,7 +79,7 @@ PYTHONPATH=. python3 -m pytest -q \
   tests/test_nfl_matchup_features.py::test_fetch_matchup_pack_rejects_missing_game_id \
   tests/test_nfl_matchup_features.py::test_fetch_matchup_pack_rejects_null_5g \
   tests/test_nfl_matchup_features.py::test_fetch_matchup_pack_returns_game_id_row
-# 54 passed in 0.22s
+# 55 passed in 0.24s
 ```
 
 ## Isolation / HOLD

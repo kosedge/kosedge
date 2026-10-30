@@ -90,6 +90,9 @@ def test_ingest_sql_uses_lagged_join_and_not_pin_same_week():
         assert "MAX(a.week)" not in text
     assert IF_MATCHUP_ROLLING_JOIN_HOME in IF_MATCHUP_PREGAME_FROM_SQL
     assert IF_MATCHUP_ROLLING_JOIN_AWAY in IF_MATCHUP_PREGAME_FROM_SQL
+    assert "g.game_date >= s.game_date" in IF_MATCHUP_PREGAME_FROM_SQL
+    assert "g.home_score IS NULL" in IF_MATCHUP_PREGAME_FROM_SQL
+    assert "g.game_date >= s.game_date" in standalone
 
 
 def test_target_and_future_games_cannot_enter_if_baseline_join():
@@ -185,7 +188,8 @@ def test_executed_sql_week_w_gets_w_minus_1_and_bye_is_null():
         """
         CREATE TABLE nfl_dp_schedules (
           season INT, week INT, game_id TEXT, game_date TEXT,
-          home_team TEXT, away_team TEXT
+          home_team TEXT, away_team TEXT,
+          home_score INT, away_score INT
         )
         """
     )
@@ -197,10 +201,10 @@ def test_executed_sql_week_w_gets_w_minus_1_and_bye_is_null():
         """
     )
     conn.executemany(
-        "INSERT INTO nfl_dp_schedules VALUES (?,?,?,?,?,?)",
+        "INSERT INTO nfl_dp_schedules VALUES (?,?,?,?,?,?,?,?)",
         [
-            (2099, 8, "G-W8", "2099-10-25", "SYN", "OPP"),
-            (2099, 9, "G-W9", "2099-11-01", "SYN", "OPP"),
+            (2099, 8, "G-W8", "2099-10-25", "SYN", "OPP", 21, 17),
+            (2099, 9, "G-W9", "2099-11-01", "SYN", "OPP", None, None),
         ],
     )
     conn.executemany(
@@ -235,4 +239,61 @@ def test_executed_sql_week_w_gets_w_minus_1_and_bye_is_null():
     assert week8["home_off_epa_5g"] is None
     assert week8["away_rating_week"] is None
     assert week8["away_off_epa_5g"] is None
+    conn.close()
+
+
+def test_executed_sql_rescheduled_w_minus_1_after_target_cannot_enter():
+    """GAP-E: W−1 week number with game_date after the target is not pregame."""
+    import sqlite3
+
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    conn.execute(
+        """
+        CREATE TABLE nfl_dp_schedules (
+          season INT, week INT, game_id TEXT, game_date TEXT,
+          home_team TEXT, away_team TEXT,
+          home_score INT, away_score INT
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE nfl_dp_team_rolling_features_weekly (
+          season INT, week INT, team TEXT, off_epa_per_play_5g REAL
+        )
+        """
+    )
+    conn.executemany(
+        "INSERT INTO nfl_dp_schedules VALUES (?,?,?,?,?,?,?,?)",
+        [
+            # Week 8 labeled, but kicked off AFTER the Week 9 target.
+            (2099, 8, "G-W8-LATE", "2099-11-08", "SYN", "OPP", 24, 20),
+            (2099, 9, "G-W9", "2099-11-01", "SYN", "OPP", None, None),
+        ],
+    )
+    conn.executemany(
+        "INSERT INTO nfl_dp_team_rolling_features_weekly VALUES (?,?,?,?)",
+        [
+            (2099, 8, "SYN", 0.10),
+            (2099, 8, "OPP", -0.02),
+            (2099, 9, "SYN", 0.99),
+        ],
+    )
+    sql = f"""
+        SELECT s.week, s.game_id, h.week AS home_rating_week,
+               h.off_epa_per_play_5g AS home_off_epa_5g,
+               a.week AS away_rating_week,
+               a.off_epa_per_play_5g AS away_off_epa_5g
+        {IF_MATCHUP_PREGAME_FROM_SQL}
+    """
+    rows = {int(r["week"]): dict(r) for r in conn.execute(sql, {"season": 2099})}
+    week9 = rows[9]
+    assert week9["game_id"] == "G-W9"
+    assert week9["home_rating_week"] is None
+    assert week9["home_off_epa_5g"] is None
+    assert week9["away_rating_week"] is None
+    assert week9["away_off_epa_5g"] is None
+    assert week9["home_off_epa_5g"] != 0.10
+    assert week9["home_off_epa_5g"] != 0.99
     conn.close()

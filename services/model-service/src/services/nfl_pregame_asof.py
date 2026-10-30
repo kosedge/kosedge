@@ -58,19 +58,46 @@ IF_MATCHUP_ROLLING_JOIN_AWAY = (
     "a.season = s.season AND a.week = (s.week - 1) AND a.team = s.away_team"
 )
 
+
+def _frame_games_pregame_predicate(team_sql: str) -> str:
+    """Reject the W−1 rolling row unless every prior-week team game is pregame.
+
+    Week−1 arithmetic is not enough (GAP-E): a rescheduled rating-week game
+    can kick off after the target. Fail closed if any ``week <= target-1``
+    game for the team is incomplete, undated, or ``game_date >=`` target.
+    """
+    return (
+        "NOT EXISTS ("
+        " SELECT 1 FROM nfl_dp_schedules g"
+        " WHERE g.season = s.season"
+        " AND g.week <= (s.week - 1)"
+        f" AND (g.home_team = {team_sql} OR g.away_team = {team_sql})"
+        " AND (g.game_date IS NULL OR s.game_date IS NULL"
+        " OR g.game_date >= s.game_date"
+        " OR g.home_score IS NULL OR g.away_score IS NULL)"
+        ")"
+    )
+
+
+IF_MATCHUP_FRAME_PREGAME_HOME = _frame_games_pregame_predicate("s.home_team")
+IF_MATCHUP_FRAME_PREGAME_AWAY = _frame_games_pregame_predicate("s.away_team")
+
 # Shared FROM/JOIN/WHERE executed by ingest and by the sqlite as-of fixture.
 # Do not add a latest-week fallback here.
 IF_MATCHUP_PREGAME_FROM_SQL = f"""FROM nfl_dp_schedules s
 LEFT JOIN nfl_dp_team_rolling_features_weekly h
   ON {IF_MATCHUP_ROLLING_JOIN_HOME}
+ AND {IF_MATCHUP_FRAME_PREGAME_HOME}
 LEFT JOIN nfl_dp_team_rolling_features_weekly a
   ON {IF_MATCHUP_ROLLING_JOIN_AWAY}
+ AND {IF_MATCHUP_FRAME_PREGAME_AWAY}
 WHERE s.season = :season"""
 
 IF_MATCHUP_ASOF_CONTRACT = (
     "pregame as-of: every consumed game completed and required source "
     "available before target forecast cutoff; "
     "rating_week = target_week - 1 (contiguous weekly IF pipeline); "
+    "every frame game completed and game_date < target game_date; "
     "no silent substitute window"
 )
 
