@@ -232,8 +232,11 @@
       "ok": true
     },
     {
-      "detail": "IMV d2587de7 D1 must-None recorded; contract bind NOT_FINAL",
-      "name": "d1_travel_info_velocity_none",
+      "detail": {
+        "n_catchall": 51,
+        "note": "Alex v2 b41f4b43 catch-all live from NflGameInputs; D1 CLOSED via PASS_CONTRACT 1a53bbd3"
+      },
+      "name": "v2_catchall_nfl_game_inputs_none",
       "ok": true
     }
   ],

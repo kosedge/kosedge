@@ -1,7 +1,13 @@
 {
-  "alex_contract_sha8": "24600552",
+  "addon_tickets": [
+    "t4776u"
+  ],
+  "alex_contract_parent_v1_sha8": "24600552",
+  "alex_contract_sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+  "alex_contract_sha8": "b41f4b43",
+  "alex_contract_version": "v2",
   "consistent_panel_through_week": 7,
-  "contract_bind": "NOT_FINAL",
+  "contract_bind": "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3",
   "decision": "751dd63c",
   "dq_failed": [],
   "dq_pass": true,
@@ -13,21 +19,23 @@
       "open Odds / E2",
       "change CLEAR-P1 #662 merge status"
     ],
-    "engineering_demo_only": "W9 consume pack + IF consume proof may be used as an offline demo that Independent Fair can read staged 2026 inputs. That is not O4 scoring-admissible.",
+    "engineering_demo_only": "W9 consume pack + IF consume proof (t4776u: 20-field call graph + input-hash perturbation) may be used as an offline demo that Independent Fair actually consumes staged 2026 inputs. That is not O4 scoring-admissible.",
     "reason": "through-W8 not complete; sealed panel is through W7 only",
     "retry_when": [
       "W8 slate complete after 2026-W08-CHI@SEA kickoff 2026-11-03T01:15:00Z (MNF)",
       "re-fetch approved nflverse play_by_play_2026.parquet (same URL)",
       "builder reports through_w8_complete=true and 32/32 teams",
-      "Alex contract v2 + IMV PASS_CONTRACT (v1 24600552 is NOT_FINAL; IMV RETURN d2587de7 D1 OPEN)",
-      "IMV ACCEPT of through-W8 inputs against the PASSed contract",
+      "IMV PASS_CONTRACT 1a53bbd3 is on file for v2 b41f4b43 (D1 CLOSED) \u2014 not a DATA ACCEPT",
+      "IMV ACCEPT of through-W8 inputs against the PASSed v2 contract (separate DATA grade)",
       "then E1 retry inside Tue 2026-11-03 00:00 \u2013 Wed 2026-11-04 23:59 America/New_York"
     ],
     "scoring_admissible_now": false,
     "window_note": "W9 O4 window starts Tue 00:00 ET, immediately after MNF. If nflverse PBP lands after Tue 00:00 ET, emit_ts may still sit inside the window provided as_of <= emit_ts and IMV ACCEPT is on file."
   },
-  "imv_d1": "OPEN \u2014 travel_*/info_velocity_* must-None recorded; await Alex v2 + IMV PASS_CONTRACT before DATA_READY-against-contract",
-  "imv_return": "d2587de7",
+  "imv_d1": "CLOSED \u2014 IMV PASS_CONTRACT 1a53bbd3 on v2 b41f4b43. PASS_CONTRACT \u2260 DATA ACCEPT.",
+  "imv_pass_contract": "1a53bbd3",
+  "imv_pass_contract_sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+  "imv_return_parent": "d2587de7",
   "locks": [
     "NFL NO-GO",
     "CERT=0",

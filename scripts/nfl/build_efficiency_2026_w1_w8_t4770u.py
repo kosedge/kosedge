@@ -7,6 +7,9 @@ Approved source only:
 
 No DATABASE_URL. No production DB/service mutation. No 2025-prior fill.
 Week 8 incomplete → fail closed (DATA_PARTIAL); do not declare through-W8.
+Bound to Alex v2 b41f4b43 after IMV PASS_CONTRACT 1a53bbd3 (D1 CLOSED).
+Ryan t4776u: IF consume proof must show the 20 required fields are used
+by the Independent Fair path (call graph + input hash), not merely present.
 """
 
 from __future__ import annotations
@@ -24,6 +27,22 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 ROOT = Path(__file__).resolve().parents[2]
 MS = ROOT / "services" / "model-service"
 sys.path.insert(0, str(MS))
+
+# Operative bind — IMV PASS_CONTRACT 1a53bbd3 on Alex v2 b41f4b43.
+DECISION_SHA8 = "751dd63c"
+ALEX_CONTRACT_V2_SHA8 = "b41f4b43"
+ALEX_CONTRACT_V2_SHA256 = (
+    "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4"
+)
+ALEX_CONTRACT_V1_SHA8 = "24600552"
+IMV_PASS_CONTRACT_SHA8 = "1a53bbd3"
+IMV_PASS_CONTRACT_SHA256 = (
+    "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8"
+)
+IMV_RETURN_PARENT_SHA8 = "d2587de7"
+CONTRACT_BIND = "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3"
+IF_CODE_COMMIT = "1b39f4e9f6b2e04c264a41831f3bb7273e475011"
+ADDON_TICKETS = ("t4776u",)
 
 # Existing approved transforms copied verbatim so this script needs no
 # DATABASE_URL / requests / SQLAlchemy. Sources:
@@ -870,47 +889,24 @@ REQUIRED_20 = (
     "matchup_diff_red_zone_td_rate_5g",
 )
 
-OUTSIDE_MUST_BE_NONE = (
-    "tendency_spread_signal",
-    "tendency_total_signal",
-    "tendency_proe_home",
-    "tendency_proe_away",
-    "home_kav_offense_5g",
-    "away_kav_offense_5g",
-    "home_kav_defense_5g",
-    "away_kav_defense_5g",
-    "home_kav_net_5g",
-    "away_kav_net_5g",
-    "kav_as_of_week",
-    "home_personnel_edge_5g",
-    "away_personnel_edge_5g",
-    "home_sub_elasticity_5g",
-    "away_sub_elasticity_5g",
-    "home_coach_aggression_5g",
-    "away_coach_aggression_5g",
-    "home_coach_pace_5g",
-    "away_coach_pace_5g",
-    "second_order_as_of_week",
-    "injury_nowcast_confidence_home",
-    "injury_nowcast_confidence_away",
-    "injury_nowcast_impact_home",
-    "injury_nowcast_impact_away",
-    "weather_available",
-    "weather_wind_mph",
-    "weather_precip_mm",
-    "weather_temp_f",
-    "weather_source",
-    # IMV RETURN d2587de7 D1 OPEN on Alex v1 24600552 — record must-None now;
-    # do not claim final v1 bind until Alex v2 + IMV PASS_CONTRACT.
-    "travel_available",
-    "travel_miles_home",
-    "travel_miles_away",
-    "travel_timezone_delta_home",
-    "travel_timezone_delta_away",
-    "info_velocity_home",
-    "info_velocity_away",
-    "hours_since_change_home",
-    "hours_since_change_away",
+# NflGameInputs @1b39f4e9 — v2 §3 CATCH-ALL: any field not in REQUIRED_20
+# and not in REQUIRED_CONTEXT must be None. Derived from the live dataclass
+# so new OUTSIDE fields cannot silently drop out of the gate.
+from src.services.nfl_simulator import NflGameInputs
+
+REQUIRED_CONTEXT = (
+    "game_id",
+    "home_team",
+    "away_team",
+    "matchup_season",
+    "matchup_week",
+    "rest_days_home",
+    "rest_days_away",
+)
+OUTSIDE_MUST_BE_NONE = tuple(
+    name
+    for name in NflGameInputs.__dataclass_fields__
+    if name not in REQUIRED_20 and name not in REQUIRED_CONTEXT
 )
 
 
@@ -1095,11 +1091,17 @@ def build_w09_pack(
         "week": 9,
         "as_of_week": as_of_week,
         "as_of": as_of_label,
-        "code_commit": "1b39f4e9f6b2e04c264a41831f3bb7273e475011",
-        "alex_contract_sha8": "24600552",
-        "contract_bind": "NOT_FINAL",
-        "imv_return": "d2587de7",
-        "imv_d1": "OPEN — travel_*/info_velocity_* must-None now recorded; await Alex v2 + IMV PASS_CONTRACT",
+        "code_commit": IF_CODE_COMMIT,
+        "alex_contract_sha8": ALEX_CONTRACT_V2_SHA8,
+        "alex_contract_sha256": ALEX_CONTRACT_V2_SHA256,
+        "alex_contract_version": "v2",
+        "alex_contract_parent_v1_sha8": ALEX_CONTRACT_V1_SHA8,
+        "contract_bind": CONTRACT_BIND,
+        "imv_pass_contract": IMV_PASS_CONTRACT_SHA8,
+        "imv_pass_contract_sha256": IMV_PASS_CONTRACT_SHA256,
+        "imv_return_parent": IMV_RETURN_PARENT_SHA8,
+        "imv_d1": "CLOSED — IMV PASS_CONTRACT 1a53bbd3 on v2 b41f4b43",
+        "addon_tickets": list(ADDON_TICKETS),
         "market_blend": 0,
         "n_games": len(rows),
         "n_accept": len(accept),
@@ -1192,24 +1194,16 @@ def dq_checks(
         all(int(row.get("as_of_week") or 0) <= CONSISTENT_PANEL_WEEK for row in current.values()),
         "as_of_week<=7",
     )
-    d1_fields = (
-        "travel_available",
-        "travel_miles_home",
-        "travel_miles_away",
-        "travel_timezone_delta_home",
-        "travel_timezone_delta_away",
-        "info_velocity_home",
-        "info_velocity_away",
-        "hours_since_change_home",
-        "hours_since_change_away",
-    )
     add(
-        "d1_travel_info_velocity_none",
+        "v2_catchall_nfl_game_inputs_none",
         all(
-            all(g.get(name) is None for name in d1_fields)
+            all(g.get(name) is None for name in OUTSIDE_MUST_BE_NONE)
             for g in pack.get("games") or []
         ),
-        "IMV d2587de7 D1 must-None recorded; contract bind NOT_FINAL",
+        {
+            "n_catchall": len(OUTSIDE_MUST_BE_NONE),
+            "note": "Alex v2 b41f4b43 catch-all live from NflGameInputs; D1 CLOSED via PASS_CONTRACT 1a53bbd3",
+        },
     )
     failed = [c for c in checks if not c["ok"] and c["name"] != "through_w8_not_declared"]
     # through_w8_not_declared is informational expected-true for DATA_PARTIAL
@@ -1284,7 +1278,10 @@ def main() -> int:
 
     inventory = {
         "ticket": "t4770u",
-        "decision": "751dd63c",
+        "addon_tickets": list(ADDON_TICKETS),
+        "decision": DECISION_SHA8,
+        "contract_bind": CONTRACT_BIND,
+        "imv_pass_contract": IMV_PASS_CONTRACT_SHA8,
         "filed_utc": _iso(now),
         "preferred_sources": [
             {
@@ -1341,8 +1338,8 @@ def main() -> int:
             "W8 slate complete after 2026-W08-CHI@SEA kickoff 2026-11-03T01:15:00Z (MNF)",
             "re-fetch approved nflverse play_by_play_2026.parquet (same URL)",
             "builder reports through_w8_complete=true and 32/32 teams",
-            "Alex contract v2 + IMV PASS_CONTRACT (v1 24600552 is NOT_FINAL; IMV RETURN d2587de7 D1 OPEN)",
-            "IMV ACCEPT of through-W8 inputs against the PASSed contract",
+            "IMV PASS_CONTRACT 1a53bbd3 is on file for v2 b41f4b43 (D1 CLOSED) — not a DATA ACCEPT",
+            "IMV ACCEPT of through-W8 inputs against the PASSed v2 contract (separate DATA grade)",
             "then E1 retry inside Tue 2026-11-03 00:00 – Wed 2026-11-04 23:59 America/New_York",
         ],
         "window_note": (
@@ -1351,18 +1348,25 @@ def main() -> int:
             "provided as_of <= emit_ts and IMV ACCEPT is on file."
         ),
         "engineering_demo_only": (
-            "W9 consume pack + IF consume proof may be used as an offline demo "
-            "that Independent Fair can read staged 2026 inputs. That is not O4 scoring-admissible."
+            "W9 consume pack + IF consume proof (t4776u: 20-field call graph + "
+            "input-hash perturbation) may be used as an offline demo that Independent "
+            "Fair actually consumes staged 2026 inputs. That is not O4 scoring-admissible."
         ),
     }
 
     report = {
         "ticket": "t4770u",
-        "decision": "751dd63c",
-        "alex_contract_sha8": "24600552",
-        "contract_bind": "NOT_FINAL",
-        "imv_return": "d2587de7",
-        "imv_d1": "OPEN — travel_*/info_velocity_* must-None recorded; await Alex v2 + IMV PASS_CONTRACT before DATA_READY-against-contract",
+        "addon_tickets": list(ADDON_TICKETS),
+        "decision": DECISION_SHA8,
+        "alex_contract_sha8": ALEX_CONTRACT_V2_SHA8,
+        "alex_contract_sha256": ALEX_CONTRACT_V2_SHA256,
+        "alex_contract_version": "v2",
+        "alex_contract_parent_v1_sha8": ALEX_CONTRACT_V1_SHA8,
+        "contract_bind": CONTRACT_BIND,
+        "imv_pass_contract": IMV_PASS_CONTRACT_SHA8,
+        "imv_pass_contract_sha256": IMV_PASS_CONTRACT_SHA256,
+        "imv_return_parent": IMV_RETURN_PARENT_SHA8,
+        "imv_d1": "CLOSED — IMV PASS_CONTRACT 1a53bbd3 on v2 b41f4b43. PASS_CONTRACT ≠ DATA ACCEPT.",
         "status": status,
         "season": SEASON,
         "consistent_panel_through_week": CONSISTENT_PANEL_WEEK,

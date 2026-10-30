@@ -1,12 +1,11 @@
-"""t4770u offline 2026 efficiency recovery — contract 24600552, no DATABASE_URL."""
+"""t4770u / t4776u offline 2026 efficiency recovery — v2 PASS_CONTRACT 1a53bbd3."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from pathlib import Path
-
-import pytest
 
 os.environ.pop("DATABASE_URL", None)
 
@@ -59,14 +58,22 @@ def _load(name: str):
     return json.loads((ART / name).read_text(encoding="utf-8"))
 
 
-def test_status_is_data_partial_through_w8_incomplete() -> None:
+def _sha256(name: str) -> str:
+    digest = hashlib.sha256()
+    digest.update((ART / name).read_bytes())
+    return digest.hexdigest()
+
+
+def test_status_is_data_partial_bound_to_v2_pass_contract() -> None:
     status = _load("STATUS.json")
     assert status["status"] == "DATA_PARTIAL"
     assert status["through_w8_declared_complete"] is False
     assert status["through_w7_complete"] is True
-    assert status["alex_contract_sha8"] == "24600552"
-    assert status["contract_bind"] == "NOT_FINAL"
-    assert status["imv_return"] == "d2587de7"
+    assert status["alex_contract_sha8"] == "b41f4b43"
+    assert status["alex_contract_version"] == "v2"
+    assert status["contract_bind"] == "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3"
+    assert status["imv_pass_contract"] == "1a53bbd3"
+    assert status["imv_d1"].startswith("CLOSED")
     assert status["week8_expected_count"] == 14
     assert status["week8_complete_count"] == 1
     missing = {row["game_id"] for row in status["week8_missing"]}
@@ -75,13 +82,20 @@ def test_status_is_data_partial_through_w8_incomplete() -> None:
     assert "2026-W08-CAR@GB" not in missing
     assert len(missing) == 13
     assert status["e1_retry"]["scoring_admissible_now"] is False
+    assert "t4776u" in status.get("addon_tickets", [])
+
+
+def test_authority_files_match_operative_hashes() -> None:
+    assert _sha256("ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md").startswith("b41f4b43")
+    assert _sha256("IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt").startswith("1a53bbd3")
+    assert _sha256("ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v1.md").startswith("24600552")
 
 
 def test_no_2025_prior_and_no_week9_rolling() -> None:
     current = _load("team_efficiency_current_through_w7.json")
     assert current["2025_prior_used"] is False
     assert current["n"] == 32
-    for team, row in current["teams"].items():
+    for _team, row in current["teams"].items():
         assert row["2025_prior_used"] is False
         assert int(row["as_of_week"]) == 7
         assert int(row["rolling_as_of_week"]) <= 7
@@ -91,13 +105,25 @@ def test_no_2025_prior_and_no_week9_rolling() -> None:
         assert 0.82 <= float(row["defense_index"]) <= 1.20
 
 
-def test_w09_consume_pack_has_20_required_fields() -> None:
+def test_w09_consume_pack_has_20_required_fields_and_v2_catchall() -> None:
     pack = _load("w09_consume_pack.json")
     assert pack["n_games"] == 15
     assert pack["week_scoring_admissible"] is False
     assert pack["as_of_week"] == 7
+    assert pack["contract_bind"] == "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3"
     ids = [g["game_id"] for g in pack["games"]]
     assert ids == W9_IDS
+    from src.services.nfl_simulator import NflGameInputs
+
+    allowed = set(REQUIRED_20) | {
+        "game_id",
+        "home_team",
+        "away_team",
+        "matchup_season",
+        "matchup_week",
+        "rest_days_home",
+        "rest_days_away",
+    }
     for game in pack["games"]:
         assert game["row_status"] == "ACCEPT"
         assert game["t4_both_success_terms"] is True
@@ -106,19 +132,10 @@ def test_w09_consume_pack_has_20_required_fields() -> None:
         for name in REQUIRED_20:
             assert game[name] is not None, name
             float(game[name])
-        assert game["weather_available"] is None
-        assert game["kav_as_of_week"] is None
-        assert game["tendency_total_signal"] is None
-        assert game["injury_nowcast_impact_home"] is None
-        assert game["travel_available"] is None
-        assert game["travel_miles_home"] is None
-        assert game["travel_miles_away"] is None
-        assert game["travel_timezone_delta_home"] is None
-        assert game["travel_timezone_delta_away"] is None
-        assert game["info_velocity_home"] is None
-        assert game["info_velocity_away"] is None
-        assert game["hours_since_change_home"] is None
-        assert game["hours_since_change_away"] is None
+        for name in NflGameInputs.__dataclass_fields__:
+            if name in allowed:
+                continue
+            assert game.get(name) is None, name
 
 
 def test_if_consume_without_database_url() -> None:
@@ -175,9 +192,59 @@ def test_if_consume_without_database_url() -> None:
     assert margin_mu == margin_mu
 
 
-def test_sha256sums_cover_sealed_json() -> None:
+def test_required_20_consumed_by_if_path_call_graph_and_input_hash() -> None:
+    """t4776u: present-in-dataset is not enough — IF path must consume each field."""
+    consumed = _load("if_required_20_consumed.json")
+    proof = _load("if_consume_proof.json")
+    assert consumed["contract_bind"] == "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3"
+    assert consumed["imv_pass_contract"] == "1a53bbd3"
+    assert consumed["n_required"] == 20
+    assert consumed["n_consumed_by_if_path"] == 20
+    assert consumed["all_20_consumed"] is True
+    assert consumed["scoring_admissible"] is False
+    assert consumed["entrypoint"] == "simulate_nfl_game_independent_fair"
+    chain = consumed["call_graph"]
+    assert chain["independent_fair_kwarg_true"] is True
+    assert chain["simulate_nfl_game_calls"]["_build_matchup_adjustments"]
+    assert chain["simulate_nfl_game_calls"]["_build_totals_adjustments"]
+    assert chain["simulate_nfl_game_calls"]["compute_nfl_projection_decomposition"]
+    names = []
+    for row in consumed["fields"]:
+        names.append(row["field"])
+        assert row["in_call_graph"] is True
+        assert row["present_in_dataset"] is True
+        assert row["passed_into_NflGameInputs"] is True
+        assert row["input_hash_changed"] is True
+        assert row["output_hash_changed"] is True
+        assert row["consumed_by_if_path"] is True
+        assert row["readers"]
+        moved = (
+            abs(float(row["delta_predicted_margin"])) > 0.0
+            or abs(float(row["delta_predicted_total"])) > 0.0
+            or abs(float(row["delta_margin_mu"])) > 0.0
+            or abs(float(row["delta_total_mu"])) > 0.0
+        )
+        assert moved, row["field"]
+    assert names == list(REQUIRED_20)
+    assert proof["required_20_consumed_by_if_path"] is True
+    assert proof["n_consumed"] == 15
+    assert proof["scoring_admissible"] is False
+
+
+def test_sha256sums_cover_sealed_json_and_authority() -> None:
     sums = (ART / "SHA256SUMS").read_text(encoding="utf-8").strip().splitlines()
     names = {line.split()[-1] for line in sums if line.strip()}
-    assert "w09_consume_pack.json" in names
-    assert "STATUS.json" in names
-    assert "SOURCE_MANIFEST.json" in names
+    required = {
+        "w09_consume_pack.json",
+        "STATUS.json",
+        "SOURCE_MANIFEST.json",
+        "if_consume_proof.json",
+        "if_required_20_consumed.json",
+        "ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md",
+        "IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt",
+        "COS_ORDER_CURSOR_t4770u_BIND_PASS_CONTRACT.txt",
+    }
+    assert required <= names
+    for line in sums:
+        digest, name = line.split()
+        assert _sha256(name) == digest

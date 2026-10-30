@@ -1,6 +1,11 @@
 {
+  "addon_tickets": [
+    "t4776u"
+  ],
+  "contract_bind": "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3",
   "decision": "751dd63c",
-  "filed_utc": "2026-10-30T14:30:29Z",
+  "filed_utc": "2026-10-30T14:40:22Z",
+  "imv_pass_contract": "1a53bbd3",
   "lineage": [
     "t4696u S1 restage \u2014 same URL template seasons 2012\u20132022 (PR #654, do not merge)",
     "t4166u W4\u2013W6 nflverse CLEAR (referenced by CoS; artifacts not on deploy-vercel)",
