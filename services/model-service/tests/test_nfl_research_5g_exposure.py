@@ -13,6 +13,8 @@ from src.services.nfl_research_5g_exposure import (
     EXPECTED_INPUT_SHA256,
     GRAIN_RESIDUAL,
     GRAIN_WINDOW,
+    RESEARCH_ID_REPAIR_RULE,
+    RESEARCH_ID_REPAIR_TICKET,
     RESEARCH_LEDGER_SCHEMA_VERSION,
     STATE_CONFLICT,
     STATE_MEASURED,
@@ -21,6 +23,7 @@ from src.services.nfl_research_5g_exposure import (
     STATE_UNRESOLVED,
     STATE_VERIFIED_ZERO,
     ResearchExposureReject,
+    apply_research_id_repair,
     build_research_5g_exposure_rows,
     parse_pfr_game_date,
     split_nflverse_game_id,
@@ -323,23 +326,80 @@ def test_act_absent_is_unknown_not_verified_zero():
 def test_unresolved_identity_flagged_exposure_null():
     snaps = _core_snaps()
     for week in range(1, 7):
-        snaps.append(_snap(week, "AndeAl01", "Alec Anderson", "C", off_s=20.0, off_p=0.4))
+        snaps.append(_snap(week, "OkoyCJ00", "CJ Okoye", "DL", off_s=0.0, off_p=0.0, def_s=12.0, def_p=0.2))
     rows, _ = _build(snaps=snaps)
     residuals = [
         r
         for r in rows
-        if r["row_grain"] == GRAIN_RESIDUAL and r["player_pfr_id"] == "AndeAl01"
+        if r["row_grain"] == GRAIN_RESIDUAL and r["player_pfr_id"] == "OkoyCJ00"
     ]
     assert len(residuals) == 6
     assert all(r["row_state"] == STATE_UNRESOLVED for r in residuals)
     assert all(r["player_gsis_id"] is None for r in residuals)
-    window = _window(rows, pfr="AndeAl01")
+    window = _window(rows, pfr="OkoyCJ00")
     assert window
     assert all(r["row_state"] == STATE_UNRESOLVED for r in window)
     assert all(r["embedded_snap_share"] is None for r in window)
 
 
-def test_conflict_flagged_no_adjudication():
+def test_conflict_flagged_no_adjudication_outside_allowlist():
+    snaps = _core_snaps()
+    players = _core_players() + [_player("ConfXx00", "PLA000001", "Conflict Guy", "DL")]
+    roster = _core_roster()
+    for week in range(1, 7):
+        snaps.append(
+            _snap(week, "ConfXx00", "Conflict Guy", "DL", off_s=0.0, off_p=0.0, def_s=40.0, def_p=0.7)
+        )
+        roster.append(_roster(week, "ConfXx00", "00-0099999", "Conflict Guy", "DL"))
+    rows, _ = _build(snaps=snaps, players=players, roster=roster)
+    residuals = [
+        r
+        for r in rows
+        if r["row_grain"] == GRAIN_RESIDUAL
+        and r["player_pfr_id"] == "ConfXx00"
+        and r["row_state"] == STATE_CONFLICT
+    ]
+    assert len(residuals) == 6
+    assert all(r["player_gsis_id"] is None for r in residuals)
+    assert all(r["player_gsis_id_players"] == "PLA000001" for r in residuals)
+    assert all(r["player_gsis_id_roster"] == "00-0099999" for r in residuals)
+    window = _window(rows, pfr="ConfXx00")
+    assert window
+    assert all(r["row_state"] == STATE_CONFLICT for r in window)
+    assert all(r["embedded_snap_share"] is None for r in window)
+
+
+def test_t4837u_allowlist_repairs_anderson_and_clears_mirror_unknown():
+    snaps = _core_snaps()
+    roster = _core_roster()
+    for week in range(1, 7):
+        snaps.append(_snap(week, "AndeAl01", "Alec Anderson", "C", off_s=20.0, off_p=0.4))
+        # roster has GSIS but pfr NaN — the double-count that created mirror UNKNOWN
+        roster.append(_roster(week, "", "00-0037428", "Alec Anderson", "C"))
+    rows, _ = _build(snaps=snaps, roster=roster)
+    residuals = [
+        r
+        for r in rows
+        if r["row_grain"] == GRAIN_RESIDUAL
+        and (
+            r["player_pfr_id"] == "AndeAl01"
+            or r["player_gsis_id"] == "00-0037428"
+        )
+    ]
+    assert residuals == []
+    window = _window(rows, gsis="00-0037428")
+    assert window
+    assert all(r["row_state"] == STATE_MEASURED for r in window)
+    assert all(r["player_gsis_id"] == "00-0037428" for r in window)
+    assert all(r["player_pfr_id"] == "AndeAl01" for r in window)
+    assert all(r["id_repair_applied"] is True for r in window)
+    assert all(r["id_repair_ticket"] == RESEARCH_ID_REPAIR_TICKET for r in window)
+    assert all(r["id_repair_rule"] == RESEARCH_ID_REPAIR_RULE for r in window)
+    assert all(r["id_state_before_repair"] == STATE_UNRESOLVED for r in window)
+    assert all(r["embedded_snap_share"] == pytest.approx(0.4) for r in window)
+
+
+def test_t4837u_woods_roster_wins_preserves_players_conflict():
     snaps = _core_snaps()
     players = _core_players() + [_player("WoodPe00", "WOO547869", "Peter Woods", "DL")]
     roster = _core_roster()
@@ -356,14 +416,48 @@ def test_conflict_flagged_no_adjudication():
         and r["player_pfr_id"] == "WoodPe00"
         and r["row_state"] == STATE_CONFLICT
     ]
-    assert len(residuals) == 6
-    assert all(r["player_gsis_id"] is None for r in residuals)
-    assert all(r["player_gsis_id_players"] == "WOO547869" for r in residuals)
-    assert all(r["player_gsis_id_roster"] == "00-0041545" for r in residuals)
-    window = _window(rows, pfr="WoodPe00")
+    assert residuals == []
+    window = _window(rows, gsis="00-0041545")
     assert window
-    assert all(r["row_state"] == STATE_CONFLICT for r in window)
-    assert all(r["embedded_snap_share"] is None for r in window)
+    assert all(r["player_gsis_id"] == "00-0041545" for r in window)
+    assert all(r["player_gsis_id_players"] == "WOO547869" for r in window)
+    assert all(r["player_gsis_id_roster"] == "00-0041545" for r in window)
+    assert all(r["id_repair_applied"] is True for r in window)
+    assert all(r["id_state_before_repair"] == STATE_CONFLICT for r in window)
+    assert all(r["embedded_snap_share"] == pytest.approx(0.7) for r in window)
+
+
+def test_t4837u_okoye_stays_unresolved_and_act_absent_not_zeroed():
+    snaps = _core_snaps()
+    roster = _core_roster()
+    for week in range(1, 7):
+        snaps.append(_snap(week, "OkoyCJ00", "CJ Okoye", "DL", off_s=0.0, off_p=0.0, def_s=8.0, def_p=0.15))
+        roster.append(_roster(week, "", "00-0008888", "Backup QB", "QB"))
+    rows, _ = _build(snaps=snaps, roster=roster)
+    okoye = [
+        r
+        for r in rows
+        if r["row_grain"] == GRAIN_RESIDUAL and r["player_pfr_id"] == "OkoyCJ00"
+    ]
+    assert len(okoye) == 6
+    assert all(r["row_state"] == STATE_UNRESOLVED for r in okoye)
+    act_absent = [
+        r
+        for r in rows
+        if r["row_grain"] == GRAIN_RESIDUAL
+        and r["row_state_reason"] == "act_absent_unconfirmed"
+        and r["player_gsis_id"] == "00-0008888"
+    ]
+    assert len(act_absent) == 6
+    assert all(r["embedded_snap_share"] is None for r in act_absent)
+    assert apply_research_id_repair(
+        pfr_id="OkoyCJ00",
+        team="NYG",
+        ident_state=STATE_UNRESOLVED,
+        gsis_players=None,
+        gsis_roster=None,
+        gsis_resolved=None,
+    )[0] == STATE_UNRESOLVED
 
 
 def test_denominators_from_max_snaps_not_pct():
@@ -392,14 +486,14 @@ def test_hash_mismatch_rejected():
 
 def test_distinct_states_present_in_mixed_universe():
     snaps = _core_snaps()
-    players = _core_players() + [_player("WoodPe00", "WOO547869", "Peter Woods", "DL")]
+    players = _core_players() + [_player("ConfXx00", "PLA000001", "Conflict Guy", "DL")]
     roster = _core_roster()
     for week in range(1, 7):
-        snaps.append(_snap(week, "AndeAl01", "Alec Anderson", "C", off_s=10.0, off_p=0.2))
+        snaps.append(_snap(week, "OkoyCJ00", "CJ Okoye", "DL", off_s=0.0, off_p=0.0, def_s=10.0, def_p=0.2))
         snaps.append(
-            _snap(week, "WoodPe00", "Peter Woods", "DL", off_s=0.0, off_p=0.0, def_s=30.0, def_p=0.5)
+            _snap(week, "ConfXx00", "Conflict Guy", "DL", off_s=0.0, off_p=0.0, def_s=30.0, def_p=0.5)
         )
-        roster.append(_roster(week, "WoodPe00", "00-0041545", "Peter Woods", "DL"))
+        roster.append(_roster(week, "ConfXx00", "00-0099999", "Conflict Guy", "DL"))
         roster.append(_roster(week, "INAxxAa00", "00-0007777", "Inactive Guy", "WR", status="INA"))
     snaps = [s for s in snaps if not (s["pfr_player_id"] == "WRxxAa00" and s["week"] == 2)]
     rows, _ = _build(snaps=snaps, players=players, roster=roster)
@@ -447,11 +541,24 @@ def test_sealed_artifact_coverage_and_no_leakage():
     unresolved = [r for r in residuals if r["row_state"] == STATE_UNRESOLVED]
     conflicts = [r for r in residuals if r["row_state"] == STATE_CONFLICT]
     act_absent = [r for r in residuals if r["row_state_reason"] == "act_absent_unconfirmed"]
-    assert len(unresolved) == 18
-    assert len(conflicts) == 6
-    assert len(act_absent) == 325
-    assert {r["player_pfr_id"] for r in unresolved} == {"AndeAl01", "WhitCo05", "OkoyCJ00"}
-    assert {r["player_pfr_id"] for r in conflicts} == {"WoodPe00"}
+    assert len(residuals) == 311
+    assert len(unresolved) == 5
+    assert len(conflicts) == 0
+    assert len(act_absent) == 306
+    assert {r["player_pfr_id"] for r in unresolved} == {"OkoyCJ00"}
+    repaired = [
+        r
+        for r in windows
+        if r.get("id_repair_applied") and r["player_pfr_id"] in {"AndeAl01", "WhitCo05", "WoodPe00"}
+    ]
+    assert repaired
+    assert {r["player_pfr_id"] for r in repaired} == {"AndeAl01", "WhitCo05", "WoodPe00"}
+    woods = [r for r in repaired if r["player_pfr_id"] == "WoodPe00"]
+    assert woods
+    assert all(r["player_gsis_id"] == "00-0041545" for r in woods)
+    assert all(r["player_gsis_id_players"] == "WOO547869" for r in woods)
+    target_keys = {(r["team"], r["target_game_id"]) for r in windows}
+    assert len(target_keys) == 52
     for row in windows:
         assert row["target_game_id"] not in (row["window_game_ids"] or [])
         assert row["rating_week"] == row["target_week"] - 1

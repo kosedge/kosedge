@@ -1,10 +1,14 @@
-"""Research-only snap-share `_5g` player exposure ledger (t4833u).
+"""Research-only snap-share `_5g` player exposure ledger (t4833u / t4837u).
 
 MATERIALIZE ≠ admit ≠ merge ≠ live ingest ≠ scoring ≠ injury weights.
 
 Reads SHA-pinned staged nflverse parquets and writes one research ledger.
 Unresolved / conflict / unknown / missing / verified_zero stay distinct.
 Target-game snaps cannot enter their own pregame window (#666 / cf514078).
+
+t4837u adds an explicit 3-player / 19-identity research allowlist. It is
+not a general name matcher. OkoyCJ00 stays unresolved. Unsupported
+ACT-absent UNKNOWN rows stay UNKNOWN.
 
 This module sits *outside* ``nfl_snap_share_exposure_ledger`` so the
 isolated production builder remains fail-closed. It reuses
@@ -41,8 +45,50 @@ from src.services.nfl_snap_share_exposure_ledger.schema import (
 from src.services.nfl_snap_share_exposure_ledger.window import resolve_if_5g_window
 
 
-RESEARCH_LEDGER_SCHEMA_VERSION = "research-snap-share-5g-exposure-ledger-v0-t4833u"
-RESEARCH_TICKET = "t4833u"
+RESEARCH_LEDGER_SCHEMA_VERSION = "research-snap-share-5g-exposure-ledger-v0-t4837u"
+RESEARCH_TICKET = "t4837u"
+RESEARCH_ID_REPAIR_TICKET = "t4837u"
+RESEARCH_ID_REPAIR_RULE = "allowlist_pfr_to_gsis_t4837u"
+
+# Evidence-supported research-only repairs (DECISION e08cae8c / Alex 94ccd2b1).
+# Exactly these three PFR ids. OkoyCJ00 is intentionally absent.
+RESEARCH_ID_REPAIRS: Dict[str, Dict[str, str]] = {
+    "AndeAl01": {
+        "gsis_id": "00-0037428",
+        "player_name": "Alec Anderson",
+        "team": "BUF",
+        "source": "roster_gsis_name_team_pos_unique",
+        "note": (
+            "players.pfr_id NaN; roster 00-0037428 Alec Anderson BUF OL ACT; "
+            "unique display_name+team; 6 snap + 6 ACT-absent mirror"
+        ),
+    },
+    "WhitCo05": {
+        "gsis_id": "00-0035891",
+        "player_name": "Cody White",
+        "team": "LV",
+        "source": "roster_gsis_name_team_pos_unique",
+        "note": (
+            "players.pfr_id NaN; roster 00-0035891 Cody White LV WR ACT; "
+            "WhitCo02 HOU G excluded by team/pos; 7 snap + 7 ACT-absent mirror"
+        ),
+    },
+    "WoodPe00": {
+        "gsis_id": "00-0041545",
+        "player_name": "Peter Woods",
+        "team": "KC",
+        "preserve_players_gsis": "WOO547869",
+        "source": "roster_wins_over_stale_players",
+        "note": (
+            "roster 00-0041545 Peter Woods KC DL ACT beats players WOO547869 "
+            "Pete Woods QB MIA RET (esb-shaped gsis); preserve WOO547869 for audit; "
+            "6 snap + 6 ACT-absent mirror"
+        ),
+    },
+}
+RESEARCH_ID_REPAIR_GSIS_TO_PFR = {
+    spec["gsis_id"]: pfr for pfr, spec in RESEARCH_ID_REPAIRS.items()
+}
 SOURCE_NFLVERSE_PLAYERS = "nflverse_players"
 SOURCE_NFLVERSE_ROSTER_WEEKLY = "nflverse_weekly_rosters"
 
@@ -288,6 +334,64 @@ def classify_pfr_identity(
     return STATE_UNRESOLVED, None, None, None
 
 
+def apply_research_id_repair(
+    *,
+    pfr_id: str,
+    team: str,
+    ident_state: str,
+    gsis_players: Optional[str],
+    gsis_roster: Optional[str],
+    gsis_resolved: Optional[str],
+) -> Tuple[str, Optional[str], Optional[str], Optional[str], Optional[Dict[str, str]]]:
+    """Overlay the t4837u allowlist. Preserve original source GSIS values."""
+    spec = RESEARCH_ID_REPAIRS.get(pfr_id)
+    if spec is None:
+        return ident_state, gsis_players, gsis_roster, gsis_resolved, None
+    # Binding is pfr→gsis (DECISION e08cae8c). Team on the spec is evidence,
+    # not a second key — a team mismatch is recorded, not a reject.
+    preserved_players = gsis_players or spec.get("preserve_players_gsis")
+    resolved = spec["gsis_id"]
+    expected_team = spec.get("team")
+    team_note = ""
+    if expected_team and normalize_team(team) != normalize_team(expected_team):
+        team_note = f"; snap team {normalize_team(team)} != evidence team {expected_team}"
+    provenance = {
+        "id_repair_ticket": RESEARCH_ID_REPAIR_TICKET,
+        "id_repair_rule": RESEARCH_ID_REPAIR_RULE,
+        "id_state_before_repair": ident_state,
+        "id_gsis_resolved_from": spec["source"],
+        "id_repair_note": spec["note"] + team_note,
+    }
+    return STATE_MEASURED, preserved_players, gsis_roster, resolved, provenance
+
+
+def resolve_research_identity(
+    *,
+    pfr_id: str,
+    team: str,
+    week: int,
+    players_pfr: Mapping[str, str],
+    roster_pfr: Mapping[str, str],
+    roster_tw: Mapping[Tuple[str, str, int], str],
+) -> Tuple[str, Optional[str], Optional[str], Optional[str], Optional[Dict[str, str]]]:
+    state, gsis_p, gsis_r, gsis = classify_pfr_identity(
+        pfr_id=pfr_id,
+        team=team,
+        week=week,
+        players_pfr=players_pfr,
+        roster_pfr=roster_pfr,
+        roster_tw=roster_tw,
+    )
+    return apply_research_id_repair(
+        pfr_id=pfr_id,
+        team=team,
+        ident_state=state,
+        gsis_players=gsis_p,
+        gsis_roster=gsis_r,
+        gsis_resolved=gsis,
+    )
+
+
 def infer_schedule_and_dates(
     snap_rows: Sequence[Mapping[str, Any]],
 ) -> Tuple[List[ScheduleGameRow], Dict[str, str], Dict[Tuple[str, int], str]]:
@@ -448,6 +552,12 @@ def _base_row(lineage: Mapping[str, Any]) -> Dict[str, Any]:
         "player_gsis_id": None,
         "player_gsis_id_players": None,
         "player_gsis_id_roster": None,
+        "id_repair_applied": False,
+        "id_repair_ticket": None,
+        "id_repair_rule": None,
+        "id_state_before_repair": None,
+        "id_gsis_resolved_from": None,
+        "id_repair_note": None,
         "player_pfr_id": None,
         "player_name": None,
         "position": None,
@@ -554,6 +664,7 @@ def _collect_window_players(
         gsis_players: Optional[str],
         gsis_roster: Optional[str],
         identity_state: str,
+        provenance: Optional[Mapping[str, str]] = None,
     ) -> None:
         key = (*_player_key(gsis=gsis, pfr=pfr, name=name), side)
         rec = found.setdefault(
@@ -567,12 +678,15 @@ def _collect_window_players(
                 "player_gsis_id_players": gsis_players,
                 "player_gsis_id_roster": gsis_roster,
                 "identity_state": identity_state,
+                "id_repair": dict(provenance) if provenance else None,
             },
         )
         if not rec["player_name"] and name:
             rec["player_name"] = name
         if not rec["position"] and position:
             rec["position"] = position
+        if provenance and not rec.get("id_repair"):
+            rec["id_repair"] = dict(provenance)
         if rec["identity_state"] != STATE_CONFLICT and identity_state == STATE_CONFLICT:
             rec["identity_state"] = STATE_CONFLICT
             rec["player_gsis_id"] = None
@@ -586,7 +700,7 @@ def _collect_window_players(
     for game in window_games:
         for snap in snaps_by_game.get((game.game_id, team), ()):
             pfr = str(snap.get("pfr_player_id") or "").strip()
-            ident_state, gsis_p, gsis_r, gsis = classify_pfr_identity(
+            ident_state, gsis_p, gsis_r, gsis, provenance = resolve_research_identity(
                 pfr_id=pfr,
                 team=team,
                 week=int(game.week),
@@ -607,6 +721,7 @@ def _collect_window_players(
                 gsis_players=gsis_p,
                 gsis_roster=gsis_r,
                 identity_state=ident_state,
+                provenance=provenance,
             )
         for roster in roster_by_tw.get((team, int(game.week)), ()):
             status = str(roster.get("status") or "").strip().upper()
@@ -619,8 +734,9 @@ def _collect_window_players(
             ident_state = STATE_MEASURED
             gsis_p = players_pfr.get(pfr) if pfr else None
             gsis_r = gsis
+            provenance = None
             if pfr:
-                ident_state, gsis_p, gsis_r, resolved = classify_pfr_identity(
+                ident_state, gsis_p, gsis_r, resolved, provenance = resolve_research_identity(
                     pfr_id=pfr,
                     team=team,
                     week=int(game.week),
@@ -641,6 +757,7 @@ def _collect_window_players(
                 gsis_players=gsis_p,
                 gsis_roster=gsis_r,
                 identity_state=ident_state,
+                provenance=provenance,
             )
     return found
 
@@ -657,6 +774,13 @@ def _lookup_snap(
         if matched:
             return matched[0]
     if gsis:
+        repair_pfr = RESEARCH_ID_REPAIR_GSIS_TO_PFR.get(gsis)
+        if repair_pfr:
+            matched = [
+                s for s in snaps if str(s.get("pfr_player_id") or "").strip() == repair_pfr
+            ]
+            if matched:
+                return matched[0]
         matched = [
             s
             for s in snaps
@@ -814,7 +938,7 @@ def build_research_5g_exposure_rows(
                     )
                     ident = rec["identity_state"]
                     if snap is not None and rec["player_pfr_id"]:
-                        ident, _, _, _ = classify_pfr_identity(
+                        ident, _, _, _, _ = resolve_research_identity(
                             pfr_id=str(rec["player_pfr_id"]),
                             team=team,
                             week=int(game.week),
@@ -842,6 +966,20 @@ def build_research_5g_exposure_rows(
                 if shareable and shares and all(x is not None for x in shares):
                     embedded = sum(float(x) for x in shares) / float(len(shares))
                     starter = bool(embedded >= STARTER_LABEL_THRESHOLD)
+                roster_gsis = rec["player_gsis_id_roster"]
+                if not roster_gsis:
+                    # Native roster GSIS when the pfr join was empty (Anderson/White).
+                    sample_roster = None
+                    for game in resolved.games:
+                        sample_roster = _lookup_roster(
+                            roster_by_tw.get((team, int(game.week)), ()),
+                            gsis=rec["player_gsis_id"],
+                            pfr=rec["player_pfr_id"],
+                        )
+                        if sample_roster and sample_roster.get("gsis_id"):
+                            roster_gsis = str(sample_roster.get("gsis_id")).strip()
+                            break
+                repair = rec.get("id_repair") or {}
                 row = _base_row(lineage)
                 row.update(
                     {
@@ -857,7 +995,13 @@ def build_research_5g_exposure_rows(
                         "opponent": _opponent(target, team),
                         "player_gsis_id": rec["player_gsis_id"],
                         "player_gsis_id_players": rec["player_gsis_id_players"],
-                        "player_gsis_id_roster": rec["player_gsis_id_roster"],
+                        "player_gsis_id_roster": roster_gsis,
+                        "id_repair_applied": bool(repair),
+                        "id_repair_ticket": repair.get("id_repair_ticket"),
+                        "id_repair_rule": repair.get("id_repair_rule"),
+                        "id_state_before_repair": repair.get("id_state_before_repair"),
+                        "id_gsis_resolved_from": repair.get("id_gsis_resolved_from"),
+                        "id_repair_note": repair.get("id_repair_note"),
                         "player_pfr_id": rec["player_pfr_id"],
                         "player_name": rec["player_name"],
                         "position": rec["position"],
@@ -920,7 +1064,7 @@ def _build_residual_rows(
         pfr = str(snap.get("pfr_player_id") or "").strip()
         team = normalize_team(snap.get("team"))
         week = int(snap.get("week"))
-        ident, gsis_p, gsis_r, gsis = classify_pfr_identity(
+        ident, gsis_p, gsis_r, gsis, _provenance = resolve_research_identity(
             pfr_id=pfr,
             team=team,
             week=week,

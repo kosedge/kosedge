@@ -92,5 +92,6 @@ tasks / routes / data_platform_nfl.
 
 OWNER CLEAR t4833u sealed a research-only snap-share `_5g` exposure ledger on
 this branch. Production builder / as-of contract above are unchanged. Receipt:
-`data/ops/nfl-research-5g-exposure-ledger-t4833u.md`. Artifact sha256
-`2454f0948a649e02f4319a4ae07fa173327a7a895fae6d3be0b2397318001f88`.
+`data/ops/nfl-research-5g-exposure-ledger-t4833u.md`. t4837u ID repair
+receipt: `data/ops/nfl-research-5g-id-repair-t4837u.md`. Artifact sha256
+`efb97fac3b5078699ca90714886a0cbb3c2819790e7f4733618271db0fc9a1d3`.

@@ -17,8 +17,12 @@ CC-BY-4.0 research attribution (nflverse-data). RETURN_UNCREDITED.
 |---|---|
 | Artifact | `data/research/nfl/t4833u/snap_share_5g_exposure_ledger.parquet` |
 | Rows / cols / bytes | 3,398 / 51 / 263,601 |
-| **output sha256** | `2454f0948a649e02f4319a4ae07fa173327a7a895fae6d3be0b2397318001f88` |
-| Schema | `research-snap-share-5g-exposure-ledger-v0-t4833u` |
+| **output sha256 (t4833u original)** | `2454f0948a649e02f4319a4ae07fa173327a7a895fae6d3be0b2397318001f88` |
+| Schema (t4833u original) | `research-snap-share-5g-exposure-ledger-v0-t4833u` |
+
+t4837u rematerialize (ID repair, same path): see
+`data/ops/nfl-research-5g-id-repair-t4837u.md`. New artifact sha256
+`efb97fac3b5078699ca90714886a0cbb3c2819790e7f4733618271db0fc9a1d3`.
 
 ### Input pins (verified before use; no additional acquisition)
 
