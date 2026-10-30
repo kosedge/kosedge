@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from src.services.nfl_pregame_asof import (
+    IF_MATCHUP_PREGAME_FROM_SQL,
     IF_MATCHUP_ROLLING_JOIN_AWAY,
     IF_MATCHUP_ROLLING_JOIN_HOME,
     PINNED_IF_INGEST_SHA,
@@ -76,18 +77,19 @@ def test_pin_same_week_join_is_not_the_corrected_predicate():
     assert "h.week = (s.week - 1)" in IF_MATCHUP_ROLLING_JOIN_HOME
 
 
-@pytest.mark.parametrize("ingest_path", [MODEL_INGEST, STANDALONE_INGEST])
-def test_ingest_sql_uses_lagged_join_and_not_pin_same_week(ingest_path: Path):
-    text = _read(ingest_path)
-    assert IF_MATCHUP_ROLLING_JOIN_HOME in text
-    assert IF_MATCHUP_ROLLING_JOIN_AWAY in text
-    assert PINNED_IF_MATCHUP_JOIN_HOME not in text
-    assert PINNED_IF_MATCHUP_JOIN_AWAY not in text
-    assert "h.week = (s.week - 1)" in text
-    assert "a.week = (s.week - 1)" in text
-    # No silent latest-week substitute.
-    assert "MAX(h.week)" not in text
-    assert "MAX(a.week)" not in text
+def test_ingest_sql_uses_lagged_join_and_not_pin_same_week():
+    model = _read(MODEL_INGEST)
+    standalone = _read(STANDALONE_INGEST)
+    assert "IF_MATCHUP_PREGAME_FROM_SQL" in model
+    assert IF_MATCHUP_ROLLING_JOIN_HOME in standalone
+    assert IF_MATCHUP_ROLLING_JOIN_AWAY in standalone
+    for text in (model, standalone):
+        assert PINNED_IF_MATCHUP_JOIN_HOME not in text
+        assert PINNED_IF_MATCHUP_JOIN_AWAY not in text
+        assert "MAX(h.week)" not in text
+        assert "MAX(a.week)" not in text
+    assert IF_MATCHUP_ROLLING_JOIN_HOME in IF_MATCHUP_PREGAME_FROM_SQL
+    assert IF_MATCHUP_ROLLING_JOIN_AWAY in IF_MATCHUP_PREGAME_FROM_SQL
 
 
 def test_target_and_future_games_cannot_enter_if_baseline_join():
@@ -100,11 +102,20 @@ def test_target_and_future_games_cannot_enter_if_baseline_join():
     assert chosen < 9
     with pytest.raises(PregameAsofReject) as exc:
         reject_if_not_pregame_game(
-            game_week=9, target_week=9, game_id="SYN-2099-09", target_game_id="SYN-2099-09"
+            game_week=9,
+            target_week=9,
+            game_id="SYN-2099-09",
+            target_game_id="SYN-2099-09",
+            forecast_cutoff_ts="2099-11-01T00:00:00Z",
         )
     assert exc.value.code == REJECT_FUTURE_GAME_IN_WINDOW
     with pytest.raises(PregameAsofReject) as exc:
-        reject_if_not_pregame_game(game_week=10, target_week=9, game_id="SYN-2099-10")
+        reject_if_not_pregame_game(
+            game_week=10,
+            target_week=9,
+            game_id="SYN-2099-10",
+            forecast_cutoff_ts="2099-11-01T00:00:00Z",
+        )
     assert exc.value.code == REJECT_FUTURE_GAME_IN_WINDOW
 
 
@@ -136,6 +147,10 @@ def test_reconstructed_if_window_excludes_target_game_stats():
             home_team="SYN",
             away_team="OPP",
             completed=True,
+            game_date=f"2099-09-{w:02d}" if w < 10 else "2099-10-04",
+            kickoff_ts=(
+                f"2099-09-{w:02d}T17:00:00Z" if w < 10 else "2099-10-04T17:00:00Z"
+            ),
         )
         for w in (2, 3, 4, 6, 8, 9, 10)
     ]
@@ -145,6 +160,7 @@ def test_reconstructed_if_window_excludes_target_game_stats():
         team="SYN",
         situational_rows=sit,
         schedule_rows=sched,
+        forecast_cutoff_ts="2099-11-01T00:00:00Z",
     )
     assert window.rating_week == 8
     assert window.target_week == 9
@@ -157,3 +173,66 @@ def test_reconstructed_if_window_excludes_target_game_stats():
     )
     assert "SYN-2099-09" not in window.game_ids
     assert "SYN-2099-10" not in window.game_ids
+
+
+def test_executed_sql_week_w_gets_w_minus_1_and_bye_is_null():
+    """Execute the shared matchup FROM/JOIN — not a source-string check."""
+    import sqlite3
+
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    conn.execute(
+        """
+        CREATE TABLE nfl_dp_schedules (
+          season INT, week INT, game_id TEXT, game_date TEXT,
+          home_team TEXT, away_team TEXT
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE nfl_dp_team_rolling_features_weekly (
+          season INT, week INT, team TEXT, off_epa_per_play_5g REAL
+        )
+        """
+    )
+    conn.executemany(
+        "INSERT INTO nfl_dp_schedules VALUES (?,?,?,?,?,?)",
+        [
+            (2099, 8, "G-W8", "2099-10-25", "SYN", "OPP"),
+            (2099, 9, "G-W9", "2099-11-01", "SYN", "OPP"),
+        ],
+    )
+    conn.executemany(
+        "INSERT INTO nfl_dp_team_rolling_features_weekly VALUES (?,?,?,?)",
+        [
+            (2099, 6, "SYN", 0.05),
+            (2099, 8, "SYN", 0.10),
+            (2099, 9, "SYN", 0.99),
+            (2099, 8, "OPP", -0.02),
+        ],
+    )
+    sql = f"""
+        SELECT s.week, s.game_id, h.week AS home_rating_week,
+               h.off_epa_per_play_5g AS home_off_epa_5g,
+               a.week AS away_rating_week,
+               a.off_epa_per_play_5g AS away_off_epa_5g
+        {IF_MATCHUP_PREGAME_FROM_SQL}
+    """
+    rows = {int(r["week"]): dict(r) for r in conn.execute(sql, {"season": 2099})}
+
+    week9 = rows[9]
+    assert week9["game_id"] == "G-W9"
+    assert week9["home_rating_week"] == 8
+    assert week9["home_off_epa_5g"] == 0.10
+    assert week9["home_off_epa_5g"] != 0.99
+    assert week9["away_rating_week"] == 8
+    assert week9["away_off_epa_5g"] == -0.02
+
+    week8 = rows[8]
+    assert week8["game_id"] == "G-W8"
+    assert week8["home_rating_week"] is None
+    assert week8["home_off_epa_5g"] is None
+    assert week8["away_rating_week"] is None
+    assert week8["away_off_epa_5g"] is None
+    conn.close()

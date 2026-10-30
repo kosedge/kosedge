@@ -4,96 +4,18 @@ from typing import Any, Dict, Optional
 
 from sqlalchemy import text
 
+# Core Independent Fair `_5g` fields. NULL after the pregame join means the
+# prior rating week is missing (bye / incomplete). Do not substitute latest-week.
+REQUIRED_IF_5G_FIELDS = (
+    "home_off_epa_5g",
+    "away_off_epa_5g",
+    "home_def_epa_allowed_5g",
+    "away_def_epa_allowed_5g",
+    "home_pass_rate_5g",
+    "away_pass_rate_5g",
+)
 
-def _to_float(value: Any) -> Optional[float]:
-    if value is None:
-        return None
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def fetch_latest_matchup_feature_pack(
-    session: Any,
-    *,
-    game_id: str,
-    season_year: Optional[int],
-    home_team: str,
-    away_team: str,
-) -> Optional[Dict[str, Any]]:
-    season = int(season_year) if season_year is not None else None
-    row = session.execute(
-        text(
-            """
-            WITH candidates AS (
-              SELECT
-                0 AS priority,
-                season, week, game_id, home_team, away_team,
-                home_off_epa_5g, away_off_epa_5g,
-                home_def_epa_allowed_5g, away_def_epa_allowed_5g,
-                home_pressure_allowed_5g, away_pressure_allowed_5g,
-                home_pressure_generated_5g, away_pressure_generated_5g,
-                home_pass_rate_5g, away_pass_rate_5g,
-                home_early_down_pass_rate_5g, away_early_down_pass_rate_5g,
-                home_red_zone_td_rate_5g, away_red_zone_td_rate_5g,
-                home_success_offense_5g, away_success_offense_5g,
-                home_success_defense_allowed_5g, away_success_defense_allowed_5g,
-                diff_off_epa_5g, diff_def_epa_allowed_5g,
-                diff_pressure_generated_5g, diff_pressure_allowed_5g,
-                diff_red_zone_td_rate_5g,
-                home_kav_offense_5g, away_kav_offense_5g,
-                home_kav_defense_5g, away_kav_defense_5g,
-                home_kav_net_5g, away_kav_net_5g,
-                home_kav_offense_ytd, away_kav_offense_ytd,
-                home_kav_defense_ytd, away_kav_defense_ytd,
-                home_kav_net_ytd, away_kav_net_ytd,
-                diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
-                kav_as_of_week,
-                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
-                home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
-                home_sub_elasticity_5g, away_sub_elasticity_5g,
-                home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
-                home_coach_pace_5g, away_coach_pace_5g,
-                second_order_as_of_week
-              FROM nfl_dp_matchup_features_weekly
-              WHERE game_id = :game_id
-              UNION ALL
-              SELECT
-                1 AS priority,
-                season, week, game_id, home_team, away_team,
-                home_off_epa_5g, away_off_epa_5g,
-                home_def_epa_allowed_5g, away_def_epa_allowed_5g,
-                home_pressure_allowed_5g, away_pressure_allowed_5g,
-                home_pressure_generated_5g, away_pressure_generated_5g,
-                home_pass_rate_5g, away_pass_rate_5g,
-                home_early_down_pass_rate_5g, away_early_down_pass_rate_5g,
-                home_red_zone_td_rate_5g, away_red_zone_td_rate_5g,
-                home_success_offense_5g, away_success_offense_5g,
-                home_success_defense_allowed_5g, away_success_defense_allowed_5g,
-                diff_off_epa_5g, diff_def_epa_allowed_5g,
-                diff_pressure_generated_5g, diff_pressure_allowed_5g,
-                diff_red_zone_td_rate_5g,
-                home_kav_offense_5g, away_kav_offense_5g,
-                home_kav_defense_5g, away_kav_defense_5g,
-                home_kav_net_5g, away_kav_net_5g,
-                home_kav_offense_ytd, away_kav_offense_ytd,
-                home_kav_defense_ytd, away_kav_defense_ytd,
-                home_kav_net_ytd, away_kav_net_ytd,
-                diff_kav_offense_5g, diff_kav_defense_5g, diff_kav_net_5g,
-                kav_as_of_week,
-                home_st_kav_net_5g, away_st_kav_net_5g, diff_st_kav_net_5g,
-                home_personnel_edge_5g, away_personnel_edge_5g, diff_personnel_edge_5g,
-                home_sub_elasticity_5g, away_sub_elasticity_5g,
-                home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
-                home_coach_pace_5g, away_coach_pace_5g,
-                second_order_as_of_week
-              FROM nfl_dp_matchup_features_weekly
-              WHERE :season IS NOT NULL
-                AND season = :season
-                AND home_team = :home_team
-                AND away_team = :away_team
-            )
+MATCHUP_PACK_BY_GAME_ID_SQL = """
             SELECT
               season, week, game_id, home_team, away_team,
               home_off_epa_5g, away_off_epa_5g,
@@ -122,21 +44,67 @@ def fetch_latest_matchup_feature_pack(
               home_coach_aggression_5g, away_coach_aggression_5g, diff_coach_aggression_5g,
               home_coach_pace_5g, away_coach_pace_5g,
               second_order_as_of_week
-            FROM candidates
-            ORDER BY priority, season DESC, week DESC
-            LIMIT 1
+            FROM nfl_dp_matchup_features_weekly
+            WHERE game_id = :game_id
             """
-        ),
-        {
-            "game_id": game_id,
-            "season": season,
-            "home_team": home_team,
-            "away_team": away_team,
-        },
+
+MATCHUP_GAME_ID_UNRESOLVED = "MATCHUP_GAME_ID_UNRESOLVED"
+MATCHUP_5G_NULL = "MATCHUP_5G_NULL"
+
+
+class MatchupFeatureReject(Exception):
+    """Fail-closed matchup pack reject. No latest-week substitute."""
+
+    def __init__(self, code: str, message: str) -> None:
+        self.code = str(code)
+        self.message = str(message)
+        super().__init__(f"{self.code}: {self.message}")
+
+
+def _to_float(value: Any) -> Optional[float]:
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def fetch_latest_matchup_feature_pack(
+    session: Any,
+    *,
+    game_id: str,
+    season_year: Optional[int],
+    home_team: str,
+    away_team: str,
+) -> Dict[str, Any]:
+    """Return the matchup pack for this exact game_id, or reject.
+
+    Pin/priority-1 latest-week fallback (UNION ALL … ORDER BY week DESC)
+    is removed. Missing game_id or NULL core `_5g` fields fail closed.
+    ``season_year`` / home / away are accepted for caller compatibility
+    and are not used to substitute another week.
+    """
+    del season_year, home_team, away_team
+    row = session.execute(
+        text(MATCHUP_PACK_BY_GAME_ID_SQL),
+        {"game_id": game_id},
     ).fetchone()
     if row is None:
-        return None
-    return dict(row._mapping)
+        raise MatchupFeatureReject(
+            MATCHUP_GAME_ID_UNRESOLVED,
+            f"no matchup_features_weekly row for game_id={game_id!r} "
+            f"(no latest-week fallback)",
+        )
+    pack = dict(row._mapping)
+    missing = [name for name in REQUIRED_IF_5G_FIELDS if pack.get(name) is None]
+    if missing:
+        raise MatchupFeatureReject(
+            MATCHUP_5G_NULL,
+            f"game_id={game_id!r} has NULL _5g fields {missing} "
+            f"(bye / missing prior rating week — not filled from latest week)",
+        )
+    return pack
 
 
 def matchup_pack_to_sim_input_kwargs(

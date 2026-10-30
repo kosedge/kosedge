@@ -67,20 +67,21 @@ def build_snap_share_5g_exposure_ledger(
     rating_week: Optional[int] = None,
     declared_games_in_window_5: Optional[int] = None,
     target_game_id: Optional[str] = None,
-    forecast_cutoff_ts: Optional[str] = None,
+    forecast_cutoff_ts: str,
 ) -> ExposureLedger:
     """Return the `_5g` snap-share exposure ledger or raise fail-closed."""
     as_of = canonicalize_as_of_ts(as_of_ts)
-    if forecast_cutoff_ts is not None:
-        cutoff = canonicalize_as_of_ts(forecast_cutoff_ts)
-        if parse_ledger_ts(as_of) > parse_ledger_ts(cutoff):
-            raise ExposureLedgerReject(
-                REJECT_AS_OF_VIOLATION,
-                f"as_of_ts {as_of} is after forecast_cutoff_ts {cutoff}",
-            )
-        bound_ts = cutoff
-    else:
-        bound_ts = as_of
+    if forecast_cutoff_ts is None or not str(forecast_cutoff_ts).strip():
+        raise ExposureLedgerReject(
+            REJECT_AS_OF_VIOLATION, "forecast_cutoff_ts required (no silent pass)"
+        )
+    cutoff = canonicalize_as_of_ts(forecast_cutoff_ts)
+    if parse_ledger_ts(as_of) > parse_ledger_ts(cutoff):
+        raise ExposureLedgerReject(
+            REJECT_AS_OF_VIOLATION,
+            f"as_of_ts {as_of} is after forecast_cutoff_ts {cutoff}",
+        )
+    bound_ts = cutoff
     window = resolve_if_5g_window(
         season=season,
         target_week=target_week,

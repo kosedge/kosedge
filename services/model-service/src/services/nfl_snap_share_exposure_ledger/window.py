@@ -41,6 +41,7 @@ from src.services.nfl_pregame_asof import (
 from src.services.nfl_snap_share_exposure_ledger.identity import fingerprint_payload
 from src.services.nfl_snap_share_exposure_ledger.schema import (
     IF_5G_WINDOW_CONTRACT,
+    REJECT_AS_OF_VIOLATION,
     REJECT_FUTURE_GAME_IN_WINDOW,
     REJECT_GAME_NOT_COMPLETED,
     REJECT_GRAIN_MISMATCH,
@@ -77,6 +78,8 @@ def _raise_asof(exc: PregameAsofReject) -> None:
         mapped = REJECT_RATING_WEEK_UNRESOLVED
     elif code == REJECT_FUTURE_GAME_IN_WINDOW:
         mapped = REJECT_FUTURE_GAME_IN_WINDOW
+    elif code == REJECT_AS_OF_VIOLATION:
+        mapped = REJECT_AS_OF_VIOLATION
     else:
         mapped = REJECT_INPUT_INVALID
     raise ExposureLedgerReject(mapped, exc.message) from exc
@@ -92,11 +95,15 @@ def resolve_if_5g_window(
     rating_week: Optional[int] = None,
     declared_games_in_window_5: Optional[int] = None,
     target_game_id: Optional[str] = None,
-    forecast_cutoff_ts: Optional[str] = None,
+    forecast_cutoff_ts: str,
 ) -> ResolvedIf5gWindow:
     """Return the exact five games feeding the IF `_5g` row at rating_week."""
     if not isinstance(season, int) or season < 1:
         raise ExposureLedgerReject(REJECT_INPUT_INVALID, "season must be a positive int")
+    if forecast_cutoff_ts is None or not str(forecast_cutoff_ts).strip():
+        raise ExposureLedgerReject(
+            REJECT_AS_OF_VIOLATION, "forecast_cutoff_ts required (no silent pass)"
+        )
     team_n = normalize_team(require_nonempty_str(team, field_name="team"))
     target_id = (
         require_nonempty_str(target_game_id, field_name="target_game_id")
@@ -147,7 +154,7 @@ def resolve_if_5g_window(
             schedule_rows=schedule_rows,
             target_week=int(target_week),
             target_game_id=target_id,
-            target_game_date=target_schedule.game_date if target_schedule else None,
+            target_game_date=target_schedule.game_date,
             forecast_cutoff_ts=forecast_cutoff_ts,
         )
         for week in selected_weeks
@@ -254,7 +261,7 @@ def _lookup_target_schedule(
     target_week: int,
     target_game_id: Optional[str],
     schedule_rows: Sequence[ScheduleGameRow],
-) -> Optional[ScheduleGameRow]:
+) -> ScheduleGameRow:
     if target_game_id is None:
         matches = [
             s
@@ -265,7 +272,11 @@ def _lookup_target_schedule(
             in {normalize_team(s.home_team), normalize_team(s.away_team)}
         ]
         if not matches:
-            return None
+            raise ExposureLedgerReject(
+                REJECT_SCHEDULE_UNRESOLVED,
+                f"no schedule game for {team} {season}w{target_week} "
+                f"(target context required; date guard cannot be skipped)",
+            )
         ids = {str(s.game_id) for s in matches}
         if len(ids) != 1:
             raise ExposureLedgerReject(
@@ -309,7 +320,7 @@ def _bind_schedule_game(
     target_week: int,
     target_game_id: Optional[str],
     target_game_date: Optional[str],
-    forecast_cutoff_ts: Optional[str],
+    forecast_cutoff_ts: str,
 ) -> ResolvedWindowGame:
     if row.games_played is not None and int(row.games_played) != 1:
         raise ExposureLedgerReject(

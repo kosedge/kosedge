@@ -5,6 +5,7 @@ No live snaps, no IF scoring, no nowcast, no #664 activate.
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -37,6 +38,7 @@ from src.services.nfl_snap_share_exposure_ledger.schema import (
     REJECT_POSITION_UNKNOWN,
     REJECT_RATING_WEEK_NOT_LAGGED,
     REJECT_RATING_WEEK_STALE,
+    REJECT_SCHEDULE_UNRESOLVED,
     REJECT_SNAPS_INCOMPLETE,
     REJECT_SNAPS_MISSING,
     REJECT_SOURCE_UNSUPPORTED,
@@ -53,6 +55,7 @@ TEAM = "SYN"
 RATING_WEEK = 8
 TARGET_WEEK = 9
 AS_OF = "2099-11-01T00:00:00Z"
+FORECAST_CUTOFF = "2099-11-01T00:00:00Z"
 SOURCE = SOURCE_SYNTH_SNAP_COUNTS
 
 # Situational weeks feeding IF `_5g` at rating_week=8 for a Week-9 forecast
@@ -64,6 +67,15 @@ SCHEDULE_WEEKS = (1, 2, 3, 4, 5, 6, 8, 9)
 
 def _gid(week: int) -> str:
     return f"SYN-2099-{week:02d}"
+
+
+def _kickoff(week: int) -> str:
+    start = datetime(2099, 9, 6, 17, 0, tzinfo=timezone.utc)
+    return (start + timedelta(days=7 * (week - 1))).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _gdate(week: int) -> str:
+    return _kickoff(week)[:10]
 
 
 def _sit(weeks=IF_WEEKS) -> list[SituationalWeekRow]:
@@ -82,6 +94,8 @@ def _sched(weeks=SCHEDULE_WEEKS, *, completed: bool = True) -> list[ScheduleGame
             home_team=TEAM,
             away_team="OPP",
             completed=completed if w != 5 else True,
+            game_date=_gdate(w),
+            kickoff_ts=_kickoff(w),
         )
         for w in weeks
     ]
@@ -171,10 +185,16 @@ def _build(**overrides):
         "participation_bundles": _complete_bundles(),
         "identity_links": _identity(),
         "as_of_ts": AS_OF,
+        "forecast_cutoff_ts": FORECAST_CUTOFF,
         "declared_games_in_window_5": 5,
     }
     kwargs.update(overrides)
     return build_snap_share_5g_exposure_ledger(**kwargs)
+
+
+def _resolve(**kwargs):
+    kwargs.setdefault("forecast_cutoff_ts", FORECAST_CUTOFF)
+    return resolve_if_5g_window(**kwargs)
 
 
 def _row(ledger, gsis: str):
@@ -184,7 +204,7 @@ def _row(ledger, gsis: str):
 
 
 def test_if_5g_window_uses_situational_frame_not_latest_five_schedule():
-    window = resolve_if_5g_window(
+    window = _resolve(
         season=SEASON,
         target_week=TARGET_WEEK,
         rating_week=RATING_WEEK,
@@ -285,20 +305,20 @@ def test_empty_complete_bundle_fails_closed():
 
 def test_window_short_weeks_1_4_fail_closed():
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=4,
             rating_week=3,
             team=TEAM,
             situational_rows=_sit(weeks=(1, 2, 3)),
-            schedule_rows=_sched(weeks=(1, 2, 3)),
+            schedule_rows=_sched(weeks=(1, 2, 3, 4)),
         )
     assert exc.value.code == REJECT_WINDOW_SHORT
 
 
 def test_incomplete_window_after_week_4_fail_closed():
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=9,
             rating_week=8,
@@ -311,7 +331,7 @@ def test_incomplete_window_after_week_4_fail_closed():
 
 def test_rating_week_without_situational_row_fail_closed():
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=8,
             rating_week=7,
@@ -334,7 +354,7 @@ def test_multi_game_week_grain_mismatch_fail_closed():
         season=SEASON, week=2, team=TEAM, games_played=2, source="synth"
     )
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=RATING_WEEK,
@@ -354,10 +374,12 @@ def test_two_schedule_games_same_week_fail_closed():
             home_team=TEAM,
             away_team="ZZZ",
             completed=True,
+            game_date=_gdate(6),
+            kickoff_ts=_kickoff(6),
         )
     ]
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=RATING_WEEK,
@@ -377,11 +399,13 @@ def test_uncompleted_schedule_game_fail_closed():
             home_team=TEAM,
             away_team="OPP",
             completed=(w != 8),
+            game_date=_gdate(w),
+            kickoff_ts=_kickoff(w),
         )
         for w in SCHEDULE_WEEKS
     ]
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=RATING_WEEK,
@@ -662,7 +686,7 @@ def test_builder_package_is_isolated_from_live_paths():
 
 
 def test_current_row_at_rating_week_is_included():
-    window = resolve_if_5g_window(
+    window = _resolve(
         season=SEASON,
         target_week=TARGET_WEEK,
         rating_week=RATING_WEEK,
@@ -678,7 +702,7 @@ def test_current_row_at_rating_week_is_included():
 
 def test_missing_target_week_fail_closed():
     with pytest.raises(TypeError):
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             rating_week=RATING_WEEK,
             team=TEAM,
@@ -689,7 +713,7 @@ def test_missing_target_week_fail_closed():
 
 def test_invalid_target_week_fail_closed():
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=0,
             rating_week=RATING_WEEK,
@@ -702,7 +726,7 @@ def test_invalid_target_week_fail_closed():
 
 def test_same_week_rating_is_target_leakage_fail_closed():
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=RATING_WEEK,
             rating_week=RATING_WEEK,
@@ -717,7 +741,7 @@ def test_target_week_game_cannot_enter_if_window_or_ledger():
     leaked_sit = _sit(weeks=IF_WEEKS + (TARGET_WEEK,))
     leaked_sched = _sched()
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=TARGET_WEEK,
@@ -727,7 +751,7 @@ def test_target_week_game_cannot_enter_if_window_or_ledger():
         )
     assert exc.value.code == REJECT_RATING_WEEK_NOT_LAGGED
 
-    window = resolve_if_5g_window(
+    window = _resolve(
         season=SEASON,
         target_week=TARGET_WEEK,
         rating_week=RATING_WEEK,
@@ -755,7 +779,7 @@ def test_future_week_game_cannot_enter_if_window_or_ledger():
     future_week = 10
     leaked_sit = _sit(weeks=IF_WEEKS + (future_week,))
     leaked_sched = _sched(weeks=SCHEDULE_WEEKS + (future_week,))
-    window = resolve_if_5g_window(
+    window = _resolve(
         season=SEASON,
         target_week=TARGET_WEEK,
         rating_week=RATING_WEEK,
@@ -779,7 +803,7 @@ def test_future_week_game_cannot_enter_if_window_or_ledger():
 
 def test_rating_week_target_minus_2_is_stale():
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=TARGET_WEEK - 2,
@@ -793,7 +817,7 @@ def test_rating_week_target_minus_2_is_stale():
 def test_bye_at_target_minus_1_fail_closed_no_substitute():
     # Week 7 is a bye. Forecasting week 8 cannot silently use week 6.
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=8,
             team=TEAM,
@@ -805,7 +829,7 @@ def test_bye_at_target_minus_1_fail_closed_no_substitute():
 
 
 def test_target_game_id_stays_out_of_window():
-    window = resolve_if_5g_window(
+    window = _resolve(
         season=SEASON,
         target_week=TARGET_WEEK,
         rating_week=RATING_WEEK,
@@ -818,7 +842,7 @@ def test_target_game_id_stays_out_of_window():
     assert _gid(TARGET_WEEK) not in window.game_ids
 
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=RATING_WEEK,
@@ -842,10 +866,11 @@ def test_window_game_date_on_or_after_target_fail_closed():
                 away_team="OPP",
                 completed=True,
                 game_date="2099-11-02" if w == 8 else f"2099-10-{w:02d}",
+                kickoff_ts=None,
             )
         )
     with pytest.raises(ExposureLedgerReject) as exc:
-        resolve_if_5g_window(
+        _resolve(
             season=SEASON,
             target_week=TARGET_WEEK,
             rating_week=RATING_WEEK,
@@ -853,6 +878,7 @@ def test_window_game_date_on_or_after_target_fail_closed():
             team=TEAM,
             situational_rows=_sit(),
             schedule_rows=sched,
+            forecast_cutoff_ts="2099-11-15T00:00:00Z",
         )
     assert exc.value.code == REJECT_FUTURE_GAME_IN_WINDOW
 
@@ -861,3 +887,68 @@ def test_forecast_cutoff_rejects_ledger_as_of_after_cutoff():
     with pytest.raises(ExposureLedgerReject) as exc:
         _build(forecast_cutoff_ts="2099-10-01T00:00:00Z")
     assert exc.value.code == REJECT_AS_OF_VIOLATION
+
+
+def test_missing_forecast_cutoff_fail_closed():
+    with pytest.raises(TypeError):
+        resolve_if_5g_window(
+            season=SEASON,
+            target_week=TARGET_WEEK,
+            rating_week=RATING_WEEK,
+            team=TEAM,
+            situational_rows=_sit(),
+            schedule_rows=_sched(),
+        )
+    with pytest.raises(TypeError):
+        build_snap_share_5g_exposure_ledger(
+            season=SEASON,
+            target_week=TARGET_WEEK,
+            rating_week=RATING_WEEK,
+            team=TEAM,
+            situational_rows=_sit(),
+            schedule_rows=_sched(),
+            participation_bundles=_complete_bundles(),
+            identity_links=_identity(),
+            as_of_ts=AS_OF,
+        )
+
+
+def test_window_game_missing_kickoff_and_date_fail_closed():
+    sched = [
+        ScheduleGameRow(
+            season=SEASON,
+            week=w,
+            game_id=_gid(w),
+            home_team=TEAM,
+            away_team="OPP",
+            completed=True,
+            game_date=None,
+            kickoff_ts=None,
+        )
+        for w in SCHEDULE_WEEKS
+    ]
+    with pytest.raises(ExposureLedgerReject) as exc:
+        _resolve(
+            season=SEASON,
+            target_week=TARGET_WEEK,
+            rating_week=RATING_WEEK,
+            team=TEAM,
+            situational_rows=_sit(),
+            schedule_rows=sched,
+        )
+    assert exc.value.code == REJECT_AS_OF_VIOLATION
+    assert "kickoff_ts" in exc.value.message
+
+
+def test_missing_target_week_schedule_fail_closed():
+    with pytest.raises(ExposureLedgerReject) as exc:
+        _resolve(
+            season=SEASON,
+            target_week=TARGET_WEEK,
+            rating_week=RATING_WEEK,
+            team=TEAM,
+            situational_rows=_sit(),
+            schedule_rows=_sched(weeks=IF_WEEKS),
+        )
+    assert exc.value.code == REJECT_SCHEDULE_UNRESOLVED
+    assert "date guard cannot be skipped" in exc.value.message

@@ -7,6 +7,8 @@ from typing import Any, Dict, Iterable, List
 
 from sqlalchemy import text
 
+from src.services.nfl_pregame_asof import IF_MATCHUP_PREGAME_FROM_SQL
+
 from .db import SessionLocal
 from .nfl_com import NflComError, fetch_nfl_com_team_intel_snapshot
 from .team_intel import build_standings_rows, infer_depth_chart_rows
@@ -1456,7 +1458,7 @@ def materialize_matchup_features_from_usage(
 
             session.execute(
                 text(
-                    """
+                    f"""
                     INSERT INTO nfl_dp_matchup_features_weekly (
                       season, week, game_id, game_date, home_team, away_team,
                       home_off_epa_5g, away_off_epa_5g,
@@ -1503,12 +1505,7 @@ def materialize_matchup_features_from_usage(
                       (a.pressure_rate_allowed_5g - h.pressure_rate_allowed_5g) AS diff_pressure_allowed_5g,
                       (h.red_zone_td_rate_5g - a.red_zone_td_rate_5g) AS diff_red_zone_td_rate_5g,
                       NOW()
-                    FROM nfl_dp_schedules s
-                    LEFT JOIN nfl_dp_team_rolling_features_weekly h
-                      ON h.season = s.season AND h.week = (s.week - 1) AND h.team = s.home_team
-                    LEFT JOIN nfl_dp_team_rolling_features_weekly a
-                      ON a.season = s.season AND a.week = (s.week - 1) AND a.team = s.away_team
-                    WHERE s.season = :season
+                    {IF_MATCHUP_PREGAME_FROM_SQL}
                     ON CONFLICT (season, week, game_id) DO UPDATE SET
                       game_date = EXCLUDED.game_date,
                       home_team = EXCLUDED.home_team,

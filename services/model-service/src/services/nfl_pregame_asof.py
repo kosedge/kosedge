@@ -58,6 +58,15 @@ IF_MATCHUP_ROLLING_JOIN_AWAY = (
     "a.season = s.season AND a.week = (s.week - 1) AND a.team = s.away_team"
 )
 
+# Shared FROM/JOIN/WHERE executed by ingest and by the sqlite as-of fixture.
+# Do not add a latest-week fallback here.
+IF_MATCHUP_PREGAME_FROM_SQL = f"""FROM nfl_dp_schedules s
+LEFT JOIN nfl_dp_team_rolling_features_weekly h
+  ON {IF_MATCHUP_ROLLING_JOIN_HOME}
+LEFT JOIN nfl_dp_team_rolling_features_weekly a
+  ON {IF_MATCHUP_ROLLING_JOIN_AWAY}
+WHERE s.season = :season"""
+
 IF_MATCHUP_ASOF_CONTRACT = (
     "pregame as-of: every consumed game completed and required source "
     "available before target forecast cutoff; "
@@ -162,15 +171,20 @@ def reject_if_not_pregame_game(
     *,
     game_week: int,
     target_week: int,
+    forecast_cutoff_ts: Any,
     game_id: Optional[str] = None,
     target_game_id: Optional[str] = None,
     game_date: Any = None,
     target_game_date: Any = None,
     game_kickoff_ts: Any = None,
-    forecast_cutoff_ts: Any = None,
 ) -> None:
     """Fail closed if a candidate game is the target or is in the future."""
     label = game_id or f"week {game_week}"
+    if forecast_cutoff_ts is None or not str(forecast_cutoff_ts).strip():
+        raise PregameAsofReject(
+            REJECT_AS_OF_VIOLATION,
+            "forecast_cutoff_ts required (no silent pass)",
+        )
     if int(game_week) >= int(target_week):
         raise PregameAsofReject(
             REJECT_FUTURE_GAME_IN_WINDOW,
@@ -181,6 +195,28 @@ def reject_if_not_pregame_game(
             REJECT_FUTURE_GAME_IN_WINDOW,
             f"target game_id {target_game_id} cannot enter the historical window",
         )
+    if game_kickoff_ts is None and game_date is None:
+        raise PregameAsofReject(
+            REJECT_AS_OF_VIOLATION,
+            f"{label} missing kickoff_ts and game_date "
+            f"(cannot verify pregame as-of vs forecast_cutoff_ts)",
+        )
+    if game_kickoff_ts is not None:
+        if _as_utc(game_kickoff_ts) >= _as_utc(forecast_cutoff_ts):
+            raise PregameAsofReject(
+                REJECT_AS_OF_VIOLATION,
+                f"{label} kickoff {game_kickoff_ts} is not before "
+                f"forecast_cutoff_ts {forecast_cutoff_ts}",
+            )
+    else:
+        cutoff_day = _as_utc(forecast_cutoff_ts).date()
+        if _as_date(game_date) >= cutoff_day:
+            raise PregameAsofReject(
+                REJECT_AS_OF_VIOLATION,
+                f"{label} game_date {game_date} is not before "
+                f"forecast_cutoff_ts date {cutoff_day.isoformat()} "
+                f"(date-only bound; kickoff_ts absent)",
+            )
     if target_game_date is not None:
         if game_date is None:
             raise PregameAsofReject(
@@ -193,13 +229,6 @@ def reject_if_not_pregame_game(
                 REJECT_FUTURE_GAME_IN_WINDOW,
                 f"{label} game_date {game_date} is not before target "
                 f"game_date {target_game_date}",
-            )
-    if forecast_cutoff_ts is not None and game_kickoff_ts is not None:
-        if _as_utc(game_kickoff_ts) >= _as_utc(forecast_cutoff_ts):
-            raise PregameAsofReject(
-                REJECT_AS_OF_VIOLATION,
-                f"{label} kickoff {game_kickoff_ts} is not before "
-                f"forecast_cutoff_ts {forecast_cutoff_ts}",
             )
 
 

@@ -57,14 +57,27 @@ rejected (not silently hashed). Hash algorithm unchanged.
 `tasks.py` `_fetch_rolling_feature_latest_rows` (`week <= week_cap`) is a
 different consumer and is **out of this bounded correction**.
 
+## Follow-up (ORDER 5071e31a) — Alex `5f2e9756` defects
+
+Closed on this DRAFT lineage (not a new PR):
+
+1. `forecast_cutoff_ts` is mandatory on ledger / window entry. Every window game must have `kickoff_ts` or `game_date`; absence fails closed (GAP-A).
+2. `_lookup_target_schedule` raises `SCHEDULE_UNRESOLVED` when the target-week game is missing — never `None` that skips the date guard (GAP-B).
+3. Executed sqlite fixture runs `IF_MATCHUP_PREGAME_FROM_SQL`: Week-W gets the W−1 rolling row; target-week stats cannot enter; W−1 bye → NULL.
+4. `fetch_latest_matchup_feature_pack` no longer has the priority-1 latest-week `UNION ALL`. Missing `game_id` or NULL core `_5g` raises `MatchupFeatureReject`.
+
 ## Tests
 
 ```bash
 cd services/model-service
 PYTHONPATH=. python3 -m pytest -q \
   tests/test_nfl_if_pregame_asof.py \
-  tests/test_nfl_snap_share_exposure_ledger.py
-# 47 passed in 0.14s
+  tests/test_nfl_snap_share_exposure_ledger.py \
+  tests/test_nfl_matchup_features.py::test_matchup_pack_sql_has_no_latest_week_fallback \
+  tests/test_nfl_matchup_features.py::test_fetch_matchup_pack_rejects_missing_game_id \
+  tests/test_nfl_matchup_features.py::test_fetch_matchup_pack_rejects_null_5g \
+  tests/test_nfl_matchup_features.py::test_fetch_matchup_pack_returns_game_id_row
+# 54 passed in 0.22s
 ```
 
 ## Isolation / HOLD
