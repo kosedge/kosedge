@@ -39,5 +39,5 @@ def test_weekly_props_live_is_explicit_web_flag() -> None:
     assert should_touch_season_artifacts() is False
     web = Path(__file__).resolve().parents[3] / "apps" / "web" / "lib" / "nfl-weekly-props-live.ts"
     text = web.read_text(encoding="utf-8")
-    assert "export const NFL_WEEKLY_PROPS_LIVE = true" in text
+    assert "export const NFL_WEEKLY_PROPS_LIVE = false" in text
     assert "No PLAY / LEAN stake tags" in text
