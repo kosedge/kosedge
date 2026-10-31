@@ -14,15 +14,15 @@ Alex PASS_RO_MAP on #680: tip `4a1bc064` (coordination; not a git object on this
 
 ## 0. Identity
 
-| Item | Value |
-|---|---|
-| This paper | t5015u · `research/q2_phase_b_t5009u/Q2_ASOF_SIDECAR_FIELD_CONTRACT_t5015u.md` |
-| Inspected live tip | `origin/deploy-vercel` @ `f5e3bb58ccbe5a8892fed2a01f347c2308394a2f` |
-| Q2 keep packet (do not merge) | draft [#679](https://github.com/kosedge/kosedge/pull/679) · `cursor/q2-phase-b-exec-a5ff` @ `af6be4f59c63af222d02c39878266460a37d418a` |
-| Prior map (do not re-do) | draft [#680](https://github.com/kosedge/kosedge/pull/680) · `cursor/q2-keep-if-ro-map-53e0` @ `be8c27a6d32d2e1cc676ff269109832faab74a2d` · `research/q2_phase_b_t5009u/RO_IF_DEPENDENCY_MAP_t5014u.md` §2c |
-| CLEAR-A IF merge | `1b39f4e9f6b2e04c264a41831f3bb7273e475011` (#657) — **code is on `deploy-vercel`** |
-| FROZEN md | sha256 prefix `28c582a1` of `ops/nfl_enterprise_green_t4359u/FROZEN_CONFIG_Q2PB_t5009u.md` on #679 |
-| Fit / config | `70db070dad3fcdb4d4ff165ba09b7840c173c232a71c8fcd670ba9c3c0bc5571` / `aa2b47b3f0b504f39b785d0cb6fc2918bb7a36fb5a22242e80fb37707b790d49` |
+| Item                          | Value                                                                                                                                                                                                      |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| This paper                    | t5015u · `research/q2_phase_b_t5009u/Q2_ASOF_SIDECAR_FIELD_CONTRACT_t5015u.md`                                                                                                                             |
+| Inspected live tip            | `origin/deploy-vercel` @ `f5e3bb58ccbe5a8892fed2a01f347c2308394a2f`                                                                                                                                        |
+| Q2 keep packet (do not merge) | draft [#679](https://github.com/kosedge/kosedge/pull/679) · `cursor/q2-phase-b-exec-a5ff` @ `af6be4f59c63af222d02c39878266460a37d418a`                                                                     |
+| Prior map (do not re-do)      | draft [#680](https://github.com/kosedge/kosedge/pull/680) · `cursor/q2-keep-if-ro-map-53e0` @ `be8c27a6d32d2e1cc676ff269109832faab74a2d` · `research/q2_phase_b_t5009u/RO_IF_DEPENDENCY_MAP_t5014u.md` §2c |
+| CLEAR-A IF merge              | `1b39f4e9f6b2e04c264a41831f3bb7273e475011` (#657) — **code is on `deploy-vercel`**                                                                                                                         |
+| FROZEN md                     | sha256 prefix `28c582a1` of `ops/nfl_enterprise_green_t4359u/FROZEN_CONFIG_Q2PB_t5009u.md` on #679                                                                                                         |
+| Fit / config                  | `70db070dad3fcdb4d4ff165ba09b7840c173c232a71c8fcd670ba9c3c0bc5571` / `aa2b47b3f0b504f39b785d0cb6fc2918bb7a36fb5a22242e80fb37707b790d49`                                                                    |
 
 ---
 
@@ -34,16 +34,16 @@ These three layers are **not interchangeable**. A sentence that says “IF is te
 
 Symbols **present** on inspected live tip `f5e3bb58` via CLEAR-A merge `1b39f4e9` (#657). Presence ≠ production invoke.
 
-| Symbol / path | File:lines (live tip) | What it is |
-|---|---|---|
-| `simulate_nfl_game(..., independent_fair=False\|True)` | `services/model-service/src/services/nfl_simulator.py:519–531` (flag), `:611–617` (blend-zero branch), `:847–860` (labeled payload) | Default path is blended. Opt-in flag attaches `independent_fair{margin_mu,total_mu,sigma,market_blend=0}`. |
-| `simulate_nfl_game_independent_fair` | `nfl_simulator.py:877–911` | Explicit labeled IF entry. Docstring: “Never the live default. Production callers must keep using `simulate_nfl_game` without this flag.” |
-| `independent_fair_mus` | `nfl_simulator.py:914–925` | Reads labeled IF mus; fail-closed if unlabeled or blend ≠ 0. |
-| `NFL_INDEPENDENT_FAIR_PATH` | `nfl_simulator.py:34–39` | Constant `False`. **Documentation + opt-in name only** — `simulate_nfl_game` does **not** read an env kill-switch. |
-| `INDEPENDENT_FAIR_FORECAST_LABEL` | `nfl_simulator.py:38` | `"independent_fair"` |
-| EPA priors path | `services/model-service/src/tasks.py:_load_team_strength_priors` `:1051–1080` (`as_of_week` → `week_cap_current`); `_resolve_team_strength_indices` `:1547–1592` (EPA `offense_index` / `defense_index` preferred; W-L record is cold-start only) | Live strength SoT. Not Massey. Not Q2. |
-| Ledger helpers | `services/model-service/src/services/nfl_handicap_ledger/schema.py` `L0_REQUIRED_FIELDS` `:59–75`; `LEDGER_SCHEMA_VERSION = handicap-ledger-v0-clear-a`; header `:8` **DEVELOPMENT_ONLY — no capture** | Append-only IF/HF/MIF envelope. Residual R1/F8 “oracle strength” still open (`schema.py:11`). |
-| Layer-1 **test imports** of the labeled IF entry | `services/model-service/tests/test_nfl_handicap_clear_a_d3.py` (imports `simulate_nfl_game_independent_fair`, `independent_fair_mus`, `NFL_INDEPENDENT_FAIR_PATH`); `test_nfl_handicap_clear_a_d1_d4_remotion.py` (`independent_fair_mus`) | On **this live tree**, non-definition imports of the labeled IF entry are tests. **This sentence is Layer 1 only.** It does not describe Layer 2 and does not overwrite OWNER/CoS-accepted offline IF caller work. |
+| Symbol / path                                          | File:lines (live tip)                                                                                                                                                                                                                             | What it is                                                                                                                                                                                                         |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `simulate_nfl_game(..., independent_fair=False\|True)` | `services/model-service/src/services/nfl_simulator.py:519–531` (flag), `:611–617` (blend-zero branch), `:847–860` (labeled payload)                                                                                                               | Default path is blended. Opt-in flag attaches `independent_fair{margin_mu,total_mu,sigma,market_blend=0}`.                                                                                                         |
+| `simulate_nfl_game_independent_fair`                   | `nfl_simulator.py:877–911`                                                                                                                                                                                                                        | Explicit labeled IF entry. Docstring: “Never the live default. Production callers must keep using `simulate_nfl_game` without this flag.”                                                                          |
+| `independent_fair_mus`                                 | `nfl_simulator.py:914–925`                                                                                                                                                                                                                        | Reads labeled IF mus; fail-closed if unlabeled or blend ≠ 0.                                                                                                                                                       |
+| `NFL_INDEPENDENT_FAIR_PATH`                            | `nfl_simulator.py:34–39`                                                                                                                                                                                                                          | Constant `False`. **Documentation + opt-in name only** — `simulate_nfl_game` does **not** read an env kill-switch.                                                                                                 |
+| `INDEPENDENT_FAIR_FORECAST_LABEL`                      | `nfl_simulator.py:38`                                                                                                                                                                                                                             | `"independent_fair"`                                                                                                                                                                                               |
+| EPA priors path                                        | `services/model-service/src/tasks.py:_load_team_strength_priors` `:1051–1080` (`as_of_week` → `week_cap_current`); `_resolve_team_strength_indices` `:1547–1592` (EPA `offense_index` / `defense_index` preferred; W-L record is cold-start only) | Live strength SoT. Not Massey. Not Q2.                                                                                                                                                                             |
+| Ledger helpers                                         | `services/model-service/src/services/nfl_handicap_ledger/schema.py` `L0_REQUIRED_FIELDS` `:59–75`; `LEDGER_SCHEMA_VERSION = handicap-ledger-v0-clear-a`; header `:8` **DEVELOPMENT_ONLY — no capture**                                            | Append-only IF/HF/MIF envelope. Residual R1/F8 “oracle strength” still open (`schema.py:11`).                                                                                                                      |
+| Layer-1 **test imports** of the labeled IF entry       | `services/model-service/tests/test_nfl_handicap_clear_a_d3.py` (imports `simulate_nfl_game_independent_fair`, `independent_fair_mus`, `NFL_INDEPENDENT_FAIR_PATH`); `test_nfl_handicap_clear_a_d1_d4_remotion.py` (`independent_fair_mus`)        | On **this live tree**, non-definition imports of the labeled IF entry are tests. **This sentence is Layer 1 only.** It does not describe Layer 2 and does not overwrite OWNER/CoS-accepted offline IF caller work. |
 
 `docs/ops/NFL_HANDICAP_CLEAR_A_EVIDENCE_t4740u.md` still says “DRAFT PR only · not merged.” That sentence is **stale** for Layer 1: #657 is on `deploy-vercel` as `1b39f4e9`. Stale docs do not move this into Layer 3.
 
@@ -53,44 +53,44 @@ D3(ii) flag-OFF blended hash (Layer 1 test pin, not a sidecar field): `75ee2ee90
 
 OWNER/CoS-accepted **offline** work that **invokes** the labeled IF entry (or a pinned IF tip) **outside** the live Railway/Vercel subscriber path. This layer is **not** “tests-only.” Do not collapse it into Layer 1 test imports or Layer 3 blended prod.
 
-| Artifact | Status on this inspection | What it is |
-|---|---|---|
-| OWNER ACCEPT t4910u bounded diagnostic score | draft [#672](https://github.com/kosedge/kosedge/pull/672) · `data/ops/OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md` + packet `data/ops/nfl-hist-diag-score-70-t4910u/` | OWNER-accepted offline IF score of 70 complete 2017 REG games. `CALL_AUDIT.md`: original score tip `19c6a460` invoked `simulate_nfl_game_independent_fair` × 70 (sealed). Close tip `02197f58` did **not** re-invoke. |
-| Offline IF caller script | `#672` `data/ops/nfl-hist-diag-score-70-t4910u/score_t4910u.py` | Loads simulator/framework from pinned IF tip `6ca03716fe52930332d5ffba302c312a651980cc` via worktree `/tmp/t4910u-if-6ca03716`. `MARKET_BLEND = 0`, `SIMULATIONS = 4000`. Does **not** import the W8 eval rest helper. |
-| IF tip / simulator pin used by that caller | tip `6ca03716` · `nfl_simulator.py` sha `52d9e909` · framework `a0051cc4` (packet `ASSUMPTIONS.md` / `CALL_AUDIT.md` / Alex RO on #672) | **Not** the `deploy-vercel` HEAD object of `nfl_simulator.py`. Packet is explicit: live HEAD simulator ≠ `52d9e909`. |
-| W8 offline eval caller (distinct) | cited in OWNER ACCEPT t4910u: tip `6ca03716` W8 eval path; rest_days correction `155d3ca0` / execution `90bf65ab` | OWNER ACCEPT binds: hist diagnostic scoring may use tip `6ca03716` **only if** sealed reconstructed `rest_days_*` are bound and **never** re-derived via the W8 eval caller. Silent tip substitution forbidden. This is a **second** offline caller family, not Layer 3. |
-| CLEAR-P1 local D3 shadow orchestrator | draft [#662](https://github.com/kosedge/kosedge/pull/662) · `scripts/nfl/shadow_handicap_e2e_t4761u.py` | Local fixture: D3 CLE vs BAL → `simulate_nfl_game_independent_fair` (`market_blend=0`) → L0/L1/L4 receipt. DRAFT; parent inventoried `1b39f4e9`. Not a production writer. |
-| SOURCE ONLY `52d9e909` @ `1b39f4e9` | cited on draft [#668](https://github.com/kosedge/kosedge/pull/668) (Hist BT Stage-1 recon) | Cited, **not invoked** for that recon. Confirms the sealed IF simulator object is a Layer 2 pin, not a Layer 3 caller. |
-| t4921u #4 R1 confirmatory addendum | draft [#675](https://github.com/kosedge/kosedge/pull/675) | Sealed IF-only **internal sampling consistency** (`R1_PASS`). Packet label: “IF-only internal sampling consistency. Not calibration, forecast skill, … merge-to-prod, or betting.” Different “R1” from ledger residual R1/F8 oracle strength. |
-| R1 IF-only ACCEPT `e7b7c567` | **cited in OWNER t5015u brief; not located as a git object, file, PR body, Linear issue, Notion page, or Slack message on this clone** | Coordination tip, same class as keep `03a4dd90` / delegation `97925eb5`. **Absence of this git object does not erase Layer 2.** Located OWNER-accepted offline IF invoke remains t4910u / `19c6a460` / `score_t4910u.py` at tip `6ca03716`. |
+| Artifact                                     | Status on this inspection                                                                                                                                              | What it is                                                                                                                                                                                                                                                               |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| OWNER ACCEPT t4910u bounded diagnostic score | draft [#672](https://github.com/kosedge/kosedge/pull/672) · `data/ops/OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md` + packet `data/ops/nfl-hist-diag-score-70-t4910u/` | OWNER-accepted offline IF score of 70 complete 2017 REG games. `CALL_AUDIT.md`: original score tip `19c6a460` invoked `simulate_nfl_game_independent_fair` × 70 (sealed). Close tip `02197f58` did **not** re-invoke.                                                    |
+| Offline IF caller script                     | `#672` `data/ops/nfl-hist-diag-score-70-t4910u/score_t4910u.py`                                                                                                        | Loads simulator/framework from pinned IF tip `6ca03716fe52930332d5ffba302c312a651980cc` via worktree `/tmp/t4910u-if-6ca03716`. `MARKET_BLEND = 0`, `SIMULATIONS = 4000`. Does **not** import the W8 eval rest helper.                                                   |
+| IF tip / simulator pin used by that caller   | tip `6ca03716` · `nfl_simulator.py` sha `52d9e909` · framework `a0051cc4` (packet `ASSUMPTIONS.md` / `CALL_AUDIT.md` / Alex RO on #672)                                | **Not** the `deploy-vercel` HEAD object of `nfl_simulator.py`. Packet is explicit: live HEAD simulator ≠ `52d9e909`.                                                                                                                                                     |
+| W8 offline eval caller (distinct)            | cited in OWNER ACCEPT t4910u: tip `6ca03716` W8 eval path; rest_days correction `155d3ca0` / execution `90bf65ab`                                                      | OWNER ACCEPT binds: hist diagnostic scoring may use tip `6ca03716` **only if** sealed reconstructed `rest_days_*` are bound and **never** re-derived via the W8 eval caller. Silent tip substitution forbidden. This is a **second** offline caller family, not Layer 3. |
+| CLEAR-P1 local D3 shadow orchestrator        | draft [#662](https://github.com/kosedge/kosedge/pull/662) · `scripts/nfl/shadow_handicap_e2e_t4761u.py`                                                                | Local fixture: D3 CLE vs BAL → `simulate_nfl_game_independent_fair` (`market_blend=0`) → L0/L1/L4 receipt. DRAFT; parent inventoried `1b39f4e9`. Not a production writer.                                                                                                |
+| SOURCE ONLY `52d9e909` @ `1b39f4e9`          | cited on draft [#668](https://github.com/kosedge/kosedge/pull/668) (Hist BT Stage-1 recon)                                                                             | Cited, **not invoked** for that recon. Confirms the sealed IF simulator object is a Layer 2 pin, not a Layer 3 caller.                                                                                                                                                   |
+| t4921u #4 R1 confirmatory addendum           | draft [#675](https://github.com/kosedge/kosedge/pull/675)                                                                                                              | Sealed IF-only **internal sampling consistency** (`R1_PASS`). Packet label: “IF-only internal sampling consistency. Not calibration, forecast skill, … merge-to-prod, or betting.” Different “R1” from ledger residual R1/F8 oracle strength.                            |
+| R1 IF-only ACCEPT `e7b7c567`                 | **cited in OWNER t5015u brief; not located as a git object, file, PR body, Linear issue, Notion page, or Slack message on this clone**                                 | Coordination tip, same class as keep `03a4dd90` / delegation `97925eb5`. **Absence of this git object does not erase Layer 2.** Located OWNER-accepted offline IF invoke remains t4910u / `19c6a460` / `score_t4910u.py` at tip `6ca03716`.                              |
 
 Layer 2 is research/offline. CERT=0. No subscriber forecast. No production promote. Sidecar wiring, if later CLEARED, would be a **new** Layer-2-or-later adapter — not an edit of these sealed callers, and not a Layer 3 flip.
 
-`6ca03716` as “Phase A IF pin / live caller SoT”: **EXISTING BUT UNVERIFIED** for Layer 3. Live IF *code* SoT on this branch is CLEAR-A `1b39f4e9`. `6ca03716` **is** the sealed offline diagnostic IF tip on #672. Those are different claims.
+`6ca03716` as “Phase A IF pin / live caller SoT”: **EXISTING BUT UNVERIFIED** for Layer 3. Live IF _code_ SoT on this branch is CLEAR-A `1b39f4e9`. `6ca03716` **is** the sealed offline diagnostic IF tip on #672. Those are different claims.
 
 ### Layer 3 — Actual deployed runtime today
 
 What Railway beat/worker and the model-service HTTP path **invoke** on inspected live tip `f5e3bb58`. **Blended** `simulate_nfl_game`. Not the labeled IF entry. Not Q2 Massey.
 
-| Entrypoint | File:lines | Invoke |
-|---|---|---|
-| Celery task | `services/model-service/src/tasks.py:4531–4542` `run_nfl_market_simulations` | Default production slate runner. Routed on `QUEUE_MODELS` (`celery_app.py:133`). Beat name `TASK_RUN_NFL_SIMULATIONS` (`main.py:79`, `celerybeat_schedule.py:20`). |
-| Strength load (same task) | `tasks.py:4723–4727` → `_load_team_strength_priors(..., as_of_week=matchup_week_for_priors)` then `_resolve_team_strength_indices` `:4800` | EPA / packaged priors → `NflGameInputs.offense_index_*` / `defense_index_*`. Week-cap, not kickoff-instant. |
-| Sim call (same task) | `tasks.py:4967–4977` `simulate_nfl_game(inputs, ..., market_spread_home=..., market_total=...)` | **`independent_fair` omitted → False.** Market blend ON when lines exist (`NFL_MARKET_BLEND_*` in `nfl_simulator.py:32–33`). |
-| HTTP | `services/model-service/src/routes/nfl.py:4739–4744` `POST /simulations/{game_id}` `run_nfl_simulation` → `:4893–4898` `simulate_nfl_game(...)` | Same blended entry. Audit stamp on this path includes `production_promote=False` (`:4908`). |
-| Week-cap (not `cf514078`) | `tasks.py:765–773` `_week_cap_nullable_predicate`; `:780–829` `_fetch_rolling_feature_latest_rows(..., week_cap=)` | `week <= week_cap`. **Do not claim week-cap = `cf514078`.** |
+| Entrypoint                | File:lines                                                                                                                                      | Invoke                                                                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Celery task               | `services/model-service/src/tasks.py:4531–4542` `run_nfl_market_simulations`                                                                    | Default production slate runner. Routed on `QUEUE_MODELS` (`celery_app.py:133`). Beat name `TASK_RUN_NFL_SIMULATIONS` (`main.py:79`, `celerybeat_schedule.py:20`). |
+| Strength load (same task) | `tasks.py:4723–4727` → `_load_team_strength_priors(..., as_of_week=matchup_week_for_priors)` then `_resolve_team_strength_indices` `:4800`      | EPA / packaged priors → `NflGameInputs.offense_index_*` / `defense_index_*`. Week-cap, not kickoff-instant.                                                        |
+| Sim call (same task)      | `tasks.py:4967–4977` `simulate_nfl_game(inputs, ..., market_spread_home=..., market_total=...)`                                                 | **`independent_fair` omitted → False.** Market blend ON when lines exist (`NFL_MARKET_BLEND_*` in `nfl_simulator.py:32–33`).                                       |
+| HTTP                      | `services/model-service/src/routes/nfl.py:4739–4744` `POST /simulations/{game_id}` `run_nfl_simulation` → `:4893–4898` `simulate_nfl_game(...)` | Same blended entry. Audit stamp on this path includes `production_promote=False` (`:4908`).                                                                        |
+| Week-cap (not `cf514078`) | `tasks.py:765–773` `_week_cap_nullable_predicate`; `:780–829` `_fetch_rolling_feature_latest_rows(..., week_cap=)`                              | `week <= week_cap`. **Do not claim week-cap = `cf514078`.**                                                                                                        |
 
 **Layer 3 does not run subscriber Independent Fair forecasts.** CERT=0 · pub/bet HOLD · Coming Soon remains the product posture this paper assumes. Presence of `nfl_market_projections` writes on the HTTP/task path is **not** CERT>0, **not** a PLAY tag, and **not** a claim that subscribers are consuming IF.
 
 ### Layer-collapse defects (do not write)
 
-| Defect | Why |
-|---|---|
-| “IF is tests-only” | True only for Layer 1 non-definition imports on live HEAD. False for Layer 2 (`score_t4910u.py` / `19c6a460` / #662 orchestrator). |
-| “IF is in production” | Layer 1 code is merged; Layer 3 callers still use blended `simulate_nfl_game`. |
-| “Week-cap is the as-of rule” | Layer 3 week-cap ≠ Layer 2/`cf514078` kickoff-instant. |
-| “`6ca03716` is the live IF caller” | That tip is the sealed offline diagnostic IF tree (#672). Live code SoT is `1b39f4e9`. |
-| Using ALEX_E1 (`b41f4b43`) as Q2 sidecar math | Different contract. See §8. |
+| Defect                                        | Why                                                                                                                                |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| “IF is tests-only”                            | True only for Layer 1 non-definition imports on live HEAD. False for Layer 2 (`score_t4910u.py` / `19c6a460` / #662 orchestrator). |
+| “IF is in production”                         | Layer 1 code is merged; Layer 3 callers still use blended `simulate_nfl_game`.                                                     |
+| “Week-cap is the as-of rule”                  | Layer 3 week-cap ≠ Layer 2/`cf514078` kickoff-instant.                                                                             |
+| “`6ca03716` is the live IF caller”            | That tip is the sealed offline diagnostic IF tree (#672). Live code SoT is `1b39f4e9`.                                             |
+| Using ALEX_E1 (`b41f4b43`) as Q2 sidecar math | Different contract. See §8.                                                                                                        |
 
 ---
 
@@ -110,14 +110,14 @@ All `q2_*` values are **research annotation**. Source of truth for each numeric 
 
 ### 3a. Game identity (join keys)
 
-| Field | Type / unit | Source symbol (packet #679) | Required |
-|---|---|---|---|
-| `game_id` | string | `Game.game_id` (`q2pb/data.py`) | **yes** if the other side has `game_id`; else fail-closed unless `Game.key` join succeeds |
-| `season` | int (NFL season year) | `Game.season` | yes |
-| `week` | int (REG week) | `Game.week` | yes |
-| `home` | string (team code as in `games_4fe1cdd7.csv`) | `Game.home` | yes |
-| `away` | string | `Game.away` | yes |
-| `kickoff_utc` | tz-aware UTC datetime | `Game.kickoff_utc` | yes |
+| Field         | Type / unit                                   | Source symbol (packet #679)     | Required                                                                                  |
+| ------------- | --------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------- |
+| `game_id`     | string                                        | `Game.game_id` (`q2pb/data.py`) | **yes** if the other side has `game_id`; else fail-closed unless `Game.key` join succeeds |
+| `season`      | int (NFL season year)                         | `Game.season`                   | yes                                                                                       |
+| `week`        | int (REG week)                                | `Game.week`                     | yes                                                                                       |
+| `home`        | string (team code as in `games_4fe1cdd7.csv`) | `Game.home`                     | yes                                                                                       |
+| `away`        | string                                        | `Game.away`                     | yes                                                                                       |
+| `kickoff_utc` | tz-aware UTC datetime                         | `Game.kickoff_utc`              | yes                                                                                       |
 
 `Game.key` = `(season, week, home, away)` (`q2pb/data.py` property `key`).
 
@@ -132,20 +132,20 @@ Do not invent a new identity. Do not map franchise aliases at join time beyond t
 
 ### 3b. As-of strength (frozen solve; no new ridge)
 
-| Field | Type / unit | Source symbol | Frozen use |
-|---|---|---|---|
-| `q2_home_s` | float — ridge Massey team rating (home), mean-centered within the as-of solve | `AsOfFeatures.home_s` ← `asof_for_targets` | input to `q2_rating_diff` |
-| `q2_away_s` | float — same scale (away) | `AsOfFeatures.away_s` | input to `q2_rating_diff` |
-| `q2_rating_diff` | float — `q2_home_s − q2_away_s` (dimensionless rating points) | `AsOfFeatures.rating_diff` | Spearman screen; **only** allowed input to `q2_pm_new` |
-| `q2_hfa` | float — unpenalized home-field intercept from the same as-of solve | `AsOfFeatures.hfa` / `StrengthSolve.hfa` | diagnostic; **not** added again into `q2_pm_new` |
-| `q2_n_asof_games` | int — count of current-season scored games with `kickoff_utc <` target | `AsOfFeatures.n_asof_games` | leakage assert recount |
+| Field             | Type / unit                                                                   | Source symbol                              | Frozen use                                             |
+| ----------------- | ----------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------ |
+| `q2_home_s`       | float — ridge Massey team rating (home), mean-centered within the as-of solve | `AsOfFeatures.home_s` ← `asof_for_targets` | input to `q2_rating_diff`                              |
+| `q2_away_s`       | float — same scale (away)                                                     | `AsOfFeatures.away_s`                      | input to `q2_rating_diff`                              |
+| `q2_rating_diff`  | float — `q2_home_s − q2_away_s` (dimensionless rating points)                 | `AsOfFeatures.rating_diff`                 | Spearman screen; **only** allowed input to `q2_pm_new` |
+| `q2_hfa`          | float — unpenalized home-field intercept from the same as-of solve            | `AsOfFeatures.hfa` / `StrengthSolve.hfa`   | diagnostic; **not** added again into `q2_pm_new`       |
+| `q2_n_asof_games` | int — count of current-season scored games with `kickoff_utc <` target        | `AsOfFeatures.n_asof_games`                | leakage assert recount                                 |
 
 Sealed solve knobs (FROZEN; do not retune): λ = `20.0`, regression fraction r = `0.5`, n_fit = 960, n_ties_excluded = 4. Model: `margin = h + s_home − s_away` (`q2pb/strength.py` module docstring).
 
 ### 3c. As-of W-L comparator (definition frozen; not an IF input)
 
-| Field | Type / unit | Source symbol | Definition |
-|---|---|---|---|
+| Field             | Type / unit                                                                 | Source symbol                                         | Definition                                                                                                                              |
+| ----------------- | --------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `q2_asof_wl_diff` | float — home current-season as-of win% minus away current-season as-of win% | `asof_wl_diff(game, history)` (`q2pb/metrics.py:212`) | win% = `(W + 0.5·T) / (W+L+T)`; **0-0 → 0.5** (`win_pct`, `q2pb/data.py:201–205`); as-of games have `kickoff_utc <` target (`cf514078`) |
 
 `games.csv` `4fe1cdd7` has **no** `wl_diff` column. `record_entering_home/away` is a mapping cross-check only (Pearson vs recomputed = 0.99993 on the sealed DEV). Sidecar stores the **recomputed** `asof_wl_diff`, not the record-column mapping.
@@ -154,9 +154,9 @@ Sealed solve knobs (FROZEN; do not retune): λ = `20.0`, regression fraction r =
 
 ### 3d. Mapped margin (frozen DEV OLS only)
 
-| Field | Type / unit | Formula (sealed coefficients; do not refit) |
-|---|---|---|
-| `q2_pm_new` | float — mapped home margin (points) | `2.56374413 + 1.66062406 · q2_rating_diff` |
+| Field       | Type / unit                         | Formula (sealed coefficients; do not refit) |
+| ----------- | ----------------------------------- | ------------------------------------------- |
+| `q2_pm_new` | float — mapped home margin (points) | `2.56374413 + 1.66062406 · q2_rating_diff`  |
 
 Exact FROZEN JSON coefficients (`a_q2`, `b_q2` on #679):
 
@@ -169,12 +169,12 @@ A writer, if later CLEARED, **applies these sealed numbers**. No new OLS, no EVA
 
 ### 3e. Pin fields (required on every row)
 
-| Field | Value | Meaning |
-|---|---|---|
-| `q2_fit_sha` | `70db070dad3fcdb4d4ff165ba09b7840c173c232a71c8fcd670ba9c3c0bc5571` (prefix `70db070d` acceptable if the writer stores prefix + verifies full) | sealed fit object |
-| `q2_config_sha` | `aa2b47b3f0b504f39b785d0cb6fc2918bb7a36fb5a22242e80fb37707b790d49` (prefix `aa2b47b3`) | sealed config |
-| `q2_asof_rule` | `cf514078` | kickoff-instant as-of (see §5) |
-| `q2_games_pin` | `4fe1cdd7` (full games sha256 `4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8`) | primary games.csv |
+| Field           | Value                                                                                                                                         | Meaning                        |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `q2_fit_sha`    | `70db070dad3fcdb4d4ff165ba09b7840c173c232a71c8fcd670ba9c3c0bc5571` (prefix `70db070d` acceptable if the writer stores prefix + verifies full) | sealed fit object              |
+| `q2_config_sha` | `aa2b47b3f0b504f39b785d0cb6fc2918bb7a36fb5a22242e80fb37707b790d49` (prefix `aa2b47b3`)                                                        | sealed config                  |
+| `q2_asof_rule`  | `cf514078`                                                                                                                                    | kickoff-instant as-of (see §5) |
+| `q2_games_pin`  | `4fe1cdd7` (full games sha256 `4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8`)                                             | primary games.csv              |
 
 Optional provenance (recommended, not a substitute for the four pins): `q2_frozen_md_sha = 28c582a1…`, `q2_keep_commit = af6be4f5…`, `q2_outcomes_sha = 50bda875…` (score-only extract; **not** an experiment frame).
 
@@ -186,15 +186,15 @@ A sidecar row is **non-authoritative payload beside** L0 / IF projection.
 
 **Forbidden writes** (Needs Ryan if anyone proposes them; this contract refuses them):
 
-| Target | Why forbidden |
-|---|---|
-| `NflGameInputs.offense_index_home` / `offense_index_away` | Live EPA / packaged strength (Layer 3). Writing Q2 ratings here changes the sim. |
-| `NflGameInputs.defense_index_home` / `defense_index_away` | same |
-| L0 `off_eff_h` / `off_eff_a` / `def_eff_h` / `def_eff_a` | Ledger required fields (`schema.py:64–67`). Q2 is not EPA efficiency. |
-| `independent_fair.margin_mu` / `total_mu` / `sigma` | Frozen IF math = `compute_nfl_projection_decomposition` + MC loop + `independent_fair=True` blend-zero. |
-| `L0.market_blend` | IF L0 requires exact 0. Sidecar must not set or “help” this field. |
-| `L0.margin_mu` / `total_mu` / `sigma` | same as IF mus |
-| Any `trailing_*` / packaged EPA / S1 family | S1 kill `50f57195`. Do not revive. |
+| Target                                                    | Why forbidden                                                                                           |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `NflGameInputs.offense_index_home` / `offense_index_away` | Live EPA / packaged strength (Layer 3). Writing Q2 ratings here changes the sim.                        |
+| `NflGameInputs.defense_index_home` / `defense_index_away` | same                                                                                                    |
+| L0 `off_eff_h` / `off_eff_a` / `def_eff_h` / `def_eff_a`  | Ledger required fields (`schema.py:64–67`). Q2 is not EPA efficiency.                                   |
+| `independent_fair.margin_mu` / `total_mu` / `sigma`       | Frozen IF math = `compute_nfl_projection_decomposition` + MC loop + `independent_fair=True` blend-zero. |
+| `L0.market_blend`                                         | IF L0 requires exact 0. Sidecar must not set or “help” this field.                                      |
+| `L0.margin_mu` / `total_mu` / `sigma`                     | same as IF mus                                                                                          |
+| Any `trailing_*` / packaged EPA / S1 family               | S1 kill `50f57195`. Do not revive.                                                                      |
 
 Attach **beside**. Do not merge maps. Do not “blend Q2 into EPA.” Do not shift MC draws.
 
@@ -277,7 +277,7 @@ Alex PASS_RO_MAP tip `4a1bc064` (on #680): that path matches tip `b41f4b43`.
 - treat ALEX_E1’s 20 `NflGameInputs` efficiency fields as `Q2AsOfSidecar` fields,
 - claim this paper verified `b41f4b43` as an IF consume map for Massey ratings.
 
-ALEX_E1 is an **efficiency-input** contract for `simulate_nfl_game_independent_fair` (`offense_index_*`, `*_epa_5g`, matchup diffs, …). `Q2AsOfSidecar` is a **different named interface** (map §2c). A future adapter that claimed to *be* `b41f4b43` still **Needs Ryan**.
+ALEX*E1 is an **efficiency-input** contract for `simulate_nfl_game_independent_fair` (`offense_index*_`, `_\_epa_5g`, matchup diffs, …). `Q2AsOfSidecar`is a **different named interface** (map §2c). A future adapter that claimed to *be*`b41f4b43` still **Needs Ryan**.
 
 ---
 
@@ -285,13 +285,13 @@ ALEX_E1 is an **efficiency-input** contract for `simulate_nfl_game_independent_f
 
 If OWNER later CLEARs a writer, it may call **only**:
 
-| Symbol | Packet path | Allowed use |
-|---|---|---|
-| `asof_for_targets` | `research/q2_phase_b_t5009u/q2pb/strength.py` | emit `home_s` / `away_s` / `rating_diff` / `hfa` / `n_asof_games` |
-| `asof_wl_diff` | `q2pb/metrics.py` | emit `q2_asof_wl_diff` |
-| `assert_asof_leakage` | `q2pb/strength.py` | refuse leaking rows |
-| sealed coefficients | FROZEN md/json `28c582a1` / `aa2b47b3` / fit `70db070d` | `q2_pm_new = a_q2 + b_q2 · rating_diff` |
-| `load_games` / `verify_games_pin` / `load_outcomes_score_only` | `q2pb/data.py` | pin `4fe1cdd7`; score-only extract `50bda875` |
+| Symbol                                                         | Packet path                                             | Allowed use                                                       |
+| -------------------------------------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------- |
+| `asof_for_targets`                                             | `research/q2_phase_b_t5009u/q2pb/strength.py`           | emit `home_s` / `away_s` / `rating_diff` / `hfa` / `n_asof_games` |
+| `asof_wl_diff`                                                 | `q2pb/metrics.py`                                       | emit `q2_asof_wl_diff`                                            |
+| `assert_asof_leakage`                                          | `q2pb/strength.py`                                      | refuse leaking rows                                               |
+| sealed coefficients                                            | FROZEN md/json `28c582a1` / `aa2b47b3` / fit `70db070d` | `q2_pm_new = a_q2 + b_q2 · rating_diff`                           |
+| `load_games` / `verify_games_pin` / `load_outcomes_score_only` | `q2pb/data.py`                                          | pin `4fe1cdd7`; score-only extract `50bda875`                     |
 
 **Blocked**
 
@@ -305,7 +305,7 @@ If OWNER later CLEARs a writer, it may call **only**:
 
 ---
 
-## 10. What the sidecar is *not*
+## 10. What the sidecar is _not_
 
 - Not live team strength.
 - Not L0 `off_eff_*`.
