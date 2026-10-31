@@ -1,0 +1,358 @@
+{
+  "n_source": 57,
+  "n_excluded_missing_retained": 2,
+  "excluded_game_ids": [
+    "2017_02_CHI_TB",
+    "2017_02_MIA_LAC"
+  ],
+  "n_eligible": 55,
+  "fields_per_game": 27,
+  "n_cells": 1485,
+  "status_counts": {
+    "DERIVED_PREGAME": 1397,
+    "MISSING_RECORD": 88
+  },
+  "derived_pregame": 1397,
+  "missing_record": 88,
+  "pct_fields_present": 94.0741,
+  "complete_eligible_games_27_of_27": [
+    "2016_08_DET_HOU",
+    "2016_08_GB_ATL",
+    "2016_08_JAX_TEN",
+    "2016_08_KC_IND",
+    "2016_08_MIN_CHI",
+    "2016_08_NE_BUF",
+    "2016_08_NYJ_CLE",
+    "2016_08_OAK_TB",
+    "2016_08_SD_DEN",
+    "2016_08_SEA_NO",
+    "2016_08_WAS_CIN",
+    "2017_02_ARI_IND",
+    "2017_02_BUF_CAR",
+    "2017_02_CLE_BAL",
+    "2017_02_DAL_DEN",
+    "2017_02_DET_NYG",
+    "2017_02_GB_ATL",
+    "2017_02_HOU_CIN",
+    "2017_02_MIN_PIT",
+    "2017_02_NE_NO",
+    "2017_02_NYJ_OAK",
+    "2017_02_PHI_KC",
+    "2017_02_SF_SEA",
+    "2017_02_TEN_JAX",
+    "2017_02_WAS_LA",
+    "2017_07_ARI_LA",
+    "2017_07_ATL_NE",
+    "2017_07_BAL_MIN",
+    "2017_07_CAR_CHI",
+    "2017_07_DEN_LAC",
+    "2017_07_JAX_IND",
+    "2017_07_KC_OAK",
+    "2017_07_NO_GB",
+    "2017_07_NYJ_MIA",
+    "2017_07_TEN_CLE",
+    "2017_07_WAS_PHI",
+    "2017_08_ATL_NYJ",
+    "2017_08_CAR_TB",
+    "2017_08_CHI_NO",
+    "2017_08_DAL_WAS",
+    "2017_08_DEN_KC",
+    "2017_08_IND_CIN",
+    "2017_08_LAC_NE",
+    "2017_08_MIA_BAL",
+    "2017_08_MIN_CLE",
+    "2017_08_OAK_BUF",
+    "2017_08_SF_PHI"
+  ],
+  "n_complete_eligible": 47,
+  "partial_eligible_games": [
+    {
+      "game_id": "2017_07_TB_BUF",
+      "season": 2017,
+      "week": 7,
+      "derived": 16,
+      "missing": 11,
+      "home": "BUF",
+      "away": "TB",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 6
+    },
+    {
+      "game_id": "2017_07_DAL_SF",
+      "season": 2017,
+      "week": 7,
+      "derived": 16,
+      "missing": 11,
+      "home": "SF",
+      "away": "DAL",
+      "t2_home": true,
+      "t2_away": false,
+      "rating_week": 6
+    },
+    {
+      "game_id": "2017_07_CIN_PIT",
+      "season": 2017,
+      "week": 7,
+      "derived": 16,
+      "missing": 11,
+      "home": "PIT",
+      "away": "CIN",
+      "t2_home": true,
+      "t2_away": false,
+      "rating_week": 6
+    },
+    {
+      "game_id": "2017_07_SEA_NYG",
+      "season": 2017,
+      "week": 7,
+      "derived": 16,
+      "missing": 11,
+      "home": "NYG",
+      "away": "SEA",
+      "t2_home": true,
+      "t2_away": false,
+      "rating_week": 6
+    },
+    {
+      "game_id": "2017_08_HOU_SEA",
+      "season": 2017,
+      "week": 8,
+      "derived": 16,
+      "missing": 11,
+      "home": "SEA",
+      "away": "HOU",
+      "t2_home": true,
+      "t2_away": false,
+      "rating_week": 7
+    },
+    {
+      "game_id": "2017_08_PIT_DET",
+      "season": 2017,
+      "week": 8,
+      "derived": 16,
+      "missing": 11,
+      "home": "DET",
+      "away": "PIT",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 7
+    },
+    {
+      "game_id": "2016_08_ARI_CAR",
+      "season": 2016,
+      "week": 8,
+      "derived": 16,
+      "missing": 11,
+      "home": "CAR",
+      "away": "ARI",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 7
+    },
+    {
+      "game_id": "2016_08_PHI_DAL",
+      "season": 2016,
+      "week": 8,
+      "derived": 16,
+      "missing": 11,
+      "home": "DAL",
+      "away": "PHI",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 7
+    }
+  ],
+  "n_partial_eligible": 8,
+  "by_slice": {
+    "2017_W2_PARITY": {
+      "n_source": 16,
+      "n_eligible": 14,
+      "n_missing_selection": 2,
+      "n_complete": 14,
+      "n_partial": 0
+    },
+    "2017_W7": {
+      "n_source": 15,
+      "n_eligible": 15,
+      "n_missing_selection": 0,
+      "n_complete": 11,
+      "n_partial": 4
+    },
+    "2017_W8": {
+      "n_source": 13,
+      "n_eligible": 13,
+      "n_missing_selection": 0,
+      "n_complete": 11,
+      "n_partial": 2
+    },
+    "2016_W8": {
+      "n_source": 13,
+      "n_eligible": 13,
+      "n_missing_selection": 0,
+      "n_complete": 11,
+      "n_partial": 2
+    }
+  },
+  "by_field": {
+    "away_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "away_off_epa_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "away_pass_rate_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "away_success_defense_allowed_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "away_success_offense_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "away_team": {
+      "DERIVED_PREGAME": 55
+    },
+    "defense_index_away": {
+      "DERIVED_PREGAME": 55
+    },
+    "defense_index_home": {
+      "DERIVED_PREGAME": 55
+    },
+    "game_id": {
+      "DERIVED_PREGAME": 55
+    },
+    "home_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "home_off_epa_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "home_pass_rate_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "home_success_defense_allowed_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "home_success_offense_5g": {
+      "DERIVED_PREGAME": 51,
+      "MISSING_RECORD": 4
+    },
+    "home_team": {
+      "DERIVED_PREGAME": 55
+    },
+    "matchup_diff_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 47,
+      "MISSING_RECORD": 8
+    },
+    "matchup_diff_off_epa_5g": {
+      "DERIVED_PREGAME": 47,
+      "MISSING_RECORD": 8
+    },
+    "matchup_diff_pressure_allowed_5g": {
+      "DERIVED_PREGAME": 47,
+      "MISSING_RECORD": 8
+    },
+    "matchup_diff_pressure_generated_5g": {
+      "DERIVED_PREGAME": 47,
+      "MISSING_RECORD": 8
+    },
+    "matchup_diff_red_zone_td_rate_5g": {
+      "DERIVED_PREGAME": 47,
+      "MISSING_RECORD": 8
+    },
+    "matchup_diff_success_rate_5g": {
+      "DERIVED_PREGAME": 47,
+      "MISSING_RECORD": 8
+    },
+    "matchup_season": {
+      "DERIVED_PREGAME": 55
+    },
+    "matchup_week": {
+      "DERIVED_PREGAME": 55
+    },
+    "offense_index_away": {
+      "DERIVED_PREGAME": 55
+    },
+    "offense_index_home": {
+      "DERIVED_PREGAME": 55
+    },
+    "rest_days_away": {
+      "DERIVED_PREGAME": 55
+    },
+    "rest_days_home": {
+      "DERIVED_PREGAME": 55
+    }
+  },
+  "t2_exact_week_misses": [
+    {
+      "game_id": "2017_07_TB_BUF",
+      "side": "home",
+      "team": "BUF",
+      "rating_week": 6,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2017_07_DAL_SF",
+      "side": "away",
+      "team": "DAL",
+      "rating_week": 6,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2017_07_CIN_PIT",
+      "side": "away",
+      "team": "CIN",
+      "rating_week": 6,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2017_07_SEA_NYG",
+      "side": "away",
+      "team": "SEA",
+      "rating_week": 6,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2017_08_HOU_SEA",
+      "side": "away",
+      "team": "HOU",
+      "rating_week": 7,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2017_08_PIT_DET",
+      "side": "home",
+      "team": "DET",
+      "rating_week": 7,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2016_08_ARI_CAR",
+      "side": "home",
+      "team": "CAR",
+      "rating_week": 7,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    },
+    {
+      "game_id": "2016_08_PHI_DAL",
+      "side": "home",
+      "team": "DAL",
+      "rating_week": 7,
+      "reason": "no T2 row at exact rating_week; no last-played fill"
+    }
+  ],
+  "identity_remap_2016": {
+    "LAC": "SD"
+  },
+  "epa_retrofit_caveat": "nflverse epa/success are retro-scored by a later-fitted EP model. Metric-definition look-ahead; not consumption of target-week outcomes. RETRO_FIT."
+}
