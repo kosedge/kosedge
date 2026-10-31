@@ -1,0 +1,2425 @@
+{
+  "ticket": "t4921u",
+  "N_confirm": 200000,
+  "bands": "SPEC fe4dc220 verbatim",
+  "r1_checks": [
+    {
+      "id": "J7_S",
+      "game_id": "2026-W08-CLE@PIT",
+      "observed": 45.49300388787633,
+      "expected": 45.45244589385797,
+      "SE": 0.031290010930210825,
+      "z": 1.2961962240543028,
+      "delta": null,
+      "band": "PASS",
+      "parent_N4000_was": "z=3.708 COND"
+    },
+    {
+      "id": "J7_S",
+      "game_id": "2026-W08-MIN@DET",
+      "observed": 45.18802365897011,
+      "expected": 45.20693466574373,
+      "SE": 0.03134503503139477,
+      "z": 0.6033174553698819,
+      "delta": null,
+      "band": "PASS",
+      "parent_N4000_was": "z=2.114 COND"
+    },
+    {
+      "id": "J7",
+      "game_id": "2026-W08-LAC@LAR",
+      "observed": 4.68979117595416,
+      "expected": 4.640944503498513,
+      "SE": 0.031107715295278934,
+      "z": 1.5702430085908659,
+      "delta": null,
+      "band": "PASS",
+      "parent_N4000_was": "z=2.423 COND"
+    },
+    {
+      "id": "J9",
+      "game_id": "2026-W08-LAC@LAR",
+      "observed": 0.631485,
+      "expected": 0.630801,
+      "SE": 0.001078683676466368,
+      "z": 0.6341061934307896,
+      "delta": 0.0006840000000000179,
+      "band": "PASS",
+      "parent_N4000_was": "\u0394p=0.0170 z=2.24 COND"
+    }
+  ],
+  "j11": [
+    {
+      "game_id": "2026-W08-ARI@DAL",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 2.174130397187662,
+      "p": 0.561,
+      "SE_D": 0.03142368225495505,
+      "SE_p": 0.001109683761201812,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-ATL@TB",
+      "band": "NOT_DECISIVE",
+      "note": "pick'em / inside noise \u2014 COND-neutral",
+      "m": -0.1284076997493423,
+      "p": 0.4959,
+      "SE_D": 0.031310679605340605,
+      "SE_p": 0.0011179957553027649,
+      "decisive": false
+    },
+    {
+      "game_id": "2026-W08-BAL@BUF",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 2.673492055391627,
+      "p": 0.5769,
+      "SE_D": 0.03135259939546887,
+      "SE_p": 0.0011047333591754165,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-CLE@PIT",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 1.0838558927669528,
+      "p": 0.5311,
+      "SE_D": 0.0312927043633541,
+      "SE_p": 0.0011158740201631186,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-IND@JAX",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 3.7254980012853443,
+      "p": 0.6058,
+      "SE_D": 0.03130660011530169,
+      "SE_p": 0.0010927273026697924,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-LV@NYJ",
+      "band": "NOT_DECISIVE",
+      "note": "pick'em / inside noise \u2014 COND-neutral",
+      "m": 0.23189535946923795,
+      "p": 0.5063,
+      "SE_D": 0.03143264611913794,
+      "SE_p": 0.0011179448125354847,
+      "decisive": false
+    },
+    {
+      "game_id": "2026-W08-MIN@DET",
+      "band": "PASS",
+      "note": "decisive",
+      "m": -1.2012826936846057,
+      "p": 0.4653,
+      "SE_D": 0.03128679270608525,
+      "SE_p": 0.0011153351998390438,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-TEN@CIN",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 4.245308209665323,
+      "p": 0.6192,
+      "SE_D": 0.031308240771496756,
+      "SE_p": 0.001085784047071516,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-LAC@LAR",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 4.68979117595416,
+      "p": 0.6315,
+      "SE_D": 0.031107715295278934,
+      "SE_p": 0.001078683676466368,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-KC@DEN",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 0.3166238983998535,
+      "p": 0.5092,
+      "SE_D": 0.03125866640975999,
+      "SE_p": 0.0011178455340519996,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-NE@MIA",
+      "band": "PASS",
+      "note": "decisive",
+      "m": -2.230623584612921,
+      "p": 0.4377,
+      "SE_D": 0.031360446689148336,
+      "SE_p": 0.0011093254228922188,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-PHI@WAS",
+      "band": "PASS",
+      "note": "decisive",
+      "m": 1.0334329010731325,
+      "p": 0.5286,
+      "SE_D": 0.03128871083182287,
+      "SE_p": 0.0011161970648142737,
+      "decisive": true
+    },
+    {
+      "game_id": "2026-W08-CHI@SEA",
+      "band": "NOT_DECISIVE",
+      "note": "pick'em / inside noise \u2014 COND-neutral",
+      "m": -0.1450062616506373,
+      "p": 0.494,
+      "SE_D": 0.031215205052762842,
+      "SE_p": 0.0011179526803492177,
+      "decisive": false
+    }
+  ],
+  "j12": {
+    "id": "J12",
+    "class": "B",
+    "kendall_tau": 1.0,
+    "concordant": 78,
+    "discordant": 0,
+    "pairs": 78,
+    "inversions_fail": [],
+    "inversions_noise": [],
+    "band": "PASS",
+    "expected": "\u03c4\u22650.95 PASS; <0.95 COND if all inversions within noise; any noisy inversion FAIL"
+  },
+  "per_game": [
+    {
+      "game_id": "2026-W08-ARI@DAL",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 2.174130397187662,
+          "expected": 2.2115910163080024,
+          "SE": 0.03142368225495505,
+          "z": 1.1921142409856555,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 46.71144748146044,
+          "expected": 46.66944250245311,
+          "SE": 0.03135655933176257,
+          "z": 1.339591457178206,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.053097925086673,
+          "expected": 14.020588795099352,
+          "SE": null,
+          "rel": 0.002318670810649868,
+          "z": 0.002318670810649868,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.560995,
+          "expected": 0.562779,
+          "SE": 0.001109683761201812,
+          "delta": 0.0017840000000000078,
+          "z": 1.607665230739158,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": -0.002138365508052795,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.002138365508052795,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 2.174130397187662,
+            "p": 0.561
+          },
+          "SE": {
+            "SE_D": 0.03142368225495505,
+            "SE_p": 0.001109683761201812
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 7.5e-05,
+          "SE": null,
+          "z": 7.5e-05,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-ATL@TB",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": -0.1284076997493423,
+          "expected": -0.080388595821411,
+          "SE": 0.031310679605340605,
+          "z": 1.5336333970771034,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 44.268288749368814,
+          "expected": 44.27742245741393,
+          "SE": 0.031223330811026656,
+          "z": 0.29252830520845613,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.002561603851577,
+          "expected": 13.979334653170127,
+          "SE": null,
+          "rel": 0.001661520469873155,
+          "z": 0.001661520469873155,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.495865,
+          "expected": 0.497723,
+          "SE": 0.0011179957553027649,
+          "delta": 0.0018580000000000263,
+          "z": 1.6619025530171718,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": -0.002793641249450265,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.002793641249450265,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": -0.1284076997493423,
+            "p": 0.4959
+          },
+          "SE": {
+            "SE_D": 0.031310679605340605,
+            "SE_p": 0.0011179957553027649
+          },
+          "z": null,
+          "band": "NOT_DECISIVE",
+          "note": "pick'em / inside noise \u2014 COND-neutral"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.00021,
+          "SE": null,
+          "z": 0.00021,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-BAL@BUF",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 2.673492055391627,
+          "expected": 2.638673172938418,
+          "SE": 0.03135259939546887,
+          "z": 1.110558075712243,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 46.26777744463629,
+          "expected": 46.21218407401067,
+          "SE": 0.03134213802013495,
+          "z": 1.773758082167241,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.02130870391744,
+          "expected": 14.01045650278309,
+          "SE": null,
+          "rel": 0.000774578696432497,
+          "z": 0.000774578696432497,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.576895,
+          "expected": 0.574893,
+          "SE": 0.0011047333591754165,
+          "delta": 0.0020020000000000593,
+          "z": 1.8122019973166839,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": -0.0003337325759181644,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.0003337325759181644,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 2.673492055391627,
+            "p": 0.5769
+          },
+          "SE": {
+            "SE_D": 0.03135259939546887,
+            "SE_p": 0.0011047333591754165
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.00015,
+          "SE": null,
+          "z": 0.00015,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-CLE@PIT",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 1.0838558927669528,
+          "expected": 1.0522135404594941,
+          "SE": 0.0312927043633541,
+          "z": 1.0111734652283384,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 45.49300388787633,
+          "expected": 45.45244589385797,
+          "SE": 0.031290010930210825,
+          "z": 1.2961962240543028,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 13.99452283125281,
+          "expected": 14.002271768688635,
+          "SE": null,
+          "rel": 0.0005534057304295634,
+          "z": 0.0005534057304295634,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.531065,
+          "expected": 0.530091,
+          "SE": 0.0011158740201631186,
+          "delta": 0.0009740000000000304,
+          "z": 0.8728583893884823,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": -8.607604783238067e-05,
+          "expected": 0.0,
+          "SE": null,
+          "z": 8.607604783238067e-05,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 1.0838558927669528,
+            "p": 0.5311
+          },
+          "SE": {
+            "SE_D": 0.0312927043633541,
+            "SE_p": 0.0011158740201631186
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.000135,
+          "SE": null,
+          "z": 0.000135,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-IND@JAX",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 3.7254980012853443,
+          "expected": 3.738452435449439,
+          "SE": 0.03130660011530169,
+          "z": 0.4137924308734778,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 44.873498002171296,
+          "expected": 44.85554795508361,
+          "SE": 0.03128633807499803,
+          "z": 0.5737343579379117,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.000737200443467,
+          "expected": 13.97569043779619,
+          "SE": null,
+          "rel": 0.0017921663876826796,
+          "z": 0.0017921663876826796,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.60578,
+          "expected": 0.605912,
+          "SE": 0.0010927273026697924,
+          "delta": 0.000132000000000021,
+          "z": 0.12079866557512897,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": -0.0006474367236136562,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.0006474367236136562,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 3.7254980012853443,
+            "p": 0.6058
+          },
+          "SE": {
+            "SE_D": 0.03130660011530169,
+            "SE_p": 0.0010927273026697924
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.000155,
+          "SE": null,
+          "z": 0.000155,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-LV@NYJ",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 0.23189535946923795,
+          "expected": 0.2539837865635626,
+          "SE": 0.03143264611913794,
+          "z": 0.7027224819254388,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 46.76136109453022,
+          "expected": 46.770323368248654,
+          "SE": 0.031442466467312385,
+          "z": 0.28503723547733056,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.057106687017475,
+          "expected": 14.026895282271115,
+          "SE": null,
+          "rel": 0.002153819796783201,
+          "z": 0.002153819796783201,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.506315,
+          "expected": 0.507405,
+          "SE": 0.0011179448125354847,
+          "delta": 0.0010900000000000354,
+          "z": 0.9750034060517971,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.00031237631343511744,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.00031237631343511744,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 0.23189535946923795,
+            "p": 0.5063
+          },
+          "SE": {
+            "SE_D": 0.03143264611913794,
+            "SE_p": 0.0011179448125354847
+          },
+          "z": null,
+          "band": "NOT_DECISIVE",
+          "note": "pick'em / inside noise \u2014 COND-neutral"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.00015,
+          "SE": null,
+          "z": 0.00015,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-MIN@DET",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": -1.2012826936846057,
+          "expected": -1.2193340838242896,
+          "SE": 0.03128679270608525,
+          "z": 0.5769651849348225,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 45.18802365897011,
+          "expected": 45.20693466574373,
+          "SE": 0.03134503503139477,
+          "z": 0.6033174553698819,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 13.991879057750241,
+          "expected": 13.997048159279107,
+          "SE": null,
+          "rel": 0.0003692994029915493,
+          "z": 0.0003692994029915493,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.46528,
+          "expected": 0.465181,
+          "SE": 0.0011153351998390438,
+          "delta": 9.900000000001574e-05,
+          "z": 0.08876255318966228,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.0018598309493209635,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.0018598309493209635,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": -1.2012826936846057,
+            "p": 0.4653
+          },
+          "SE": {
+            "SE_D": 0.03128679270608525,
+            "SE_p": 0.0011153351998390438
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.000115,
+          "SE": null,
+          "z": 0.000115,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-TEN@CIN",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 4.245308209665323,
+          "expected": 4.226477603226975,
+          "SE": 0.031308240771496756,
+          "z": 0.6014584650662136,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 45.63627572900901,
+          "expected": 45.63895590795573,
+          "SE": 0.03118519382867416,
+          "z": 0.08594395665616497,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.00147092419944,
+          "expected": 13.988019992724597,
+          "SE": null,
+          "rel": 0.0009616036781359213,
+          "z": 0.0009616036781359213,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.619225,
+          "expected": 0.619327,
+          "SE": 0.001085784047071516,
+          "delta": 0.00010199999999993548,
+          "z": 0.09394133232574302,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": -0.003938238224478453,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.003938238224478453,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 4.245308209665323,
+            "p": 0.6192
+          },
+          "SE": {
+            "SE_D": 0.031308240771496756,
+            "SE_p": 0.001085784047071516
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.00017,
+          "SE": null,
+          "z": 0.00017,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-LAC@LAR",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 4.68979117595416,
+          "expected": 4.640944503498513,
+          "SE": 0.031107715295278934,
+          "z": 1.5702430085908659,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 44.2351436947199,
+          "expected": 44.264707195598106,
+          "SE": 0.03121941438573274,
+          "z": 0.9469588542863495,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 13.911793204990728,
+          "expected": 13.953132678318186,
+          "SE": null,
+          "rel": 0.0029627377794303814,
+          "z": 0.0029627377794303814,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.631485,
+          "expected": 0.630801,
+          "SE": 0.001078683676466368,
+          "delta": 0.0006840000000000179,
+          "z": 0.6341061934307896,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.0035845411575919734,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.0035845411575919734,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 4.68979117595416,
+            "p": 0.6315
+          },
+          "SE": {
+            "SE_D": 0.031107715295278934,
+            "SE_p": 0.001078683676466368
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.00018,
+          "SE": null,
+          "z": 0.00018,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-KC@DEN",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 0.3166238983998535,
+          "expected": 0.30387884869329795,
+          "SE": 0.03125866640975999,
+          "z": 0.40772851725293435,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 44.94709099796652,
+          "expected": 44.99720013756992,
+          "SE": 0.03140508666351856,
+          "z": 1.5955739953938337,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 13.979300595642524,
+          "expected": 13.994385888272868,
+          "SE": null,
+          "rel": 0.0010779531699912084,
+          "z": 0.0010779531699912084,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.50918,
+          "expected": 0.508796,
+          "SE": 0.0011178455340519996,
+          "delta": 0.00038399999999993994,
+          "z": 0.3435179443871868,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.004673215524987744,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.004673215524987744,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 0.3166238983998535,
+            "p": 0.5092
+          },
+          "SE": {
+            "SE_D": 0.03125866640975999,
+            "SE_p": 0.0011178455340519996
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.00012,
+          "SE": null,
+          "z": 0.00012,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-NE@MIA",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": -2.230623584612921,
+          "expected": -2.135037246603723,
+          "SE": 0.031360446689148336,
+          "z": 3.0479903222256755,
+          "band": "COND"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 46.40962180859537,
+          "expected": 46.38473779351054,
+          "SE": 0.03136412018286981,
+          "z": 0.7933911405689758,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 14.024818120338779,
+          "expected": 14.015954231668166,
+          "SE": null,
+          "rel": 0.0006324142134101079,
+          "z": 0.0006324142134101079,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.437715,
+          "expected": 0.439328,
+          "SE": 0.0011093254228922188,
+          "delta": 0.0016129999999999756,
+          "z": 1.4540368107625108,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.00011713117086157439,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.00011713117086157439,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": -2.230623584612921,
+            "p": 0.4377
+          },
+          "SE": {
+            "SE_D": 0.031360446689148336,
+            "SE_p": 0.0011093254228922188
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.000145,
+          "SE": null,
+          "z": 0.000145,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-PHI@WAS",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": 1.0334329010731325,
+          "expected": 1.0350153707948557,
+          "SE": 0.03128871083182287,
+          "z": 0.0505763797757299,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 45.59310136707853,
+          "expected": 45.573188167896774,
+          "SE": 0.0314297429468768,
+          "z": 0.6335781751513445,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 13.992736869657987,
+          "expected": 14.004625674575061,
+          "SE": null,
+          "rel": 0.0008489198635746445,
+          "z": 0.0008489198635746445,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.52865,
+          "expected": 0.529626,
+          "SE": 0.0011161970648142737,
+          "delta": 0.0009760000000000879,
+          "z": 0.87439756900139,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.004497298589632073,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.004497298589632073,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": 1.0334329010731325,
+            "p": 0.5286
+          },
+          "SE": {
+            "SE_D": 0.03128871083182287,
+            "SE_p": 0.0011161970648142737
+          },
+          "z": null,
+          "band": "PASS",
+          "note": "decisive"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.000115,
+          "SE": null,
+          "z": 0.000115,
+          "band": "PASS"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-CHI@SEA",
+      "rows": [
+        {
+          "id": "J7",
+          "class": "B",
+          "observed": -0.1450062616506373,
+          "expected": -0.15926708595367245,
+          "SE": 0.031215205052762842,
+          "z": 0.45685505762112366,
+          "band": "PASS"
+        },
+        {
+          "id": "J7_S",
+          "class": "B",
+          "observed": 43.79943026290075,
+          "expected": 43.83661463785361,
+          "SE": 0.031219595201948513,
+          "z": 1.1910588434066944,
+          "band": "PASS"
+        },
+        {
+          "id": "J8",
+          "class": "B",
+          "observed": 13.959864085914525,
+          "expected": 13.969421737904046,
+          "SE": null,
+          "rel": 0.0006841837957821649,
+          "z": 0.0006841837957821649,
+          "band": "PASS"
+        },
+        {
+          "id": "J9",
+          "class": "B",
+          "observed": 0.49397,
+          "expected": 0.495447,
+          "SE": 0.0011179526803492177,
+          "delta": 0.001477000000000006,
+          "z": 1.3211650421005583,
+          "band": "PASS",
+          "p_model_source": "sealed parent GAMES/RESULTS p_model_home_win"
+        },
+        {
+          "id": "J10",
+          "class": "B",
+          "observed": 0.00014063150002889777,
+          "expected": 0.0,
+          "SE": null,
+          "z": 0.00014063150002889777,
+          "band": "PASS"
+        },
+        {
+          "id": "J11",
+          "class": "B",
+          "expected": "sign(m)==sign(p-0.5) in decisive zone",
+          "observed": {
+            "m": -0.1450062616506373,
+            "p": 0.494
+          },
+          "SE": {
+            "SE_D": 0.031215205052762842,
+            "SE_p": 0.0011179526803492177
+          },
+          "z": null,
+          "band": "NOT_DECISIVE",
+          "note": "pick'em / inside noise \u2014 COND-neutral"
+        },
+        {
+          "id": "tie_rate",
+          "class": "B",
+          "expected": "\u22641e-3 PASS",
+          "observed": 0.000205,
+          "SE": null,
+          "z": 0.000205,
+          "band": "PASS"
+        }
+      ]
+    }
+  ],
+  "table_a_reemit": [
+    {
+      "game_id": "2026-W08-ARI@DAL",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -2.17,
+          "recompute": -2.174130397187662,
+          "delta": -0.0041303971876622825,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 46.71144748146044,
+          "recompute": 46.71144748146044,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.561,
+          "recompute": 0.561,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.439,
+          "recompute": 0.439005,
+          "delta": 4.999999999977245e-06,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -128,
+            128
+          ],
+          "recompute": [
+            -128,
+            128
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 46.71144748146044,
+          "recompute": 46.711447481460425,
+          "delta": -1.4210854715202004e-14,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "4da46563e066f2dc205d4f53e37555804113db1f50f4a885400636c14f9bdd31",
+          "recompute": "4da46563e066f2dc205d4f53e37555804113db1f50f4a885400636c14f9bdd31",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-ATL@TB",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": 0.13,
+          "recompute": 0.1284076997493423,
+          "delta": -0.0015923002506577077,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 44.268288749368814,
+          "recompute": 44.268288749368814,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.4959,
+          "recompute": 0.4959,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.5041,
+          "recompute": 0.504135,
+          "delta": 3.500000000000725e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            102,
+            -102
+          ],
+          "recompute": [
+            102,
+            -102
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 44.268288749368814,
+          "recompute": 44.26828874936881,
+          "delta": -7.105427357601002e-15,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "251bbe6d5c75a6bdb348add9a4acc2c96effb697a6ceac16dc10939178764a26",
+          "recompute": "251bbe6d5c75a6bdb348add9a4acc2c96effb697a6ceac16dc10939178764a26",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-BAL@BUF",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -2.67,
+          "recompute": -2.673492055391627,
+          "delta": -0.0034920553916268915,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 46.26777744463629,
+          "recompute": 46.26777744463629,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.5769,
+          "recompute": 0.5769,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.4231,
+          "recompute": 0.423105,
+          "delta": 5.000000000032756e-06,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -136,
+            136
+          ],
+          "recompute": [
+            -136,
+            136
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 46.26777744463629,
+          "recompute": 46.26777744463628,
+          "delta": -7.105427357601002e-15,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "63eddf48acc16ed046ad2423598b9914ba29aa0f325221782b1ed6446dc3548f",
+          "recompute": "63eddf48acc16ed046ad2423598b9914ba29aa0f325221782b1ed6446dc3548f",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-CLE@PIT",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -1.08,
+          "recompute": -1.0838558927669528,
+          "delta": -0.003855892766952751,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 45.49300388787633,
+          "recompute": 45.49300388787633,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.5311,
+          "recompute": 0.5311,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.4689,
+          "recompute": 0.468935,
+          "delta": 3.500000000000725e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -113,
+            113
+          ],
+          "recompute": [
+            -113,
+            113
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 45.49300388787633,
+          "recompute": 45.49300388787631,
+          "delta": -1.4210854715202004e-14,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "64b3abb58ef71662f849ef9b65af0129d20a0fa48e78443b2b5b45b09c457a6a",
+          "recompute": "64b3abb58ef71662f849ef9b65af0129d20a0fa48e78443b2b5b45b09c457a6a",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-IND@JAX",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -3.73,
+          "recompute": -3.7254980012853443,
+          "delta": 0.0045019987146557305,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 44.873498002171296,
+          "recompute": 44.873498002171296,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.6058,
+          "recompute": 0.6058,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.3942,
+          "recompute": 0.39422,
+          "delta": 2.0000000000020002e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -154,
+            154
+          ],
+          "recompute": [
+            -154,
+            154
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 44.873498002171296,
+          "recompute": 44.873498002171296,
+          "delta": 0.0,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "f072a3f0be3380e55d259d1c2a7a98d01975c4981ca0e2e7ce5c84226d7f826e",
+          "recompute": "f072a3f0be3380e55d259d1c2a7a98d01975c4981ca0e2e7ce5c84226d7f826e",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-LV@NYJ",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -0.23,
+          "recompute": -0.23189535946923795,
+          "delta": -0.0018953594692379394,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 46.76136109453022,
+          "recompute": 46.76136109453022,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.5063,
+          "recompute": 0.5063,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.4937,
+          "recompute": 0.493685,
+          "delta": -1.5000000000042757e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -103,
+            103
+          ],
+          "recompute": [
+            -103,
+            103
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 46.76136109453022,
+          "recompute": 46.76136109453022,
+          "delta": 0.0,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "f906440dd878585cb3d22bd51796ef12ed8edebc6d7395d6df521190b6bf57ba",
+          "recompute": "f906440dd878585cb3d22bd51796ef12ed8edebc6d7395d6df521190b6bf57ba",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-MIN@DET",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": 1.2,
+          "recompute": 1.2012826936846057,
+          "delta": 0.0012826936846057624,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 45.18802365897011,
+          "recompute": 45.18802365897011,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.4653,
+          "recompute": 0.4653,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.5347,
+          "recompute": 0.53472,
+          "delta": 2.0000000000020002e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            115,
+            -115
+          ],
+          "recompute": [
+            115,
+            -115
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 45.18802365897011,
+          "recompute": 45.18802365897011,
+          "delta": 0.0,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "88ff3eafe1bcf8fa09d39414174f18297af1ddfe8261bc0e681273046733b9fc",
+          "recompute": "88ff3eafe1bcf8fa09d39414174f18297af1ddfe8261bc0e681273046733b9fc",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-TEN@CIN",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -4.25,
+          "recompute": -4.245308209665323,
+          "delta": 0.004691790334677037,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 45.63627572900901,
+          "recompute": 45.63627572900901,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.6192,
+          "recompute": 0.6192,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.3808,
+          "recompute": 0.38077500000000003,
+          "delta": -2.4999999999997247e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -163,
+            163
+          ],
+          "recompute": [
+            -163,
+            163
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 45.63627572900901,
+          "recompute": 45.636275729009014,
+          "delta": 7.105427357601002e-15,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "756279de5529f2c2eabdfc2d914a5d67ccb36f4ed0c328b9fb298c83a9f6137c",
+          "recompute": "756279de5529f2c2eabdfc2d914a5d67ccb36f4ed0c328b9fb298c83a9f6137c",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-LAC@LAR",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -4.69,
+          "recompute": -4.68979117595416,
+          "delta": 0.00020882404584021685,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 44.2351436947199,
+          "recompute": 44.2351436947199,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.6315,
+          "recompute": 0.6315,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.3685,
+          "recompute": 0.36851500000000004,
+          "delta": 1.5000000000042757e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -171,
+            171
+          ],
+          "recompute": [
+            -171,
+            171
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 44.2351436947199,
+          "recompute": 44.23514369471991,
+          "delta": 7.105427357601002e-15,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "d6f60737b89d9596d2c524be2a6fe1f3524989a7606d4f7294b8168cece7b0f4",
+          "recompute": "d6f60737b89d9596d2c524be2a6fe1f3524989a7606d4f7294b8168cece7b0f4",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-KC@DEN",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -0.32,
+          "recompute": -0.3166238983998535,
+          "delta": 0.0033761016001465083,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 44.94709099796652,
+          "recompute": 44.94709099796652,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.5092,
+          "recompute": 0.5092,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.4908,
+          "recompute": 0.49082000000000003,
+          "delta": 2.0000000000020002e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -104,
+            104
+          ],
+          "recompute": [
+            -104,
+            104
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 44.94709099796652,
+          "recompute": 44.947090997966505,
+          "delta": -1.4210854715202004e-14,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "afd686227c4ecc87da26abaf2d9c38902a0c4fb2eb8476cacbbe0557c05140fc",
+          "recompute": "afd686227c4ecc87da26abaf2d9c38902a0c4fb2eb8476cacbbe0557c05140fc",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-NE@MIA",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": 2.23,
+          "recompute": 2.230623584612921,
+          "delta": 0.0006235846129212241,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 46.40962180859537,
+          "recompute": 46.40962180859537,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.4377,
+          "recompute": 0.4377,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.5623,
+          "recompute": 0.5622849999999999,
+          "delta": -1.5000000000098268e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            128,
+            -128
+          ],
+          "recompute": [
+            128,
+            -128
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 46.40962180859537,
+          "recompute": 46.409621808595354,
+          "delta": -1.4210854715202004e-14,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "f051e47d04ff1b51a2044543b5cbf580071b42ab91ce9dcc724c3d202e5d0210",
+          "recompute": "f051e47d04ff1b51a2044543b5cbf580071b42ab91ce9dcc724c3d202e5d0210",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-PHI@WAS",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": -1.03,
+          "recompute": -1.0334329010731325,
+          "delta": -0.0034329010731324328,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 45.59310136707853,
+          "recompute": 45.59310136707853,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.5286,
+          "recompute": 0.5286,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.4713,
+          "recompute": 0.47135,
+          "delta": 4.999999999999449e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            -112,
+            112
+          ],
+          "recompute": [
+            -112,
+            112
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 45.59310136707853,
+          "recompute": 45.593101367078546,
+          "delta": 1.4210854715202004e-14,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "b6c02069c4c36d896dab1f8ae912d17a0582b7be289fbb86cc0596380e4e9a82",
+          "recompute": "b6c02069c4c36d896dab1f8ae912d17a0582b7be289fbb86cc0596380e4e9a82",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    },
+    {
+      "game_id": "2026-W08-CHI@SEA",
+      "rows": [
+        {
+          "id": "J1",
+          "class": "A",
+          "value": 0.15,
+          "recompute": 0.1450062616506373,
+          "delta": -0.004993738349362703,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J2",
+          "class": "A",
+          "value": 43.79943026290075,
+          "recompute": 43.79943026290075,
+          "delta": 0.0,
+          "tol": 0.005,
+          "band": "PASS"
+        },
+        {
+          "id": "J3",
+          "class": "A",
+          "value": 0.494,
+          "recompute": 0.494,
+          "delta": 0.0,
+          "tol": 0.0,
+          "band": "PASS"
+        },
+        {
+          "id": "J4",
+          "class": "A",
+          "value": 0.506,
+          "recompute": 0.50603,
+          "delta": 2.999999999997449e-05,
+          "tol": 0.0001,
+          "band": "PASS"
+        },
+        {
+          "id": "J5",
+          "class": "A",
+          "value": [
+            102,
+            -102
+          ],
+          "recompute": [
+            102,
+            -102
+          ],
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J6",
+          "class": "A",
+          "value": 43.79943026290075,
+          "recompute": 43.79943026290075,
+          "delta": 0.0,
+          "tol": 1e-09,
+          "band": "PASS"
+        },
+        {
+          "id": "tie_identity",
+          "class": "A",
+          "value": 200000,
+          "recompute": 200000,
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J13",
+          "class": "A",
+          "value": "b066c3c9518087e3d91cd7419f60e5696f2add6e9a778d565997005c5b33a88a",
+          "recompute": "b066c3c9518087e3d91cd7419f60e5696f2add6e9a778d565997005c5b33a88a",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS"
+        },
+        {
+          "id": "J14",
+          "class": "A",
+          "value": "NOT_APPLICABLE_NOT_EMITTED",
+          "recompute": "ATS/OU NOT EMITTED",
+          "delta": 0,
+          "tol": 0,
+          "band": "PASS",
+          "note": "scope-limited; confirmatory packet emits no ATS-cover / OU-over / push probability"
+        }
+      ]
+    }
+  ],
+  "a_fails": [],
+  "b_fails": [],
+  "scope_label": "ATS/OU NOT EMITTED"
+}
