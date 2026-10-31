@@ -299,6 +299,14 @@ jobs:
           cd services/model-service
           pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py tests/test_nhl_toi_grid_ch2.py tests/test_nhl_player_projection_ch5.py tests/test_nhl_situation_ch3.py tests/test_nhl_kei_ch4.py tests/test_nhl_props_ch6.py tests/test_nhl_fantasy_ch7.py tests/test_nhl_grade_harness.py
 
+      - name: Odds credential sanitization tests
+        if: steps.paths.outputs.model_service == '1'
+        run: |
+          cd services/model-service
+          pytest -q tests/test_odds_api.py tests/test_odds_credential_sanitize.py
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+
       - name: Run model-service DepthSot / NFL tests
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1' && steps.paths.outputs.db_mig != '1')
         run: |

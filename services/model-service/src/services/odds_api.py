@@ -9,6 +9,45 @@ import requests
 BASE_URL = "https://api.the-odds-api.com/v4"
 
 
+class OddsAPIHTTPError(Exception):
+    """HTTP failure from The Odds API with no request URL (and no apiKey)."""
+
+    def __init__(self, status: int | None, endpoint: str, source: str) -> None:
+        self.status = status
+        self.endpoint = endpoint
+        self.source = source
+        super().__init__(
+            f"Odds API HTTP {status} endpoint={endpoint} source={source}"
+        )
+
+
+def _detach_exception_chain(exc: BaseException) -> None:
+    exc.__cause__ = None
+    exc.__context__ = None
+    exc.__suppress_context__ = True
+
+
+def _raise_for_status_sanitized(
+    resp: requests.Response, *, endpoint: str, source: str
+) -> None:
+    sanitized: OddsAPIHTTPError | None = None
+    try:
+        resp.raise_for_status()
+    except requests.HTTPError as exc:
+        status = None
+        response = getattr(exc, "response", None)
+        if response is not None:
+            status = getattr(response, "status_code", None)
+        if status is None:
+            status = getattr(resp, "status_code", None)
+        # Build the replacement inside the handler, raise it outside so
+        # `from None` is not fighting an implicit HTTPError __context__.
+        sanitized = OddsAPIHTTPError(status=status, endpoint=endpoint, source=source)
+    if sanitized is not None:
+        _detach_exception_chain(sanitized)
+        raise sanitized from None
+
+
 def _env_bool(name: str, default: bool = False) -> bool:
     raw = os.getenv(name)
     if raw is None:
@@ -78,7 +117,7 @@ def fetch_odds(endpoint: str, params: dict):
 
 def fetch_odds_with_metadata(endpoint: str, params: dict) -> dict:
     assert_odds_key_present()
-    last_error: requests.HTTPError | None = None
+    last_error: OddsAPIHTTPError | None = None
 
     # Avoid inheriting host proxy auto-detection; local proxy settings can block
     # The Odds API while direct egress is available from this runtime.
@@ -92,8 +131,9 @@ def fetch_odds_with_metadata(endpoint: str, params: dict) -> dict:
             )
 
             try:
-                resp.raise_for_status()
-            except requests.HTTPError as exc:
+                _raise_for_status_sanitized(resp, endpoint=endpoint, source=source)
+            except OddsAPIHTTPError as exc:
+                _detach_exception_chain(exc)
                 last_error = exc
                 continue
 
@@ -116,5 +156,6 @@ def fetch_odds_with_metadata(endpoint: str, params: dict) -> dict:
             }
 
     if last_error is not None:
-        raise last_error
+        _detach_exception_chain(last_error)
+        raise last_error from None
     raise RuntimeError("Odds API key missing")
