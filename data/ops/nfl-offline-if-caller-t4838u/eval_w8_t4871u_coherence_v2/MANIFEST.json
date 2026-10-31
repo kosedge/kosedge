@@ -1,0 +1,56 @@
+{
+  "baseline": {
+    "alex_ro_card_a": "b5de5df1",
+    "coherence_parent": "eval_w8_t4871u_coherence",
+    "coherence_parent_seal": "1f4ffde3f8fd0894a50cc1410ce815925ea4acde",
+    "coherence_parent_tip": "aa9605dc52dc24d73d73d8e9d0c5588a39e2762a",
+    "note": "Sibling v2 of Card A packet. Parent 1f4ffde3 / tip aa9605dc left sealed. v3 90bf65ab documented ST/total/ML/wp identical to eval v2; this run invokes current HEAD for gauss capture. blend=0. C2/C3 soft notes only. #4 remains CONDITIONAL.",
+    "packet": "eval_w8_t4850u_v2",
+    "packet_tip": "6ca03716fe52930332d5ffba302c312a651980cc"
+  },
+  "clarification_sha256": "fe4dc220d208fe6312cb32c7e441c49448d6e3b11c40639d919f47b5aedbea95",
+  "cmd": "PYTHONPATH=services/model-service python3 scripts/nfl/run_offline_if_coherence_t4871u.py --write-packet",
+  "config": {
+    "c10": false,
+    "hl": false,
+    "if_blend": 0,
+    "odds": false,
+    "railway": false,
+    "rating_week": 7,
+    "through_w7": "c674da77"
+  },
+  "e1_admissible": false,
+  "execution_tip": "e603edbaa38c7d74ed2a445184a4583fda9cc1ed",
+  "execution_tip_short": "e603edba",
+  "frozen": {
+    "N": 4000,
+    "j9_mc_n": 1000000,
+    "j9_mc_seed": 48711001,
+    "no_rerun_until_pass": true,
+    "seed_base": 48500,
+    "seeds": [
+      48500,
+      48501,
+      48502,
+      48503,
+      48504,
+      48505,
+      48506,
+      48507,
+      48508,
+      48509,
+      48510,
+      48511,
+      48512
+    ],
+    "tolerances": "ALEX_IF_COHERENCE_SPEC_CLARIFICATION_t4871u_v1 sha fe4dc220"
+  },
+  "invoke_head": "e603edbaa38c7d74ed2a445184a4583fda9cc1ed",
+  "invoke_head_matches_execution_tip": true,
+  "label": "DIAGNOSTIC / EVAL_ONLY / IF-only coherence",
+  "owner_clear": "t4871u",
+  "parent_paper_sha256": "05222939cc37086f0544063df3a6b66a1238cbc4bf92d7a0b88b2522718f0d3a",
+  "public_delivery": false,
+  "run_id": "eval-w8-t4871u-coh-20261031T031733Z-5658cb29",
+  "scoring_admissible_now": false
+}
