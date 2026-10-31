@@ -1,0 +1,1198 @@
+{
+  "any_signal_concentrated": true,
+  "flagged_signals": [
+    "wl_home_wpct",
+    "wl_away_wpct",
+    "wl_diff",
+    "wl_index_off_diff",
+    "wl_index_def_diff",
+    "wl_index_net",
+    "epa_def_diff",
+    "epa_net_diff",
+    "success_off_diff",
+    "success_def_diff",
+    "success_net_diff",
+    "matchup_diff_success_rate_5g"
+  ],
+  "n_sample": 70,
+  "week_counts": {
+    "2": 14,
+    "3": 16,
+    "4": 16,
+    "5": 14,
+    "6": 10
+  },
+  "per_signal": {
+    "wl_home_wpct": {
+      "overall_spearman": 0.024358306258925547,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.5368004047113665,
+          "ci_crosses_0": false
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.11499169534410467,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": -0.054955235651095696,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.2652701390791169,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": -0.6788335930269978,
+          "ci_crosses_0": false
+        }
+      ],
+      "n_weeks_ci_excludes_0": 2,
+      "loo_range_min": -0.24228028902344886,
+      "loo_range_max": 0.11847072029176448,
+      "loo_range": 0.3607510093152133,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.24228028902344886,
+          "delta_from_overall": -0.26663859528237444
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.11847072029176448,
+          "delta_from_overall": 0.09411241403283893
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": 0.062312148199768734,
+          "delta_from_overall": 0.03795384194084318
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.043556016052015076,
+          "delta_from_overall": 0.01919770979308953
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.10478363881374698,
+          "delta_from_overall": 0.08042533255482144
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        2
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.24228028902344886,
+          "delta_from_overall": -0.26663859528237444
+        }
+      ],
+      "largest_abs_week": 6,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [2] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "wl_away_wpct": {
+      "overall_spearman": 0.19771351068514562,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.37637413432219824,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": 0.4933123107405123,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.04005244156418924,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.054209559870002005,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": -0.46921626483186957,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": 0.09468105938121094,
+      "loo_range_max": 0.2658549873733784,
+      "loo_range": 0.1711739279921675,
+      "loo_all_same_sign": true,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.10571108396872539,
+          "delta_from_overall": -0.09200242671642023
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.09468105938121094,
+          "delta_from_overall": -0.10303245130393468
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": 0.2267455112539643,
+          "delta_from_overall": 0.02903200056881869
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.2658549873733784,
+          "delta_from_overall": 0.06814147668823281
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.2642950083434625,
+          "delta_from_overall": 0.06658149765831686
+        }
+      ],
+      "sign_flip_when_drop_weeks": [],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.09468105938121094,
+          "delta_from_overall": -0.10303245130393468
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "wl_diff": {
+      "overall_spearman": -0.13132900236539988,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.10022847501751941,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.4360569835081603,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": -0.038499875175907056,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.124169001271076,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": -0.03763993960049205,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.2005927249330484,
+      "loo_range_max": 0.002802792446123556,
+      "loo_range": 0.20339551737917194,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.2005927249330484,
+          "delta_from_overall": -0.06926372256764851
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.002802792446123556,
+          "delta_from_overall": 0.13413179481152343
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.1450006046639146,
+          "delta_from_overall": -0.013671602298514718
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": -0.17548613798325574,
+          "delta_from_overall": -0.044157135617855864
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": -0.13116249449658365,
+          "delta_from_overall": 0.0001665078688162236
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        3
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.002802792446123556,
+          "delta_from_overall": 0.13413179481152343
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [3] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "wl_index_off_diff": {
+      "overall_spearman": -0.13455257974990364,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.10022847501751941,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.4890316234158463,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": -0.002308134856445716,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.0943879807448539,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": -0.13173978860172217,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.20528573802019925,
+      "loo_range_max": 0.006181534520209753,
+      "loo_range": 0.211467272540409,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.20528573802019925,
+          "delta_from_overall": -0.07073315827029561
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.006181534520209753,
+          "delta_from_overall": 0.1407341142701134
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.15546083275490144,
+          "delta_from_overall": -0.020908253004997795
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": -0.1776750675524274,
+          "delta_from_overall": -0.04312248780252376
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": -0.13340562784038165,
+          "delta_from_overall": 0.0011469519095219927
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        3
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.006181534520209753,
+          "delta_from_overall": 0.1407341142701134
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [3] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "wl_index_def_diff": {
+      "overall_spearman": 0.1378601790127627,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.10022847501751941,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": 0.4890316234158463,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.0438545622724686,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.147488335093878,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.13173978860172217,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": 0.0008347190282195655,
+      "loo_range_max": 0.21092217692253834,
+      "loo_range": 0.21008745789431876,
+      "loo_all_same_sign": true,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.21092217692253834,
+          "delta_from_overall": 0.07306199790977563
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.0008347190282195655,
+          "delta_from_overall": -0.13702545998454313
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": 0.15567999311504077,
+          "delta_from_overall": 0.017819814102278064
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.18259204245489838,
+          "delta_from_overall": 0.04473186344213567
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.13784186711825513,
+          "delta_from_overall": -1.8311894507572202e-05
+        }
+      ],
+      "sign_flip_when_drop_weeks": [],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.0008347190282195655,
+          "delta_from_overall": -0.13702545998454313
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "wl_index_net": {
+      "overall_spearman": -0.12828384957370043,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.10022847501751941,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.4360569835081603,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.0023137213144512844,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.06919711811885058,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": -0.05701801103317627,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.19520788760583707,
+      "loo_range_max": 0.009739395224767777,
+      "loo_range": 0.20494728283060484,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.19520788760583707,
+          "delta_from_overall": -0.06692403803213665
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.009739395224767777,
+          "delta_from_overall": 0.1380232447984682
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.14528085226075435,
+          "delta_from_overall": -0.016997002687053925
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": -0.1718407177403213,
+          "delta_from_overall": -0.04355686816662088
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": -0.12664738663384023,
+          "delta_from_overall": 0.0016364629398601949
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        3
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.009739395224767777,
+          "delta_from_overall": 0.1380232447984682
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [3] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "epa_off_diff": {
+      "overall_spearman": 0.08123793982517497,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.004400442706805578,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": 0.1365039251893875,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": -0.05150847604921027,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.0441995696087864,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.2,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": 0.055649968069610097,
+      "loo_range_max": 0.10850156529614392,
+      "loo_range": 0.05285159722653383,
+      "loo_all_same_sign": true,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.10850156529614392,
+          "delta_from_overall": 0.027263625470968958
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.055649968069610097,
+          "delta_from_overall": -0.02558797175556487
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": 0.07621094981528025,
+          "delta_from_overall": -0.005026990009894719
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.059557495796018024,
+          "delta_from_overall": -0.02168044402915694
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.08895527463728356,
+          "delta_from_overall": 0.007717334812108595
+        }
+      ],
+      "sign_flip_when_drop_weeks": [],
+      "large_loo_moves": [],
+      "largest_abs_week": 6,
+      "concentration_flag": false,
+      "concentration_reasons": []
+    },
+    "epa_def_diff": {
+      "overall_spearman": -0.09734183686989795,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.15621571609159798,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.47924747648013216,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.37086102755431394,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.041989591128347076,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": -0.2,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.245241949230233,
+      "loo_range_max": 0.05942866960520091,
+      "loo_range": 0.3046706188354339,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.11144606975037818,
+          "delta_from_overall": -0.014104232880480239
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.05942866960520091,
+          "delta_from_overall": 0.15677050647509885
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.245241949230233,
+          "delta_from_overall": -0.14790011236033504
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": -0.07143476650936186,
+          "delta_from_overall": 0.02590707036053609
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": -0.11069989732639732,
+          "delta_from_overall": -0.013358060456499371
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        3
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.05942866960520091,
+          "delta_from_overall": 0.15677050647509885
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.245241949230233,
+          "delta_from_overall": -0.14790011236033504
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [3] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "epa_net_diff": {
+      "overall_spearman": -0.02349872245590156,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.2178219139868761,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.36945084100171177,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.32671090522641943,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.09944903161976938,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.12727272727272726,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.15249826330773011,
+      "loo_range_max": 0.12374293311500408,
+      "loo_range": 0.2762411964227342,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.03170478051884799,
+          "delta_from_overall": -0.008206058062946428
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.12374293311500408,
+          "delta_from_overall": 0.14724165557090563
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.15249826330773011,
+          "delta_from_overall": -0.12899954085182855
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": -0.038609686929832375,
+          "delta_from_overall": -0.015110964473930816
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": -0.02995802050382382,
+          "delta_from_overall": -0.006459298047922262
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        3
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.12374293311500408,
+          "delta_from_overall": 0.14724165557090563
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.15249826330773011,
+          "delta_from_overall": -0.12899954085182855
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [3] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "success_off_diff": {
+      "overall_spearman": 0.13978322821083275,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.23762390616750118,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": 0.23146317749504836,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.28550412438705125,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.09502907465889075,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.01818181818181818,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": 0.09019264372324325,
+      "loo_range_max": 0.25154970029371077,
+      "loo_range": 0.1613570565704675,
+      "loo_all_same_sign": true,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.25154970029371077,
+          "delta_from_overall": 0.11176647208287802
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.09019264372324325,
+          "delta_from_overall": -0.049590584487589504
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": 0.0952255054305155,
+          "delta_from_overall": -0.04455772278031725
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.0923825753755475,
+          "delta_from_overall": -0.047400652835285245
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.15154415018802328,
+          "delta_from_overall": 0.01176092197719053
+        }
+      ],
+      "sign_flip_when_drop_weeks": [],
+      "large_loo_moves": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.25154970029371077,
+          "delta_from_overall": 0.11176647208287802
+        }
+      ],
+      "largest_abs_week": 4,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "success_def_diff": {
+      "overall_spearman": -0.08822972972816133,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.3102312108297932,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.43473532696185363,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.38410606425268234,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": -0.0773492468153762,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.2,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.2202328449571826,
+      "loo_range_max": 0.06053556197421236,
+      "loo_range": 0.28076840693139493,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": -0.05057015208027913,
+          "delta_from_overall": 0.0376595776478822
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.06053556197421236,
+          "delta_from_overall": 0.14876529170237368
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.2202328449571826,
+          "delta_from_overall": -0.13200311522902125
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": -0.09491548036917126,
+          "delta_from_overall": -0.00668575064100993
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": -0.12428680625378209,
+          "delta_from_overall": -0.03605707652562076
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        3
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.06053556197421236,
+          "delta_from_overall": 0.14876529170237368
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.2202328449571826,
+          "delta_from_overall": -0.13200311522902125
+        }
+      ],
+      "largest_abs_week": 3,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [3] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "success_net_diff": {
+      "overall_spearman": 0.07708492176249884,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.3102312108297932,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.32493869148343324,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.5047830652822607,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.0220997848043932,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.2727272727272727,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.053149119310055164,
+      "loo_range_max": 0.18748466608911166,
+      "loo_range": 0.24063378539916683,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.14880019021048957,
+          "delta_from_overall": 0.07171526844799073
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.18748466608911166,
+          "delta_from_overall": 0.11039974432661281
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.053149119310055164,
+          "delta_from_overall": -0.130234041072554
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.032893536471249034,
+          "delta_from_overall": -0.04419138529124981
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.05470958205391618,
+          "delta_from_overall": -0.022375339708582666
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        4
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.18748466608911166,
+          "delta_from_overall": 0.11039974432661281
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.053149119310055164,
+          "delta_from_overall": -0.130234041072554
+        }
+      ],
+      "largest_abs_week": 4,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [4] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    },
+    "matchup_diff_off_epa_5g": {
+      "overall_spearman": 0.08123793982517497,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": 0.004400442706805578,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": 0.1365039251893875,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": -0.05150847604921027,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.0441995696087864,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.2,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": 0.055649968069610097,
+      "loo_range_max": 0.10850156529614392,
+      "loo_range": 0.05285159722653383,
+      "loo_all_same_sign": true,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.10850156529614392,
+          "delta_from_overall": 0.027263625470968958
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.055649968069610097,
+          "delta_from_overall": -0.02558797175556487
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": 0.07621094981528025,
+          "delta_from_overall": -0.005026990009894719
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.059557495796018024,
+          "delta_from_overall": -0.02168044402915694
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.08895527463728356,
+          "delta_from_overall": 0.007717334812108595
+        }
+      ],
+      "sign_flip_when_drop_weeks": [],
+      "large_loo_moves": [],
+      "largest_abs_week": 6,
+      "concentration_flag": false,
+      "concentration_reasons": []
+    },
+    "matchup_diff_success_rate_5g": {
+      "overall_spearman": 0.07708492176249884,
+      "overall_ci_crosses_0": true,
+      "weeks": [
+        {
+          "week": 2,
+          "n_complete": 14,
+          "spearman": -0.3102312108297932,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 3,
+          "n_complete": 16,
+          "spearman": -0.32493869148343324,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 4,
+          "n_complete": 16,
+          "spearman": 0.5047830652822607,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 5,
+          "n_complete": 14,
+          "spearman": 0.0220997848043932,
+          "ci_crosses_0": true
+        },
+        {
+          "week": 6,
+          "n_complete": 10,
+          "spearman": 0.2727272727272727,
+          "ci_crosses_0": true
+        }
+      ],
+      "n_weeks_ci_excludes_0": 0,
+      "loo_range_min": -0.053149119310055164,
+      "loo_range_max": 0.18748466608911166,
+      "loo_range": 0.24063378539916683,
+      "loo_all_same_sign": false,
+      "loo_drop_deltas": [
+        {
+          "week_dropped": 2,
+          "rho_without_week": 0.14880019021048957,
+          "delta_from_overall": 0.07171526844799073
+        },
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.18748466608911166,
+          "delta_from_overall": 0.11039974432661281
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.053149119310055164,
+          "delta_from_overall": -0.130234041072554
+        },
+        {
+          "week_dropped": 5,
+          "rho_without_week": 0.032893536471249034,
+          "delta_from_overall": -0.04419138529124981
+        },
+        {
+          "week_dropped": 6,
+          "rho_without_week": 0.05470958205391618,
+          "delta_from_overall": -0.022375339708582666
+        }
+      ],
+      "sign_flip_when_drop_weeks": [
+        4
+      ],
+      "large_loo_moves": [
+        {
+          "week_dropped": 3,
+          "rho_without_week": 0.18748466608911166,
+          "delta_from_overall": 0.11039974432661281
+        },
+        {
+          "week_dropped": 4,
+          "rho_without_week": -0.053149119310055164,
+          "delta_from_overall": -0.130234041072554
+        }
+      ],
+      "largest_abs_week": 4,
+      "concentration_flag": true,
+      "concentration_reasons": [
+        "dropping week(s) [4] flips LOO Spearman sign vs overall",
+        "dropping at least one week moves Spearman by >= 0.10"
+      ]
+    }
+  },
+  "note": "Concentration flags are descriptive (LOO move >=0.10, sign flip, or overall-vs-week CI mismatch). Not a cutoff search."
+}
