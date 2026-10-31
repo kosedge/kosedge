@@ -1,0 +1,359 @@
+{
+  "n_source": 60,
+  "n_source_by_week": {
+    "3": 16,
+    "4": 16,
+    "5": 14,
+    "6": 14
+  },
+  "n_excluded": 0,
+  "excluded_game_ids": [],
+  "n_games": 60,
+  "n_eligible": 60,
+  "fields_per_game": 27,
+  "n_cells": 1620,
+  "status_counts": {
+    "DERIVED_PREGAME": 1576,
+    "MISSING_RECORD": 44
+  },
+  "derived_pregame": 1576,
+  "missing_record": 44,
+  "out_of_contract": 0,
+  "excluded_cells": 0,
+  "pct_fields_present": 97.284,
+  "complete_eligible_games_27_of_27": [
+    "2017_03_ATL_DET",
+    "2017_03_BAL_JAX",
+    "2017_03_CIN_GB",
+    "2017_03_CLE_IND",
+    "2017_03_DAL_ARI",
+    "2017_03_DEN_BUF",
+    "2017_03_HOU_NE",
+    "2017_03_KC_LAC",
+    "2017_03_LA_SF",
+    "2017_03_MIA_NYJ",
+    "2017_03_NO_CAR",
+    "2017_03_NYG_PHI",
+    "2017_03_OAK_WAS",
+    "2017_03_PIT_CHI",
+    "2017_03_SEA_TEN",
+    "2017_03_TB_MIN",
+    "2017_04_BUF_ATL",
+    "2017_04_CAR_NE",
+    "2017_04_CHI_GB",
+    "2017_04_CIN_CLE",
+    "2017_04_DET_MIN",
+    "2017_04_IND_SEA",
+    "2017_04_JAX_NYJ",
+    "2017_04_LA_DAL",
+    "2017_04_NO_MIA",
+    "2017_04_NYG_TB",
+    "2017_04_OAK_DEN",
+    "2017_04_PHI_LAC",
+    "2017_04_PIT_BAL",
+    "2017_04_SF_ARI",
+    "2017_04_TEN_HOU",
+    "2017_04_WAS_KC",
+    "2017_05_ARI_PHI",
+    "2017_05_BAL_OAK",
+    "2017_05_BUF_CIN",
+    "2017_05_CAR_DET",
+    "2017_05_GB_DAL",
+    "2017_05_JAX_PIT",
+    "2017_05_KC_HOU",
+    "2017_05_LAC_NYG",
+    "2017_05_MIN_CHI",
+    "2017_05_NE_TB",
+    "2017_05_NYJ_CLE",
+    "2017_05_SEA_LA",
+    "2017_05_SF_IND",
+    "2017_05_TEN_MIA",
+    "2017_06_CHI_BAL",
+    "2017_06_CLE_HOU",
+    "2017_06_GB_MIN",
+    "2017_06_IND_TEN",
+    "2017_06_LAC_OAK",
+    "2017_06_LA_JAX",
+    "2017_06_NE_NYJ",
+    "2017_06_PHI_CAR",
+    "2017_06_PIT_KC",
+    "2017_06_TB_ARI"
+  ],
+  "n_complete_eligible": 56,
+  "partial_eligible_games": [
+    {
+      "game_id": "2017_06_DET_NO",
+      "week": 6,
+      "derived": 16,
+      "missing": 11,
+      "home": "NO",
+      "away": "DET",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 5
+    },
+    {
+      "game_id": "2017_06_MIA_ATL",
+      "week": 6,
+      "derived": 16,
+      "missing": 11,
+      "home": "ATL",
+      "away": "MIA",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 5
+    },
+    {
+      "game_id": "2017_06_SF_WAS",
+      "week": 6,
+      "derived": 16,
+      "missing": 11,
+      "home": "WSH",
+      "away": "SF",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 5
+    },
+    {
+      "game_id": "2017_06_NYG_DEN",
+      "week": 6,
+      "derived": 16,
+      "missing": 11,
+      "home": "DEN",
+      "away": "NYG",
+      "t2_home": false,
+      "t2_away": true,
+      "rating_week": 5
+    }
+  ],
+  "n_partial_eligible": 4,
+  "by_week": {
+    "3": {
+      "n_source": 16,
+      "n_eligible": 16,
+      "n_complete": 16,
+      "n_partial": 0,
+      "complete_game_ids": [
+        "2017_03_ATL_DET",
+        "2017_03_BAL_JAX",
+        "2017_03_CIN_GB",
+        "2017_03_CLE_IND",
+        "2017_03_DAL_ARI",
+        "2017_03_DEN_BUF",
+        "2017_03_HOU_NE",
+        "2017_03_KC_LAC",
+        "2017_03_LA_SF",
+        "2017_03_MIA_NYJ",
+        "2017_03_NO_CAR",
+        "2017_03_NYG_PHI",
+        "2017_03_OAK_WAS",
+        "2017_03_PIT_CHI",
+        "2017_03_SEA_TEN",
+        "2017_03_TB_MIN"
+      ],
+      "partial_game_ids": []
+    },
+    "4": {
+      "n_source": 16,
+      "n_eligible": 16,
+      "n_complete": 16,
+      "n_partial": 0,
+      "complete_game_ids": [
+        "2017_04_BUF_ATL",
+        "2017_04_CAR_NE",
+        "2017_04_CHI_GB",
+        "2017_04_CIN_CLE",
+        "2017_04_DET_MIN",
+        "2017_04_IND_SEA",
+        "2017_04_JAX_NYJ",
+        "2017_04_LA_DAL",
+        "2017_04_NO_MIA",
+        "2017_04_NYG_TB",
+        "2017_04_OAK_DEN",
+        "2017_04_PHI_LAC",
+        "2017_04_PIT_BAL",
+        "2017_04_SF_ARI",
+        "2017_04_TEN_HOU",
+        "2017_04_WAS_KC"
+      ],
+      "partial_game_ids": []
+    },
+    "5": {
+      "n_source": 14,
+      "n_eligible": 14,
+      "n_complete": 14,
+      "n_partial": 0,
+      "complete_game_ids": [
+        "2017_05_ARI_PHI",
+        "2017_05_BAL_OAK",
+        "2017_05_BUF_CIN",
+        "2017_05_CAR_DET",
+        "2017_05_GB_DAL",
+        "2017_05_JAX_PIT",
+        "2017_05_KC_HOU",
+        "2017_05_LAC_NYG",
+        "2017_05_MIN_CHI",
+        "2017_05_NE_TB",
+        "2017_05_NYJ_CLE",
+        "2017_05_SEA_LA",
+        "2017_05_SF_IND",
+        "2017_05_TEN_MIA"
+      ],
+      "partial_game_ids": []
+    },
+    "6": {
+      "n_source": 14,
+      "n_eligible": 14,
+      "n_complete": 10,
+      "n_partial": 4,
+      "complete_game_ids": [
+        "2017_06_CHI_BAL",
+        "2017_06_CLE_HOU",
+        "2017_06_GB_MIN",
+        "2017_06_IND_TEN",
+        "2017_06_LAC_OAK",
+        "2017_06_LA_JAX",
+        "2017_06_NE_NYJ",
+        "2017_06_PHI_CAR",
+        "2017_06_PIT_KC",
+        "2017_06_TB_ARI"
+      ],
+      "partial_game_ids": [
+        "2017_06_DET_NO",
+        "2017_06_MIA_ATL",
+        "2017_06_NYG_DEN",
+        "2017_06_SF_WAS"
+      ]
+    }
+  },
+  "by_field": {
+    "away_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 60
+    },
+    "away_off_epa_5g": {
+      "DERIVED_PREGAME": 60
+    },
+    "away_pass_rate_5g": {
+      "DERIVED_PREGAME": 60
+    },
+    "away_success_defense_allowed_5g": {
+      "DERIVED_PREGAME": 60
+    },
+    "away_success_offense_5g": {
+      "DERIVED_PREGAME": 60
+    },
+    "away_team": {
+      "DERIVED_PREGAME": 60
+    },
+    "defense_index_away": {
+      "DERIVED_PREGAME": 60
+    },
+    "defense_index_home": {
+      "DERIVED_PREGAME": 60
+    },
+    "game_id": {
+      "DERIVED_PREGAME": 60
+    },
+    "home_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "home_off_epa_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "home_pass_rate_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "home_success_defense_allowed_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "home_success_offense_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "home_team": {
+      "DERIVED_PREGAME": 60
+    },
+    "matchup_diff_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "matchup_diff_off_epa_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "matchup_diff_pressure_allowed_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "matchup_diff_pressure_generated_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "matchup_diff_red_zone_td_rate_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "matchup_diff_success_rate_5g": {
+      "DERIVED_PREGAME": 56,
+      "MISSING_RECORD": 4
+    },
+    "matchup_season": {
+      "DERIVED_PREGAME": 60
+    },
+    "matchup_week": {
+      "DERIVED_PREGAME": 60
+    },
+    "offense_index_away": {
+      "DERIVED_PREGAME": 60
+    },
+    "offense_index_home": {
+      "DERIVED_PREGAME": 60
+    },
+    "rest_days_away": {
+      "DERIVED_PREGAME": 60
+    },
+    "rest_days_home": {
+      "DERIVED_PREGAME": 60
+    }
+  },
+  "t1_w1w5_teams_w1": 30,
+  "t1_w1w5_rows": 154,
+  "t2_exact_week_misses": [
+    {
+      "game_id": "2017_06_DET_NO",
+      "side": "home",
+      "team": "NO",
+      "rating_week": 5,
+      "reason": "no T2 row at exact rating_week (W2 lookup_t2); no last-played fill"
+    },
+    {
+      "game_id": "2017_06_MIA_ATL",
+      "side": "home",
+      "team": "ATL",
+      "rating_week": 5,
+      "reason": "no T2 row at exact rating_week (W2 lookup_t2); no last-played fill"
+    },
+    {
+      "game_id": "2017_06_SF_WAS",
+      "side": "home",
+      "team": "WSH",
+      "rating_week": 5,
+      "reason": "no T2 row at exact rating_week (W2 lookup_t2); no last-played fill"
+    },
+    {
+      "game_id": "2017_06_NYG_DEN",
+      "side": "home",
+      "team": "DEN",
+      "rating_week": 5,
+      "reason": "no T2 row at exact rating_week (W2 lookup_t2); no last-played fill"
+    }
+  ],
+  "pressure_rz_status": "DERIVED_PREGAME via T1 SQL as written (not a substitute) when T2 row present; MISSING_RECORD if exact rating_week T2 absent",
+  "epa_retrofit_caveat": "nflverse epa/success are retro-scored by a later-fitted EP model. Metric-definition look-ahead; not consumption of target-week outcomes.",
+  "w2_lineage_tip": "440314e4",
+  "w2_lineage_alex_sha8": "91e2d7db"
+}

@@ -1,0 +1,49 @@
+{
+  "contract_t1": "nfl_dp_team_situational_weekly columns cited in b41f4b43 \u00a74",
+  "producer": "services/model-service/data_platform_nfl/ingest.py offense/defense CTEs",
+  "producer_sha256": "5fc97157c388452da60f687f886770d631e26e5405789bc76cefbbb86284ee4d",
+  "producer_sha8": "5fc97157",
+  "reused_from": "data/ops/nfl-hist-bt-stage1b-w2-t4893u/build_recon_t4893u.py",
+  "functions_reused": [
+    "t1_from_plays",
+    "rolling_5g",
+    "lookup_t2",
+    "synthetic_t1_selfcheck",
+    "team_strength_from_record",
+    "rest_days_et"
+  ],
+  "numeric_2023_plus_gate": "NOT POSSIBLE on this box: 2023 PBP not owned (pin unused); 2025 situational dump is 2025 W1 only and 2025 PBP is not owned. No 2024\u201325 rows opened for values. Same residual as W2.",
+  "gate_used": "SQL-to-pandas code-review port + synthetic fixture (abs_tol 1e-12) via W2 builder",
+  "synthetic_selfcheck": {
+    "status": "pass",
+    "n_checks": 7,
+    "mismatches": {}
+  },
+  "pressure_definition": {
+    "contract": "T1 column pressure_rate_allowed/generated from ingest.py",
+    "sql": "(sack OR qb_hit) among play_type='pass' / count play_type='pass'",
+    "qb_dropback_used_as_denominator": false,
+    "hurries_required": false,
+    "matched": true,
+    "status": "DERIVED_PREGAME when T2 present",
+    "escalation": null
+  },
+  "red_zone_definition": {
+    "contract": "T1 column red_zone_td_rate from ingest.py",
+    "sql": "(yardline_100<=20 AND touchdown) / (yardline_100<=20) on pass/run plays",
+    "trips_definition_used": false,
+    "plain_english_trips_paraphrase": "T1T4_PLAIN_ENGLISH_DEFS says 'RZ trips ending in TD'. Contract-cited T1 SQL is play-based, not drive-trip-based. Using trips would be a substitute \u2192 refused. Play-based SQL used.",
+    "matched": true,
+    "status": "DERIVED_PREGAME when T2 present",
+    "escalation": "NOTE only: plain-English 'trips' \u2260 T1 SQL plays. Reconstructed as written (SQL). Not a contract change."
+  },
+  "play_filter": "play_type IN ('pass','run') \u2014 excludes qb_kneel, qb_spike, no_play, special teams",
+  "team_identity_remap": {
+    "LA": "LAR",
+    "WAS": "WSH",
+    "LV": "OAK",
+    "note": "2017 PBP uses later nflverse codes LA/WAS/LV; games.csv pin uses LAR/WSH/OAK. Identity join only."
+  },
+  "min_periods": "T2 window = last \u22645 PLAYED games. rating_week = target_week-1. W2 lookup_t2 is exact week. W5 byes (ATL/DEN/NO/WSH) have no T2 row at week=5 \u2192 W6 sides MISSING_RECORD (no last-played fill).",
+  "epa_retrofit_caveat": "nflverse epa/success are retro-scored by a later-fitted EP model. Metric-definition look-ahead; not consumption of target-week outcomes."
+}
