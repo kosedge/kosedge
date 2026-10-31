@@ -20,6 +20,7 @@ North star: ``data/ops/nfl-model-vision.md``.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -42,6 +43,10 @@ _SKILL_POS = frozenset({"QB", "RB", "WR", "TE", "FB"})
 _OL_POS = frozenset({"OL", "T", "G", "C", "OT", "OG", "LS", "C/G", "G/C"})
 
 _PACKAGE_DATA_DIR = Path(__file__).resolve().parent / "data"
+
+
+class ContinuitySourceError(RuntimeError):
+    """F-2/F-3: roster/QB/skill/coaching load failed. Fail closed — do not empty."""
 
 # Curated HC/OC change flags for the upcoming season (approximate until a live
 # coaching feed exists). Only material known breaks are listed; missing teams
@@ -150,7 +155,7 @@ class TeamContinuity:
     fidelity: str = "approximate"  # real | mixed | approximate
 
     def to_drivers(self) -> Dict[str, Any]:
-        return {
+        payload = {
             "continuity_score": round(float(self.continuity_score), 4),
             "band": self.band,
             "prior_travel_weight": round(float(self.prior_travel_weight), 4),
@@ -171,6 +176,10 @@ class TeamContinuity:
             ),
             **dict(self.drivers or {}),
         }
+        # R-1: surface the flag. Missing is NOT_RECORDED, not ABSENT.
+        if payload.get("packaged_qb1_flag") in (None, ""):
+            payload["packaged_qb1_flag"] = PACKAGED_QB1_NOT_RECORDED
+        return payload
 
 
 def band_from_score(score: float) -> str:
@@ -499,15 +508,46 @@ def blend_weights_with_continuity(
 # ---------------------------------------------------------------------------
 
 
+PACKAGED_QB1_NOT_RECORDED = "NOT_RECORDED"
+PACKAGED_QB1_ABSENT = "ABSENT"
+PACKAGED_QB1_PRESENT = "PRESENT"
+_PACKAGED_QB1_FLAG: Dict[int, str] = {}
+
+
+def packaged_qb1_flag(season: int) -> str:
+    """R-1: NOT_RECORDED until a load is attempted; then ABSENT or PRESENT."""
+    return _PACKAGED_QB1_FLAG.get(int(season), PACKAGED_QB1_NOT_RECORDED)
+
+
+def _refuse_w8_db_loader(name: str, session: Any = None) -> None:
+    # W8-only. Session-less packaged SoT (fetch_current_qb1(None)) stays open.
+    _ = session
+    if os.environ.get("W8_CAPTURE_BUILD"):
+        raise RuntimeError(f"F-6 STOP: builder reached DB loader {name}")
+
+
+def _packaged_qb1_path(season: int) -> Optional[Path]:
+    name = f"nfl_depth_chart_{int(season)}_w1.json"
+    for folder in (_PACKAGE_DATA_DIR, _PACKAGE_DATA_DIR / "historical"):
+        path = folder / name
+        if path.is_file():
+            return path
+    return None
+
+
 def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
     """Return {team: (player_id, player_name)} from packaged depth chart."""
-    path = _PACKAGE_DATA_DIR / f"nfl_depth_chart_{int(season)}_w1.json"
-    if not path.is_file():
+    path = _packaged_qb1_path(int(season))
+    if path is None:
+        _PACKAGED_QB1_FLAG[int(season)] = PACKAGED_QB1_ABSENT
         return {}
+    _PACKAGED_QB1_FLAG[int(season)] = PACKAGED_QB1_PRESENT
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: packaged QB1 JSON failed; fail closed (must not empty)"
+        ) from exc
     out: Dict[str, Tuple[str, str]] = {}
     for row in payload.get("rows") or []:
         if str(row.get("position") or "").upper() != "QB":
@@ -524,6 +564,7 @@ def _load_packaged_qb1(season: int) -> Dict[str, Tuple[str, str]]:
 
 def fetch_prior_primary_qbs(session: Any, *, prior_season: int) -> Dict[str, Tuple[str, str]]:
     """Prior-season primary passer by attempts → {team: (player_id, name)}."""
+    _refuse_w8_db_loader("fetch_prior_primary_qbs", session)
     from sqlalchemy import text
 
     rows = session.execute(
@@ -562,7 +603,7 @@ def fetch_current_qb1(
     as_of_week: Optional[int] = None,
 ) -> Dict[str, Tuple[str, str]]:
     """Current projected QB1 from packaged depth SoT (exclusive when present)."""
-    from sqlalchemy import text
+    _refuse_w8_db_loader("fetch_current_qb1", session)
 
     week = int(as_of_week or 1)
     packaged = _load_packaged_qb1(int(season))
@@ -572,6 +613,8 @@ def fetch_current_qb1(
     # No packaged SoT — bridge from official depth only.
     out: Dict[str, Tuple[str, str]] = dict(packaged)
     try:
+        from sqlalchemy import text
+
         rows = session.execute(
             text(
                 """
@@ -589,8 +632,10 @@ def fetch_current_qb1(
             name = str(getattr(row, "player_name", None) or row[2] or "")
             if team and pid:
                 out.setdefault(team, (pid, name))
-    except Exception:
-        pass
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: official depth QB1 load failed; fail closed (must not empty)"
+        ) from exc
     return out
 
 
@@ -598,6 +643,7 @@ def fetch_roster_sets(
     session: Any, *, season: int
 ) -> Dict[str, Dict[str, str]]:
     """{team: {player_id: position}} for a season."""
+    _refuse_w8_db_loader("fetch_roster_sets", session)
     from sqlalchemy import text
 
     rows = session.execute(
@@ -625,6 +671,7 @@ def fetch_skill_yards_by_player(
     session: Any, *, prior_season: int
 ) -> Dict[str, Dict[str, float]]:
     """{team: {player_id: yards}} skill production in prior season."""
+    _refuse_w8_db_loader("fetch_skill_yards_by_player", session)
     from sqlalchemy import text
 
     rows = session.execute(
@@ -719,26 +766,37 @@ def build_continuity_book(
     team_list = [normalize_team(t) for t in (teams or [])]
     try:
         prior_qbs = fetch_prior_primary_qbs(session, prior_season=prior_season)
-    except Exception:
-        prior_qbs = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: prior QB load failed; fail closed (must not empty)"
+        ) from exc
     try:
         current_qbs = fetch_current_qb1(
             session, season=int(season), as_of_week=as_of_week
         )
-    except Exception:
-        current_qbs = _load_packaged_qb1(int(season))
+        qb1_flag = packaged_qb1_flag(int(season))
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: current QB load failed; fail closed (must not empty)"
+        ) from exc
     try:
         roster_prior = fetch_roster_sets(session, season=prior_season)
-    except Exception:
-        roster_prior = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: prior roster load failed; fail closed (must not empty)"
+        ) from exc
     try:
         roster_curr = fetch_roster_sets(session, season=int(season))
-    except Exception:
-        roster_curr = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: current roster load failed; fail closed (must not empty)"
+        ) from exc
     try:
         skill_yards = fetch_skill_yards_by_player(session, prior_season=prior_season)
-    except Exception:
-        skill_yards = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: skill-yards load failed; fail closed (must not empty)"
+        ) from exc
 
     # Packaged HC/OC/DC book is the product SoT; curated flags backfill only.
     try:
@@ -747,8 +805,10 @@ def build_continuity_book(
         )
 
         staff_book = dict(continuity_staff_from_packaged(int(season)))
-    except Exception:
-        staff_book = {}
+    except Exception as exc:
+        raise ContinuitySourceError(
+            "F-2/F-3: coaching staff load failed; fail closed (must not empty)"
+        ) from exc
     for team_key, raw in CURATED_STAFF_BY_SEASON.get(int(season), {}).items():
         if team_key not in staff_book:
             staff_book[team_key] = dict(raw)
@@ -824,6 +884,7 @@ def build_continuity_book(
             roster_return_share=roster_ret,
             major_churn=major if roster_ret is not None else None,
         )
+        cont.drivers["packaged_qb1_flag"] = qb1_flag
         out[team] = cont
     return out
 
