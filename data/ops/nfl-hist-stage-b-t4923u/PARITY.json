@@ -1,0 +1,27 @@
+{
+  "tolerances_source": "STAGE_B_GAME_SELECTION_t4923u.md / SELECTION_HASH_SEAL.json",
+  "tolerances_locked": {
+    "index_abs_delta": 1e-06,
+    "epa_success_5g_abs_delta": 1e-09,
+    "post_hoc_change": false
+  },
+  "w2_recon_content_sha256": "708513db885fe362aca9446578154d58e9d8265857ec2385e475323b24f24182",
+  "w2_recon_content_sha8": "708513db",
+  "w2_games": 14,
+  "n_index_compared": 56,
+  "n_index_pass": 56,
+  "n_epa_success_compared": 140,
+  "n_epa_success_pass": 140,
+  "max_abs_delta_index": 0.0,
+  "max_abs_delta_epa_success": 0.0,
+  "w2_parity_pass": true,
+  "fails": [],
+  "games_csv_index_w7w8_2016w8": {
+    "n_compared": 164,
+    "n_pass": 164,
+    "n_fail": 0,
+    "fails": [],
+    "note": "4fe1cdd7 index vs rebuilt T5; |\u0394|<1e-6 when csv finite"
+  },
+  "cdff0115": "Cited pin only; W3\u2013W6 games are not in this sample; no field compare."
+}

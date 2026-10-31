@@ -1,0 +1,37 @@
+{
+  "rule": "All games.csv rows for the frozen slices, minus any game where either side has 0 completed same-season games as-of kickoff. Ineligible games are RETAINED as MISSING \u2014 not replaced, not filled, not swapped for another week/season game.",
+  "n_source": 57,
+  "n_excluded_missing_retained": 2,
+  "n_eligible": 55,
+  "exclusions": [
+    {
+      "game_id": "2017_02_CHI_TB",
+      "reason": "TB home \u2014 0 completed 2017 games as-of kickoff (Irma postpone)",
+      "predeclared": true,
+      "retained_missing": true,
+      "substituted": false,
+      "completed_same_season_games_home": 0,
+      "completed_same_season_games_away": 1,
+      "home_team": "TB",
+      "away_team": "CHI",
+      "season": 2017,
+      "week": 2,
+      "rule": "exclude any game where either side has 0 completed same-season games as-of kickoff; leave MISSING, no fills, no substitute games"
+    },
+    {
+      "game_id": "2017_02_MIA_LAC",
+      "reason": "MIA away \u2014 0 completed 2017 games as-of kickoff (Irma postpone)",
+      "predeclared": true,
+      "retained_missing": true,
+      "substituted": false,
+      "completed_same_season_games_home": 1,
+      "completed_same_season_games_away": 0,
+      "home_team": "LAC",
+      "away_team": "MIA",
+      "season": 2017,
+      "week": 2,
+      "rule": "exclude any game where either side has 0 completed same-season games as-of kickoff; leave MISSING, no fills, no substitute games"
+    }
+  ],
+  "substituted": false
+}

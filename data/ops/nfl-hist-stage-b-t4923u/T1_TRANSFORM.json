@@ -1,0 +1,31 @@
+{
+  "contract_t1": "nfl_dp_team_situational_weekly columns cited in b41f4b43 \u00a74",
+  "producer": "services/model-service/data_platform_nfl/ingest.py offense/defense CTEs",
+  "producer_sha256": "5fc97157c388452da60f687f886770d631e26e5405789bc76cefbbb86284ee4d",
+  "reused_from": "data/ops/nfl-hist-bt-stage1b-w2-t4893u/build_recon_t4893u.py",
+  "builder_sha8": "7e77c57f",
+  "functions_reused": [
+    "t1_from_plays",
+    "rolling_5g",
+    "lookup_t2",
+    "synthetic_t1_selfcheck",
+    "team_strength_from_record",
+    "rest_days_et"
+  ],
+  "synthetic_selfcheck": {
+    "status": "pass",
+    "n_checks": 7,
+    "mismatches": {}
+  },
+  "season_generalization": "PBP path + T1 week filter parameterized to 2016/2017 W1\u2013W7. No T1/T4 formula change.",
+  "identity_remap_2016_extra": {
+    "LAC": "SD",
+    "class": "identity join only",
+    "rationale": "2016 games.csv 4fe1cdd7 uses SD; restage PBP 95eba04e uses LAC. Same class as W2 LA\u2192LAR / WAS\u2192WSH / LV\u2192OAK."
+  },
+  "epa_retrofit_caveat": "nflverse epa/success are retro-scored by a later-fitted EP model. Metric-definition look-ahead; not consumption of target-week outcomes. RETRO_FIT.",
+  "labels": [
+    "RETRO_FIT",
+    "DEV_RESEARCH"
+  ]
+}
