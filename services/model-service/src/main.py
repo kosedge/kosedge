@@ -14,6 +14,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from src.celery_app import QUEUE_MODELS, QUEUE_NFL_MARKET, celery_app, celery_healthcheck
 from src.db import engine
+from src.logging_sanitize import install_odds_credential_log_filter
 from src.nfl_remat_policy import resolve_remat_weeks
 from src.routes import (
     book_router,
@@ -37,6 +38,7 @@ logging.basicConfig(
     level=getattr(logging, LOG_LEVEL, logging.INFO),
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
 )
+install_odds_credential_log_filter()
 log = logging.getLogger(APP_NAME)
 
 TASK_PULL_ODDS_SNAPSHOT = "src.tasks.pull_odds_snapshot"

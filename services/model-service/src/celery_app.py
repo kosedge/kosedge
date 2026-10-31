@@ -5,7 +5,10 @@ import os
 from typing import Any, Dict
 
 from celery import Celery
+from celery.signals import worker_process_init
 from kombu import Exchange, Queue
+
+from src.logging_sanitize import install_odds_credential_log_filter
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -188,6 +191,15 @@ try:
     celery_app.conf.beat_schedule = beat_schedule
 except Exception:
     celery_app.conf.beat_schedule = {}
+
+
+@worker_process_init.connect
+def _install_odds_credential_log_filter(**_kwargs: Any) -> None:
+    install_odds_credential_log_filter()
+
+
+# Parent process (and import-time tests) also get the filter; children re-install.
+install_odds_credential_log_filter()
 
 
 def celery_healthcheck() -> Dict[str, Any]:
