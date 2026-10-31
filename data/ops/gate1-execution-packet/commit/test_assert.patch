@@ -1,0 +1,11 @@
+--- a/services/model-service/tests/test_nfl_clock_play_simulator.py
++++ b/services/model-service/tests/test_nfl_clock_play_simulator.py
+@@ -553,7 +553,7 @@ def test_rz_q4_trail3_regulation_clock_blocks_early_fg_range_field_goal() -> Non
+         home_score=17,
+         away_score=20,
+     )
+-    assert simulator._fourth_down_decision("home") == "go"
++    assert simulator._fourth_down_decision("home") == "punt"
+     simulator.state.clock_seconds = 300.0
+     assert simulator._fourth_down_decision("home") == "field_goal"
+     simulator.state.clock_seconds = 240.0

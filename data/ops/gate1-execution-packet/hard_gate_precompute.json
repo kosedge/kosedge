@@ -1,0 +1,141 @@
+{
+  "artifact": "hard_gate_precompute",
+  "bound_parent_sha": "57347d888d2832a735bb826f6105c44b34d9cc72",
+  "policy": "Alex CERT_CONTRACT abs_delta_max; NOT +/-0.05; NOT fitted to SHA closeness",
+  "sim_note": "train/sim values from prior Gate 1 receipt at parent (builder_827); reuse-until-rebind",
+  "hard_gate_metrics": [
+    {
+      "metric": "field_goal_makes_per_game",
+      "train": 3.264407963674467,
+      "sim": 4.02392578125,
+      "abs_delta": 0.7595178175755328,
+      "abs_delta_max": 0.119987,
+      "expected_verdict": "FAIL",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        3.144421,
+        3.384395
+      ],
+      "notes": "FG volume mechanism fail under honest contract thresholds (delta >> max); NOT a threshold-fitting issue"
+    },
+    {
+      "metric": "final_total_mean",
+      "train": 45.59517988124345,
+      "sim": 44.6455078125,
+      "abs_delta": 0.9496720687434532,
+      "abs_delta_max": 1.7637,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        43.83148,
+        47.35888
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    },
+    {
+      "metric": "offensive_td_per_game",
+      "train": 4.82046804051694,
+      "sim": 4.68017578125,
+      "abs_delta": 0.14029225926694,
+      "abs_delta_max": 0.2966,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        4.523868,
+        5.117068
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    },
+    {
+      "metric": "red_zone_entries_per_game",
+      "train": 6.697520083828152,
+      "sim": 6.82373046875,
+      "abs_delta": 0.12621038492184766,
+      "abs_delta_max": 0.2474,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        6.45012,
+        6.94492
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    },
+    {
+      "metric": "core_drives_per_game",
+      "train": 22.564093608103388,
+      "sim": 22.3203125,
+      "abs_delta": 0.24378110810338782,
+      "abs_delta_max": 0.7439,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "interval": [
+        21.820194,
+        23.307994
+      ],
+      "notes": "Passes under contract abs_delta_max (NOT +/-0.05)"
+    }
+  ],
+  "structural_expected_after_wrapper": [
+    {
+      "metric": "freeze_state_invariants_and_structural_checks",
+      "train": null,
+      "sim": "expected all true (unchanged model)",
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "prior freeze at parent; wrapper does not touch simulator src",
+      "notes": "Wrapper is certification-only; structural freeze state expected unchanged"
+    },
+    {
+      "metric": "train_denominator_lock",
+      "train": "2863 games; anchors match denom receipt",
+      "sim": null,
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "builder_827 / GATE_1_NOT_CLEARED packet at parent 57347d888 (reuse-until-rebind)",
+      "notes": "PBP/config/inputs hashes unchanged vs parent"
+    },
+    {
+      "metric": "exclusive_routing_pytest_all_pass",
+      "train": null,
+      "sim": "after wrapper: GO->PUNT assert fix; 38/38 expected",
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "Alex contract go_vs_punt ruling TEST_EXPECTATION_STALE_WRONG",
+      "notes": "Single-line test assert change only; do not touch _fourth_down_decision"
+    },
+    {
+      "metric": "certification_thresholds_artifact_present",
+      "train": null,
+      "sim": "PRESENT after wrapper commit at data/ops/.../certification_thresholds.json",
+      "abs_delta": null,
+      "abs_delta_max": null,
+      "expected_verdict": "PASS",
+      "hard_gate": true,
+      "source_receipt": "this packet commit/certification_thresholds.json",
+      "notes": "Was MISSING at parent; wrapper adds it"
+    }
+  ],
+  "schema_columns": [
+    "metric",
+    "train",
+    "sim",
+    "abs_delta",
+    "abs_delta_max",
+    "expected_verdict",
+    "hard_gate",
+    "source_receipt"
+  ],
+  "overall_expected_gate1": "GATE_1_NOT_CLEARED",
+  "overall_reason": "FG hard gate FAIL under honest contract; other 4 hard metrics PASS; pytest+thresholds PRESENT pass after wrapper"
+}
