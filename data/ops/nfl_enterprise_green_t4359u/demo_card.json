@@ -1,0 +1,17 @@
+{
+  "game_id": "t4359u-DEMO-KC@BUF",
+  "home_team": "BUF",
+  "away_team": "KC",
+  "season": 2026,
+  "week": 6,
+  "site_class": "HOME",
+  "kickoff_utc": "2026-10-18T17:00:00Z",
+  "rest_days_home": 7.0,
+  "rest_days_away": 7.0,
+  "rest_days_home_source": "explicit_named_value",
+  "rest_days_away_source": "explicit_named_value",
+  "seed": 4359,
+  "simulations": 2000,
+  "model_version": "nfl-v1.5-matchup-sim",
+  "fixture_class": "ENGINEERING_FIXTURE"
+}
