@@ -303,7 +303,7 @@ jobs:
         if: steps.paths.outputs.model_service == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_odds_api.py tests/test_odds_credential_sanitize.py
+          pytest -q tests/test_odds_api.py tests/test_odds_credential_sanitize.py tests/test_odds_pull_late_overlap.py
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
 

@@ -143,6 +143,9 @@ ACTIVE_END_HOUR = os.getenv("ODDS_PULL_ACTIVE_END_HOUR", "23")
 # Single overnight slot (3:00) unless explicitly widened.
 LATE_START_HOUR = os.getenv("ODDS_PULL_LATE_START_HOUR", "3")
 LATE_END_HOUR = os.getenv("ODDS_PULL_LATE_END_HOUR", "3")
+# Default on so full-season 03 LATE vs 07–23 ACTIVE is unchanged. Set "0"
+# to drop LATE even when hours do not overlap.
+LATE_ENABLED = os.getenv("ODDS_PULL_LATE_ENABLED", "1") == "1"
 
 ACTIVE_MINUTE_PATTERN = os.getenv("ODDS_PULL_ACTIVE_MINUTE_PATTERN", "0")  # top of each hour
 LATE_MINUTE_PATTERN = os.getenv("ODDS_PULL_LATE_MINUTE_PATTERN", "0")
@@ -155,6 +158,18 @@ ODDS_QUEUE = os.getenv("CELERY_ODDS_QUEUE", "odds")
 MODELS_QUEUE = os.getenv("CELERY_MODELS_QUEUE", "models")
 # Isolate NFL market-history materialize from NBA-clogged models queue (#5 C-fix).
 NFL_MARKET_QUEUE = os.getenv("CELERY_NFL_MARKET_QUEUE", "nfl_market")
+
+
+def _late_overlaps_active() -> bool:
+    """True when LATE and ACTIVE hour spans share at least one hour.
+
+    crontab hour='12-18' is inclusive. Live reduced LATE 12-12 sits inside
+    ACTIVE 12-18 and would double-dispatch TASK_PULL_ODDS_SNAPSHOT at 12:00 ET.
+    """
+    active = set(range(int(ACTIVE_START_HOUR), int(ACTIVE_END_HOUR) + 1))
+    late = set(range(int(LATE_START_HOUR), int(LATE_END_HOUR) + 1))
+    return bool(active & late)
+
 
 beat_schedule: Dict[str, Dict[str, Any]] = {
     "pull-odds-season-cadence": {
@@ -588,6 +603,13 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "options": {"queue": MODELS_QUEUE},
     },
 }
+
+# Noon-dedupe: LATE and ACTIVE both enqueue TASK_PULL_ODDS_SNAPSHOT.
+# Drop LATE when disabled, or when its hour span overlaps ACTIVE (live reduced
+# 12-12 ⊂ 12-18 → unique 7/day, no env edit). Default 03 vs 07-23 has no
+# overlap, so LATE stays for full-season restore.
+if not LATE_ENABLED or _late_overlaps_active():
+    beat_schedule.pop("pull-odds-3am-refresh", None)
 
 # 10-minute nowcast floods `models` and buries NFL remats. Default on; disable
 # with MLB_NOWCAST_ENABLED=false during controlled rematerialize windows.
