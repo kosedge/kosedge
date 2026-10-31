@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 BASE="${MODEL_SERVICE_URL:-https://model-service-production-e253.up.railway.app}"
+: "${INTERNAL_API_SECRET:?INTERNAL_API_SECRET is required to call /api/jobs}"
 curl -sS -m 90 "${BASE}/nfl/fair-lines?days_ahead=120&limit=500" -o /tmp/fair-before-full.json
 python3 - <<'PY'
 import json
@@ -25,12 +26,12 @@ ok_n=0
 fail_n=0
 while IFS= read -r d; do
   [[ -z "$d" ]] && continue
-  TASK=$(curl -sS -m 120 -X POST "${BASE}/api/jobs/run-nfl-simulations?game_date=${d}&simulations=4000")
+  TASK=$(curl -sS -m 120 -X POST -H "x-kosedge-secret: ${INTERNAL_API_SECRET}" "${BASE}/api/jobs/run-nfl-simulations?game_date=${d}&simulations=4000")
   TID=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["task_id"])' "$TASK")
   ok=0
   for _ in $(seq 1 40); do
     sleep 5
-    RES=$(curl -sS -m 30 "${BASE}/api/jobs/${TID}")
+    RES=$(curl -sS -m 30 -H "x-kosedge-secret: ${INTERNAL_API_SECRET}" "${BASE}/api/jobs/${TID}")
     STATE=$(python3 -c 'import json,sys; print(json.loads(sys.argv[1]).get("state"))' "$RES")
     if [[ "$STATE" == "SUCCESS" ]]; then
       BID=$(python3 -c 'import json,sys; print((json.loads(sys.argv[1]).get("result") or {}).get("worker_build_id"))' "$RES")
