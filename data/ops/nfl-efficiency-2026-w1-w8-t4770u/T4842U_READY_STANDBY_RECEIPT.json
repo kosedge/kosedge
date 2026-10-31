@@ -1,0 +1,96 @@
+{
+  "ticket": "t4842u",
+  "filed_utc": "2026-10-31T01:36:00Z",
+  "verdict": "READY_STANDBY",
+  "data_ready_claimed": false,
+  "emit": false,
+  "merge_663": false,
+  "touched_667": false,
+  "lineage": {
+    "accepted_tip": "ba9e842631b6c3421fedbd9baa819e1aef571b37",
+    "accepted_tip_sha8": "ba9e8426",
+    "head_at_check": "064cfe3394a3f67ac30650bd1f876714717e8716",
+    "head_is_ba9e8426_plus_standby_only": true,
+    "imv_data_partial_accept": "c674da77",
+    "contract": "b41f4b43",
+    "pass_contract": "1a53bbd3",
+    "pr": "#663 DRAFT",
+    "do_not_touch": "#667 tip b6d019b0"
+  },
+  "w8_ro": {
+    "as_of_utc": "2026-10-31T01:34:47Z",
+    "source": "local nflverse play_by_play_2026.parquet sha256 b790f399… + canonical schedule d88ae734 (no READY fetch)",
+    "complete": 1,
+    "expected": 14,
+    "through_w8_complete": false,
+    "mnf_present": false,
+    "complete_game_id": "2026-W08-CAR@GB",
+    "mnf": {
+      "game_id": "2026-W08-CHI@SEA",
+      "kickoff_utc_sealed": "2026-11-03T01:15:00Z",
+      "kickoff_et_from_sealed_utc": "2026-11-02T20:15:00-05:00",
+      "status": "NOT_YET_KICKED"
+    },
+    "finals_invented": false
+  },
+  "runbook": {
+    "O-a": {
+      "present": true,
+      "pins": [
+        "scripts/nfl/build_efficiency_2026_w1_w8_t4770u.py:fetch_pbp",
+        "scripts/nfl/build_efficiency_2026_w1_w8_t4770u.py:archive_pbp",
+        "refuse --skip-fetch when through_w8_complete"
+      ]
+    },
+    "O-b": {
+      "present": true,
+      "pins": [
+        "panel_week_from_coverage → 8 iff through_w8_complete",
+        "T5 team_strength_from_record on completed W-L through panel week",
+        "decide_status DATA_READY only if through_w8_complete and dq.pass"
+      ]
+    },
+    "O-c": {
+      "present": true,
+      "pins": [
+        "scripts/nfl/prove_if_consume_2026_w09_t4770u.py",
+        "if_required_20_consumed.json (diagnostic through-W7; re-run at READY)"
+      ]
+    },
+    "O-d": {
+      "present": true,
+      "pins": [
+        "rest_days_spotcheck()",
+        "data/ops/nfl-efficiency-2026-w1-w8-t4770u/rest_days_spotcheck.json"
+      ]
+    },
+    "docs": [
+      "STANDBY.md",
+      "BUILD.md (PARTIAL vs READY; READY forbids --skip-fetch)",
+      "ACCEPT.json"
+    ]
+  },
+  "wake": {
+    "timer": "t4770u-w8-complete-data-ready",
+    "subscription_id": "sub_34cacbe7-6422-4b13-8882-ed58ed7544f2",
+    "once": true,
+    "fire_utc": "2026-11-03T14:00:22Z",
+    "hours_after_mnf_kickoff": 12.76,
+    "if_incomplete": "stay IDLE; resubscribe 6h; do not invent progress",
+    "if_14_of_14_incl_mnf": "re-fetch+archive, T5 through W8, 20-field IF consume, rest_days, seal DATA_READY or fail-closed"
+  },
+  "gaps_noted_not_blocking_standby": [
+    "pytest currently pins DATA_PARTIAL / as_of_week==7 / STATUS sha 81d7dd9f — rewrite those asserts in the READY commit (documented in STANDBY.md / BUILD.md)"
+  ],
+  "locks": [
+    "NFL NO-GO",
+    "CERT=0",
+    "Coming Soon ON",
+    "F2 frozen",
+    "C10 HOLD",
+    "Odds HOLD 70c56700",
+    "overlays OFF",
+    "#663 DRAFT ≠merge",
+    "#667 ≠touch"
+  ]
+}

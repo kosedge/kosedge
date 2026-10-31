@@ -6,7 +6,7 @@ Accepted tip `ba9e8426` is **through-W7 only**. Do **not** claim DATA_READY. Do 
 
 ## Hold until
 
-W8 is 14/14 final, including MNF `2026-W08-CHI@SEA` (kickoff 2026-11-03T01:15:00Z), and nflverse PBP is re-fetchable.
+W8 is 14/14 final, including MNF `2026-W08-CHI@SEA` (sealed kickoff `2026-11-03T01:15:00Z` = `2026-11-02T20:15:00-05:00` America/New_York), and nflverse PBP is re-fetchable. Do not invent a different kickoff.
 
 ## Then execute (fail closed if still incomplete)
 
@@ -24,4 +24,8 @@ python3 scripts/nfl/prove_if_consume_2026_w09_t4770u.py
 cd services/model-service && python3 -m pytest tests/test_nfl_efficiency_2026_w1_w8_t4770u.py -q
 ```
 
-Until then: IDLE. RO prep on this lane only. ≠emit ≠E2 ≠C10 ≠CERT ≠merge #663.
+**Wake path:** timer `t4770u-w8-complete-data-ready` fires `2026-11-03T14:00:22Z` (~12.8h after MNF kickoff). If still not 14/14, stay IDLE and resubscribe 6h. Do not invent W8 progress. Offline IF caller #667 / tip `b6d019b0` is a separate ACCEPTED lane — do not touch it.
+
+**pytest at READY:** `tests/test_nfl_efficiency_2026_w1_w8_t4770u.py` currently pins `DATA_PARTIAL`, `as_of_week==7`, and STATUS sha `81d7dd9f…` (accepted tip `ba9e8426`). Rewrite those PARTIAL-era asserts onto the new seal in the READY commit. Do not treat those reds as a reason to withhold DATA_READY, and do not run `--skip-fetch` once 14/14.
+
+Until then: IDLE. RO prep on this lane only. ≠emit ≠E2 ≠C10 ≠CERT ≠merge #663 ≠touch #667.
