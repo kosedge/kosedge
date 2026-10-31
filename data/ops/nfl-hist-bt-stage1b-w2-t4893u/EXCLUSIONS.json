@@ -1,0 +1,28 @@
+{
+  "rule": "SAMPLE_MANIFEST W2 games (16) minus any game where either side has 0 completed same-season games as-of kickoff",
+  "n_source_w2": 16,
+  "n_excluded": 2,
+  "n_eligible": 14,
+  "exclusions": [
+    {
+      "game_id": "2017_02_CHI_TB",
+      "reason": "TB home \u2014 0 completed 2017 games as-of kickoff (Irma postpone)",
+      "predeclared": true,
+      "completed_same_season_games_home": 0,
+      "completed_same_season_games_away": 1,
+      "home_team": "TB",
+      "away_team": "CHI",
+      "rule": "exclude any W2 game where either side has 0 completed same-season games as-of kickoff; leave MISSING, no fills"
+    },
+    {
+      "game_id": "2017_02_MIA_LAC",
+      "reason": "MIA away \u2014 0 completed 2017 games as-of kickoff (Irma postpone)",
+      "predeclared": true,
+      "completed_same_season_games_home": 1,
+      "completed_same_season_games_away": 0,
+      "home_team": "LAC",
+      "away_team": "MIA",
+      "rule": "exclude any W2 game where either side has 0 completed same-season games as-of kickoff; leave MISSING, no fills"
+    }
+  ]
+}
