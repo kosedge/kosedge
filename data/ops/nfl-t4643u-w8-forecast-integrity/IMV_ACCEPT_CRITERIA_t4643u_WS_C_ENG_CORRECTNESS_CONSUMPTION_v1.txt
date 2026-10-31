@@ -1,0 +1,158 @@
+IMV ACCEPT CRITERIA — t4643u WS-C Eng-correctness · Forecast input consumption — v1
+Filed 2026-10-28 14:05 EDT · Author: IMV (paper/verify only)
+
+VERDICT: CRITERIA_FILED · STANDBY_OPEN
+Skeleton for Cursor WS-A consumption-test contract ACCEPT. Separates engineering correctness from predictive improvement. Nested G34 CLOSED a27ac961 — no G34/exp re-grade. No CERT claim.
+
+AUTHORITY (sha256 recomputed on box; EXISTING AND VERIFIED)
+098da1dd  DECISION_RYAN_t4643u_POST_G34_EXECUTION_PRIORITIES_v1.txt  098da1dde265a13bc10c00255ed98e0e09e12b767d517732e48df55bd507188a
+2692ca73  COS_EXECUTION_PACKET_t4643u_POST_G34_v1.md  2692ca73a654e5b5620bee7e4d9caa202259aac6050dfbfebeac18079191d35e
+9ab30b76  COS_ORDER_IMV_t4643u_WS_C_ENG_CRITERIA_v1.txt  9ab30b76435c117589ba5011d1fdfef20d79fbd4a7cc031fdcbc26d5683c8986
+f26f2808  COS_ORDER_CURSOR_t4643u_WS_A_W8_FORECAST_INTEGRITY_v1.txt  f26f2808195923ba38d3e8d2dc577cc4a9bef40f1aa49b638f95c40a1d1178a3
+3224fbe7  COS_ORDER_ALEX_t4643u_WS_B_STRUCTURAL_RCA_v1.txt  3224fbe7b0160160466d9c1cd2e7062354a57ec1fff65793dffc9d307cd5577d
+7c2d9625  CONSUME_PROOF_t4621u_7c2d9625.md  7c2d9625cf6ae8d8da9b2de971ed60ebb444184a4660cefb2c60e5dce1c1d2a9
+0be23ede  CONSUME_PROOF_t4621u_0be23ede.json  0be23edef8ce3062f5cb5592c027d6eb921313b88e769a0f7e63d0e22da2bcfa
+4041944a  COS_ACCEPT_CURSOR_W8_CONSUME_PROOF_t4621u_7c2d9625.txt  4041944a73d58f25b06fe987f5dfe2ebaf392baa1c9c1d022adf5c22dcab4a12
+675e1cf7  completeness SoT (cited by consume proof; not re-hashed this filing)
+a27ac961  IMV_GRADE_t4639u_NESTED_G34_v1.txt (CLOSED — untouched)  a27ac96199df1f6185ff52490380dfe16857498106bd723aeb35985ca4d28ffa
+0d1f4f9b Exp A · 93a79857 Exp D-R · f9a9c12f lineage · 3d79c41b Exp E — PRESERVED / CLOSED / UNAFFECTED
+Register: /workspace/kosedge-registers/DECISIONS_ADDENDA_t4643u.md cites 098da1dd — EXISTING AND VERIFIED
+
+SCOPE LOCK
+WS-C P0 only: (1) eng-correctness ACCEPT criteria for forecast input consumption; (2) STANDBY grade of Cursor WS-A map+matrix+repair plan; (3) STANDBY independent audit of Alex WS-B structural diagnosis (facts vs untested claims).
+Path under proof (unchanged): scripts/nfl/run_w8_research_forecast_t4564u.py → _simulate_one → simulate_nfl_game.
+Draft surface: #645 DRAFT only. No merge · deploy · Odds · F2 · holdout · CERT · NO-GO lift · Coming Soon OFF · G34/exp reopen · redesign GO.
+Eng correctness ≠ predictive improvement. PASS of a consumption contract ≠ CERT ≠ fireable slate ≠ market beat.
+
+================================================================
+A) SEPARATION — what this lane grades vs what it does not
+================================================================
+ENG-CORRECTNESS (this lane CAN PASS/FAIL):
+- Named input is read from the declared SoT at the declared vintage.
+- Declared consumed fields reach NflGameInputs / simulate_nfl_game (or named component).
+- Perturbation of a valid consumed input changes the intended forecast component in the declared direction/identity.
+- Missing / irrelevant / stale input triggers the declared fallback AND an explicit flag (no silent healthy, no silent zero, no silent prior-pack).
+- Authoritative vs provenance-only roles are labeled; provenance-only cannot claim CONSUMED.
+- Season-engine SoT vs game-level SoT conflicts are named; dual-book publish without resolution is FAIL for eng integrity (even if research-only).
+
+NOT ENG-CORRECTNESS (cannot alone PASS this lane; REPORT-ONLY or separate predictive lane):
+- MAE / ΔMAE vs market or vs any reference cell.
+- Calibration, cover/over Brier, slope, SD ratio, bias.
+- Any claim that wiring an input "should" improve predictive skill.
+- Nested G34 / Exp A / D-R outcomes (CLOSED; do not re-litigate).
+
+PASS_ENG_CONTRACT ≠ PASS_RESEARCH ≠ CERT ≠ redesign GO ≠ NO-GO lift.
+
+================================================================
+B) BINDING STARTING GAPs (from sealed 7c2d9625 — exact miss, not hypothesis)
+================================================================
+G1  current_weekly_depth_db — GAP
+    Forecast path never SELECTs DATABASE_URL / nfl_dp_*. Warehouse CLOSED (675e1cf7 / Unblock A) ≠ consumed.
+
+G2  depth_sot_week — READ+GATE · GAP_SIM_VOLUME
+    Reads nflverse depth_charts; gates as_of; writes CLOSED pack. Does NOT pass depth rows into NflGameInputs.
+    used_for=provenance_only_not_player_box_volume. Team-sim volume = EPA.
+
+G3  W8 official injury — MISSING
+    injury_paths_current CONSUMED as W7-or-earlier designated overlay (n=153 designated week 7).
+    14/14 games flag w8_official_injury_report + injury_as_of_week8. Do not invent W8 official.
+
+G4  Season vs game SoT conflicts (documented in 7c2d9625 §3)
+    Season depth binds W1 camp pack (2026-08-13) while research/warehouse have W8.
+    Season cold-start strength = 2025 prior (2026-08-08) vs research W1–W7 EPA.
+    Warehouse injury max_week=3 vs research W7 designated. Not CERT claims; eng integrity defects.
+
+CONSUMED (baseline must not regress): injury_paths_current · week_schedule_kickoffs · inseason_efficiency_current.
+
+================================================================
+C) OBJECTIVE ACCEPT CRITERIA — consumption test contract
+================================================================
+Cursor WS-A deliverable MUST include, for each input family below:
+  (i)  code-path map (file:line) from SoT → NflGameInputs / component → artifact flag
+  (ii) consumption verdict enum: CONSUMED | READ+GATE | PROVENANCE_ONLY | GAP | MISSING | STALE_FALLBACK
+  (iii) test matrix row(s) with pre-declared oracle
+  (iv) bounded repair plan on #645 DRAFT (or explicit DEFER + Needs-CLEAR if wire/authority required)
+
+C0  CONTRACT COMPLETENESS (meta)
+    PASS iff matrix covers ALL five completeness checks from 675e1cf7/7c2d9625
+    (depth_sot_week · injury_paths_current · current_weekly_depth_db · week_schedule_kickoffs · inseason_efficiency_current)
+    PLUS named season-engine conflict surfaces in §3 of consume proof.
+    RETURN if any family omitted, or if "CLOSED access" is labeled CONSUMED without a SELECT/read into sim.
+
+C1  PERTURBATION → INTENDED COMPONENT  (Ryan bar)
+    For every input labeled CONSUMED (or proposed-to-be-CONSUMED after repair):
+    PASS iff a controlled, hashed fixture change of a valid value changes ONLY the declared forecast component
+    (identity of field / totals-adjustment term / strength index / rest days — as named in the matrix)
+    and the change is reproducible (script + seed + fixture sha256).
+    Example (depth, when/if promoted from GAP_SIM_VOLUME to CONSUMED): changing a valid depth row changes the declared volume/player-box component; EPA indices unchanged unless the contract explicitly couples them.
+    FAIL if perturbation has no effect, wrong component moves, or effect is non-deterministic without declared RNG.
+
+C2  MISSING / IRRELEVANT → SPECIFIED FALLBACK + FLAG  (Ryan bar)
+    PASS iff for each input family the contract names:
+      - the exact fallback (e.g. prior designated week; provenance-only; refuse-to-sim; league-avg placeholder — whichever is declared)
+      - the exact artifact flag string(s) that MUST appear (e.g. w8_official_injury_report, injury_as_of_week8, depth_role=provenance_only)
+      - forbidden silent behaviors: silent healthy, silent zero-as-official, silent W1-pack as W8, silent warehouse skip
+    Test: remove or null the input in a fixture → fallback fires AND flags present AND no invented official report.
+    G3 today: W8 official MISSING must remain flagged; overlay must stay last-designated-week, not week-8 empty stubs.
+
+C3  AUTHORITY / VINTAGE PIN
+    PASS iff each CONSUMED or READ+GATE input pins: SoT path or table · as_of / week · row counts or team coverage · sha256 of fixture or CLOSED pack.
+    Warehouse may be cited as CLOSED access only with explicit GAP until a SELECT into the forecast path exists and is tested.
+    RETURN if "wire warehouse because available" without authority proof + vintage pin + C1/C2 tests (DECISION 098da1dd hard stop).
+
+C4  NO REGRESSION ON ALREADY-CONSUMED
+    PASS iff injury_paths_current · week_schedule_kickoffs · inseason_efficiency_current still satisfy C1+C2 after any repair.
+    FAIL if a repair to G1/G2 silently drops or stubs an already-CONSUMED path.
+
+C5  ROLE LABEL INTEGRITY
+    PASS iff provenance-only / READ+GATE cannot be summarized as CONSUMED in the contract, PR body, or completeness close.
+    G2 today: depth_sot remains GAP_SIM_VOLUME until depth rows reach simulate_nfl_game under C1.
+
+C6  SEASON vs GAME SoT CONFLICT HANDLING
+    PASS iff contract names each conflict from 7c2d9625 §3 and either:
+      (a) bounded repair that makes game-level path authoritative for W8 research forecast with tests, OR
+      (b) explicit DEFER + Needs-CLEAR for season-engine pack/DB preference changes.
+    FAIL if contract claims one SoT while code still binds a conflicting pack (W1 depth / 2025 prior) without a flag.
+
+C7  HARD NON-CLAIMS (auto-RETURN if asserted as eng PASS)
+    - Any MAE / market / nested-G34 / Exp metric as evidence of eng correctness.
+    - CERT · fireable · publish · F2 · Coming Soon OFF.
+    - Inventing W8 official injury.
+    - Merge/deploy/Odds on the strength of this contract.
+
+================================================================
+D) PASS / RETURN / FAIL — how IMV will grade Cursor WS-A
+================================================================
+PASS_ENG_CONTRACT (draft #645 only):
+  C0–C6 all met on sealed matrix + map + fixtures; C7 clean; hashes MATCH; no holdout/Odds/merge.
+  Meaning: engineering consumption behavior is specified and tested. NOT predictive skill. NOT CERT.
+
+RETURN:
+  Missing family; CONSUMED mislabel; no C1/C2 oracle; warehouse wire without authority; silent fallback; predictive metric used as eng gate; incomplete hashes.
+
+FAIL_ENG_CONTRACT:
+  Contract claims PASS but independent IMV re-run of declared tests disagrees (wrong component, missing flag, silent path), or sealed tip diverges from paper.
+
+Grade trigger: CoS FORWARD of sealed Cursor WS-A packet (map + matrix + bounded repair plan + test fixtures/SHA256SUMS). Do not grade from tip chatter.
+
+================================================================
+E) ALEX WS-B — independent audit bar (STANDBY)
+================================================================
+When CoS forwards Alex structural diagnosis:
+  FACT: claim reproducible from sealed artifacts already accepted (market-gap eb8c4501 / RCA 04869644-chain / Exp A 0d1f4f9b / D-R 93a79857 / nested a27ac961 / lineage f9a9c12f) with sha256 + no new experiment.
+  HYPOTHESIS: labeled; falsifiable test named; not promoted to cause by narrative.
+  UNSUPPORTED: no artifact; contradicts sealed grades; peeks holdout; uses predictive performance to resolve eng identity/orientation; reopens G34 search.
+IMV will tag each Ryan Q1–Q4 answer FACT / HYPOTHESIS / UNSUPPORTED. No redesign GO from this audit.
+
+================================================================
+F) STANDBY STATE
+================================================================
+- Nested G34 lane CLOSED (a27ac961; CLEAR c51b4280 spent).
+- WS-A: STANDBY for Cursor sealed map+matrix+repair on #645 DRAFT targeting C0–C7.
+- WS-B: STANDBY for Alex ranked causal-hypothesis report; audit under §E.
+- This paper is the Cursor target skeleton (authorized by CoS order 9ab30b76 / DECISION 098da1dd). Criteria may be tightened by erratum if Cursor surfaces a new exact miss; gates will not be weakened after seeing results.
+
+HARD LOCKS: NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen · #645/#648 DRAFT · PASS_ENG_CONTRACT≠CERT · PASS_RESEARCH≠CERT
+NON-ACTIONS: no Odds · no merge · no deploy · no holdout · no G34/exp reopen · no messages from this paper beyond CoS/Ryan notify.
+Signed: IMV Model Validation Lead · 2026-10-28 ET
+END

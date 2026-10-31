@@ -1,0 +1,163 @@
+{
+  "2026-W08-ARI@DAL": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-ATL@TB": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-BAL@BUF": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-CAR@GB": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-CHI@SEA": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-CLE@PIT": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-IND@JAX": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-KC@DEN": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-LAC@LAR": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-LV@NYJ": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-MIN@DET": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-NE@MIA": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-PHI@WAS": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "2026-W08-TEN@CIN": [
+    "injury_as_of_week8",
+    "injury_as_of_week8_away",
+    "kav_5g_warehouse",
+    "market_ml",
+    "market_spread",
+    "market_total",
+    "nfl_dp_team_rolling_features_weekly",
+    "w8_official_injury_report",
+    "weather"
+  ],
+  "slate": [
+    "Odds API market lines (forbidden this ticket)",
+    "W8 official Wednesday injury report (latest official is week 7)",
+    "DATABASE_URL / nfl_dp_* warehouse on this VM",
+    "Railway /nfl HTTP (production OpenAPI has 0 NFL paths)",
+    "weather / KAV warehouse 5g"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "cert_candidate": 0,
+  "code_tip_sha": "67c817ad8671824e985479f3f1dce035f2f552c3",
+  "config_sha256": "0e1eee4b4366e8663a3ef13323e6c20e75f46ca09ea6dd8d299d7434fcf3ac25",
+  "emitted_at_et": "2026-10-27T17:32:17-04:00",
+  "fingerprints": {
+    "canonical_schedule": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe",
+    "depth_parquet": "522bc45820f21375f2df92b8d8776c6a2242305c6183e7b6b8509888c7c787cf",
+    "injuries_parquet": "2adbdd6b4fee93eb14525959e858d1bea78072af84c71726fc37aaca1452871a",
+    "team_week_parquet": "5ef5a28ad1a6f263c94232df5e8a454476abd2bcfc238ff85d9f33d7996165e3"
+  },
+  "forecast_ts_utc": "2026-10-27T21:32:17Z",
+  "games": [
+    "2026-W08-CAR@GB",
+    "2026-W08-ARI@DAL",
+    "2026-W08-ATL@TB",
+    "2026-W08-BAL@BUF",
+    "2026-W08-CLE@PIT",
+    "2026-W08-IND@JAX",
+    "2026-W08-LV@NYJ",
+    "2026-W08-MIN@DET",
+    "2026-W08-TEN@CIN",
+    "2026-W08-LAC@LAR",
+    "2026-W08-KC@DEN",
+    "2026-W08-NE@MIA",
+    "2026-W08-PHI@WAS",
+    "2026-W08-CHI@SEA"
+  ],
+  "hard_stops": {
+    "coming_soon": true,
+    "merge_deploy": false,
+    "nfl_nogo": true,
+    "odds_api": false,
+    "pr641_tip": "385767a2",
+    "seals": false
+  },
+  "label": "RESEARCH",
+  "run_id": "nfl-w8-2026-t4564u-20261027T213217Z",
+  "sources": {
+    "depth_charts_2026.parquet": {
+      "sha256": "522bc45820f21375f2df92b8d8776c6a2242305c6183e7b6b8509888c7c787cf",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_2026.parquet"
+    },
+    "injuries_2026.parquet": {
+      "sha256": "2adbdd6b4fee93eb14525959e858d1bea78072af84c71726fc37aaca1452871a",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_2026.parquet"
+    },
+    "stats_team_week_2026.parquet": {
+      "sha256": "5ef5a28ad1a6f263c94232df5e8a454476abd2bcfc238ff85d9f33d7996165e3",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/stats_team/stats_team_week_2026.parquet"
+    }
+  },
+  "ticket": "t4564u"
+}

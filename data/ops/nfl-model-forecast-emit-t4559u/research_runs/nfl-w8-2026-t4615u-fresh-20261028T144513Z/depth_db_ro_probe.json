@@ -1,0 +1,112 @@
+{
+  "audited_at_utc": "2026-10-28T14:44:18Z",
+  "blocker": "",
+  "cert_candidate": 0,
+  "connect_ok": true,
+  "dml_ddl": false,
+  "host_kind": "proxy",
+  "host_suffix": "altaria.proxy.rlwy.net",
+  "invented": false,
+  "missing_tables": [],
+  "ok": true,
+  "port": 10880,
+  "read_only": true,
+  "tables": {
+    "nfl_dp_depth_chart_weekly": {
+      "by_week": [
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 8
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 7
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 6
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 5
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 4
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 3
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 2
+        },
+        {
+          "n": 2907,
+          "teams": 32,
+          "week": 1
+        }
+      ],
+      "max_week": 8,
+      "min_week": 1,
+      "n": 23256,
+      "present": true,
+      "table": "nfl_dp_depth_chart_weekly",
+      "teams": 32
+    },
+    "nfl_dp_injuries": {
+      "by_week": [
+        {
+          "n": 301,
+          "teams": 32,
+          "week": 3
+        },
+        {
+          "n": 251,
+          "teams": 32,
+          "week": 2
+        },
+        {
+          "n": 182,
+          "teams": 32,
+          "week": 1
+        }
+      ],
+      "max_week": 3,
+      "min_week": 1,
+      "n": 734,
+      "present": true,
+      "table": "nfl_dp_injuries",
+      "teams": 32
+    },
+    "nfl_dp_official_depth_charts": {
+      "by_week": [
+        {
+          "n": 3171,
+          "teams": 32,
+          "week": 1
+        }
+      ],
+      "max_week": 1,
+      "min_week": 1,
+      "n": 3171,
+      "present": true,
+      "table": "nfl_dp_official_depth_charts",
+      "teams": 32
+    }
+  },
+  "tcp_open": true,
+  "ticket": "t4615u",
+  "transaction_read_only": true,
+  "url_present": true,
+  "url_source_key": "DATABASE_PUBLIC_URL",
+  "warehouse_rows_read": 27161
+}

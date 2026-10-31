@@ -1,0 +1,15 @@
+{
+  "current_depth": true,
+  "current_injury_latest_official": true,
+  "current_inseason_epa": true,
+  "failing_if_require_warehouse_only": [
+    "DATABASE_URL unset on this VM",
+    "Railway /nfl HTTP public-killed (0 paths)"
+  ],
+  "ok": true,
+  "schedule": true,
+  "t08_blocks_slate": false,
+  "unblocked_by": "nflverse public 2026 current files (not Odds API)",
+  "w8_official_injury_report": false,
+  "warehouse_db": false
+}
