@@ -1,0 +1,99 @@
+{
+  "brier_const": 0.24935072040055323,
+  "brier_new": 0.22339718387801621,
+  "brier_wl_wp": 0.23643976164455371,
+  "delta_brier_new_minus_const": -0.025953536522537013,
+  "delta_brier_new_minus_wl": -0.0130425777665375,
+  "delta_mae_cluster_boot": {
+    "B": 10000.0,
+    "ci_hi": -0.20684150491199105,
+    "ci_lo": -0.6744360027147718,
+    "mean": -0.44187136661066406,
+    "n_clusters": 160.0,
+    "seed": 4918.0
+  },
+  "delta_mae_new_minus_wl": -0.44261411261497313,
+  "delta_rmse_new_minus_const": -1.1654684713476744,
+  "delta_rmse_new_minus_wl": -0.6205030048357685,
+  "eval_rows_read": true,
+  "eval_seasons": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+  ],
+  "history_only_seasons": [
+    2017
+  ],
+  "k_looks_eval": 1,
+  "keep_all": true,
+  "keep_kill": true,
+  "keep_mae": true,
+  "keep_rho": true,
+  "kill_pearson_corr": 0.2958624575337465,
+  "loso": [
+    {
+      "delta_mae": -0.3662742453940827,
+      "kill": 0.3063297599014043,
+      "n": 240,
+      "rho": 0.3750423180155653,
+      "season": 2018
+    },
+    {
+      "delta_mae": -0.3873563061486564,
+      "kill": 0.2766278859831792,
+      "n": 240,
+      "rho": 0.4135477287911585,
+      "season": 2019
+    },
+    {
+      "delta_mae": -0.19662270432514475,
+      "kill": 0.21197847508097847,
+      "n": 240,
+      "rho": 0.3712006177249149,
+      "season": 2020
+    },
+    {
+      "delta_mae": -1.0216156739617321,
+      "kill": 0.3871746292475336,
+      "n": 240,
+      "rho": 0.4290991299758643,
+      "season": 2021
+    },
+    {
+      "delta_mae": -0.2403589032060459,
+      "kill": 0.2684794708374767,
+      "n": 239,
+      "rho": 0.31238290192683726,
+      "season": 2022
+    }
+  ],
+  "mae_const": 11.093693529329997,
+  "mae_pm_new": 10.306251239396397,
+  "mae_wl_margin": 10.74886535201137,
+  "n": 1199,
+  "n_history_2017": 267,
+  "n_ties": 4,
+  "post_eval_tuning": false,
+  "rmse_const": 14.355291331957007,
+  "rmse_pm_new": 13.189822860609333,
+  "rmse_wl_margin": 13.810325865445101,
+  "spearman_cluster_boot": {
+    "B": 10000.0,
+    "ci_hi": 0.43302603902808173,
+    "ci_lo": 0.32794440600838937,
+    "mean": 0.3816415757420325,
+    "n_clusters": 160.0,
+    "seed": 4918.0
+  },
+  "spearman_rho": 0.38268986150915124,
+  "spearman_week_cluster_boot": {
+    "B": 10000.0,
+    "ci_hi": 0.4270776896143485,
+    "ci_lo": 0.3360031896463267,
+    "mean": 0.3821039233707461,
+    "n_clusters": 80.0,
+    "seed": 4918.0
+  }
+}
