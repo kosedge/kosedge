@@ -1,0 +1,72 @@
+IMV CHECK — NFL IMV bundle v2.6.7 / Mac runbook v2.4.9 (RD-4 erratum) — PURE-DIFF TEXT CHECK
+Date: Thu Oct 22 15:05:54 EDT 2026
+Reviewer: IMV. Read-only. No project code run (no bash -n), no DB, no network, no installs.
+Evidence grade: PLUMBING-ONLY
+
+VERDICT: RETURN
+
+1. INTEGRITY (all verified)
+- SHA256SUMS sha prefix 404d75ad: OK. sha256sum -c: 58/58 OK.
+- runbook v2.4.9 prefix 15c27ade: OK. bundled diff v2.4.8->v2.4.9 prefix 5cdb2351: OK.
+- Fresh diff -u v2.4.8.md v2.4.9.md == bundled diff (headers ignored): MATCH.
+- vs v2.6.6: every carried file byte-identical except SHA256SUMS (expected).
+  New files (3): nfl-imv-mac-runbook-v2.4.9.md, nfl-imv-mac-runbook-v2.4.9.diff,
+  nfl-imv-v2.6.7-rd4-trace.md (all covered by SUMS -c). No files missing.
+
+2. DIFF CONTENT (5 hunks)
+- Hunk 1: title line "v2.4.8 — a3e80242 F-2 / F-3 PIN" -> "v2.4.9 — RD-4 PY pin". Not in RD-4 text;
+  F-0 (housekeeping, non-blocking, accepted).
+- Hunks 2-5 (W4 l.260-264, W5 l.307-311, W6 l.354-358, W8 l.407-411): the five RD-4 lines, verbatim,
+  immediately before each P-5 builder call. Version comes from ${IMV_PY_VERSION:?}; nothing hard-coded. OK.
+- Fail-closed analysis (non-interactive bash 3.2, set -euo pipefail at top of each block, L-1):
+  each new line is a standalone simple command, not inside an && / || list or if, so set -e trips.
+  ${IMV_PY:?}, ${IMV_PY_VERSION:?}, ${IMV_PY_FREEZE_SHA:?} unset/empty -> expansion error exits shell.
+  A failing "$PY" inside $( ) yields empty/wrong text -> [ ] false -> exit; pip failure -> sha of
+  wrong input != pin -> exit. Import line exits nonzero on ImportError. All fail closed. OK.
+
+3. FINDINGS
+F-1 (BLOCKING): The pin does not reach the interpreter that actually builds/seals. PY is a runbook
+  shell variable, never exported nor passed. The frozen builder nfl-imv-feature-build-v2.4.1.sh calls
+  bare python3 at l.118,160,180,210,211,212,225,230,248 (the build),259,265,268; nfl-imv-sealed-v2.4.sh
+  calls bare python3 at l.160,194,300,410. Those resolve via PATH — exactly how W4 got
+  /usr/local/opt/python@3.14 without pandas. The checks validate $PY, then the build runs a different
+  python3. Requirement 3 ("every python invocation in the build and seal blocks uses $PY") is NOT met.
+F-2 (BLOCKING): Seal blocks (l.278-288, 325-335, 372-382, 424-434 region) define/check no PY at all,
+  yet invoke sealed-v2.4.sh, which runs python3.
+F-3 (BLOCKING): No RD-4 register entry in the bundle (grep RD-4 over nfl-imv-deviation-register*.md:
+  0 hits). Only the trace mentions it.
+F-4 (note, non-blocking): bare python3 at runbook l.127 and l.129 (check-pins, stdlib only, pre-build
+  block). Outside build/seal scope; acceptable, but will be covered by the F-1 fix if placed earlier.
+Full python-call grep of runbook v2.4.9: l.127 python3 (check-pins), l.129 python3 (json ok-check),
+  l.260-264 / 307-311 / 354-358 / 407-411 "$PY" (RD-4 checks). No other python calls in runbook text.
+
+4. EXACT CORRECTIVE TEXT (v2.4.10; shells stay frozen, runbook-only)
+(a) In EACH build block AND EACH seal block, immediately after the existing five RD-4 lines (and, in seal
+blocks, insert the five RD-4 lines first, right after the B-3 first line), add verbatim:
+    PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
+    test -x "$PYBIN/python3"
+    export PATH="$PYBIN:$PATH"
+    hash -r
+    [ "$(command -v python3)" = "$PYBIN/python3" ]
+    [ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
+    [ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+  Each line standalone (no && chaining). IMV_PY must be the python3 inside a venv/bin dir (IMV ruling
+  at filing time).
+(b) Add register file nfl-imv-deviation-register-rd4.md with exactly:
+    RD-4: interpreter unpinned. W4 OUT /var/tmp/nfl-imv-features/w4-20261022T184946Z BUILD_BLOCKED
+    (ModuleNotFoundError pandas, python3.14.7 via PATH). Never reused. Fixed by IMV_PY pin + PATH
+    pin (v2.4.10).
+(c) Title line may change to v2.4.10; nothing else may change. Next check is pure-diff again.
+
+5. CAVEATS
+- Text-only review; nothing executed on bash 3.2. pwd -P / hash -r / command -v are bash 3.2 builtins.
+- Python subprocesses spawned by the helpers via sys.executable would follow the pinned python3;
+  any helper hard-coding another interpreter path was not grepped in nfl_imv_v2*.py (out of scope).
+- Mac discovery (route a) output not yet received; no IMV_PY values filed.
+
+EXECUTION RULING: Builds may NOT resume on v2.4.9. Builds may resume only after (1) a v2.4.10 passes IMV
+pure-diff check AND (2) IMV files IMV_PY, IMV_PY_VERSION and IMV_PY_FREEZE_SHA from verified discovery
+output. CoS sets them from the IMV filing only. Each new run uses a fresh stamped OUT; w4-20261022T184946Z
+is never reused. No seal without per-week IMV ack.
+
+NO-GO, Coming Soon ON.

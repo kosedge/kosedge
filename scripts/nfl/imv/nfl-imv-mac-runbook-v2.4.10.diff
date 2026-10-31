@@ -1,0 +1,140 @@
+--- /workspace/scripts/nfl/imv/nfl-imv-mac-runbook-v2.4.9.md	2026-10-22 19:02:15.031737052 +0000
++++ /workspace/scripts/nfl/imv/nfl-imv-mac-runbook-v2.4.10.md	2026-10-22 19:07:21.041666124 +0000
+@@ -1,4 +1,4 @@
+-# Mac runbook v2.4.9 — RD-4 PY pin
++# Mac runbook v2.4.10 — 48c3cb6d RD-4 PATH pin
+ 
+ Ryan's Mac. Dedicated **b1d857d3** worktree. **Not** `~/kosedge`. No W7.
+ No Odds / Railway / prod DB on the seal. Re-run = **new** snapshot.
+@@ -262,6 +262,13 @@
+ [ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
+ "$PY" -c 'import pandas,pyarrow,numpy'
+ [ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_RETRO" \
+   --out "$OUT4" --game-week-cap 4 --pbp-week-cap 3
+ test "$(cat "$OUT4/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -278,6 +285,18 @@
+ ```bash
+ set -euo pipefail
+ : "${IMV_SEAL_ACK_W4:?IMV ack required}"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT4" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w4.sha256)" \
+@@ -309,6 +328,13 @@
+ [ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
+ "$PY" -c 'import pandas,pyarrow,numpy'
+ [ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_RETRO" \
+   --out "$OUT5" --game-week-cap 5 --pbp-week-cap 4
+ test "$(cat "$OUT5/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -325,6 +351,18 @@
+ ```bash
+ set -euo pipefail
+ : "${IMV_SEAL_ACK_W5:?IMV ack required}"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT5" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w5.sha256)" \
+@@ -356,6 +394,13 @@
+ [ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
+ "$PY" -c 'import pandas,pyarrow,numpy'
+ [ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_RETRO" \
+   --out "$OUT6" --game-week-cap 6 --pbp-week-cap 5
+ test "$(cat "$OUT6/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -372,6 +417,18 @@
+ ```bash
+ set -euo pipefail
+ : "${IMV_SEAL_ACK_W6:?IMV ack required}"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT6" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w6.sha256)" \
+@@ -409,6 +466,13 @@
+ [ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
+ "$PY" -c 'import pandas,pyarrow,numpy'
+ [ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_W8" \
+   --out "$OUT8" --game-week-cap 8 --pbp-week-cap 7
+ test "$(cat "$OUT8/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -424,6 +488,18 @@
+ ```bash
+ set -euo pipefail
+ : "${IMV_SEAL_ACK_W8:?IMV ack required}"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
++PYBIN="$(cd "$(dirname "$PY")" && pwd -P)"
++test -x "$PYBIN/python3"
++export PATH="$PYBIN:$PATH"
++hash -r
++[ "$(command -v python3)" = "$PYBIN/python3" ]
++[ "$(python3 -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++[ "$(python3 -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3
+ IMV_FEATURE_STORE="$OUT8" \
+ IMV_FEATURE_STORE_SHA="$(cat /var/tmp/operator-pins/w8.sha256)" \
