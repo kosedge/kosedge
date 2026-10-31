@@ -35,7 +35,9 @@ spreads / totals still unchanged by the player layer.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Mapping
+from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import Any, Dict, Iterator, Mapping, Optional
 
 # Bump when priors / architecture change in a material way.
 # Week-0 close publisher stamp — live API and frozen artifacts share this string.
@@ -104,7 +106,12 @@ PLAYER_STAR_PASS_SHARE_CAP = 0.92  # of named pass pool (post residual)
 PLAYER_STAR_RUSH_SHARE_CAP = 0.48  # of team rush yards
 PLAYER_STAR_REC_SHARE_CAP = 0.30  # of team pass yards (receiving)
 # Hist-cal: spreads compressed vs close (home-fav bias +7 / dog −9) → decompress.
+# Production constant. Research sweeps overlay at score time; they must not
+# mutate this value. See overlay_matchup_response().
 MATCHUP_RESPONSE = 1.40
+_MATCHUP_RESPONSE_OVERLAY: ContextVar[Optional[float]] = ContextVar(
+    "cfb_matchup_response_overlay", default=None
+)
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
 MATCHUP_RATIO_CLAMP = (0.52, 1.45)
@@ -297,7 +304,9 @@ def early_season_uncertainty(week: int) -> Dict[str, Any]:
         "margin_sd_mult": round(margin_mult, 4),
         "win_prob_margin_sd": round(WIN_PROB_MARGIN_SD * margin_mult, 4),
         "separation_soften": round(soften, 4),
-        "matchup_response_effective": round(MATCHUP_RESPONSE * soften, 4),
+        "matchup_response_base": round(matchup_response_base(), 4),
+        "matchup_response_effective": round(matchup_response_for_week(w), 4),
+        "matchup_response_overlay_active": _MATCHUP_RESPONSE_OVERLAY.get() is not None,
         "roster_identity_uncertainty": round(roster_u, 4),
         "note": (
             "W1–W4 CFB: inflate outcome SD more than NFL, soften separation, "
@@ -317,8 +326,35 @@ def win_prob_margin_sd_for_week(week: int) -> float:
     return WIN_PROB_MARGIN_SD * early_season_factor(week, EARLY_SEASON_MARGIN_SD_MULT)
 
 
+def matchup_response_base() -> float:
+    """Frozen 1.40 unless a research overlay is active on this context."""
+    overlay = _MATCHUP_RESPONSE_OVERLAY.get()
+    if overlay is None:
+        return float(MATCHUP_RESPONSE)
+    return float(overlay)
+
+
 def matchup_response_for_week(week: int) -> float:
-    return MATCHUP_RESPONSE * early_season_factor(week, EARLY_SEASON_SEPARATION_SOFTEN)
+    return matchup_response_base() * early_season_factor(
+        week, EARLY_SEASON_SEPARATION_SOFTEN
+    )
+
+
+@contextmanager
+def overlay_matchup_response(value: Optional[float]) -> Iterator[float]:
+    """Score-time MATCHUP_RESPONSE overlay. Does not mutate the frozen constant.
+
+    Early-season soften still applies on top of ``value``. Pass None to
+    yield the frozen 1.40 path with no overlay token.
+    """
+    if value is None:
+        yield float(MATCHUP_RESPONSE)
+        return
+    token = _MATCHUP_RESPONSE_OVERLAY.set(float(value))
+    try:
+        yield float(value)
+    finally:
+        _MATCHUP_RESPONSE_OVERLAY.reset(token)
 
 
 def strength_noise_sd_for_week(week: int) -> float:
@@ -357,6 +393,10 @@ def documentation() -> Dict[str, Any]:
     return {
         "engine_version": ENGINE_VERSION,
         "calibration_tag": CALIBRATION_TAG,
+        "qb_feature_contract_version": __import__(
+            "src.services.cfb_season_engine.qb_feature_contract",
+            fromlist=["QB_FEATURE_CONTRACT_VERSION"],
+        ).QB_FEATURE_CONTRACT_VERSION,
         "fidelity": "approximate",
         "assumptions": [
             "Historical team ratings alone are insufficient for CFB 2026.",
