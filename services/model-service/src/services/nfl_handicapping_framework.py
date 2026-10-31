@@ -465,10 +465,13 @@ def compute_nfl_projection_decomposition(
             "margin_points": round(injury_margin_points, 4),
             "total_points": round(injury_total_points, 4),
             "available": bool(
-                injury_nowcast_impact_home is not None
-                or injury_nowcast_impact_away is not None
-                or injury_nowcast_offense_multiplier_home is not None
-                or injury_nowcast_offense_multiplier_away is not None
+                injury_conf > 0.0
+                and (
+                    injury_nowcast_impact_home is not None
+                    or injury_nowcast_impact_away is not None
+                    or injury_nowcast_offense_multiplier_home is not None
+                    or injury_nowcast_offense_multiplier_away is not None
+                )
             ),
             "notes": "Uses injury nowcast multipliers and confidence-aware scaling.",
             "raw_signals": {
@@ -838,6 +841,9 @@ def compute_nfl_projection_decomposition(
         (_to_float(injury_nowcast_impact_home, 0.0) or 0.0)
         + (_to_float(injury_nowcast_impact_away, 0.0) or 0.0)
     ) / 2.0
+    # t4688u / 88a08cae G-C1-STDEV: same confidence gate as the mean term
+    # (injury_conf above). Raw impact must not widen MC spread when conf=0.
+    gated_injury_impact = injury_impact_avg * injury_conf
     if not bool(err_cfg.get("enabled")):
         contributions["error_regime"] = {
             "margin_points": 0.0,
@@ -858,7 +864,7 @@ def compute_nfl_projection_decomposition(
             hours_since_injury_change=hours_change,
             weather_available=bool(weather_available),
             factor_coverage=factor_coverage,
-            injury_impact=injury_impact_avg,
+            injury_impact=gated_injury_impact,
             max_stdev_widen=float(err_cfg["max_stdev_widen"]),
             confidence_penalty_weight=float(err_cfg["confidence_penalty_weight"]),
             season_week=int(season_week) if season_week is not None else None,
