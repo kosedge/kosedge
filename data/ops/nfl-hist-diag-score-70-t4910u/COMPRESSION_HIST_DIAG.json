@@ -1,0 +1,23 @@
+{
+  "note": "Do not expect forecast-margin SD == realized-margin SD. Distinguish variation in forecast means from outcome noise.",
+  "sd_forecast_means": 2.9761705251687793,
+  "sd_realized_margin": 13.66217671031114,
+  "mean_if_sigma": 10.0068,
+  "coverage_margin_p10_p90": 0.8,
+  "coverage_total_p10_p90": 0.7428571428571429,
+  "coverage_nominal": 0.8,
+  "draw_replay_max_abs_err_margin": 0.0008911499999979533,
+  "draw_replay_max_abs_err_total": 0.000984624999993855,
+  "n": 70,
+  "addendum_file": "METRICS_ADDENDUM_t4910u.json",
+  "addendum_if_reinvoke": false,
+  "iqr_forecast_margin": 2.7241276868386866,
+  "iqr_realized_margin": 15.0,
+  "iqr_ratio_forecast_over_realized": 0.18160851245591245,
+  "range_forecast_margin": 13.982764725215848,
+  "range_realized_margin": 67.0,
+  "ols_slope_realized_on_forecast_margin": -0.42615276048073125,
+  "ols_r_margin": -0.09283317818637547,
+  "coverage_margin_50_80_90": [0.6142857142857143, 0.8, 0.8714285714285714],
+  "coverage_total_50_80_90": [0.5, 0.7428571428571429, 0.8857142857142857]
+}
