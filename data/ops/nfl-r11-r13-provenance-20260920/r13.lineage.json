@@ -1,0 +1,34 @@
+{
+  "label": "R13",
+  "status": "UNBOUND",
+  "bind_allowed": false,
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": null,
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": {}
+  },
+  "random_seeds": [],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "Label R13 is not present as an experiment identity in this checkout, git history, tags, Linear, Notion, Gmail, or Google Drive titles. In-repo 'WR13' / market-risk R1–R11 strings are unrelated and were not used."
+  ],
+  "evidence": [
+    "data/ops/nfl-r11-r13-provenance-20260920/search_log.json"
+  ],
+  "notes": "Fail-closed. Prior R13 experiment cannot be reconstructed from available artifacts without inventing a binding."
+}
