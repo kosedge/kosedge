@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from src.services.nfl_offline_if_caller import REJECT_THROUGH_W8, evaluate_caller, sha256_file
 from src.services.nfl_offline_if_eval_w8 import SUPPORTED_GAMES, TNF_GAME_ID
 from src.services.nfl_offline_if_eval_w8_v2 import V1_DIR, V2_DIR
@@ -61,3 +63,19 @@ def test_v3_rerun_before_after_vs_v2():
     assert artifacts["call_audit"]["passed"] is True
     assert f"HEAD={artifacts['manifest']['execution_tip']}" in artifacts["logs"]["stdout"]
     assert artifacts["manifest"]["execution_tip"] != V2_INVOKE_PARENT
+
+
+def test_sealed_v3_invoke_ran_at_declared_execution_tip():
+    _assert_sealed(V3_DIR)
+    manifest = json.loads((V3_DIR / "MANIFEST.json").read_text(encoding="utf-8"))
+    stdout = (V3_DIR / "INVOKE_STDOUT.txt").read_text(encoding="utf-8")
+    tip = manifest["execution_tip"]
+    assert tip == "90bf65ab332024f9c3d83df7868668282ea18c1d"
+    assert manifest["invoke_head_matches_execution_tip"] is True
+    assert f"HEAD={tip}" in stdout
+    assert f"EXECUTION_TIP={tip}" in stdout
+    assert tip != V2_INVOKE_PARENT
+    ba = json.loads((V3_DIR / "BEFORE_AFTER.json").read_text(encoding="utf-8"))
+    assert ba["phi_was_changed"] is True
+    assert ba["chi_sea_changed"] is True
+    assert ba["n_unchanged"] == 11

@@ -1,0 +1,24 @@
+{
+  "readiness_1_wired_admissible_run": {
+    "e1_admissible": false,
+    "fact": "13/13 remaining W8 games re-invoked Independent Fair at execution tip 90bf65ab (blend=0, rating_week=7, through-W7 c674da77, ET rest_days). DIAGNOSTIC, not E1.",
+    "scoring_admissible": false,
+    "wired_diagnostic_run": true
+  },
+  "readiness_4_coherence": {
+    "fact": "No sealed joint ST/ML coherence packet. Do not treat omitted failed coherence outputs as validation of remaining prices.",
+    "joint_st_ml": "INSUFFICIENT",
+    "status": "DIAGNOSTIC_IF_ONLY"
+  },
+  "readiness_6_fail_closed": {
+    "fact": "TNF CAR@GB rejected; operational THROUGH_W8_DATA_ACCEPT_MISSING; utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; no invented rest.",
+    "operational_through_w8_still_blocked": true,
+    "tnf_excluded": true
+  },
+  "readiness_8_publication_controls": {
+    "enabled": false,
+    "fact": "Controls tested. Public delivery not enabled.",
+    "prepared": true,
+    "public_delivery": false
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "baseline_packet": "eval_w8_t4850u_v2",
+  "baseline_packet_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+  "changed": [
+    {
+      "after_rest": 7.0,
+      "before_rest": 6.0,
+      "changed": true,
+      "deltas": {
+        "rest_days_away": {
+          "after": 7.0,
+          "before": 6.0
+        },
+        "rest_days_home": {
+          "after": 7.0,
+          "before": 6.0
+        }
+      },
+      "game_id": "2026-W08-PHI@WAS",
+      "if_outputs_changed": false,
+      "if_outputs_note": "margin_mu/total_mu/spread/win-prob/fair ML identical to v2 at the same seed"
+    },
+    {
+      "after_rest": 6.0,
+      "before_rest": 7.0,
+      "changed": true,
+      "deltas": {
+        "rest_days_away": {
+          "after": 6.0,
+          "before": 7.0
+        },
+        "rest_days_home": {
+          "after": 6.0,
+          "before": 7.0
+        }
+      },
+      "game_id": "2026-W08-CHI@SEA",
+      "if_outputs_changed": false,
+      "if_outputs_note": "margin_mu/total_mu/spread/win-prob/fair ML identical to v2 at the same seed"
+    }
+  ],
+  "chi_sea_changed": true,
+  "n_changed": 2,
+  "n_unchanged": 11,
+  "phi_was_changed": true,
+  "unchanged": [
+    "2026-W08-ARI@DAL",
+    "2026-W08-ATL@TB",
+    "2026-W08-BAL@BUF",
+    "2026-W08-CLE@PIT",
+    "2026-W08-IND@JAX",
+    "2026-W08-LV@NYJ",
+    "2026-W08-MIN@DET",
+    "2026-W08-TEN@CIN",
+    "2026-W08-LAC@LAR",
+    "2026-W08-KC@DEN",
+    "2026-W08-NE@MIA"
+  ]
+}

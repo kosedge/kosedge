@@ -39,3 +39,5 @@ NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen · C10/Odds HOLD.
 Diagnostic W8 consume at rating_week=7 using through-W7 `c674da77` is sealed under `eval_w8_t4850u/`. That packet is **not** E1, **not** FREE_PUBLIC, and does **not** change through-W8 FAIL-CLOSED or this BLOCKED caller packet.
 
 v2 packet is sealed under `eval_w8_t4850u_v2/`. D2 provenance add-only (t4862u) lives in `eval_w8_t4850u_v2_d2/` and does **not** rewrite v1 or v2 packets.
+
+v3 re-execution after ET rest_days (t4864u) is sealed under `eval_w8_t4850u_v3/`. Invoke ran at declared execution tip `90bf65ab`. v2 remains the before baseline.
