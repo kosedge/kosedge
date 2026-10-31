@@ -1,0 +1,263 @@
+{
+  "ticket": "t4921u",
+  "role": "R1 confirmatory addendum",
+  "verdict": "R1_PASS",
+  "reason": "all four R1 checks PASS; zero A-class FAIL; parent digests unchanged; ATS/OU NOT EMITTED",
+  "N_confirm": 200000,
+  "seeds": [
+    49210000,
+    49210001,
+    49210002,
+    49210003,
+    49210004,
+    49210005,
+    49210006,
+    49210007,
+    49210008,
+    49210009,
+    49210010,
+    49210011,
+    49210012
+  ],
+  "no_rerun_until_pass": true,
+  "one_shot": true,
+  "started_utc": "2026-10-31T15:14:48.131210+00:00",
+  "finished_utc": "2026-10-31T15:14:49.704137+00:00",
+  "sys_version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "protocol_sha256": "a1b4f03e2c5ee2c2dacee7b1ea21fd36584a656efe6920fa27629c467cb82b25",
+  "protocol_sha8": "a1b4f03e",
+  "erratum_sha256": "ae42c97f8d31737b538c01e7fbb6f6d130a12704fa70ad53a264e67f8f996455",
+  "erratum_sha8": "ae42c97f",
+  "exec_card_sha256": "2ed320d240656ca4040699b0ab8a11f1698fb1c3b816ed992405d8f53cabae19",
+  "exec_card_sha8": "2ed320d2",
+  "spec_sha256": "fe4dc220d208fe6312cb32c7e441c49448d6e3b11c40639d919f47b5aedbea95",
+  "spec_sha8": "fe4dc220",
+  "acceptance_map_tip": "3df95f51",
+  "parent_pins": {
+    "card_a_tip": "aa9605dc",
+    "packet_seal": "1f4ffde3",
+    "alex_ro": "b5de5df1",
+    "soft_c2_c3_tip": "9e370050",
+    "soft_c2_c3_scope": "CLOSED \u2014 out of scope",
+    "if_tip": "6ca03716",
+    "source_pin": "52d9e909",
+    "blend": 0,
+    "parent_N": 4000,
+    "parent_seeds": [
+      48500,
+      48501,
+      48502,
+      48503,
+      48504,
+      48505,
+      48506,
+      48507,
+      48508,
+      48509,
+      48510,
+      48511,
+      48512
+    ]
+  },
+  "parent_digests_unchanged": true,
+  "used_reconstructed_means_for_acceptance": false,
+  "market_blend": 0,
+  "source_pin_unedited": "52d9e909",
+  "if_tip": "6ca03716",
+  "soft_c2_c3": "CLOSED 9e370050 \u2014 out of scope",
+  "nfl_nogo": true,
+  "cert": 0,
+  "pub_bet": "HOLD",
+  "scope_label": "ATS/OU NOT EMITTED",
+  "r1_checks": [
+    {
+      "id": "J7_S",
+      "game_id": "2026-W08-CLE@PIT",
+      "observed": 45.49300388787633,
+      "expected": 45.45244589385797,
+      "SE": 0.031290010930210825,
+      "z": 1.2961962240543028,
+      "delta": null,
+      "band": "PASS",
+      "parent_N4000_was": "z=3.708 COND"
+    },
+    {
+      "id": "J7_S",
+      "game_id": "2026-W08-MIN@DET",
+      "observed": 45.18802365897011,
+      "expected": 45.20693466574373,
+      "SE": 0.03134503503139477,
+      "z": 0.6033174553698819,
+      "delta": null,
+      "band": "PASS",
+      "parent_N4000_was": "z=2.114 COND"
+    },
+    {
+      "id": "J7",
+      "game_id": "2026-W08-LAC@LAR",
+      "observed": 4.68979117595416,
+      "expected": 4.640944503498513,
+      "SE": 0.031107715295278934,
+      "z": 1.5702430085908659,
+      "delta": null,
+      "band": "PASS",
+      "parent_N4000_was": "z=2.423 COND"
+    },
+    {
+      "id": "J9",
+      "game_id": "2026-W08-LAC@LAR",
+      "observed": 0.631485,
+      "expected": 0.630801,
+      "SE": 0.001078683676466368,
+      "z": 0.6341061934307896,
+      "delta": 0.0006840000000000179,
+      "band": "PASS",
+      "parent_N4000_was": "\u0394p=0.0170 z=2.24 COND"
+    }
+  ],
+  "j11": {
+    "status": "NO_DECISIVE_DISAGREEMENT",
+    "any_decisive_fail": false,
+    "rows": [
+      {
+        "game_id": "2026-W08-ARI@DAL",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 2.174130397187662,
+        "p": 0.561,
+        "SE_D": 0.03142368225495505,
+        "SE_p": 0.001109683761201812,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-ATL@TB",
+        "band": "NOT_DECISIVE",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "m": -0.1284076997493423,
+        "p": 0.4959,
+        "SE_D": 0.031310679605340605,
+        "SE_p": 0.0011179957553027649,
+        "decisive": false
+      },
+      {
+        "game_id": "2026-W08-BAL@BUF",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 2.673492055391627,
+        "p": 0.5769,
+        "SE_D": 0.03135259939546887,
+        "SE_p": 0.0011047333591754165,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-CLE@PIT",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 1.0838558927669528,
+        "p": 0.5311,
+        "SE_D": 0.0312927043633541,
+        "SE_p": 0.0011158740201631186,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-IND@JAX",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 3.7254980012853443,
+        "p": 0.6058,
+        "SE_D": 0.03130660011530169,
+        "SE_p": 0.0010927273026697924,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-LV@NYJ",
+        "band": "NOT_DECISIVE",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "m": 0.23189535946923795,
+        "p": 0.5063,
+        "SE_D": 0.03143264611913794,
+        "SE_p": 0.0011179448125354847,
+        "decisive": false
+      },
+      {
+        "game_id": "2026-W08-MIN@DET",
+        "band": "PASS",
+        "note": "decisive",
+        "m": -1.2012826936846057,
+        "p": 0.4653,
+        "SE_D": 0.03128679270608525,
+        "SE_p": 0.0011153351998390438,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-TEN@CIN",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 4.245308209665323,
+        "p": 0.6192,
+        "SE_D": 0.031308240771496756,
+        "SE_p": 0.001085784047071516,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-LAC@LAR",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 4.68979117595416,
+        "p": 0.6315,
+        "SE_D": 0.031107715295278934,
+        "SE_p": 0.001078683676466368,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-KC@DEN",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 0.3166238983998535,
+        "p": 0.5092,
+        "SE_D": 0.03125866640975999,
+        "SE_p": 0.0011178455340519996,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-NE@MIA",
+        "band": "PASS",
+        "note": "decisive",
+        "m": -2.230623584612921,
+        "p": 0.4377,
+        "SE_D": 0.031360446689148336,
+        "SE_p": 0.0011093254228922188,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-PHI@WAS",
+        "band": "PASS",
+        "note": "decisive",
+        "m": 1.0334329010731325,
+        "p": 0.5286,
+        "SE_D": 0.03128871083182287,
+        "SE_p": 0.0011161970648142737,
+        "decisive": true
+      },
+      {
+        "game_id": "2026-W08-CHI@SEA",
+        "band": "NOT_DECISIVE",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "m": -0.1450062616506373,
+        "p": 0.494,
+        "SE_D": 0.031215205052762842,
+        "SE_p": 0.0011179526803492177,
+        "decisive": false
+      }
+    ],
+    "note": "R2, not required for R1. Decisive disagreement would block."
+  },
+  "j12": {
+    "band": "PASS",
+    "kendall_tau": 1.0
+  },
+  "a_class_fails": [],
+  "b_class_fails": [],
+  "contract_complete": true,
+  "non_claims": "IF-only engine internal sampling consistency at W8 for these 13 games. NOT calibration, forecast skill, market edge, ATS/OU validity, enterprise readiness, CERT, merge, publication, or betting."
+}

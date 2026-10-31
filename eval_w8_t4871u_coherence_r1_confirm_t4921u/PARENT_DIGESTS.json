@@ -1,0 +1,39 @@
+{
+  "note": "Parent Card A packet was not written, reseated, or re-graded. Digests below are of the attached RO parent files.",
+  "parent_pins": {
+    "card_a_tip": "aa9605dc",
+    "packet_seal": "1f4ffde3",
+    "alex_ro": "b5de5df1"
+  },
+  "files": {
+    "GAMES.json": {
+      "source": "/home/ubuntu/.cursor/projects/workspace/uploads/GAMES_6824.json",
+      "sha256": "c73a9c0c2901070cf6dca8ea24bd2285aa243b3419757939996bf78a5c0b97ca",
+      "pinned": "c73a9c0c2901070cf6dca8ea24bd2285aa243b3419757939996bf78a5c0b97ca",
+      "unchanged": true
+    },
+    "RESULTS.json": {
+      "source": "/home/ubuntu/.cursor/projects/workspace/uploads/RESULTS_e362.json",
+      "sha256": "e1c40da2bf7dbc50156ad78f577108a54779d315b3ac923ab5f6a7479dcbc0e1",
+      "pinned": "e1c40da2bf7dbc50156ad78f577108a54779d315b3ac923ab5f6a7479dcbc0e1",
+      "unchanged": true
+    },
+    "FROZEN_CONFIG.json": {
+      "source": "/home/ubuntu/.cursor/projects/workspace/uploads/FROZEN_CONFIG_1934.json",
+      "sha256": "7efc08ef2df860180054d4252ec9d91f3572c955d04912dd7fc38c26b8c52ea7",
+      "pinned": "7efc08ef2df860180054d4252ec9d91f3572c955d04912dd7fc38c26b8c52ea7",
+      "unchanged": true
+    }
+  },
+  "all_unchanged": true,
+  "lineage_parent_repro": {
+    "game_id": "2026-W08-ARI@DAL",
+    "parent_seed": 48500,
+    "parent_N": 4000,
+    "draw_array_sha256": "f73c433f88ab6ebdb560705e77489fb0066513db91f62367c2c226bb68bc4689",
+    "sealed": "f73c433f88ab6ebdb560705e77489fb0066513db91f62367c2c226bb68bc4689",
+    "match": true,
+    "note": "Generator identity check on parent seed/N only. Confirmatory seeds 49210000+i were not used for this check."
+  },
+  "confirm_packet_does_not_contain_parent_files": true
+}

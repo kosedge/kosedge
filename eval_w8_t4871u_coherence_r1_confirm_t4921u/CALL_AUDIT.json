@@ -1,0 +1,18 @@
+{
+  "odds_api_calls": 0,
+  "http_calls": 0,
+  "c10_calls": 0,
+  "market_reads": 0,
+  "network": "offline",
+  "ats_ou_fields_emitted": [],
+  "ats_ou_emitted": false,
+  "test_no_ats_ou_emitted": true,
+  "notes": "Confirmatory runner is offline MC from sealed pre-clamp \u03bc_h/\u03bc_a/\u03c3 only. No Odds API, no C10, no HTTP, no 2024\u201325 data, no SOURCE/math/blend change.",
+  "pid": 3105,
+  "argv": [
+    "/workspace/eval_w8_t4871u_coherence_r1_confirm_t4921u/run_r1_confirm_once.py"
+  ],
+  "cwd": "/workspace/eval_w8_t4871u_coherence_r1_confirm_t4921u",
+  "started_utc": "2026-10-31T15:14:48.131210+00:00",
+  "finished_utc": "2026-10-31T15:14:49.704137+00:00"
+}
