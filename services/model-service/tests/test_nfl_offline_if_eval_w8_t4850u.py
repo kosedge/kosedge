@@ -23,7 +23,10 @@ from src.services.nfl_offline_if_eval_w8 import (
     load_schedule,
     publication_controls,
     refuse_public_delivery,
+    rest_days_from_schedule,
+    rest_days_from_schedule_utc,
     run_eval_slate,
+    verify_rest_days,
 )
 
 
@@ -121,3 +124,65 @@ def test_eval_slate_invokes_13_diagnostic_only():
     ]
     assert rest_flags and all(flag == "VERIFY_AT_CONSUME" for flag in rest_flags)
     assert artifacts["findings"]["readiness_4_coherence"]["joint_st_ml"] == "INSUFFICIENT"
+
+
+PHI_WAS_KICK = "2026-11-02T01:20:00.000Z"  # Sunday 21:20 ET
+CHI_SEA_KICK = "2026-11-03T01:15:00.000Z"  # Monday 20:15 ET
+
+
+def test_phi_was_sunday_et_not_utc_monday():
+    rest = verify_rest_days(PHI_WAS_KICK)
+    assert rest["dow_et"] == 6
+    assert rest["dow_utc"] == 0
+    assert rest["utc_et_dow_mismatch"] is True
+    assert rest["status"] == "VERIFY_AT_CONSUME"
+    assert rest["rest_days_home"] == 7.0
+    assert rest["rest_days_away"] == 7.0
+    assert rest["rest_days_utc_heuristic"] == 6.0
+    assert rest["heuristic_inverted_if_utc"] is True
+    assert rest_days_from_schedule(PHI_WAS_KICK) == 7.0
+    assert rest_days_from_schedule_utc(PHI_WAS_KICK) == 6.0
+
+
+def test_chi_sea_monday_et_not_utc_tuesday():
+    rest = verify_rest_days(CHI_SEA_KICK)
+    assert rest["dow_et"] == 0
+    assert rest["dow_utc"] == 1
+    assert rest["utc_et_dow_mismatch"] is True
+    assert rest["status"] == "VERIFY_AT_CONSUME"
+    assert rest["rest_days_home"] == 6.0
+    assert rest["rest_days_away"] == 6.0
+    assert rest["rest_days_utc_heuristic"] == 7.0
+    assert rest["heuristic_inverted_if_utc"] is True
+    assert rest_days_from_schedule(CHI_SEA_KICK) == 6.0
+    assert rest_days_from_schedule_utc(CHI_SEA_KICK) == 7.0
+
+
+def test_w8_eligibility_rest_uses_et_and_keeps_verify_on_mismatch():
+    panel = load_panel()
+    schedule = load_schedule()
+    by_id = {g["game_id"]: g for g in schedule["games"]}
+    phi = _eligibility_row(
+        game_id="2026-W08-PHI@WAS",
+        schedule_game=by_id["2026-W08-PHI@WAS"],
+        panel=panel,
+    )
+    chi = _eligibility_row(
+        game_id="2026-W08-CHI@SEA",
+        schedule_game=by_id["2026-W08-CHI@SEA"],
+        panel=panel,
+    )
+    assert phi["rest"]["rest_days_home"] == 7.0
+    assert chi["rest"]["rest_days_home"] == 6.0
+    assert phi["rest"]["utc_et_dow_mismatch"] is True
+    assert chi["rest"]["utc_et_dow_mismatch"] is True
+    assert phi["rest"]["status"] == "VERIFY_AT_CONSUME"
+    assert chi["rest"]["status"] == "VERIFY_AT_CONSUME"
+    ari = _eligibility_row(
+        game_id="2026-W08-ARI@DAL",
+        schedule_game=by_id["2026-W08-ARI@DAL"],
+        panel=panel,
+    )
+    assert ari["rest"]["utc_et_dow_mismatch"] is False
+    assert ari["rest"]["rest_days_home"] == 7.0
+    assert ari["rest"]["status"] == "VERIFY_AT_CONSUME"

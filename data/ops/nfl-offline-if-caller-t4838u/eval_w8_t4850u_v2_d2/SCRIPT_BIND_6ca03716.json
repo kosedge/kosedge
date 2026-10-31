@@ -1,0 +1,30 @@
+{
+  "invoke_head": "426bd1d9e7d3eed4e9bf1166caa2b558862e7551",
+  "invoke_head_short": "426bd1d9",
+  "lineage_base": "b6d019b051f13156354504097d1635b64ab7ceae",
+  "lineage_base_short": "b6d019b0",
+  "packet_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+  "packet_tip_short": "6ca03716",
+  "pr_head_stamp": "1d8b089bcea5e6b3573e837bc17266d6c18ef1b6",
+  "pr_head_stamp_short": "1d8b089b",
+  "scripts_at_packet_tip": [
+    {
+      "git_blob": "a6f249d0ca517dd05ede3c1a303acd4b9607c863",
+      "path": "scripts/nfl/run_offline_if_eval_w8_t4850u_v2.py",
+      "rev": "6ca03716",
+      "sha256": "d1582231a014f717bc85e8bba634410bcb70a862776b2db0b9929106948d3314"
+    },
+    {
+      "git_blob": "f1675348af9c27e50d3ec201a9f81d07259901b1",
+      "path": "services/model-service/src/services/nfl_offline_if_eval_w8_v2.py",
+      "rev": "6ca03716",
+      "sha256": "a6ccb178b5c5c136e5aae8bc5ee0d31c1fe3ebe91268b8e6b51f59a828a989a3"
+    },
+    {
+      "git_blob": "77f34a83608097942233fdc618f96822a4879810",
+      "path": "services/model-service/src/services/nfl_offline_if_eval_w8.py",
+      "rev": "6ca03716",
+      "sha256": "f4c5aba02695e5fc11baac5b1ebe3f7b292b3742611bf6716659f05051ba872d"
+    }
+  ]
+}

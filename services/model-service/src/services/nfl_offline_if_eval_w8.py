@@ -120,21 +120,43 @@ REJECT_PUBLICATION = "PUBLICATION_REFUSED"
 ET = ZoneInfo("America/New_York")
 
 
-def rest_days_from_schedule(game_time_iso: str | None) -> float:
-    """Exact nfl_data.rest_days_from_schedule (no requests import)."""
-    if not game_time_iso:
-        return 7.0
-    try:
-        raw = game_time_iso[:-1] + "+00:00" if game_time_iso.endswith("Z") else game_time_iso
-        game_dt = datetime.fromisoformat(raw)
-    except Exception:
-        return 7.0
-    dow = game_dt.astimezone(timezone.utc).weekday()
+def _parse_kickoff(game_time_iso: str) -> datetime:
+    raw = game_time_iso[:-1] + "+00:00" if game_time_iso.endswith("Z") else game_time_iso
+    dt = datetime.fromisoformat(raw)
+    if dt.tzinfo is None:
+        raise ValueError("naive kickoff rejected")
+    return dt
+
+
+def _rest_from_weekday(dow: int) -> float:
+    """Thu=4, Mon=6, else=7. Does not add bye rest."""
     if dow == 3:
         return 4.0
     if dow == 0:
         return 6.0
     return 7.0
+
+
+def rest_days_from_schedule_utc(game_time_iso: str | None) -> float:
+    """Legacy UTC-DOW heuristic (nfl_data.rest_days_from_schedule). Kept for inversion evidence."""
+    if not game_time_iso:
+        return 7.0
+    try:
+        dow = _parse_kickoff(game_time_iso).astimezone(timezone.utc).weekday()
+    except Exception:
+        return 7.0
+    return _rest_from_weekday(dow)
+
+
+def rest_days_from_schedule(game_time_iso: str | None) -> float:
+    """DOW rest on America/New_York kick local date. Not the UTC Monday rule."""
+    if not game_time_iso:
+        return 7.0
+    try:
+        dow = _parse_kickoff(game_time_iso).astimezone(ET).weekday()
+    except Exception:
+        return 7.0
+    return _rest_from_weekday(dow)
 
 
 class EvalW8Reject(Exception):
@@ -213,21 +235,27 @@ def history_w1_w7(schedule: Mapping[str, Any]) -> List[Dict[str, Any]]:
 
 
 def verify_rest_days(kickoff_utc: str) -> Dict[str, Any]:
-    days = float(rest_days_from_schedule(kickoff_utc))
     utc = _as_utc(kickoff_utc)
     et = utc.astimezone(ET)
+    days_et = float(rest_days_from_schedule(kickoff_utc))
+    days_utc = float(rest_days_from_schedule_utc(kickoff_utc))
+    mismatch = utc.weekday() != et.weekday()
     return {
-        "rest_days_home": days,
-        "rest_days_away": days,
-        "source": "nfl_data.rest_days_from_schedule",
+        "rest_days_home": days_et,
+        "rest_days_away": days_et,
+        "rest_days_utc_heuristic": days_utc,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
         "status": "VERIFY_AT_CONSUME",
         "kickoff_utc": kickoff_utc,
+        "kickoff_et": et.isoformat(),
         "dow_utc": utc.weekday(),
         "dow_et": et.weekday(),
-        "utc_et_dow_mismatch": utc.weekday() != et.weekday(),
+        "utc_et_dow_mismatch": mismatch,
+        "heuristic_inverted_if_utc": days_et != days_utc,
         "note": (
-            "UTC DOW heuristic (Thu=4, Mon=6, else=7). "
-            "Bye rest is not added. Record mismatch; do not invent rest."
+            "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). "
+            "Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; "
+            "do not invent rest."
         ),
     }
 
@@ -821,7 +849,7 @@ def _render_unresolved(artifacts: Mapping[str, Any]) -> str:
             "- #4 joint ST/ML coherence packet INSUFFICIENT — IF mus only; do not infer remaining prices are valid",
             "- #5/#7 market-beat INSUFFICIENT — Odds HOLD; no market evidence invented",
             "- FREE_PUBLIC not CLEARed — publication controls refuse delivery (Coming Soon ON, CERT=0)",
-            "- rest_days VERIFY_AT_CONSUME — UTC DOW heuristic; bye rest not added",
+            "- rest_days VERIFY_AT_CONSUME — America/New_York kick local date; bye rest not added",
         ]
     )
     for row in rest_mismatch:

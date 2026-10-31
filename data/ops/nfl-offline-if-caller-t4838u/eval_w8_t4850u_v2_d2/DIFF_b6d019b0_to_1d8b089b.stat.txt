@@ -1,0 +1,52 @@
+ data/ops/nfl-offline-if-caller-t4838u/README.md    |   4 +
+ .../eval_w8_t4850u/DIAGNOSTIC_PACKET.json          | 146 ++++
+ .../eval_w8_t4850u/DIAGNOSTIC_PACKET.md            |  19 +
+ .../eval_w8_t4850u/ELIGIBILITY.json                | 301 +++++++
+ .../eval_w8_t4850u/FINDINGS.json                   |  28 +
+ .../eval_w8_t4850u/FINDINGS.md                     |  18 +
+ .../eval_w8_t4850u/PINS.json                       |  97 +++
+ .../eval_w8_t4850u/PUBLICATION_CONTROLS.json       |  21 +
+ .../eval_w8_t4850u/RESULTS.json                    | 262 ++++++
+ .../eval_w8_t4850u/SHA256SUMS                      |  12 +
+ .../eval_w8_t4850u/UNRESOLVED.json                 |   1 +
+ .../eval_w8_t4850u/UNRESOLVED.md                   |  15 +
+ .../eval_w8_t4850u/inputs/ACCEPT.json              |  35 +
+ .../inputs/team_efficiency_current_through_w7.json | 905 ++++++++++++++++++++
+ .../eval_w8_t4850u_v2/CALL_AUDIT.json              |  13 +
+ .../eval_w8_t4850u_v2/CONFIG.json                  |  25 +
+ .../eval_w8_t4850u_v2/DIAGNOSTIC_PACKET.json       | 162 ++++
+ .../eval_w8_t4850u_v2/DIAGNOSTIC_PACKET.md         |  13 +
+ .../eval_w8_t4850u_v2/ELIGIBILITY.json             | 301 +++++++
+ .../eval_w8_t4850u_v2/FINDINGS.json                |  36 +
+ .../eval_w8_t4850u_v2/FINDINGS.md                  |  16 +
+ .../eval_w8_t4850u_v2/INVOKE_LOG.json              |   5 +
+ .../eval_w8_t4850u_v2/INVOKE_STDERR.txt            |   0
+ .../eval_w8_t4850u_v2/INVOKE_STDOUT.txt            |  20 +
+ .../eval_w8_t4850u_v2/MANIFEST.json                | 114 +++
+ .../eval_w8_t4850u_v2/MANIFEST.md                  |  65 ++
+ .../eval_w8_t4850u_v2/PINS.json                    | 103 +++
+ .../eval_w8_t4850u_v2/PUBLICATION_CONTROLS.json    |  21 +
+ .../eval_w8_t4850u_v2/RESULTS.json                 | 366 ++++++++
+ .../eval_w8_t4850u_v2/RESULTS.md                   |  20 +
+ .../eval_w8_t4850u_v2/SHA256SUMS                   |  30 +
+ .../eval_w8_t4850u_v2/TEST_6_1.json                |  16 +
+ .../eval_w8_t4850u_v2/TEST_6_1.md                  |  27 +
+ .../eval_w8_t4850u_v2/TEST_6_1_EXIT.txt            |   1 +
+ .../eval_w8_t4850u_v2/TEST_6_1_STDERR.txt          |   0
+ .../eval_w8_t4850u_v2/TEST_6_1_STDOUT.txt          |  10 +
+ .../eval_w8_t4850u_v2/TEST_6_3.json                |  31 +
+ .../eval_w8_t4850u_v2/TEST_6_3.md                  |  42 +
+ .../eval_w8_t4850u_v2/TEST_6_3_EXIT.txt            |   1 +
+ .../eval_w8_t4850u_v2/TEST_6_3_STDERR.txt          |   0
+ .../eval_w8_t4850u_v2/TEST_6_3_STDOUT.txt          |  25 +
+ .../eval_w8_t4850u_v2/UNRESOLVED.json              |  42 +
+ .../eval_w8_t4850u_v2/UNRESOLVED.md                |  18 +
+ .../eval_w8_t4850u_v2/inputs/ACCEPT.json           |  35 +
+ .../inputs/team_efficiency_current_through_w7.json | 905 ++++++++++++++++++++
+ scripts/nfl/run_offline_if_eval_w8_t4850u.py       |  54 ++
+ scripts/nfl/run_offline_if_eval_w8_t4850u_v2.py    |  84 ++
+ .../src/services/nfl_offline_if_eval_w8.py         | 834 +++++++++++++++++++
+ .../src/services/nfl_offline_if_eval_w8_v2.py      | 916 +++++++++++++++++++++
+ .../tests/test_nfl_offline_if_eval_w8_t4850u.py    | 123 +++
+ .../tests/test_nfl_offline_if_eval_w8_t4850u_v2.py | 101 +++
+ 51 files changed, 6439 insertions(+)

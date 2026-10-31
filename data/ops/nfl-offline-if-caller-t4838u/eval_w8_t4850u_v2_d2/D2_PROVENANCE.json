@@ -1,0 +1,33 @@
+{
+  "alex_ro_conditional": "10ca67fe",
+  "order": "t4862u",
+  "label": "DIAGNOSTIC / EVAL_ONLY",
+  "add_only": true,
+  "rewrites_v1_packet": false,
+  "rewrites_v2_packet": false,
+  "public_delivery": false,
+  "e1_admissible": false,
+  "scoring_admissible_now": false,
+  "packet_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+  "packet_tip_short": "6ca03716",
+  "pr_head_stamp": "1d8b089bcea5e6b3573e837bc17266d6c18ef1b6",
+  "pr_head_stamp_short": "1d8b089b",
+  "invoke_head": "426bd1d9e7d3eed4e9bf1166caa2b558862e7551",
+  "invoke_head_short": "426bd1d9",
+  "invoke_stdout_head_line": "HEAD=426bd1d9e7d3eed4e9bf1166caa2b558862e7551",
+  "lineage_base": "b6d019b051f13156354504097d1635b64ab7ceae",
+  "lineage_base_short": "b6d019b0",
+  "cmd_at_packet_tip": "PYTHONPATH=services/model-service python3 scripts/nfl/run_offline_if_eval_w8_t4850u_v2.py --write-packet",
+  "v2_py_in_regenerated_diff": [
+    "scripts/nfl/run_offline_if_eval_w8_t4850u_v2.py",
+    "services/model-service/src/services/nfl_offline_if_eval_w8_v2.py",
+    "services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u_v2.py"
+  ],
+  "script_bind_path": "SCRIPT_BIND_6ca03716.json",
+  "diff_artifacts": [
+    "DIFF_b6d019b0_to_6ca03716.name-only.txt",
+    "DIFF_b6d019b0_to_6ca03716.stat.txt",
+    "DIFF_b6d019b0_to_1d8b089b.name-only.txt",
+    "DIFF_b6d019b0_to_1d8b089b.stat.txt"
+  ]
+}

@@ -8,6 +8,7 @@ from src.services.nfl_offline_if_eval_w8_v2 import (
     PARENT_TIP,
     PARENT_TIP_FULL,
     V1_DIR,
+    V2_DIR,
     capture_cli,
     render_unresolved_md,
     run_eval_slate_v2,
@@ -26,6 +27,16 @@ def test_v1_packet_sealed_untouched():
     for line in sha_file.read_text(encoding="utf-8").splitlines():
         digest, rel = line.split("  ", 1)
         assert sha256_file(V1_DIR / rel) == digest
+
+
+def test_v2_packet_sealed_untouched():
+    sha_file = V2_DIR / "SHA256SUMS"
+    assert sha_file.is_file()
+    stdout = (V2_DIR / "INVOKE_STDOUT.txt").read_text(encoding="utf-8")
+    assert "HEAD=426bd1d9e7d3eed4e9bf1166caa2b558862e7551" in stdout
+    for line in sha_file.read_text(encoding="utf-8").splitlines():
+        digest, rel = line.split("  ", 1)
+        assert sha256_file(V2_DIR / rel) == digest
 
 
 def test_6_1_induced_missing_field_rejects():

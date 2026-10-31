@@ -303,7 +303,7 @@ def evidence_gaps(eligibility: Sequence[Mapping[str, Any]]) -> List[Dict[str, st
         {
             "id": "REST_DAYS_VERIFY_AT_CONSUME",
             "class": "CONDITIONAL",
-            "detail": "rest_days VERIFY_AT_CONSUME — UTC DOW heuristic; bye rest not added",
+            "detail": "rest_days VERIFY_AT_CONSUME — America/New_York kick local date; bye rest not added",
         },
     ]
     for row in eligibility:
