@@ -200,9 +200,7 @@ describe("Pro-gated APIs — 401 + private cache (A4/A6)", () => {
     expect(entitledBody.count).toBe(1);
 
     vi.mocked(getProAccessState).mockResolvedValue("unauthenticated");
-    const unauth = await getNbaFair(
-      req("http://localhost/api/nba/fair-lines"),
-    );
+    const unauth = await getNbaFair(req("http://localhost/api/nba/fair-lines"));
     expect(unauth.status).toBe(401);
     expectNoStore(unauth);
     const unauthBody = (await unauth.json()) as { error?: string };

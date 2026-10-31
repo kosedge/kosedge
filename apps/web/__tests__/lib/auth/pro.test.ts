@@ -315,7 +315,15 @@ describe("Auth Pro Utilities", () => {
     });
 
     it("false and closed aliases ⇒ false", () => {
-      for (const value of ["false", "FALSE", "0", "no", "n", "off", "  false  "]) {
+      for (const value of [
+        "false",
+        "FALSE",
+        "0",
+        "no",
+        "n",
+        "off",
+        "  false  ",
+      ]) {
         process.env.OPEN_ACCESS_PREVIEW = value;
         expect(isOpenAccessPreviewEnabled()).toBe(false);
       }
@@ -397,9 +405,11 @@ describe("Auth Pro Utilities", () => {
           expect(await getProAccessState()).toBe(expectedPro[role][flag]);
           expect(await isEntitledProUser()).toBe(expectedEntitled[role]);
           expect(await getEntitledProAccessState()).toBe(
-            role === "anonymous" ? "unauthenticated" : expectedEntitled[role]
-              ? "authorized"
-              : "forbidden",
+            role === "anonymous"
+              ? "unauthenticated"
+              : expectedEntitled[role]
+                ? "authorized"
+                : "forbidden",
           );
         });
       }

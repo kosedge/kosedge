@@ -25,9 +25,7 @@ describe("pricing page preview behavior (A6)", () => {
   it("with preview false, entitled users redirect to /pro/welcome", async () => {
     isOpenAccessPreviewEnabled.mockReturnValue(false);
     isProUser.mockResolvedValue(true);
-    await expect(PricingPage()).rejects.toThrow(
-      "NEXT_REDIRECT /pro/welcome",
-    );
+    await expect(PricingPage()).rejects.toThrow("NEXT_REDIRECT /pro/welcome");
   });
 
   it("with preview unset/false, non-entitled users stay on pricing", async () => {
