@@ -1,0 +1,92 @@
+{
+  "packet": "nfl-if-compression-diag-t4902u",
+  "class": "CONDITIONAL_DIAG",
+  "owner": "t4902u",
+  "read_only": true,
+  "math_changed": false,
+  "cert": 0,
+  "nfl": "NO-GO",
+  "starting_ref": "6ca03716fe52930332d5ffba302c312a651980cc",
+  "if": {
+    "tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "tip_short": "6ca03716",
+    "run_id": "eval-w8-t4850u-v2-20261031T021529Z-232f5da7",
+    "RESULTS_sha256": "31cb1d89260693447b5715fd3e5472e49faa45ebf4c741c2bae38a3543c6cf69",
+    "market_blend": 0,
+    "rating_week": 7,
+    "target_week": 8,
+    "simulations": 4000,
+    "sigma": 10.0068,
+    "status_labels_not_causal": ["DIAGNOSTIC_IF_ONLY", "DATA_PARTIAL"]
+  },
+  "compare": {
+    "seal_sha256": "e19d6c3cca7f27849dce0f5897bc53effc7d7248b08a50a105930df6b37a27d8",
+    "seal_sha8": "e19d6c3c",
+    "table_sha256": "bfa50665cd5df88a1ba76f977bc8e967cfc1a9f0ae86034f36481ca1c7807b28",
+    "table_sha8": "bfa50665",
+    "primary_book": "draftkings",
+    "snapshot_class": "current_post_seal",
+    "T_now": "2026-10-31T03:20:28Z",
+    "odds_raw_sha256": "46910aad200d7d64ff17039d110bba056bd57ee865e24009c237e0986a7d5356",
+    "call_audit_sha8": "586cd1c5"
+  },
+  "owner_direction": {
+    "sha256": "f06adadf5dd977c83d26648d7f536975622f530f0ae8d8e58345481440cb67c7"
+  },
+  "as_of": {
+    "contract": "rating_week = target_week - 1; through-W7 panel for W8 IF",
+    "sha8": "cf514078",
+    "status": "PASS_ASOF_BOUNDARY",
+    "tip": "1010b86f",
+    "module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98"
+  },
+  "source_only": {
+    "object": "services/model-service/src/services/nfl_simulator.py",
+    "sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "sha8": "52d9e909",
+    "status": "SOURCE_ONLY"
+  },
+  "framework": {
+    "object": "services/model-service/src/services/nfl_handicapping_framework.py",
+    "sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3"
+  },
+  "caller": {
+    "object": "services/model-service/src/services/nfl_offline_if_caller.py",
+    "sha256": "69fb76984d50e981b4df3d979fba0942704d0e12c0a37935192b8f056e0ada50",
+    "contract_sha8": "b41f4b43",
+    "pass_contract_sha8": "1a53bbd3"
+  },
+  "eval_w8": {
+    "object": "services/model-service/src/services/nfl_offline_if_eval_w8.py",
+    "sha256": "f4c5aba02695e5fc11baac5b1ebe3f7b292b3742611bf6716659f05051ba872d"
+  },
+  "panel": {
+    "object": "data/ops/nfl-offline-if-caller-t4838u/eval_w8_t4850u_v2/inputs/team_efficiency_current_through_w7.json",
+    "sha256": "340a06dd81e25eece87a4d8475feca918e1ccb3c5d9663edfe5063a85ba3fa9e",
+    "sha8": "340a06dd",
+    "as_of_week": 7,
+    "through_w7_accept": "c674da77"
+  },
+  "schedule": {
+    "sha256": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe"
+  },
+  "w8": {
+    "status": "DATA_PARTIAL",
+    "complete": "1/14",
+    "tip": "ba9e8426",
+    "note": "Operational E1 block. Not a causal explanation of IF compression."
+  },
+  "focus_games": [
+    "2026-W08-TEN@CIN",
+    "2026-W08-IND@JAX",
+    "2026-W08-ARI@DAL"
+  ],
+  "bans": [
+    "no retune",
+    "no sportsbook matching",
+    "no feature/weight/blend change",
+    "no Odds re-pull",
+    "no E1",
+    "≠edge ≠CLV ≠betting ≠CERT"
+  ]
+}
