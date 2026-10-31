@@ -1,7 +1,7 @@
 {
   "readiness_1_wired_admissible_run": {
     "e1_admissible": false,
-    "fact": "13/13 remaining W8 games invoked Independent Fair (blend=0, rating_week=7, through-W7 c674da77). Packet tip 426bd1d9 on #667 DRAFT (parent v1 426bd1d9 / 426bd1d9e7d3eed4e9bf1166caa2b558862e7551, lineage b6d019b0). DIAGNOSTIC, not E1.",
+    "fact": "13/13 remaining W8 games invoked Independent Fair (blend=0, rating_week=7, through-W7 c674da77). Packet tip 6ca03716 on #667 DRAFT (parent v1 426bd1d9 / 426bd1d9e7d3eed4e9bf1166caa2b558862e7551, lineage b6d019b0). DIAGNOSTIC, not E1.",
     "scoring_admissible": false,
     "wired_diagnostic_run": true
   },
