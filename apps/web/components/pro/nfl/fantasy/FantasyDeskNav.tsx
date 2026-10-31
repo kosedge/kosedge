@@ -1,6 +1,7 @@
 import Link from "next/link";
-import type { FantasyScoringProfile } from "@/lib/fantasy/types";
 import { Fragment } from "react";
+import { withoutFootballPublicNumberHrefs } from "@/lib/cfb-edge-board-public";
+import type { FantasyScoringProfile } from "@/lib/fantasy/types";
 
 type DeskSurface = "rankings" | "builder" | "dfs" | "mock";
 type ResearchSurface = "guillotine" | "sleepers" | "pickem";
@@ -72,6 +73,20 @@ export function FantasyDeskNav({
   showResearch,
 }: Props) {
   const showResearchNav = showResearch ?? researchActive != null;
+  const deskLinks = withoutFootballPublicNumberHrefs(
+    LINKS.map((link) => ({
+      id: link.id,
+      label: link.label,
+      href: link.href(scoring),
+    })),
+  );
+  const researchLinks = withoutFootballPublicNumberHrefs(
+    RESEARCH_LINKS.map((link) => ({
+      id: link.id,
+      label: link.label,
+      href: link.href(scoring),
+    })),
+  );
   return (
     <div className={className}>
       <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-kos-text/40">
@@ -81,7 +96,7 @@ export function FantasyDeskNav({
         aria-label="DFS, Draft board, Builder"
         className="flex flex-wrap items-center gap-1.5 sm:gap-2"
       >
-        {LINKS.map((link, index) => {
+        {deskLinks.map((link, index) => {
           const isActive = link.id === active;
           return (
             <Fragment key={link.id}>
@@ -91,7 +106,7 @@ export function FantasyDeskNav({
                 </span>
               ) : null}
               <Link
-                href={link.href(scoring)}
+                href={link.href}
                 className={`min-h-10 min-w-[5.5rem] rounded-xl border px-3 py-2 text-center text-sm font-semibold transition active:scale-[0.98] ${
                   isActive
                     ? "border-kos-gold/45 bg-kos-gold/15 text-kos-gold"
@@ -111,7 +126,7 @@ export function FantasyDeskNav({
           className="mt-3 flex flex-wrap gap-2"
           aria-label="Fantasy research pages"
         >
-          {RESEARCH_LINKS.map((link) => {
+          {researchLinks.map((link) => {
             const isActive = researchActive === link.id;
             if (isActive) {
               return (
@@ -126,7 +141,7 @@ export function FantasyDeskNav({
             return (
               <Link
                 key={link.id}
-                href={link.href(scoring)}
+                href={link.href}
                 className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
               >
                 {link.label}

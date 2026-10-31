@@ -17,6 +17,7 @@ import {
   NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED,
   customerCtaHref,
   footballPublicNumbersAssembleUnavailablePayload,
+  isFootballPublicNumberHref,
   isFootballPublicNumbersDisabled,
   isNflEdgeBoardCustomerDisabled,
   isNflEdgeBoardCustomerEnabled,
@@ -89,6 +90,16 @@ describe("football public numbers kill switch", () => {
     expect(getSportToolNav("nba").map((i) => i.label)).toContain("Edges desk");
     expect(publicEdgeBoardHref("nfl")).toBeNull();
     expect(customerCtaHref("/edge-board/nfl")).toBeNull();
+    expect(isFootballPublicNumberHref("/pro/nfl/game-boxes")).toBe(true);
+    expect(isFootballPublicNumberHref("/pro/nfl/dfs")).toBe(true);
+    expect(isFootballPublicNumberHref("/pro/nfl/projections")).toBe(true);
+    expect(isFootballPublicNumberHref("/pro/nfl/weekly-fantasy")).toBe(true);
+    expect(isFootballPublicNumberHref("/pro/nfl/model")).toBe(true);
+    expect(customerCtaHref("/pro/nfl/game-boxes")).toBeNull();
+    expect(customerCtaHref("/pro/nfl/dfs")).toBeNull();
+    expect(customerCtaHref("/pro/nfl/projections")).toBeNull();
+    expect(customerCtaHref("/pro/nfl/weekly-fantasy")).toBeNull();
+    expect(customerCtaHref("/pro/nfl/model")).toBeNull();
     expect(publicEdgeBoardSports(SPORTS).map((s) => s.key)).not.toContain(
       "nfl",
     );
@@ -99,6 +110,11 @@ describe("football public numbers kill switch", () => {
       "app/edge-board/[sport]/page.tsx",
       "app/(pro)/pro/nfl/edges/page.tsx",
       "app/(pro)/pro/nfl/fair-lines/page.tsx",
+      "app/(pro)/pro/nfl/game-boxes/page.tsx",
+      "app/(pro)/pro/nfl/dfs/page.tsx",
+      "app/(pro)/pro/nfl/projections/page.tsx",
+      "app/(pro)/pro/nfl/weekly-fantasy/page.tsx",
+      "app/(pro)/pro/nfl/model/page.tsx",
       "app/(pro)/pro/power-ratings/[sport]/page.tsx",
       "app/(pro)/pro/nfl/slate/[date]/page.tsx",
       "app/(pro)/pro/cfb/teams/page.tsx",
@@ -122,6 +138,8 @@ describe("football public numbers kill switch", () => {
     expect(isNflEdgeBoardCustomerDisabled("nfl")).toBe(false);
     expect(isFootballPublicNumbersDisabled("nfl")).toBe(false);
     expect(publicEdgeBoardHref("nfl")).toBe("/edge-board/nfl");
+    expect(customerCtaHref("/pro/nfl/dfs")).toBe("/pro/nfl/dfs");
+    expect(customerCtaHref("/pro/nfl/model")).toBe("/pro/nfl/model");
     expect(publicEdgeBoardSports(SPORTS).map((s) => s.key)).toContain("nfl");
     expect(isFootballPublicNumbersDisabled("cfb")).toBe(true);
   });

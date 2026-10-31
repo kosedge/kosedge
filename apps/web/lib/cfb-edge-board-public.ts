@@ -239,6 +239,9 @@ export function isFootballPublicNumberHref(
     /(?:^|\/)pro\/power-ratings\/(?:nfl|cfb)(?:[/?#]|$)/.test(href) ||
     /(?:^|\/)pro\/kei-lines\/(?:nfl|cfb)(?:[/?#]|$)/.test(href) ||
     /(?:^|\/)pro\/nfl\/fantasy\/pickem(?:[/?#]|$)/.test(href) ||
+    /(?:^|\/)pro\/nfl\/(?:game-boxes|dfs|projections|weekly-fantasy|model)(?:[/?#]|$)/.test(
+      href,
+    ) ||
     /(?:^|\/)pro\/cfb\/teams(?:[/?#]|$)/.test(href)
   );
 }
@@ -317,13 +320,15 @@ export function customerCtaHref(
   href: string | null | undefined,
 ): string | null | undefined {
   if (href == null || href === "") return href;
-  if (isCfbEdgeBoardHref(href) && !isCfbEdgeBoardCustomerEnabled()) {
-    return null;
+  if (!isFootballPublicNumberHref(href)) return href;
+  if (
+    isCfbEdgeBoardHref(href) ||
+    /(?:^|\/)pro\/cfb\//.test(href) ||
+    /(?:^|\/)pro\/(?:power-ratings|kei-lines)\/cfb/.test(href)
+  ) {
+    return isCfbEdgeBoardCustomerEnabled() ? href : null;
   }
-  if (isNflEdgeBoardHref(href) && !isNflEdgeBoardCustomerEnabled()) {
-    return null;
-  }
-  return href;
+  return isNflEdgeBoardCustomerEnabled() ? href : null;
 }
 
 export type CfbCustomerPublishTag = "PLAY" | "LEAN" | "PASS";

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import SportHubShell from "@/components/pro/SportHubShell";
 import TruePrDriversBoard from "@/components/pro/nfl/TruePrDriversBoard";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import { fetchSeasonEngineStatus } from "@/lib/nfl-season-engine";
 import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 
@@ -20,6 +22,20 @@ const TOOLS = [
 ] as const;
 
 export default async function NflSeasonModelHubPage() {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="Season Model"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Season Model" />
+      </SportHubShell>
+    );
+  }
+
   const [status, truePr] = await Promise.all([
     fetchSeasonEngineStatus(),
     fetchTruePrProductSurface({ season: 2026, asOfWeek: 1 }),
