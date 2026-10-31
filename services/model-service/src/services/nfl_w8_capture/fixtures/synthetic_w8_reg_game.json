@@ -1,0 +1,119 @@
+{
+  "note": "Synthetic W8 REG fixture only. Not a live Odds pull. Not a seal.",
+  "game_id": "2026-W08-MIN@LAC",
+  "season": 2026,
+  "week": 8,
+  "season_type": "REG",
+  "kickoff_utc": "2026-10-29T23:15:00Z",
+  "home_team": "Los Angeles Chargers",
+  "away_team": "Minnesota Vikings",
+  "provider_server_ts": "2026-10-29T23:08:00Z",
+  "client_received_at": "2026-10-29T23:08:12Z",
+  "bookmakers": [
+    {
+      "key": "draftkings",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2026-10-29T23:08:00Z",
+          "outcomes": [
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.0,
+              "price": -110
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.0,
+              "price": -110
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanduel",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2026-10-29T23:09:00Z",
+          "outcomes": [
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.0,
+              "price": -108
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.0,
+              "price": -112
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betmgm",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2026-10-29T23:07:30Z",
+          "outcomes": [
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.5,
+              "price": -105
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.5,
+              "price": -115
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2026-10-29T23:06:00Z",
+          "outcomes": [
+            {
+              "name": "Los Angeles Chargers",
+              "point": -2.5,
+              "price": -110
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 2.5,
+              "price": -110
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "circa",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2026-10-29T23:08:45Z",
+          "outcomes": [
+            {
+              "name": "Los Angeles Chargers",
+              "point": -3.0,
+              "price": -105
+            },
+            {
+              "name": "Minnesota Vikings",
+              "point": 3.0,
+              "price": -115
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
