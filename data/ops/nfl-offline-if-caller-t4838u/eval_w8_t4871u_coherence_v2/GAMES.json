@@ -1,0 +1,3200 @@
+[
+  {
+    "away_wp": 0.431,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "f73c433f88ab6ebdb560705e77489fb0066513db91f62367c2c226bb68bc4689",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 22.1823,
+      "mu_h": 24.4164,
+      "n_clamped_a": 51,
+      "n_clamped_h": 30,
+      "reconstructed_postclamp_mu_a": 22.285214319431763,
+      "reconstructed_postclamp_mu_h": 24.66401375706764,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48500,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "ARI",
+      "game_id": "2026-W08-ARI@DAL",
+      "home_rolling_as_of": 7,
+      "home_team": "DAL",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "ARI",
+      "panel_home": "DAL",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 132,
+    "fair_home_ml": -132,
+    "game_id": "2026-W08-ARI@DAL",
+    "home_wp": 0.569,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "f73c433f88ab6ebdb560705e77489fb0066513db91f62367c2c226bb68bc4689",
+      "tol": 0,
+      "value": "f73c433f88ab6ebdb560705e77489fb0066513db91f62367c2c226bb68bc4689"
+    },
+    "margin_mu": 2.3787994376358736,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.431,
+      "fair_away_ml": 132,
+      "fair_home_ml": -132,
+      "home_win_prob": 0.569,
+      "spread_home": -2.38,
+      "total_mean": 46.95,
+      "total_p10": 29.19,
+      "total_p50": 46.72,
+      "total_p90": 64.9
+    },
+    "p_away_win_strict": 0.431,
+    "p_home_win": 0.569,
+    "p_model_home_win": 0.562779,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": -2.38,
+    "stats": {
+      "SE_D": 0.22450660471693615,
+      "SE_p": 0.007830054278228218,
+      "corr_HA": -0.010165190299411132,
+      "mean_A": 22.285214319431763,
+      "mean_D": 2.3787994376358736,
+      "mean_H": 24.66401375706764,
+      "mean_S": 46.9492280764994,
+      "n": 4000,
+      "n_away_strict": 1724,
+      "n_home_wins": 2276,
+      "n_ties": 0,
+      "p_away_win_strict": 0.431,
+      "p_home_win": 0.569,
+      "p_tie": 0.0,
+      "sd_D": 14.199044413132402,
+      "sd_S": 14.055440025993041
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.0012005623641262453,
+        "id": "J1",
+        "recompute": -2.3787994376358736,
+        "tol": 0.005,
+        "value": -2.38
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 46.9492280764994,
+        "tol": 0.005,
+        "value": 46.9492280764994
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.569,
+        "tol": 0.0,
+        "value": 0.569
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -5.551115123125783e-17,
+        "id": "J4",
+        "recompute": 0.43100000000000005,
+        "tol": 0.0001,
+        "value": 0.431
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -132,
+          132
+        ],
+        "tol": 0,
+        "value": [
+          -132,
+          132
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 3.1086244689504383e-15,
+        "id": "J6",
+        "recompute": 46.9492280764994,
+        "tol": 1e-09,
+        "value": 46.9492280764994
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22450660471693615,
+        "band": "PASS",
+        "class": "B",
+        "expected": 2.2115910163080024,
+        "id": "J7",
+        "observed": 2.3787994376358736,
+        "z": 0.7447817472394279
+      },
+      {
+        "SE": 0.2222360199901713,
+        "band": "PASS",
+        "class": "B",
+        "expected": 46.66944250245311,
+        "id": "J7_S",
+        "observed": 46.9492280764994,
+        "z": 1.2589569146291741
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 14.020588795099352,
+        "id": "J8",
+        "observed": 14.199044413132402,
+        "rel": 0.012728111539468734,
+        "z": 0.012728111539468734
+      },
+      {
+        "SE": 0.007830054278228218,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.006220999999999921,
+        "expected": 0.562779,
+        "id": "J9",
+        "observed": 0.569,
+        "z": 0.7945027938436727
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.010165190299411132,
+        "z": 0.010165190299411132
+      },
+      {
+        "SE": {
+          "SE_D": 0.22450660471693615,
+          "SE_p": 0.007830054278228218
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 2.3787994376358736,
+          "p": 0.569
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -132,
+    "tie_excluded_p": 0.569,
+    "total_mean_markets": 46.95,
+    "total_mu": 46.9492280764994
+  },
+  {
+    "away_wp": 0.4985,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "bea96215cc4589e41defe7a402649eeb3439f41f9fbaa29705aa7e0785b69cca",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 22.1316,
+      "mu_h": 22.0501,
+      "n_clamped_a": 50,
+      "n_clamped_h": 48,
+      "reconstructed_postclamp_mu_a": 22.147684799476952,
+      "reconstructed_postclamp_mu_h": 22.140422802359648,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48501,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "ATL",
+      "game_id": "2026-W08-ATL@TB",
+      "home_rolling_as_of": 7,
+      "home_team": "TB",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "ATL",
+      "panel_home": "TB",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 101,
+    "fair_home_ml": -101,
+    "game_id": "2026-W08-ATL@TB",
+    "home_wp": 0.5015,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "bea96215cc4589e41defe7a402649eeb3439f41f9fbaa29705aa7e0785b69cca",
+      "tol": 0,
+      "value": "bea96215cc4589e41defe7a402649eeb3439f41f9fbaa29705aa7e0785b69cca"
+    },
+    "margin_mu": -0.0072619971173024265,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.4985,
+      "fair_away_ml": 101,
+      "fair_home_ml": -101,
+      "home_win_prob": 0.5015,
+      "spread_home": 0.01,
+      "total_mean": 44.29,
+      "total_p10": 26.65,
+      "total_p50": 43.98,
+      "total_p90": 62.55
+    },
+    "p_away_win_strict": 0.4985,
+    "p_home_win": 0.5015,
+    "p_model_home_win": 0.497723,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": 0.01,
+    "stats": {
+      "SE_D": 0.21883016138344485,
+      "SE_p": 0.007905658574717226,
+      "corr_HA": 0.018506047415364074,
+      "mean_A": 22.147684799476952,
+      "mean_D": -0.0072619971173024265,
+      "mean_H": 22.140422802359648,
+      "mean_S": 44.2881076018366,
+      "n": 4000,
+      "n_away_strict": 1994,
+      "n_home_wins": 2006,
+      "n_ties": 0,
+      "p_away_win_strict": 0.4985,
+      "p_home_win": 0.5015,
+      "p_tie": 0.0,
+      "sd_D": 13.840034614278176,
+      "sd_S": 14.098572182934369
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0027380028826975737,
+        "id": "J1",
+        "recompute": 0.0072619971173024265,
+        "tol": 0.005,
+        "value": 0.01
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 44.2881076018366,
+        "tol": 0.005,
+        "value": 44.2881076018366
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.5015,
+        "tol": 0.0,
+        "value": 0.5015
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -5.551115123125783e-17,
+        "id": "J4",
+        "recompute": 0.49850000000000005,
+        "tol": 0.0001,
+        "value": 0.4985
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -101,
+          101
+        ],
+        "tol": 0,
+        "value": [
+          -101,
+          101
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 1.5933435126846973e-15,
+        "id": "J6",
+        "recompute": 44.2881076018366,
+        "tol": 1e-09,
+        "value": 44.2881076018366
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.21883016138344485,
+        "band": "PASS",
+        "class": "B",
+        "expected": -0.080388595821411,
+        "id": "J7",
+        "observed": -0.0072619971173024265,
+        "z": 0.33417056516250787
+      },
+      {
+        "SE": 0.22291799927182349,
+        "band": "PASS",
+        "class": "B",
+        "expected": 44.27742245741393,
+        "id": "J7_S",
+        "observed": 44.2881076018366,
+        "z": 0.047933071611880464
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.979334653170127,
+        "id": "J8",
+        "observed": 13.840034614278176,
+        "rel": 0.009964711651019958,
+        "z": 0.009964711651019958
+      },
+      {
+        "SE": 0.007905658574717226,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.0037769999999999193,
+        "expected": 0.497723,
+        "id": "J9",
+        "observed": 0.5015,
+        "z": 0.4777590588188305
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": 0.018506047415364074,
+        "z": 0.018506047415364074
+      },
+      {
+        "SE": {
+          "SE_D": 0.21883016138344485,
+          "SE_p": 0.007905658574717226
+        },
+        "band": "NOT_DECISIVE",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "observed": {
+          "m": -0.0072619971173024265,
+          "p": 0.5015
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -101,
+    "tie_excluded_p": 0.5015,
+    "total_mean_markets": 44.29,
+    "total_mu": 44.2881076018366
+  },
+  {
+    "away_wp": 0.422,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "c2886a20d9774d70562f261e5631eeb8323ada860648f7bb9be7f4ef26258e3a",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 21.7338,
+      "mu_h": 24.4012,
+      "n_clamped_a": 64,
+      "n_clamped_h": 29,
+      "reconstructed_postclamp_mu_a": 21.630128228753723,
+      "reconstructed_postclamp_mu_h": 24.475748788350575,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48502,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "BAL",
+      "game_id": "2026-W08-BAL@BUF",
+      "home_rolling_as_of": 6,
+      "home_team": "BUF",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "BAL",
+      "panel_home": "BUF",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 137,
+    "fair_home_ml": -137,
+    "game_id": "2026-W08-BAL@BUF",
+    "home_wp": 0.578,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "c2886a20d9774d70562f261e5631eeb8323ada860648f7bb9be7f4ef26258e3a",
+      "tol": 0,
+      "value": "c2886a20d9774d70562f261e5631eeb8323ada860648f7bb9be7f4ef26258e3a"
+    },
+    "margin_mu": 2.8456205595968544,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.422,
+      "fair_away_ml": 137,
+      "fair_home_ml": -137,
+      "home_win_prob": 0.578,
+      "spread_home": -2.85,
+      "total_mean": 46.11,
+      "total_p10": 27.7,
+      "total_p50": 46.07,
+      "total_p90": 64.45
+    },
+    "p_away_win_strict": 0.42175,
+    "p_home_win": 0.578,
+    "p_model_home_win": 0.574893,
+    "p_tie": 0.00025,
+    "sigma": 10.0068,
+    "spread_home": -2.85,
+    "stats": {
+      "SE_D": 0.2183598144871348,
+      "SE_p": 0.007808905172941979,
+      "corr_HA": 0.026221295559354638,
+      "mean_A": 21.630128228753723,
+      "mean_D": 2.8456205595968544,
+      "mean_H": 24.475748788350575,
+      "mean_S": 46.1058770171043,
+      "n": 4000,
+      "n_away_strict": 1687,
+      "n_home_wins": 2312,
+      "n_ties": 1,
+      "p_away_win_strict": 0.42175,
+      "p_home_win": 0.578,
+      "p_tie": 0.00025,
+      "sd_D": 13.81028726462356,
+      "sd_S": 14.177279553402107
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.00437944040314564,
+        "id": "J1",
+        "recompute": -2.8456205595968544,
+        "tol": 0.005,
+        "value": -2.85
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 46.1058770171043,
+        "tol": 0.005,
+        "value": 46.1058770171043
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.578,
+        "tol": 0.0,
+        "value": 0.578
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -5.551115123125783e-17,
+        "id": "J4",
+        "recompute": 0.42200000000000004,
+        "tol": 0.0001,
+        "value": 0.422
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -137,
+          137
+        ],
+        "tol": 0,
+        "value": [
+          -137,
+          137
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 1.7763568394002505e-15,
+        "id": "J6",
+        "recompute": 46.1058770171043,
+        "tol": 1e-09,
+        "value": 46.1058770171043
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.2183598144871348,
+        "band": "PASS",
+        "class": "B",
+        "expected": 2.638673172938418,
+        "id": "J7",
+        "observed": 2.8456205595968544,
+        "z": 0.9477356772100994
+      },
+      {
+        "SE": 0.2241624720684271,
+        "band": "PASS",
+        "class": "B",
+        "expected": 46.21218407401067,
+        "id": "J7_S",
+        "observed": 46.1058770171043,
+        "z": 0.47424109809925297
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 14.01045650278309,
+        "id": "J8",
+        "observed": 13.81028726462356,
+        "rel": 0.01428713176617534,
+        "z": 0.01428713176617534
+      },
+      {
+        "SE": 0.007808905172941979,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.003106999999999971,
+        "expected": 0.574893,
+        "id": "J9",
+        "observed": 0.578,
+        "z": 0.39787907922941507
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": 0.026221295559354638,
+        "z": 0.026221295559354638
+      },
+      {
+        "SE": {
+          "SE_D": 0.2183598144871348,
+          "SE_p": 0.007808905172941979
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 2.8456205595968544,
+          "p": 0.578
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.00025,
+        "z": 0.00025
+      }
+    ],
+    "tie_excluded_ml": -137,
+    "tie_excluded_p": 0.5781445361340335,
+    "total_mean_markets": 46.11,
+    "total_mu": 46.1058770171043
+  },
+  {
+    "away_wp": 0.4838,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "75ba40ecdc1715b5516023b3b11d5d04fcecd9c027d1d1c010aa4b29bd6efde2",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 22.1531,
+      "mu_h": 23.2178,
+      "n_clamped_a": 46,
+      "n_clamped_h": 55,
+      "reconstructed_postclamp_mu_a": 21.95877926843059,
+      "reconstructed_postclamp_mu_h": 22.67357466703629,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48503,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "CLE",
+      "game_id": "2026-W08-CLE@PIT",
+      "home_rolling_as_of": 7,
+      "home_team": "PIT",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "CLE",
+      "panel_home": "PIT",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 107,
+    "fair_home_ml": -107,
+    "game_id": "2026-W08-CLE@PIT",
+    "home_wp": 0.5162,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "75ba40ecdc1715b5516023b3b11d5d04fcecd9c027d1d1c010aa4b29bd6efde2",
+      "tol": 0,
+      "value": "75ba40ecdc1715b5516023b3b11d5d04fcecd9c027d1d1c010aa4b29bd6efde2"
+    },
+    "margin_mu": 0.7147953986057045,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.4838,
+      "fair_away_ml": 107,
+      "fair_home_ml": -107,
+      "home_win_prob": 0.5162,
+      "spread_home": -0.71,
+      "total_mean": 44.63,
+      "total_p10": 26.85,
+      "total_p50": 44.6,
+      "total_p90": 62.34
+    },
+    "p_away_win_strict": 0.483,
+    "p_home_win": 0.51625,
+    "p_model_home_win": 0.530091,
+    "p_tie": 0.00075,
+    "sigma": 10.0068,
+    "spread_home": -0.71,
+    "stats": {
+      "SE_D": 0.2245878162811228,
+      "SE_p": 0.007901517852602753,
+      "corr_HA": -0.015394717852925953,
+      "mean_A": 21.95877926843059,
+      "mean_D": 0.7147953986057045,
+      "mean_H": 22.673574667036295,
+      "mean_S": 44.63235393546688,
+      "n": 4000,
+      "n_away_strict": 1932,
+      "n_home_wins": 2065,
+      "n_ties": 3,
+      "p_away_win_strict": 0.483,
+      "p_home_win": 0.51625,
+      "p_tie": 0.00075,
+      "sd_D": 14.204180683435895,
+      "sd_S": 13.987171081997804
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.004795398605704548,
+        "id": "J1",
+        "recompute": -0.7147953986057045,
+        "tol": 0.005,
+        "value": -0.71
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 44.63235393546688,
+        "tol": 0.005,
+        "value": 44.63235393546688
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.5162,
+        "tol": 0.0,
+        "value": 0.5162
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.4838,
+        "tol": 0.0001,
+        "value": 0.4838
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -107,
+          107
+        ],
+        "tol": 0,
+        "value": [
+          -107,
+          107
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 8.881784197001252e-16,
+        "id": "J6",
+        "recompute": 44.63235393546688,
+        "tol": 1e-09,
+        "value": 44.63235393546688
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.2245878162811228,
+        "band": "PASS",
+        "class": "B",
+        "expected": 1.0522135404594941,
+        "id": "J7",
+        "observed": 0.7147953986057045,
+        "z": 1.5023884529489968
+      },
+      {
+        "SE": 0.22115659320777417,
+        "band": "COND",
+        "class": "B",
+        "expected": 45.45244589385797,
+        "id": "J7_S",
+        "observed": 44.63235393546688,
+        "z": 3.708195837601014
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 14.002271768688635,
+        "id": "J8",
+        "observed": 14.204180683435895,
+        "rel": 0.014419725461889825,
+        "z": 0.014419725461889825
+      },
+      {
+        "SE": 0.007901517852602753,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.013840999999999992,
+        "expected": 0.530091,
+        "id": "J9",
+        "observed": 0.51625,
+        "z": 1.7516887588174948
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.015394717852925953,
+        "z": 0.015394717852925953
+      },
+      {
+        "SE": {
+          "SE_D": 0.2245878162811228,
+          "SE_p": 0.007901517852602753
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 0.7147953986057045,
+          "p": 0.5162
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.00075,
+        "z": 0.00075
+      }
+    ],
+    "tie_excluded_ml": -107,
+    "tie_excluded_p": 0.5166374781085814,
+    "total_mean_markets": 44.63,
+    "total_mu": 44.63235393546688
+  },
+  {
+    "away_wp": 0.3915,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "c2d88150c9350ce4696eaae2e95ac13521c4db20d071b1ee6c0d986e3993c274",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 20.4837,
+      "mu_h": 24.2718,
+      "n_clamped_a": 64,
+      "n_clamped_h": 40,
+      "reconstructed_postclamp_mu_a": 20.568499061562964,
+      "reconstructed_postclamp_mu_h": 24.205650281870103,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48504,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "IND",
+      "game_id": "2026-W08-IND@JAX",
+      "home_rolling_as_of": 6,
+      "home_team": "JAX",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "IND",
+      "panel_home": "JAX",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 155,
+    "fair_home_ml": -155,
+    "game_id": "2026-W08-IND@JAX",
+    "home_wp": 0.6085,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "c2d88150c9350ce4696eaae2e95ac13521c4db20d071b1ee6c0d986e3993c274",
+      "tol": 0,
+      "value": "c2d88150c9350ce4696eaae2e95ac13521c4db20d071b1ee6c0d986e3993c274"
+    },
+    "margin_mu": 3.637151220307136,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.3915,
+      "fair_away_ml": 155,
+      "fair_home_ml": -155,
+      "home_win_prob": 0.6085,
+      "spread_home": -3.64,
+      "total_mean": 44.77,
+      "total_p10": 27.11,
+      "total_p50": 44.46,
+      "total_p90": 62.87
+    },
+    "p_away_win_strict": 0.3915,
+    "p_home_win": 0.6085,
+    "p_model_home_win": 0.605912,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": -3.64,
+    "stats": {
+      "SE_D": 0.22232127313943212,
+      "SE_p": 0.007717314137703609,
+      "corr_HA": -0.011616287306883761,
+      "mean_A": 20.568499061562964,
+      "mean_D": 3.637151220307136,
+      "mean_H": 24.205650281870103,
+      "mean_S": 44.774149343433066,
+      "n": 4000,
+      "n_away_strict": 1566,
+      "n_home_wins": 2434,
+      "n_ties": 0,
+      "p_away_win_strict": 0.3915,
+      "p_home_win": 0.6085,
+      "p_tie": 0.0,
+      "sd_D": 14.06083190858037,
+      "sd_S": 13.898444225336448
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.002848779692864234,
+        "id": "J1",
+        "recompute": -3.637151220307136,
+        "tol": 0.005,
+        "value": -3.64
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 44.774149343433066,
+        "tol": 0.005,
+        "value": 44.774149343433066
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.6085,
+        "tol": 0.0,
+        "value": 0.6085
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 5.551115123125783e-17,
+        "id": "J4",
+        "recompute": 0.39149999999999996,
+        "tol": 0.0001,
+        "value": 0.3915
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -155,
+          155
+        ],
+        "tol": 0,
+        "value": [
+          -155,
+          155
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 3.1086244689504383e-15,
+        "id": "J6",
+        "recompute": 44.774149343433066,
+        "tol": 1e-09,
+        "value": 44.774149343433066
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22232127313943212,
+        "band": "PASS",
+        "class": "B",
+        "expected": 3.738452435449439,
+        "id": "J7",
+        "observed": 3.637151220307136,
+        "z": 0.45565237060679464
+      },
+      {
+        "SE": 0.21975369842438833,
+        "band": "PASS",
+        "class": "B",
+        "expected": 44.85554795508361,
+        "id": "J7_S",
+        "observed": 44.774149343433066,
+        "z": 0.3704083809927279
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.97569043779619,
+        "id": "J8",
+        "observed": 14.06083190858037,
+        "rel": 0.006092111954191626,
+        "z": 0.006092111954191626
+      },
+      {
+        "SE": 0.007717314137703609,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.0025880000000000347,
+        "expected": 0.605912,
+        "id": "J9",
+        "observed": 0.6085,
+        "z": 0.3353498320557065
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.011616287306883761,
+        "z": 0.011616287306883761
+      },
+      {
+        "SE": {
+          "SE_D": 0.22232127313943212,
+          "SE_p": 0.007717314137703609
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 3.637151220307136,
+          "p": 0.6085
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -155,
+    "tie_excluded_p": 0.6085,
+    "total_mean_markets": 44.77,
+    "total_mu": 44.774149343433066
+  },
+  {
+    "away_wp": 0.49,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "a8987ab7860fc7f5204253cb5672d47e13ad8dce8f6eac6498896f99e4d8f034",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 23.2237,
+      "mu_h": 23.4802,
+      "n_clamped_a": 37,
+      "n_clamped_h": 34,
+      "reconstructed_postclamp_mu_a": 23.092364067136295,
+      "reconstructed_postclamp_mu_h": 23.441521139446763,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48505,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "LV",
+      "game_id": "2026-W08-LV@NYJ",
+      "home_rolling_as_of": 7,
+      "home_team": "NYJ",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "LV",
+      "panel_home": "NYJ",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 104,
+    "fair_home_ml": -104,
+    "game_id": "2026-W08-LV@NYJ",
+    "home_wp": 0.51,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "a8987ab7860fc7f5204253cb5672d47e13ad8dce8f6eac6498896f99e4d8f034",
+      "tol": 0,
+      "value": "a8987ab7860fc7f5204253cb5672d47e13ad8dce8f6eac6498896f99e4d8f034"
+    },
+    "margin_mu": 0.3491570723104685,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.49,
+      "fair_away_ml": 104,
+      "fair_home_ml": -104,
+      "home_win_prob": 0.51,
+      "spread_home": -0.35,
+      "total_mean": 46.53,
+      "total_p10": 28.15,
+      "total_p50": 46.6,
+      "total_p90": 64.83
+    },
+    "p_away_win_strict": 0.49,
+    "p_home_win": 0.51,
+    "p_model_home_win": 0.507405,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": -0.35,
+    "stats": {
+      "SE_D": 0.22185927284501572,
+      "SE_p": 0.00790411285344535,
+      "corr_HA": 0.0014943000499122283,
+      "mean_A": 23.092364067136295,
+      "mean_D": 0.3491570723104685,
+      "mean_H": 23.441521139446763,
+      "mean_S": 46.53388520658306,
+      "n": 4000,
+      "n_away_strict": 1960,
+      "n_home_wins": 2040,
+      "n_ties": 0,
+      "p_away_win_strict": 0.49,
+      "p_home_win": 0.51,
+      "p_tie": 0.0,
+      "sd_D": 14.031612444379887,
+      "sd_S": 14.052595546034668
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.0008429276895314808,
+        "id": "J1",
+        "recompute": -0.3491570723104685,
+        "tol": 0.005,
+        "value": -0.35
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 46.53388520658306,
+        "tol": 0.005,
+        "value": 46.53388520658306
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.51,
+        "tol": 0.0,
+        "value": 0.51
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.49,
+        "tol": 0.0001,
+        "value": 0.49
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -104,
+          104
+        ],
+        "tol": 0,
+        "value": [
+          -104,
+          104
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 1.6653345369377348e-16,
+        "id": "J6",
+        "recompute": 46.53388520658306,
+        "tol": 1e-09,
+        "value": 46.53388520658306
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22185927284501572,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.2539837865635626,
+        "id": "J7",
+        "observed": 0.3491570723104685,
+        "z": 0.4289804276668262
+      },
+      {
+        "SE": 0.2221910448130355,
+        "band": "PASS",
+        "class": "B",
+        "expected": 46.770323368248654,
+        "id": "J7_S",
+        "observed": 46.53388520658306,
+        "z": 1.064121021909542
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 14.026895282271115,
+        "id": "J8",
+        "observed": 14.031612444379887,
+        "rel": 0.00033629409886121864,
+        "z": 0.00033629409886121864
+      },
+      {
+        "SE": 0.00790411285344535,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.002595000000000014,
+        "expected": 0.507405,
+        "id": "J9",
+        "observed": 0.51,
+        "z": 0.3283100897109371
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": 0.0014943000499122283,
+        "z": 0.0014943000499122283
+      },
+      {
+        "SE": {
+          "SE_D": 0.22185927284501572,
+          "SE_p": 0.00790411285344535
+        },
+        "band": "NOT_DECISIVE",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "observed": {
+          "m": 0.3491570723104685,
+          "p": 0.51
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -104,
+    "tie_excluded_p": 0.51,
+    "total_mean_markets": 46.53,
+    "total_mu": 46.53388520658306
+  },
+  {
+    "away_wp": 0.5353,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "2bd243d8846ae5b209e9ae96feb75f59f41098ccd69985000a225db78c0b2983",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 23.1782,
+      "mu_h": 21.9439,
+      "n_clamped_a": 36,
+      "n_clamped_h": 48,
+      "reconstructed_postclamp_mu_a": 23.474693208242,
+      "reconstructed_postclamp_mu_h": 22.19892219420486,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48506,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "MIN",
+      "game_id": "2026-W08-MIN@DET",
+      "home_rolling_as_of": 7,
+      "home_team": "DET",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "MIN",
+      "panel_home": "DET",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": -115,
+    "fair_home_ml": 115,
+    "game_id": "2026-W08-MIN@DET",
+    "home_wp": 0.4647,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "2bd243d8846ae5b209e9ae96feb75f59f41098ccd69985000a225db78c0b2983",
+      "tol": 0,
+      "value": "2bd243d8846ae5b209e9ae96feb75f59f41098ccd69985000a225db78c0b2983"
+    },
+    "margin_mu": -1.275771014037138,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.5353,
+      "fair_away_ml": -115,
+      "fair_home_ml": 115,
+      "home_win_prob": 0.4647,
+      "spread_home": 1.28,
+      "total_mean": 45.67,
+      "total_p10": 28.12,
+      "total_p50": 45.44,
+      "total_p90": 63.7
+    },
+    "p_away_win_strict": 0.53525,
+    "p_home_win": 0.46475,
+    "p_model_home_win": 0.465181,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": 1.28,
+    "stats": {
+      "SE_D": 0.2210513740568875,
+      "SE_p": 0.007886023039213111,
+      "corr_HA": -0.0014365426661001124,
+      "mean_A": 23.474693208242,
+      "mean_D": -1.275771014037138,
+      "mean_H": 22.198922194204865,
+      "mean_S": 45.67361540244686,
+      "n": 4000,
+      "n_away_strict": 2141,
+      "n_home_wins": 1859,
+      "n_ties": 0,
+      "p_away_win_strict": 0.53525,
+      "p_home_win": 0.46475,
+      "p_tie": 0.0,
+      "sd_D": 13.980516438592387,
+      "sd_S": 13.960447239259128
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.00422898596286192,
+        "id": "J1",
+        "recompute": 1.275771014037138,
+        "tol": 0.005,
+        "value": 1.28
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 45.67361540244686,
+        "tol": 0.005,
+        "value": 45.67361540244686
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.4647,
+        "tol": 0.0,
+        "value": 0.4647
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.5353,
+        "tol": 0.0001,
+        "value": 0.5353
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          115,
+          -115
+        ],
+        "tol": 0,
+        "value": [
+          115,
+          -115
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 7.105427357601002e-15,
+        "id": "J6",
+        "recompute": 45.67361540244686,
+        "tol": 1e-09,
+        "value": 45.67361540244687
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.2210513740568875,
+        "band": "PASS",
+        "class": "B",
+        "expected": -1.2193340838242896,
+        "id": "J7",
+        "observed": -1.275771014037138,
+        "z": 0.25531137480432237
+      },
+      {
+        "SE": 0.22073405215334235,
+        "band": "COND",
+        "class": "B",
+        "expected": 45.20693466574373,
+        "id": "J7_S",
+        "observed": 45.67361540244686,
+        "z": 2.1142217621182104
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.997048159279107,
+        "id": "J8",
+        "observed": 13.980516438592387,
+        "rel": 0.0011810862189368322,
+        "z": 0.0011810862189368322
+      },
+      {
+        "SE": 0.007886023039213111,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.0004310000000000147,
+        "expected": 0.465181,
+        "id": "J9",
+        "observed": 0.46475,
+        "z": 0.054653657218204255
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.0014365426661001124,
+        "z": 0.0014365426661001124
+      },
+      {
+        "SE": {
+          "SE_D": 0.2210513740568875,
+          "SE_p": 0.007886023039213111
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": -1.275771014037138,
+          "p": 0.4647
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": 115,
+    "tie_excluded_p": 0.46475,
+    "total_mean_markets": 45.67,
+    "total_mu": 45.67361540244686
+  },
+  {
+    "away_wp": 0.3782,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "289e3d8ac462dacc6af9b33155b5d4394b228893771e6078cae0820af11d8230",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 20.6344,
+      "mu_h": 24.912,
+      "n_clamped_a": 81,
+      "n_clamped_h": 33,
+      "reconstructed_postclamp_mu_a": 20.63598728975083,
+      "reconstructed_postclamp_mu_h": 25.07696534432143,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48507,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "TEN",
+      "game_id": "2026-W08-TEN@CIN",
+      "home_rolling_as_of": 7,
+      "home_team": "CIN",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "panel_away": "TEN",
+      "panel_home": "CIN",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T13:00:00-05:00",
+        "kickoff_utc": "2026-11-01T18:00:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 164,
+    "fair_home_ml": -164,
+    "game_id": "2026-W08-TEN@CIN",
+    "home_wp": 0.6218,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "289e3d8ac462dacc6af9b33155b5d4394b228893771e6078cae0820af11d8230",
+      "tol": 0,
+      "value": "289e3d8ac462dacc6af9b33155b5d4394b228893771e6078cae0820af11d8230"
+    },
+    "margin_mu": 4.440978054570602,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.3782,
+      "fair_away_ml": 164,
+      "fair_home_ml": -164,
+      "home_win_prob": 0.6218,
+      "spread_home": -4.44,
+      "total_mean": 45.71,
+      "total_p10": 27.8,
+      "total_p50": 45.61,
+      "total_p90": 63.84
+    },
+    "p_away_win_strict": 0.37825,
+    "p_home_win": 0.62175,
+    "p_model_home_win": 0.619327,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": -4.44,
+    "stats": {
+      "SE_D": 0.22286678177216473,
+      "SE_p": 0.007667739847895206,
+      "corr_HA": -0.003294308532922742,
+      "mean_A": 20.635987289750833,
+      "mean_D": 4.440978054570602,
+      "mean_H": 25.07696534432143,
+      "mean_S": 45.71295263407226,
+      "n": 4000,
+      "n_away_strict": 1513,
+      "n_home_wins": 2487,
+      "n_ties": 0,
+      "p_away_win_strict": 0.37825,
+      "p_home_win": 0.62175,
+      "p_tie": 0.0,
+      "sd_D": 14.095332903834757,
+      "sd_S": 14.048981396443619
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0009780545706012944,
+        "id": "J1",
+        "recompute": -4.440978054570602,
+        "tol": 0.005,
+        "value": -4.44
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 45.71295263407226,
+        "tol": 0.005,
+        "value": 45.71295263407226
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.6218,
+        "tol": 0.0,
+        "value": 0.6218
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.3782,
+        "tol": 0.0001,
+        "value": 0.3782
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -164,
+          164
+        ],
+        "tol": 0,
+        "value": [
+          -164,
+          164
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 7.105427357601002e-15,
+        "id": "J6",
+        "recompute": 45.71295263407226,
+        "tol": 1e-09,
+        "value": 45.712952634072266
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22286678177216473,
+        "band": "PASS",
+        "class": "B",
+        "expected": 4.226477603226975,
+        "id": "J7",
+        "observed": 4.440978054570602,
+        "z": 0.9624603973637894
+      },
+      {
+        "SE": 0.2221339000904741,
+        "band": "PASS",
+        "class": "B",
+        "expected": 45.63895590795573,
+        "id": "J7_S",
+        "observed": 45.71295263407226,
+        "z": 0.33311766500470064
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.988019992724597,
+        "id": "J8",
+        "observed": 14.095332903834757,
+        "rel": 0.007671772785996538,
+        "z": 0.007671772785996538
+      },
+      {
+        "SE": 0.007667739847895206,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.002423000000000064,
+        "expected": 0.619327,
+        "id": "J9",
+        "observed": 0.62175,
+        "z": 0.3159992446359767
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.003294308532922742,
+        "z": 0.003294308532922742
+      },
+      {
+        "SE": {
+          "SE_D": 0.22286678177216473,
+          "SE_p": 0.007667739847895206
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 4.440978054570602,
+          "p": 0.6218
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -164,
+    "tie_excluded_p": 0.62175,
+    "total_mean_markets": 45.71,
+    "total_mu": 45.71295263407226
+  },
+  {
+    "away_wp": 0.3522,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "906fcd94b49a1fcf38d46cc625cff2a85f1d48a012b92d57a580306d116b87b7",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 19.72,
+      "mu_h": 24.4288,
+      "n_clamped_a": 96,
+      "n_clamped_h": 27,
+      "reconstructed_postclamp_mu_a": 19.581620748597178,
+      "reconstructed_postclamp_mu_h": 24.756997117635915,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48508,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 6,
+      "away_team": "LAC",
+      "game_id": "2026-W08-LAC@LAR",
+      "home_rolling_as_of": 7,
+      "home_team": "LAR",
+      "kickoff_utc": "2026-11-01T21:05:00.000Z",
+      "panel_away": "LAC",
+      "panel_home": "LA",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T16:05:00-05:00",
+        "kickoff_utc": "2026-11-01T21:05:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 184,
+    "fair_home_ml": -184,
+    "game_id": "2026-W08-LAC@LAR",
+    "home_wp": 0.6478,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "906fcd94b49a1fcf38d46cc625cff2a85f1d48a012b92d57a580306d116b87b7",
+      "tol": 0,
+      "value": "906fcd94b49a1fcf38d46cc625cff2a85f1d48a012b92d57a580306d116b87b7"
+    },
+    "margin_mu": 5.175376369038738,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.3522,
+      "fair_away_ml": 184,
+      "fair_home_ml": -184,
+      "home_win_prob": 0.6478,
+      "spread_home": -5.18,
+      "total_mean": 44.34,
+      "total_p10": 26.93,
+      "total_p50": 44.06,
+      "total_p90": 62.15
+    },
+    "p_away_win_strict": 0.352,
+    "p_home_win": 0.64775,
+    "p_model_home_win": 0.630801,
+    "p_tie": 0.00025,
+    "sigma": 10.0068,
+    "spread_home": -5.18,
+    "stats": {
+      "SE_D": 0.22054020552543963,
+      "SE_p": 0.0075526475076624616,
+      "corr_HA": -0.021997504057141362,
+      "mean_A": 19.581620748597178,
+      "mean_D": 5.175376369038738,
+      "mean_H": 24.75699711763592,
+      "mean_S": 44.33861786623309,
+      "n": 4000,
+      "n_away_strict": 1408,
+      "n_home_wins": 2591,
+      "n_ties": 1,
+      "p_away_win_strict": 0.352,
+      "p_home_win": 0.64775,
+      "p_tie": 0.00025,
+      "sd_D": 13.948187302040814,
+      "sd_S": 13.644804860089545
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.0046236309612615045,
+        "id": "J1",
+        "recompute": -5.175376369038738,
+        "tol": 0.005,
+        "value": -5.18
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 44.33861786623309,
+        "tol": 0.005,
+        "value": 44.33861786623309
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.6478,
+        "tol": 0.0,
+        "value": 0.6478
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 5.551115123125783e-17,
+        "id": "J4",
+        "recompute": 0.35219999999999996,
+        "tol": 0.0001,
+        "value": 0.3522
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -184,
+          184
+        ],
+        "tol": 0,
+        "value": [
+          -184,
+          184
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 2.6645352591003757e-15,
+        "id": "J6",
+        "recompute": 44.33861786623309,
+        "tol": 1e-09,
+        "value": 44.33861786623309
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22054020552543963,
+        "band": "COND",
+        "class": "B",
+        "expected": 4.640944503498513,
+        "id": "J7",
+        "observed": 5.175376369038738,
+        "z": 2.4232854243829816
+      },
+      {
+        "SE": 0.21574330793209048,
+        "band": "PASS",
+        "class": "B",
+        "expected": 44.264707195598106,
+        "id": "J7_S",
+        "observed": 44.33861786623309,
+        "z": 0.34258615640700246
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.953132678318186,
+        "id": "J8",
+        "observed": 13.948187302040814,
+        "rel": 0.0003544276680645253,
+        "z": 0.0003544276680645253
+      },
+      {
+        "SE": 0.0075526475076624616,
+        "band": "COND",
+        "class": "B",
+        "delta": 0.016949000000000103,
+        "expected": 0.630801,
+        "id": "J9",
+        "observed": 0.64775,
+        "z": 2.2441137339991926
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.021997504057141362,
+        "z": 0.021997504057141362
+      },
+      {
+        "SE": {
+          "SE_D": 0.22054020552543963,
+          "SE_p": 0.0075526475076624616
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 5.175376369038738,
+          "p": 0.6478
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.00025,
+        "z": 0.00025
+      }
+    ],
+    "tie_excluded_ml": -184,
+    "tie_excluded_p": 0.6479119779944986,
+    "total_mean_markets": 44.34,
+    "total_mu": 44.33861786623309
+  },
+  {
+    "away_wp": 0.4925,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "6141de1f93c2541674490fe4dfce62da82c79b107a6617be6a8616ba0e8b9725",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 22.3016,
+      "mu_h": 22.6093,
+      "n_clamped_a": 55,
+      "n_clamped_h": 44,
+      "reconstructed_postclamp_mu_a": 22.412998122005447,
+      "reconstructed_postclamp_mu_h": 22.836914270181552,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48509,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "KC",
+      "game_id": "2026-W08-KC@DEN",
+      "home_rolling_as_of": 7,
+      "home_team": "DEN",
+      "kickoff_utc": "2026-11-01T21:25:00.000Z",
+      "panel_away": "KC",
+      "panel_home": "DEN",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T16:25:00-05:00",
+        "kickoff_utc": "2026-11-01T21:25:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 103,
+    "fair_home_ml": -103,
+    "game_id": "2026-W08-KC@DEN",
+    "home_wp": 0.5075,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "6141de1f93c2541674490fe4dfce62da82c79b107a6617be6a8616ba0e8b9725",
+      "tol": 0,
+      "value": "6141de1f93c2541674490fe4dfce62da82c79b107a6617be6a8616ba0e8b9725"
+    },
+    "margin_mu": 0.42391614817610485,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.4925,
+      "fair_away_ml": 103,
+      "fair_home_ml": -103,
+      "home_win_prob": 0.5075,
+      "spread_home": -0.42,
+      "total_mean": 45.25,
+      "total_p10": 27.4,
+      "total_p50": 45.56,
+      "total_p90": 62.93
+    },
+    "p_away_win_strict": 0.4925,
+    "p_home_win": 0.5075,
+    "p_model_home_win": 0.508796,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": -0.42,
+    "stats": {
+      "SE_D": 0.22231935558856988,
+      "SE_p": 0.007904804709795177,
+      "corr_HA": -0.02332579783629791,
+      "mean_A": 22.412998122005447,
+      "mean_D": 0.42391614817610485,
+      "mean_H": 22.836914270181552,
+      "mean_S": 45.249912392187,
+      "n": 4000,
+      "n_away_strict": 1970,
+      "n_home_wins": 2030,
+      "n_ties": 0,
+      "p_away_win_strict": 0.4925,
+      "p_home_win": 0.5075,
+      "p_tie": 0.0,
+      "sd_D": 14.060710632015294,
+      "sd_S": 13.736486452288485
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.003916148176104861,
+        "id": "J1",
+        "recompute": -0.42391614817610485,
+        "tol": 0.005,
+        "value": -0.42
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 45.249912392187,
+        "tol": 0.005,
+        "value": 45.249912392187
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.5075,
+        "tol": 0.0,
+        "value": 0.5075
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -5.551115123125783e-17,
+        "id": "J4",
+        "recompute": 0.49250000000000005,
+        "tol": 0.0001,
+        "value": 0.4925
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -103,
+          103
+        ],
+        "tol": 0,
+        "value": [
+          -103,
+          103
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 3.885780586188048e-16,
+        "id": "J6",
+        "recompute": 45.249912392187,
+        "tol": 1e-09,
+        "value": 45.249912392187
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22231935558856988,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.30387884869329795,
+        "id": "J7",
+        "observed": 0.42391614817610485,
+        "z": 0.5399318433836733
+      },
+      {
+        "SE": 0.21719292118638736,
+        "band": "PASS",
+        "class": "B",
+        "expected": 44.99720013756992,
+        "id": "J7_S",
+        "observed": 45.249912392187,
+        "z": 1.1635381725917822
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.994385888272868,
+        "id": "J8",
+        "observed": 14.060710632015294,
+        "rel": 0.004739382225982853,
+        "z": 0.004739382225982853
+      },
+      {
+        "SE": 0.007904804709795177,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.0012960000000000749,
+        "expected": 0.508796,
+        "id": "J9",
+        "observed": 0.5075,
+        "z": 0.16395091941919154
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.02332579783629791,
+        "z": 0.02332579783629791
+      },
+      {
+        "SE": {
+          "SE_D": 0.22231935558856988,
+          "SE_p": 0.007904804709795177
+        },
+        "band": "NOT_DECISIVE",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "observed": {
+          "m": 0.42391614817610485,
+          "p": 0.5075
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -103,
+    "tie_excluded_p": 0.5075,
+    "total_mean_markets": 45.25,
+    "total_mu": 45.249912392187
+  },
+  {
+    "away_wp": 0.5682,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "04c6d89ff338143e87fef36b50b1f924f4a06c92a6d63898d09bd8c9651a3d42",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 24.2344,
+      "mu_h": 22.0768,
+      "n_clamped_a": 31,
+      "n_clamped_h": 52,
+      "reconstructed_postclamp_mu_a": 24.3971318081697,
+      "reconstructed_postclamp_mu_h": 21.9785982373099,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48510,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "NE",
+      "game_id": "2026-W08-NE@MIA",
+      "home_rolling_as_of": 7,
+      "home_team": "MIA",
+      "kickoff_utc": "2026-11-01T21:25:00.000Z",
+      "panel_away": "NE",
+      "panel_home": "MIA",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 6,
+        "heuristic_inverted_if_utc": false,
+        "kickoff_et": "2026-11-01T16:25:00-05:00",
+        "kickoff_utc": "2026-11-01T21:25:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": false
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": -132,
+    "fair_home_ml": 132,
+    "game_id": "2026-W08-NE@MIA",
+    "home_wp": 0.4318,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "04c6d89ff338143e87fef36b50b1f924f4a06c92a6d63898d09bd8c9651a3d42",
+      "tol": 0,
+      "value": "04c6d89ff338143e87fef36b50b1f924f4a06c92a6d63898d09bd8c9651a3d42"
+    },
+    "margin_mu": -2.4185335708597986,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.5682,
+      "fair_away_ml": -132,
+      "fair_home_ml": 132,
+      "home_win_prob": 0.4318,
+      "spread_home": 2.42,
+      "total_mean": 46.38,
+      "total_p10": 28.91,
+      "total_p50": 45.89,
+      "total_p90": 65.05
+    },
+    "p_away_win_strict": 0.568,
+    "p_home_win": 0.43175,
+    "p_model_home_win": 0.439328,
+    "p_tie": 0.00025,
+    "sigma": 10.0068,
+    "spread_home": 2.42,
+    "stats": {
+      "SE_D": 0.22346016312013559,
+      "SE_p": 0.00783169741339641,
+      "corr_HA": -0.006119835565864678,
+      "mean_A": 24.3971318081697,
+      "mean_D": -2.4185335708597986,
+      "mean_H": 21.9785982373099,
+      "mean_S": 46.3757300454796,
+      "n": 4000,
+      "n_away_strict": 2272,
+      "n_home_wins": 1727,
+      "n_ties": 1,
+      "p_away_win_strict": 0.568,
+      "p_home_win": 0.43175,
+      "p_tie": 0.00025,
+      "sd_D": 14.132861635447734,
+      "sd_S": 14.046651430233169
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0014664291402013419,
+        "id": "J1",
+        "recompute": 2.4185335708597986,
+        "tol": 0.005,
+        "value": 2.42
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 46.3757300454796,
+        "tol": 0.005,
+        "value": 46.3757300454796
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.4318,
+        "tol": 0.0,
+        "value": 0.4318
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.5682,
+        "tol": 0.0001,
+        "value": 0.5682
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          132,
+          -132
+        ],
+        "tol": 0,
+        "value": [
+          132,
+          -132
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 1.7763568394002505e-15,
+        "id": "J6",
+        "recompute": 46.3757300454796,
+        "tol": 1e-09,
+        "value": 46.3757300454796
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22346016312013559,
+        "band": "PASS",
+        "class": "B",
+        "expected": -2.135037246603723,
+        "id": "J7",
+        "observed": -2.4185335708597986,
+        "z": 1.2686660579571125
+      },
+      {
+        "SE": 0.22209706008999283,
+        "band": "PASS",
+        "class": "B",
+        "expected": 46.38473779351054,
+        "id": "J7_S",
+        "observed": 46.3757300454796,
+        "z": 0.04055770944148947
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 14.015954231668166,
+        "id": "J8",
+        "observed": 14.132861635447734,
+        "rel": 0.008341023511294187,
+        "z": 0.008341023511294187
+      },
+      {
+        "SE": 0.00783169741339641,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.007577999999999974,
+        "expected": 0.439328,
+        "id": "J9",
+        "observed": 0.43175,
+        "z": 0.9676063310410234
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.006119835565864678,
+        "z": 0.006119835565864678
+      },
+      {
+        "SE": {
+          "SE_D": 0.22346016312013559,
+          "SE_p": 0.00783169741339641
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": -2.4185335708597986,
+          "p": 0.4318
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.00025,
+        "z": 0.00025
+      }
+    ],
+    "tie_excluded_ml": 132,
+    "tie_excluded_p": 0.43185796449112285,
+    "total_mean_markets": 46.38,
+    "total_mu": 46.3757300454796
+  },
+  {
+    "away_wp": 0.476,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "3b9e91444392c2ac8ac6bae9ce8cf7b568291ba6d4b4ba56d48916bf122c4926",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 22.223,
+      "mu_h": 23.2701,
+      "n_clamped_a": 48,
+      "n_clamped_h": 46,
+      "reconstructed_postclamp_mu_a": 22.26090327260624,
+      "reconstructed_postclamp_mu_h": 23.208803340639026,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48511,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "PHI",
+      "game_id": "2026-W08-PHI@WAS",
+      "home_rolling_as_of": 6,
+      "home_team": "WAS",
+      "kickoff_utc": "2026-11-02T01:20:00.000Z",
+      "panel_away": "PHI",
+      "panel_home": "WAS",
+      "rest": {
+        "dow_et": 6,
+        "dow_utc": 0,
+        "heuristic_inverted_if_utc": true,
+        "kickoff_et": "2026-11-01T20:20:00-05:00",
+        "kickoff_utc": "2026-11-02T01:20:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 7.0,
+        "rest_days_home": 7.0,
+        "rest_days_utc_heuristic": 6.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": true
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": 110,
+    "fair_home_ml": -110,
+    "game_id": "2026-W08-PHI@WAS",
+    "home_wp": 0.524,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "3b9e91444392c2ac8ac6bae9ce8cf7b568291ba6d4b4ba56d48916bf122c4926",
+      "tol": 0,
+      "value": "3b9e91444392c2ac8ac6bae9ce8cf7b568291ba6d4b4ba56d48916bf122c4926"
+    },
+    "margin_mu": 0.9479000680327873,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.476,
+      "fair_away_ml": 110,
+      "fair_home_ml": -110,
+      "home_win_prob": 0.524,
+      "spread_home": -0.95,
+      "total_mean": 45.47,
+      "total_p10": 27.56,
+      "total_p50": 45.26,
+      "total_p90": 63.83
+    },
+    "p_away_win_strict": 0.476,
+    "p_home_win": 0.524,
+    "p_model_home_win": 0.529626,
+    "p_tie": 0.0,
+    "sigma": 10.0068,
+    "spread_home": -0.95,
+    "stats": {
+      "SE_D": 0.225720112788437,
+      "SE_p": 0.007896581538868575,
+      "corr_HA": -0.014637724320424988,
+      "mean_A": 22.26090327260624,
+      "mean_D": 0.9479000680327873,
+      "mean_H": 23.20880334063903,
+      "mean_S": 45.469706613245265,
+      "n": 4000,
+      "n_away_strict": 1904,
+      "n_home_wins": 2096,
+      "n_ties": 0,
+      "p_away_win_strict": 0.476,
+      "p_home_win": 0.524,
+      "p_tie": 0.0,
+      "sd_D": 14.275793402431225,
+      "sd_S": 14.068336624884115
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.002099931967212698,
+        "id": "J1",
+        "recompute": -0.9479000680327873,
+        "tol": 0.005,
+        "value": -0.95
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 45.469706613245265,
+        "tol": 0.005,
+        "value": 45.469706613245265
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.524,
+        "tol": 0.0,
+        "value": 0.524
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.476,
+        "tol": 0.0001,
+        "value": 0.476
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          -110,
+          110
+        ],
+        "tol": 0,
+        "value": [
+          -110,
+          110
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 3.4416913763379853e-15,
+        "id": "J6",
+        "recompute": 45.469706613245265,
+        "tol": 1e-09,
+        "value": 45.469706613245265
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.225720112788437,
+        "band": "PASS",
+        "class": "B",
+        "expected": 1.0350153707948557,
+        "id": "J7",
+        "observed": 0.9479000680327873,
+        "z": 0.385943909410146
+      },
+      {
+        "SE": 0.22243993312299826,
+        "band": "PASS",
+        "class": "B",
+        "expected": 45.573188167896774,
+        "id": "J7_S",
+        "observed": 45.469706613245265,
+        "z": 0.4652112289311332
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 14.004625674575061,
+        "id": "J8",
+        "observed": 14.275793402431225,
+        "rel": 0.019362725870528563,
+        "z": 0.019362725870528563
+      },
+      {
+        "SE": 0.007896581538868575,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.00562600000000002,
+        "expected": 0.529626,
+        "id": "J9",
+        "observed": 0.524,
+        "z": 0.7124601920853609
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.014637724320424988,
+        "z": 0.014637724320424988
+      },
+      {
+        "SE": {
+          "SE_D": 0.225720112788437,
+          "SE_p": 0.007896581538868575
+        },
+        "band": "PASS",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "decisive",
+        "observed": {
+          "m": 0.9479000680327873,
+          "p": 0.524
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.0,
+        "z": 0.0
+      }
+    ],
+    "tie_excluded_ml": -110,
+    "tie_excluded_p": 0.524,
+    "total_mean_markets": 45.47,
+    "total_mu": 45.469706613245265
+  },
+  {
+    "away_wp": 0.511,
+    "capture": {
+      "N": 4000,
+      "draw_array_sha256": "c122aa025faa5c54364e60f59935a5257bbd72fd1041ca5c05f66312311e412f",
+      "draw_layout": "interleaved float64 little-endian [H0,A0,H1,A1,...] post-clamp scores",
+      "draw_order": "home gauss then away gauss per sim; H=max(0,raw_h)",
+      "mu_a": 21.9481,
+      "mu_h": 21.7865,
+      "n_clamped_a": 64,
+      "n_clamped_h": 69,
+      "reconstructed_postclamp_mu_a": 21.991288767905345,
+      "reconstructed_postclamp_mu_h": 21.539007045367235,
+      "rng_id": "random.Random.gauss CPython 3.12.3",
+      "seed": 48512,
+      "sigma": 10.0068,
+      "source": "random.Random.gauss call-site wrap (pre-clamp params; post-clamp H,A)",
+      "used_reconstructed_means_for_acceptance": false
+    },
+    "eligibility": {
+      "away_rolling_as_of": 7,
+      "away_team": "CHI",
+      "game_id": "2026-W08-CHI@SEA",
+      "home_rolling_as_of": 7,
+      "home_team": "SEA",
+      "kickoff_utc": "2026-11-03T01:15:00.000Z",
+      "panel_away": "CHI",
+      "panel_home": "SEA",
+      "rest": {
+        "dow_et": 0,
+        "dow_utc": 1,
+        "heuristic_inverted_if_utc": true,
+        "kickoff_et": "2026-11-02T20:15:00-05:00",
+        "kickoff_utc": "2026-11-03T01:15:00.000Z",
+        "note": "Rest from America/New_York kick local date (Thu=4, Mon=6, else=7). Bye rest is not added. utc_et_dow_mismatch keeps VERIFY_AT_CONSUME; do not invent rest.",
+        "rest_days_away": 6.0,
+        "rest_days_home": 6.0,
+        "rest_days_utc_heuristic": 7.0,
+        "source": "eval_w8.rest_days_from_schedule America/New_York kick local date",
+        "status": "VERIFY_AT_CONSUME",
+        "utc_et_dow_mismatch": true
+      },
+      "status": "SUPPORTED",
+      "tnf_excluded": true
+    },
+    "engine_tie_convention": "ties\u2192away; \u2260NFL truth \u2260market settlement",
+    "fair_away_ml": -104,
+    "fair_home_ml": 104,
+    "game_id": "2026-W08-CHI@SEA",
+    "home_wp": 0.489,
+    "j13": {
+      "band": "PASS",
+      "class": "A",
+      "delta": 0,
+      "id": "J13",
+      "recompute": "c122aa025faa5c54364e60f59935a5257bbd72fd1041ca5c05f66312311e412f",
+      "tol": 0,
+      "value": "c122aa025faa5c54364e60f59935a5257bbd72fd1041ca5c05f66312311e412f"
+    },
+    "margin_mu": -0.45228172253810833,
+    "market_blend": 0,
+    "markets": {
+      "away_win_prob": 0.511,
+      "fair_away_ml": -104,
+      "fair_home_ml": 104,
+      "home_win_prob": 0.489,
+      "spread_home": 0.45,
+      "total_mean": 43.53,
+      "total_p10": 25.83,
+      "total_p50": 43.56,
+      "total_p90": 61.35
+    },
+    "p_away_win_strict": 0.51075,
+    "p_home_win": 0.489,
+    "p_model_home_win": 0.495447,
+    "p_tie": 0.00025,
+    "sigma": 10.0068,
+    "spread_home": 0.45,
+    "stats": {
+      "SE_D": 0.22256955636205628,
+      "SE_p": 0.007903780740885972,
+      "corr_HA": -0.010179172454449789,
+      "mean_A": 21.991288767905345,
+      "mean_D": -0.45228172253810833,
+      "mean_H": 21.53900704536724,
+      "mean_S": 43.53029581327258,
+      "n": 4000,
+      "n_away_strict": 2043,
+      "n_home_wins": 1956,
+      "n_ties": 1,
+      "p_away_win_strict": 0.51075,
+      "p_home_win": 0.489,
+      "p_tie": 0.00025,
+      "sd_D": 14.07653471834635,
+      "sd_S": 13.933970291440492
+    },
+    "table_a": [
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": -0.0022817225381083217,
+        "id": "J1",
+        "recompute": 0.45228172253810833,
+        "tol": 0.005,
+        "value": 0.45
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J2",
+        "recompute": 43.53029581327258,
+        "tol": 0.005,
+        "value": 43.53029581327258
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J3",
+        "recompute": 0.489,
+        "tol": 0.0,
+        "value": 0.489
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0.0,
+        "id": "J4",
+        "recompute": 0.511,
+        "tol": 0.0001,
+        "value": 0.511
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "J5",
+        "recompute": [
+          104,
+          -104
+        ],
+        "tol": 0,
+        "value": [
+          104,
+          -104
+        ]
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 7.105427357601002e-15,
+        "id": "J6",
+        "recompute": 43.53029581327258,
+        "tol": 1e-09,
+        "value": 43.53029581327259
+      },
+      {
+        "band": "PASS",
+        "class": "A",
+        "delta": 0,
+        "id": "tie_identity",
+        "recompute": 4000,
+        "tol": 0,
+        "value": 4000
+      }
+    ],
+    "table_b": [
+      {
+        "SE": 0.22256955636205628,
+        "band": "PASS",
+        "class": "B",
+        "expected": -0.15926708595367245,
+        "id": "J7",
+        "observed": -0.45228172253810833,
+        "z": 1.3165081576016886
+      },
+      {
+        "SE": 0.22031541485036074,
+        "band": "PASS",
+        "class": "B",
+        "expected": 43.83661463785361,
+        "id": "J7_S",
+        "observed": 43.53029581327258,
+        "z": 1.3903649219873238
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 13.969421737904046,
+        "id": "J8",
+        "observed": 14.07653471834635,
+        "rel": 0.007667674614738577,
+        "z": 0.007667674614738577
+      },
+      {
+        "SE": 0.007903780740885972,
+        "band": "PASS",
+        "class": "B",
+        "delta": 0.006447000000000036,
+        "expected": 0.495447,
+        "id": "J9",
+        "observed": 0.489,
+        "z": 0.8156855828059524
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": 0.0,
+        "id": "J10",
+        "observed": -0.010179172454449789,
+        "z": 0.010179172454449789
+      },
+      {
+        "SE": {
+          "SE_D": 0.22256955636205628,
+          "SE_p": 0.007903780740885972
+        },
+        "band": "NOT_DECISIVE",
+        "class": "B",
+        "expected": "sign(m)==sign(p-0.5) in decisive zone",
+        "id": "J11",
+        "note": "pick'em / inside noise \u2014 COND-neutral",
+        "observed": {
+          "m": -0.45228172253810833,
+          "p": 0.489
+        },
+        "z": null
+      },
+      {
+        "SE": null,
+        "band": "PASS",
+        "class": "B",
+        "expected": "\u22641e-3 PASS",
+        "id": "tie_rate",
+        "observed": 0.00025,
+        "z": 0.00025
+      }
+    ],
+    "tie_excluded_ml": 104,
+    "tie_excluded_p": 0.4891222805701425,
+    "total_mean_markets": 43.53,
+    "total_mu": 43.53029581327258
+  }
+]

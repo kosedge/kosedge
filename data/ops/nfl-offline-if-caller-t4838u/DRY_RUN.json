@@ -1,0 +1,23 @@
+{
+  "asof_module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+  "caller_id": "offline-if-caller-t4838u",
+  "digest": "2a9893b6548d01f29888b20b440825a8dd766a86a0c9cae6d4c2dbc57195231b",
+  "e1": false,
+  "e1_admissible": false,
+  "e1_label": null,
+  "forecast_class": "WIRING_ONLY",
+  "game_id": "SYN-2099-09-WIRING",
+  "independent_fair_invoked": true,
+  "margin_mu": 2.489613656124589,
+  "market_blend": 0,
+  "matchup_season": 2099,
+  "matchup_week": 9,
+  "mode": "dry_run_wiring",
+  "note": "Synthetic dry-run wiring probe only. Not an admissible E1 forecast. Not a 2026 slate row. Do not score, publish, or merge as emit.",
+  "rating_week": 8,
+  "scoring_admissible": false,
+  "seed": 48380,
+  "simulations": 300,
+  "source_pin_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+  "total_mu": 44.20261411389926
+}

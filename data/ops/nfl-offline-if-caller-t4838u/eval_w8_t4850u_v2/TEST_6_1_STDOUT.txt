@@ -1,0 +1,10 @@
+{
+  "code": "INPUTS_INCOMPLETE",
+  "contract": "b41f4b43 \u00a73/\u00a77",
+  "exit_code": 2,
+  "field": "home_off_epa_5g",
+  "imputed": false,
+  "message": "required contract fields missing: ['home_off_epa_5g']",
+  "passed": true,
+  "test": "6.1"
+}

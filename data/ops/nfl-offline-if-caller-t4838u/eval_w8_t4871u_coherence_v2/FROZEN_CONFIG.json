@@ -1,0 +1,23 @@
+{
+  "N": 4000,
+  "j9_mc_n": 1000000,
+  "j9_mc_seed": 48711001,
+  "no_rerun_until_pass": true,
+  "seed_base": 48500,
+  "seeds": [
+    48500,
+    48501,
+    48502,
+    48503,
+    48504,
+    48505,
+    48506,
+    48507,
+    48508,
+    48509,
+    48510,
+    48511,
+    48512
+  ],
+  "tolerances": "ALEX_IF_COHERENCE_SPEC_CLARIFICATION_t4871u_v1 sha fe4dc220"
+}

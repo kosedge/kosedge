@@ -1,0 +1,13 @@
+{
+  "c10_calls": 0,
+  "forbidden_hits": [],
+  "hl_adjustments": 0,
+  "network_blocked": true,
+  "new_forbidden_modules": [],
+  "note": "socket.socket.connect patched closed for the diagnostic invoke. passed=true means no Odds/C10/Railway/HL/network calls during this run. preexisting_matching_modules are informational only (already imported).",
+  "odds_calls": 0,
+  "passed": true,
+  "preexisting_matching_modules": [],
+  "railway_calls": 0,
+  "socket_attempts": []
+}

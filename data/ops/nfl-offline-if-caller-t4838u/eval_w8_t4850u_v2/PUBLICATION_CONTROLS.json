@@ -1,0 +1,21 @@
+{
+  "betting": "BLOCKED",
+  "c10": "HOLD",
+  "cert": 0,
+  "cert_claim": false,
+  "coming_soon": "ON",
+  "enabled": false,
+  "free_public": "REFUSED",
+  "nfl": "NO-GO",
+  "odds": "HOLD",
+  "paid_edge_language": false,
+  "public_delivery": false,
+  "reasons": [
+    "EVAL_ONLY t4850u \u2014 FREE_PUBLIC pending separate OWNER decision",
+    "Coming Soon ON / CERT=0 / NFL NO-GO",
+    "e1_admissible=false; scoring_admissible=false; DATA_PARTIAL",
+    "Odds HOLD; no sportsbook; no betting language",
+    "diagnostic label is not a controlled public surface"
+  ],
+  "surface": "OFFLINE_DIAGNOSTIC_ONLY"
+}

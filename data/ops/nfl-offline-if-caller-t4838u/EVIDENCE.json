@@ -1,0 +1,127 @@
+{
+  "caller_id": "offline-if-caller-t4838u",
+  "configuration": {
+    "c10_required": false,
+    "e1_emit": false,
+    "if_blend": 0,
+    "mode_operational_fail_closed": true,
+    "railway_required": false,
+    "sportsbook": false,
+    "unapproved_hl": false
+  },
+  "cos_order_sha256": "40634a3ebcf799368e0d950f98cb1840d7b87dfb40de6ec98d18a90f8da93dd4",
+  "data_identity": {
+    "as_of": "cf514078",
+    "as_of_module": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+    "contract": "b41f4b43",
+    "lineages_distinct": true,
+    "pass_contract": "1a53bbd3",
+    "source_pin": "52d9e909",
+    "through_w8": {
+      "data_accept": false,
+      "path": "data/ops/nfl-offline-if-caller-t4838u/THROUGH_W8_DATA_ACCEPT.json",
+      "present": true,
+      "record": {
+        "complete_games": "1/14",
+        "data_accept": false,
+        "imv_data_partial": "c674da77",
+        "invent_w8": false,
+        "note": "W8 DATA_READY lane STANDBY (#663 ba9e8426). Do not invent W8. PASS_CONTRACT 1a53bbd3 on file is not DATA ACCEPT. Caller fail-closes until a sealed through-W8 DATA_ACCEPT record with status=DATA_ACCEPT and data_accept=true is written by the W8/IMV lane.",
+        "pass_contract": "1a53bbd3",
+        "pr": 663,
+        "standby": "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY",
+        "status": "ABSENT",
+        "tip": "ba9e8426",
+        "w8_status": "DATA_PARTIAL"
+      },
+      "status": "ABSENT"
+    },
+    "w8_complete": "1/14",
+    "w8_status": "DATA_PARTIAL",
+    "w8_tip": "ba9e8426"
+  },
+  "decision_sha256": "1aeb63ee926955109409bfbdb5cea79b7f940b50e5ddae6cf51bd1ccd4e9c17a",
+  "execution_path": {
+    "asof_module": "src.services.nfl_pregame_asof",
+    "cli": "scripts/nfl/run_offline_if_caller_t4838u.py",
+    "contract": "b41f4b43",
+    "if_entrypoint": "simulate_nfl_game_independent_fair",
+    "module": "src.services.nfl_offline_if_caller",
+    "production_routes": false,
+    "tasks_py": false
+  },
+  "implementation_sha256": "f32101cf701dec933bd12754f3fffd50f5b2c926a3a3f48de864528177e250ae",
+  "pins": {
+    "as_of": {
+      "contract": "pregame as-of: every consumed game completed and required source available before target forecast cutoff; rating_week = target_week - 1 (contiguous weekly IF pipeline); every frame game completed and game_date < target game_date; no silent substitute window",
+      "distinct_from_source_pin_52d9e909": true,
+      "ingest_pin_cited_as_contrast_only": "1b39f4e9",
+      "module_object": "services/model-service/src/services/nfl_pregame_asof.py",
+      "module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+      "note": "PASS_ASOF_BOUNDARY cf514078 is the as-of identity. Do not report 52d9e909 as as-of.",
+      "research_id_repair_scope": "acknowledged; out of scope for this PR except citing as-of",
+      "research_id_repair_tip": "ef209d35",
+      "sha8": "cf514078",
+      "status": "PASS_ASOF_BOUNDARY",
+      "tip": "1010b86f",
+      "tip_lineage": "1010b86f+"
+    },
+    "contract": {
+      "pass_contract_note": "PASS_CONTRACT 1a53bbd3 on file \u2260 DATA ACCEPT",
+      "pass_contract_sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+      "pass_contract_sha8": "1a53bbd3",
+      "required_20": [
+        "offense_index_home",
+        "offense_index_away",
+        "defense_index_home",
+        "defense_index_away",
+        "home_off_epa_5g",
+        "away_off_epa_5g",
+        "home_def_epa_allowed_5g",
+        "away_def_epa_allowed_5g",
+        "home_pass_rate_5g",
+        "away_pass_rate_5g",
+        "home_success_offense_5g",
+        "away_success_offense_5g",
+        "home_success_defense_allowed_5g",
+        "away_success_defense_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_success_rate_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_red_zone_td_rate_5g"
+      ],
+      "required_context": [
+        "game_id",
+        "home_team",
+        "away_team",
+        "matchup_season",
+        "matchup_week",
+        "rest_days_home",
+        "rest_days_away"
+      ],
+      "sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+      "sha8": "b41f4b43"
+    },
+    "source_only": {
+      "lineage_commit": "1b39f4e9",
+      "lineage_commit_full": "1b39f4e9f6b2e04c264a41831f3bb7273e475011",
+      "note": "SOURCE ONLY \u2014 ratified 75d1b695; not an operational caller authorization; not the as-of identity",
+      "object": "services/model-service/src/services/nfl_simulator.py",
+      "ratified": "75d1b695",
+      "sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+      "sha8": "52d9e909",
+      "status": "SOURCE_ONLY"
+    },
+    "w8": {
+      "complete": "1/14",
+      "imv_data_partial": "c674da77",
+      "invent_w8": false,
+      "pr": 663,
+      "standby": "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY",
+      "status": "DATA_PARTIAL",
+      "tip": "ba9e8426"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "readiness_1_wired_admissible_run": {
+    "e1_admissible": false,
+    "fact": "13/13 remaining W8 games invoked Independent Fair (blend=0, rating_week=7, through-W7 c674da77). Packet tip 6ca03716 on #667 DRAFT (parent v1 426bd1d9 / 426bd1d9e7d3eed4e9bf1166caa2b558862e7551, lineage b6d019b0). DIAGNOSTIC, not E1.",
+    "scoring_admissible": false,
+    "wired_diagnostic_run": true
+  },
+  "readiness_4_coherence": {
+    "fact": "No sealed joint ST/ML coherence packet and no market-beat evidence. Do not treat omitted failed coherence outputs as validation of remaining prices. Odds HOLD \u2014 no invented market evidence.",
+    "joint_st_ml": "INSUFFICIENT",
+    "market": "INSUFFICIENT",
+    "status": "DIAGNOSTIC_IF_ONLY"
+  },
+  "readiness_6_fail_closed": {
+    "fact": "TNF CAR@GB rejected; operational invoke still THROUGH_W8_DATA_ACCEPT_MISSING; #6.1 induced-missing-field REJECT (exit 2); #6.3 pin/as-of mismatch non-zero exit (exit 3); publication controls refuse FREE_PUBLIC/BETTING.",
+    "operational_through_w8_still_blocked": true,
+    "publication_refused": true,
+    "tnf_excluded": true
+  },
+  "readiness_8_publication_controls": {
+    "cert": 0,
+    "coming_soon": "ON",
+    "enabled": false,
+    "fact": "Controls tested. Public delivery not enabled.",
+    "prepared": true,
+    "public_delivery": false
+  },
+  "test_6_1": {
+    "exit_code": 2,
+    "passed": true
+  },
+  "test_6_3": {
+    "exit_code": 3,
+    "passed": true
+  }
+}

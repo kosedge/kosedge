@@ -1,0 +1,38 @@
+{
+  "a_fail": [],
+  "b_cond": [
+    "2026-W08-CLE@PIT:J7_S",
+    "2026-W08-MIN@DET:J7_S",
+    "2026-W08-LAC@LAR:J7",
+    "2026-W08-LAC@LAR:J9"
+  ],
+  "b_fail": [],
+  "e1_admissible": false,
+  "execution_tip": "49eb0c270ffec9ef712df69d5ae32b8df51b0996",
+  "j11_not_decisive": [
+    "2026-W08-ATL@TB",
+    "2026-W08-LV@NYJ",
+    "2026-W08-KC@DEN",
+    "2026-W08-CHI@SEA"
+  ],
+  "j12": {
+    "band": "PASS",
+    "class": "B",
+    "id": "J12",
+    "kendall_tau": 0.9743589743589743
+  },
+  "j14": {
+    "band": "NOT_APPLICABLE_NOT_EMITTED",
+    "class": "A",
+    "detail": "test_no_ats_ou_emitted: no ATS/OU/push fields present",
+    "id": "J14"
+  },
+  "n_games": 13,
+  "public_delivery": false,
+  "run_id": "eval-w8-t4871u-coh-20261031T032147Z-152d92db",
+  "scope": "IF-only internal consistency only; \u2260calibration \u2260accuracy \u2260market \u2260enterprise",
+  "status": "CONDITIONAL",
+  "tnf_excluded": "2026-W08-CAR@GB",
+  "verdict": "CONDITIONAL",
+  "verdict_label": "CONDITIONAL(#4 IF-only; scope: spread/total/wp/ML; ATS/OU NOT EMITTED, NOT TESTED)"
+}

@@ -1,0 +1,121 @@
+{
+  "blocked": true,
+  "caller_engineering": "PASS",
+  "codes": [
+    "THROUGH_W8_DATA_ACCEPT_MISSING"
+  ],
+  "e1_admissible": false,
+  "e1_emit": false,
+  "evidence_sha256": "006a58105300090e3037bf801efcf96b9394b70413a7a1adc0309196d32bf517",
+  "forecast_class": "WIRING_ONLY",
+  "independent_fair_invoked_operational": false,
+  "locks": {
+    "c10": "HOLD",
+    "cert": 0,
+    "coming_soon": "ON",
+    "f2": "frozen",
+    "nfl": "NO-GO",
+    "odds": "HOLD"
+  },
+  "market_blend": 0,
+  "messages": [
+    "through-W8 DATA ACCEPT missing (status=ABSENT; W8=DATA_PARTIAL 1/14)"
+  ],
+  "pins": {
+    "as_of": {
+      "contract": "pregame as-of: every consumed game completed and required source available before target forecast cutoff; rating_week = target_week - 1 (contiguous weekly IF pipeline); every frame game completed and game_date < target game_date; no silent substitute window",
+      "distinct_from_source_pin_52d9e909": true,
+      "ingest_pin_cited_as_contrast_only": "1b39f4e9",
+      "module_object": "services/model-service/src/services/nfl_pregame_asof.py",
+      "module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+      "note": "PASS_ASOF_BOUNDARY cf514078 is the as-of identity. Do not report 52d9e909 as as-of.",
+      "research_id_repair_scope": "acknowledged; out of scope for this PR except citing as-of",
+      "research_id_repair_tip": "ef209d35",
+      "sha8": "cf514078",
+      "status": "PASS_ASOF_BOUNDARY",
+      "tip": "1010b86f",
+      "tip_lineage": "1010b86f+"
+    },
+    "contract": {
+      "pass_contract_note": "PASS_CONTRACT 1a53bbd3 on file \u2260 DATA ACCEPT",
+      "pass_contract_sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+      "pass_contract_sha8": "1a53bbd3",
+      "required_20": [
+        "offense_index_home",
+        "offense_index_away",
+        "defense_index_home",
+        "defense_index_away",
+        "home_off_epa_5g",
+        "away_off_epa_5g",
+        "home_def_epa_allowed_5g",
+        "away_def_epa_allowed_5g",
+        "home_pass_rate_5g",
+        "away_pass_rate_5g",
+        "home_success_offense_5g",
+        "away_success_offense_5g",
+        "home_success_defense_allowed_5g",
+        "away_success_defense_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_success_rate_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_red_zone_td_rate_5g"
+      ],
+      "required_context": [
+        "game_id",
+        "home_team",
+        "away_team",
+        "matchup_season",
+        "matchup_week",
+        "rest_days_home",
+        "rest_days_away"
+      ],
+      "sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+      "sha8": "b41f4b43"
+    },
+    "source_only": {
+      "lineage_commit": "1b39f4e9",
+      "lineage_commit_full": "1b39f4e9f6b2e04c264a41831f3bb7273e475011",
+      "note": "SOURCE ONLY \u2014 ratified 75d1b695; not an operational caller authorization; not the as-of identity",
+      "object": "services/model-service/src/services/nfl_simulator.py",
+      "ratified": "75d1b695",
+      "sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+      "sha8": "52d9e909",
+      "status": "SOURCE_ONLY"
+    },
+    "w8": {
+      "complete": "1/14",
+      "imv_data_partial": "c674da77",
+      "invent_w8": false,
+      "pr": 663,
+      "standby": "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY",
+      "status": "DATA_PARTIAL",
+      "tip": "ba9e8426"
+    }
+  },
+  "remaining_conditions_for_owner_e1_clear": [
+    {
+      "detail": "Cursor: re-fetch+archive PBP + pin fetched_at_utc \u2192 rebuild through-W8 panel \u2192 seal DATA_READY (O-a\u2026O-d). Current W8=DATA_PARTIAL 1/14 tip ba9e8426 #663 IMV c674da77. Do not invent W8. Do not delay that lane.",
+      "id": "W8_DATA_READY",
+      "status": "OPEN"
+    },
+    {
+      "detail": "IMV through-W8 DATA ACCEPT vs contract b41f4b43. PASS_CONTRACT 1a53bbd3 on file \u2260 DATA ACCEPT.",
+      "id": "IMV_THROUGH_W8_DATA_ACCEPT",
+      "status": "OPEN"
+    },
+    {
+      "detail": "OWNER / CoS CLEAR for first scoring-admissible E1 emit after W8 DATA_READY + IMV ACCEPT + caller technical checks. Path: W8 DATA_READY \u2192 IMV ACCEPT \u2192 OWNER E1 CLEAR \u2192 first verified IF forecast. This packet is not that CLEAR.",
+      "id": "OWNER_E1_CLEAR",
+      "status": "OPEN"
+    },
+    {
+      "detail": "Keep PASS_ASOF_BOUNDARY cf514078 (tip 1010b86f) as the as-of identity, distinct from SOURCE ONLY 52d9e909. rating_week = target_week - 1; no sportsbook; IF(blend=0).",
+      "id": "NO_SAME_WEEK_LEAKAGE",
+      "status": "HELD_BY_ASOF"
+    }
+  ],
+  "status": "BLOCKED",
+  "wiring_digest": "2a9893b6548d01f29888b20b440825a8dd766a86a0c9cae6d4c2dbc57195231b"
+}

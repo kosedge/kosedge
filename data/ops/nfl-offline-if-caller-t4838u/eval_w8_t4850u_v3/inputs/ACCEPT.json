@@ -1,0 +1,35 @@
+{
+  "verdict": "DATA_PARTIAL_ACCEPT",
+  "imv_data_partial_accept": "c674da77",
+  "imv_data_partial_accept_sha256": "c674da77dd7419851b63357ffd64028b1d2c2d3d98039a200177da7188eba115",
+  "accepted_tip": "ba9e842631b6c3421fedbd9baa819e1aef571b37",
+  "accepted_tip_sha8": "ba9e8426",
+  "panel": "through-W7 only",
+  "through_w8": "OPEN",
+  "status_remains": "DATA_PARTIAL",
+  "do_not_claim": ["DATA_READY", "through-W8 complete", "scoring-admissible", "emit"],
+  "do_not_merge": "#663",
+  "contract": "b41f4b43",
+  "pass_contract": "1a53bbd3",
+  "decision": "751dd63c",
+  "cos_standby": "71a49789",
+  "cos_standby_sha256": "71a497897389548f870e50cc8d09b02311ae07b95f1b9834f7de879668abea1f",
+  "standby_until": "W8 14/14 final including 2026-W08-CHI@SEA 2026-11-03T01:15:00Z",
+  "ready_steps": [
+    "O-a re-fetch + archive raw PBP bytes + pin fetched_at_utc",
+    "O-b rebuild through-W8 panel; recompute T5 through W8",
+    "O-c re-run 20-field IF consume / perturbation",
+    "O-d spot-check rest_days short weeks",
+    "seal DATA_READY (or PARTIAL/UNAVAILABLE if still incomplete) + hashes; report tip sha8"
+  ],
+  "locks": [
+    "NFL NO-GO",
+    "CERT=0",
+    "Coming Soon ON",
+    "F2 frozen",
+    "C10 HOLD",
+    "Odds HOLD 70c56700",
+    "overlays OFF",
+    "#663 DRAFT ≠merge"
+  ]
+}

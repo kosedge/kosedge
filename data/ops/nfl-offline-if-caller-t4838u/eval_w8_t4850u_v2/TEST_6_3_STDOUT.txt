@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "code": "SOURCE_PIN_MISSING_OR_MISMATCH",
+      "expected": "SOURCE_PIN_MISSING_OR_MISMATCH",
+      "kind": "source_pin",
+      "message": "services/model-service/src/services/nfl_simulator.py sha256 4f27e5f095797b6ac516593eb6c1f11261ac2d0907ea2dd2be055a5d86354dce != SOURCE ONLY pin 52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385 (52d9e909 @ 1b39f4e9)",
+      "rejected": true
+    },
+    {
+      "code": "ASOF_BOUNDARY",
+      "expected": "ASOF_BOUNDARY",
+      "kind": "asof_module",
+      "message": "services/model-service/src/services/nfl_pregame_asof.py sha256 674a876f2984632d19e56cde01fb6a6afa2af1cdce0866a774260cec0d8060db != as-of module pin 7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98 (lineage 1010b86f; grade cf514078)",
+      "rejected": true
+    }
+  ],
+  "exit_code": 3,
+  "expected_pins": {
+    "asof_module": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+    "source_only": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385"
+  },
+  "passed": true,
+  "test": "6.3"
+}

@@ -1,0 +1,42 @@
+{
+  "as_of": {
+    "distinct_from_source_pin_52d9e909": true,
+    "module_object": "services/model-service/src/services/nfl_pregame_asof.py",
+    "module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+    "research_id_repair_scope": "acknowledged; out of scope for this PR except citing as-of",
+    "research_id_repair_tip": "ef209d35",
+    "sha8": "cf514078",
+    "status": "PASS_ASOF_BOUNDARY",
+    "tip": "1010b86f",
+    "tip_lineage": "1010b86f+"
+  },
+  "authority": {
+    "cos_order_sha256": "40634a3ebcf799368e0d950f98cb1840d7b87dfb40de6ec98d18a90f8da93dd4",
+    "decision_sha256": "1aeb63ee926955109409bfbdb5cea79b7f940b50e5ddae6cf51bd1ccd4e9c17a"
+  },
+  "contract": {
+    "pass_contract_note": "PASS_CONTRACT 1a53bbd3 on file ≠ DATA ACCEPT",
+    "pass_contract_sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+    "pass_contract_sha8": "1a53bbd3",
+    "sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+    "sha8": "b41f4b43"
+  },
+  "source_only": {
+    "lineage_commit": "1b39f4e9",
+    "lineage_commit_full": "1b39f4e9f6b2e04c264a41831f3bb7273e475011",
+    "object": "services/model-service/src/services/nfl_simulator.py",
+    "ratified": "75d1b695",
+    "sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "sha8": "52d9e909",
+    "status": "SOURCE_ONLY"
+  },
+  "w8": {
+    "complete": "1/14",
+    "imv_data_partial": "c674da77",
+    "invent_w8": false,
+    "pr": 663,
+    "standby": "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY",
+    "status": "DATA_PARTIAL",
+    "tip": "ba9e8426"
+  }
+}

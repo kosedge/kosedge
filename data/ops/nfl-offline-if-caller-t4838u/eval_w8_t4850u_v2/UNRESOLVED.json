@@ -1,0 +1,42 @@
+{
+  "e1_admissible": false,
+  "evidence_gaps": [
+    {
+      "class": "EVIDENCE_GAP",
+      "detail": "through-W8 DATA ACCEPT absent \u2014 DATA_PARTIAL preserved; operational E1 path remains BLOCKED",
+      "id": "THROUGH_W8_DATA_ACCEPT"
+    },
+    {
+      "class": "EVIDENCE_GAP",
+      "detail": "#4 joint ST/ML coherence packet INSUFFICIENT \u2014 IF mus+win-prob present; not a PASS_RO coherence seal; do not infer remaining prices are valid",
+      "id": "COHERENCE_JOINT_ST_ML"
+    },
+    {
+      "class": "EVIDENCE_GAP",
+      "detail": "#5/#7 market-beat INSUFFICIENT \u2014 Odds HOLD; no market evidence invented",
+      "id": "MARKET_BEAT"
+    },
+    {
+      "class": "EVIDENCE_GAP",
+      "detail": "FREE_PUBLIC not CLEARed \u2014 publication controls refuse delivery (Coming Soon ON, CERT=0)",
+      "id": "FREE_PUBLIC"
+    },
+    {
+      "class": "CONDITIONAL",
+      "detail": "rest_days VERIFY_AT_CONSUME \u2014 UTC DOW heuristic; bye rest not added",
+      "id": "REST_DAYS_VERIFY_AT_CONSUME"
+    },
+    {
+      "class": "CONDITIONAL",
+      "detail": "2026-W08-PHI@WAS rest=6.0 dow_utc=0 dow_et=6 UTC/ET mismatch",
+      "id": "REST_MISMATCH_2026-W08-PHI@WAS"
+    },
+    {
+      "class": "CONDITIONAL",
+      "detail": "2026-W08-CHI@SEA rest=7.0 dow_utc=1 dow_et=0 UTC/ET mismatch",
+      "id": "REST_MISMATCH_2026-W08-CHI@SEA"
+    }
+  ],
+  "invocation_failures": [],
+  "scoring_admissible_now": false
+}
