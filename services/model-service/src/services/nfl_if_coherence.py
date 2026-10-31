@@ -6,13 +6,16 @@ SOURCE ONLY pin 52d9e909 is not rewritten — capture wraps Random.gauss.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import math
+import os
 import random
 import struct
 import subprocess
 import sys
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Sequence, Tuple
@@ -54,11 +57,20 @@ from src.services.nfl_simulator import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-PACKET_DIR = (
+PARENT_PACKET_DIR = (
     REPO_ROOT / "data" / "ops" / "nfl-offline-if-caller-t4838u" / "eval_w8_t4871u_coherence"
+)
+PACKET_DIR = (
+    REPO_ROOT / "data" / "ops" / "nfl-offline-if-caller-t4838u" / "eval_w8_t4871u_coherence_v2"
 )
 CLI_REL = "scripts/nfl/run_offline_if_coherence_t4871u.py"
 CMD = f"PYTHONPATH=services/model-service python3 {CLI_REL} --write-packet"
+PARENT_PACKET_TIP = "aa9605dc52dc24d73d73d8e9d0c5588a39e2762a"
+PARENT_PACKET_SEAL = "1f4ffde3f8fd0894a50cc1410ce815925ea4acde"
+ALEX_RO_CARD_A = "b5de5df1"
+# C2 negative fixture only — never a packet-run seed. Distinct from SEED_BASE+0..12.
+SECOND_SEED_C2 = 148500
+SECOND_SEED_C2_FALLBACKS = (148501, 148502, 148503)
 CLARIFICATION_SHA256 = (
     "fe4dc220d208fe6312cb32c7e441c49448d6e3b11c40639d919f47b5aedbea95"
 )
@@ -95,6 +107,15 @@ SOURCE_GUARD = (
     "services/model-service/src/services/nfl_if_coherence.py",
     "scripts/nfl/run_offline_if_coherence_t4871u.py",
     "services/model-service/src/services/nfl_simulator.py",
+    "services/model-service/tests/test_nfl_if_coherence_t4871u.py",
+)
+PYTEST_FILES = (
+    "services/model-service/tests/test_nfl_if_coherence_t4871u.py",
+    "services/model-service/tests/test_nfl_offline_if_caller_t4838u.py",
+    "services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u.py",
+    "services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u_v2.py",
+    "services/model-service/tests/test_nfl_offline_if_eval_w8_t4862u_d2.py",
+    "services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u_v3.py",
 )
 
 
@@ -717,6 +738,119 @@ def verdict_from_tables(
     }
 
 
+def eval_request_at_seed(game_id: str, seed: int) -> Any:
+    """Build the frozen-slate request for game_id, then replace seed only."""
+    if game_id not in SUPPORTED_GAMES:
+        raise EvalW8Reject("GAME", f"{game_id} not on the 13-game diagnostic slate")
+    panel = load_panel()
+    schedule = load_schedule()
+    history = history_w1_w7(schedule)
+    by_id = {str(g["game_id"]): g for g in schedule.get("games") or []}
+    req, _elig = build_eval_request(
+        game_id=game_id,
+        schedule_game=by_id[game_id],
+        panel=panel,
+        history=history,
+    )
+    return replace(req, seed=int(seed))
+
+
+def inject_published_wp(game: Mapping[str, Any], home_wp: float) -> Dict[str, Any]:
+    """C2: overlay a foreign home_wp on the same-draw game and re-run Table A.
+
+    Draws/stats/capture stay on the original array. Only published wp is swapped.
+    The checker must FAIL J3 when the injected wp is not the same-draw p_home.
+    """
+    tampered = copy.deepcopy(dict(game))
+    tampered["home_wp"] = float(home_wp)
+    tampered["away_wp"] = round(1.0 - float(home_wp), 4)
+    rows = table_a(tampered)
+    tampered["table_a"] = rows
+    j3 = next(r for r in rows if r["id"] == "J3")
+    return {
+        "game": tampered,
+        "table_a": rows,
+        "j3": j3,
+        "drives_fail": j3["band"] == "FAIL",
+        "injected_home_wp": float(home_wp),
+        "original_home_wp": float(game["home_wp"]),
+        "same_draw_sha256": game["capture"]["draw_array_sha256"],
+    }
+
+
+def second_seed_injection(game: Mapping[str, Any]) -> Dict[str, Any]:
+    """Invoke the same game at a predeclared non-packet seed and inject that wp."""
+    seeds = (SECOND_SEED_C2, *SECOND_SEED_C2_FALLBACKS)
+    foreign = None
+    used_seed = None
+    for seed in seeds:
+        cand = invoke_with_capture(eval_request_at_seed(str(game["game_id"]), seed))
+        if float(cand["home_wp"]) != float(game["home_wp"]):
+            foreign = cand
+            used_seed = seed
+            break
+    if foreign is None:
+        raise EvalW8Reject(
+            "C2_SEED_COLLISION",
+            f"all C2 seeds {seeds} matched published wp {game['home_wp']}",
+        )
+    injected = inject_published_wp(game, float(foreign["home_wp"]))
+    injected["second_seed"] = used_seed
+    injected["second_seed_draw_sha256"] = foreign["capture"]["draw_array_sha256"]
+    injected["second_seed_home_wp"] = float(foreign["home_wp"])
+    return injected
+
+
+def _assert_parent_packet_untouched() -> None:
+    sums = PARENT_PACKET_DIR / "SHA256SUMS"
+    if not sums.is_file():
+        raise EvalW8Reject("PARENT_PACKET", "parent Card A SHA256SUMS missing")
+    for line in sums.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        digest, rel = line.split("  ", 1)
+        if sha256_file(PARENT_PACKET_DIR / rel) != digest:
+            raise EvalW8Reject("PARENT_PACKET", f"parent {rel} mutated")
+
+
+def write_pytest_evidence(dest: Path) -> Dict[str, Any]:
+    """C3: run the IF pytest suite and seal stdout as packet evidence."""
+    dest.mkdir(parents=True, exist_ok=True)
+    cmd = [sys.executable, "-m", "pytest", "-q", "--tb=short", *PYTEST_FILES]
+    env = dict(os.environ)
+    ms = str(REPO_ROOT / "services" / "model-service")
+    env["PYTHONPATH"] = ms + (os.pathsep + env["PYTHONPATH"] if env.get("PYTHONPATH") else "")
+    started = datetime.now(timezone.utc)
+    proc = subprocess.run(
+        cmd,
+        cwd=str(REPO_ROOT),
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    ended = datetime.now(timezone.utc)
+    log = proc.stdout or ""
+    # PYTEST.txt (not .log) — repo gitignore is *.log; C3 evidence must be commitable.
+    (dest / "PYTEST.txt").write_text(log, encoding="utf-8")
+    summary = {
+        "cmd": " ".join(cmd),
+        "exit_code": proc.returncode,
+        "passed": proc.returncode == 0,
+        "started_utc": started.isoformat(),
+        "ended_utc": ended.isoformat(),
+        "files": list(PYTEST_FILES),
+        "note": "C3 pytest/CI evidence. Does not change #4 verdict. ≠PASS_RO claim.",
+    }
+    (dest / "PYTEST.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    if proc.returncode != 0:
+        raise EvalW8Reject("PYTEST", f"pytest exit {proc.returncode}\n{log[-2000:]}")
+    return summary
+
+
 def run_coherence_slate(*, write: bool = False) -> Dict[str, Any]:
     execution_tip = require_clean_for_write() if write else _git("rev-parse", "HEAD")
     run_id = (
@@ -865,9 +999,15 @@ def run_coherence_slate(*, write: bool = False) -> Dict[str, Any]:
         "baseline": {
             "packet": "eval_w8_t4850u_v2",
             "packet_tip": V2_PACKET_TIP,
+            "coherence_parent": "eval_w8_t4871u_coherence",
+            "coherence_parent_tip": PARENT_PACKET_TIP,
+            "coherence_parent_seal": PARENT_PACKET_SEAL,
+            "alex_ro_card_a": ALEX_RO_CARD_A,
             "note": (
-                "v3 90bf65ab documented ST/total/ML/wp identical to v2; "
-                "this run invokes current HEAD for gauss capture. blend=0."
+                "Sibling v2 of Card A packet. Parent 1f4ffde3 / tip aa9605dc left sealed. "
+                "v3 90bf65ab documented ST/total/ML/wp identical to eval v2; "
+                "this run invokes current HEAD for gauss capture. blend=0. "
+                "C2/C3 soft notes only. #4 remains CONDITIONAL."
             ),
         },
         "config": {
@@ -942,6 +1082,9 @@ def _write_packet(artifacts: Mapping[str, Any]) -> None:
         _render_packet_md(artifacts), encoding="utf-8"
     )
     (PACKET_DIR / "COS_NOTE.md").write_text(_render_cos_note(artifacts), encoding="utf-8")
+    (PACKET_DIR / "C2_C3.md").write_text(_render_c2_c3_note(), encoding="utf-8")
+    _assert_parent_packet_untouched()
+    write_pytest_evidence(PACKET_DIR)
     lines = []
     for path in sorted(PACKET_DIR.rglob("*")):
         if path.is_file() and path.name != "SHA256SUMS":
@@ -980,7 +1123,11 @@ def _render_cos_note(artifacts: Mapping[str, Any]) -> str:
             "# CoS note t4871u Card A",
             "",
             f"- tip `{m['execution_tip']}`",
-            f"- path `data/ops/nfl-offline-if-caller-t4838u/eval_w8_t4871u_coherence/`",
+            f"- path `data/ops/nfl-offline-if-caller-t4838u/eval_w8_t4871u_coherence_v2/`",
+            f"- parent packet tip `{PARENT_PACKET_TIP}` seal `{PARENT_PACKET_SEAL}` Alex RO `{ALEX_RO_CARD_A}`",
+            "- C2: second-seed wp injection now drives Table A J3 → FAIL / packet BLOCKED",
+            "- C3: PYTEST.txt + PYTEST.json sealed in this packet",
+            "- #4 remains CONDITIONAL; PASS_RO not claimed",
             f"- verdict `{p['verdict']}` · {p['verdict_label']}",
             f"- A FAIL: {v['a_fail'] or 'none'}",
             f"- B FAIL: {v['b_fail'] or 'none'}",
@@ -1016,3 +1163,32 @@ def _render_tables_md(artifacts: Mapping[str, Any]) -> str:
     lines.append(f"{artifacts['j14']}")
     lines.append("")
     return "\n".join(lines)
+
+
+def _render_c2_c3_note() -> str:
+    return "\n".join(
+        [
+            "# C2 / C3 soft notes (t4890u)",
+            "",
+            "Parent Card A packet `eval_w8_t4871u_coherence/` tip `aa9605dc` seal `1f4ffde3` Alex RO `b5de5df1`.",
+            "This sibling does not rewrite that packet. #4 remains CONDITIONAL. ≠PASS_RO.",
+            "",
+            "## C2 — second-seed wp injection drives FAIL",
+            "",
+            "Prior `test_16` only asserted `injected != published_wp` (or p=0.5).",
+            "It never fed the foreign wp into Table A / `verdict_from_tables`.",
+            "",
+            "`inject_published_wp` overlays a wp from `SECOND_SEED_C2` (148500, not a packet seed)",
+            "onto the same-draw game. Draws/stats/hash stay on seed_base. J3 must FAIL.",
+            "`verdict_from_tables` must map that A FAIL to BLOCKED. That is the checker proof.",
+            "",
+            "## C3 — pytest / CI evidence in the packet",
+            "",
+            "`PYTEST.txt` and `PYTEST.json` are written by `--write-packet` before SHA256SUMS.",
+            "Command is the IF caller/eval/coherence suite. Exit 0 required to seal.",
+            "Evidence of tests ≠ #4 PASS.",
+            "",
+            "No forecast math change. No tolerance retune. NFL NO-GO · CERT=0.",
+            "",
+        ]
+    )

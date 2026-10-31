@@ -12,8 +12,11 @@ from src.services.nfl_if_coherence import (
     J9_MC_SEED,
     N_PACKET,
     PARENT_PAPER_SHA256,
+    SECOND_SEED_C2,
+    SECOND_SEED_C2_FALLBACKS,
     SEED_BASE,
     fair_ml,
+    inject_published_wp,
     j10_band,
     j7_band,
     j8_band,
@@ -21,8 +24,10 @@ from src.services.nfl_if_coherence import (
     pack_ha_sha256,
     run_coherence_slate,
     scan_ats_ou,
+    second_seed_injection,
     summarize_draws,
     tie_rate_band,
+    verdict_from_tables,
 )
 from src.services.nfl_offline_if_caller import (
     IF_SOURCE_PIN_SHA256,
@@ -149,13 +154,29 @@ def test_15_emit_joint_artifact(slate):
 
 
 def test_16_single_draw_array(slate):
-    game = slate["games"][0]
+    game = next(g for g in slate["games"] if g["home_wp"] != 0.5)
     st = game["stats"]
     assert abs(game["spread_home"] - (-st["mean_D"])) <= 0.005
     assert abs(game["total_mu"] - st["mean_S"]) <= 0.005
     assert game["home_wp"] == round(st["p_home_win"], 4)
-    injected = round(1.0 - st["p_home_win"], 4)
-    assert injected != game["home_wp"] or game["home_wp"] == 0.5
+    same = inject_published_wp(game, game["home_wp"])
+    assert same["j3"]["band"] == "PASS"
+    assert same["drives_fail"] is False
+    injected = second_seed_injection(game)
+    assert injected["second_seed"] in (SECOND_SEED_C2, *SECOND_SEED_C2_FALLBACKS)
+    assert injected["second_seed_home_wp"] != game["home_wp"]
+    assert injected["second_seed_draw_sha256"] != game["capture"]["draw_array_sha256"]
+    assert injected["same_draw_sha256"] == game["capture"]["draw_array_sha256"]
+    assert injected["drives_fail"] is True
+    assert injected["j3"]["band"] == "FAIL"
+    mapped = verdict_from_tables(
+        [injected["game"]],
+        slate["j12"],
+        slate["j14"],
+        True,
+    )
+    assert mapped["verdict"] == "BLOCKED"
+    assert any(item.endswith(":J3") for item in mapped["a_fail"])
 
 
 def test_17_component_identity(slate):
@@ -314,6 +335,18 @@ def test_v2_outputs_match_and_v2_sealed(slate):
     for line in (V2_DIR / "SHA256SUMS").read_text(encoding="utf-8").splitlines():
         digest, rel = line.split("  ", 1)
         assert sha256_file(V2_DIR / rel) == digest
+
+
+def test_parent_coherence_packet_untouched():
+    from src.services.nfl_if_coherence import PARENT_PACKET_DIR
+
+    sums = PARENT_PACKET_DIR / "SHA256SUMS"
+    assert sums.is_file()
+    for line in sums.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        digest, rel = line.split("  ", 1)
+        assert sha256_file(PARENT_PACKET_DIR / rel) == digest
 
 
 def json_results():
