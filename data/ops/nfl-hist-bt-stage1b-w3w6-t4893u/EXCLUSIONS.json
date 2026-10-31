@@ -1,0 +1,14 @@
+{
+  "rule": "SAMPLE_MANIFEST W3\u2013W6 games minus any game where either side has 0 completed same-season games as-of kickoff",
+  "n_source": 60,
+  "n_source_by_week": {
+    "3": 16,
+    "4": 16,
+    "5": 14,
+    "6": 14
+  },
+  "n_excluded": 0,
+  "n_eligible": 60,
+  "exclusions": [],
+  "note": "No W3\u2013W6 game had a 0-completed-same-season side. W1 Irma TB/MIA completed W2 before W3."
+}
