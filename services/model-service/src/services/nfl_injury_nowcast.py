@@ -7,6 +7,12 @@ from typing import Any, Dict, List, Optional
 
 from sqlalchemy import text
 
+from .nfl_injury_null_contract import (
+    FLAG_MISSING_KOSEDGE_INJURY_NOWCAST,
+    empty_nowcast_payload,
+    nowcast_is_missing,
+    nullable_float,
+)
 from .nfl_roster_continuity import fetch_roster_continuity_nowcast
 
 
@@ -269,16 +275,8 @@ def compute_team_info_velocity(
 
 def _aggregate_team_nowcast(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     if not rows:
-        return {
-            "injury_count": 0,
-            "freshness_hours": None,
-            "freshness_multiplier": 0.0,
-            "confidence": 0.0,
-            "offense_multiplier": 1.0,
-            "defense_multiplier": 1.0,
-            "impact_score": 0.0,
-            "top_drivers": [],
-        }
+        # C-7 / D-1: empty listing is missing, not a sourced-0.0 healthy row.
+        return empty_nowcast_payload()
 
     # Calibrated against real team-week distributions (2013-2025, ~9,600
     # team-weeks) *after* fixing position weighting (see
@@ -350,37 +348,70 @@ def _merge_roster_continuity_into_nowcast(
     nowcast: Dict[str, Any],
     continuity: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """Compose a live injury-report nowcast with the roster-continuity
-    nowcast (see nfl_roster_continuity.py) by multiplying the two
-    multiplier pairs together -- both are centered on 1.0, so a team with
-    no roster-continuity entries (the common case) gets back exactly the
-    original in-season nowcast untouched, and a team with no live injury
-    rows (e.g. the 2026 preseason, before any weekly injury report
-    exists) gets back exactly the roster-continuity nowcast.
+    """Attach roster-continuity metadata to a nowcast.
+
+    A missing nowcast (empty listing) stays NULL on game-line keys (C-7 /
+    D-1). Continuity is recorded as metadata only and does not fill
+    impact/multipliers. A complete nowcast may still compose multipliers
+    for non-game-line consumers; remat does not apply them.
     """
     if int(continuity.get("adjustment_count") or 0) <= 0:
         return nowcast
 
-    merged_offense = _clamp(
-        float(nowcast.get("offense_multiplier", 1.0)) * float(continuity.get("offense_multiplier", 1.0)),
-        0.82,
-        1.08,
-    )
-    merged_defense = _clamp(
-        float(nowcast.get("defense_multiplier", 1.0)) * float(continuity.get("defense_multiplier", 1.0)),
-        0.90,
-        1.18,
-    )
+    # Continuity must not fill a missing nowcast (D-1 / Q9). Game-line keys
+    # stay NULL; continuity is recorded as metadata only.
+    if nowcast_is_missing(nowcast):
+        merged_missing = dict(nowcast)
+        flags = list(merged_missing.get("flags") or [])
+        if FLAG_MISSING_KOSEDGE_INJURY_NOWCAST not in flags:
+            flags.append(FLAG_MISSING_KOSEDGE_INJURY_NOWCAST)
+        merged_missing["flags"] = flags
+        merged_missing["roster_continuity_adjustment_count"] = int(
+            continuity.get("adjustment_count") or 0
+        )
+        merged_missing["roster_continuity"] = {
+            "offense_multiplier": continuity.get("offense_multiplier"),
+            "defense_multiplier": continuity.get("defense_multiplier"),
+            "impact_score": continuity.get("impact_score"),
+            "top_drivers": list(continuity.get("top_drivers") or []),
+        }
+        return merged_missing
+
+    offense = nullable_float(nowcast.get("offense_multiplier"))
+    defense = nullable_float(nowcast.get("defense_multiplier"))
+    confidence = nullable_float(nowcast.get("confidence"))
+    impact = nullable_float(nowcast.get("impact_score"))
+    cont_off = nullable_float(continuity.get("offense_multiplier"))
+    cont_def = nullable_float(continuity.get("defense_multiplier"))
+    cont_conf = nullable_float(continuity.get("confidence"))
+    cont_imp = nullable_float(continuity.get("impact_score"))
+    # Drop-one (G-1): a missing game-line key stays NULL. Continuity
+    # metadata may attach, but it must not fill the hole.
+    if offense is None or defense is None or impact is None or confidence is None:
+        incomplete = dict(nowcast)
+        incomplete["roster_continuity_adjustment_count"] = int(
+            continuity.get("adjustment_count") or 0
+        )
+        incomplete["roster_continuity"] = {
+            "offense_multiplier": continuity.get("offense_multiplier"),
+            "defense_multiplier": continuity.get("defense_multiplier"),
+            "impact_score": continuity.get("impact_score"),
+            "top_drivers": list(continuity.get("top_drivers") or []),
+        }
+        flags = list(incomplete.get("flags") or [])
+        if FLAG_MISSING_KOSEDGE_INJURY_NOWCAST not in flags:
+            flags.append(FLAG_MISSING_KOSEDGE_INJURY_NOWCAST)
+        incomplete["flags"] = flags
+        return incomplete
+
+    merged_offense = _clamp(offense * (cont_off if cont_off is not None else 1.0), 0.82, 1.08)
+    merged_defense = _clamp(defense * (cont_def if cont_def is not None else 1.0), 0.90, 1.18)
     merged_confidence = _clamp(
-        max(float(nowcast.get("confidence", 0.0)), float(continuity.get("confidence", 0.0))),
+        max(confidence if confidence is not None else 0.0, cont_conf if cont_conf is not None else 0.0),
         0.0,
         1.0,
     )
-    merged_impact = _clamp(
-        float(nowcast.get("impact_score", 0.0)) + float(continuity.get("impact_score", 0.0)),
-        0.0,
-        1.0,
-    )
+    merged_impact = _clamp(impact + (cont_imp if cont_imp is not None else 0.0), 0.0, 1.0)
     merged_drivers = sorted(
         list(nowcast.get("top_drivers") or []) + list(continuity.get("top_drivers") or []),
         key=lambda item: abs(_safe_float(item.get("impact", item.get("impact_score")))),
@@ -409,7 +440,12 @@ def compute_team_week_injury_severity(rows: List[Dict[str, Any]]) -> Dict[str, f
     would be meaningless here. Shares the same status/position/severity
     weighting as the live path so training and inference stay consistent."""
     if not rows:
-        return {"offense_impact": 0.0, "defense_impact": 0.0, "injury_count": 0.0}
+        return {
+            "offense_impact": None,
+            "defense_impact": None,
+            "impact_score": None,
+            "injury_count": 0.0,
+        }
 
     max_raw_offense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_OFFENSE"), 2.5))
     max_raw_defense = max(0.01, _safe_float(os.getenv("NFL_INJURY_MAX_RAW_DEFENSE"), 2.2))
@@ -455,7 +491,7 @@ def _fetch_injury_rows_for_week(
             WITH latest AS (
               SELECT DISTINCT ON (i.team, i.player_key)
                 i.season, i.week, i.team, i.player_key, i.player_id, i.player_name,
-                i.report_status, i.practice_status, i.injury, i.updated_at
+                i.report_status, i.practice_status, i.injury, i.updated_at, i.report_time
               FROM nfl_dp_injuries i
               WHERE i.season = :season
                 AND (i.team = :home_team OR i.team = :away_team)
@@ -464,6 +500,7 @@ def _fetch_injury_rows_for_week(
             SELECT
               latest.season, latest.week, latest.team, latest.player_key, latest.player_name,
               latest.report_status, latest.practice_status, latest.injury, latest.updated_at,
+              latest.report_time,
               r.position
             FROM latest
             LEFT JOIN nfl_dp_rosters r
@@ -480,7 +517,7 @@ def _fetch_injury_rows_for_week(
         sql = """
             SELECT
               i.season, i.week, i.team, i.player_key, i.player_name,
-              i.report_status, i.practice_status, i.injury, i.updated_at,
+              i.report_status, i.practice_status, i.injury, i.updated_at, i.report_time,
               r.position
             FROM nfl_dp_injuries i
             LEFT JOIN nfl_dp_rosters r
@@ -497,7 +534,12 @@ def _fetch_injury_rows_for_week(
             "home_team": home_team,
             "away_team": away_team,
         }
-    rows = session.execute(text(sql), params).fetchall()
+    try:
+        rows = session.execute(text(sql), params).fetchall()
+    except Exception:
+        # Pre-migration DBs have no report_time. listing_as_of stays NULL (fail closed).
+        sql = sql.replace(", i.report_time", "").replace(", latest.report_time", "")
+        rows = session.execute(text(sql), params).fetchall()
     return [dict(row._mapping) for row in rows]
 
 
@@ -579,18 +621,23 @@ def fetch_nfl_injury_nowcast(
     home_nowcast = _merge_roster_continuity_into_nowcast(home_nowcast, home_continuity)
     away_nowcast = _merge_roster_continuity_into_nowcast(away_nowcast, away_continuity)
 
-    game_confidence = round(
-        _clamp(
-            (float(home_nowcast["confidence"]) + float(away_nowcast["confidence"])) / 2.0,
-            0.0,
-            1.0,
-        ),
-        4,
-    )
+    home_conf = nullable_float(home_nowcast.get("confidence"))
+    away_conf = nullable_float(away_nowcast.get("confidence"))
+    if home_conf is None and away_conf is None:
+        game_confidence = None
+    else:
+        parts = [v for v in (home_conf, away_conf) if v is not None]
+        game_confidence = round(_clamp(sum(parts) / len(parts), 0.0, 1.0), 4)
+
+    listing_times = [row.get("report_time") for row in injury_rows if row.get("report_time") is not None]
+    listing_as_of = max(listing_times) if listing_times else None
     source = "nfl_dp_injuries"
     has_continuity = bool(home_nowcast.get("roster_continuity_adjustment_count") or away_nowcast.get("roster_continuity_adjustment_count"))
     if has_continuity:
         source = "nfl_dp_injuries+roster_continuity"
+    flags: List[str] = []
+    if nowcast_is_missing(home_nowcast) or nowcast_is_missing(away_nowcast):
+        flags.append(FLAG_MISSING_KOSEDGE_INJURY_NOWCAST)
     return {
         "season_year": season,
         "source": source,
@@ -599,6 +646,8 @@ def fetch_nfl_injury_nowcast(
         "home": home_nowcast,
         "away": away_nowcast,
         "game_confidence": game_confidence,
+        "listing_as_of": listing_as_of,
+        "flags": flags,
         "info_velocity_as_of_week": as_of_week,
         "info_velocity_prior_week": prior_week,
     }

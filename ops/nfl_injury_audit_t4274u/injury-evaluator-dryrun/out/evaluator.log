@@ -1,0 +1,19 @@
+HEAD 2241af8e9dcc1b6446ba4b0b9e73ab159762b05a is ops-only descendant of frozen fit 8e2a15ac581277ecda71ea745c3b3477185d733b
+cmd=python3 /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/run_injury_residual_evaluator.py --out /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/out --cohorts synthetic_inconclusive,synthetic_fail,synthetic_pass,le2023
+CLOSE_LABEL=comparative research, not certified CLV
+PINNED_SEED=2708041115
+HEAD=2241af8e9dcc1b6446ba4b0b9e73ab159762b05a frozen_fit=8e2a15ac581277ecda71ea745c3b3477185d733b
+evaluate synthetic_inconclusive n_universe=40
+synthetic_inconclusive decision=INCONCLUSIVE i2=INCONCLUSIVE
+evaluate synthetic_fail n_universe=612
+synthetic_fail decision=NO CLAIM i2=MET
+evaluate synthetic_pass n_universe=612
+synthetic_pass decision=VALUE PROVEN i2=MET
+oos_le2023 n=2992 skipped_forbidden_or_future=586
+export games n=2863
+le2023 joined=2863 export=2863
+evaluate le2023 n_universe=2863
+le2023 decision=NO CLAIM i2=MET
+wrote /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/out/evaluator_results.json
+wrote /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/out/dry-run-report.md
+wrote /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/out/provenance.md
