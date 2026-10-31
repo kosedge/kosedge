@@ -1,6 +1,6 @@
 {
   "cmd": "/usr/bin/python3 -m pytest -q --tb=short services/model-service/tests/test_nfl_if_coherence_t4871u.py services/model-service/tests/test_nfl_offline_if_caller_t4838u.py services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u.py services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u_v2.py services/model-service/tests/test_nfl_offline_if_eval_w8_t4862u_d2.py services/model-service/tests/test_nfl_offline_if_eval_w8_t4850u_v3.py",
-  "ended_utc": "2026-10-31T03:17:51.345089+00:00",
+  "ended_utc": "2026-10-31T03:22:05.093432+00:00",
   "exit_code": 0,
   "files": [
     "services/model-service/tests/test_nfl_if_coherence_t4871u.py",
@@ -12,5 +12,5 @@
   ],
   "note": "C3 pytest/CI evidence. Does not change #4 verdict. \u2260PASS_RO claim.",
   "passed": true,
-  "started_utc": "2026-10-31T03:17:41.990075+00:00"
+  "started_utc": "2026-10-31T03:21:55.859805+00:00"
 }

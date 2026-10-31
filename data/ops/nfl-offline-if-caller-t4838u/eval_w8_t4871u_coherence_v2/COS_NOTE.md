@@ -1,27 +1,21 @@
 # CoS note t4890u — Card A C2/C3 soft follow-ups
 
-- tip `e603edbaa38c7d74ed2a445184a4583fda9cc1ed` (INVOKE HEAD = execution tip)
+- tip `49eb0c270ffec9ef712df69d5ae32b8df51b0996` (INVOKE HEAD = execution tip)
 - path `data/ops/nfl-offline-if-caller-t4838u/eval_w8_t4871u_coherence_v2/`
 - parent packet `eval_w8_t4871u_coherence/` tip `aa9605dc` seal `1f4ffde3` Alex RO `b5de5df1` — left sealed
 - verdict `CONDITIONAL` · CONDITIONAL(#4 IF-only; scope: spread/total/wp/ML; ATS/OU NOT EMITTED, NOT TESTED)
-- clarification `fe4dc220` · parent paper `05222939` · SOURCE ONLY `52d9e909` unedited
-- #4 remains CONDITIONAL. PASS_RO not claimed. No forecast math change. No tolerance retune.
+- #4 remains CONDITIONAL. PASS_RO not claimed. No forecast math change. No tolerance retune. No spec change.
 
 ## What C2 / C3 now prove
 
-- **C2:** `test_16` invokes the same game at predeclared `SECOND_SEED_C2=148500` (not a packet seed), overlays that foreign home_wp on the original same-draw stats, and runs `table_a` + `verdict_from_tables`. J3 FAIL and packet BLOCKED. Same-wp overlay still PASSes J3 (checker discriminates). Prior test only compared numbers and never drove FAIL.
-- **C3:** `PYTEST.txt` / `PYTEST.json` sealed in this packet (79 passed, exit 0). Written as `.txt` because `*.log` is gitignored. Evidence of tests ≠ #4 PASS.
+- **C2 wp:** `test_16` second-seed home_wp overlay → J3 FAIL → BLOCKED. Same-wp overlay PASSes.
+- **C2 joint ST+ML:** `test_c2_joint_st_ml_fail_closed` overlays second-seed spread_home + total_mu + fair ML on draw-1 stats. Frozen J1/J2/J5 FAIL → BLOCKED. Same-draw overlay PASSes. Expected fail-closed of existing checkers, not a new contract.
+- **C3:** `PYTEST.txt` / `PYTEST.json` sealed (coherence + caller/eval suite, exit 0). Evidence of tests ≠ #4 PASS.
 
 ## Unchanged from parent (honest)
 
 - A FAIL: none · B FAIL: none
 - B COND: CLE@PIT J7_S; MIN@DET J7_S; LAC@LAR J7; LAC@LAR J9
-- J11 NOT_DECISIVE: ATL@TB, LV@NYJ, KC@DEN, CHI@SEA
 - J14 `NOT_APPLICABLE_NOT_EMITTED`
 
-## Still open (not this ticket)
-
-1. Four B-class COND items at N=4000 — sampling noise; not a model-correction proposal.
-2. ATS/OU not emitted — scope-limited.
-3. Operational caller BLOCKED (through-W8 DATA ACCEPT absent).
-4. #4 ≠ enterprise ≠ FREE_PUBLIC ≠ betting ≠ E1. NFL NO-GO · CERT=0.
+NFL NO-GO · CERT=0.

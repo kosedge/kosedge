@@ -8,7 +8,7 @@
   ],
   "b_fail": [],
   "e1_admissible": false,
-  "execution_tip": "e603edbaa38c7d74ed2a445184a4583fda9cc1ed",
+  "execution_tip": "49eb0c270ffec9ef712df69d5ae32b8df51b0996",
   "j11_not_decisive": [
     "2026-W08-ATL@TB",
     "2026-W08-LV@NYJ",
@@ -29,7 +29,7 @@
   },
   "n_games": 13,
   "public_delivery": false,
-  "run_id": "eval-w8-t4871u-coh-20261031T031733Z-5658cb29",
+  "run_id": "eval-w8-t4871u-coh-20261031T032147Z-152d92db",
   "scope": "IF-only internal consistency only; \u2260calibration \u2260accuracy \u2260market \u2260enterprise",
   "status": "CONDITIONAL",
   "tnf_excluded": "2026-W08-CAR@GB",

@@ -20,8 +20,8 @@
     "through_w7": "c674da77"
   },
   "e1_admissible": false,
-  "execution_tip": "e603edbaa38c7d74ed2a445184a4583fda9cc1ed",
-  "execution_tip_short": "e603edba",
+  "execution_tip": "49eb0c270ffec9ef712df69d5ae32b8df51b0996",
+  "execution_tip_short": "49eb0c27",
   "frozen": {
     "N": 4000,
     "j9_mc_n": 1000000,
@@ -45,12 +45,12 @@
     ],
     "tolerances": "ALEX_IF_COHERENCE_SPEC_CLARIFICATION_t4871u_v1 sha fe4dc220"
   },
-  "invoke_head": "e603edbaa38c7d74ed2a445184a4583fda9cc1ed",
+  "invoke_head": "49eb0c270ffec9ef712df69d5ae32b8df51b0996",
   "invoke_head_matches_execution_tip": true,
   "label": "DIAGNOSTIC / EVAL_ONLY / IF-only coherence",
   "owner_clear": "t4871u",
   "parent_paper_sha256": "05222939cc37086f0544063df3a6b66a1238cbc4bf92d7a0b88b2522718f0d3a",
   "public_delivery": false,
-  "run_id": "eval-w8-t4871u-coh-20261031T031733Z-5658cb29",
+  "run_id": "eval-w8-t4871u-coh-20261031T032147Z-152d92db",
   "scoring_admissible_now": false
 }
