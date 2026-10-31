@@ -1,0 +1,110 @@
+{
+  "artifact": "nfl-hist-diag-score-70-t4910u",
+  "label": "CONDITIONAL_DIAG",
+  "cert": 0,
+  "nfl": "NO-GO",
+  "exec_freeze": {
+    "name": "EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md",
+    "box_sha8_expected": "5ecdef1c",
+    "recreated_sha256": "8ef7a83470c8d7d02c107d74246a05c667275679aa61313c6a31bcf7ff301c32",
+    "recreated_sha8": "8ef7a834",
+    "recreated_match_expected": false,
+    "note": "Box original not mounted on this box. Local recreation from CoS EXEC_FREEZE chat bind. Parameters bound exactly; sha8 remount unmatched."
+  },
+  "owner_accept": {
+    "name": "OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md",
+    "box_sha8_expected": "1102720e",
+    "recreated_sha256": "d3acd43d286638119f961fef7b8ff58e013acabaee23a9bd4e7ddcdd870be87a",
+    "recreated_sha8": "d3acd43d",
+    "recreated_match_expected": false,
+    "note": "Box original not mounted on this box. Local recreation from OWNER ACCEPT chat bind. Parameters bound exactly; sha8 remount unmatched."
+  },
+  "if_tip": {
+    "sha8": "6ca03716",
+    "sha256": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "full": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "note": "IF tip / framework tree. Not switched to 90bf65ab."
+  },
+  "simulator": {
+    "sha8": "52d9e909",
+    "sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "object": "services/model-service/src/services/nfl_simulator.py",
+    "commit": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "rehash_this_run": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "rehash_match": true,
+    "note": "deploy-vercel HEAD simulator is a different object. This run loaded 6ca03716 only."
+  },
+  "framework": {
+    "sha8": "a0051cc4",
+    "sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+    "object": "services/model-service/src/services/nfl_handicapping_framework.py",
+    "commit": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "rehash_this_run": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+    "rehash_match": true
+  },
+  "contract": {
+    "name": "ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md",
+    "sha8": "b41f4b43",
+    "sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+    "git_ref": "origin/cursor/hift1-efficiency-recovery-f693",
+    "path": "data/ops/nfl-efficiency-2026-w1-w8-t4770u/ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md",
+    "rehash_this_run": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+    "rehash_match": true,
+    "note": "Field/transform SoT. Not an E1 emit authorization."
+  },
+  "as_of": {
+    "identity_sha8": "cf514078",
+    "status": "PASS_ASOF_BOUNDARY",
+    "module_sha8": "7dc6afea",
+    "module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+    "module": "services/model-service/src/services/nfl_pregame_asof.py",
+    "rehash_this_run": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+    "rehash_match": true,
+    "distinct_from_source_pin_52d9e909": true
+  },
+  "pbp_2017": {
+    "sha8": "84eacd96",
+    "sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+    "note": "Cited only. Not re-opened. Score consumed sealed Stage-1b reconstructed values."
+  },
+  "inputs": {
+    "w2": {
+      "tip": "440314e43cba41311b10a54b9b11ecd1e7638653",
+      "tip_sha8": "440314e4",
+      "alex_pass_recon_sha8": "91e2d7db",
+      "packet": "data/ops/nfl-hist-bt-stage1b-w2-t4893u/",
+      "matrix_sha256": "708513db885fe362aca9446578154d58e9d8265857ec2385e475323b24f24182",
+      "matrix_sha8": "708513db",
+      "n_complete": 14
+    },
+    "w3w6": {
+      "tip": "f92aaea385eb18af90ba09178dddc8ebd732864f",
+      "tip_sha8": "f92aaea3",
+      "pr": 671,
+      "alex_pass_recon_sha8": "af30adba",
+      "packet": "data/ops/nfl-hist-bt-stage1b-w3w6-t4893u/",
+      "matrix_sha256": "cdff011536a7cd9224b1238e08b707c36222243833f778f2df61b577e0c80235",
+      "matrix_sha8": "cdff0115",
+      "n_complete": 56,
+      "n_bye_partial_excluded": 4
+    }
+  },
+  "realized_scores": {
+    "path": "data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv",
+    "sha8": "1ee90fac",
+    "sha256": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+    "rehash_this_run": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+    "rehash_match": true,
+    "use": "2017 REG home_score / away_score only. Market columns not consumed."
+  },
+  "sim": {
+    "simulations": 4000,
+    "seed_base": 201710,
+    "seed_formula": "201710 + (int(sha256(game_id.encode()).hexdigest()[:12], 16) % 1000003)",
+    "tie": "margin==0 counted away (same IF fair path)",
+    "market_blend": 0,
+    "rest_bind": "BIND_PACKET_ONLY"
+  },
+  "holdout_2024_25": "untouched",
+  "odds_credits": 0
+}

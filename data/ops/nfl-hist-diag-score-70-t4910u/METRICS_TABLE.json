@@ -1,0 +1,90 @@
+{
+  "n_attempted": 70,
+  "n_scored": 70,
+  "n_failed": 0,
+  "n_decided": 70,
+  "n_ties": 0,
+  "failed_game_ids": [],
+  "tie_game_ids": [],
+  "straight_up_outcome_accuracy_if": 0.4714285714285714,
+  "straight_up_outcome_accuracy_naive_wl": 0.5,
+  "straight_up_outcome_accuracy_pickem": 0.5,
+  "straight_up_note": "NOT ATS-vs-0. No historical betting line. Ties excluded from decided denominator.",
+  "mae_margin": 10.7447015184893,
+  "rmse_margin": 14.170850904952937,
+  "mae_total": 11.963406664050009,
+  "rmse_total": 14.644710125393793,
+  "mae_margin_pickem": 10.485714285714286,
+  "rmse_margin_pickem": 13.68314917804273,
+  "mae_total_const_45_3": 11.82,
+  "rmse_total_const_45_3": 14.47100549374507,
+  "brier_if": 0.2583807187142857,
+  "log_loss_if": 0.7106896486011719,
+  "brier_naive_wl": 0.3048431111112397,
+  "brier_pickem": 0.25,
+  "mean_forecast_wp_home": 0.5277842857142857,
+  "mean_realized_home_win": 0.5,
+  "exploratory_n70": true,
+  "sd_forecast_means": 2.9761705251687793,
+  "sd_realized_margin": 13.66217671031114,
+  "mean_if_sigma": 10.0068,
+  "coverage_margin_p10_p90": 0.8,
+  "coverage_total_p10_p90": 0.7428571428571429,
+  "coverage_nominal": 0.8,
+  "draw_replay_max_abs_err_margin": 0.0008911499999979533,
+  "draw_replay_max_abs_err_total": 0.000984624999993855,
+  "all_blend_zero": true,
+  "rest_bind": "BIND_PACKET_ONLY",
+  "simulations": 4000,
+  "seed_base": 201710,
+  "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+  "epa_success_label": "RETRO_FIT / DEV_RESEARCH only (A1)",
+  "clv": false,
+  "odds_2017_used": false,
+  "benchmarks_are_not_edge_proof": true,
+  "visible_excluded_or_failed": [
+    {
+      "game_id": "2017_02_CHI_TB",
+      "reason": "W2 ineligible \u2014 TB 0 completed 2017 games as-of (Irma). Not in W2 sealed sample.",
+      "class": "W2_INELIGIBLE",
+      "in_score_sample": false
+    },
+    {
+      "game_id": "2017_02_MIA_LAC",
+      "reason": "W2 ineligible \u2014 MIA 0 completed 2017 games as-of (Irma). Not in W2 sealed sample.",
+      "class": "W2_INELIGIBLE",
+      "in_score_sample": false
+    },
+    {
+      "game_id": "2017_06_DET_NO",
+      "reason": "W6 bye partial \u2014 NO W5 bye; T2 fail-closed. Excluded from 70.",
+      "class": "W6_BYE_PARTIAL",
+      "in_score_sample": false
+    },
+    {
+      "game_id": "2017_06_MIA_ATL",
+      "reason": "W6 bye partial \u2014 ATL W5 bye; T2 fail-closed. Excluded from 70.",
+      "class": "W6_BYE_PARTIAL",
+      "in_score_sample": false
+    },
+    {
+      "game_id": "2017_06_SF_WAS",
+      "reason": "W6 bye partial \u2014 WSH W5 bye; T2 fail-closed. Excluded from 70.",
+      "class": "W6_BYE_PARTIAL",
+      "in_score_sample": false
+    },
+    {
+      "game_id": "2017_06_NYG_DEN",
+      "reason": "W6 bye partial \u2014 DEN W5 bye; T2 fail-closed. Excluded from 70.",
+      "class": "W6_BYE_PARTIAL",
+      "in_score_sample": false
+    }
+  ],
+  "weeks": {
+    "2": 14,
+    "3": 16,
+    "4": 16,
+    "5": 14,
+    "6": 10
+  }
+}
