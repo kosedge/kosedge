@@ -1,0 +1,19 @@
+{
+  "a_fail": [],
+  "b_cond": [
+    "2026-W08-CLE@PIT:J7_S",
+    "2026-W08-MIN@DET:J7_S",
+    "2026-W08-LAC@LAR:J7",
+    "2026-W08-LAC@LAR:J9"
+  ],
+  "b_fail": [],
+  "j11_not_decisive": [
+    "2026-W08-ATL@TB",
+    "2026-W08-LV@NYJ",
+    "2026-W08-KC@DEN",
+    "2026-W08-CHI@SEA"
+  ],
+  "label": "CONDITIONAL(#4 IF-only; scope: spread/total/wp/ML; ATS/OU NOT EMITTED, NOT TESTED)",
+  "scope": "IF-only internal consistency only; \u2260calibration \u2260accuracy \u2260market \u2260enterprise",
+  "verdict": "CONDITIONAL"
+}
