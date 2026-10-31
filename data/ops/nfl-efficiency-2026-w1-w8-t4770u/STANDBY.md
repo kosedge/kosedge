@@ -24,7 +24,9 @@ python3 scripts/nfl/prove_if_consume_2026_w09_t4770u.py
 cd services/model-service && python3 -m pytest tests/test_nfl_efficiency_2026_w1_w8_t4770u.py -q
 ```
 
-**Wake path:** timer `t4770u-w8-complete-data-ready` fires `2026-11-03T14:00:22Z` (~12.8h after MNF kickoff). If still not 14/14, stay IDLE and resubscribe 6h. Do not invent W8 progress. Offline IF caller #667 / tip `b6d019b0` is a separate ACCEPTED lane — do not touch it.
+**Wake path (t4845u correction):** live timer `t4770u-w8-complete-data-ready` still fires `2026-11-03T14:00:22Z` = `2026-11-03T09:00:00-05:00` EST. That offset is **12h45 after MNF kickoff** (`2026-11-03T01:15:00Z` / `2026-11-02T20:15:00-05:00`), **not after final**. Final is not declared and must not be invented.
+
+Planning band only (not a final): kickoff + 3h00–3h45 → `2026-11-03T04:15Z`–`05:00Z`. Proposed corrected first wake = late band + 8h PBP buffer → **`2026-11-03T13:00:00Z`** (`08:00 EST`), then 6h retry if PBP is not 14/14. OWNER may reset the live timer; this runbook does not move it. If still incomplete: IDLE. Do not invent W8 progress. Offline IF caller #667 / tip `b6d019b0` is a separate ACCEPTED lane — do not touch it.
 
 **pytest at READY:** `tests/test_nfl_efficiency_2026_w1_w8_t4770u.py` currently pins `DATA_PARTIAL`, `as_of_week==7`, and STATUS sha `81d7dd9f…` (accepted tip `ba9e8426`). Rewrite those PARTIAL-era asserts onto the new seal in the READY commit. Do not treat those reds as a reason to withhold DATA_READY, and do not run `--skip-fetch` once 14/14.
 

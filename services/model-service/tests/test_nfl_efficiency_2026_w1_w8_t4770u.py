@@ -276,6 +276,7 @@ def test_sha256sums_cover_sealed_json_and_authority() -> None:
         "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY.txt",
         "rest_days_spotcheck.json",
         "T4842U_READY_STANDBY_RECEIPT.json",
+        "T4845U_WEEKEND_LAUNCH_ASSESS_RECEIPT.json",
     }
     assert required <= names
     for line in sums:
