@@ -1,0 +1,10 @@
+{
+  "scoring_validation_report.json": {
+    "sha256": "c2fe56182f90d0508f25650ede41b491fdc1698ed06d438ae0e3f9e3a00c01fc",
+    "bytes": 66459
+  },
+  "scoring_summary.json": {
+    "sha256": "1d15a35bf5ad4f90f758502bea29d15f7a77720327c53aa895d658fa95aae624",
+    "bytes": 1330
+  }
+}

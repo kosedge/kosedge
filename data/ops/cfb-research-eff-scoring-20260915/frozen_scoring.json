@@ -1,0 +1,44 @@
+{
+  "research_only": true,
+  "production_promote": false,
+  "boards_stay_coming_soon": true,
+  "protocol": "docs/cfb/EVAL_PROTOCOL.md",
+  "protocol_lock_commit": "6aae7b7a",
+  "recommendation": "revise",
+  "confirmation_set": "2024 weeks >= 10",
+  "confirmation_n_fbs_vs_fbs": 280,
+  "dev_evidence_2025_used_for_call": false,
+  "frozen_epa": {
+    "estimator_id": "fit_joint_v2_joint_mu_hfa_n0_ridge",
+    "lam": 40.0,
+    "prior_n0": 4.0,
+    "prior_decay": 0.75,
+    "retuned": false
+  },
+  "selected_scoring_knobs": {
+    "pace_source": "pace_plays",
+    "hfa_k": 10.0,
+    "selection_seasons": [2023]
+  },
+  "hfa_points": {
+    "h_pts": 5.870444749510898,
+    "h_window": 5.868948657134452,
+    "h_prior": 6.72725685350096,
+    "n_hfa": 5727,
+    "units": "points added to home team; 0 on neutrals",
+    "thin_window_epa_h_times_plays": false
+  },
+  "points_equation": {
+    "intercept": 25.732766089229905,
+    "slope": 0.7866613651465597,
+    "ppp": 5.662166569616673,
+    "margin_sign": "home_points - away_points"
+  },
+  "ibf_v1": {
+    "fallback_value": 0.040693502722139334,
+    "holdout_obs_keys_sha256": "009ce549ab9e0b0b5a94aa0bdc88b0c9d57d11e156c291634dca5e08f2532508",
+    "mae_adj_unchanged": 0.16728386119705843,
+    "mae_unadj_clean": 0.19095703715530393,
+    "mae_blend_clean": 0.18356436952803756
+  }
+}
