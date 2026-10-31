@@ -1,0 +1,16 @@
+{
+  "cli": {
+    "cmd": "PYTHONPATH=services/model-service python3 scripts/nfl/run_offline_if_eval_w8_t4850u_v2.py --test-6-1-missing-field",
+    "exit_code": 2,
+    "stderr": "",
+    "stdout": "{\n  \"code\": \"INPUTS_INCOMPLETE\",\n  \"contract\": \"b41f4b43 \\u00a73/\\u00a77\",\n  \"exit_code\": 2,\n  \"field\": \"home_off_epa_5g\",\n  \"imputed\": false,\n  \"message\": \"required contract fields missing: ['home_off_epa_5g']\",\n  \"passed\": true,\n  \"test\": \"6.1\"\n}\n"
+  },
+  "code": "INPUTS_INCOMPLETE",
+  "contract": "b41f4b43 \u00a73/\u00a77",
+  "exit_code": 2,
+  "field": "home_off_epa_5g",
+  "imputed": false,
+  "message": "required contract fields missing: ['home_off_epa_5g']",
+  "passed": true,
+  "test": "6.1"
+}

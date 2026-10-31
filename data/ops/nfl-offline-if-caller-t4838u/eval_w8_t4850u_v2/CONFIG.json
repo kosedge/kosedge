@@ -1,0 +1,25 @@
+{
+  "as_of": "cf514078",
+  "bye_rolling_as_of": {
+    "BUF": 6,
+    "JAX": 6,
+    "LAC": 6,
+    "WAS": 6
+  },
+  "c10": false,
+  "hl": false,
+  "if_blend": 0,
+  "odds": false,
+  "panel": "340a06dd81e25eece87a4d8475feca918e1ccb3c5d9663edfe5063a85ba3fa9e",
+  "railway": false,
+  "rating_week": 7,
+  "schedule": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe",
+  "season": 2026,
+  "seed_base": 48500,
+  "simulations": 4000,
+  "source_pin": "52d9e909",
+  "sportsbook": false,
+  "target_week": 8,
+  "through_w7": "c674da77",
+  "tnf_excluded": "2026-W08-CAR@GB"
+}
