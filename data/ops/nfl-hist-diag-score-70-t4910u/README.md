@@ -2,7 +2,7 @@
 
 OWNER t4910u ACCEPT · CoS EXEC_FREEZE · **one** frozen Independent Fair consume.
 
-Eng self-label: `CONDITIONAL_DIAG` (`VERDICT_ENG.md`). NFL NO-GO · CERT=0. Not E1. Not publish. Not betting.
+Eng self-label: `PASS_DIAG_SCORE` (`VERDICT_ENG.md`). Parent score tip `19c6a460`. NFL NO-GO · CERT=0. Not E1. Not publish. Not betting.
 
 ## What this is
 
@@ -14,17 +14,20 @@ It is **not** a fit, not a tune, not CERT, not a market claim, not ATS.
 
 | File | Role |
 |---|---|
-| `EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md` | CoS freeze recreation (Box sha8 expected 5ecdef1c; remount unmatched) |
-| `OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md` | OWNER accept recreation (Box sha8 expected 1102720e; remount unmatched) |
+| `EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md` | Box original **5ecdef1c MATCH** |
+| `OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md` | Box original **1102720e MATCH** |
+| `REMOUNT_NOTE.md` | remount CLOSED |
+| `ALEX_RO_HIST_DIAG_SCORE_70_t4910u_v1.md` | Alex RO **fbd7abe9** |
 | `ASSUMPTIONS.md` | Frozen formulas **before** first score write (naive W-L, pick'em, 45.3, seed, rest bind) |
 | `SAMPLE_MANIFEST_70.json` / `.md` | 70 games + visible exclusions |
-| `SCORE_RESULTS.json` / `.md` | per-game forecast vs realized |
+| `SCORE_RESULTS.json` / `.md` | per-game forecast vs realized (sealed; unchanged on close) |
 | `METRICS_TABLE.json` / `.md` | ACCEPT-named metrics |
+| `METRICS_ADDENDUM_t4910u.json` / `.md` | WP bins · envelope · OLS slope · 50/80/90 coverage |
 | `COMPRESSION_HIST_DIAG.json` / `.md` | forecast-mean SD vs realized SD + coverage |
-| `CALL_AUDIT.md` | Odds=0; rest bind; sources |
+| `CALL_AUDIT.md` | Odds=0; rest bind; remount CLOSED; no close-time IF invoke |
 | `PINS.json` | rehashed pins this exec |
 | `VERDICT_ENG.md` | Eng self-label only |
-| `score_t4910u.py` | reproducible wrapper (no math change) |
+| `score_t4910u.py` | original score wrapper (do not re-run for this close) |
 | `SHA256SUMS` | packet digests |
 
 Box-mirror copies of the freeze/accept filenames also sit at `data/ops/EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md` and `data/ops/OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md`.
@@ -64,6 +67,6 @@ PYTHONPATH=/tmp/t4910u-if-6ca03716/services/model-service \
 
 ## Headline (diagnostic, not edge)
 
-IF SU 0.4714 · MAE margin 10.745 · MAE total 11.963 · Brier 0.2584 · coverage margin/total 0.800 / 0.743. Does not beat labeled baselines. See `VERDICT_ENG.md`.
+IF SU 0.4714 · MAE margin 10.745 · MAE total 11.963 · Brier 0.2584 · OLS slope −0.426 · coverage 50/80/90 margin 0.614 / 0.800 / 0.871. Does not beat labeled baselines. See `VERDICT_ENG.md`.
 
 NFL NO-GO · CERT=0 · 0 Odds credits

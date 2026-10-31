@@ -1,30 +1,40 @@
-# EXEC_FREEZE — t4910u bounded diagnostic score 70
+# EXEC FREEZE t4910u — Bounded Diagnostic Score (70)
+NFL NO-GO · CERT=0 · Binds OWNER_ACCEPT_t4910u on card 27b2bb7c. Any change → escalate Ryan; no silent edit.
 
-CoS EXEC_FREEZE sealed. Bind exactly. Do not invent alternatives.
+```yaml
+if_tip: 6ca03716fe52930332d5ffba302c312a651980cc
+market_blend: 0
+contract: b41f4b43
+as_of: cf514078
+pbp: 84eacd96
+lineage: {w2: {tip: 440314e4, ro: 91e2d7db}, w3w6: {tip: f92aaea3, ro: af30adba}}
+epa_success_label: RETRO_FIT / DEV_RESEARCH
+simulations: 4000
+seed_base: 201710            # hist-specific; Cursor must not change without escalate
+seed_formula: "seed = seed_base + (int(sha256(game_id.encode('utf-8')).hexdigest()[:12], 16) % 1000003)"
+tie_treatment: "margin == 0 -> away (IF fair ML path)"
+rest_days: BIND_PACKET_ONLY  # sealed ET DOW (155d3ca0); W8 eval caller re-derive FORBIDDEN
+sample_manifest_rule: "union of complete rows from W2 tip 440314e4 + W3-W6 tip f92aaea3; exclude DET_NO, MIA_ATL, SF_WAS, NYG_DEN"
+expected_n: 70
+replacement: forbidden   # failed/ineligible remain visible
+metrics:
+  - margin/spread/total/WP vs realized
+  - MAE/RMSE margin and total
+  - Brier/log-loss on WP
+  - WP calibration bins (EXPLORATORY, N=70)
+  - straight-up outcome accuracy (ties separate; no line)
+  - dispersion: forecast-mean SD vs realized SD, envelope, realized-on-forecast slope (interpret forecast-mean variation vs outcome noise)
+  - predictive-distribution coverage (e.g. 50/80/90% margin/total intervals) if sims support
+  - NO CLV / NO 2017 market
+benchmarks:
+  naive_wl: "WP from pregame W-L record (win% diff), margin per frozen mapping in implementation; pregame-only"
+  pickem: "margin 0, WP 0.5"
+  constant_total: 45.3
+deliverables_path: data/ops/nfl-hist-diag-score-70-t4910u/
+deliverables: [SAMPLE_MANIFEST_70, SCORE_RESULTS, METRICS_TABLE, COMPRESSION_HIST_DIAG, ASSUMPTIONS, CALL_AUDIT, SHA256SUMS]
+executions_allowed: 1
+review: "Alex RO → PASS_DIAG_SCORE | CONDITIONAL | RETURN before interpretation"
+not_authorized: [fit, tune, weight/feature/math change, sample swap, T2 last-played, 2024-25 sealed access, odds acquire, historical market claims, edge claim, publish, betting, merge, E1, CERT, re-run]
+```
 
-Expected Box sha8: **5ecdef1c**. Recreated under `data/ops/` for this PR. Rehash this exec; if sha8 ≠ 5ecdef1c the remount is documented in CALL_AUDIT (Box original was not mounted on this box).
-
-## Freeze (do not change)
-
-- Filing authorized. This is the **ONE** score execution under frozen spec.
-- NFL NO-GO · CERT=0.
-- Read-only on model math: no fit, tune, weight/feature/blend change, sample replacement, 2024–25 sealed access, market/CLV claims, publish, betting, merge, E1, CERT.
-- IF tip / framework tree: **6ca03716** (`6ca03716fe52930332d5ffba302c312a651980cc`).
-- market_blend=0.
-- Source pins: simulator **52d9e909** · framework **a0051cc4** · contract **b41f4b43** · as-of **cf514078** · PBP **84eacd96**.
-- Inputs: Stage-1b W2 tip **440314e4** (Alex PASS_RECON **91e2d7db**) + W3–W6 tip **f92aaea3** #671 (Alex PASS_RECON **af30adba**).
-- Sample: exactly 70 complete games (W2 14 + W3–W6 56). Exclude bye partials DET_NO MIA_ATL SF_WAS NYG_DEN. Failed/ineligible stay visible — no silent fill or substitute.
-- rest BIND_PACKET_ONLY. Do not re-derive rest via W8 eval caller at 6ca03716. Do not silently switch tip to 90bf65ab.
-- simulations=**4000**.
-- Binding seed formula (do not change):
-  `seed = 201710 + (int(sha256(game_id.encode()).hexdigest()[:12], 16) % 1000003)`
-- tie: margin==0 → away (same IF fair path).
-- Naive W-L benchmark: seal exact pregame-only formula in ASSUMPTIONS before first score write (WP from pregame W-L win% diff); then freeze — no post-hoc change.
-- Benchmarks: naive W-L · pick'em · constant-total prior 45.3 — labeled baselines ≠ edge proof.
-- NO CLV / no 2017 odds.
-- EPA/success fields label RETRO_FIT / DEV_RESEARCH only (A1).
-- 0 Odds credits.
-- Packet: `data/ops/nfl-hist-diag-score-70-t4910u/`.
-- Open DRAFT PR (do not merge). Eng label CONDITIONAL_DIAG or SCORE_SEALED as honest.
-
-≠FREE_PUBLIC ≠betting ≠Odds ≠merge ≠E1 ≠CERT
+Prose: score-only diagnostic of frozen IF baseline at tip 6ca03716 on 70 verified 2017 REG games, quantifying compression (t4902u cb0992e2). Implementer must seal the exact naive W-L formula code in ASSUMPTIONS before the run; seed formula above is binding.

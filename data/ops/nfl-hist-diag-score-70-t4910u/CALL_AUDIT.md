@@ -34,16 +34,22 @@ Hypothesis accepted: rest was already correct in packets; only consumption bindi
 | W3–W6 Alex PASS_RECON | **af30adba** | cited (document sha8; not a git object on this box) |
 | `historical_oos_games.csv` | **1ee90fac** | 2017 REG scores only. Rehash MATCH. Market columns not read into metrics |
 | PBP 2017 | **84eacd96** | cited only. Not opened |
-| OWNER / EXEC_FREEZE chat bind | expected **1102720e** / **5ecdef1c** | parameters bound; Box files not mounted |
+| OWNER_ACCEPT box original | **1102720e** | remount CLOSED — exact bytes from Agent Store uploads |
+| EXEC_FREEZE box original | **5ecdef1c** | remount CLOSED — exact bytes from Agent Store uploads |
+| Alex RO | **fbd7abe9** | CONDITIONAL; CoS CLOSE addendum only |
 
-## Box remount
+## Box remount — CLOSED
 
-| file | expected sha8 | observed sha8 this box | match |
+| file | expected sha8 | observed | match |
 |---|---|---|---|
-| `EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md` | **5ecdef1c** | **8ef7a834** | NO |
-| `OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md` | **1102720e** | **d3acd43d** | NO |
+| `EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md` | **5ecdef1c** | **5ecdef1c** | YES |
+| `OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md` | **1102720e** | **1102720e** | YES |
 
-Box originals were not present in repo, Drive, Slack, Gmail, or Linear on this box. Local files are recreations of the sealed chat bind (same pins, seed formula, rest rule, sample, metrics naming). **Parameters were not invented.** Sha8 remount is unmatched — this is a residual for CONDITIONAL_DIAG, not a pin rewrite.
+19c6a460 recreations (8ef7a834 / d3acd43d) **SUPERSEDED** by box originals. See `REMOUNT_NOTE.md`. CoS ACCEPT: box originals are SoT.
+
+## Addendum close (no IF re-invoke)
+
+`METRICS_ADDENDUM_t4910u` computed from sealed `SCORE_RESULTS.json` only. `simulate_nfl_game` / `simulate_nfl_game_independent_fair` **not called** on this close. SCORE_RESULTS bytes unchanged.
 
 ## Sources not touched
 
@@ -64,7 +70,8 @@ Box originals were not present in repo, Drive, Slack, Gmail, or Linear on this b
 
 ## Invoke
 
-- `simulate_nfl_game_independent_fair` × 70
+- Original score tip `19c6a460`: `simulate_nfl_game_independent_fair` × 70 (sealed).
+- This close: **zero** IF / `simulate_nfl_game` calls.
 - simulations=4000 · market_spread_home=None · market_total=None · market_blend=0 on all 70
 - seed formula frozen in ASSUMPTIONS / PINS before first SCORE_RESULTS write
 - 70/70 SCORED · 0 FAILED

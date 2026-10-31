@@ -1,30 +1,26 @@
 # VERDICT_ENG — t4910u bounded diagnostic score 70
 
-**Eng self-label: CONDITIONAL_DIAG**
+**Eng self-label: PASS_DIAG_SCORE**
 
-Not CERT. Not SCORE_SEALED as a certification. Not E1. Not PASS. Alex / CoS grade is separate.
+Not CERT. Not E1. Not publish. Not a market beat. Alex RO was CONDITIONAL (`fbd7abe9`); CoS ordered add-only CLOSE. NFL NO-GO · CERT=0.
 
-## Why CONDITIONAL_DIAG (eng)
+## Why PASS_DIAG_SCORE (eng)
 
-Holds:
+Parent tip **19c6a460** still holds: 70/70 SCORED, rest BIND_PACKET_ONLY, IF tip 6ca03716, blend=0, pins MATCH, no math change.
 
-- ASSUMPTIONS (including naive W-L formula) written **before** first SCORE_RESULTS write. Formula not changed after.
-- All **70** complete games attempted. **70/70 SCORED**. 0 FAILED. 0 ties.
-- Exclusions visible and not filled: W2 ineligible CHI_TB / MIA_LAC; W6 bye partials DET_NO / MIA_ATL / SF_WAS / NYG_DEN.
-- rest BIND_PACKET_ONLY. Packet ET rest consumed as IF inputs. W8 UTC helper not called. Tip stayed **6ca03716**. Thu games kept packet rest=4.0 (UTC contrast 7.0 unused).
-- IF loaded from 6ca03716 worktree. Simulator rehash **52d9e909 MATCH**. Framework **a0051cc4 MATCH**. market_blend=0 on all 70.
-- Seed formula bound: `201710 + (int(sha256(game_id.encode()).hexdigest()[:12], 16) % 1000003)`. simulations=4000. Tie margin==0 → away.
-- Metrics use ACCEPT names: forecast margin/spread/total/wp vs realized; straight-up outcome accuracy (NOT ATS-vs-0); Brier/log-loss exploratory N=70; MAE/RMSE; compression with forecast-mean SD vs realized SD; sealed-sim p10–p90 coverage.
-- No CLV. 2017 odds not consumed. 0 Odds credits. 2024–25 untouched. No math change.
+This close (same PR #672):
 
-Does not hold for SCORE_SEALED / CERT (eng view):
+- Box originals remounted: EXEC_FREEZE **5ecdef1c MATCH** · OWNER_ACCEPT **1102720e MATCH**. Recreations SUPERSEDED. Residual CLOSED.
+- Four freeze-listed metrics added from sealed `SCORE_RESULTS.json` only. No IF re-invoke.
+- Alex RO `fbd7abe9` filed add-only.
 
-- Box EXEC_FREEZE / OWNER_ACCEPT sha8 remount unmatched (expected 5ecdef1c / 1102720e; observed 8ef7a834 / d3acd43d). Bind text followed; originals not mounted.
-- EPA/success inputs remain RETRO_FIT / DEV_RESEARCH (A1).
-- N=70 is exploratory. Coverage and Brier are not a certification sample.
-- IF SU 0.4714 does not beat pick'em 0.5000 or naive W-L 0.5000. MAE does not beat the labeled baselines. That is a diagnostic result, not a defect to “fix” in this filing.
+Still not CERT:
 
-## Headline numbers (not edge)
+- EPA/success remain RETRO_FIT / DEV_RESEARCH (A1).
+- N=70 exploratory. Calibration bins / OLS / coverage are not a certification sample.
+- IF does not beat labeled baselines (SU 0.4714 vs 0.5000). Diagnostic finding.
+
+## Headline (not edge)
 
 | | IF | naive W-L | pick'em / 45.3 |
 |---|---|---|---|
@@ -33,12 +29,12 @@ Does not hold for SCORE_SEALED / CERT (eng view):
 | MAE total | 11.963 | — | 11.820 (45.3) |
 | Brier | 0.2584 | 0.3048 | 0.2500 |
 | sd forecast means / sd realized | 2.976 / 13.662 | | |
-| coverage margin / total p10–p90 | 0.800 / 0.743 | nominal 0.80 | |
-
-Forecast means are compressed vs outcomes (as expected). mean IF sigma ≈ 10.0 is the per-game noise term, not a claim that SDs should match.
+| OLS slope realized~forecast margin | −0.426 (r=−0.093) | | |
+| coverage 50/80/90 margin | 0.614 / 0.800 / 0.871 | | |
+| coverage 50/80/90 total | 0.500 / 0.743 / 0.886 | | |
 
 ## Not claimed
 
-CERT · SCORE_SEALED-as-cert · E1 · market beat · CLV · ATS · PLAY / LEAN · FREE_PUBLIC · merge.
+CERT · E1 · market beat · CLV · ATS · PLAY / LEAN · FREE_PUBLIC · merge.
 
 NFL NO-GO · CERT=0

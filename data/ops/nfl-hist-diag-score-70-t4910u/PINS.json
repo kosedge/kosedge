@@ -1,23 +1,37 @@
 {
   "artifact": "nfl-hist-diag-score-70-t4910u",
-  "label": "CONDITIONAL_DIAG",
+  "label": "PASS_DIAG_SCORE",
+  "parent_tip": "19c6a460752f23d73e7d340572c35adab9ea1996",
   "cert": 0,
   "nfl": "NO-GO",
+  "alex_ro": {
+    "name": "ALEX_RO_HIST_DIAG_SCORE_70_t4910u_v1.md",
+    "sha8": "fbd7abe9",
+    "sha256": "fbd7abe9f24775a99a5b62a02ca65a64ff65ef69bb7db5a68266a98cb001a57d",
+    "verdict": "CONDITIONAL",
+    "close_order": "add-only CLOSE to PASS_DIAG_SCORE; no re-score"
+  },
   "exec_freeze": {
     "name": "EXEC_FREEZE_t4910u_BOUNDED_DIAG_SCORE_70.md",
     "box_sha8_expected": "5ecdef1c",
-    "recreated_sha256": "8ef7a83470c8d7d02c107d74246a05c667275679aa61313c6a31bcf7ff301c32",
-    "recreated_sha8": "8ef7a834",
-    "recreated_match_expected": false,
-    "note": "Box original not mounted on this box. Local recreation from CoS EXEC_FREEZE chat bind. Parameters bound exactly; sha8 remount unmatched."
+    "sha256": "5ecdef1c42320ac5ab349094beda80bf6b4593c6977a15cd68f18f042e62c510",
+    "sha8": "5ecdef1c",
+    "rehash_match": true,
+    "source": "Agent Store uploads box original; replaced 19c6a460 recreation 8ef7a834",
+    "recreations_superseded": true
   },
   "owner_accept": {
     "name": "OWNER_ACCEPT_t4910u_BOUNDED_DIAG_SCORE_70.md",
     "box_sha8_expected": "1102720e",
-    "recreated_sha256": "d3acd43d286638119f961fef7b8ff58e013acabaee23a9bd4e7ddcdd870be87a",
-    "recreated_sha8": "d3acd43d",
-    "recreated_match_expected": false,
-    "note": "Box original not mounted on this box. Local recreation from OWNER ACCEPT chat bind. Parameters bound exactly; sha8 remount unmatched."
+    "sha256": "1102720e40e83d10e1f79cd146732e1a49eaf717583dbe54ec044a8aa43eab8a",
+    "sha8": "1102720e",
+    "rehash_match": true,
+    "source": "Agent Store uploads box original; replaced 19c6a460 recreation d3acd43d",
+    "recreations_superseded": true
+  },
+  "remount": {
+    "status": "CLOSED",
+    "note": "Box originals now SoT in packet + data/ops/. See REMOUNT_NOTE.md."
   },
   "if_tip": {
     "sha8": "6ca03716",

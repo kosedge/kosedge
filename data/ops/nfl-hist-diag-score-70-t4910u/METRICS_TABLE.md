@@ -18,3 +18,10 @@ Exploratory at N=70. Benchmarks are labeled baselines ≠ edge proof. No CLV.
 | sd forecast means / sd realized margin | 2.976 / 13.662 | do not expect equality |
 | mean IF sigma | 10.007 | score-error prior; not SD equality |
 | coverage margin / total p10–p90 | 0.800 / 0.743 | nominal 0.80; exploratory |
+| WP calibration bins | see addendum | exploratory; compressed WP 0.33–0.70 |
+| forecast vs realized IQR (margin) | 2.724 / 15.000 | envelope; ratio 0.182 |
+| OLS slope realized~forecast margin | −0.426 (r=−0.093) | compression; not edge |
+| coverage 50/80/90 margin | 0.614 / 0.800 / 0.871 | 80% sealed draws; 50/90 scaled width |
+| coverage 50/80/90 total | 0.500 / 0.743 / 0.886 | same method |
+
+Add-only detail: `METRICS_ADDENDUM_t4910u.md`. Sealed SCORE_RESULTS unchanged. No IF re-invoke.

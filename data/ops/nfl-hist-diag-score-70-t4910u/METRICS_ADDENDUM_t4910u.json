@@ -1,0 +1,149 @@
+{
+  "source": "SCORE_RESULTS.json sealed rows only",
+  "if_reinvoke": false,
+  "simulate_nfl_game_called": false,
+  "n": 70,
+  "wp_calibration_bins": {
+    "note": "Exploratory N=70. Equal-width WP bins. y_home=1 if realized_margin>0 else 0 (ties as not-home; n_ties=0).",
+    "bins": [
+      {
+        "lo": 0.0,
+        "hi": 0.4,
+        "n": 4,
+        "mean_wp": 0.34557499999999997,
+        "emp_rate": 0.5,
+        "abs_gap": 0.15442500000000003
+      },
+      {
+        "lo": 0.4,
+        "hi": 0.45,
+        "n": 9,
+        "mean_wp": 0.42977777777777776,
+        "emp_rate": 0.5555555555555556,
+        "abs_gap": 0.12577777777777782
+      },
+      {
+        "lo": 0.45,
+        "hi": 0.5,
+        "n": 7,
+        "mean_wp": 0.47928571428571426,
+        "emp_rate": 0.5714285714285714,
+        "abs_gap": 0.09214285714285714
+      },
+      {
+        "lo": 0.5,
+        "hi": 0.55,
+        "n": 28,
+        "mean_wp": 0.5274821428571429,
+        "emp_rate": 0.5,
+        "abs_gap": 0.0274821428571429
+      },
+      {
+        "lo": 0.55,
+        "hi": 0.6,
+        "n": 11,
+        "mean_wp": 0.5770090909090909,
+        "emp_rate": 0.2727272727272727,
+        "abs_gap": 0.3042818181818182
+      },
+      {
+        "lo": 0.6,
+        "hi": 0.65,
+        "n": 6,
+        "mean_wp": 0.623,
+        "emp_rate": 0.8333333333333334,
+        "abs_gap": 0.21033333333333337
+      },
+      {
+        "lo": 0.65,
+        "hi": 1.01,
+        "n": 5,
+        "mean_wp": 0.697,
+        "emp_rate": 0.4,
+        "abs_gap": 0.29699999999999993
+      }
+    ],
+    "wp_min": 0.3272,
+    "wp_max": 0.704,
+    "mean_wp": 0.5277842857142857,
+    "mean_y": 0.5
+  },
+  "dispersion_envelope": {
+    "forecast_margin": {
+      "n": 70,
+      "min": -6.186652129070021,
+      "p25": -0.2169411858755602,
+      "median": 1.0221154599048676,
+      "p75": 2.5071865009631265,
+      "max": 7.796112596145828,
+      "range": 13.982764725215848,
+      "iqr": 2.7241276868386866,
+      "mean": 0.9926187705767534,
+      "sd_sample": 2.9761705251687793
+    },
+    "realized_margin": {
+      "n": 70,
+      "min": -24.0,
+      "p25": -6.0,
+      "median": -1.0,
+      "p75": 9.0,
+      "max": 43.0,
+      "range": 67.0,
+      "iqr": 15.0,
+      "mean": 1.8,
+      "sd_sample": 13.66217671031114
+    },
+    "iqr_ratio_forecast_over_realized": 0.18160851245591245,
+    "range_ratio_forecast_over_realized": 0.20869798097337086,
+    "sd_ratio_forecast_over_realized": 0.21784014277334,
+    "note": "Forecast-mean envelope vs realized envelope. Do not expect equality."
+  },
+  "realized_on_forecast_ols_margin": {
+    "formula": "realized_margin = intercept + slope * forecast_margin",
+    "slope": -0.42615276048073125,
+    "intercept": 2.223007229186273,
+    "r": -0.09283317818637547,
+    "r_squared": 0.008617998972183339,
+    "n": 70,
+    "mean_forecast": 0.9926187705767534,
+    "mean_realized": 1.8,
+    "note": "Slope << 1 is compression (forecast means vary less than outcomes). Exploratory N=70. Not edge.",
+    "totals_ols_not_primary": {
+      "slope": -1.2408797298770124,
+      "intercept": 100.80833964986506
+    }
+  },
+  "predictive_interval_coverage": {
+    "method_80": "sealed SCORE_RESULTS margin_p10/p90 and total_p10/p90 from original sim draws",
+    "method_50_90": "scale sealed 80% width: sigma_hat=(p90-p10)/(2*z80); interval = mu \u00b1 z * sigma_hat. No IF re-invoke.",
+    "z50": 0.6744897501960817,
+    "z80": 1.2815515655446004,
+    "z90": 1.6448536269514722,
+    "margin": {
+      "cov_50": 0.6142857142857143,
+      "hits_50": 43,
+      "cov_80": 0.8,
+      "hits_80": 56,
+      "cov_90": 0.8714285714285714,
+      "hits_90": 61,
+      "mean_width_50": 18.92033120830987,
+      "mean_width_90": 46.14032370701608
+    },
+    "total": {
+      "cov_50": 0.5,
+      "hits_50": 35,
+      "cov_80": 0.7428571428571429,
+      "hits_80": 52,
+      "cov_90": 0.8857142857142857,
+      "hits_90": 62,
+      "mean_width_50": 18.96026756639857,
+      "mean_width_90": 46.23771505125865
+    },
+    "nominal": {
+      "50": 0.5,
+      "80": 0.8,
+      "90": 0.9
+    },
+    "note": "Exploratory N=70. 80% is the sealed draw interval. 50/90 derived from that width + sealed mu."
+  }
+}
