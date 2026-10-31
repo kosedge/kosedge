@@ -1,0 +1,35 @@
+{
+  "rule": "no consumed play/game with kickoff >= target kickoff",
+  "consumed_pbp_game_ids": [
+    "2017_01_ARI_DET",
+    "2017_01_ATL_CHI",
+    "2017_01_BAL_CIN",
+    "2017_01_CAR_SF",
+    "2017_01_IND_LA",
+    "2017_01_JAX_HOU",
+    "2017_01_KC_NE",
+    "2017_01_LAC_DEN",
+    "2017_01_NO_MIN",
+    "2017_01_NYG_DAL",
+    "2017_01_NYJ_BUF",
+    "2017_01_OAK_TEN",
+    "2017_01_PHI_WAS",
+    "2017_01_PIT_CLE",
+    "2017_01_SEA_GB"
+  ],
+  "n_consumed_games": 15,
+  "n_consumed_plays": 1830,
+  "max_consumed_kickoff_utc": "2017-09-12T02:20:00Z",
+  "min_eligible_target_kickoff_utc": "2017-09-15T00:25:00Z",
+  "max_w1_kickoff_lt_min_w2": true,
+  "w2_plays_consumed": 0,
+  "season_types_consumed": [
+    "REG"
+  ],
+  "weeks_consumed": [
+    1
+  ],
+  "leaked_rows": [],
+  "play_filter": "play_type IN ('pass','run'); season_type=REG; week=1",
+  "result": "PASS"
+}

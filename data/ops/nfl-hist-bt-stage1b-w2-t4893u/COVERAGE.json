@@ -1,0 +1,126 @@
+{
+  "n_source_w2": 16,
+  "n_excluded": 2,
+  "excluded_game_ids": [
+    "2017_02_CHI_TB",
+    "2017_02_MIA_LAC"
+  ],
+  "n_games": 14,
+  "n_eligible": 14,
+  "fields_per_game": 27,
+  "n_cells": 378,
+  "status_counts": {
+    "DERIVED_PREGAME": 378
+  },
+  "derived_pregame": 378,
+  "missing_record": 0,
+  "out_of_contract": 0,
+  "excluded_cells": 0,
+  "pct_fields_present": 100.0,
+  "complete_eligible_games_27_of_27": [
+    "2017_02_ARI_IND",
+    "2017_02_BUF_CAR",
+    "2017_02_CLE_BAL",
+    "2017_02_DAL_DEN",
+    "2017_02_DET_NYG",
+    "2017_02_GB_ATL",
+    "2017_02_HOU_CIN",
+    "2017_02_MIN_PIT",
+    "2017_02_NE_NO",
+    "2017_02_NYJ_OAK",
+    "2017_02_PHI_KC",
+    "2017_02_SF_SEA",
+    "2017_02_TEN_JAX",
+    "2017_02_WAS_LA"
+  ],
+  "n_complete_eligible": 14,
+  "partial_eligible_games": [],
+  "n_partial_eligible": 0,
+  "by_field": {
+    "away_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "away_off_epa_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "away_pass_rate_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "away_success_defense_allowed_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "away_success_offense_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "away_team": {
+      "DERIVED_PREGAME": 14
+    },
+    "defense_index_away": {
+      "DERIVED_PREGAME": 14
+    },
+    "defense_index_home": {
+      "DERIVED_PREGAME": 14
+    },
+    "game_id": {
+      "DERIVED_PREGAME": 14
+    },
+    "home_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "home_off_epa_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "home_pass_rate_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "home_success_defense_allowed_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "home_success_offense_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "home_team": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_diff_def_epa_allowed_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_diff_off_epa_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_diff_pressure_allowed_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_diff_pressure_generated_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_diff_red_zone_td_rate_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_diff_success_rate_5g": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_season": {
+      "DERIVED_PREGAME": 14
+    },
+    "matchup_week": {
+      "DERIVED_PREGAME": 14
+    },
+    "offense_index_away": {
+      "DERIVED_PREGAME": 14
+    },
+    "offense_index_home": {
+      "DERIVED_PREGAME": 14
+    },
+    "rest_days_away": {
+      "DERIVED_PREGAME": 14
+    },
+    "rest_days_home": {
+      "DERIVED_PREGAME": 14
+    }
+  },
+  "t1_w1_teams": 30,
+  "t1_w1_rows": 30,
+  "pressure_rz_status": "DERIVED_PREGAME via T1 SQL as written (not a substitute)",
+  "epa_retrofit_caveat": "nflverse epa/success are retro-scored by a later-fitted EP model. Metric-definition look-ahead; not consumption of W2+ outcomes."
+}

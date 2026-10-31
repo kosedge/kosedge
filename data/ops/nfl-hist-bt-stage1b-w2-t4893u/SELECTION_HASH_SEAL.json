@@ -1,0 +1,30 @@
+{
+  "sealed_before_rebuild": true,
+  "sealed_before_pbp_open": true,
+  "selection_hash_recipe": "sha256(utf-8 of sorted canonical game_id list joined by \\n with trailing \\n)",
+  "selection_hash": "96a1317613d695fe027caf4a9230028480f64facfe460736702bd66328708640",
+  "n": 14,
+  "season": 2017,
+  "week": 2,
+  "exclusion_rule": "SAMPLE_MANIFEST W2 games (16) minus any game where either side has 0 completed same-season games as-of kickoff",
+  "predeclared_exclusions": {
+    "2017_02_CHI_TB": "TB home \u2014 0 completed 2017 games as-of kickoff (Irma postpone)",
+    "2017_02_MIA_LAC": "MIA away \u2014 0 completed 2017 games as-of kickoff (Irma postpone)"
+  },
+  "game_ids_sorted": [
+    "2017_02_ARI_IND",
+    "2017_02_BUF_CAR",
+    "2017_02_CLE_BAL",
+    "2017_02_DAL_DEN",
+    "2017_02_DET_NYG",
+    "2017_02_GB_ATL",
+    "2017_02_HOU_CIN",
+    "2017_02_MIN_PIT",
+    "2017_02_NE_NO",
+    "2017_02_NYJ_OAK",
+    "2017_02_PHI_KC",
+    "2017_02_SF_SEA",
+    "2017_02_TEN_JAX",
+    "2017_02_WAS_LA"
+  ]
+}
