@@ -16,6 +16,7 @@ from src.services.nfl_if_coherence import (
     SECOND_SEED_C2_FALLBACKS,
     SEED_BASE,
     fair_ml,
+    inject_published_st_ml,
     inject_published_wp,
     j10_band,
     j7_band,
@@ -25,6 +26,7 @@ from src.services.nfl_if_coherence import (
     run_coherence_slate,
     scan_ats_ou,
     second_seed_injection,
+    second_seed_st_ml_injection,
     summarize_draws,
     tie_rate_band,
     verdict_from_tables,
@@ -177,6 +179,42 @@ def test_16_single_draw_array(slate):
     )
     assert mapped["verdict"] == "BLOCKED"
     assert any(item.endswith(":J3") for item in mapped["a_fail"])
+
+
+def test_c2_joint_st_ml_fail_closed(slate):
+    """Expected fail-closed: second-seed ST+ML on draw-1 stats → J1/J2/J5 FAIL.
+
+    Frozen J1/J2/J5 already require same-draw ST/total/ML. Not a spec change.
+    """
+    game = next(g for g in slate["games"] if g["home_wp"] != 0.5)
+    same = inject_published_st_ml(
+        game,
+        spread_home=game["spread_home"],
+        total_mu=game["total_mu"],
+        fair_home_ml=game["fair_home_ml"],
+        fair_away_ml=game["fair_away_ml"],
+    )
+    assert same["j1"]["band"] == "PASS"
+    assert same["j2"]["band"] == "PASS"
+    assert same["j5"]["band"] == "PASS"
+    assert same["drives_fail"] is False
+    injected = second_seed_st_ml_injection(game)
+    assert injected["second_seed"] in (SECOND_SEED_C2, *SECOND_SEED_C2_FALLBACKS)
+    assert injected["second_seed_draw_sha256"] != game["capture"]["draw_array_sha256"]
+    assert injected["same_draw_sha256"] == game["capture"]["draw_array_sha256"]
+    assert injected["j1"]["band"] == "FAIL"
+    assert injected["j2"]["band"] == "FAIL"
+    assert injected["j5"]["band"] == "FAIL"
+    assert injected["drives_fail"] is True
+    mapped = verdict_from_tables(
+        [injected["game"]],
+        slate["j12"],
+        slate["j14"],
+        True,
+    )
+    assert mapped["verdict"] == "BLOCKED"
+    assert any(item.endswith(":J1") for item in mapped["a_fail"])
+    assert any(item.endswith(":J5") for item in mapped["a_fail"])
 
 
 def test_17_component_identity(slate):

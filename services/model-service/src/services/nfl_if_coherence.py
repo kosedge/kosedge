@@ -801,6 +801,75 @@ def second_seed_injection(game: Mapping[str, Any]) -> Dict[str, Any]:
     return injected
 
 
+def inject_published_st_ml(
+    game: Mapping[str, Any],
+    *,
+    spread_home: float | None = None,
+    total_mu: float | None = None,
+    fair_home_ml: int | None = None,
+    fair_away_ml: int | None = None,
+) -> Dict[str, Any]:
+    """C2 joint ST+ML: overlay foreign published spread/total/ML on the same-draw game.
+
+    Frozen J1/J2/J5 already require those fields to come from the captured array.
+    A second-seed overlay must fail-closed (A FAIL → BLOCKED). No new tolerance.
+    """
+    tampered = copy.deepcopy(dict(game))
+    if spread_home is not None:
+        tampered["spread_home"] = float(spread_home)
+    if total_mu is not None:
+        tampered["total_mu"] = float(total_mu)
+    if fair_home_ml is not None:
+        tampered["fair_home_ml"] = int(fair_home_ml)
+    if fair_away_ml is not None:
+        tampered["fair_away_ml"] = int(fair_away_ml)
+    rows = table_a(tampered)
+    tampered["table_a"] = rows
+    by_id = {r["id"]: r for r in rows}
+    return {
+        "game": tampered,
+        "table_a": rows,
+        "j1": by_id["J1"],
+        "j2": by_id["J2"],
+        "j5": by_id["J5"],
+        "drives_fail": any(by_id[k]["band"] == "FAIL" for k in ("J1", "J2", "J5")),
+        "same_draw_sha256": game["capture"]["draw_array_sha256"],
+    }
+
+
+def second_seed_st_ml_injection(game: Mapping[str, Any]) -> Dict[str, Any]:
+    """Same game, predeclared non-packet seed; inject that seed's ST+ML onto draw-1."""
+    seeds = (SECOND_SEED_C2, *SECOND_SEED_C2_FALLBACKS)
+    foreign = None
+    used_seed = None
+    for seed in seeds:
+        cand = invoke_with_capture(eval_request_at_seed(str(game["game_id"]), seed))
+        st_diff = float(cand["spread_home"]) != float(game["spread_home"])
+        ml_diff = int(cand["fair_home_ml"]) != int(game["fair_home_ml"])
+        if st_diff and ml_diff:
+            foreign = cand
+            used_seed = seed
+            break
+    if foreign is None:
+        raise EvalW8Reject(
+            "C2_ST_ML_COLLISION",
+            f"all C2 seeds {seeds} matched published ST or ML for {game['game_id']}",
+        )
+    injected = inject_published_st_ml(
+        game,
+        spread_home=float(foreign["spread_home"]),
+        total_mu=float(foreign["total_mu"]),
+        fair_home_ml=int(foreign["fair_home_ml"]),
+        fair_away_ml=int(foreign["fair_away_ml"]),
+    )
+    injected["second_seed"] = used_seed
+    injected["second_seed_draw_sha256"] = foreign["capture"]["draw_array_sha256"]
+    injected["second_seed_spread_home"] = float(foreign["spread_home"])
+    injected["second_seed_total_mu"] = float(foreign["total_mu"])
+    injected["second_seed_fair_home_ml"] = int(foreign["fair_home_ml"])
+    return injected
+
+
 def _assert_parent_packet_untouched() -> None:
     sums = PARENT_PACKET_DIR / "SHA256SUMS"
     if not sums.is_file():
@@ -1173,14 +1242,17 @@ def _render_c2_c3_note() -> str:
             "Parent Card A packet `eval_w8_t4871u_coherence/` tip `aa9605dc` seal `1f4ffde3` Alex RO `b5de5df1`.",
             "This sibling does not rewrite that packet. #4 remains CONDITIONAL. ≠PASS_RO.",
             "",
-            "## C2 — second-seed wp injection drives FAIL",
+            "## C2 — second-seed wp and joint ST+ML injection drive FAIL",
             "",
-            "Prior `test_16` only asserted `injected != published_wp` (or p=0.5).",
-            "It never fed the foreign wp into Table A / `verdict_from_tables`.",
+            "Frozen contract (fe4dc220 §6): same-draw J1/J2/J5; different draw sets → BLOCKED.",
+            "No new tolerance. Expected fail-closed of existing checkers:",
             "",
-            "`inject_published_wp` overlays a wp from `SECOND_SEED_C2` (148500, not a packet seed)",
-            "onto the same-draw game. Draws/stats/hash stay on seed_base. J3 must FAIL.",
-            "`verdict_from_tables` must map that A FAIL to BLOCKED. That is the checker proof.",
+            "- `inject_published_wp` / `test_16`: foreign home_wp → J3 FAIL → BLOCKED.",
+            "- `inject_published_st_ml` / `test_c2_joint_st_ml_fail_closed`: foreign",
+            "  spread_home + total_mu + fair ML from `SECOND_SEED_C2` onto draw-1 stats →",
+            "  J1/J2/J5 FAIL → BLOCKED. Same-draw overlay still PASSes.",
+            "",
+            "This documents expected fail-closed, not a spec change.",
             "",
             "## C3 — pytest / CI evidence in the packet",
             "",
