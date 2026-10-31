@@ -1,0 +1,342 @@
+{
+  "n": {
+    "games": 2992,
+    "oos": 3578,
+    "roll": 5984,
+    "emit": 2992,
+    "pred": 2725,
+    "w1": 350,
+    "intra": 14541,
+    "kounk": 0,
+    "sched2012": 267
+  },
+  "c1": {
+    "oos_score_keys": 2992,
+    "oos_used_2013_2023": 2992,
+    "oos_dup_conflict": 0,
+    "miss_score": 0,
+    "emit_vs_games_record_mismatch": 0,
+    "n_games": 2992,
+    "no_ko": 0,
+    "mismatch": 0,
+    "examples": [],
+    "match": 2992,
+    "n_distinct_record_strings": 174,
+    "sample_records": [
+      [
+        "0-0",
+        358
+      ],
+      [
+        "1-0",
+        177
+      ],
+      [
+        "0-1",
+        177
+      ],
+      [
+        "1-1",
+        171
+      ],
+      [
+        "1-2",
+        131
+      ],
+      [
+        "2-2",
+        123
+      ],
+      [
+        "2-1",
+        121
+      ],
+      [
+        "3-2",
+        110
+      ]
+    ]
+  },
+  "c3": {
+    "n_roll": 5984,
+    "n_giw_gt_min5_prior": 0,
+    "examples": [],
+    "note": "prior counted as team-games with (season,week)<target from games.csv + 2012 sidecar if present"
+  },
+  "d": {
+    "ge2024": {
+      "games": 0,
+      "oos": 586,
+      "roll": 0,
+      "emit": 0,
+      "pred": 0
+    },
+    "epa": {
+      "seasons": {
+        "2013": 267,
+        "2014": 267,
+        "2015": 267,
+        "2016": 267,
+        "2017": 267,
+        "2018": 267,
+        "2019": 267,
+        "2020": 269,
+        "2021": 285,
+        "2022": 284,
+        "2023": 285
+      },
+      "n_le2022": 2707,
+      "n_2023": 285,
+      "intersect": 0,
+      "union": 2992
+    },
+    "pred_seasons": {
+      "2014": 267,
+      "2015": 267,
+      "2016": 267,
+      "2017": 267,
+      "2018": 267,
+      "2019": 267,
+      "2020": 269,
+      "2021": 285,
+      "2022": 284,
+      "2023": 285
+    },
+    "grid_has_2023_col": false,
+    "grid_n": 54,
+    "grid_cfg": [
+      "G01",
+      "G02",
+      "G03",
+      "G04",
+      "G05",
+      "G06",
+      "G07",
+      "G08",
+      "G09",
+      "G10",
+      "G11",
+      "G12",
+      "G13",
+      "G14",
+      "G15",
+      "G16",
+      "G17",
+      "G18",
+      "G19",
+      "G20",
+      "G21",
+      "G22",
+      "G23",
+      "G24",
+      "G25",
+      "G26",
+      "G27",
+      "G28",
+      "G29",
+      "G30",
+      "G31",
+      "G32",
+      "G33",
+      "G34",
+      "G35",
+      "G36",
+      "G37",
+      "G38",
+      "G39",
+      "G40",
+      "G41",
+      "G42",
+      "G43",
+      "G44",
+      "G45",
+      "G46",
+      "G47",
+      "G48",
+      "G49",
+      "G50",
+      "G51",
+      "G52",
+      "G53",
+      "G54"
+    ],
+    "grid_fields": [
+      "cfg_id",
+      "rho",
+      "lambda",
+      "rho_s",
+      "n0",
+      "hfa_mode",
+      "mae",
+      "n_oof"
+    ],
+    "g34_n_design_vs_prior": [
+      {
+        "fold": "F1",
+        "S": 2014,
+        "n_design": 267,
+        "prior_seasons_n": 267,
+        "match": true
+      },
+      {
+        "fold": "F2",
+        "S": 2015,
+        "n_design": 534,
+        "prior_seasons_n": 534,
+        "match": true
+      },
+      {
+        "fold": "F3",
+        "S": 2016,
+        "n_design": 801,
+        "prior_seasons_n": 801,
+        "match": true
+      },
+      {
+        "fold": "F4",
+        "S": 2017,
+        "n_design": 1068,
+        "prior_seasons_n": 1068,
+        "match": true
+      },
+      {
+        "fold": "F5",
+        "S": 2018,
+        "n_design": 1335,
+        "prior_seasons_n": 1335,
+        "match": true
+      },
+      {
+        "fold": "F6",
+        "S": 2019,
+        "n_design": 1602,
+        "prior_seasons_n": 1602,
+        "match": true
+      },
+      {
+        "fold": "F7",
+        "S": 2020,
+        "n_design": 1869,
+        "prior_seasons_n": 1869,
+        "match": true
+      },
+      {
+        "fold": "F8",
+        "S": 2021,
+        "n_design": 2138,
+        "prior_seasons_n": 2138,
+        "match": true
+      },
+      {
+        "fold": "F9",
+        "S": 2022,
+        "n_design": 2423,
+        "prior_seasons_n": 2423,
+        "match": true
+      }
+    ]
+  },
+  "b": {
+    "week1": {
+      "n": 350,
+      "same_season_tokens": 0,
+      "examples": [],
+      "distinct_first_years": [
+        "2012",
+        "2013",
+        "2014",
+        "2015",
+        "2016",
+        "2017",
+        "2018",
+        "2019",
+        "2020",
+        "2021",
+        "2022"
+      ]
+    },
+    "rolling": {
+      "n": 5984,
+      "asof_policy": {
+        "strict_prior_weeks_unweighted_weekly_mean_last5": 5984
+      },
+      "source": {
+        "nflverse_pbp_pass_run_offline": 5984
+      },
+      "not_warehouse_table": {
+        "True": 5984
+      },
+      "games_in_window_min": 5,
+      "games_in_window_max": 5,
+      "n_gt_5": 0
+    },
+    "b3": {
+      "emit_n": 2992,
+      "missing_rolling_join": 0,
+      "roll_keys": 5984
+    },
+    "b5": {
+      "intra_n": 14541,
+      "kickoff_unknown_n": 0,
+      "intra_game_ids_in_emit": 2670,
+      "intra_game_ids_in_pred": 2439,
+      "intra_ids_not_in_emit": 0,
+      "notes": {
+        "same (season,week) earlier kickoff excluded by week <": 14541
+      },
+      "self_exclude": 0
+    },
+    "pmA_identity": {
+      "match": 2725,
+      "fail": 0,
+      "max_abs": 5.019322202315379e-07
+    }
+  },
+  "e": {
+    "games_market_line_source": {
+      "historical_oos_ms9_nflverse_close": 2992
+    },
+    "emit_market_line_source": {
+      "historical_oos_ms9_nflverse_close": 2992
+    },
+    "emit_has_forecast_ts": false,
+    "emit_ts_like": [
+      "kickoff_utc",
+      "nflverse_gametime",
+      "pit_schedule_path",
+      "pit_schedule_sha256",
+      "pit_record_rule"
+    ],
+    "pred_has_kickoff": false,
+    "pred_cols": [
+      "season",
+      "week",
+      "game_id",
+      "home",
+      "away",
+      "fold",
+      "cfg_id",
+      "neutral",
+      "home_ind",
+      "m",
+      "mm",
+      "pm_epa",
+      "rating_diff_home",
+      "pm_A",
+      "beta",
+      "hfa"
+    ],
+    "pit_schedule_sha256": {
+      "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed": 2992
+    },
+    "pit_record_rule": {
+      "walkforward_wl_after_game_same_season": 2992
+    },
+    "pit_schedule_path": {
+      "data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv": 2992
+    },
+    "research_label": {
+      "RESEARCH_DIAGNOSTIC": 2992
+    }
+  }
+}

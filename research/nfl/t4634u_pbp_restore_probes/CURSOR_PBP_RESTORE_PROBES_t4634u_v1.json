@@ -1,0 +1,433 @@
+{
+  "authority": {
+    "cos_order_sha8": "2693c91b",
+    "decision_sha8": "1cf303e3",
+    "h1_sums_sha256": "97774e08985cba90f23196857807b3e69144630867bc9d000007cfa4e93bc8da",
+    "lineage_sha8": "ebd3ea93"
+  },
+  "branch_draft": 648,
+  "cert_candidate": 0,
+  "checks": {
+    "A4": {
+      "h1_sums_file_sha8": "97774e08",
+      "inputs_sums_path": "research/nfl/t4602u_exp_a/SHA256SUMS.inputs",
+      "n_pbp_expect": 12,
+      "n_pbp_pass": 12,
+      "pbp": [
+        {
+          "bytes": 19322039,
+          "file": "play_by_play_2012.parquet",
+          "got": "447b90789104aac70427ec9d3b51df7247234029d0ecabd269279369b1cc6278",
+          "result": "PASS",
+          "sha8": "447b9078",
+          "want": "447b90789104aac70427ec9d3b51df7247234029d0ecabd269279369b1cc6278"
+        },
+        {
+          "bytes": 19521610,
+          "file": "play_by_play_2013.parquet",
+          "got": "f454605a1983b3946baf0ffadf3a0b9f5e04735c4b84732e0483f2049a780d00",
+          "result": "PASS",
+          "sha8": "f454605a",
+          "want": "f454605a1983b3946baf0ffadf3a0b9f5e04735c4b84732e0483f2049a780d00"
+        },
+        {
+          "bytes": 19360792,
+          "file": "play_by_play_2014.parquet",
+          "got": "54c01408d8f0ff9e013a4ea51428b91d610101f72545d082e932f5710e2fb4f7",
+          "result": "PASS",
+          "sha8": "54c01408",
+          "want": "54c01408d8f0ff9e013a4ea51428b91d610101f72545d082e932f5710e2fb4f7"
+        },
+        {
+          "bytes": 19545842,
+          "file": "play_by_play_2015.parquet",
+          "got": "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9",
+          "result": "PASS",
+          "sha8": "01b5ae7d",
+          "want": "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9"
+        },
+        {
+          "bytes": 19344382,
+          "file": "play_by_play_2016.parquet",
+          "got": "95eba04e2145e3c1c8ca502f2a3a76cfb0a5990680c3fb480f02a74a45f54a3b",
+          "result": "PASS",
+          "sha8": "95eba04e",
+          "want": "95eba04e2145e3c1c8ca502f2a3a76cfb0a5990680c3fb480f02a74a45f54a3b"
+        },
+        {
+          "bytes": 19050401,
+          "file": "play_by_play_2017.parquet",
+          "got": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+          "result": "PASS",
+          "sha8": "84eacd96",
+          "want": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710"
+        },
+        {
+          "bytes": 19072097,
+          "file": "play_by_play_2018.parquet",
+          "got": "2e6f2dce7c7ebd46e985cabe0c17eb72b39a77f98cb4478409294f50b5820150",
+          "result": "PASS",
+          "sha8": "2e6f2dce",
+          "want": "2e6f2dce7c7ebd46e985cabe0c17eb72b39a77f98cb4478409294f50b5820150"
+        },
+        {
+          "bytes": 19119729,
+          "file": "play_by_play_2019.parquet",
+          "got": "60c3067017db2d28a78f66a79b657268be8578d9a5288e6a827efdcd7fe42540",
+          "result": "PASS",
+          "sha8": "60c30670",
+          "want": "60c3067017db2d28a78f66a79b657268be8578d9a5288e6a827efdcd7fe42540"
+        },
+        {
+          "bytes": 19286459,
+          "file": "play_by_play_2020.parquet",
+          "got": "8889f5d8782b5c5dce3c3644acdc0322b228a7e9cb13fa36cbac250e260e9f60",
+          "result": "PASS",
+          "sha8": "8889f5d8",
+          "want": "8889f5d8782b5c5dce3c3644acdc0322b228a7e9cb13fa36cbac250e260e9f60"
+        },
+        {
+          "bytes": 20249925,
+          "file": "play_by_play_2021.parquet",
+          "got": "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8",
+          "result": "PASS",
+          "sha8": "333ad343",
+          "want": "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8"
+        },
+        {
+          "bytes": 20426548,
+          "file": "play_by_play_2022.parquet",
+          "got": "931121d8897779d7944e2a293e92ed8799c8e5cceef84096ac42339003fedc09",
+          "result": "PASS",
+          "sha8": "931121d8",
+          "want": "931121d8897779d7944e2a293e92ed8799c8e5cceef84096ac42339003fedc09"
+        },
+        {
+          "bytes": 20534088,
+          "file": "play_by_play_2023.parquet",
+          "got": "bd3484731408def6b0ec93225bba2bd7b2c65769ca707a2b9444d891abdc6776",
+          "result": "PASS",
+          "sha8": "bd348473",
+          "want": "bd3484731408def6b0ec93225bba2bd7b2c65769ca707a2b9444d891abdc6776"
+        }
+      ],
+      "result": "PASS",
+      "sha256sum_c": "12/12 PBP MATCH",
+      "sibling_inputs": {
+        "CURSOR_EXP_A_H2_GRID_FOLD_MANIFEST_t4598u_v1.json": {
+          "got": "db2cf4b24bfa9c441f7eafea19d5c24624541f9cb7225759e9882f61cb6c6463",
+          "path": "research/nfl/t4586u_exp_a_h2_manifest_freeze/CURSOR_EXP_A_H2_GRID_FOLD_MANIFEST_t4598u_v1.json",
+          "result": "PASS",
+          "sha8": "db2cf4b2",
+          "want": "db2cf4b24bfa9c441f7eafea19d5c24624541f9cb7225759e9882f61cb6c6463"
+        },
+        "epa_wf_features_2013_2023.csv": {
+          "got": "02f6b2e2baa425cab7703dd1d3d5064fc0dabfc69e330a846e54d736c49430a2",
+          "path": "git-show #646 (cite; not a merge)",
+          "result": "PASS",
+          "sha8": "02f6b2e2",
+          "want": "02f6b2e2baa425cab7703dd1d3d5064fc0dabfc69e330a846e54d736c49430a2"
+        },
+        "exp_e_h1_SHA256SUMS": {
+          "got": "97774e08985cba90f23196857807b3e69144630867bc9d000007cfa4e93bc8da",
+          "path": "research/nfl/t4586u_exp_e_kickoff_asof/SHA256SUMS",
+          "result": "PASS",
+          "sha8": "97774e08",
+          "want": "97774e08985cba90f23196857807b3e69144630867bc9d000007cfa4e93bc8da"
+        },
+        "games.csv": {
+          "got": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+          "path": "research/nfl/t4586u_exp_e_inputs/games.csv",
+          "result": "PASS",
+          "sha8": "4fe1cdd7",
+          "want": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8"
+        },
+        "historical_oos_games.csv": {
+          "got": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+          "path": "research/nfl/t4586u_exp_e_inputs/historical_oos_games.csv",
+          "result": "PASS",
+          "sha8": "1ee90fac",
+          "want": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed"
+        },
+        "predictions.csv": {
+          "got": "c3248302c5efd9bb63629721679ca46eba2106d6a3a71877e3d10271a26c43cb",
+          "path": "research/nfl/t4602u_exp_a/predictions.csv",
+          "result": "PASS",
+          "sha8": "c3248302",
+          "want": "c3248302c5efd9bb63629721679ca46eba2106d6a3a71877e3d10271a26c43cb"
+        },
+        "rolling_features_weekly_pbp_strict_asof_2013_2023.csv": {
+          "got": "1b07654ea500535ff445e0f3c20acc26a6c3006857951562755e406adff52479",
+          "path": "research/nfl/t4586u_exp_e_inputs/rolling_features_weekly_pbp_strict_asof_2013_2023.csv",
+          "result": "PASS",
+          "sha8": "1b07654e",
+          "want": "1b07654ea500535ff445e0f3c20acc26a6c3006857951562755e406adff52479"
+        }
+      },
+      "threat": "T5"
+    },
+    "B1": {
+      "asof_policy": "strict_prior_weeks_unweighted_weekly_mean_last5",
+      "n_gt_5_pinned": 0,
+      "n_pinned": 5984,
+      "n_pinned_expect": 5984,
+      "n_plays_season_ge_2024": 0,
+      "n_policy_strict_prior": 5984,
+      "n_reconstructed": 5984,
+      "n_same_week_in_window": 0,
+      "n_vintage_mismatch": 0,
+      "n_weekly": 6518,
+      "result": "PASS",
+      "rolling_pin_sha8": "1b07654e",
+      "threat": "T1/T5",
+      "vintage_reasons": []
+    },
+    "B4": {
+      "cfg_id": "G34",
+      "examples": [],
+      "max_abs_err_pm_A": 4.999064717736701e-07,
+      "max_abs_err_rating_diff": 4.998703534431215e-11,
+      "n_games_ge_2024": 0,
+      "n_oos_dropped_ge_2024": 586,
+      "n_panel": 2992,
+      "n_plays_season_ge_2024": 0,
+      "n_pma_identity": 2725,
+      "n_pred": 2725,
+      "n_pred_expect": 2725,
+      "n_rd_match": 2725,
+      "n_rd_missing": 0,
+      "n_team_games": 6518,
+      "n_team_games_expect": 6518,
+      "params": {
+        "lambda": 2.0,
+        "n0": 8.0,
+        "rho": 0.95,
+        "rho_s": 0.67
+      },
+      "pma_tol": 5e-07,
+      "predictions_pin_sha8": "c3248302",
+      "result": "PASS",
+      "threat": "T1",
+      "tol": 1e-06
+    },
+    "C2": {
+      "hist_rule": "sk < ko_ts",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "n0_base": 4.0,
+      "n0_expect": 8.0,
+      "n_future_in_hist": 0,
+      "n_hist_max": 568,
+      "n_hist_median": 288.0,
+      "n_hist_min": 0,
+      "n_hist_zero": 11,
+      "n_kickoffs": 1336,
+      "n_panel": 2992,
+      "n_same_game_in_hist": 0,
+      "n_team_games": 6518,
+      "result": "PASS",
+      "samples": [
+        {
+          "n0": 8.0,
+          "n_hist": 0,
+          "n_targets": 1,
+          "season": 2013,
+          "week": 1
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 2,
+          "n_targets": 10,
+          "season": 2013,
+          "week": 1
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 22,
+          "n_targets": 2,
+          "season": 2013,
+          "week": 1
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 26,
+          "n_targets": 1,
+          "season": 2013,
+          "week": 1
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 28,
+          "n_targets": 1,
+          "season": 2013,
+          "week": 1
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 30,
+          "n_targets": 1,
+          "season": 2013,
+          "week": 1
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 32,
+          "n_targets": 1,
+          "season": 2013,
+          "week": 2
+        },
+        {
+          "n0": 8.0,
+          "n_hist": 34,
+          "n_targets": 9,
+          "season": 2013,
+          "week": 2
+        }
+      ],
+      "season_final_role": "next-year prior only",
+      "season_final_used_as_same_season_rating": 0,
+      "threat": "T3"
+    },
+    "E2": {
+      "note": "$R papers not remounted; optional E2/E4 skipped (authorized only if papers available)",
+      "present": {},
+      "r_root": "/workspace/ops/nfl_enterprise_green_t4359u",
+      "result": "FAIL_CLOSED"
+    },
+    "E4": {
+      "note": "$R papers not remounted; optional E2/E4 skipped (authorized only if papers available)",
+      "present": {},
+      "r_root": "/workspace/ops/nfl_enterprise_green_t4359u",
+      "result": "FAIL_CLOSED"
+    }
+  },
+  "coming_soon": true,
+  "f2_frozen": true,
+  "forecast_ts_utc": "2026-10-28T16:20:52Z",
+  "label": "RESEARCH_DIAGNOSTIC_PBP_RESTORE_PROBES",
+  "nested_g34": false,
+  "new_predictive_experiment": false,
+  "nfl_nogo": true,
+  "odds_api_called": false,
+  "restore": {
+    "aborted": [],
+    "first_restore_path": "pin_matched_refetch",
+    "first_restore_note": "VM boot /tmp/nflverse-pbp-exp-e empty (no prior Exp E cloud cache). Pin-gated nflverse re-fetch of play_by_play_2012..2023.parquet; each sha256 exact-matched sealed H1 pins. Probe runner then cache-hit those restored bytes.",
+    "path_used": "pin_matched_refetch",
+    "cache_search": {
+      "cache_dir": "/tmp/nflverse-pbp-exp-e",
+      "existed_before_this_run": false,
+      "existed_before_probe_script": true,
+      "hits": [
+        "play_by_play_2012.parquet",
+        "play_by_play_2013.parquet",
+        "play_by_play_2014.parquet",
+        "play_by_play_2015.parquet",
+        "play_by_play_2016.parquet",
+        "play_by_play_2017.parquet",
+        "play_by_play_2018.parquet",
+        "play_by_play_2019.parquet",
+        "play_by_play_2020.parquet",
+        "play_by_play_2021.parquet",
+        "play_by_play_2022.parquet",
+        "play_by_play_2023.parquet"
+      ],
+      "misses": []
+    },
+    "files": {
+      "play_by_play_2012.parquet": {
+        "bytes": 19322039,
+        "match": true,
+        "sha256": "447b90789104aac70427ec9d3b51df7247234029d0ecabd269279369b1cc6278",
+        "sha8": "447b9078",
+        "source": "cache_hit"
+      },
+      "play_by_play_2013.parquet": {
+        "bytes": 19521610,
+        "match": true,
+        "sha256": "f454605a1983b3946baf0ffadf3a0b9f5e04735c4b84732e0483f2049a780d00",
+        "sha8": "f454605a",
+        "source": "cache_hit"
+      },
+      "play_by_play_2014.parquet": {
+        "bytes": 19360792,
+        "match": true,
+        "sha256": "54c01408d8f0ff9e013a4ea51428b91d610101f72545d082e932f5710e2fb4f7",
+        "sha8": "54c01408",
+        "source": "cache_hit"
+      },
+      "play_by_play_2015.parquet": {
+        "bytes": 19545842,
+        "match": true,
+        "sha256": "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9",
+        "sha8": "01b5ae7d",
+        "source": "cache_hit"
+      },
+      "play_by_play_2016.parquet": {
+        "bytes": 19344382,
+        "match": true,
+        "sha256": "95eba04e2145e3c1c8ca502f2a3a76cfb0a5990680c3fb480f02a74a45f54a3b",
+        "sha8": "95eba04e",
+        "source": "cache_hit"
+      },
+      "play_by_play_2017.parquet": {
+        "bytes": 19050401,
+        "match": true,
+        "sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+        "sha8": "84eacd96",
+        "source": "cache_hit"
+      },
+      "play_by_play_2018.parquet": {
+        "bytes": 19072097,
+        "match": true,
+        "sha256": "2e6f2dce7c7ebd46e985cabe0c17eb72b39a77f98cb4478409294f50b5820150",
+        "sha8": "2e6f2dce",
+        "source": "cache_hit"
+      },
+      "play_by_play_2019.parquet": {
+        "bytes": 19119729,
+        "match": true,
+        "sha256": "60c3067017db2d28a78f66a79b657268be8578d9a5288e6a827efdcd7fe42540",
+        "sha8": "60c30670",
+        "source": "cache_hit"
+      },
+      "play_by_play_2020.parquet": {
+        "bytes": 19286459,
+        "match": true,
+        "sha256": "8889f5d8782b5c5dce3c3644acdc0322b228a7e9cb13fa36cbac250e260e9f60",
+        "sha8": "8889f5d8",
+        "source": "cache_hit"
+      },
+      "play_by_play_2021.parquet": {
+        "bytes": 20249925,
+        "match": true,
+        "sha256": "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8",
+        "sha8": "333ad343",
+        "source": "cache_hit"
+      },
+      "play_by_play_2022.parquet": {
+        "bytes": 20426548,
+        "match": true,
+        "sha256": "931121d8897779d7944e2a293e92ed8799c8e5cceef84096ac42339003fedc09",
+        "sha8": "931121d8",
+        "source": "cache_hit"
+      },
+      "play_by_play_2023.parquet": {
+        "bytes": 20534088,
+        "match": true,
+        "sha256": "bd3484731408def6b0ec93225bba2bd7b2c65769ca707a2b9444d891abdc6776",
+        "sha8": "bd348473",
+        "source": "cache_hit"
+      }
+    },
+    "mac_cert_pbp_touched": false,
+    "n_files": 12,
+    "ok": true,
+    "purchased_data": false,
+    "url_family": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.parquet",
+    "warehouse_sot_changed": false
+  },
+  "simulate_nfl_game_called": false,
+  "ticket": "t4634u",
+  "warehouse_sot_changed": false
+}

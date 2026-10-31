@@ -1,0 +1,186 @@
+{
+  "document": "CURSOR_HISTORICAL_LINEAGE_VERIFY_t4621u_v1",
+  "class": "RESEARCH_DIAGNOSTIC",
+  "cert_candidate": 0,
+  "nfl_nogo": true,
+  "f2_frozen": true,
+  "branch_tip": "dc415cf6fd9ae9a4ec8a607617fb1ff4b986e77f",
+  "deploy_vercel_tip": "bfc89f57b118ed2e480f3bde8a0c3a281a2341ad",
+  "spec_sha8": "5ad4f170",
+  "addendum_sha8": "085c92e9",
+  "order_sha8": "54acf54f",
+  "paper_sha8": "ebd3ea93",
+  "paper_sha256": "ebd3ea93520f6abb4d003b0d55a8d8a387dd77e423de886417923e7b54c00dac",
+  "imv_cite": "74c97d4c",
+  "exp_dr_untouched": true,
+  "checks": [
+    {
+      "check_id": "A1",
+      "threat": "T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "$R/ALEX_EPA_WALKFORWARD_EVAL_2013_2023_t4564u_v2.md 88b3b7ce absent"
+    },
+    {
+      "check_id": "A2",
+      "threat": "T5",
+      "result": "PASS",
+      "evidence": "git-show a027cc7d emit 02f6b2e2 / rolling 1b07654e / manifest 3073dd96"
+    },
+    {
+      "check_id": "A3",
+      "threat": "T5",
+      "result": "PASS",
+      "evidence": "research/nfl/t4586u_exp_e_inputs/historical_oos_games.csv 1ee90fac; rolling 1b07654e"
+    },
+    {
+      "check_id": "A4",
+      "threat": "T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "t4602u outputs MATCH c3248302/3172b236; PBP inputs absent"
+    },
+    {
+      "check_id": "A5",
+      "threat": "T5",
+      "result": "PASS",
+      "evidence": "H2 db2cf4b2"
+    },
+    {
+      "check_id": "A6",
+      "threat": "T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "RECORD/R1/eval-record papers absent"
+    },
+    {
+      "check_id": "A7",
+      "threat": "T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "IMV/RCA/DFG papers absent"
+    },
+    {
+      "check_id": "A8",
+      "threat": "T5",
+      "result": "PASS",
+      "evidence": "MISSING.json e036c0fe; DATABASE_URL_BLOCKER.json 5ba0b759"
+    },
+    {
+      "check_id": "A9",
+      "threat": "T5",
+      "result": "PASS",
+      "evidence": "a027cc7d+0940a289 commits; emit script at a027 only"
+    },
+    {
+      "check_id": "B1",
+      "threat": "T1/T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "PBP absent; rolling 1b07654e policy-only"
+    },
+    {
+      "check_id": "B2",
+      "threat": "T1",
+      "result": "PASS",
+      "evidence": "week1_windows.csv 08ef1fa3; 2013 first/last=2012"
+    },
+    {
+      "check_id": "B3",
+      "threat": "T1",
+      "result": "PASS",
+      "evidence": "emit 02f6b2e2 join rolling miss=0"
+    },
+    {
+      "check_id": "B4",
+      "threat": "T1",
+      "result": "FAIL_CLOSED",
+      "evidence": "PBP absent; pm_A identity 2725/2725 c3248302"
+    },
+    {
+      "check_id": "B5",
+      "threat": "T1",
+      "result": "PASS",
+      "evidence": "intraweek_conservative.csv a67c89e2 n=14541 week< excluded"
+    },
+    {
+      "check_id": "B6",
+      "threat": "T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "beta refit not run; n_design F1-F9 9/9"
+    },
+    {
+      "check_id": "C1",
+      "threat": "T3",
+      "result": "PASS",
+      "evidence": "games 4fe1cdd7 + oos 1ee90fac; 2992/2992"
+    },
+    {
+      "check_id": "C2",
+      "threat": "T3",
+      "result": "FAIL_CLOSED",
+      "evidence": "PBP absent; walk_rating_diffs hist=sk<ko_ts"
+    },
+    {
+      "check_id": "C3",
+      "threat": "T3",
+      "result": "PASS",
+      "evidence": "rolling 1b07654e giw<=min(5,prior); 0 exceed"
+    },
+    {
+      "check_id": "C4",
+      "threat": "T3",
+      "result": "PASS",
+      "evidence": "emit script groupby season,week; not season-total"
+    },
+    {
+      "check_id": "D1",
+      "threat": "T4",
+      "result": "PASS",
+      "evidence": "H2 db2cf4b2 F1-F9 prior seasons < S"
+    },
+    {
+      "check_id": "D2",
+      "threat": "T4",
+      "result": "PASS",
+      "evidence": "grid_mae 170cec7a no 2023; metrics_2023 76b94beb supportive"
+    },
+    {
+      "check_id": "D3",
+      "threat": "T4",
+      "result": "FAIL",
+      "evidence": "emit train\u2229check=\u2205 n=2992; oos 1ee90fac has 586 rows 2024-26"
+    },
+    {
+      "check_id": "D4",
+      "threat": "T4",
+      "result": "PASS",
+      "evidence": "H2 d854ac52 before packet 6f1fe16b; T4 flag cfg\u2229OOF n=2440"
+    },
+    {
+      "check_id": "E1",
+      "threat": "T2/T5",
+      "result": "PASS",
+      "evidence": "forecast_ts MISSING on rows; manifests packet emit ts"
+    },
+    {
+      "check_id": "E2",
+      "threat": "T2",
+      "result": "FAIL_CLOSED",
+      "evidence": "88b3b7ce/5878136c/0d1f4f9b absent; on-box RESEARCH_DIAGNOSTIC"
+    },
+    {
+      "check_id": "E3",
+      "threat": "T5",
+      "result": "PASS",
+      "evidence": "pit_schedule_sha256=1ee90fac resolves on box"
+    },
+    {
+      "check_id": "E4",
+      "threat": "T2/T5",
+      "result": "FAIL_CLOSED",
+      "evidence": "f1fa86e7 absent"
+    },
+    {
+      "check_id": "E5",
+      "threat": "T6",
+      "result": "PASS",
+      "evidence": "market_line_source=historical_oos_ms9_nflverse_close 2992/2992"
+    }
+  ]
+}

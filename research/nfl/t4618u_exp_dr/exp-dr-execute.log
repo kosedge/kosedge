@@ -1,0 +1,25 @@
+[exp-dr] start 2026-10-28T14:53:31Z CERT=0
+[h1] CURSOR_EXP_A_H2_GRID_FOLD_MANIFEST_t4598u_v1.json sha256=db2cf4b24bfa9c441f7eafea19d5c24624541f9cb7225759e9882f61cb6c6463 sha8=db2cf4b2
+[h1] games.csv sha256=4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8 sha8=4fe1cdd7
+[h1] historical_oos_games.csv sha256=1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed sha8=1ee90fac
+[h1] predictions.csv sha256=c3248302c5efd9bb63629721679ca46eba2106d6a3a71877e3d10271a26c43cb sha8=c3248302
+[h1] selected_cell.json sha256=3172b23617f31e38ab990adc6c2d7b87176a8d0eace890eea3208e24e5635939 sha8=3172b236
+[h1] CURSOR_EXP_DR_ACK_D6_D7_t4605u_v1.md sha256=82c71d6475cccfc52a7c263ebca719c0cb59c1cf160e5ace5f32cce59e207234 sha8=82c71d64
+[h1] CURSOR_EXP_DR_FEASIBILITY_t4605u_v1.md sha256=9906430ec7192b994cf84eaca1429d71bcd63d1ca02b6292b09c1ca92e444458 sha8=9906430e
+[h1] t4618u_exp_dr_execute.py sha256=fb5b8d38469b1f4dcefe4ef2ea927f5a54955a2f2b631e8610ceb136589e657f sha8=fb5b8d38
+[h1] git-show #646 emit CSV (cite; not a merge)
+[h1] epa_wf_features_2013_2023.csv sha256=02f6b2e2baa425cab7703dd1d3d5064fc0dabfc69e330a846e54d736c49430a2 sha8=02f6b2e2
+[h1] wrote input SHA256SUMS n=9 (before any input parse)
+[rest] n=2992 nan_h=176 nan_a=176 missing=177 drest_nz=1076 short_h=179 short_a=179 gameday_mm=0 oos_mm=0
+[h1] rest_emit.csv sha256=32090818bea9baff303c1e273d05bb52c89a2604c21fb36392a935305857f26e sha8=32090818 (hashed before OLS)
+[fold] F1 S=2014 n_train=0 n_eval=267 empty=True mae_G34=11.493209 mae_DR=11.493209
+[fold] F2 S=2015 n_train=267 n_eval=267 empty=False mae_G34=10.288079 mae_DR=10.549943
+[fold] F3 S=2016 n_train=534 n_eval=267 empty=False mae_G34=9.615740 mae_DR=9.593139
+[fold] F4 S=2017 n_train=801 n_eval=267 empty=False mae_G34=10.583768 mae_DR=10.587169
+[fold] F5 S=2018 n_train=1068 n_eval=267 empty=False mae_G34=10.064837 mae_DR=10.031131
+[fold] F6 S=2019 n_train=1335 n_eval=267 empty=False mae_G34=10.553522 mae_DR=10.559429
+[fold] F7 S=2020 n_train=1602 n_eval=269 empty=False mae_G34=10.085484 mae_DR=10.119161
+[fold] F8 S=2021 n_train=1871 n_eval=285 empty=False mae_G34=11.064490 mae_DR=11.034768
+[fold] F9 S=2022 n_train=2156 n_eval=284 empty=False mae_G34=9.125801 mae_DR=9.111098
+[fold] S2023_supportive n_train=2440 n_eval=285 mae_G34=10.475721 mae_DR=10.420227
+[exp-dr] verdict=FAIL path_m=False vs_g34=False d4=True delta=-0.0220 out=/workspace/research/nfl/t4618u_exp_dr

@@ -1,0 +1,11 @@
+# Exp E PBP / large caches — do not commit (~230MB parquets)
+t4586u_exp_e_cache/
+t4602u_exp_a_cache/
+*.parquet
+*.parquet.part
+# Keep H1 both-run logs (repo *.log ignore would drop them)
+!t4586u_exp_e_h1_addendum/**/*.log
+!t4602u_exp_a/**/*.log
+!t4618u_exp_dr/**/*.log
+!t4639u_nested_g34/**/*.log
+

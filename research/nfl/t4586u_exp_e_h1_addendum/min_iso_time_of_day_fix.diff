@@ -1,0 +1,189 @@
+diff --git a/research/nfl/t4586u_exp_e_kickoff_asof_audit.py b/research/nfl/t4586u_exp_e_kickoff_asof_audit.py
+index 4bae6562..13c34cfb 100644
+--- a/research/nfl/t4586u_exp_e_kickoff_asof_audit.py
++++ b/research/nfl/t4586u_exp_e_kickoff_asof_audit.py
+@@ -436,20 +436,49 @@ def _first_str(rec: Mapping[str, Any], keys: Sequence[str]) -> Optional[str]:
+     return None
+ 
+ 
++def _parse_mdy_clock_et(text: Any) -> Optional[datetime]:
++    """Parse ``M/D/YY, HH:MM:SS`` as America/New_York. Reject 1969 sentinels. No noon."""
++    if _is_nan(text):
++        return None
++    m = re.fullmatch(
++        r"(\d{1,2})/(\d{1,2})/(\d{2}),\s*(\d{1,2}):(\d{2}):(\d{2})",
++        str(text).strip(),
++    )
++    if not m:
++        return None
++    month, day, yy, hh, mm, ss = (int(x) for x in m.groups())
++    year = 2000 + yy
++    if year < 2012 or year > 2023:
++        return None
++    try:
++        return datetime(year, month, day, hh, mm, ss, tzinfo=ET).astimezone(timezone.utc)
++    except ValueError:
++        return None
++
++
+ def _kickoff_from_pbp_row(rec: Mapping[str, Any]) -> Tuple[Optional[datetime], str, str]:
+-    """Return (utc, source, raw). Never invents noon."""
+-    for key in ("start_time", "time_of_day"):
+-        if key in rec and not _is_nan(rec.get(key)):
+-            parsed = _parse_utc(rec.get(key), naive_as_et=True)
+-            if parsed is not None:
+-                src = f"pbp_{key}_aware" if _parse_utc(rec.get(key)) is not None else f"pbp_{key}_naive_et"
+-                return parsed, src, str(rec.get(key))
++    """Return (utc, source, raw). Never invents noon.
++
++    Prefer ISO ``time_of_day`` (UTC). ``start_time`` in nflverse 2012 is often
++    ``M/D/YY, HH:MM:SS`` or the ``12/31/69`` sentinel — sentinel is unknown.
++    """
++    if "time_of_day" in rec and not _is_nan(rec.get("time_of_day")):
++        parsed = _parse_utc(rec.get("time_of_day"))
++        if parsed is not None:
++            return parsed, "pbp_time_of_day_iso", str(rec.get("time_of_day"))
++    if "start_time" in rec and not _is_nan(rec.get("start_time")):
++        parsed = _parse_mdy_clock_et(rec.get("start_time"))
++        if parsed is not None:
++            return parsed, "pbp_start_time_mdy_et", str(rec.get("start_time"))
++        parsed = _parse_utc(rec.get("start_time"), naive_as_et=True)
++        if parsed is not None and parsed.year >= 2012:
++            return parsed, "pbp_start_time_aware", str(rec.get("start_time"))
+     date_s = _first_str(rec, ("game_date", "gameday"))
+-    time_s = _first_str(rec, ("start_time", "gametime", "start_time_eastern"))
++    time_s = _first_str(rec, ("gametime", "start_time_eastern"))
+     parsed = _et_date_time_to_utc(date_s, time_s)
+     if parsed is not None:
+         return parsed, "pbp_gameday_gametime_et", f"{date_s} {time_s}"
+-    return None, "unknown", f"date={date_s!r} time={time_s!r}"
++    return None, "unknown", f"date={date_s!r} start_time={rec.get('start_time')!r} time_of_day={rec.get('time_of_day')!r}"
+ 
+ 
+ def close_h1(cache: Path) -> Dict[str, Any]:
+@@ -644,11 +673,24 @@ def _load_pbp_week_rows(
+             if c in df.columns
+         ]
+         if "game_id" in df.columns:
++            tod_min = None
++            if "time_of_day" in df.columns:
++                tod = pd.to_datetime(df["time_of_day"], utc=True, errors="coerce")
++                tod_min = tod.groupby(df["game_id"].astype(str)).min()
+             for rec in df[meta_cols].drop_duplicates(subset=["game_id"]).to_dict("records"):
+                 gid = str(rec["game_id"]).strip()
+                 if gid in game_meta:
+                     continue
+-                ko, src, raw = _kickoff_from_pbp_row(rec)
++                ko = None
++                src = "unknown"
++                raw = ""
++                if tod_min is not None and gid in tod_min.index and pd.notna(tod_min[gid]):
++                    ko = _parse_utc(tod_min[gid])
++                    if ko is not None:
++                        src = "pbp_time_of_day_min_iso"
++                        raw = str(tod_min[gid])
++                if ko is None:
++                    ko, src, raw = _kickoff_from_pbp_row(rec)
+                 game_meta[gid] = {
+                     "game_id": gid,
+                     "season": int(rec["season"]) if not _is_nan(rec.get("season")) else season,
+@@ -656,7 +698,7 @@ def _load_pbp_week_rows(
+                     "home": _first_str(rec, ("home_team",)),
+                     "away": _first_str(rec, ("away_team",)),
+                     "game_date": _first_str(rec, ("game_date", "gameday")),
+-                    "start_time_raw": _first_str(
++                    "start_time_raw": raw or _first_str(
+                         rec, ("start_time", "gametime", "start_time_eastern", "time_of_day")
+                     ),
+                     "kickoff_utc": _fmt_utc(ko) if ko is not None else "",
+@@ -916,6 +958,7 @@ def main() -> int:
+             artifact_sha,
+             forecast_ts,
+             inversions=[],
++            unknown_rows=[],
+             week1=[],
+             covid=[],
+             intra=[],
+@@ -1027,6 +1070,7 @@ def main() -> int:
+ 
+     # First-pass windows
+     inversions: List[Dict[str, Any]] = []
++    unknown_rows: List[Dict[str, Any]] = []
+     week1_rows: List[Dict[str, Any]] = []
+     intra_rows: List[Dict[str, Any]] = []
+     pass1: Dict[Tuple[str, str], Set[str]] = {}
+@@ -1136,14 +1180,27 @@ def main() -> int:
+                         "last": rolled["last"],
+                     }
+                 )
+-            if unknown:
+-                n_unknown += 1
+-                continue
+-            if ko_g is None:
+-                n_unknown += 1
+-                continue
+-            if max_ko is None:
++            if unknown or ko_g is None or max_ko is None:
+                 n_unknown += 1
++                unknown_rows.append(
++                    {
++                        "game_id": gid,
++                        "season": season,
++                        "week": week,
++                        "side": side,
++                        "franchise": franchise,
++                        "kickoff_G": _fmt_utc(ko_g) if ko_g is not None else "",
++                        "max_kickoff_TW": _fmt_utc(max_ko) if max_ko is not None else "",
++                        "n_contributors": rolled["games"],
++                        "first": rolled["first"],
++                        "last": rolled["last"],
++                        "reason": (
++                            "contributor_kickoff_unparsed"
++                            if unknown
++                            else ("panel_kickoff_unparsed" if ko_g is None else "tw_kickoff_empty")
++                        ),
++                    }
++                )
+                 continue
+             if max_ko >= ko_g:
+                 n_fail += 1
+@@ -1383,6 +1440,7 @@ def main() -> int:
+         },
+         forecast_ts,
+         inversions=inversions,
++        unknown_rows=unknown_rows,
+         week1=week1_rows,
+         covid=covid_rows,
+         intra=intra_rows,
+@@ -1400,6 +1458,7 @@ def _seal_and_exit(
+     forecast_ts: datetime,
+     *,
+     inversions: Sequence[Mapping[str, Any]],
++    unknown_rows: Sequence[Mapping[str, Any]],
+     week1: Sequence[Mapping[str, Any]],
+     covid: Sequence[Mapping[str, Any]],
+     intra: Sequence[Mapping[str, Any]],
+@@ -1455,6 +1514,23 @@ def _seal_and_exit(
+         ],
+         inversions,
+     )
++    artifact_sha["kickoff_unknown.csv"] = _write_csv(
++        OUT_DIR / "kickoff_unknown.csv",
++        [
++            "game_id",
++            "season",
++            "week",
++            "side",
++            "franchise",
++            "kickoff_G",
++            "max_kickoff_TW",
++            "n_contributors",
++            "first",
++            "last",
++            "reason",
++        ],
++        unknown_rows,
++    )
+     artifact_sha["week1_windows.csv"] = _write_csv(
+         OUT_DIR / "week1_windows.csv",
+         [

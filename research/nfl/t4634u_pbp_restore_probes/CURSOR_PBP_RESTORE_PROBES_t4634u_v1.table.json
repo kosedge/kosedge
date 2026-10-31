@@ -1,0 +1,28 @@
+{
+  "cert_candidate": 0,
+  "checks": [
+    {
+      "check_id": "A4",
+      "result": "PASS",
+      "threat": "T5"
+    },
+    {
+      "check_id": "B1",
+      "result": "PASS",
+      "threat": "T1/T5"
+    },
+    {
+      "check_id": "B4",
+      "result": "PASS",
+      "threat": "T1"
+    },
+    {
+      "check_id": "C2",
+      "result": "PASS",
+      "threat": "T3"
+    }
+  ],
+  "class": "RESEARCH_DIAGNOSTIC_PBP_RESTORE_PROBES",
+  "document": "CURSOR_PBP_RESTORE_PROBES_t4634u_v1",
+  "restore_path": "pin_matched_refetch"
+}

@@ -1,0 +1,77 @@
+[e] H1 close-on-run FIRST (hash before any input parse)
+[h1] cache hit walkforward_games_82ffb211.csv bytes=1875548
+[h1] sha256 games.csv 4fe1cdd7 bytes=1875548
+[h1] sha256 historical_oos_games.csv 1ee90fac bytes=758703
+[h1] git-show #646 rolling CSV (cite; not a merge)
+[h1] sha256 rolling_features_weekly_pbp_strict_asof_2013_2023.csv 1b07654e bytes=823791
+[h1] cache hit play_by_play_2012.parquet bytes=19322039
+[h1] sha256 play_by_play_2012.parquet 447b9078 bytes=19322039
+[h1] cache hit play_by_play_2013.parquet bytes=19521610
+[h1] sha256 play_by_play_2013.parquet f454605a bytes=19521610
+[h1] cache hit play_by_play_2014.parquet bytes=19360792
+[h1] sha256 play_by_play_2014.parquet 54c01408 bytes=19360792
+[h1] cache hit play_by_play_2015.parquet bytes=19545842
+[h1] sha256 play_by_play_2015.parquet 01b5ae7d bytes=19545842
+[h1] cache hit play_by_play_2016.parquet bytes=19344382
+[h1] sha256 play_by_play_2016.parquet 95eba04e bytes=19344382
+[h1] cache hit play_by_play_2017.parquet bytes=19050401
+[h1] sha256 play_by_play_2017.parquet 84eacd96 bytes=19050401
+[h1] cache hit play_by_play_2018.parquet bytes=19072097
+[h1] sha256 play_by_play_2018.parquet 2e6f2dce bytes=19072097
+[h1] cache hit play_by_play_2019.parquet bytes=19119729
+[h1] sha256 play_by_play_2019.parquet 60c30670 bytes=19119729
+[h1] cache hit play_by_play_2020.parquet bytes=19286459
+[h1] sha256 play_by_play_2020.parquet 8889f5d8 bytes=19286459
+[h1] cache hit play_by_play_2021.parquet bytes=20249925
+[h1] sha256 play_by_play_2021.parquet 333ad343 bytes=20249925
+[h1] cache hit play_by_play_2022.parquet bytes=20426548
+[h1] sha256 play_by_play_2022.parquet 931121d8 bytes=20426548
+[h1] cache hit play_by_play_2023.parquet bytes=20534088
+[h1] sha256 play_by_play_2023.parquet bd348473 bytes=20534088
+[h1] wrote /workspace/research/nfl/t4586u_exp_e_kickoff_asof/SHA256SUMS n=15 (before any input parse)
+[pbp] load 2012 bytes=19322039
+[pbp] load 2013 bytes=19521610
+[pbp] load 2014 bytes=19360792
+[pbp] load 2015 bytes=19545842
+[pbp] load 2016 bytes=19344382
+[pbp] load 2017 bytes=19050401
+[pbp] load 2018 bytes=19072097
+[pbp] load 2019 bytes=19119729
+[pbp] load 2020 bytes=19286459
+[pbp] load 2021 bytes=20249925
+[pbp] load 2022 bytes=20426548
+[pbp] load 2023 bytes=20534088
+[pbp] weekly_rows=6518 tw_keys=6518 game_meta=3259 n_plays_season_ge_2024=0
+{
+  "verdict": "PASS",
+  "n_kickoff_fail": 0,
+  "sha8": {
+    "counts.json": "b0365365",
+    "covid_flex_flags.csv": "531cadcc",
+    "games.csv": "4fe1cdd7",
+    "historical_oos_games.csv": "1ee90fac",
+    "intraweek_conservative.csv": "a67c89e2",
+    "inversions.csv": "62ac348e",
+    "kickoff_unknown.csv": "d8cece63",
+    "neutral_catalog.csv": "14a48a60",
+    "pbp_weather_game_2012_2023.csv": "6934509a",
+    "play_by_play_2012.parquet": "447b9078",
+    "play_by_play_2013.parquet": "f454605a",
+    "play_by_play_2014.parquet": "54c01408",
+    "play_by_play_2015.parquet": "01b5ae7d",
+    "play_by_play_2016.parquet": "95eba04e",
+    "play_by_play_2017.parquet": "84eacd96",
+    "play_by_play_2018.parquet": "2e6f2dce",
+    "play_by_play_2019.parquet": "60c30670",
+    "play_by_play_2020.parquet": "8889f5d8",
+    "play_by_play_2021.parquet": "333ad343",
+    "play_by_play_2022.parquet": "931121d8",
+    "play_by_play_2023.parquet": "bd348473",
+    "rest_catalog.csv": "82b956ec",
+    "rolling_features_weekly_pbp_strict_asof_2013_2023.csv": "1b07654e",
+    "schedule_2012_offpanel_kickoffs.csv": "d36bbb12",
+    "week1_windows.csv": "08ef1fa3",
+    "manifest.json": "aa9d37e0",
+    "REPORT.md": "1d7f5c78"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "by_season": {
+    "2014": {
+      "beats_market": false,
+      "mae_A": 11.493209345781025,
+      "mae_market": 11.284644194756554,
+      "n": 267
+    },
+    "2015": {
+      "beats_market": false,
+      "mae_A": 10.28807932127804,
+      "mae_market": 10.117977528089888,
+      "n": 267
+    },
+    "2016": {
+      "beats_market": false,
+      "mae_A": 9.615740301306936,
+      "mae_market": 9.043071161048688,
+      "n": 267
+    },
+    "2017": {
+      "beats_market": false,
+      "mae_A": 10.583768454974061,
+      "mae_market": 10.08052434456929,
+      "n": 267
+    },
+    "2018": {
+      "beats_market": false,
+      "mae_A": 10.064837330053287,
+      "mae_market": 9.874531835205993,
+      "n": 267
+    },
+    "2019": {
+      "beats_market": false,
+      "mae_A": 10.553521557738831,
+      "mae_market": 10.176029962546817,
+      "n": 267
+    },
+    "2020": {
+      "beats_market": false,
+      "mae_A": 10.085483900257218,
+      "mae_market": 9.78996282527881,
+      "n": 269
+    },
+    "2021": {
+      "beats_market": false,
+      "mae_A": 11.06449034805571,
+      "mae_market": 10.666666666666666,
+      "n": 285
+    },
+    "2022": {
+      "beats_market": false,
+      "mae_A": 9.125801328939922,
+      "mae_market": 8.783450704225352,
+      "n": 284
+    }
+  },
+  "corr_pm_m": 0.370152794984348,
+  "delta_point": 0.3778863807965986,
+  "label": "pooled_le_2022_OOF",
+  "mae_A": 10.316425094613237,
+  "mae_epa": 10.694311475409835,
+  "mae_gap_A_vs_market": 0.34019558641651493,
+  "mae_gap_epa_vs_market": 0.7180819672131129,
+  "mae_market": 9.976229508196722,
+  "mean_bias_A_minus_m": 0.6122297574300004,
+  "n": 2440,
+  "neutral_subset": {
+    "mae_A": 11.869992164770142,
+    "mae_epa": 12.236666666666666,
+    "mae_market": 11.222222222222221,
+    "n": 45
+  },
+  "path_a": {
+    "a": -0.25617017908425177,
+    "a_se_hc1": 0.286011469363972,
+    "b": 0.9628342273226116,
+    "b_se_hc1": 0.08297912708331175,
+    "c": 0.0511507602072242,
+    "c_ci95_hi": 0.22571861412508273,
+    "c_ci95_lo": -0.12341709371063433,
+    "c_ci_excludes_0": false,
+    "c_gt_0": true,
+    "c_se_hc1": 0.08906523159074416,
+    "equation": "m ~ a + b*mm + c*pm_A",
+    "estimator": "OLS HC1",
+    "pass": false
+  },
+  "path_b": {
+    "B": 10000,
+    "ci": "percentile 95",
+    "ci_excludes_0": true,
+    "delta_ci95_hi": 0.5293600144140136,
+    "delta_ci95_lo": 0.22331531822928416,
+    "delta_definition": "mean(gap_epa)-mean(gap_A); gap_X=|m-pm_X|-|m-mm|",
+    "delta_point": 0.3778863807965986,
+    "pass": true,
+    "point_ge_0_10": true,
+    "seed": 4141
+  },
+  "sd_mm": 6.023421420002196,
+  "sd_pm": 5.6043230947424245,
+  "sd_ratio_pm_over_mm": 0.9304218821767881,
+  "seasons_beating_market": 0,
+  "slope_m_on_pm": 0.9421276576754974,
+  "slope_pm_on_mm": 0.8010779069133993,
+  "stop_or": true
+}

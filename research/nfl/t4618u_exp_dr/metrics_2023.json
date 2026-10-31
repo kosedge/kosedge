@@ -1,0 +1,53 @@
+{
+  "by_season": {
+    "2023": {
+      "beats_market": false,
+      "delta_DR": 0.055494386400530615,
+      "mae_DR": 10.420226950441576,
+      "mae_G34": 10.475721336842106,
+      "mae_market": 9.98421052631579,
+      "n": 285
+    }
+  },
+  "delta_DR": 0.05549438640052984,
+  "delta_DR_vs_epa_report_only": 0.26331690920754625,
+  "epa_secondary_report_only": true,
+  "floor_0_10_applied": false,
+  "label": "2023_supportive",
+  "mae_DR": 10.420226950441576,
+  "mae_G34": 10.475721336842106,
+  "mae_epa": 10.683543859649122,
+  "mae_gap_DR_vs_market": 0.43601642412578556,
+  "mae_gap_G34_vs_market": 0.4915108105263162,
+  "mae_market": 9.98421052631579,
+  "n": 285,
+  "path_m": {
+    "a": 1.1231705807945187,
+    "a_se_hc1": 0.829615807810987,
+    "b": 1.095029401941989,
+    "b_se_hc1": 0.23931390825648807,
+    "c": -0.08604765013960783,
+    "c_ci95_hi": 0.4333521696493807,
+    "c_ci95_lo": -0.6054474699285963,
+    "c_ci_excludes_0": false,
+    "c_gt_0": false,
+    "c_se_hc1": 0.2649999080556064,
+    "equation": "m ~ a + b*mm + c*pm_DR",
+    "estimator": "OLS HC1",
+    "pass": false
+  },
+  "seasons_beating_market": 0,
+  "vs_g34": {
+    "B": 10000,
+    "ci": "percentile 95",
+    "ci_excludes_0": false,
+    "delta_ci95_hi": 0.11750197711147282,
+    "delta_ci95_lo": -0.004143736611619968,
+    "delta_definition": "mae_G34 - mae_DR = mean(gap_G34)-mean(gap_DR); gap_X=|m-pm_X|-|m-mm|",
+    "delta_point": 0.05549438640052984,
+    "floor": 0.05,
+    "pass": false,
+    "point_ge_0_05": true,
+    "seed": 4141
+  }
+}
