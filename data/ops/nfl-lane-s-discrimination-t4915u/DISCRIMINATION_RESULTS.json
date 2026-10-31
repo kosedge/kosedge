@@ -1,0 +1,5387 @@
+{
+  "artifact": "nfl-lane-s-discrimination-t4915u",
+  "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+  "cert": 0,
+  "nfl": "NO-GO",
+  "publish": false,
+  "betting": false,
+  "phase": "Phase 1 Lane S ONLY",
+  "ticket": "t4915u",
+  "exec_at_utc": "2026-10-31T12:05:24Z",
+  "one_exec": true,
+  "sample_n": 70,
+  "sample_game_ids_hash": "6d4a12793f4b41125a9011e9a53d66154bf2f22641246cd3f8ff94c7322d062a",
+  "sample_game_ids_hash_match_manifest": true,
+  "n_ties_realized_margin": 0,
+  "pins": {
+    "control_tip": "02197f58",
+    "control_tip_note": "packet tip; DO NOT CHANGE \u2014 not rewritten this EXEC",
+    "score_results_sha8": "2b9f302e",
+    "score_results_sha256": "2b9f302e097183ef275185a4edb100ab206565a087ca1ce78dbe8062524e877a",
+    "sample_manifest_sha8": "861a6264",
+    "if_tip_from_score_results": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "if_tip_freeze": "6ca03716",
+    "w2_tip": "440314e4",
+    "w3w6_tip": "f92aaea3",
+    "contract": "b41f4b43",
+    "exec_freeze_sha256": "29dc400571da4f7bfdd7f99b195324d8e71042a7c133ce831cd929f6e3ac53fc",
+    "owner_accept_sha256": "dd4a2390a96568ab223fbc24031e4630d3f1607cccdc7bc38c0f5ec5481518c8",
+    "proposal_sha8": "44e3451f",
+    "bootstrap_B": 2000,
+    "bootstrap_seed": 4915
+  },
+  "input_hashes": {
+    "SCORE_RESULTS.json": {
+      "path": "/workspace/data/ops/nfl-lane-s-discrimination-t4915u/inputs/SCORE_RESULTS.json",
+      "sha256": "2b9f302e097183ef275185a4edb100ab206565a087ca1ce78dbe8062524e877a",
+      "sha8": "2b9f302e",
+      "match": true
+    },
+    "SAMPLE_MANIFEST_70.json": {
+      "path": "/workspace/data/ops/nfl-lane-s-discrimination-t4915u/inputs/SAMPLE_MANIFEST_70.json",
+      "sha256": "861a6264ea4727f4a3caf0a58e1d79bad60bc158443c12df90b2256dcbac5553",
+      "sha8": "861a6264",
+      "match": true
+    },
+    "RECON_MATRIX_w2_440314e4.csv": {
+      "path": "/workspace/data/ops/nfl-lane-s-discrimination-t4915u/inputs/RECON_MATRIX_w2_440314e4.csv",
+      "sha256": "708513db885fe362aca9446578154d58e9d8265857ec2385e475323b24f24182",
+      "sha8": "708513db",
+      "match": true
+    },
+    "RECON_MATRIX_w3w6_f92aaea3.csv": {
+      "path": "/workspace/data/ops/nfl-lane-s-discrimination-t4915u/inputs/RECON_MATRIX_w3w6_f92aaea3.csv",
+      "sha256": "cdff011536a7cd9224b1238e08b707c36222243833f778f2df61b577e0c80235",
+      "sha8": "cdff0115",
+      "match": true
+    },
+    "EXEC_FREEZE_t4915u_LANE_S_ANALYSIS_PLAN.md": {
+      "path": "/workspace/data/ops/nfl-lane-s-discrimination-t4915u/EXEC_FREEZE_t4915u_LANE_S_ANALYSIS_PLAN.md",
+      "sha256": "29dc400571da4f7bfdd7f99b195324d8e71042a7c133ce831cd929f6e3ac53fc",
+      "sha8": "29dc4005",
+      "match": true
+    },
+    "OWNER_ACCEPT_t4915u_PHASE1_LANE_S.md": {
+      "path": "/workspace/data/ops/nfl-lane-s-discrimination-t4915u/OWNER_ACCEPT_t4915u_PHASE1_LANE_S.md",
+      "sha256": "dd4a2390a96568ab223fbc24031e4630d3f1607cccdc7bc38c0f5ec5481518c8",
+      "sha8": "dd4a2390",
+      "match": true
+    }
+  },
+  "recon_join": {
+    "w2_games_in_matrix": 14,
+    "w3w6_games_in_matrix": 60,
+    "w2_extra_not_in_sample": [],
+    "w3w6_extra_not_in_sample": [
+      "2017_06_DET_NO",
+      "2017_06_MIA_ATL",
+      "2017_06_NYG_DEN",
+      "2017_06_SF_WAS"
+    ],
+    "sample_missing_from_recon": [],
+    "w2_w3_overlap": [],
+    "w2_rows": 378,
+    "w3w6_rows": 1620,
+    "w3w6_missing_status_rows": 24,
+    "repo_tip_crosscheck": "git objects 440314e4 / f92aaea3 not present in this checkout; attached box copies used; shas match freeze 708513db / cdff0115"
+  },
+  "missing": {
+    "rule": "MISSING if denom 0 or field absent/non-finite/non-DERIVED_PREGAME; no impute",
+    "games_with_any_signal_missing": [],
+    "n_games_with_any_signal_missing": 0,
+    "n_complete_per_signal": {
+      "wl_home_wpct": 70,
+      "wl_away_wpct": 70,
+      "wl_diff": 70,
+      "wl_index_off_diff": 70,
+      "wl_index_def_diff": 70,
+      "wl_index_net": 70,
+      "epa_off_diff": 70,
+      "epa_def_diff": 70,
+      "epa_net_diff": 70,
+      "success_off_diff": 70,
+      "success_def_diff": 70,
+      "success_net_diff": 70,
+      "matchup_diff_off_epa_5g": 70,
+      "matchup_diff_success_rate_5g": 70
+    }
+  },
+  "control_if": {
+    "note": "Control IF forecast_margin vs realized_margin on the sealed 70. Known comparator; not a retune.",
+    "n_complete": 70,
+    "spearman_vs_realized_margin": {
+      "n": 70,
+      "estimate": -0.09839323384779064,
+      "ci_low": -0.35173812823956396,
+      "ci_high": 0.14387103610912838,
+      "ci_crosses_0": true,
+      "B": 2000,
+      "seed": 4915,
+      "n_undefined_resamples": 0,
+      "n_defined_resamples": 2000,
+      "method": "percentile_bootstrap_pairs"
+    },
+    "pearson_vs_realized_margin": {
+      "n": 70,
+      "estimate": -0.09283317818637547,
+      "ci_low": -0.3591449616741371,
+      "ci_high": 0.1785533826729597,
+      "ci_crosses_0": true,
+      "B": 2000,
+      "seed": 4915,
+      "n_undefined_resamples": 0,
+      "n_defined_resamples": 2000,
+      "method": "percentile_bootstrap_pairs"
+    },
+    "ols_realized_margin_on_forecast_margin": {
+      "n": 70,
+      "slope": -0.42615276048073136,
+      "intercept": 2.223007229186273,
+      "se_slope": 0.5542786437020704,
+      "se_intercept": 1.7277449471347877,
+      "df": 68,
+      "t_crit_95": 1.9954688582323272,
+      "t_method": "acklam_norm_ppf + cornish_fisher_t",
+      "slope_ci_low": -1.5321985327714647,
+      "slope_ci_high": 0.679893011810002,
+      "intercept_ci_low": -1.224654007789454,
+      "intercept_ci_high": 5.670668466162001,
+      "slope_ci_crosses_0": true,
+      "r_squared": 0.00861799897218396,
+      "undefined_reason": null
+    },
+    "su_when_signal_sign": {
+      "signal_gt_0": {
+        "n": 50,
+        "k": 24,
+        "rate": 0.48,
+        "ci_low": 0.34797135286578046,
+        "ci_high": 0.6148825510995539,
+        "method": "wilson",
+        "z": 1.959963984540054,
+        "home_wins": 24,
+        "meaning": "P(home win | signal>0), ties excluded"
+      },
+      "signal_lt_0": {
+        "n": 20,
+        "k": 11,
+        "rate": 0.55,
+        "ci_low": 0.3420853424503424,
+        "ci_high": 0.7418021417443758,
+        "method": "wilson",
+        "z": 1.959963984540054,
+        "home_wins": 11,
+        "meaning": "P(home win | signal<0), ties excluded"
+      },
+      "n_signal_zero_excluded": 0,
+      "n_margin_ties_excluded": 0,
+      "n_signal_missing": 0
+    },
+    "tertiles": {
+      "n_complete": 70,
+      "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+      "tertiles": [
+        {
+          "tertile": 1,
+          "n": 23,
+          "mean_realized_margin": 5.6521739130434785,
+          "mean_signal": -2.12957815880427,
+          "min_signal": -6.186652129070021,
+          "max_signal": 0.258290343205545,
+          "label": "lowest_rank_third"
+        },
+        {
+          "tertile": 2,
+          "n": 23,
+          "mean_realized_margin": 0.30434782608695654,
+          "mean_signal": 1.0321046890964853,
+          "min_signal": 0.3496018196815489,
+          "max_signal": 1.6718324984926518,
+          "label": "middle_rank_third"
+        },
+        {
+          "tertile": 3,
+          "n": 24,
+          "mean_realized_margin": -0.4583333333333333,
+          "mean_signal": 3.946883489318824,
+          "min_signal": 1.7452737646130068,
+          "max_signal": 7.796112596145828,
+          "label": "highest_rank_third"
+        }
+      ],
+      "mean_margin_monotonic_increasing": false,
+      "mean_margin_monotonic_decreasing": true
+    }
+  },
+  "signals": {
+    "wl_home_wpct": {
+      "signal": "wl_home_wpct",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.024358306258925547,
+        "ci_low": -0.21967513898689994,
+        "ci_high": 0.26862136182619983,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.09562708053053105,
+        "ci_low": -0.1252525543385498,
+        "ci_high": 0.32843417207342446,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 56,
+          "k": 31,
+          "rate": 0.5535714285714286,
+          "ci_low": 0.4241321478993947,
+          "ci_high": 0.6761327874521665,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 31,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 0,
+          "k": 0,
+          "rate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 0,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 14,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 22,
+            "mean_realized_margin": 1.1818181818181819,
+            "mean_signal": 0.10984848484848485,
+            "min_signal": 0.0,
+            "max_signal": 0.3333333333333333,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 22,
+            "mean_realized_margin": 3.1363636363636362,
+            "mean_signal": 0.5,
+            "min_signal": 0.4,
+            "max_signal": 0.6,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 26,
+            "mean_realized_margin": 1.1923076923076923,
+            "mean_signal": 0.864102564102564,
+            "min_signal": 0.6666666666666666,
+            "max_signal": 1.0,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": 3.8538724033306626,
+        "intercept": -0.17556840104069393,
+        "se_slope": 4.864823988812932,
+        "se_intercept": 2.983289694149646,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -5.853732367127115,
+        "slope_ci_high": 13.56147717378844,
+        "intercept_ci_low": -6.128630080801757,
+        "intercept_ci_high": 5.777493278720368,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.009144538530793223,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.5368004047113665,
+            "ci_low": 0.06620474439977045,
+            "ci_high": 0.8740250693351311,
+            "ci_crosses_0": false,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 8,
+            "n_defined_resamples": 1992,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 7,
+              "rate": 0.7777777777777778,
+              "ci_low": 0.45258896910698887,
+              "ci_high": 0.9367748928821533,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 7,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 5,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.11499169534410467,
+            "ci_low": -0.6288764916383779,
+            "ci_high": 0.5136028142638989,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 11,
+              "k": 8,
+              "rate": 0.7272727272727273,
+              "ci_low": 0.43435469882387084,
+              "ci_high": 0.902539407099751,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 8,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 5,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.054955235651095696,
+            "ci_low": -0.5922775521029352,
+            "ci_high": 0.4947419689828473,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 14,
+              "k": 8,
+              "rate": 0.5714285714285714,
+              "ci_low": 0.3259064457965074,
+              "ci_high": 0.7861920109552588,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 8,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 2,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.2652701390791169,
+            "ci_low": -0.7207163071965564,
+            "ci_high": 0.33553575914452294,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 12,
+              "k": 4,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.13812009109121315,
+              "ci_high": 0.6093779111272004,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 2,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": -0.6788335930269978,
+            "ci_low": -0.902428247748114,
+            "ci_high": -0.15494344228277204,
+            "ci_crosses_0": false,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 1,
+            "n_defined_resamples": 1999,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 10,
+              "k": 4,
+              "rate": 0.4,
+              "ci_low": 0.16818032970623614,
+              "ci_high": 0.6873262302663417,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.24228028902344886
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.11847072029176448
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": 0.062312148199768734
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.043556016052015076
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.10478363881374698
+        },
+        "range_min": -0.24228028902344886,
+        "range_max": 0.11847072029176448,
+        "range": 0.3607510093152133,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.49568643582639066,
+        "ci_low": 0.29839042683583705,
+        "ci_high": 0.6565023303878722,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "wl_away_wpct": {
+      "signal": "wl_away_wpct",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.19771351068514562,
+        "ci_low": -0.04757551819449952,
+        "ci_high": 0.4301643114327351,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.21275184781853593,
+        "ci_low": -0.023995949376556736,
+        "ci_high": 0.4201314197303106,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 52,
+          "k": 25,
+          "rate": 0.4807692307692308,
+          "ci_low": 0.35104114445455514,
+          "ci_high": 0.6131431723194395,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 25,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 0,
+          "k": 0,
+          "rate": null,
+          "ci_low": null,
+          "ci_high": null,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 0,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 18,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": -0.043478260869565216,
+            "mean_signal": 0.0608695652173913,
+            "min_signal": 0.0,
+            "max_signal": 0.3333333333333333,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 27,
+            "mean_realized_margin": -0.18518518518518517,
+            "mean_signal": 0.5691358024691358,
+            "min_signal": 0.4,
+            "max_signal": 0.6666666666666666,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 20,
+            "mean_realized_margin": 6.6,
+            "mean_signal": 0.9425000000000001,
+            "min_signal": 0.75,
+            "max_signal": 1.0,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": 7.963150731585398,
+        "intercept": -2.2517269317614286,
+        "se_slope": 4.4350542524342895,
+        "se_intercept": 2.7704653793236953,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -0.8868619137180813,
+        "slope_ci_high": 16.813163376888877,
+        "intercept_ci_low": -7.780104319012674,
+        "intercept_ci_high": 3.2766504554898166,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.04526334875020199,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.37637413432219824,
+            "ci_low": -0.15455637319288323,
+            "ci_high": 0.8367065852589215,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 1,
+            "n_defined_resamples": 1999,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 5,
+              "rate": 0.8333333333333334,
+              "ci_low": 0.43649717781352987,
+              "ci_high": 0.9699466302516935,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 8,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.4933123107405123,
+            "ci_low": -8.08975707786858e-05,
+            "ci_high": 0.8480503450757662,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 12,
+              "k": 8,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.39062208887279953,
+              "ci_high": 0.8618799089087867,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 8,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 4,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.04005244156418924,
+            "ci_low": -0.5285475262906424,
+            "ci_high": 0.5318530852036991,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 2,
+            "n_defined_resamples": 1998,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 13,
+              "k": 6,
+              "rate": 0.46153846153846156,
+              "ci_low": 0.23206067809538303,
+              "ci_high": 0.7085620428549398,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 3,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.054209559870002005,
+            "ci_low": -0.520802497206563,
+            "ci_high": 0.4416245710111144,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 12,
+              "k": 3,
+              "rate": 0.25,
+              "ci_low": 0.08894166839405471,
+              "ci_high": 0.5323053349335657,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 2,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": -0.46921626483186957,
+            "ci_low": -0.9022039882746313,
+            "ci_high": 0.28810773154831315,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 3,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.1205838183869109,
+              "ci_high": 0.6457978644196036,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 0,
+              "k": 0,
+              "rate": null,
+              "ci_low": null,
+              "ci_high": null,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 1,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.10571108396872539
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.09468105938121094
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": 0.2267455112539643
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.2658549873733784
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.2642950083434625
+        },
+        "range_min": 0.09468105938121094,
+        "range_max": 0.2658549873733784,
+        "range": 0.1711739279921675,
+        "all_same_sign": true
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": -0.6541145711951112,
+        "ci_low": -0.7813465737382896,
+        "ci_high": -0.4766852401522319,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "wl_diff": {
+      "signal": "wl_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.13132900236539988,
+        "ci_low": -0.3780621965801677,
+        "ci_high": 0.11588400356783642,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.10083564791740644,
+        "ci_low": -0.37051938976510873,
+        "ci_high": 0.169135974947785,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 22,
+          "k": 11,
+          "rate": 0.5,
+          "ci_low": 0.3072210627372502,
+          "ci_high": 0.6927789372627497,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 11,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 20,
+          "k": 12,
+          "rate": 0.6,
+          "ci_low": 0.38658150076225317,
+          "ci_high": 0.7811934676271829,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 12,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 28,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 20,
+            "mean_realized_margin": 6.25,
+            "mean_signal": -0.5149999999999999,
+            "min_signal": -1.0,
+            "max_signal": -0.09999999999999998,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 28,
+            "mean_realized_margin": -0.2857142857142857,
+            "mean_signal": 0.0,
+            "min_signal": 0.0,
+            "max_signal": 0.0,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 22,
+            "mean_realized_margin": 0.4090909090909091,
+            "mean_signal": 0.4803030303030303,
+            "min_signal": 0.16666666666666663,
+            "max_signal": 1.0,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -3.0706617705043975,
+        "intercept": 1.811697759125731,
+        "se_slope": 3.6740428340564852,
+        "se_intercept": 1.6365814817633508,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -10.402099829675755,
+        "slope_ci_high": 4.2607762886669605,
+        "intercept_ci_low": -1.454049621692753,
+        "intercept_ci_high": 5.077445139944215,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.010167827890923742,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.10022847501751941,
+            "ci_low": -0.5611866130109697,
+            "ci_high": 0.7136282407751057,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 9,
+            "n_defined_resamples": 1991,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 1,
+              "k": 0,
+              "rate": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.7934506856227626,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 9,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.4360569835081603,
+            "ci_low": -0.8337851632958316,
+            "ci_high": 0.10218354477870224,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 5,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.038499875175907056,
+            "ci_low": -0.5133081499976749,
+            "ci_high": 0.43843820972559716,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 7,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.124169001271076,
+            "ci_low": -0.7365738664373017,
+            "ci_high": 0.49604512266220063,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 3,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": -0.03763993960049205,
+            "ci_low": -0.7452813752115927,
+            "ci_high": 0.6986813649397839,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 1,
+            "n_defined_resamples": 1999,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 1,
+              "rate": 0.25,
+              "ci_low": 0.04558726080970055,
+              "ci_high": 0.6993581574175981,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 2,
+              "k": 2,
+              "rate": 1.0,
+              "ci_low": 0.34238022750665303,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 4,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.2005927249330484
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.002802792446123556
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.1450006046639146
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": -0.17548613798325574
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": -0.13116249449658365
+        },
+        "range_min": -0.2005927249330484,
+        "range_max": 0.002802792446123556,
+        "range": 0.20339551737917194,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.9636232985382599,
+        "ci_low": 0.9264262730047503,
+        "ci_high": 0.9818032753852369,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "wl_index_off_diff": {
+      "signal": "wl_index_off_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.13455257974990364,
+        "ci_low": -0.3812329281092295,
+        "ci_high": 0.117374581714075,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.10083589614227847,
+        "ci_low": -0.37051943043491353,
+        "ci_high": 0.16913590944999898,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 22,
+          "k": 11,
+          "rate": 0.5,
+          "ci_low": 0.3072210627372502,
+          "ci_high": 0.6927789372627497,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 11,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 20,
+          "k": 12,
+          "rate": 0.6,
+          "ci_low": 0.38658150076225317,
+          "ci_high": 0.7811934676271829,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 12,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 28,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 20,
+            "mean_realized_margin": 6.25,
+            "mean_signal": -0.11330010000000001,
+            "min_signal": -0.22000000000000008,
+            "max_signal": -0.02200000000000002,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 28,
+            "mean_realized_margin": -0.2857142857142857,
+            "mean_signal": 0.0,
+            "min_signal": 0.0,
+            "max_signal": 0.0,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 22,
+            "mean_realized_margin": 0.4090909090909091,
+            "mean_signal": 0.10566668181818185,
+            "min_signal": 0.036667000000000005,
+            "max_signal": 0.22000000000000008,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -13.957584533092136,
+        "intercept": 1.811697452809055,
+        "se_slope": 16.700190295781244,
+        "se_intercept": 1.6365814369499692,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -47.28229419487733,
+        "slope_ci_high": 19.367125128693054,
+        "intercept_ci_low": -1.4540498385857215,
+        "intercept_ci_high": 5.077444744203832,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.010167877950817195,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.10022847501751941,
+            "ci_low": -0.5611866130109697,
+            "ci_high": 0.7136282407751057,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 9,
+            "n_defined_resamples": 1991,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 1,
+              "k": 0,
+              "rate": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.7934506856227626,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 9,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.4890316234158463,
+            "ci_low": -0.8498255376649377,
+            "ci_high": 0.04805672811522837,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 5,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.002308134856445716,
+            "ci_low": -0.5009713264010464,
+            "ci_high": 0.4939978990463395,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 7,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.0943879807448539,
+            "ci_low": -0.7281666779869591,
+            "ci_high": 0.5220372018620023,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 3,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": -0.13173978860172217,
+            "ci_low": -0.7523843693018523,
+            "ci_high": 0.6126268099232157,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 1,
+            "n_defined_resamples": 1999,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 1,
+              "rate": 0.25,
+              "ci_low": 0.04558726080970055,
+              "ci_high": 0.6993581574175981,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 2,
+              "k": 2,
+              "rate": 1.0,
+              "ci_low": 0.34238022750665303,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 4,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.20528573802019925
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.006181534520209753
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.15546083275490144
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": -0.1776750675524274
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": -0.13340562784038165
+        },
+        "range_min": -0.20528573802019925,
+        "range_max": 0.006181534520209753,
+        "range": 0.211467272540409,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.962656846380879,
+        "ci_low": 0.9261255460013736,
+        "ci_high": 0.9808748567867891,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "wl_index_def_diff": {
+      "signal": "wl_index_def_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.1378601790127627,
+        "ci_low": -0.11304660788193484,
+        "ci_high": 0.3834173729119952,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.1008353748695583,
+        "ci_low": -0.16913604699491475,
+        "ci_high": 0.3705193450270563,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 20,
+          "k": 12,
+          "rate": 0.6,
+          "ci_low": 0.38658150076225317,
+          "ci_high": 0.7811934676271829,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 12,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 22,
+          "k": 11,
+          "rate": 0.5,
+          "ci_low": 0.3072210627372502,
+          "ci_high": 0.6927789372627497,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 11,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 28,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 22,
+            "mean_realized_margin": 0.4090909090909091,
+            "mean_signal": -0.09606059090909094,
+            "min_signal": -0.20000000000000007,
+            "max_signal": -0.03333300000000006,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 28,
+            "mean_realized_margin": -0.2857142857142857,
+            "mean_signal": 0.0,
+            "min_signal": 0.0,
+            "max_signal": 0.0,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 20,
+            "mean_realized_margin": 6.25,
+            "mean_signal": 0.10299990000000007,
+            "min_signal": 0.020000000000000018,
+            "max_signal": 0.20000000000000007,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": 15.353271305107775,
+        "intercept": 1.811698096072256,
+        "se_slope": 18.37021949963582,
+        "se_intercept": 1.6365815310581484,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -21.303929625307745,
+        "slope_ci_high": 52.010472235523295,
+        "intercept_ci_low": -1.4540493831124615,
+        "intercept_ci_high": 5.077445575256974,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.010167772825084853,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.10022847501751941,
+            "ci_low": -0.7136282407751057,
+            "ci_high": 0.5611866130109697,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 9,
+            "n_defined_resamples": 1991,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 1,
+              "k": 0,
+              "rate": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.7934506856227626,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 9,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.4890316234158463,
+            "ci_low": -0.048056728115228924,
+            "ci_high": 0.8498255376649376,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 5,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.0438545622724686,
+            "ci_low": -0.4220464833158172,
+            "ci_high": 0.5133081499976747,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 7,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.147488335093878,
+            "ci_low": -0.5148460777193042,
+            "ci_high": 0.7695030419076159,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 3,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.13173978860172217,
+            "ci_low": -0.6126268099232158,
+            "ci_high": 0.7523843693018523,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 1,
+            "n_defined_resamples": 1999,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 2,
+              "k": 2,
+              "rate": 1.0,
+              "ci_low": 0.34238022750665303,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 4,
+              "k": 1,
+              "rate": 0.25,
+              "ci_low": 0.04558726080970055,
+              "ci_high": 0.6993581574175981,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 4,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.21092217692253834
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.0008347190282195655
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": 0.15567999311504077
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.18259204245489838
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.13784186711825513
+        },
+        "range_min": 0.0008347190282195655,
+        "range_max": 0.21092217692253834,
+        "range": 0.21008745789431876,
+        "all_same_sign": true
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": -0.9626475247794621,
+        "ci_low": -0.9809073007432726,
+        "ci_high": -0.9258242791526228,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "wl_index_net": {
+      "signal": "wl_index_net",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "DEV_RESEARCH / RETRO_FIT exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.12828384957370043,
+        "ci_low": -0.3727620503186476,
+        "ci_high": 0.11998354866387963,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.10084110876678735,
+        "ci_low": -0.3705202842471977,
+        "ci_high": 0.16913453390951075,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 22,
+          "k": 11,
+          "rate": 0.5,
+          "ci_low": 0.3072210627372502,
+          "ci_high": 0.6927789372627497,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 11,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 20,
+          "k": 12,
+          "rate": 0.6,
+          "ci_low": 0.38658150076225317,
+          "ci_high": 0.7811934676271829,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 12,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 28,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 20,
+            "mean_realized_margin": 6.25,
+            "mean_signal": -0.010300199999999982,
+            "min_signal": -0.020000000000000018,
+            "max_signal": -0.0020000000000000018,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 28,
+            "mean_realized_margin": -0.2857142857142857,
+            "mean_signal": 0.0,
+            "min_signal": 0.0,
+            "max_signal": 0.0,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 22,
+            "mean_realized_margin": 0.4090909090909091,
+            "mean_signal": 0.0096060909090909,
+            "min_signal": 0.003333999999999948,
+            "max_signal": 0.020000000000000018,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -153.54059768488563,
+        "intercept": 1.8116910197951495,
+        "se_slope": 183.7010756959037,
+        "se_intercept": 1.636580495884512,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -520.110373459841,
+        "slope_ci_high": 213.02917809006968,
+        "intercept_ci_low": -1.4540543937328139,
+        "intercept_ci_high": 5.077436433323113,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.010168929217315048,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.10022847501751941,
+            "ci_low": -0.5611866130109697,
+            "ci_high": 0.7136282407751057,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 9,
+            "n_defined_resamples": 1991,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 1,
+              "k": 0,
+              "rate": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.7934506856227626,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 9,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.4360569835081603,
+            "ci_low": -0.8337851632958316,
+            "ci_high": 0.10218354477870224,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 5,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.0023137213144512844,
+            "ci_low": -0.4978482140303394,
+            "ci_high": 0.5009204116899512,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 7,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.06919711811885058,
+            "ci_low": -0.704172965039764,
+            "ci_high": 0.49493253272798815,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 3,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": -0.05701801103317627,
+            "ci_low": -0.7306037174911688,
+            "ci_high": 0.6758967206916086,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 1,
+            "n_defined_resamples": 1999,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 1,
+              "rate": 0.25,
+              "ci_low": 0.04558726080970055,
+              "ci_high": 0.6993581574175981,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 2,
+              "k": 2,
+              "rate": 1.0,
+              "ci_low": 0.34238022750665303,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 4,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.19520788760583707
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.009739395224767777
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.14528085226075435
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": -0.1718407177403213
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": -0.12664738663384023
+        },
+        "range_min": -0.19520788760583707,
+        "range_max": 0.009739395224767777,
+        "range": 0.20494728283060484,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.9637236201973137,
+        "ci_low": 0.926455274797264,
+        "ci_high": 0.9819678899841559,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "epa_off_diff": {
+      "signal": "epa_off_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.08123793982517497,
+        "ci_low": -0.15919307422596723,
+        "ci_high": 0.3069141860799253,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.0657052476947815,
+        "ci_low": -0.15683070074443875,
+        "ci_high": 0.2927091327867313,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 31,
+          "k": 19,
+          "rate": 0.6129032258064516,
+          "ci_low": 0.4382410861966073,
+          "ci_high": 0.7626689857961975,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 19,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 39,
+          "k": 16,
+          "rate": 0.41025641025641024,
+          "ci_low": 0.27079310000725176,
+          "ci_high": 0.5658137711710304,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 16,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 0.34782608695652173,
+            "mean_signal": -0.2081956160869565,
+            "min_signal": -0.35551782,
+            "max_signal": -0.11982836,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": 1.6956521739130435,
+            "mean_signal": -0.03422358652173913,
+            "min_signal": -0.11641031,
+            "max_signal": 0.06674768,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 3.2916666666666665,
+            "mean_signal": 0.22725541750000003,
+            "min_signal": 0.07550264999999998,
+            "max_signal": 0.47682282,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": true,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": 4.4701954987507495,
+        "intercept": 1.807759725516769,
+        "se_slope": 8.232514620045821,
+        "se_intercept": 1.6414132490908055,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -11.957531050493026,
+        "slope_ci_high": 20.897922047994527,
+        "intercept_ci_low": -1.467629296533875,
+        "intercept_ci_high": 5.083148747567413,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.004317179574633068,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.004400442706805578,
+            "ci_low": -0.5178652597402598,
+            "ci_high": 0.5561297390949854,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 3,
+              "rate": 0.6,
+              "ci_low": 0.2307242812760128,
+              "ci_high": 0.882379225767352,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.1365039251893875,
+            "ci_low": -0.3999577669987023,
+            "ci_high": 0.532777932509955,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 6,
+              "rate": 1.0,
+              "ci_low": 0.6096657120978346,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 5,
+              "rate": 0.5,
+              "ci_low": 0.236593090512564,
+              "ci_high": 0.7634069094874361,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.05150847604921027,
+            "ci_low": -0.6042137719704703,
+            "ci_high": 0.5744271729776246,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 3,
+              "rate": 0.42857142857142855,
+              "ci_low": 0.15821985525146975,
+              "ci_high": 0.7495416354723428,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.0441995696087864,
+            "ci_low": -0.6143997384383316,
+            "ci_high": 0.7297836372800496,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 1,
+              "rate": 0.25,
+              "ci_low": 0.04558726080970055,
+              "ci_high": 0.6993581574175981,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 3,
+              "rate": 0.3,
+              "ci_low": 0.10779126740630099,
+              "ci_high": 0.6032218525388546,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.2,
+            "ci_low": -0.6273291925465838,
+            "ci_high": 0.8452128136200715,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 2,
+              "rate": 0.2857142857142857,
+              "ci_low": 0.08221892400405678,
+              "ci_high": 0.6410655481673808,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.10850156529614392
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.055649968069610097
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": 0.07621094981528025
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.059557495796018024
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.08895527463728356
+        },
+        "range_min": 0.055649968069610097,
+        "range_max": 0.10850156529614392,
+        "range": 0.05285159722653383,
+        "all_same_sign": true
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.4986615344239349,
+        "ci_low": 0.304441983216546,
+        "ci_high": 0.6486144015306227,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "epa_def_diff": {
+      "signal": "epa_def_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.09734183686989795,
+        "ci_low": -0.32619154904553915,
+        "ci_high": 0.15256673351118227,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.1520788584791132,
+        "ci_low": -0.3793845861273139,
+        "ci_high": 0.10525357670745153,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 32,
+          "k": 16,
+          "rate": 0.5,
+          "ci_low": 0.33630882869327483,
+          "ci_high": 0.6636911713067252,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 16,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 38,
+          "k": 19,
+          "rate": 0.5,
+          "ci_low": 0.34849928364395105,
+          "ci_high": 0.6515007163560489,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 19,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 2.739130434782609,
+            "mean_signal": -0.19265797043478264,
+            "min_signal": -0.36583986,
+            "max_signal": -0.07298711000000001,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": 0.8695652173913043,
+            "mean_signal": -0.007083145652173917,
+            "min_signal": -0.07248742,
+            "max_signal": 0.0719028,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 1.7916666666666667,
+            "mean_signal": 0.22571865166666663,
+            "min_signal": 0.07267101,
+            "max_signal": 0.7154159499999999,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -9.796939418615029,
+        "intercept": 1.9152122832767793,
+        "se_slope": 7.721220544875396,
+        "se_intercept": 1.6283063420630035,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -25.204394563457523,
+        "slope_ci_high": 5.610515726227465,
+        "intercept_ci_low": -1.3340223139721394,
+        "intercept_ci_high": 5.1644468805256984,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.02312797919631071,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.15621571609159798,
+            "ci_low": -0.7008958305783451,
+            "ci_high": 0.4885440668202761,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 4,
+              "rate": 0.5,
+              "ci_low": 0.21521606221387757,
+              "ci_high": 0.7847839377861224,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.47924747648013216,
+            "ci_low": -0.8086587632475056,
+            "ci_high": 0.057414773451578215,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 11,
+              "k": 9,
+              "rate": 0.8181818181818182,
+              "ci_low": 0.523019438039156,
+              "ci_high": 0.9486323102539149,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 9,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.37086102755431394,
+            "ci_low": -0.18111893788388517,
+            "ci_high": 0.7040798512783265,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 5,
+              "rate": 0.8333333333333334,
+              "ci_low": 0.43649717781352987,
+              "ci_high": 0.9699466302516935,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 3,
+              "rate": 0.3,
+              "ci_low": 0.10779126740630099,
+              "ci_high": 0.6032218525388546,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.041989591128347076,
+            "ci_low": -0.5744737960631895,
+            "ci_high": 0.5808394986767431,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 1,
+              "rate": 0.2,
+              "ci_low": 0.03622410863243014,
+              "ci_high": 0.6244653702374747,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 9,
+              "k": 3,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.1205838183869109,
+              "ci_high": 0.6457978644196036,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": -0.2,
+            "ci_low": -0.673202614379085,
+            "ci_high": 0.6291513367672308,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 4,
+              "rate": 0.5,
+              "ci_low": 0.21521606221387757,
+              "ci_high": 0.7847839377861224,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 2,
+              "k": 0,
+              "rate": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.6576197724933469,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 0,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.11144606975037818
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.05942866960520091
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.245241949230233
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": -0.07143476650936186
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": -0.11069989732639732
+        },
+        "range_min": -0.245241949230233,
+        "range_max": 0.05942866960520091,
+        "range": 0.3046706188354339,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.4166389642201032,
+        "ci_low": 0.20661828182742636,
+        "ci_high": 0.5959738173662216,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "epa_net_diff": {
+      "signal": "epa_net_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.02349872245590156,
+        "ci_low": -0.2825414438654068,
+        "ci_high": 0.21266902648736866,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.07306413373703559,
+        "ci_low": -0.30054211796629393,
+        "ci_high": 0.16430170147823625,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 35,
+          "k": 18,
+          "rate": 0.5142857142857142,
+          "ci_low": 0.35568804595868564,
+          "ci_high": 0.6700576399749026,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 18,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 35,
+          "k": 17,
+          "rate": 0.4857142857142857,
+          "ci_low": 0.32994236002509725,
+          "ci_high": 0.6443119540413141,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 17,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 3.739130434782609,
+            "mean_signal": -0.24977854086956522,
+            "min_signal": -0.54396715,
+            "max_signal": -0.10566619000000001,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": -1.0434782608695652,
+            "mean_signal": -0.005393210869565216,
+            "min_signal": -0.10345113999999998,
+            "max_signal": 0.08249687,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 2.6666666666666665,
+            "mean_signal": 0.2737766925,
+            "min_signal": 0.08592093000000003,
+            "max_signal": 0.88453873,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -3.826881760919584,
+        "intercept": 1.8383612275098664,
+        "se_slope": 6.33467051855273,
+        "se_intercept": 1.6417376149945009,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -16.467519507853986,
+        "slope_ci_high": 8.813755986014817,
+        "intercept_ci_low": -1.4376750566002743,
+        "intercept_ci_high": 5.114397511620007,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.005338367638743735,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.2178219139868761,
+            "ci_low": -0.7416799625748014,
+            "ci_high": 0.42929088912515273,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 3,
+              "rate": 0.6,
+              "ci_low": 0.2307242812760128,
+              "ci_high": 0.882379225767352,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.36945084100171177,
+            "ci_low": -0.7454009612618192,
+            "ci_high": 0.13607489313123547,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 7,
+              "rate": 0.7,
+              "ci_low": 0.39677814746114537,
+              "ci_high": 0.8922087325936989,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 7,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.32671090522641943,
+            "ci_low": -0.23848078398240583,
+            "ci_high": 0.7837379767827527,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 6,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.3542021355803963,
+              "ci_high": 0.879416181613089,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 2,
+              "rate": 0.2857142857142857,
+              "ci_low": 0.08221892400405678,
+              "ci_high": 0.6410655481673808,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.09944903161976938,
+            "ci_low": -0.7027038167330315,
+            "ci_high": 0.5248238206086299,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 1,
+              "rate": 0.2,
+              "ci_low": 0.03622410863243014,
+              "ci_high": 0.6244653702374747,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 9,
+              "k": 3,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.1205838183869109,
+              "ci_high": 0.6457978644196036,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.12727272727272726,
+            "ci_low": -0.7325682009373873,
+            "ci_high": 0.7735849056603774,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.03170478051884799
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.12374293311500408
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.15249826330773011
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": -0.038609686929832375
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": -0.02995802050382382
+        },
+        "range_min": -0.15249826330773011,
+        "range_max": 0.12374293311500408,
+        "range": 0.2762411964227342,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.7934738867990552,
+        "ci_low": 0.6638549980337078,
+        "ci_high": 0.8757368728780438,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "success_off_diff": {
+      "signal": "success_off_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.13978322821083275,
+        "ci_low": -0.11293972970789175,
+        "ci_high": 0.3695798694636472,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.13189339621702456,
+        "ci_low": -0.09564324131912111,
+        "ci_high": 0.355110107168272,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 32,
+          "k": 20,
+          "rate": 0.625,
+          "ci_low": 0.4525440735307745,
+          "ci_high": 0.7706611269054578,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 20,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 38,
+          "k": 15,
+          "rate": 0.39473684210526316,
+          "ci_low": 0.25598075748160104,
+          "ci_high": 0.5528213200395746,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 15,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 1.826086956521739,
+            "mean_signal": -0.07148784434782608,
+            "min_signal": -0.13626448000000002,
+            "max_signal": -0.04598492999999998,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": -2.391304347826087,
+            "mean_signal": -0.004932989999999995,
+            "min_signal": -0.03728704999999999,
+            "max_signal": 0.02682053000000001,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 5.791666666666667,
+            "mean_signal": 0.07411766583333333,
+            "min_signal": 0.03110054000000001,
+            "max_signal": 0.19921184000000003,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": 26.808123901051303,
+        "intercept": 1.7919021121402612,
+        "se_slope": 24.433079459621222,
+        "se_intercept": 1.630552209671715,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -21.947325271338784,
+        "slope_ci_high": 75.56357307344139,
+        "intercept_ci_low": -1.4618140439815546,
+        "intercept_ci_high": 5.045618268262077,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.017395867965661616,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.23762390616750118,
+            "ci_low": -0.795257359181553,
+            "ci_high": 0.34675615212527966,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 4,
+              "rate": 0.5,
+              "ci_low": 0.21521606221387757,
+              "ci_high": 0.7847839377861224,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 4,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.299993315138392,
+              "ci_high": 0.9032285888942195,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.23146317749504836,
+            "ci_low": -0.29700327185493997,
+            "ci_high": 0.689695707164201,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 7,
+              "k": 7,
+              "rate": 1.0,
+              "ci_low": 0.6456695649333126,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 7,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 9,
+              "k": 4,
+              "rate": 0.4444444444444444,
+              "ci_low": 0.18877852109766452,
+              "ci_high": 0.733348706504507,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.28550412438705125,
+            "ci_low": -0.3105706033918864,
+            "ci_high": 0.7900540514434045,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 10,
+              "k": 6,
+              "rate": 0.6,
+              "ci_low": 0.31267376973365824,
+              "ci_high": 0.8318196702937638,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.09502907465889075,
+            "ci_low": -0.5588778761460903,
+            "ci_high": 0.6439251443161026,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 1,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.06149194472039621,
+              "ci_high": 0.7923403991979522,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 11,
+              "k": 3,
+              "rate": 0.2727272727272727,
+              "ci_low": 0.09746059290024889,
+              "ci_high": 0.5656453011761291,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.01818181818181818,
+            "ci_low": -0.8616352201257862,
+            "ci_high": 0.6646480331262937,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 2,
+              "rate": 0.3333333333333333,
+              "ci_low": 0.09677141110578041,
+              "ci_high": 0.700006684861608,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.25154970029371077
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.09019264372324325
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": 0.0952255054305155
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.0923825753755475
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.15154415018802328
+        },
+        "range_min": 0.09019264372324325,
+        "range_max": 0.25154970029371077,
+        "range": 0.1613570565704675,
+        "all_same_sign": true
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.3508879363135334,
+        "ci_low": 0.1135973579416135,
+        "ci_high": 0.5615434759607268,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "success_def_diff": {
+      "signal": "success_def_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.08822972972816133,
+        "ci_low": -0.33961616771479175,
+        "ci_high": 0.17268862475615293,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.1399291120740395,
+        "ci_low": -0.38337769991230647,
+        "ci_high": 0.1339408099020182,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 39,
+          "k": 18,
+          "rate": 0.46153846153846156,
+          "ci_low": 0.3156688560672785,
+          "ci_high": 0.6143055172948424,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 18,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 31,
+          "k": 17,
+          "rate": 0.5483870967741935,
+          "ci_low": 0.37772167637354503,
+          "ci_high": 0.7083826401947998,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 17,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 2.608695652173913,
+            "mean_signal": -0.06348988652173913,
+            "min_signal": -0.13528499,
+            "max_signal": -0.013805480000000037,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": 1.7826086956521738,
+            "mean_signal": 0.005170589999999997,
+            "min_signal": -0.010334750000000004,
+            "max_signal": 0.02024718000000003,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 1.0416666666666667,
+            "mean_signal": 0.07465223333333333,
+            "min_signal": 0.024417170000000044,
+            "max_signal": 0.15468006,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": true
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -30.105855268137226,
+        "intercept": 1.9936708723215246,
+        "se_slope": 25.834168100857617,
+        "se_intercept": 1.6371791184560456,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -81.65713319173759,
+        "slope_ci_high": 21.445422655463133,
+        "intercept_ci_low": -1.2732690739057686,
+        "intercept_ci_high": 5.260610818548818,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.019580156405829663,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.3102312108297932,
+            "ci_low": -0.7991026357243008,
+            "ci_high": 0.4401985317633975,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 4,
+              "rate": 0.4444444444444444,
+              "ci_low": 0.18877852109766452,
+              "ci_high": 0.733348706504507,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 4,
+              "rate": 0.8,
+              "ci_low": 0.37553462976252533,
+              "ci_high": 0.9637758913675698,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 4,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.43473532696185363,
+            "ci_low": -0.8269301427947197,
+            "ci_high": 0.16923509154226532,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 10,
+              "k": 5,
+              "rate": 0.5,
+              "ci_low": 0.236593090512564,
+              "ci_high": 0.7634069094874361,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 6,
+              "rate": 1.0,
+              "ci_low": 0.6096657120978346,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.38410606425268234,
+            "ci_low": -0.14979532615748375,
+            "ci_high": 0.8234793523722697,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 8,
+              "k": 2,
+              "rate": 0.25,
+              "ci_low": 0.071479212752109,
+              "ci_high": 0.5907245696898311,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.0773492468153762,
+            "ci_low": -0.6667629778683173,
+            "ci_high": 0.5272716146697836,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 7,
+              "k": 1,
+              "rate": 0.14285714285714285,
+              "ci_low": 0.02567962434474355,
+              "ci_high": 0.5131278292743189,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 3,
+              "rate": 0.42857142857142855,
+              "ci_low": 0.15821985525146975,
+              "ci_high": 0.7495416354723428,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.2,
+            "ci_low": -0.656105377731194,
+            "ci_high": 0.7342002682538351,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 2,
+              "rate": 0.4,
+              "ci_low": 0.11762077423264783,
+              "ci_high": 0.769275718723987,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": -0.05057015208027913
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.06053556197421236
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.2202328449571826
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": -0.09491548036917126
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": -0.12428680625378209
+        },
+        "range_min": -0.2202328449571826,
+        "range_max": 0.06053556197421236,
+        "range": 0.28076840693139493,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.05660047239961508,
+        "ci_low": -0.19396038608827737,
+        "ci_high": 0.29942934995034465,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "success_net_diff": {
+      "signal": "success_net_diff",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.07708492176249884,
+        "ci_low": -0.17168524279737732,
+        "ci_high": 0.31644457538461157,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.000298427669173334,
+        "ci_low": -0.23507190548756096,
+        "ci_high": 0.26744358401919377,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 34,
+          "k": 22,
+          "rate": 0.6470588235294118,
+          "ci_low": 0.47913963119781733,
+          "ci_high": 0.785120794051205,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 22,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 36,
+          "k": 13,
+          "rate": 0.3611111111111111,
+          "ci_low": 0.22475592946515371,
+          "ci_high": 0.5242492451444196,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 13,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 2.1739130434782608,
+            "mean_signal": -0.060224240434782604,
+            "min_signal": -0.10113908999999999,
+            "max_signal": -0.03232196000000004,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": -0.4782608695652174,
+            "mean_signal": -0.004510786521739129,
+            "min_signal": -0.02994302999999998,
+            "max_signal": 0.022567329999999997,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 3.625,
+            "mean_signal": 0.08168167458333335,
+            "min_signal": 0.03111979999999992,
+            "max_signal": 0.26264384,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -0.06041300991209959,
+        "intercept": 1.8004068855658646,
+        "se_slope": 24.549175529676454,
+        "se_intercept": 1.6531943199508747,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -49.04752827466056,
+        "slope_ci_high": 48.926702254836364,
+        "intercept_ci_low": -1.4984908965026762,
+        "intercept_ci_high": 5.099304667634406,
+        "slope_ci_crosses_0": true,
+        "r_squared": 8.905907422640524e-08,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.3102312108297932,
+            "ci_low": -0.747533697865976,
+            "ci_high": 0.3423185822147649,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 3,
+              "rate": 0.6,
+              "ci_low": 0.2307242812760128,
+              "ci_high": 0.882379225767352,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.32493869148343324,
+            "ci_low": -0.7465414759084726,
+            "ci_high": 0.22248090230350623,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 6,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.3542021355803963,
+              "ci_high": 0.879416181613089,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 5,
+              "rate": 0.7142857142857143,
+              "ci_low": 0.35893445183261935,
+              "ci_high": 0.9177810759959433,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.5047830652822607,
+            "ci_low": -0.009061908470884079,
+            "ci_high": 0.8482142857142857,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 8,
+              "k": 2,
+              "rate": 0.25,
+              "ci_low": 0.071479212752109,
+              "ci_high": 0.5907245696898311,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.0220997848043932,
+            "ci_low": -0.558365632787664,
+            "ci_high": 0.5570503575864146,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 2,
+              "rate": 0.2,
+              "ci_low": 0.05668215145437519,
+              "ci_high": 0.5098375284633583,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.2727272727272727,
+            "ci_low": -0.5125756987577639,
+            "ci_high": 0.801244292707005,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 3,
+              "rate": 0.75,
+              "ci_low": 0.30064184258240184,
+              "ci_high": 0.9544127391902995,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 1,
+              "rate": 0.16666666666666666,
+              "ci_low": 0.030053369748306635,
+              "ci_high": 0.5635028221864702,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.14880019021048957
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.18748466608911166
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.053149119310055164
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.032893536471249034
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.05470958205391618
+        },
+        "range_min": -0.053149119310055164,
+        "range_max": 0.18748466608911166,
+        "range": 0.24063378539916683,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.5057650249322019,
+        "ci_low": 0.302267026744412,
+        "ci_high": 0.6792100675365415,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "matchup_diff_off_epa_5g": {
+      "signal": "matchup_diff_off_epa_5g",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.08123793982517497,
+        "ci_low": -0.15919307422596723,
+        "ci_high": 0.3069141860799253,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.06570525317495006,
+        "ci_low": -0.15683069303298514,
+        "ci_high": 0.29270913697492695,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 31,
+          "k": 19,
+          "rate": 0.6129032258064516,
+          "ci_low": 0.4382410861966073,
+          "ci_high": 0.7626689857961975,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 19,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 39,
+          "k": 16,
+          "rate": 0.41025641025641024,
+          "ci_low": 0.27079310000725176,
+          "ci_high": 0.5658137711710304,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 16,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 0.34782608695652173,
+            "mean_signal": -0.2081956152173913,
+            "min_signal": -0.35551782,
+            "max_signal": -0.11982836,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": 1.6956521739130435,
+            "mean_signal": -0.03422358739130434,
+            "min_signal": -0.11641032,
+            "max_signal": 0.06674768,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 3.2916666666666665,
+            "mean_signal": 0.2272554175,
+            "min_signal": 0.07550264,
+            "max_signal": 0.47682282,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": true,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": 4.470195874257074,
+        "intercept": 1.8077597261686031,
+        "se_slope": 8.232514621982418,
+        "se_intercept": 1.641413248497284,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -11.95753067885112,
+        "slope_ci_high": 20.897922427365266,
+        "intercept_ci_low": -1.4676292946976874,
+        "intercept_ci_high": 5.083148747034894,
+        "slope_ci_crosses_0": true,
+        "r_squared": 0.004317180294784562,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.004400442706805578,
+            "ci_low": -0.5178652597402598,
+            "ci_high": 0.5561297390949854,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 3,
+              "rate": 0.6,
+              "ci_low": 0.2307242812760128,
+              "ci_high": 0.882379225767352,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.1365039251893875,
+            "ci_low": -0.3999577669987023,
+            "ci_high": 0.532777932509955,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 6,
+              "k": 6,
+              "rate": 1.0,
+              "ci_low": 0.6096657120978346,
+              "ci_high": 1.0,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 5,
+              "rate": 0.5,
+              "ci_low": 0.236593090512564,
+              "ci_high": 0.7634069094874361,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.05150847604921027,
+            "ci_low": -0.6042137719704703,
+            "ci_high": 0.5744271729776246,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 3,
+              "rate": 0.42857142857142855,
+              "ci_low": 0.15821985525146975,
+              "ci_high": 0.7495416354723428,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.0441995696087864,
+            "ci_low": -0.6143997384383316,
+            "ci_high": 0.7297836372800496,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 1,
+              "rate": 0.25,
+              "ci_low": 0.04558726080970055,
+              "ci_high": 0.6993581574175981,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 3,
+              "rate": 0.3,
+              "ci_low": 0.10779126740630099,
+              "ci_high": 0.6032218525388546,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.2,
+            "ci_low": -0.6273291925465838,
+            "ci_high": 0.8452128136200715,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 3,
+              "k": 2,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.2076596008020477,
+              "ci_high": 0.9385080552796037,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 2,
+              "rate": 0.2857142857142857,
+              "ci_low": 0.08221892400405678,
+              "ci_high": 0.6410655481673808,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.10850156529614392
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.055649968069610097
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": 0.07621094981528025
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.059557495796018024
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.08895527463728356
+        },
+        "range_min": 0.055649968069610097,
+        "range_max": 0.10850156529614392,
+        "range": 0.05285159722653383,
+        "all_same_sign": true
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.4986615344239349,
+        "ci_low": 0.304441983216546,
+        "ci_high": 0.6486144015306227,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    },
+    "matchup_diff_success_rate_5g": {
+      "signal": "matchup_diff_success_rate_5g",
+      "n_complete": 70,
+      "n_missing": 0,
+      "missing_games": [],
+      "label": "RETRO_FIT / DEV_RESEARCH exploratory",
+      "spearman_vs_realized_margin": {
+        "n": 70,
+        "estimate": 0.07708492176249884,
+        "ci_low": -0.17168524279737732,
+        "ci_high": 0.31644457538461157,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "pearson_vs_realized_margin": {
+        "n": 70,
+        "estimate": -0.00029843338893142436,
+        "ci_low": -0.23507189927167044,
+        "ci_high": 0.2674435957922984,
+        "ci_crosses_0": true,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs"
+      },
+      "su_when_signal_sign": {
+        "signal_gt_0": {
+          "n": 34,
+          "k": 22,
+          "rate": 0.6470588235294118,
+          "ci_low": 0.47913963119781733,
+          "ci_high": 0.785120794051205,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 22,
+          "meaning": "P(home win | signal>0), ties excluded"
+        },
+        "signal_lt_0": {
+          "n": 36,
+          "k": 13,
+          "rate": 0.3611111111111111,
+          "ci_low": 0.22475592946515371,
+          "ci_high": 0.5242492451444196,
+          "method": "wilson",
+          "z": 1.959963984540054,
+          "home_wins": 13,
+          "meaning": "P(home win | signal<0), ties excluded"
+        },
+        "n_signal_zero_excluded": 0,
+        "n_margin_ties_excluded": 0,
+        "n_signal_missing": 0
+      },
+      "tertiles": {
+        "n_complete": 70,
+        "assignment": "average_rank; T1 if rank<=n/3; T2 if rank<=2n/3; else T3",
+        "tertiles": [
+          {
+            "tertile": 1,
+            "n": 23,
+            "mean_realized_margin": 2.1739130434782608,
+            "mean_signal": -0.030112119565217386,
+            "min_signal": -0.05056954,
+            "max_signal": -0.01616098,
+            "label": "lowest_rank_third"
+          },
+          {
+            "tertile": 2,
+            "n": 23,
+            "mean_realized_margin": -0.4782608695652174,
+            "mean_signal": -0.002255393913043479,
+            "min_signal": -0.01497152,
+            "max_signal": 0.01128366,
+            "label": "middle_rank_third"
+          },
+          {
+            "tertile": 3,
+            "n": 24,
+            "mean_realized_margin": 3.625,
+            "mean_signal": 0.04084083791666667,
+            "min_signal": 0.0155599,
+            "max_signal": 0.13132192,
+            "label": "highest_rank_third"
+          }
+        ],
+        "mean_margin_monotonic_increasing": false,
+        "mean_margin_monotonic_decreasing": false
+      },
+      "ols_realized_margin_on_signal": {
+        "n": 70,
+        "slope": -0.12082833494036967,
+        "intercept": 1.8004068933879855,
+        "se_slope": 49.09835078574249,
+        "se_intercept": 1.6531943209081703,
+        "df": 68,
+        "t_crit_95": 1.9954688582323272,
+        "t_method": "acklam_norm_ppf + cornish_fisher_t",
+        "slope_ci_low": -98.09505831845622,
+        "slope_ci_high": 97.85340164857548,
+        "intercept_ci_low": -1.4984908905908085,
+        "intercept_ci_high": 5.09930467736678,
+        "slope_ci_crosses_0": true,
+        "r_squared": 8.906248816220597e-08,
+        "undefined_reason": null
+      },
+      "week_stratified": {
+        "2": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": -0.3102312108297932,
+            "ci_low": -0.747533697865976,
+            "ci_high": 0.3423185822147649,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 5,
+              "rate": 0.5555555555555556,
+              "ci_low": 0.26665129349549305,
+              "ci_high": 0.8112214789023355,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 5,
+              "k": 3,
+              "rate": 0.6,
+              "ci_low": 0.2307242812760128,
+              "ci_high": 0.882379225767352,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "3": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": -0.32493869148343324,
+            "ci_low": -0.7465414759084726,
+            "ci_high": 0.22248090230350623,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 9,
+              "k": 6,
+              "rate": 0.6666666666666666,
+              "ci_low": 0.3542021355803963,
+              "ci_high": 0.879416181613089,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 7,
+              "k": 5,
+              "rate": 0.7142857142857143,
+              "ci_low": 0.35893445183261935,
+              "ci_high": 0.9177810759959433,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 5,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "4": {
+          "n_games": 16,
+          "n_complete": 16,
+          "spearman_vs_realized_margin": {
+            "n": 16,
+            "estimate": 0.5047830652822607,
+            "ci_low": -0.009061908470884079,
+            "ci_high": 0.8482142857142857,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 8,
+              "k": 6,
+              "rate": 0.75,
+              "ci_low": 0.40927543031016883,
+              "ci_high": 0.9285207872478909,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 6,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 8,
+              "k": 2,
+              "rate": 0.25,
+              "ci_low": 0.071479212752109,
+              "ci_high": 0.5907245696898311,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "5": {
+          "n_games": 14,
+          "n_complete": 14,
+          "spearman_vs_realized_margin": {
+            "n": 14,
+            "estimate": 0.0220997848043932,
+            "ci_low": -0.558365632787664,
+            "ci_high": 0.5570503575864146,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 2,
+              "rate": 0.5,
+              "ci_low": 0.15003898915214947,
+              "ci_high": 0.8499610108478506,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 10,
+              "k": 2,
+              "rate": 0.2,
+              "ci_low": 0.05668215145437519,
+              "ci_high": 0.5098375284633583,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 2,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        },
+        "6": {
+          "n_games": 10,
+          "n_complete": 10,
+          "spearman_vs_realized_margin": {
+            "n": 10,
+            "estimate": 0.2727272727272727,
+            "ci_low": -0.5125756987577639,
+            "ci_high": 0.801244292707005,
+            "ci_crosses_0": true,
+            "B": 2000,
+            "seed": 4915,
+            "n_undefined_resamples": 0,
+            "n_defined_resamples": 2000,
+            "method": "percentile_bootstrap_pairs"
+          },
+          "su_when_signal_sign": {
+            "signal_gt_0": {
+              "n": 4,
+              "k": 3,
+              "rate": 0.75,
+              "ci_low": 0.30064184258240184,
+              "ci_high": 0.9544127391902995,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 3,
+              "meaning": "P(home win | signal>0), ties excluded"
+            },
+            "signal_lt_0": {
+              "n": 6,
+              "k": 1,
+              "rate": 0.16666666666666666,
+              "ci_low": 0.030053369748306635,
+              "ci_high": 0.5635028221864702,
+              "method": "wilson",
+              "z": 1.959963984540054,
+              "home_wins": 1,
+              "meaning": "P(home win | signal<0), ties excluded"
+            },
+            "n_signal_zero_excluded": 0,
+            "n_margin_ties_excluded": 0,
+            "n_signal_missing": 0
+          }
+        }
+      },
+      "leave_one_week_out_spearman": {
+        "drop_week_2": {
+          "n_complete": 56,
+          "spearman_rho": 0.14880019021048957
+        },
+        "drop_week_3": {
+          "n_complete": 54,
+          "spearman_rho": 0.18748466608911166
+        },
+        "drop_week_4": {
+          "n_complete": 54,
+          "spearman_rho": -0.053149119310055164
+        },
+        "drop_week_5": {
+          "n_complete": 56,
+          "spearman_rho": 0.032893536471249034
+        },
+        "drop_week_6": {
+          "n_complete": 60,
+          "spearman_rho": 0.05470958205391618
+        },
+        "range_min": -0.053149119310055164,
+        "range_max": 0.18748466608911166,
+        "range": 0.24063378539916683,
+        "all_same_sign": false
+      },
+      "spearman_vs_forecast_margin": {
+        "n": 70,
+        "estimate": 0.5057650249322019,
+        "ci_low": 0.302267026744412,
+        "ci_high": 0.6792100675365415,
+        "ci_crosses_0": false,
+        "B": 2000,
+        "seed": 4915,
+        "n_undefined_resamples": 0,
+        "n_defined_resamples": 2000,
+        "method": "percentile_bootstrap_pairs",
+        "note": "association-to-IF only; not a retune"
+      }
+    }
+  },
+  "week_subset_audit_summary": {
+    "any_signal_concentrated": true,
+    "flagged_signals": [
+      "wl_home_wpct",
+      "wl_away_wpct",
+      "wl_diff",
+      "wl_index_off_diff",
+      "wl_index_def_diff",
+      "wl_index_net",
+      "epa_def_diff",
+      "epa_net_diff",
+      "success_off_diff",
+      "success_def_diff",
+      "success_net_diff",
+      "matchup_diff_success_rate_5g"
+    ],
+    "week_counts": {
+      "2": 14,
+      "3": 16,
+      "4": 16,
+      "5": 14,
+      "6": 10
+    }
+  },
+  "comparisons_frozen_all_reported": true,
+  "weight_cutoff_feature_search": false,
+  "forecast_regenerated": false,
+  "engine_ablation": false,
+  "access_2024_25": false,
+  "verdict_eng": {
+    "verdict": "FAILS_TO_SHOW",
+    "vocabulary": [
+      "USEFUL_DISCRIMINATION",
+      "FAILS_TO_SHOW",
+      "INCONCLUSIVE"
+    ],
+    "predictive_pass": false,
+    "betting_pass": false,
+    "cert": 0,
+    "rationale_short": "Every frozen signal Spearman/Pearson/OLS CI vs realized_margin includes 0; every existing SU Wilson CI includes 0.50; W-L signed diffs point the wrong way (rho~-0.13). n_complete=70, n_ties=0, no MISSING. Wide CIs do not prove zero information; they fail to show useful discrimination on this already-examined sample.",
+    "recommended_next": "Further signal research \u2014 not Lane E paper CLEAR. No ablation, no IF retune, no 2024-25. New OWNER ACCEPT required for any larger already-owned hist window.",
+    "week_subset": "No signed signal week-stable. wl_home_wpct W2 vs W6 CIs exclude 0 in opposite directions.",
+    "source": "VERDICT_ENG.md"
+  },
+  "verdict_recorded_at_utc": "2026-10-31T12:07:31Z"
+}
