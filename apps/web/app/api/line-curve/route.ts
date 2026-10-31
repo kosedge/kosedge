@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
-import { getLineCurve } from "@/lib/line-curve/service";
 import { closed } from "@/lib/line-curve/guardrails";
+import { lineCurveUnavailablePayload } from "@/lib/line-curve/degrade";
 import type {
   LineCurveSport,
   ModelMarginInput,
@@ -44,14 +44,8 @@ export async function GET(req: Request) {
     );
   }
 
-  // GET cannot carry a model bind or snapshot. Never live-fetch Odds API.
-  return noStore({
-    researchOnly: true,
-    curve: closed(
-      "missing_model_run",
-      "No injected alternate-spread snapshot bound to a model run. POST snapshot + model to price; do not invent a curve.",
-    ),
-  });
+  // GET cannot carry a model bind or snapshot. This route does not live-fetch Odds API.
+  return noStore(lineCurveUnavailablePayload());
 }
 
 export async function POST(req: Request) {
@@ -93,19 +87,7 @@ export async function POST(req: Request) {
     });
   }
 
-  if (!body.snapshot) {
-    return noStore({
-      researchOnly: true,
-      curve: closed(
-        "missing_snapshot",
-        "An injected alternate-spread snapshot is required. This route does not live-fetch Odds API alternate_spreads.",
-      ),
-    });
-  }
-
-  const curve = await getLineCurve(body.eventId, body.side, body.book, {
-    snapshot: body.snapshot,
-    model: body.model,
-  });
-  return noStore({ researchOnly: true, curve });
+  // G-S6-CLIENT-SNAP: client snapshot is not a job SoT. Never price book
+  // alts from browser-minted capturedAt. Request path has no server snapshot.
+  return noStore(lineCurveUnavailablePayload());
 }

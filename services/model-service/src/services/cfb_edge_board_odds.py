@@ -273,7 +273,7 @@ def _live_pull_events() -> Tuple[List[Dict[str, Any]], Optional[str], Optional[s
 def current_cfb_odds_events(
     *,
     now: Optional[datetime] = None,
-    allow_live: bool = True,
+    allow_live: bool = False,
 ) -> Dict[str, Any]:
     clock = now or datetime.now(timezone.utc)
     if clock.tzinfo is None:

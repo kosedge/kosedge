@@ -3,8 +3,10 @@ import { env } from "@/lib/config/env";
 import { logError } from "@/lib/logger";
 import { getSport } from "@/lib/sports";
 import { SPORT_KEY_MAP } from "@/lib/odds-api";
+import { oddsAcquire } from "@/lib/odds-acquire/acquire";
+import { ODDS_WIDGET_HOST } from "@/lib/odds-acquire/hosts";
+import { isPaidFetchDenied } from "@/lib/odds-acquire/errors";
 
-const WIDGET_BASE = "https://widget.the-odds-api.com/v1/sports";
 const BOOKMAKERS =
   "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr";
 const MARKETS = "h2h,spreads,totals";
@@ -25,15 +27,19 @@ export async function GET(
     return new NextResponse("Widget not configured", { status: 404 });
   }
 
-  const url = `${WIDGET_BASE}/${widgetSportKey}/events/?accessKey=${encodeURIComponent(key)}&bookmakerKeys=${BOOKMAKERS}&oddsFormat=american&markets=${MARKETS}&marketNames=${encodeURIComponent(MARKET_NAMES)}`;
+  const qs = new URLSearchParams({
+    accessKey: key,
+    bookmakerKeys: BOOKMAKERS,
+    oddsFormat: "american",
+    markets: MARKETS,
+    marketNames: MARKET_NAMES,
+  });
 
   try {
-    const res = await fetch(url, {
-      cache: "no-store",
-      headers: {
-        accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
+    const res = await oddsAcquire({
+      host: ODDS_WIDGET_HOST,
+      path: `/v1/sports/${widgetSportKey}/events/?${qs.toString()}`,
+      caller: `odds-widget:${sport}`,
     });
     if (!res.ok) {
       return new NextResponse(`Widget upstream error: ${res.status}`, {
@@ -49,6 +55,9 @@ export async function GET(
       },
     });
   } catch (e) {
+    if (isPaidFetchDenied(e)) {
+      return new NextResponse("Widget not configured", { status: 404 });
+    }
     logError(e instanceof Error ? e : new Error(String(e)), {
       sport,
       route: "odds-widget",

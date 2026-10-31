@@ -1,12 +1,8 @@
 /**
- * CFB Edge Board current-market acquire.
+ * CFB Edge Board current-market read (request path).
  *
- * Prod 2026-09-10/11: Vercel-side The Odds API pull yields 0 priced rows
- * (compare `/api/odds/cfb/compare` empty in <400ms — same `getOddsApiKeys()`
- * gate). NFL still prices because assemble reads Railway fair-lines /
- * odds_snapshots (model-service has ODDS_API_KEY).
- *
- * Order: Vercel live pull → Railway current observations → fail closed.
+ * Order: Railway / model-service observations → shipped fallback → none.
+ * Live Vercel Odds pulls are forbidden on this path (t4662u fail-closed).
  * July 31 NFT fallback is stale Week 0 and must never paint as current MARKET.
  * Never derive Open/Best from KosEdge Fair/KEI.
  */
@@ -16,12 +12,7 @@ import "server-only";
 import type { EdgeBoardRow } from "@kosedge/contracts";
 import { env } from "@/lib/config/env";
 import { loadEdgeBoardFallbackMeta } from "@/lib/edge-board-fallback";
-import { getOddsApiKeys } from "@/lib/odds-api-keys";
-import {
-  edgeBoardRowsFromOddsEvents,
-  fetchEdgeBoard,
-  type OddsEvent,
-} from "@/lib/odds-api";
+import { edgeBoardRowsFromOddsEvents, type OddsEvent } from "@/lib/odds-api";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 /** Max age for a CFB market observation to count as current. */
@@ -139,19 +130,6 @@ export function loadFreshCfbEdgeBoardFallback(
   };
 }
 
-async function pullVercelLiveCfbRows(): Promise<EdgeBoardRow[]> {
-  const keys = getOddsApiKeys();
-  for (const key of keys) {
-    try {
-      const rows = await fetchEdgeBoard("cfb", key);
-      if (countPricedCfbMarketRows(rows) > 0) return rows;
-    } catch {
-      // try next key
-    }
-  }
-  return [];
-}
-
 async function pullModelServiceCfbEvents(
   timeoutMs: number,
 ): Promise<{ events: OddsEvent[]; capturedAt: string | null }> {
@@ -187,8 +165,8 @@ async function pullModelServiceCfbEvents(
 }
 
 /**
- * Acquire current CFB book observations for Edge Board.
- * Fail closed when no trustworthy current priced row exists.
+ * Read current CFB book observations for Edge Board.
+ * Request path never live-pulls. Fail closed when no trustworthy row exists.
  */
 export async function loadCfbCurrentMarketRows(options?: {
   timeoutMs?: number;
@@ -196,17 +174,6 @@ export async function loadCfbCurrentMarketRows(options?: {
 }): Promise<CfbMarketAcquire> {
   const nowMs = options?.nowMs ?? Date.now();
   const timeoutMs = options?.timeoutMs ?? UPSTREAM_TIMEOUT_MS.pageData;
-
-  const live = await pullVercelLiveCfbRows();
-  const liveOk = acceptFreshCfbMarketRows(live, nowMs);
-  if (liveOk.reason === "ok") {
-    return {
-      rows: liveOk.rows,
-      source: "vercel_live",
-      capturedAt: liveOk.capturedAt,
-      reason: "ok",
-    };
-  }
 
   const remote = await pullModelServiceCfbEvents(timeoutMs);
   const remoteRows = edgeBoardRowsFromOddsEvents("cfb", remote.events);
@@ -220,6 +187,5 @@ export async function loadCfbCurrentMarketRows(options?: {
     };
   }
 
-  // Explicit freshness contract — stale shipped snapshot is not current MARKET.
   return loadFreshCfbEdgeBoardFallback(nowMs);
 }

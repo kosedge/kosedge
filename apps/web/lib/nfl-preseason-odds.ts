@@ -1,7 +1,10 @@
 import "server-only";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { bookDisplay, configuredBooksForSport } from "@/lib/odds-api";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import { oddsAcquire } from "@/lib/odds-acquire/acquire";
+import { ODDS_API_HOST } from "@/lib/odds-acquire/hosts";
+import { isPaidFetchDenied } from "@/lib/odds-acquire/errors";
+import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { normalizeNflAbbr } from "@/lib/nfl-preseason-desk";
 
@@ -53,7 +56,12 @@ type OddsEvent = {
 function pickSpreadHome(
   event: OddsEvent,
   homeAbbr: string,
-): { consensus: number | null; best: number | null; bestBook: string | null; books: number } {
+): {
+  consensus: number | null;
+  best: number | null;
+  bestBook: string | null;
+  books: number;
+} {
   const homeName = event.home_team ?? "";
   const points: Array<{ point: number; book: string; price: number }> = [];
   for (const book of event.bookmakers ?? []) {
@@ -74,8 +82,7 @@ function pickSpreadHome(
     if (b.point !== a.point) return b.point - a.point;
     return a.price - b.price;
   })[0];
-  const avg =
-    points.reduce((sum, row) => sum + row.point, 0) / points.length;
+  const avg = points.reduce((sum, row) => sum + row.point, 0) / points.length;
   return {
     consensus: Math.round(avg * 2) / 2,
     best: best.point,
@@ -93,7 +100,9 @@ function pickTotal(event: OddsEvent): {
   for (const book of event.bookmakers ?? []) {
     const market = book.markets?.find((m) => m.key === "totals");
     const over = market?.outcomes?.find((o) =>
-      String(o.name ?? "").toLowerCase().startsWith("over"),
+      String(o.name ?? "")
+        .toLowerCase()
+        .startsWith("over"),
     );
     if (over?.point == null || !Number.isFinite(over.point)) continue;
     overs.push({
@@ -123,7 +132,7 @@ function pickTotal(event: OddsEvent): {
  */
 export async function fetchNflPreseasonOddsMarkets(): Promise<{
   byMatchup: Map<string, NflPreseasonMarketSnap>;
-  status: "ok" | "empty" | "unauthorized" | "error" | "no_key";
+  status: "ok" | "empty" | "unauthorized" | "error" | "no_key" | "unavailable";
   eventCount: number;
 }> {
   const keys = getOddsApiKeys();
@@ -132,23 +141,27 @@ export async function fetchNflPreseasonOddsMarkets(): Promise<{
   }
   const books = configuredBooksForSport("nfl");
   const byMatchup = new Map<string, NflPreseasonMarketSnap>();
-  let lastStatus: "ok" | "empty" | "unauthorized" | "error" = "empty";
+  let lastStatus: "ok" | "empty" | "unauthorized" | "error" | "unavailable" =
+    "empty";
 
   for (const apiKey of keys) {
-    const url = new URL(
-      `https://api.the-odds-api.com/v4/sports/${ODDS_PRESEASON_KEY}/odds`,
-    );
-    url.searchParams.set("regions", "us,us2");
-    url.searchParams.set("markets", "h2h,spreads,totals");
-    url.searchParams.set("oddsFormat", "american");
-    url.searchParams.set("bookmakers", books.join(","));
-    url.searchParams.set("apiKey", apiKey);
+    const qs = new URLSearchParams({
+      regions: "us,us2",
+      markets: "h2h,spreads,totals",
+      oddsFormat: "american",
+      bookmakers: books.join(","),
+      apiKey,
+    });
 
     try {
-      const response = await upstreamFetch(url.toString(), {
-        next: { revalidate: 900 },
-        headers: { accept: "application/json" },
-        timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+      const response = await oddsAcquire({
+        host: ODDS_API_HOST,
+        path: `/v4/sports/${ODDS_PRESEASON_KEY}/odds?${qs.toString()}`,
+        caller: "fetchNflPreseasonOddsMarkets",
+        init: {
+          headers: { accept: "application/json" },
+          timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+        },
       });
       if (response.status === 401 || response.status === 403) {
         lastStatus = "unauthorized";
@@ -164,8 +177,12 @@ export async function fetchNflPreseasonOddsMarkets(): Promise<{
         return { byMatchup, status: "empty", eventCount: 0 };
       }
       for (const event of events) {
-        const homeAbbr = normalizeNflAbbr(teamToAbbr(event.home_team ?? "") ?? "");
-        const awayAbbr = normalizeNflAbbr(teamToAbbr(event.away_team ?? "") ?? "");
+        const homeAbbr = normalizeNflAbbr(
+          teamToAbbr(event.home_team ?? "") ?? "",
+        );
+        const awayAbbr = normalizeNflAbbr(
+          teamToAbbr(event.away_team ?? "") ?? "",
+        );
         if (!homeAbbr || !awayAbbr) continue;
         const spread = pickSpreadHome(event, homeAbbr);
         const total = pickTotal(event);
@@ -188,8 +205,9 @@ export async function fetchNflPreseasonOddsMarkets(): Promise<{
         status: byMatchup.size > 0 ? "ok" : "empty",
         eventCount: events.length,
       };
-    } catch {
-      lastStatus = "error";
+    } catch (err) {
+      lastStatus = isPaidFetchDenied(err) ? "unavailable" : "error";
+      if (isPaidFetchDenied(err)) break;
     }
   }
 

@@ -26,7 +26,7 @@ from src.nfl_remat_policy import (
     resolve_remat_weeks,
 )
 from src.services.nfl_canonical_teams import canonicalize_team
-from src.services.odds_api import fetch_odds
+from src.services.odds_api import fetch_odds, request_path_paid_odds_allowed
 from src.services.nfl_injury_nowcast import fetch_nfl_injury_nowcast
 from src.services.nfl_matchup_features import (
     fetch_latest_matchup_feature_pack,
@@ -3437,22 +3437,27 @@ def nfl_edges_today(
     market_events: List[Dict[str, Any]] = []
     odds_feed_error: Optional[str] = None
     resolved_bookmakers = _resolve_nfl_odds_bookmakers_for_request(bookmakers)
-    try:
-        raw_market_events = fetch_odds(
-            endpoint="sports/americanfootball_nfl/odds",
-            params={
-                "regions": NFL_ODDS_REGIONS,
-                "markets": "h2h,totals",
-                "oddsFormat": "american",
-                "dateFormat": "iso",
-                "bookmakers": resolved_bookmakers,
-            },
-        )
-        if isinstance(raw_market_events, list):
-            market_events = raw_market_events
-    except Exception as exc:
-        odds_feed_error = _redact_odds_api_error(exc)
-        log.warning("NFL odds feed unavailable for edges endpoint: %s", odds_feed_error)
+    # G-PROXY-LIVE: /pro/nfl/edges → edges-desk → this route. User-read
+    # cannot live-pull Odds unless C8 is explicitly on (A1 HOLD).
+    if not request_path_paid_odds_allowed():
+        odds_feed_error = "paid_fetch_denied"
+    else:
+        try:
+            raw_market_events = fetch_odds(
+                endpoint="sports/americanfootball_nfl/odds",
+                params={
+                    "regions": NFL_ODDS_REGIONS,
+                    "markets": "h2h,totals",
+                    "oddsFormat": "american",
+                    "dateFormat": "iso",
+                    "bookmakers": resolved_bookmakers,
+                },
+            )
+            if isinstance(raw_market_events, list):
+                market_events = raw_market_events
+        except Exception as exc:
+            odds_feed_error = _redact_odds_api_error(exc)
+            log.warning("NFL odds feed unavailable for edges endpoint: %s", odds_feed_error)
     session = SessionLocal()
     tuned_guardrails = framework_cfg["guardrails"]
     tuning_summary: Optional[Dict[str, Any]] = None
@@ -3768,7 +3773,11 @@ def nfl_edges_today(
             "filtered_examples": filtered_examples[:25],
             "base_quality_score": round(base_quality, 2),
             "tuning_latest_run_id": tuning_summary.get("run_id") if isinstance(tuning_summary, dict) else None,
-            "odds_feed_status": "degraded" if odds_feed_error else "ok",
+            "odds_feed_status": (
+                "denied"
+                if odds_feed_error == "paid_fetch_denied"
+                else ("degraded" if odds_feed_error else "ok")
+            ),
             "odds_feed_error": odds_feed_error,
             "odds_events_seen": len(market_events),
             "bookmakers": resolved_bookmakers.split(","),
@@ -3783,10 +3792,10 @@ def nfl_edges_today(
 
 
 def _normalize_nfl_fair_lines_odds_mode(raw: Optional[str]) -> str:
-    mode = str(raw or "live").strip().lower()
+    mode = str(raw or "skip").strip().lower()
     if mode in {"live", "skip", "reuse"}:
         return mode
-    return "live"
+    return "skip"
 
 
 def _odds_event_dicts(raw: Any) -> List[Dict[str, Any]]:
@@ -3808,10 +3817,11 @@ def _resolve_nfl_fair_lines_market_events(
 ) -> Tuple[List[Dict[str, Any]], Optional[str], str]:
     """WS-02 DUP-C / S1: live|skip|reuse Odds acquire seam.
 
-    - live (default): existing fetch_odds HTTP
+    - live: fetch_odds HTTP only when C8 (ODDS_API_REQUEST_PATH_ALLOW=1)
     - skip: never call fetch_odds (empty events; warehouse may still paint Current)
     - reuse: when caller supplied events list (possibly empty after payload signal),
-      use them and skip HTTP; without supply (None), fall through to live
+      use them and skip HTTP; without supply (None), would fall through to live
+      but live is still C8-gated (G-PROXY-LIVE)
 
     Returns (market_events, odds_feed_error, resolved_mode).
     """
@@ -3825,6 +3835,11 @@ def _resolve_nfl_fair_lines_market_events(
         if supplied_events is not None:
             return _odds_event_dicts(supplied_events), None, "reuse"
         mode = "live"
+
+    # Any path that would pay Odds is C8-gated. Covers explicit live *and*
+    # reuse-without-supply fallthrough (G-PROXY-LIVE).
+    if not request_path_paid_odds_allowed():
+        return [], None, "skip"
 
     try:
         raw_market_events = fetch_odds(
@@ -4658,10 +4673,10 @@ def nfl_fair_lines(
         description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
     ),
     odds_mode: str = Query(
-        "live",
+        "skip",
         description=(
-            "WS-02 DUP-C: live (default HTTP), skip (never fetch_odds), "
-            "reuse (caller-supplied events/payload — no fetch_odds when valid)."
+            "t4668u / G-PROXY-LIVE: skip (default, never fetch_odds), "
+            "reuse (caller-supplied events/payload), live (C8 only)."
         ),
     ),
     persist: bool = Query(
@@ -4675,7 +4690,7 @@ def nfl_fair_lines(
         ),
     ),
 ) -> Dict[str, Any]:
-    """Customer/page-data fair-lines GET. Default odds_mode=live (one Odds HTTP)."""
+    """Customer/page-data fair-lines GET. Default odds_mode=skip (no Odds HTTP)."""
     return _nfl_fair_lines_impl(
         season=season,
         days_ahead=days_ahead,

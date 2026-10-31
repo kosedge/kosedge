@@ -22,7 +22,7 @@ import {
 } from "@/lib/model-service-status";
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
-import { bookDisplay } from "@/lib/odds-api";
+import { bookDisplay } from "@/lib/odds-book-display";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
 const PAST_WEEK_DAYS = 7;

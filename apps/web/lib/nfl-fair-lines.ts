@@ -635,10 +635,10 @@ export async function fetchNflFairLines(params: {
    */
   persistOdds?: boolean;
   /**
-   * WS-02 DUP-C / S1: Odds acquire mode for model-service fair-lines.
-   * - live (default): model may HTTP The Odds API once
-   * - skip: model never calls fetch_odds
+   * WS-02 DUP-C / S1 + t4668u G-PROXY-LIVE: Odds acquire mode.
+   * - skip (default): model never calls fetch_odds
    * - reuse: assemble already pulled Odds; POST payload so model skips fetch_odds
+   * - live: coerced to skip on this user-read client (C8 / A1 HOLD)
    */
   oddsMode?: "live" | "reuse" | "skip";
   /**
@@ -682,7 +682,9 @@ export async function fetchNflFairLines(params: {
     return softEmpty(error);
   }
 
-  const oddsMode = params.oddsMode ?? "live";
+  const requestedMode = params.oddsMode ?? "skip";
+  // User-read cannot ask Railway to live-pull (G-PROXY-LIVE).
+  const oddsMode = requestedMode === "live" ? "skip" : requestedMode;
   const oddsEvents = Array.isArray(params.oddsEvents) ? params.oddsEvents : [];
   const oddsPayload = Array.isArray(params.oddsPayload)
     ? params.oddsPayload
@@ -706,7 +708,7 @@ export async function fetchNflFairLines(params: {
   // Default read-only: page-data / SSR must not write odds_snapshots on GET.
   const persistOdds = params.persistOdds === true;
   url.searchParams.set("persist", persistOdds ? "1" : "0");
-  if (!useReusePost && oddsMode !== "live") {
+  if (!useReusePost) {
     url.searchParams.set("odds_mode", oddsMode);
   }
 

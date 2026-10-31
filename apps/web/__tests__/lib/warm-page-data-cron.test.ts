@@ -54,10 +54,12 @@ describe("GO-1c / INC-2026-09-07 (E) warm-page-data cron (public cache path)", (
     expect(warm?.schedule).toBe("* * * * *");
   });
 
-  it("rate-limit skips cron/warm traffic", () => {
+  it("rate-limit does not trust spoofable warm/cron headers", () => {
     const rl = readRel("lib/security/rate-limit.ts");
-    expect(rl).toContain("isCronOrWarmRequest");
+    expect(rl).toContain("isVerifiedCronSecretRequest");
     expect(rl).toContain("x-kosedge-warm");
-    expect(rl).toContain("/api/cron/");
+    expect(rl).toContain("x-vercel-cron");
+    expect(rl).toMatch(/NEVER qualify/);
+    expect(rl).not.toContain("isCronOrWarmRequest");
   });
 });
