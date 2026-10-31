@@ -1,0 +1,28 @@
+{
+  "readiness_1_wired_admissible_run": {
+    "e1_admissible": false,
+    "fact": "13/13 remaining W8 games invoked Independent Fair (blend=0, rating_week=7, through-W7 c674da77). This is DIAGNOSTIC wiring, not a scoring-admissible / OWNER E1 run.",
+    "scoring_admissible": false,
+    "wired_diagnostic_run": true
+  },
+  "readiness_4_coherence": {
+    "fact": "No sealed joint ST/ML coherence packet and no market-beat evidence. Do not treat omitted failed coherence outputs as validation of remaining prices. Odds HOLD \u2014 no invented market evidence.",
+    "joint_st_ml": "INSUFFICIENT",
+    "market": "INSUFFICIENT",
+    "status": "DIAGNOSTIC_IF_ONLY"
+  },
+  "readiness_6_fail_closed": {
+    "fact": "TNF CAR@GB rejected; operational invoke still THROUGH_W8_DATA_ACCEPT_MISSING; publication controls refuse FREE_PUBLIC/BETTING; same-week rolling >=8 rejected.",
+    "operational_through_w8_still_blocked": true,
+    "publication_refused": true,
+    "tnf_excluded": true
+  },
+  "readiness_8_publication_controls": {
+    "cert": 0,
+    "coming_soon": "ON",
+    "enabled": false,
+    "fact": "Controls tested. Public delivery not enabled.",
+    "prepared": true,
+    "public_delivery": false
+  }
+}

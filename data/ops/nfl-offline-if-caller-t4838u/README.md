@@ -33,3 +33,7 @@ Operational `--invoke` consumes `b41f4b43` and fail-closes on missing through-W8
 | DRY_RUN.json | `56759273fce688196f7436394d70bb834a05069f32acd687ba56063f626d8c3d` |
 
 NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen · C10/Odds HOLD.
+
+## t4850u EVAL_ONLY (same DRAFT)
+
+Diagnostic W8 consume at rating_week=7 using through-W7 `c674da77` is sealed under `eval_w8_t4850u/`. That packet is **not** E1, **not** FREE_PUBLIC, and does **not** change through-W8 FAIL-CLOSED or this BLOCKED caller packet.
