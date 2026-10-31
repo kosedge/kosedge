@@ -1,0 +1,162 @@
+{
+  "addon_tickets": [
+    "t4776u"
+  ],
+  "alex_contract_parent_v1_sha8": "24600552",
+  "alex_contract_sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+  "alex_contract_sha8": "b41f4b43",
+  "alex_contract_version": "v2",
+  "consistent_panel_through_week": 7,
+  "contract_bind": "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3",
+  "decision": "751dd63c",
+  "dq_failed": [],
+  "dq_pass": true,
+  "e1_retry": {
+    "do_not": [
+      "retry E1 scoring-admissible emit on this DATA_PARTIAL set",
+      "substitute 2025 packaged priors for missing W8 games",
+      "restore C10 / Railway / DATABASE_URL",
+      "open Odds / E2",
+      "change CLEAR-P1 #662 merge status"
+    ],
+    "engineering_demo_only": "W9 consume pack + IF consume proof (t4776u: 20-field call graph + input-hash perturbation) may be used as an offline demo that Independent Fair actually consumes staged 2026 inputs. That is not O4 scoring-admissible.",
+    "reason": "through-W8 not complete; sealed panel is through W7 only",
+    "retry_when": [
+      "W8 slate complete after 2026-W08-CHI@SEA kickoff 2026-11-03T01:15:00Z (MNF)",
+      "re-fetch approved nflverse play_by_play_2026.parquet (same URL)",
+      "builder reports through_w8_complete=true and 32/32 teams",
+      "IMV PASS_CONTRACT 1a53bbd3 is on file for v2 b41f4b43 (D1 CLOSED) \u2014 not a DATA ACCEPT",
+      "IMV ACCEPT of through-W8 inputs against the PASSed v2 contract (separate DATA grade)",
+      "then E1 retry inside Tue 2026-11-03 00:00 \u2013 Wed 2026-11-04 23:59 America/New_York"
+    ],
+    "scoring_admissible_now": false,
+    "window_note": "W9 O4 window starts Tue 00:00 ET, immediately after MNF. If nflverse PBP lands after Tue 00:00 ET, emit_ts may still sit inside the window provided as_of <= emit_ts and IMV ACCEPT is on file."
+  },
+  "imv_d1": "CLOSED \u2014 IMV PASS_CONTRACT 1a53bbd3 on v2 b41f4b43. PASS_CONTRACT \u2260 DATA ACCEPT.",
+  "imv_pass_contract": "1a53bbd3",
+  "imv_pass_contract_sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+  "imv_return_parent": "d2587de7",
+  "locks": [
+    "NFL NO-GO",
+    "CERT=0",
+    "Coming Soon ON",
+    "F2 frozen",
+    "C10 HOLD",
+    "Odds HOLD 70c56700",
+    "overlays OFF"
+  ],
+  "season": 2026,
+  "status": "DATA_PARTIAL",
+  "teams": 32,
+  "through_w7_complete": true,
+  "through_w8_declared_complete": false,
+  "ticket": "t4770u",
+  "week8_complete_count": 1,
+  "week8_expected_count": 14,
+  "week8_missing": [
+    {
+      "away_team": "ARI",
+      "game_id": "2026-W08-ARI@DAL",
+      "home_team": "DAL",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "ATL",
+      "game_id": "2026-W08-ATL@TB",
+      "home_team": "TB",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "BAL",
+      "game_id": "2026-W08-BAL@BUF",
+      "home_team": "BUF",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "CHI",
+      "game_id": "2026-W08-CHI@SEA",
+      "home_team": "SEA",
+      "kickoff_utc": "2026-11-03T01:15:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "CLE",
+      "game_id": "2026-W08-CLE@PIT",
+      "home_team": "PIT",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "IND",
+      "game_id": "2026-W08-IND@JAX",
+      "home_team": "JAX",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "KC",
+      "game_id": "2026-W08-KC@DEN",
+      "home_team": "DEN",
+      "kickoff_utc": "2026-11-01T21:25:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "LAC",
+      "game_id": "2026-W08-LAC@LAR",
+      "home_team": "LAR",
+      "kickoff_utc": "2026-11-01T21:05:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "LV",
+      "game_id": "2026-W08-LV@NYJ",
+      "home_team": "NYJ",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "MIN",
+      "game_id": "2026-W08-MIN@DET",
+      "home_team": "DET",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "NE",
+      "game_id": "2026-W08-NE@MIA",
+      "home_team": "MIA",
+      "kickoff_utc": "2026-11-01T21:25:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "PHI",
+      "game_id": "2026-W08-PHI@WAS",
+      "home_team": "WAS",
+      "kickoff_utc": "2026-11-02T01:20:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    },
+    {
+      "away_team": "TEN",
+      "game_id": "2026-W08-TEN@CIN",
+      "home_team": "CIN",
+      "kickoff_utc": "2026-11-01T18:00:00.000Z",
+      "status": "NOT_YET_KICKED",
+      "week": 8
+    }
+  ]
+}

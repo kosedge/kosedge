@@ -1,0 +1,12 @@
+COS_ORDER — Cursor t4770u STANDBY for DATA_READY (after W8 final)
+Authority: DECISION 751dd63c · IMV DATA_PARTIAL_ACCEPT c674da77 · contract b41f4b43
+
+HOLD emit / merge #663 / C10 / Odds / CERT.
+When W8 is final (all 14 incl MNF CHI@SEA) and PBP re-fetchable:
+1. Re-fetch + archive raw PBP bytes + pin fetched_at_utc (O-a)
+2. Rebuild through-W8 panel; recompute T5 through W8 (O-b)
+3. Re-run 20-field IF consume / perturbation at tip (O-c)
+4. Spot-check rest_days short weeks (O-d)
+5. Seal DATA_READY (or PARTIAL/UNAVAILABLE if still incomplete) + hashes; report tip sha8
+Do not invent scores. Do not use 2025 priors. Do not emit.
+Until then: IDLE on this lane (or continue only RO prep that does not claim READY).

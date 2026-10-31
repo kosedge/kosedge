@@ -1,0 +1,65 @@
+{
+  "addon_tickets": [
+    "t4776u"
+  ],
+  "contract_bind": "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3",
+  "decision": "751dd63c",
+  "filed_utc": "2026-10-30T14:40:22Z",
+  "imv_pass_contract": "1a53bbd3",
+  "lineage": [
+    "t4696u S1 restage \u2014 same URL template seasons 2012\u20132022 (PR #654, do not merge)",
+    "t4166u W4\u2013W6 nflverse CLEAR (referenced by CoS; artifacts not on deploy-vercel)",
+    "t4139u W7 nflverse CLEAR (referenced by CoS; artifacts not on deploy-vercel)",
+    "DECISION 751dd63c t4770u \u2014 authorize 2026 W1\u2013W8 recovery from approved no-cost sources"
+  ],
+  "preferred_sources": [
+    {
+      "id": "packaged_efficiency_backbone_2026",
+      "path": "services/model-service/src/services/nfl_season_engine/data/nfl_team_efficiency_backbone_2026.json",
+      "status": "EXISTING AND VERIFIED (packaged) \u2014 2025 priors as_of 2026-08-08; NOT used as 2026 in-season substitute"
+    },
+    {
+      "id": "packaged_epa_priors_2026",
+      "path": "services/model-service/src/services/nfl_season_engine/data/nfl_team_epa_priors_2026.json",
+      "status": "EXISTING AND VERIFIED (packaged) \u2014 2025 priors; NOT used as 2026 in-season substitute"
+    },
+    {
+      "as_of": "2026-08-21",
+      "id": "canonical_schedule_2026",
+      "path": "services/model-service/src/services/nfl_season_engine/data/nfl-canonical-schedule-2026.json",
+      "sha256": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe",
+      "status": "EXISTING AND VERIFIED (packaged)"
+    },
+    {
+      "id": "t4696u_s1_pbp_restage",
+      "pr": "#654 DRAFT/OPEN \u2014 do not merge; binaries gitignored",
+      "status": "CLEARed URL template 2012\u20132022 only; 2026 not in that restage",
+      "url_template": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.parquet"
+    },
+    {
+      "id": "t4139u_w7",
+      "status": "referenced by CoS; no artifact on deploy-vercel / Slack / Notion / this VM"
+    },
+    {
+      "id": "t4166u_w4_w6",
+      "status": "referenced by CoS; no artifact on deploy-vercel / Slack / Notion / this VM"
+    },
+    {
+      "id": "DATABASE_URL / Railway C10",
+      "status": "HOLD \u2014 not used"
+    }
+  ],
+  "ticket": "t4770u",
+  "used_source": {
+    "access": "public HTTPS; no credential; no paid vendor",
+    "bytes": 8068642,
+    "fetched_at_utc": null,
+    "hash_before_parse": true,
+    "license": "nflverse open data (nflverse-data GitHub releases). Public HTTPS. No credential. No paid vendor. Terms: github.com/nflverse/nflverse-data",
+    "path": "data/raw/nfl/pbp/t4770u/play_by_play_2026.parquet",
+    "sha256": "b790f399a7455f7686cc34012367fa683ca50be6092bc52295aa50f23daff25c",
+    "skip_fetch": true,
+    "source_id": "nflverse-data/releases/pbp/play_by_play_2026.parquet",
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.parquet"
+  }
+}

@@ -1,0 +1,41 @@
+IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2 — re-grade Alex E1 efficiency contract v2 (D1 ONLY)
+Graded 2026-10-30 ET by IMV (Model Validation Lead). Fail closed. Independent re-measure vs RETURN d2587de7; Alex "D1 CLOSED" not accepted on assertion.
+
+A. AUTHORITY (sha256 recomputed this session — all MATCH)
+- COS_ORDER_IMV_t4770u_EFFICIENCY_VALIDATE.txt  5c94831b438d0bb22163607e200a284361c423bfb7d2b8db5c11882d67d72b44 MATCH
+- DECISION_RYAN_t4770u_HIFT1_EFFICIENCY_RECOVERY.md  751dd63c34c5ac815e10fc92ed2fe61daf99fb6741bde891ce7091df9de2913a MATCH
+- COS_ORDER_ALEX_t4770u_EFFICIENCY_CONTRACT_REMOTION_D1.txt  a0e42016e16e881e7555be5bbc0bea6af43d7c563d483ee705893c373353a553 MATCH
+- IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT.txt (prior RETURN)  d2587de706b114ebba57843eb17c6fb05e96aa4469a5b02a2c02c3184447dd94 MATCH (parent UNTOUCHED)
+- ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v1.md  24600552d368c690c7377a3fe4d6b96f92cc5d4658c2d95442c948456e5799a3 MATCH (parent UNTOUCHED)
+- ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md  b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4 MATCH (graded object)
+- COS_ACCEPT_ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.txt  (CoS remotion packet for grade; not authority)
+
+B. VERDICT: PASS_CONTRACT
+D1 CLOSED. Contract is the operative acceptance bar for subsequent Cursor DATA_READY/PARTIAL IMV input validation.
+PASS_CONTRACT ≠ authorize emit. ≠ E2 ≠ C10 restore ≠ CERT. ≠ DATA ACCEPT (separate; needs sealed dataset + independent verify against this contract).
+
+C. D1 DISPOSITION (vs RETURN d2587de7) — measured by full v1→v2 diff
+Diff delta ONLY: remotion banner; §3 OUTSIDE expansion + CATCH-ALL; §7 O-d wording; §11 remotion log. No other section reopened.
+- Enumerated OUTSIDE must-None now includes travel_available, travel_miles_*, travel_timezone_delta_* and info_velocity_*, hours_since_change_* (+ prior tendency/kav/personnel/coach/injury/weather). MATCH D1 REQUIRED.
+- CATCH-ALL: any NflGameInputs field not in the 20 required efficiency fields and not in required context {game_id, home_team, away_team, matchup_season, matchup_week, rest_days_home, rest_days_away} must be None and recorded; populating = scope change → CoS; emitter pre-call gate → ROW REJECT. MATCH D1 prefer catch-all.
+- O-d optional: §7 W1–W7 incomplete T1 → WEEK REJECT (not "ROW REJECT those games' rows"). CLOSED.
+Parents v1 24600552 + RETURN d2587de7 UNTOUCHED (re-hash OK).
+
+D. PRIOR STANDING (unchanged; reaffirmed, not re-litigated)
+20 fields @1b39; silent-default REJECT; T1–T5 bind; week≤8 as-of bind; through-W8/MNF; no 2025 prior; E2 timing record-only; locks; ≠emit authorization chain (DATA_READY + IMV ACCEPT + paper gates + new CoS CLEAR).
+
+E. OBSERVATIONS (non-blocking; bind DATA_READY / emit order — not contract defects)
+O-a: DATA_READY must prove week≤8 consumption key (not naive week=week builder join) with per-row evidence / input hash.
+O-b: "each team played ≥7" prove from sealed 2026 schedule at DATA grade.
+O-c: rest_days_from_schedule is DOW heuristic — record function+values in manifest.
+O-d CLOSED in v2 (see C).
+O-e: Prior PASS_PAPER O-a/O-b (D3 vs row reject; frozen-at-pin/OFF) remain for eventual E1 emit order.
+
+F. SCOPE
+Read: remotion ORDER a0e42016, v1, v2, prior RETURN d2587de7, DECISION 751dd63c, CoS ACCEPT packet. Full v1→v2 diff. Did not re-open code beyond prior grade evidence. NOT opened: outcomes, closes, IF CSVs, holdouts, G34, books.py, registers. No edits. ≠emit ≠E2 ≠C10 ≠CERT ≠DATA ACCEPT.
+
+G. BOARD
+ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2 b41f4b43: PASS_CONTRACT · D1 CLOSED
+Operative contract for Cursor W1–W8 dataset validation.
+Next: CoS ACCEPT; IMV standby Cursor DATA_READY|DATA_PARTIAL → independent provenance/integrity/through-W8/cutoff/leakage/IF-consumption verify vs this contract. Incomplete W8 → fail closed.
+Locks: NFL NO-GO · CERT=0 · Coming Soon ON · F2 frozen · C10 HOLD · Odds HOLD 70c56700 · overlays OFF

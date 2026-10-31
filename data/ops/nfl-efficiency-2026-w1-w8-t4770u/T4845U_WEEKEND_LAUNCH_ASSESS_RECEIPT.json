@@ -1,0 +1,116 @@
+{
+  "ticket": "t4845u",
+  "filed_utc": "2026-10-31T01:46:00Z",
+  "verdict": "READY_ASSESS",
+  "weekend_emit": "BLOCKED",
+  "data_ready_claimed": false,
+  "emit": false,
+  "merge_663": false,
+  "touched_667": false,
+  "w8_finals_invented": false,
+  "as_of_weakened": false,
+  "alex_w9_plan": "d5df371f preserved separately; not reopened",
+  "lineage": {
+    "accepted_tip": "ba9e842631b6c3421fedbd9baa819e1aef571b37",
+    "imv_data_partial_accept": "c674da77",
+    "contract": "b41f4b43",
+    "pass_contract": "1a53bbd3",
+    "schedule_sha256": "d88ae73440d3da87198ddb9d8986e0a19773cd3626215e495138907c44ff43fe",
+    "caller_tip_ro": "b6d019b051f13156354504097d1635b64ab7ceae",
+    "caller_pr": "#667 DRAFT — RO only, not edited",
+    "if_source_pin": "52d9e909 @ 1b39f4e9"
+  },
+  "wake_correction": {
+    "live_timer": "t4770u-w8-complete-data-ready",
+    "live_fire_utc": "2026-11-03T14:00:22Z",
+    "live_fire_et": "2026-11-03T09:00:00-05:00",
+    "measured_from": "MNF kickoff, not final",
+    "mnf_kickoff_utc": "2026-11-03T01:15:00Z",
+    "mnf_kickoff_et": "2026-11-02T20:15:00-05:00",
+    "hours_after_kickoff": 12.76,
+    "hours_after_final": null,
+    "final_declared": false,
+    "planning_expected_final_band_utc": ["2026-11-03T04:15:00Z", "2026-11-03T05:00:00Z"],
+    "planning_note": "kickoff+3h00–3h45 planning band only; not a final; do not invent scores",
+    "proposed_first_wake_utc": "2026-11-03T13:00:00Z",
+    "proposed_first_wake_et": "2026-11-03T08:00:00-05:00",
+    "proposed_rule": "late expected-final band 05:00Z + 8h PBP buffer; then 6h retry if not 14/14",
+    "live_timer_moved": false
+  },
+  "weekend_slate_ro": {
+    "sealed_complete": "1/14",
+    "complete_game_id": "2026-W08-CAR@GB",
+    "remaining_not_yet_kicked": 13,
+    "source": "STATUS.json week8_missing + canonical schedule d88ae734; no new fetch",
+    "games": [
+      {"game_id": "2026-W08-ARI@DAL", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "FOX"},
+      {"game_id": "2026-W08-ATL@TB", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "FOX"},
+      {"game_id": "2026-W08-BAL@BUF", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "CBS"},
+      {"game_id": "2026-W08-CLE@PIT", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "CBS"},
+      {"game_id": "2026-W08-IND@JAX", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "CBS"},
+      {"game_id": "2026-W08-LV@NYJ", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "FOX"},
+      {"game_id": "2026-W08-MIN@DET", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "FOX"},
+      {"game_id": "2026-W08-TEN@CIN", "kickoff_utc": "2026-11-01T18:00:00Z", "kickoff_et": "2026-11-01 13:00 EST", "network": "CBS"},
+      {"game_id": "2026-W08-LAC@LAR", "kickoff_utc": "2026-11-01T21:05:00Z", "kickoff_et": "2026-11-01 16:05 EST", "network": "FOX"},
+      {"game_id": "2026-W08-KC@DEN", "kickoff_utc": "2026-11-01T21:25:00Z", "kickoff_et": "2026-11-01 16:25 EST", "network": "CBS"},
+      {"game_id": "2026-W08-NE@MIA", "kickoff_utc": "2026-11-01T21:25:00Z", "kickoff_et": "2026-11-01 16:25 EST", "network": "CBS"},
+      {"game_id": "2026-W08-PHI@WAS", "kickoff_utc": "2026-11-02T01:20:00Z", "kickoff_et": "2026-11-01 20:20 EST", "network": "NBC"},
+      {"game_id": "2026-W08-CHI@SEA", "kickoff_utc": "2026-11-03T01:15:00Z", "kickoff_et": "2026-11-02 20:15 EST", "network": "ESPN"}
+    ]
+  },
+  "caller_path": {
+    "implemented": false,
+    "bypass_written": false,
+    "rating_week_changed": false,
+    "feasible": "SMALL_DRAFT_PATCH_NEEDS_OWNER_CLEAR",
+    "impossible_under_current_code": false,
+    "current_gate": {
+      "code": "THROUGH_W8_DATA_ACCEPT_MISSING",
+      "where": "nfl_offline_if_caller.invoke_independent_fair → require_through_w8_data_accept (unconditional)",
+      "file_ro": "origin/cursor/t4838u-offline-if-caller-1c0c:services/model-service/src/services/nfl_offline_if_caller.py",
+      "accept_record": "THROUGH_W8_DATA_ACCEPT.json status=ABSENT data_accept=false",
+      "wired_for": "W9 path (dry-run matchup_week=9, rating_week=8)"
+    },
+    "asof_identity_unchanged": {
+      "rule": "rating_week = target_week - 1 (PASS_ASOF_BOUNDARY cf514078; no silent substitute)",
+      "w8_targets": "matchup_week=8 → rating_week=7",
+      "through_w7_panel": "DATA_PARTIAL_ACCEPT c674da77 tip ba9e8426 as_of_week=7 is the matching completed-data week"
+    },
+    "minimal_eng_change_not_implemented": [
+      "Do not change resolve_pregame_rating_week / contiguous formula",
+      "Scope require_through_w8_data_accept to matchup_week >= 9 only (W9 path keeps THROUGH_W8 gate)",
+      "For matchup_week == 8, require a sealed through-W7 record pin (c674da77 / ba9e8426 / as_of_week=7). DATA_PARTIAL_ACCEPT must stay labeled PARTIAL — do not write data_accept=true",
+      "available_rating_weeks must include 7; history_games must exclude unplayed W8",
+      "Efficiency payload from sealed through-W7 consume pack; OUTSIDE catch-all None; market_blend=0",
+      "Patch belongs on #667 DRAFT after OWNER CLEAR — not on #663; this receipt does not implement it"
+    ],
+    "pin_contract_implications": [
+      "Alex v2 b41f4b43 is written for W9 consume of through-W8. W8-target consume of through-W7 is the same rating_week=target-1 identity, a different slate, not a silent as-of weaken",
+      "DATA_PARTIAL_ACCEPT c674da77 ≠ DATA_ACCEPT ≠ scoring-admissible ≠ emit CLEAR (IMV grade explicit)",
+      "PASS_CONTRACT 1a53bbd3 ≠ DATA ACCEPT",
+      "Using PARTIAL_ACCEPT as a W8-target consume pin requires OWNER CLEAR + IMV note that the W8-target use is in-scope; must not relabel PARTIAL as ACCEPT",
+      "W9 plan d5df371f and THROUGH_W8 gate stay in force for target_week>=9"
+    ]
+  },
+  "evidence_required_before_weekend_emit": [
+    "impl sha: caller tip + nfl_simulator.py 52d9e909 @ 1b39f4e9 + nfl_pregame_asof PASS_ASOF_BOUNDARY cf514078",
+    "as-of: matchup_week=8, rating_week=7, as_of_ts ≤ emit_ts, forecast_cutoff_ts < first remaining W8 kickoff (2026-11-01T18:00:00Z / 13:00 EST)",
+    "panel pin: ba9e8426 STATUS sha 81d7dd9f + IMV DATA_PARTIAL_ACCEPT c674da77 + contract b41f4b43; as_of_week=7; 2025_prior_used=false",
+    "dry-run digest: operational-shaped W8-target rows (not SYN-2099) with 20/20 consume + input-hash perturbation + market_blend=0 + catch-all None",
+    "fail-closed proof: W9/target_week>=9 still THROUGH_W8_DATA_ACCEPT_MISSING; sportsbook/HL/blend/E1-label still reject; no rating_week substitute",
+    "OWNER CLEAR for weekend W8 subscription-quality numbers-only (and a separate CLEAR if E1 scoring-admissible is wanted)",
+    "IMV note that PARTIAL_ACCEPT consume for W8 targets is accepted-as-pin, not promoted to DATA_ACCEPT / DATA_READY",
+    "locks remain: NFL NO-GO · CERT=0 · Coming Soon ON · no stake tags · ≠merge #663/#667 until CLEAR"
+  ],
+  "locks": [
+    "NFL NO-GO",
+    "CERT=0",
+    "Coming Soon ON",
+    "F2 frozen",
+    "C10 HOLD",
+    "Odds HOLD 70c56700",
+    "overlays OFF",
+    "#663 DRAFT ≠merge",
+    "#667 ≠touch ≠bypass"
+  ]
+}
