@@ -5,27 +5,20 @@ import { UserRole, SubscriptionStatus } from "#prisma";
 
 export type ProAccessState = "authorized" | "unauthenticated" | "forbidden";
 
-function parseBooleanEnv(value: string | undefined): boolean | null {
-  if (!value) return null;
-  const token = value.trim().toLowerCase();
-  if (["1", "true", "yes", "y", "on"].includes(token)) return true;
-  if (["0", "false", "no", "n", "off"].includes(token)) return false;
-  return null;
-}
-
 /**
- * Temporary launch-mode override for paid gating.
- * Set OPEN_ACCESS_PREVIEW=false (and NEXT_PUBLIC_OPEN_ACCESS_PREVIEW=false)
- * when full paywall enforcement is ready.
+ * Opt-in launch override for paid Pro gating. Fail-closed by default.
+ *
+ * Only the exact server string "true" (after trim, case-insensitive) on
+ * OPEN_ACCESS_PREVIEW opens. Unset, invalid, garbage, and aliases
+ * (1/yes/y/on/0/false/no/n/off) are closed.
+ *
+ * NEXT_PUBLIC_OPEN_ACCESS_PREVIEW is UI-only (build-inlined) and must never
+ * grant server Pro access. Default is closed.
  */
 export function isOpenAccessPreviewEnabled(): boolean {
-  const serverValue = parseBooleanEnv(process.env.OPEN_ACCESS_PREVIEW);
-  if (serverValue !== null) return serverValue;
-  const publicValue = parseBooleanEnv(
-    process.env.NEXT_PUBLIC_OPEN_ACCESS_PREVIEW,
-  );
-  if (publicValue !== null) return publicValue;
-  return true;
+  const raw = process.env.OPEN_ACCESS_PREVIEW;
+  if (typeof raw !== "string") return false;
+  return raw.trim().toLowerCase() === "true";
 }
 
 /**
@@ -53,7 +46,8 @@ export async function isEntitledProUser(): Promise<boolean> {
  * - forbidden: signed in but not entitled
  * - authorized: PRO/ADMIN role or active subscription
  *
- * When OPEN_ACCESS_PREVIEW is on, returns authorized (launch mode).
+ * When server OPEN_ACCESS_PREVIEW is exactly "true", returns authorized
+ * (opt-in launch override). Unset/invalid defaults closed.
  */
 export async function getProAccessState(): Promise<ProAccessState> {
   if (isOpenAccessPreviewEnabled()) {

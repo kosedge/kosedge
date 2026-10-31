@@ -83,16 +83,40 @@ export function pageDataBoardOccupancy(body: PageDataBoardBody): number {
   return max;
 }
 
+export type PageDataJsonInit = {
+  status?: number;
+  /**
+   * "private" forces private,no-store (Pro-gated authorized bodies).
+   * Default "shared" uses occupancy (public assemble / free page-data only).
+   */
+  cache?: "shared" | "private";
+};
+
 /** JSON response with page-data Cache-Control (cacheable only when board non-empty). */
 export function pageDataJsonResponse<T extends PageDataBoardBody>(
   body: T,
-  init?: { status?: number },
+  init?: PageDataJsonInit,
 ): NextResponse {
   const status = init?.status ?? 200;
+  const forcePrivate = init?.cache === "private";
   return NextResponse.json(body, {
     status,
     headers: pageDataCacheHeaders({
-      cacheable: isPageDataCountCacheable(status, pageDataBoardOccupancy(body)),
+      cacheable:
+        !forcePrivate &&
+        isPageDataCountCacheable(status, pageDataBoardOccupancy(body)),
     }),
   });
+}
+
+/**
+ * Pro-gated page-data — never shared-cacheable.
+ * Authorized 200s must not be reusable across users at the CDN
+ * (no public s-maxage; dual Cache-Control + CDN-Cache-Control stay no-store).
+ */
+export function pageDataPrivateJsonResponse<T extends PageDataBoardBody>(
+  body: T,
+  init?: { status?: number },
+): NextResponse {
+  return pageDataJsonResponse(body, { ...init, cache: "private" });
 }

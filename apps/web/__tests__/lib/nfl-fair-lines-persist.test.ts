@@ -17,7 +17,7 @@ describe("fetchNflFairLines persist=0 (read-only page-data)", () => {
   it("page-data fair-lines route opts out of odds_snapshots persist", () => {
     const fair = readApp("app/api/nfl/fair-lines/route.ts");
     expect(fair).toContain("persistOdds: false");
-    expect(fair).toContain("pageDataJsonResponse");
+    expect(fair).toContain("pageDataPrivateJsonResponse");
   });
 
   it("sends persist=0 on the model-service URL by default", async () => {

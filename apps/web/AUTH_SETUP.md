@@ -94,6 +94,8 @@ Pro access is determined by:
 1. User has `PRO` or `ADMIN` role, OR
 2. User has `ACTIVE` subscription status with valid `subscriptionEnd` date
 
+`OPEN_ACCESS_PREVIEW` is an opt-in launch override and **fail-closes by default**. Unset, invalid, or alias values do not grant Pro. Only the exact server string `true` (trim, case-insensitive) on `OPEN_ACCESS_PREVIEW` opens. `NEXT_PUBLIC_OPEN_ACCESS_PREVIEW` is UI-only and does not grant server Pro access.
+
 Use the `isProUser()` function to check:
 
 ```typescript
@@ -106,7 +108,7 @@ if (await isProUser()) {
 
 ### Protected Routes
 
-Paid routes under `/pro/*` are protected at the shared Pro layout boundary (`app/(pro)/pro/layout.tsx`) using `getProAccessState()`. Unauthenticated users are redirected to `/auth/signin`; signed-in but non-entitled users are redirected to `/pricing`.
+Paid routes under `/pro/*` are protected at the shared Pro layout boundary (`app/(pro)/pro/layout.tsx`) using `getProAccessState()`. Unauthenticated users are redirected to `/auth/signin`; signed-in but non-entitled users are redirected to `/pricing`. With `OPEN_ACCESS_PREVIEW` unset or invalid, non-entitled users are closed (fail-closed default).
 
 ### Client-Side Session
 
