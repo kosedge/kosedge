@@ -4,7 +4,7 @@ import { fetchNflEdgesDesk, type DeskMarketType } from "@/lib/nfl-edges";
 import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import {
   pageDataCacheHeaders,
-  pageDataJsonResponse,
+  pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
@@ -30,7 +30,7 @@ const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
  * Desk already Promise.all's fair-lines ∥ edges/today ∥ props/board.
  * Client-fetch so HTML is not held open on that waterfall (Alex).
  * Uses pageData timeout (25s); fair-lines transport failures → 503/504.
- * Cache-Control s-maxage=45 on non-empty 200 only (never 503/504/count=0).
+ * Cache-Control private,no-store on authorized 200s (never shared CDN).
  */
 export async function GET(req: Request) {
   const access = await getProAccessState();
@@ -86,7 +86,7 @@ export async function GET(req: Request) {
       timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
       throwOnTransportError: true,
     });
-    return pageDataJsonResponse(desk);
+    return pageDataPrivateJsonResponse(desk);
   } catch (err) {
     return pageDataUpstreamErrorResponse(err);
   }

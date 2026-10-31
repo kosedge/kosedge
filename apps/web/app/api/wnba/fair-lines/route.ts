@@ -4,7 +4,7 @@ import { toFairLinesApiBoard } from "@/lib/fair-lines-api-board";
 import { fetchWnbaFairLines } from "@/lib/wnba-fair-lines";
 import {
   pageDataCacheHeaders,
-  pageDataJsonResponse,
+  pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +30,7 @@ export async function GET(req: Request) {
     Number.isFinite(daysAheadRaw) && daysAheadRaw > 0 ? daysAheadRaw : 5;
 
   const board = await fetchWnbaFairLines({ gameDate, daysAhead });
-  return pageDataJsonResponse(
+  return pageDataPrivateJsonResponse(
     toFairLinesApiBoard({
       sport: "wnba",
       sportLabel: "WNBA",

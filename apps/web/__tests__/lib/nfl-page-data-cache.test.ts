@@ -8,6 +8,7 @@ import {
   pageDataBoardOccupancy,
   pageDataCacheHeaders,
   pageDataJsonResponse,
+  pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UpstreamTimeoutError } from "@/lib/upstream-fetch";
@@ -135,20 +136,45 @@ describe("page-data cache headers (45s band)", () => {
     expect(unreachable.headers.get("Cache-Control")).toBe(PAGE_DATA_NO_STORE);
   });
 
-  it("source-locks assemble + fair-lines + edges-desk through pageDataJsonResponse CDN dual headers", () => {
+  it("private helper never shares a non-empty Pro board", () => {
+    const res = pageDataPrivateJsonResponse({
+      count: 16,
+      oddsAsOf: "2026-09-03T14:00:00Z",
+      lines: [{ gameId: "g1" }],
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Cache-Control")).toBe(PAGE_DATA_NO_STORE);
+    expect(res.headers.get("CDN-Cache-Control")).toBe(PAGE_DATA_NO_STORE);
+    expect(res.headers.get("Cache-Control")).not.toContain("s-maxage");
+    expect(res.headers.get("Cache-Control")).not.toContain("public");
+  });
+
+  it("source-locks assemble shared cache vs Pro-gated private,no-store", () => {
     const cacheLib = readApp("lib/page-data-cache.ts");
     expect(cacheLib).toContain("CDN-Cache-Control");
     expect(cacheLib).toContain("PAGE_DATA_CACHE_CONTROL");
+    expect(cacheLib).toContain("pageDataPrivateJsonResponse");
     expect(cacheLib).toContain("s-maxage");
     expect(cacheLib).toMatch(/PAGE_DATA_CACHE_S_MAXAGE = 45/);
 
+    const assemble = readApp("app/api/edge-board/[sport]/assemble/route.ts");
+    expect(assemble).toContain("pageDataJsonResponse");
+    expect(assemble).not.toContain("pageDataPrivateJsonResponse");
+    expect(assemble).not.toContain("Date.now()");
+
     for (const rel of [
-      "app/api/edge-board/[sport]/assemble/route.ts",
       "app/api/nfl/fair-lines/route.ts",
+      "app/api/ncaaf/fair-lines/route.ts",
+      "app/api/cfb/fair-lines/route.ts",
+      "app/api/mlb/fair-lines/route.ts",
+      "app/api/nba/fair-lines/route.ts",
+      "app/api/nhl/fair-lines/route.ts",
+      "app/api/wnba/fair-lines/route.ts",
       "app/api/nfl/edges-desk/route.ts",
     ]) {
       const src = readApp(rel);
-      expect(src).toContain("pageDataJsonResponse");
+      expect(src).toContain("pageDataPrivateJsonResponse");
+      expect(src).not.toContain("pageDataJsonResponse(");
       expect(src).not.toContain("Date.now()");
     }
   });

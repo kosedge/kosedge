@@ -4,7 +4,7 @@ import { toFairLinesApiBoard } from "@/lib/fair-lines-api-board";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import {
   pageDataCacheHeaders,
-  pageDataJsonResponse,
+  pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +28,7 @@ export async function GET(req: Request) {
 
   // Soft-empty on transport — prefer honest 200 over bare 404 for Pro desks.
   const board = await fetchMlbFairLines({ gameDate });
-  return pageDataJsonResponse(
+  return pageDataPrivateJsonResponse(
     toFairLinesApiBoard({
       sport: "mlb",
       sportLabel: "MLB",

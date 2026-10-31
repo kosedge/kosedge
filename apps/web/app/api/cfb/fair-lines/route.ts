@@ -6,7 +6,7 @@ import {
 } from "@/lib/fair-lines-api-board";
 import {
   pageDataCacheHeaders,
-  pageDataJsonResponse,
+  pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export async function GET() {
     );
   }
 
-  return pageDataJsonResponse(
+  return pageDataPrivateJsonResponse(
     honestEmptyFairLinesBoard({
       sport: "cfb",
       slateStatus: "not_connected",
