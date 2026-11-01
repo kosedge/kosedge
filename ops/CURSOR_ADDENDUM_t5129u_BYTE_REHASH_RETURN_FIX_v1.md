@@ -64,6 +64,6 @@ New: mutate+fresh rebind refuse; unrelated freeze+rebind refuse; caller extract 
 | COS ORDER file          | sha8 `2a099402` (unstamped file `2a099402…`) |
 | parent impl             | `f4f6e311e8af4d72163d71f389d6294e0e5d5f3b` |
 | parent HEAD             | `2847ffc168fcbe10d36c9db5f6759bbfbafb65aa` |
-| this implementation tip | *(stamped after commit)*                   |
+| this implementation tip | `a957745a6aed30e8e0b279410f525c3cf80a3701` |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
