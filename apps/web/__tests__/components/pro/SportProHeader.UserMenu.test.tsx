@@ -89,10 +89,9 @@ describe("SportProHeader UserMenu mount", () => {
     render(<SportProHeader activeSport="nba" />);
 
     const desk = screen.getByRole("navigation", { name: "NBA research desk" });
-    expect(within(desk).getByRole("link", { name: "Overview" })).toHaveAttribute(
-      "href",
-      "/pro/nba/overview",
-    );
+    expect(
+      within(desk).getByRole("link", { name: "Overview" }),
+    ).toHaveAttribute("href", "/pro/nba/overview");
     expect(
       within(desk).getByRole("link", { name: "Edge Board" }),
     ).toHaveAttribute("href", "/edge-board/nba");
@@ -147,7 +146,9 @@ describe("SportProHeader UserMenu mount", () => {
 
     const overlay = document.querySelector(".fixed.inset-0.z-50");
     expect(overlay).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Sign Out" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Sign Out" }),
+    ).toBeInTheDocument();
     expect(signOut).not.toHaveBeenCalled();
   });
 
