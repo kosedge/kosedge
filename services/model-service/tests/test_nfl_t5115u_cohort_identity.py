@@ -47,6 +47,11 @@ def test_pin_metric_cohorts_splits_eval_and_dev():
     assert pins["dev"]["n"] == 3
     assert pins["dev"]["wildcard_2020_w18_game_ids"] == ["2020_18_BAL_TEN"]
     assert pins["dev"]["not_pooled_into_eval"] is True
+    assert pins["dev_reg"]["n"] == 2
+    assert pins["dev_reg"]["game_ids"] == ["2020_02_A", "2021_02_B"]
+    assert pins["non_reg_wildcard"]["label"] == "NON_REG_WILDCARD"
+    assert pins["non_reg_wildcard"]["game_ids"] == ["2020_18_BAL_TEN"]
+    assert pins["non_reg_wildcard"]["freeze_body_rewritten"] is False
 
 
 def test_refuse_default_to_full_mixed_freeze():
@@ -121,8 +126,16 @@ def test_live_freeze_eval_pin_and_2020_wildcard():
         "f240fde23025d7584a5f8031ec1e0e74f902be1100ce1630aca4f2f20ed326b0"
     )
     assert set(pins["dev"]["wildcard_2020_w18_game_ids"]) == set(WILDCARD_2020_W18)
+    assert pins["dev_reg"]["n"] == 437
+    assert pins["dev_reg"]["n_by_season"] == {2020: 210, 2021: 227}
+    assert pins["non_reg_wildcard"]["n"] == 6
+    assert pins["non_reg_wildcard"]["label"] == "NON_REG_WILDCARD"
+    assert set(pins["non_reg_wildcard"]["game_ids"]) == set(WILDCARD_2020_W18)
     assert freeze["cohort_sha256"] == (
         "af129383acdad81316897cea6a1d5b48ca51647b3fc51092b55b29ca284908bc"
+    )
+    assert freeze["forecast_sha256"] == (
+        "f326a39aeaf4bc43b139f2441fab3c07c2d4e6d5bb363ecea421010d5983a458"
     )
 
 
@@ -138,4 +151,4 @@ def test_declared_reg_hold_uses_pbp_256_not_pin_262():
     assert by[2020]["excluded_n"] == 46
     assert by[2020]["hold"] is False
     assert table["any_season_hold"] is False
-    assert table["quote_eligibility"] == "REQUIRED_BEFORE_METRICS_NOT_APPLIED_t5115u"
+    assert table["quote_eligibility"] == "REQUIRED_FAIL_CLOSED_t5116u"

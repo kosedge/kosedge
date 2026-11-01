@@ -12,6 +12,7 @@ import json
 from collections import Counter
 from typing import Any, Mapping, Sequence
 
+from .inputs import QUOTE_MANIFEST_SHA256
 from .q2 import T5107U_DEV_SEASONS, T5107U_EVAL_SEASONS
 
 
@@ -71,9 +72,13 @@ def pin_metric_cohorts(forecasts: Sequence[Mapping[str, Any]]) -> dict[str, Any]
         raise MetricCohortRefuse("EVAL metric cohort empty — refuse")
     if len(eval_ids) != len(set(eval_ids)) or len(dev_ids) != len(set(dev_ids)):
         raise MetricCohortRefuse("duplicate game_id in metric cohort")
-    wildcard = [gid for gid in dev_ids if gid in WILDCARD_2020_W18]
+    wildcard = [gid for gid in dev_ids if gid in set(WILDCARD_2020_W18)]
+    dev_reg_ids = [gid for gid in dev_ids if gid not in set(WILDCARD_2020_W18)]
     eval_by_season = dict(Counter(_season(r) for r in split["EVAL"]))
     dev_by_season = dict(Counter(_season(r) for r in split["DEV"]))
+    dev_reg_by_season = dict(
+        Counter(_season(r) for r in split["DEV"] if str(r["game_id"]) not in set(WILDCARD_2020_W18))
+    )
     return {
         "schema_version": "nfl-t5115u-metric-cohorts-v1",
         "label": LABEL,
@@ -101,10 +106,31 @@ def pin_metric_cohorts(forecasts: Sequence[Mapping[str, Any]]) -> dict[str, Any]
             "wildcard_2020_w18_game_ids": wildcard,
             "not_pooled_into_eval": True,
         },
+        "dev_reg": {
+            "metric_split": DEV_METRIC_SPLIT,
+            "season_type": "REG",
+            "seasons": list(T5107U_DEV_SEASONS),
+            "game_ids": dev_reg_ids,
+            "n": len(dev_reg_ids),
+            "n_by_season": dev_reg_by_season,
+            "cohort_sha256": cohort_sha256(dev_reg_ids),
+            "not_pooled_into_eval": True,
+        },
+        "non_reg_wildcard": {
+            "label": "NON_REG_WILDCARD",
+            "season_type": "POST",
+            "round": "WILDCARD_2020_21",
+            "game_ids": wildcard,
+            "n": len(wildcard),
+            "cohort_sha256": cohort_sha256(wildcard),
+            "in_eval": False,
+            "in_declared_reg_2020": False,
+            "freeze_body_rewritten": False,
+        },
         "notes": [
             "Primary EVAL accuracy = 2022–23 REG only.",
             "DEV 2020–21 retained separately; never pooled into EVAL metrics.",
-            "2020 W18 Wild Card identities stay in the freeze DEV list, labeled, and are outside the declared 256 REG universe.",
+            "DEV REG = freeze DEV minus 6 NON_REG_WILDCARD (2020_18_*). Freeze body f326a39a untouched.",
         ],
     }
 
@@ -136,6 +162,49 @@ def refuse_pooled_or_default_eval(
         raise MetricCohortRefuse("EVAL metric cohort may not include DEV 2020–21 games")
 
 
+def refuse_eval_quote_and_hold(
+    forecasts: Sequence[Mapping[str, Any]],
+    eligible_cohorts: Mapping[str, Any] | None,
+) -> None:
+    """Fail-closed: EVAL path needs quote-eligible cohort + G5 HOLD before join."""
+    seasons = {_season(r) for r in forecasts}
+    if not (seasons & set(T5107U_EVAL_SEASONS)):
+        return
+    if eligible_cohorts is None:
+        raise MetricCohortRefuse(
+            "quote-eligible EVAL cohort required before outcome join (manifest 6a1c1b37)"
+        )
+    if not eligible_cohorts.get("sealed_after_eligibility_before_outcome_join"):
+        raise MetricCohortRefuse("eligible cohorts were not sealed before outcome join")
+    if str(eligible_cohorts.get("quote_manifest_sha256") or "") != QUOTE_MANIFEST_SHA256:
+        raise MetricCohortRefuse(
+            "quote-eligible EVAL cohort must be from quote manifest 6a1c1b37"
+        )
+    pins = pin_metric_cohorts(forecasts)
+    eval_ids = set(pins["eval"]["game_ids"])
+    allow = list((eligible_cohorts.get("margin_cohort") or {}).get("game_ids") or [])
+    if not allow:
+        raise MetricCohortRefuse("quote-eligible EVAL margin cohort empty")
+    extra = sorted({gid for gid in allow if gid not in eval_ids})
+    if extra:
+        raise MetricCohortRefuse("eligible games not in EVAL metric cohort (2022–23 REG)")
+    hold = eligible_cohorts.get("g5_hold")
+    if not isinstance(hold, Mapping):
+        raise MetricCohortRefuse("G5 HOLD required before outcome join")
+    rows = list(hold.get("seasons") or [])
+    seen = {int(row.get("season") or 0) for row in rows}
+    if seen != set(DECLARED_REG_UNIVERSE):
+        raise MetricCohortRefuse("G5 HOLD must cover declared PBP REG 2020–23")
+    for row in rows:
+        season = int(row["season"])
+        if int(row.get("declared_n") or 0) != DECLARED_REG_UNIVERSE[season]:
+            raise MetricCohortRefuse("G5 HOLD declared n must be owned PBP REG")
+        if row.get("hold"):
+            raise MetricCohortRefuse("G5 30% per-season HOLD tripped — refuse scoring")
+    if hold.get("any_season_hold"):
+        raise MetricCohortRefuse("G5 30% per-season HOLD tripped — refuse scoring")
+
+
 def declared_reg_hold_table(
     *,
     recon_excluded_n: Mapping[int, int],
@@ -159,7 +228,7 @@ def declared_reg_hold_table(
         "hold_threshold": PER_SEASON_EXCLUSION_HOLD,
         "any_season_hold": any_hold,
         "seasons": seasons,
-        "quote_eligibility": "REQUIRED_BEFORE_METRICS_NOT_APPLIED_t5115u",
+        "quote_eligibility": "REQUIRED_FAIL_CLOSED_t5116u",
         "notes": [
             "Declared n is owned PBP REG, not games.csv week≤18.",
             "2020 pin 262 − declared 256 = 6 Wild Card rows preserved, not extra REG games.",
