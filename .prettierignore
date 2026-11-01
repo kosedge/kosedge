@@ -34,3 +34,9 @@ apps/android-odds-widget/local.properties
 # Ops artifacts / reports (not source; keep CI format check focused)
 data/
 services/model-service/data/
+
+# Q2 research sealed pins + generated sidecar artifacts (do not reformat)
+research/q2_phase_b_t5009u/frozen/FROZEN_CONFIG_Q2PB_t5009u.json
+research/q2_phase_b_t5009u/frozen/FROZEN_CONFIG_Q2PB_t5009u.md
+research/q2_phase_b_t5009u/artifacts/
+research/q2_phase_b_t5009u/data/
