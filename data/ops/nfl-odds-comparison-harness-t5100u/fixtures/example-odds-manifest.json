@@ -1,0 +1,111 @@
+{
+  "schema_version": "nfl-odds-comparison-manifest-v1",
+  "label": "SYNTHETIC",
+  "cert_candidate": 0,
+  "purpose": "synthetic_comparison_only",
+  "sport": "nfl",
+  "provenance": "synthetic_owned_odds",
+  "games": [
+    {
+      "game_id": "2020_01_HOU_KC",
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home_team": "KC",
+      "away_team": "HOU",
+      "kickoff": "2020-09-10T20:20:00Z",
+      "forecast_cutoff": "2020-09-10T20:00:00Z"
+    },
+    {
+      "game_id": "2020_01_NYJ_BUF",
+      "event_id": "evt-buf-nyj",
+      "season": 2020,
+      "game_date": "2020-09-13",
+      "home_team": "BUF",
+      "away_team": "NYJ",
+      "kickoff": "2020-09-13T17:00:00Z",
+      "forecast_cutoff": "2020-09-13T17:00:00Z"
+    }
+  ],
+  "quotes": [
+    {
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home": "Kansas City Chiefs",
+      "away": "Houston Texans",
+      "book": "draftkings",
+      "market": "spreads",
+      "spread_home": -9.5,
+      "price_home": -110,
+      "price_away": -110,
+      "captured_at": "2020-09-10T19:50:00Z",
+      "snapshot_kind": "mid",
+      "source": "synthetic",
+      "provenance": "synthetic_owned_odds"
+    },
+    {
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home": "Kansas City Chiefs",
+      "away": "Houston Texans",
+      "book": "draftkings",
+      "market": "totals",
+      "total_points": 54.5,
+      "over_price": -108,
+      "under_price": -112,
+      "captured_at": "2020-09-10T19:50:00Z",
+      "snapshot_kind": "mid",
+      "source": "synthetic",
+      "provenance": "synthetic_owned_odds"
+    },
+    {
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home": "Kansas City Chiefs",
+      "away": "Houston Texans",
+      "book": "draftkings",
+      "market": "h2h",
+      "price_home": -320,
+      "price_away": 260,
+      "captured_at": "2020-09-10T19:50:00Z",
+      "snapshot_kind": "mid",
+      "source": "synthetic",
+      "provenance": "synthetic_owned_odds"
+    },
+    {
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home": "Kansas City Chiefs",
+      "away": "Houston Texans",
+      "book": "draftkings",
+      "market": "spreads",
+      "spread_home": -10.5,
+      "price_home": -110,
+      "price_away": -110,
+      "captured_at": "2020-09-10T20:15:00Z",
+      "snapshot_kind": "close",
+      "source": "synthetic",
+      "provenance": "synthetic_owned_odds"
+    },
+    {
+      "event_id": "evt-buf-nyj",
+      "season": 2020,
+      "game_date": "2020-09-13",
+      "home": "Buffalo Bills",
+      "away": "New York Jets",
+      "book": "fanduel",
+      "market": "spreads",
+      "spread_home": 3.0,
+      "price_home": -105,
+      "price_away": -115,
+      "captured_at": "2020-09-13T16:30:00Z",
+      "snapshot_kind": "mid",
+      "source": "synthetic",
+      "provenance": "synthetic_owned_odds"
+    }
+  ]
+}
