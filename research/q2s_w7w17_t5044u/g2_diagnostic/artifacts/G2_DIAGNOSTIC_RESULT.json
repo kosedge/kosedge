@@ -1,0 +1,616 @@
+{
+  "alex_go": {
+    "binds_frozen_manifest_sha256": "d4f24894f62a5dd27df874178f13c256efdcb01aa8afac9ff64e3c085a0d3a4c",
+    "bound": true
+  },
+  "binary": {
+    "disclosure": "IF if_forecast_wp_home is persisted at legacy 4-decimal rounding. Joint home_wp is persisted as #(D>0)/N; forecast-side D=0 counts away.",
+    "if": {
+      "brier": 0.22380949092198582,
+      "legacy_rounding": "legacy 4-decimal IF WP",
+      "log_loss": {
+        "clip_interval": [
+          0.000125,
+          0.999875
+        ],
+        "eps": 0.000125,
+        "log_loss_clipped": 0.639895212327675,
+        "log_loss_original": 0.639895212327675,
+        "n": 141,
+        "n_draws": 4000,
+        "n_probs_clipped": 0,
+        "originals_retained": true
+      },
+      "n_binary": 141,
+      "n_ties": 0,
+      "n_total": 141,
+      "source": "if.if_forecast_wp_home",
+      "status": "computed"
+    },
+    "joint": {
+      "brier": 0.20850038741134752,
+      "legacy_rounding": "none \u2014 persisted home_wp = #(D>0)/N",
+      "log_loss": {
+        "clip_interval": [
+          0.000125,
+          0.999875
+        ],
+        "eps": 0.000125,
+        "log_loss_clipped": 0.6067710253486487,
+        "log_loss_original": 0.6067710253486487,
+        "n": 141,
+        "n_draws": 4000,
+        "n_probs_clipped": 0,
+        "originals_retained": true
+      },
+      "n_binary": 141,
+      "n_ties": 0,
+      "n_total": 141,
+      "source": "joint.home_wp",
+      "status": "computed"
+    },
+    "point": {
+      "n_binary": null,
+      "n_ties": null,
+      "source": "point.wp",
+      "status": "UNAVAILABLE"
+    }
+  },
+  "cert": 0,
+  "claims": {
+    "edge": false,
+    "lean": false,
+    "pass": false,
+    "play": false,
+    "retune": false,
+    "selection": false
+  },
+  "draws": {
+    "N": 4000,
+    "coverage_width_margin": {
+      "50pct": {
+        "coverage": 0.5390070921985816,
+        "equal_tail": [
+          0.25,
+          0.75
+        ],
+        "level": 0.5,
+        "mean_width": 19.04670955433982,
+        "n": 141,
+        "n_inside": 76
+      },
+      "80pct": {
+        "coverage": 0.8297872340425532,
+        "equal_tail": [
+          0.09999999999999998,
+          0.9
+        ],
+        "level": 0.8,
+        "mean_width": 35.975268450945435,
+        "n": 141,
+        "n_inside": 117
+      },
+      "90pct": {
+        "coverage": 0.9148936170212766,
+        "equal_tail": [
+          0.04999999999999999,
+          0.95
+        ],
+        "level": 0.9,
+        "mean_width": 45.89500770876747,
+        "n": 141,
+        "n_inside": 129
+      }
+    },
+    "coverage_width_total": {
+      "50pct": {
+        "coverage": 0.5460992907801419,
+        "equal_tail": [
+          0.25,
+          0.75
+        ],
+        "level": 0.5,
+        "mean_width": 18.993533696971948,
+        "n": 141,
+        "n_inside": 77
+      },
+      "80pct": {
+        "coverage": 0.7872340425531915,
+        "equal_tail": [
+          0.09999999999999998,
+          0.9
+        ],
+        "level": 0.8,
+        "mean_width": 35.99430413822571,
+        "n": 141,
+        "n_inside": 111
+      },
+      "90pct": {
+        "coverage": 0.900709219858156,
+        "equal_tail": [
+          0.04999999999999999,
+          0.95
+        ],
+        "level": 0.9,
+        "mean_width": 46.043788325680865,
+        "n": 141,
+        "n_inside": 127
+      }
+    },
+    "crps_margin_mean": 7.549007106369072,
+    "crps_total_mean": 7.713948534597698,
+    "if_distribution": "UNAVAILABLE",
+    "n": 141
+  },
+  "executed": true,
+  "gates_preserved": {
+    "cond": 34,
+    "j14_not_emitted": 141
+  },
+  "identity_boundary": {
+    "accept_tip": "bd51eb3e",
+    "look_consumed_sha8": "013d270a",
+    "look_tip": "8bea4ca3",
+    "note": "Cited identity boundary only. No LOOK invocation. No Q2 EVAL reopen. No counter rewrite.",
+    "q2_eval": "03a4dd90 CLOSED"
+  },
+  "label": "RETRO_FIT / DEV_RESEARCH",
+  "mae_rmse": {
+    "margin": {
+      "if": {
+        "mae": 11.227008463232384,
+        "rmse": 14.064062252776084
+      },
+      "joint": {
+        "mae": 10.544821308858754,
+        "rmse": 13.498362464329881
+      },
+      "point": {
+        "mae": 10.536287613359102,
+        "rmse": 13.492334655368603
+      }
+    },
+    "paired_mae_diff_margin": {
+      "joint_minus_if": -0.6821871543736269,
+      "joint_minus_point": 0.00853369549965346,
+      "point_minus_if": -0.6907208498732802
+    },
+    "paired_mae_diff_total": {
+      "joint_minus_if": 0.0016765601064025032,
+      "joint_minus_point": "UNAVAILABLE",
+      "point_minus_if": "UNAVAILABLE"
+    },
+    "paired_rmse_diff_margin": {
+      "joint_minus_if": -0.565699788446203,
+      "joint_minus_point": 0.0060278089612779695,
+      "point_minus_if": -0.5717275974074809
+    },
+    "paired_rmse_diff_total": {
+      "joint_minus_if": 0.0022351286248945,
+      "joint_minus_point": "UNAVAILABLE",
+      "point_minus_if": "UNAVAILABLE"
+    },
+    "total": {
+      "if": {
+        "mae": 10.842920847835128,
+        "rmse": 13.729752503864985
+      },
+      "joint": {
+        "mae": 10.844597407941531,
+        "rmse": 13.73198763248988
+      },
+      "point": {
+        "mae": "UNAVAILABLE",
+        "rmse": "UNAVAILABLE"
+      }
+    }
+  },
+  "manifest_sha256": "d4f24894f62a5dd27df874178f13c256efdcb01aa8afac9ff64e3c085a0d3a4c",
+  "n": 141,
+  "namespace": "research.q2s.g2_diagnostic",
+  "nfl": "NO-GO",
+  "one_run": true,
+  "outcomes_sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+  "per_week": {
+    "blocks": {
+      "10": {
+        "if_margin": {
+          "mae": 15.38476914491471,
+          "rmse": 18.985624349933467
+        },
+        "if_total": {
+          "mae": 10.765191781572202,
+          "rmse": 12.949790834864713
+        },
+        "joint_margin": {
+          "mae": 14.664632503466354,
+          "rmse": 18.404918036038882
+        },
+        "joint_total": {
+          "mae": 10.764034737556416,
+          "rmse": 12.945688375913145
+        },
+        "n": 8,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -0.7201366414483561,
+          "joint_minus_point": 0.01001189503479194,
+          "point_minus_if": -0.730148536483148
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": -0.0011570440157866457,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 14.654620608431564,
+          "rmse": 18.3968998897173
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 10
+      },
+      "11": {
+        "if_margin": {
+          "mae": 10.907758179738916,
+          "rmse": 13.902090675127662
+        },
+        "if_total": {
+          "mae": 14.36800688615374,
+          "rmse": 16.63470089194652
+        },
+        "joint_margin": {
+          "mae": 10.035142749105662,
+          "rmse": 12.786302554399532
+        },
+        "joint_total": {
+          "mae": 14.365734011089126,
+          "rmse": 16.63247717870397
+        },
+        "n": 10,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -0.8726154306332539,
+          "joint_minus_point": 0.012630263197159586,
+          "point_minus_if": -0.8852456938304133
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": -0.0022728750646137997,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 10.022512485908502,
+          "rmse": 12.770803258179116
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 11
+      },
+      "12": {
+        "if_margin": {
+          "mae": 9.592824943804818,
+          "rmse": 11.604703651798854
+        },
+        "if_total": {
+          "mae": 9.155967227686563,
+          "rmse": 10.684329828501888
+        },
+        "joint_margin": {
+          "mae": 8.500004346026687,
+          "rmse": 10.329188639417508
+        },
+        "joint_total": {
+          "mae": 9.154963001937624,
+          "rmse": 10.688426599724853
+        },
+        "n": 13,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -1.0928205977781265,
+          "joint_minus_point": 0.020175570852770133,
+          "point_minus_if": -1.1129961686308967
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": -0.0010042257489387269,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 8.47982877517392,
+          "rmse": 10.307776368598937
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 12
+      },
+      "13": {
+        "if_margin": {
+          "mae": 11.222663858994286,
+          "rmse": 13.59023532807974
+        },
+        "if_total": {
+          "mae": 10.300406843240982,
+          "rmse": 12.883987754466999
+        },
+        "joint_margin": {
+          "mae": 10.584420627473182,
+          "rmse": 13.005085740505454
+        },
+        "joint_total": {
+          "mae": 10.30814806741598,
+          "rmse": 12.891772447158989
+        },
+        "n": 16,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -0.6382432315211046,
+          "joint_minus_point": 0.002043437976979978,
+          "point_minus_if": -0.6402866694980845
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": 0.007741224174997452,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 10.582377189496203,
+          "rmse": 12.998211004720039
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 13
+      },
+      "14": {
+        "if_margin": {
+          "mae": 9.798537542457456,
+          "rmse": 12.37192042049427
+        },
+        "if_total": {
+          "mae": 12.103299024479586,
+          "rmse": 16.471041450999493
+        },
+        "joint_margin": {
+          "mae": 9.616776580138954,
+          "rmse": 12.69389015636036
+        },
+        "joint_total": {
+          "mae": 12.10392592205813,
+          "rmse": 16.472320431326192
+        },
+        "n": 16,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -0.18176096231850347,
+          "joint_minus_point": 0.0014899489731416693,
+          "point_minus_if": -0.1832509112916451
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": 0.0006268975785452824,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 9.615286631165812,
+          "rmse": 12.70157281318725
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 14
+      },
+      "15": {
+        "if_margin": {
+          "mae": 11.382413131499206,
+          "rmse": 15.517489838355791
+        },
+        "if_total": {
+          "mae": 6.924846404016171,
+          "rmse": 8.337820640026456
+        },
+        "joint_margin": {
+          "mae": 9.89121371025448,
+          "rmse": 14.499607838502758
+        },
+        "joint_total": {
+          "mae": 6.92371778915944,
+          "rmse": 8.33421643677668
+        },
+        "n": 16,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -1.491199421244726,
+          "joint_minus_point": 0.018283448185882095,
+          "point_minus_if": -1.5094828694306077
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": -0.0011286148567308807,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 9.8729302620686,
+          "rmse": 14.486714182676419
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 15
+      },
+      "16": {
+        "if_margin": {
+          "mae": 11.177040943685226,
+          "rmse": 12.875832144198037
+        },
+        "if_total": {
+          "mae": 12.997171113817718,
+          "rmse": 16.088490538379766
+        },
+        "joint_margin": {
+          "mae": 9.834235203662713,
+          "rmse": 11.784758856853337
+        },
+        "joint_total": {
+          "mae": 13.00612898312567,
+          "rmse": 16.092657274625545
+        },
+        "n": 16,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -1.3428057400225117,
+          "joint_minus_point": 0.014549605215494671,
+          "point_minus_if": -1.3573553452380063
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": 0.008957869307952393,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 9.819685598447219,
+          "rmse": 11.77228676821407
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 16
+      },
+      "17": {
+        "if_margin": {
+          "mae": 10.414856305777818,
+          "rmse": 12.299915457405817
+        },
+        "if_total": {
+          "mae": 10.773249262900137,
+          "rmse": 13.91016700743612
+        },
+        "joint_margin": {
+          "mae": 10.884938765626696,
+          "rmse": 12.825113747691368
+        },
+        "joint_total": {
+          "mae": 10.770438514480244,
+          "rmse": 13.916360972045693
+        },
+        "n": 16,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": 0.4700824598488769,
+          "joint_minus_point": -0.006096370861412376,
+          "point_minus_if": 0.4761788307102893
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": -0.0028107484198924837,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 10.89103513648811,
+          "rmse": 12.839879539661231
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 17
+      },
+      "7": {
+        "if_margin": {
+          "mae": 12.42349599544225,
+          "rmse": 15.858215288325798
+        },
+        "if_total": {
+          "mae": 15.140500121751057,
+          "rmse": 16.666147351620314
+        },
+        "joint_margin": {
+          "mae": 11.927060035560766,
+          "rmse": 15.442559848995034
+        },
+        "joint_total": {
+          "mae": 15.14149483744269,
+          "rmse": 16.666897116236832
+        },
+        "n": 11,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -0.4964359598814866,
+          "joint_minus_point": 0.007301618846481051,
+          "point_minus_if": -0.5037375787279676
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": 0.00099471569162998,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 11.919758416714284,
+          "rmse": 15.437336678242046
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 7
+      },
+      "8": {
+        "if_margin": {
+          "mae": 12.750436175395453,
+          "rmse": 16.331617491745725
+        },
+        "if_total": {
+          "mae": 7.060889864315448,
+          "rmse": 9.978379803217079
+        },
+        "joint_margin": {
+          "mae": 11.427049527101117,
+          "rmse": 15.159787992858218
+        },
+        "joint_total": {
+          "mae": 7.062967929935727,
+          "rmse": 9.98283439908015
+        },
+        "n": 11,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": -1.3233866482943373,
+          "joint_minus_point": 0.018710231887626882,
+          "point_minus_if": -1.3420968801819642
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": 0.0020780656202797395,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 11.40833929521349,
+          "rmse": 15.14496346751762
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 8
+      },
+      "9": {
+        "if_margin": {
+          "mae": 10.66303646146973,
+          "rmse": 12.70930202794949
+        },
+        "if_total": {
+          "mae": 10.777976281088453,
+          "rmse": 13.646069325271963
+        },
+        "joint_margin": {
+          "mae": 11.09633714352163,
+          "rmse": 12.777264858167436
+        },
+        "joint_total": {
+          "mae": 10.782157327778757,
+          "rmse": 13.64619135837899
+        },
+        "n": 8,
+        "paired_mae_diff_margin": {
+          "joint_minus_if": 0.4333006820519011,
+          "joint_minus_point": -0.004485077225171136,
+          "point_minus_if": 0.4377857592770722
+        },
+        "paired_mae_diff_total": {
+          "joint_minus_if": 0.004181046690304058,
+          "joint_minus_point": "UNAVAILABLE",
+          "point_minus_if": "UNAVAILABLE"
+        },
+        "point_margin": {
+          "mae": 11.100822220746801,
+          "rmse": 12.778234477798144
+        },
+        "point_total": "UNAVAILABLE",
+        "week": 9
+      }
+    },
+    "n_week_blocks": 11,
+    "week_blocks_role": "descriptive_only"
+  },
+  "protocol_id": "g2-diagnostic-t5075u-v1",
+  "role": "consumed_data_descriptive_only",
+  "ticket": "t5075u",
+  "unavailable": {
+    "if_distribution": "UNAVAILABLE",
+    "if_distribution_note": "IF_MUS is means-only (no persisted draw arrays). IF distribution comparison is UNAVAILABLE. Do not regenerate.",
+    "point_candidate_total": "UNAVAILABLE",
+    "point_candidate_total_note": "Point-candidate is a margin blend only; no persisted total mean.",
+    "point_candidate_wp": "UNAVAILABLE",
+    "point_candidate_wp_note": "q2s rows set no_candidate_probabilities=true; no persisted candidate WP."
+  }
+}
