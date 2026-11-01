@@ -24,12 +24,15 @@ from bootstrap import (  # noqa: E402
 from compare import EvalRefuse, evaluate, look_real  # noqa: E402
 from verify_final_prelook import (  # noqa: E402
     ALEX_RECEIPT_PATH,
+    HISTORY_FREEZE_SHA,
     IF_MUS_SHA,
     MATRIX_SHA,
     PARENT_FREEZE_SHA,
     Q2S_SHA,
+    T5055U_FREEZE_PATH,
     sha256_file,
     verify_complete_set,
+    verify_history_freeze_a4652323,
     verify_parent_history,
 )
 
@@ -139,8 +142,11 @@ class SyntheticEvaluatorTests(unittest.TestCase):
         for week, exp in expected.items():
             self.assertAlmostEqual(blocks[week]["delta_mae"], exp, places=12)
             self.assertEqual(blocks[week]["n"], 2.0)
-            self.assertEqual(blocks[week]["bootstrap"]["seed"], 20261102.0)
-            self.assertEqual(blocks[week]["bootstrap"]["B"], 10000.0)
+            self.assertNotIn("bootstrap", blocks[week])
+        self.assertEqual(result["descriptive"]["week_blocks_role"], "descriptive_only")
+        self.assertEqual(
+            result["uncertainty"]["week_cluster_bootstrap"]["n_clusters"], 11.0
+        )
 
     def test_week_block_miswire_refused(self) -> None:
         bad_weeks = [w - 6 for w in self.weeks]  # 1–11 instead of 7–17
@@ -172,7 +178,12 @@ class SyntheticEvaluatorTests(unittest.TestCase):
         self.assertNotIn("1ee90fac", text)
         src = (EVAL / "compare.py").read_text()
         self.assertNotIn("def load_oos", src)
-        self.assertNotIn("outcomes_2013_2022_score_only", src)
+        from compare import OUTCOMES_JOINS, OUTCOMES_PIN_PATH  # noqa: WPS433
+
+        OUTCOMES_JOINS.clear()
+        with self.assertRaises(EvalRefuse):
+            look_real()
+        self.assertNotIn(str(OUTCOMES_PIN_PATH.resolve()), OUTCOMES_JOINS)
 
     def test_look_real_refuses(self) -> None:
         self.assertFalse(ALEX_RECEIPT_PATH.exists())
@@ -193,15 +204,24 @@ class FinalFreezeAndParentHistoryTests(unittest.TestCase):
         self.assertEqual(parent["rows"]["if_mus"]["sha256"], IF_MUS_SHA)
         self.assertEqual(parent["rows"]["q2s_rows"]["sha256"], Q2S_SHA)
 
+    def test_history_freeze_object_unchanged(self) -> None:
+        hist = verify_history_freeze_a4652323()
+        self.assertEqual(
+            sha256_file(EVAL / "FINAL_PRELOOK_FREEZE.json"), HISTORY_FREEZE_SHA
+        )
+        self.assertEqual(hist["parent_freeze"]["sha256"], PARENT_FREEZE_SHA)
+        self.assertFalse(hist["look_authorized"])
+        self.assertFalse(hist["look_run"])
+
     def test_final_freeze_complete_set_when_present(self) -> None:
-        path = EVAL / "FINAL_PRELOOK_FREEZE.json"
-        if not path.is_file():
-            self.skipTest("final freeze not written yet")
+        if not T5055U_FREEZE_PATH.is_file():
+            self.skipTest("t5055u freeze not written yet")
         final = verify_complete_set()
         self.assertFalse(final["parent_rewritten"])
         self.assertFalse(final["look_authorized"])
         self.assertFalse(final["look_run"])
         self.assertEqual(final["parent_freeze"]["sha256"], PARENT_FREEZE_SHA)
+        self.assertEqual(final["history_freeze"]["sha256"], HISTORY_FREEZE_SHA)
         self.assertEqual(final["rows"]["if_mus"]["sha256"], IF_MUS_SHA)
         self.assertEqual(final["rows"]["q2s_rows"]["sha256"], Q2S_SHA)
         self.assertIn("evaluator/METRIC_PROTOCOL.md", final["files"])

@@ -16,8 +16,9 @@ NEW bounded package. Does **not** amend [#685](https://github.com/kosedge/kosedg
 | 3 Alex pre-IF | **ACCEPT** tip **adbcf11d** |
 | 4 IF + emit | **DONE** — 141 scored / 24 T2 sealed not scored. Freeze has **row identity** |
 | 5 Alex pre-look | **SUPERSEDED for look** — `8b80ad7b` does not bind the final evaluator freeze |
-| t5053u evaluator bind | **DONE** — code + protocol frozen; synthetic tests only |
-| 6 ONE look | **NOT RUN** — await Alex RO of `evaluator/FINAL_PRELOOK_FREEZE.json` |
+| t5053u evaluator bind | **HISTORY** — `a4652323` object preserved; not rewritten |
+| t5055u evaluator correction | **DONE** — week-cluster bootstrap + complete `look_real` path; synthetic tests only |
+| 6 ONE look | **NOT RUN** — await Alex RO of `evaluator/FINAL_PRELOOK_FREEZE_t5055u.json` |
 
 ## Completeness
 
@@ -37,7 +38,8 @@ Matrix: `gate2/RECON_MATRIX_W7W17.csv` sha256 `b56be1462e591ac5e04cfaf860938118e
 | `phase4/artifacts/IF_MUS_W7W17.json` | **32e97434…** |
 | `phase4/artifacts/q2s_rows_w7w17.json` | **55d8c8bc…** |
 | `phase4/artifacts/PROTOCOL_FREEZE.json` | **90774bd4…** (history — not rewritten) |
-| `evaluator/FINAL_PRELOOK_FREEZE.json` | **a4652323…** (appends evaluator + parent hashes) |
+| `evaluator/FINAL_PRELOOK_FREEZE.json` | **a4652323…** (history — t5053u object, not rewritten) |
+| `evaluator/FINAL_PRELOOK_FREEZE_t5055u.json` | **60b5f4b0…** (appended evaluator + protocol; live complete set) |
 
 `research.q2s.margin_mu_q2s = 0.5*IF.margin_mu + 0.5*q2_pm_new`. Fit **70db070d** excludes 2017. Rest BIND_PACKET_ONLY / **155d3ca0**. Never opened **1ee90fac**.
 

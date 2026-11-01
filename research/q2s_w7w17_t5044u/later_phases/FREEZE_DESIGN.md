@@ -24,13 +24,15 @@ Alex timestamped pre-look PASS must bind to those hashes
 (not `FREEZE.exists()` — t5035u / `404a4ab2`). Compare re-hashes
 and refuses if the receipt is absent or mismatched.
 
-## 6. ONE look — NOT RUN (t5053u)
+## 6. ONE look — NOT RUN (t5055u)
 
-Evaluator + protocol are frozen in `evaluator/FINAL_PRELOOK_FREEZE.json`
-(appended onto **90774bd4**). Do **not** look until Alex PASS on that
-final freeze and CoS re-authorizes. `8b80ad7b` is not sufficient.
+Evaluator + protocol are frozen in `evaluator/FINAL_PRELOOK_FREEZE_t5055u.json`
+(appended onto **90774bd4** + history **a4652323**). Do **not** look until
+Alex PASS on that t5055u freeze and CoS executes. `8b80ad7b` / `a4652323`
+are not sufficient.
 
-Paired ΔMAE + paired bootstrap B=10000 seed **20261102**. Week-block
-sensitivity: 11 blocks, same B/seed. RMSE / weekly descriptive only.
-If CI contains 0 → **INCONCLUSIVE**. No favorable claim if analyses disagree.
-No second weight. No re-look of the examined 70. `03a4dd90` stays CLOSED.
+Paired ΔMAE + paired game-bootstrap B=10000 seed **20261102**. Week-cluster
+bootstrap: 11 clusters, sample 11 week indices with replacement, game-weighted
+statistic. Per-week tables descriptive only. INCONCLUSIVE if either pooled CI
+contains 0 or the two CIs disagree in direction. Do not require every week
+same sign. No second weight. No re-look of the examined 70. `03a4dd90` stays CLOSED.

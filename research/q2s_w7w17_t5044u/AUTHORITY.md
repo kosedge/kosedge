@@ -25,5 +25,9 @@ IF @ **6ca03716** (not 90bf65ab). Rest BIND_PACKET_ONLY / **155d3ca0**.
 HARD STOP after freeze (row identity). No look.
 
 t5053u: evaluator bound under CLEAR **12763c08**. Prediction freeze **90774bd4**
-is history. Final pre-look freeze `evaluator/FINAL_PRELOOK_FREEZE.json`.
-`8b80ad7b` does not authorize a look on the final freeze. No real outcomes join.
+is history. History evaluator freeze `evaluator/FINAL_PRELOOK_FREEZE.json`
+(**a4652323**) is not rewritten.
+
+t5055u: week-cluster bootstrap + complete `look_real` path under CLEAR
+**12763c08**. Live freeze `evaluator/FINAL_PRELOOK_FREEZE_t5055u.json`.
+No real outcomes join. No LOOK_CONSUMED. Q2 EVAL stays CLOSED.
