@@ -31,7 +31,14 @@ from src.services.nfl_odds_reader import (
 )
 
 from .builder import SCHEMA as FORECAST_SCHEMA
-from .one_run import OneRunRefuse, consume_one_run, load_one_run, verify_one_run
+from .one_run import (
+    OneRunRefuse,
+    claim_one_run,
+    complete_one_run,
+    fail_one_run,
+    load_one_run,
+    verify_one_run,
+)
 from .q2 import SEALED_SEASONS
 
 CUTOFF_MINUTES = 60
@@ -602,6 +609,7 @@ def run_eval_score(
     code_root: Any = None,
     spec_path: Any = None,
     input_path: Any = None,
+    score_body: Any = None,
 ) -> dict[str, Any]:
     """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS."""
     if not frozen.sealed_before_outcome_join:
@@ -630,7 +638,9 @@ def run_eval_score(
             code_root=code_root,
             spec_path=spec_path,
             input_path=input_path,
+            path=one_run_path,
         )
+        record = claim_one_run(one_run_path, record["bind_id"])
     except OneRunRefuse as exc:
         raise EvalRefuse(f"one-run bind refused: {exc}") from exc
 
@@ -639,18 +649,24 @@ def run_eval_score(
         if not eligible_cohorts.get("sealed_after_eligibility_before_outcome_join"):
             raise EvalRefuse("eligible cohorts were not sealed before outcome join")
         allow = list((eligible_cohorts.get("margin_cohort") or {}).get("game_ids") or [])
-    scored = run_paired_margin_eval(
-        list(frozen.payload.get("forecasts") or []),
-        outcomes,
-        eligible_game_ids=allow,
-        market_points=market_points,
-        bootstrap_b=bootstrap_b,
-        bootstrap_seed=bootstrap_seed,
-    )
+    score_fn = score_body or run_paired_margin_eval
     try:
-        consume_one_run(one_run_path, record["bind_id"])
-    except OneRunRefuse as exc:
-        raise EvalRefuse(f"one-run consume refused: {exc}") from exc
+        scored = score_fn(
+            list(frozen.payload.get("forecasts") or []),
+            outcomes,
+            eligible_game_ids=allow,
+            market_points=market_points,
+            bootstrap_b=bootstrap_b,
+            bootstrap_seed=bootstrap_seed,
+        )
+        complete_one_run(one_run_path, record["bind_id"], result={"n": scored.get("n")})
+    except Exception as exc:
+        fail_one_run(one_run_path, record["bind_id"], str(exc))
+        if isinstance(exc, (EvalRefuse, OneRunRefuse)):
+            raise
+        raise EvalRefuse(
+            f"one-run claimed then failed — refuse automatic rerun: {exc}"
+        ) from exc
     scored["eval"] = "REAL_EVAL_GATED_PATH"
     scored["scoring"] = "authorized_one_run_only"
     scored["one_run_bind_id"] = record["bind_id"]

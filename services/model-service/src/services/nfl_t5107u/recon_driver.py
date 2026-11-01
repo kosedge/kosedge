@@ -482,7 +482,7 @@ def freeze_completeness(
         rec["record_asof_away"] = f"{w_a}-{l_a}"
         rec["n_home"] = n_h
         rec["n_away"] = n_a
-        if n_h < 1 or n_a < 1:
+        if n_h < 1 or n_a < 1 or rec["record_asof_home"] == "0-0" or rec["record_asof_away"] == "0-0":
             excluded.append(
                 {
                     **rec,

@@ -20,7 +20,13 @@ HASH_FIELDS = (
     "alex_go_id",
 )
 STATUS_BOUND = "BOUND"
+STATUS_CLAIMED = "CLAIMED"
+STATUS_IN_PROGRESS = "IN_PROGRESS"
+STATUS_FAILED = "FAILED"
 STATUS_CONSUMED = "CONSUMED"
+TERMINAL_STATUSES = frozenset(
+    {STATUS_CLAIMED, STATUS_IN_PROGRESS, STATUS_FAILED, STATUS_CONSUMED}
+)
 
 
 class OneRunRefuse(ValueError):
@@ -134,7 +140,108 @@ def bind_one_run(
     return record
 
 
+def claim_path_for(dest: Path, bind_id: str) -> Path:
+    return dest.with_name(f"{dest.name}.claim.{bind_id}")
+
+
+def result_path_for(dest: Path, bind_id: str) -> Path:
+    return dest.with_name(f"{dest.name}.result.{bind_id}.json")
+
+
+def claim_one_run(path: Path | None, bind_id: str) -> dict[str, Any]:
+    """Exclusive persistent claim keyed by bind ID. Must run before outcome join."""
+    dest = Path(path) if path else DEFAULT_PATH
+    record = load_one_run(dest)
+    if not record:
+        raise OneRunRefuse("no persistent one-run record")
+    if record.get("bind_id") != bind_id:
+        raise OneRunRefuse("claim bind_id mismatch")
+    if record.get("status") in TERMINAL_STATUSES:
+        raise OneRunRefuse(
+            f"one-run already {record.get('status')} — refuse concurrent/second execution"
+        )
+    claim = claim_path_for(dest, bind_id)
+    payload = {
+        "bind_id": bind_id,
+        "status": STATUS_IN_PROGRESS,
+        "pid": os.getpid(),
+        "claimed_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+    try:
+        _write_exclusive(claim, json.dumps(payload, indent=2) + "\n")
+    except OneRunRefuse as exc:
+        raise OneRunRefuse(
+            "one-run exclusive claim refused — already claimed / concurrent caller"
+        ) from exc
+    # Re-read after exclusive create so a raced verifier cannot both proceed.
+    record = load_one_run(dest) or {}
+    if record.get("bind_id") != bind_id:
+        raise OneRunRefuse("claim bind_id mismatch after exclusive create")
+    if record.get("status") in TERMINAL_STATUSES:
+        raise OneRunRefuse(
+            f"one-run already {record.get('status')} — refuse concurrent/second execution"
+        )
+    record["status"] = STATUS_IN_PROGRESS
+    record["claimed_at_utc"] = payload["claimed_at_utc"]
+    record["claim_path"] = str(claim)
+    _replace_atomic(dest, json.dumps(record, indent=2) + "\n")
+    record["_path"] = str(dest)
+    record["_claim_path"] = str(claim)
+    return record
+
+
+def complete_one_run(
+    path: Path | None,
+    bind_id: str,
+    result: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Separate completion receipt. Does not reopen the exclusive claim."""
+    dest = Path(path) if path else DEFAULT_PATH
+    record = load_one_run(dest)
+    if not record:
+        raise OneRunRefuse("no persistent one-run record")
+    if record.get("bind_id") != bind_id:
+        raise OneRunRefuse("complete bind_id mismatch")
+    if record.get("status") not in {STATUS_CLAIMED, STATUS_IN_PROGRESS}:
+        raise OneRunRefuse(
+            f"one-run complete refused from status {record.get('status')}"
+        )
+    receipt = {
+        "schema_version": "nfl-t5113u-one-run-result-v1",
+        "bind_id": bind_id,
+        "status": "COMPLETED",
+        "completed_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "result": dict(result or {}),
+        "label": "RESEARCH_CONSUMED_RETRO",
+        "cert_candidate": 0,
+    }
+    receipt_path = result_path_for(dest, bind_id)
+    receipt_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    record["status"] = STATUS_CONSUMED
+    record["consumed_at_utc"] = receipt["completed_at_utc"]
+    record["result_receipt_path"] = str(receipt_path)
+    _replace_atomic(dest, json.dumps(record, indent=2) + "\n")
+    record["_path"] = str(dest)
+    record["_result_path"] = str(receipt_path)
+    return record
+
+
+def fail_one_run(path: Path | None, bind_id: str, error: str) -> dict[str, Any]:
+    """Crash after claim: stay consumed/in-progress. No automatic rerun."""
+    dest = Path(path) if path else DEFAULT_PATH
+    record = load_one_run(dest) or {}
+    if record.get("bind_id") != bind_id:
+        raise OneRunRefuse("fail bind_id mismatch")
+    record["status"] = STATUS_FAILED
+    record["failed_at_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    record["failure"] = str(error)
+    _replace_atomic(dest, json.dumps(record, indent=2) + "\n")
+    record["_path"] = str(dest)
+    return record
+
+
 def consume_one_run(path: Path | None, bind_id: str) -> dict[str, Any]:
+    """Back-compat alias: exclusive claim must already exist."""
     dest = Path(path) if path else DEFAULT_PATH
     record = load_one_run(dest)
     if not record:
@@ -143,11 +250,11 @@ def consume_one_run(path: Path | None, bind_id: str) -> dict[str, Any]:
         raise OneRunRefuse("one-run already CONSUMED — refuse second execution")
     if record.get("bind_id") != bind_id:
         raise OneRunRefuse("consume bind_id mismatch")
-    record["status"] = STATUS_CONSUMED
-    record["consumed_at_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    _replace_atomic(dest, json.dumps(record, indent=2) + "\n")
-    record["_path"] = str(dest)
-    return record
+    if record.get("status") not in {STATUS_CLAIMED, STATUS_IN_PROGRESS}:
+        raise OneRunRefuse(
+            "consume requires a prior exclusive claim — refuse read-then-replace score"
+        )
+    return complete_one_run(dest, bind_id)
 
 
 def verify_one_run(
@@ -163,11 +270,23 @@ def verify_one_run(
     code_root: Path | None = None,
     spec_path: Path | None = None,
     input_path: Path | None = None,
+    path: Path | None = None,
 ) -> dict[str, Any]:
     if not record:
         raise OneRunRefuse("no persistent one-run record")
-    if record.get("status") == STATUS_CONSUMED:
-        raise OneRunRefuse("one-run already CONSUMED — refuse second execution")
+    if record.get("status") in TERMINAL_STATUSES:
+        raise OneRunRefuse(
+            f"one-run already {record.get('status')} — refuse second execution"
+        )
+    dest = Path(path) if path is not None else None
+    bind_id = str(record.get("bind_id") or "")
+    claim = Path(str(record["claim_path"])) if record.get("claim_path") else None
+    if claim is None and dest is not None and bind_id:
+        candidate = claim_path_for(dest, bind_id)
+        if candidate.is_file():
+            claim = candidate
+    if claim is not None and claim.is_file() and record.get("status") == STATUS_BOUND:
+        raise OneRunRefuse("one-run exclusive claim exists — refuse automatic rerun")
     if record.get("bind_id") != bind_id_for(record):
         raise OneRunRefuse("one-run bind_id does not match bound hashes")
     if exec_bind != record.get("bind_id"):
