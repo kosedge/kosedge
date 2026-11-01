@@ -1,4 +1,4 @@
-# CURSOR ADDENDUM t5141u — R3-DEV-CALIBRATION (pre-fit freeze + STOP)
+# CURSOR ADDENDUM t5141u — R3-DEV-CALIBRATION (pre-fit freeze + STOP) · tip `acffed20`
 
 Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5141u **714ced10** · Cos ORDER **1155f43f** · PREFLIGHT **a23e01dd**
@@ -130,6 +130,6 @@ G5 `DATA_COVERAGE_BLOCKED`
 | uploaded/on-branch DEV437 file | `66c3bde1` |
 | DEV437 record | `0550ef9b` |
 | parent #693 HEAD | `316345fa` |
-| this implementation tip | *(stamped after commit)* |
+| this implementation tip | `acffed2057a937a8bbd8ee3bba7c88eaa358ebcb` |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC · STOP for Alex precomp.
