@@ -33,7 +33,7 @@ t5116u quote manifest **6a1c1b37** (`data/ops/nfl-odds-reader-2020-2023-join-man
 | JSONL 2022 | `/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2022-20260806.jsonl` | 1 242 382 | `973c327fa65045698b5f278f4b324b61feeb09d39a93de73e140a15a83484ad7` | **yes** |
 | JSONL 2023 | `/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2023-20260806.jsonl` | 3 533 310 | `fe35b2cc48240eccdddba736404f0d9cc1266c32b2177ece7f4484231c4bbbc5` | **yes** |
 | open_close CSV | `/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv` | 1 078 200 270 | `ed072346d4a59a995817831f8308647c559f0ac2d820bb3469bce01d3d9d2745` | **yes** (2022–23 commence window) |
-| gapfill sqlite | `/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite` | 13 877 006 336 | original not rewritten; **extract** hash after 2020–23 NFL DK/FD mainline stage | **no** (this is the R2 expansion) |
+| gapfill sqlite | `/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite` | 13 877 006 336 | original untouched; extract `96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0` (19914 rows) | **no** (R2 expansion; same 720 events as CSV mainline) |
 | lake parquet 2020–23 | `/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-202{0,1,2,3}.parquet` | 47 834 / 88 054 / 79 480 / 64 705 | `b63ebc17…` / `52eaa7d8…` / `458e4951…` / `1cc89168…` (full in `EXTRACT_HASHES.json`) | no (compact lake files; inventory.json also lists 2024–25 keys — those parquet files were **not** opened) |
 | lake inventory | `/Volumes/KosEdgeData/clean/odds/nfl/lake/inventory.json` | — | as_of 2026-08-19 · source `/tmp/nfl_oc_lines.csv` | no (counts only; not a quote feed) |
 | raw hist 2020–23 | `/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/{2020,2021,2022,2023}` | 8 / 50 / 145 / 935 files | file-count inventory only | no (Odds API harvest JSON; overlap with sqlite/CSV; not a second feed until extract+TZ sealed) |
@@ -116,46 +116,54 @@ Per-source EVAL margin after **this** freeze’s documented home-side sign rule 
 |---|---|---|---|---|
 | JSONL | 95 | 23 | 72 | 2022 JSONL capture ends 2022-12-29; mid-season sparse |
 | open_close CSV | 27 | 27 | 0 | 2023 CSV mainline failed exact `commence_time == kickoff_utc` or home-side flatten |
-| gapfill sqlite | pending | — | — | **not in t5116u load**; extract in progress via event_id index |
-| Union (R2 sign) | **119** | 47 | 72 | 13 of the spent 132 fail the frozen home-side sign rule |
+| gapfill sqlite | 27 | 27 | 0 | same 720 events / 19914 DK+FD mainline rows as CSV (`mid/pre1d/pre3d/pre7d` only) |
+| Union after conflict-refuse | **95** | (see lists) | (see lists) | 480 CSV↔sqlite slots refused; not loosened |
 
-Those 13 stay refused here. **G5 / KO−60 / ≤24h / DK+FD were not loosened** (t5125u ad000a52). t5116u’s `latest_per_book_market` can treat an away-side flattened `point` as `spread_home`; R2-A does not.
+JSONL+CSV-only documented-sign union was 119. Adding sqlite (byte-identical store to CSV for these IDs) created 480 unresolved fingerprint conflicts; frozen rule refuses those slots. **G5 / KO−60 / ≤24h / DK+FD were not loosened.** t5116u replay remains 132.
 
 All 317 replay-missing EVAL ids carry reason `no_admissible_dk_fd_spread_after_identity_cutoff_age` in `per_game`. Full ids in the JSON report.
 
-## R2-A coverage freeze (JSONL+CSV sealed; sqlite still required)
+## R2-A coverage freeze — SEALED (JSONL + CSV + sqlite)
 
-`data/ops/nfl-t5119u-r2-owned-coverage/COVERAGE_MANIFEST.json` (file sha `b1dd579e…`) · parser reader `7bc21d82…` · builder `96545fac…` · CSV `ed072346…` · JSONL hashes above.
+`COVERAGE_MANIFEST.json` file sha `bfcf8ff4…` · reader `7bc21d82…` · builder `546f60ba…` · CSV `ed072346…` · sqlite extract `96c679d7…` (19 914 rows).
 
-| Cohort | n | R2 matched (JSONL+CSV, documented sign) | Missing |
+Sqlite extract (t5129u resume, same 1307 IDs, no restart-from-zero, no 2025 dense):
+
+| | |
+|---|---|
+| event_ids queried | **1307** (720 CSV ∪ 992 request hashes) |
+| event_ids with kept DK/FD mainline | **720** |
+| request-only IDs with no kept row after book/market/2020–23 filter | 587 |
+| rows | **19914** = CSV DK/FD mainline count (3188/5966/4586/6174 by season) |
+| books | DK 12406 · FD 7508 |
+| snapshot kinds | mid 4894 · pre1d 4894 · pre3d 4656 · pre7d 5470 |
+| `dense` 2025 | **not opened** |
+
+| Cohort | n | R2 matched (union, documented sign, conflicts refused) | Missing |
 |---|---|---|---|
-| EVAL fac21ebe | 449 | 119 | 330 |
-| DEV REG 92b91585 | 437 | 94 | 343 |
+| EVAL fac21ebe | 449 | **95** | 354 |
+| DEV REG 92b91585 | 437 | **72** | 365 |
 | NON_REG_WILDCARD f81d381e | 6 | **6** | 0 |
 
-Admissible latest quotes: `ADMISSIBLE_QUOTES.jsonl` n=1667 sha `671cc7b3…`. Collapse: 2737 → 1667, identical dups 403, **conflicts 0**. Observation = `captured_at` / `snapshot_ts` with offset/Z. File mtime / import / `close_*` label not used as observation.
+Admissible latest quotes: `ADMISSIBLE_QUOTES.jsonl` n=1475 sha `75c0b14c…`. Collapse: 3689 → 1475, identical dups 571, **conflicts 480 (refused)**. Observation = `captured_at` / `snapshot_ts` with offset/Z.
 
-`requests.snapshot_kind=dense` date_params are **2025-01-*** — not opened (protected). Sqlite 2020–23 extract uses CSV event_ids (720) + in-window request hashes only.
+## R2-B consume (t5125u / t5129u)
 
-## R2-B consume (t5125u)
-
-`data/ops/nfl-t5119u-r2-owned-coverage/R2B_CONSUME.json`
+`data/ops/nfl-t5119u-r2-owned-coverage/R2B_CONSUME.json` flipped because the freeze is complete.
 
 | Field | Value |
 |---|---|
-| `market_e2e` | **NOT_READY** |
-| reason | sqlite 2020–23 DK/FD extract not sealed |
+| `market_e2e` | **READY_FOR_R2B_DEV_E2E** |
+| sqlite extract | 19914 rows · `96c679d7…` |
 | g5_loosened / time_rule_loosened / book_rule_loosened | **false** |
 | eval_claim | **false** |
 | CERT | 0 |
 
-R2-B must not start market E2E until this flips to `READY_FOR_R2B_DEV_E2E` after sqlite extract hashes land on this same DRAFT. First DEV eligible id after that freeze (currently among `DEV_MATCHED_GAME_IDS.json`, e.g. `2020_02_CIN_CLE`) is the hand-check candidate — not claimed here.
+First DEV eligible id is in `DEV_MATCHED_GAME_IDS.json` — not claimed here. No EVAL scoring.
 
 ## Status
 
-- First-milestone receipt: landed on #694.
-- JSONL+CSV coverage + t5116u exclusion lists: **sealed** on this DRAFT.
-- Sqlite extract: running (event_id index; no full 13GB scan; no 2025 dense).
-- No forecast / weight / feature change. No ONE_RUN. No PE fixtures. No merge.
+- Extract **finished** 1307/1307 · re-seal **done** · #694 updated.
+- t5116u 132 reproduced. Conflicts refused. No G5 loosen. No ONE_RUN. No PE. No merge.
 
 CERT=0 · DRAFT≠merge · failure of t5116u ≠ second look.

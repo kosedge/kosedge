@@ -1,1 +1,5762 @@
-[]
+[
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_01_HOU_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2020-09-10T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_01_HOU_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2020-09-10T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_01_HOU_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2020-09-10T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_01_HOU_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2020-09-10T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_CAR_WAS",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_CAR_WAS",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_CAR_WAS",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_CAR_WAS",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_DEN_LAC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_DEN_LAC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_DEN_LAC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_DEN_LAC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_LA_SEA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_LA_SEA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_LA_SEA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_LA_SEA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_PHI_DAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_PHI_DAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_PHI_DAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_PHI_DAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_TEN_GB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_TEN_GB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_TEN_GB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_16_TEN_GB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2020-12-27T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIA_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_DAL_NYG",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_MIN_DET",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_PIT_CLE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_ATL_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_NYJ_NE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_17_BAL_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-02T18:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_IND_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-08T18:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_IND_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-08T18:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_IND_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-08T18:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_IND_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-08T18:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_TB_WAS",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_TB_WAS",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_TB_WAS",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_TB_WAS",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_BAL_TEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_BAL_TEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_BAL_TEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_BAL_TEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_CHI_NO",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_CHI_NO",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_CHI_NO",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_18_CHI_NO",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-09T21:35:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_LA_GB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-15T21:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_LA_GB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-15T21:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_LA_GB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-15T21:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_LA_GB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-15T21:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_TB_NO",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-17T20:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_TB_NO",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-17T20:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_TB_NO",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-17T20:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_19_TB_NO",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-17T20:05:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_20_TB_GB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-01-23T20:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_20_TB_GB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-01-23T20:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_20_TB_GB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-01-23T20:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_20_TB_GB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-01-23T20:05:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-02-06T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-02-06T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-02-06T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-02-06T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-02-06T23:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-02-06T23:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-02-06T23:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2020_21_KC_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-02-06T23:35:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_01_DAL_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-09-09T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_01_DAL_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-09-09T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_01_DAL_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-09-09T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_01_DAL_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-09-09T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_14_PIT_MIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-09T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_14_PIT_MIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-09T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_14_PIT_MIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-09T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_14_PIT_MIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-09T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_KC_LAC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-16T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_KC_LAC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-16T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_KC_LAC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-16T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_KC_LAC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-16T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_SEA_LA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_SEA_LA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_SEA_LA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_SEA_LA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_WAS_PHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_WAS_PHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_WAS_PHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_15_WAS_PHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-21T01:15:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_SF_TEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-23T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_SF_TEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-23T01:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_CHI_SEA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_CHI_SEA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_CHI_SEA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_CHI_SEA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_DEN_LV",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_DEN_LV",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_DEN_LV",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_DEN_LV",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_PIT_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_PIT_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_PIT_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_PIT_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_WAS_DAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_WAS_DAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_WAS_DAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_16_WAS_DAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2021-12-26T17:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T17:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_NYG_CHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LA_BAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_TB_NYJ",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_PHI_WAS",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_KC_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ATL_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_JAX_NE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_MIA_TEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_LV_IND",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_HOU_SF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_HOU_SF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_HOU_SF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_HOU_SF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DEN_LAC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DEN_LAC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DEN_LAC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DEN_LAC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DET_SEA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DET_SEA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DET_SEA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_DET_SEA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ARI_DAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ARI_DAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ARI_DAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_ARI_DAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_CAR_NO",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_CAR_NO",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_CAR_NO",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_17_CAR_NO",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-01T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_KC_DEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-07T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_KC_DEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-07T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_KC_DEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-07T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_KC_DEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-07T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_DAL_PHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_DAL_PHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_DAL_PHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_DAL_PHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_TEN_HOU",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_TEN_HOU",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_TEN_HOU",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_TEN_HOU",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_PIT_BAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_PIT_BAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_PIT_BAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_PIT_BAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_IND_JAX",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_IND_JAX",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CHI_MIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CHI_MIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CHI_MIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CHI_MIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_GB_DET",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_GB_DET",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_GB_DET",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_GB_DET",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CIN_CLE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CIN_CLE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CIN_CLE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CIN_CLE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_WAS_NYG",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_WAS_NYG",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_WAS_NYG",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_WAS_NYG",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_SF_LA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_SF_LA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_SEA_ARI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_SEA_ARI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_SEA_ARI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_SEA_ARI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NYJ_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NYJ_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NYJ_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NYJ_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NE_MIA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NE_MIA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NE_MIA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NE_MIA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CAR_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CAR_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CAR_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_CAR_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NO_ATL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NO_ATL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NO_ATL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_18_NO_ATL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-08T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_LV_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-14T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_LV_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-14T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_LV_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-14T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_LV_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-14T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_NE_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_NE_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_NE_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_NE_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_PHI_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_PHI_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_PHI_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_PHI_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_SF_DAL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_SF_DAL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_SF_DAL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_19_SF_DAL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-15T21:25:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_CIN_TEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-21T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_CIN_TEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-21T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_CIN_TEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-21T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_CIN_TEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-21T21:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_BUF_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-23T19:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_BUF_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-23T19:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_BUF_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-23T19:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_20_BUF_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-23T19:55:00Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_21_CIN_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-01-29T19:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_21_CIN_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-01-29T19:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_21_CIN_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-01-29T19:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_21_CIN_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-01-29T19:55:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_22_LA_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-02-12T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_22_LA_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-02-12T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_22_LA_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-02-12T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2021_22_LA_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-02-12T23:25:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_01_BUF_LA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-09-08T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_01_BUF_LA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-09-08T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_01_BUF_LA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-09-08T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_01_BUF_LA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-09-08T00:15:00Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DAL_TEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-29T01:10:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DAL_TEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-29T01:10:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DAL_TEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-29T01:10:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DAL_TEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-29T01:10:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CAR_TB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CAR_TB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CAR_TB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CAR_TB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DEN_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DEN_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DEN_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_DEN_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_IND_NYG",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_IND_NYG",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_IND_NYG",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_IND_NYG",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIA_NE",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIA_NE",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIA_NE",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIA_NE",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_ARI_ATL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_ARI_ATL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_ARI_ATL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_ARI_ATL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CLE_WAS",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CLE_WAS",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CLE_WAS",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CLE_WAS",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NO_PHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NO_PHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NO_PHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NO_PHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_JAX_HOU",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_JAX_HOU",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_JAX_HOU",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_JAX_HOU",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CHI_DET",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CHI_DET",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CHI_DET",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_CHI_DET",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_SF_LV",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_SF_LV",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_SF_LV",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_SF_LV",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NYJ_SEA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NYJ_SEA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NYJ_SEA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_NYJ_SEA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIN_GB",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIN_GB",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIN_GB",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_MIN_GB",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_LA_LAC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_LA_LAC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_LA_LAC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_17_LA_LAC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2022-12-31T21:25:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_KC_LV",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-06T21:25:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_KC_LV",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-06T21:25:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_KC_LV",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-06T21:25:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_KC_LV",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-06T21:25:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TEN_JAX",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TEN_JAX",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TEN_JAX",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TEN_JAX",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYJ_MIA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYJ_MIA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYJ_MIA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYJ_MIA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_MIN_CHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_MIN_CHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_MIN_CHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_MIN_CHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CAR_NO",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CAR_NO",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CAR_NO",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CAR_NO",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CLE_PIT",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CLE_PIT",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CLE_PIT",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_CLE_PIT",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_HOU_IND",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_HOU_IND",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_HOU_IND",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_HOU_IND",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TB_ATL",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TB_ATL",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TB_ATL",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_TB_ATL",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NE_BUF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NE_BUF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NE_BUF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NE_BUF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_BAL_CIN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_BAL_CIN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_BAL_CIN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_BAL_CIN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LA_SEA",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LA_SEA",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LA_SEA",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LA_SEA",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_DAL_WAS",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_DAL_WAS",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_DAL_WAS",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_DAL_WAS",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYG_PHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYG_PHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYG_PHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_NYG_PHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_ARI_SF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_ARI_SF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_ARI_SF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_ARI_SF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LAC_DEN",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LAC_DEN",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LAC_DEN",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_18_LAC_DEN",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-07T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_19_SEA_SF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-13T21:25:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_19_SEA_SF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-13T21:25:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_19_LAC_JAX",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-14T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_19_LAC_JAX",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-14T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_19_LAC_JAX",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-14T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_19_LAC_JAX",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-14T21:25:39Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_JAX_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-20T21:25:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_JAX_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-20T21:25:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_JAX_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-20T21:25:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_JAX_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-20T21:25:39Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_DAL_SF",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-22T19:55:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_DAL_SF",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-22T19:55:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_DAL_SF",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-22T19:55:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_20_DAL_SF",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-22T19:55:38Z",
+    "n": 2,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_21_SF_PHI",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-01-28T19:55:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_21_SF_PHI",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-01-28T19:55:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_21_SF_PHI",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-01-28T19:55:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2022_21_SF_PHI",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-01-28T19:55:38Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_01_DET_KC",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2023-09-07T00:20:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_01_DET_KC",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2023-09-07T00:20:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_01_DET_KC",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2023-09-07T00:20:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_01_DET_KC",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2023-09-07T00:20:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_19_CLE_HOU",
+    "book": "draftkings",
+    "market": "moneyline",
+    "captured_at": "2024-01-12T21:30:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_19_CLE_HOU",
+    "book": "draftkings",
+    "market": "spread",
+    "captured_at": "2024-01-12T21:30:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_19_CLE_HOU",
+    "book": "fanduel",
+    "market": "moneyline",
+    "captured_at": "2024-01-12T21:30:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  },
+  {
+    "reason": "duplicate_conflict",
+    "game_id": "2023_19_CLE_HOU",
+    "book": "fanduel",
+    "market": "spread",
+    "captured_at": "2024-01-12T21:30:40Z",
+    "n": 4,
+    "sources": [
+      "odds_gapfill_sqlite",
+      "open_close_csv"
+    ]
+  }
+]

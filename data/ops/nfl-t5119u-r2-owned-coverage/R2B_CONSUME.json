@@ -5,8 +5,8 @@
   "g5_loosened": false,
   "time_rule_loosened": false,
   "book_rule_loosened": false,
-  "market_e2e": "NOT_READY",
-  "reason": "sqlite 2020-23 DK/FD extract not sealed yet \u2014 market E2E stays NOT_READY",
+  "market_e2e": "READY_FOR_R2B_DEV_E2E",
+  "reason": "sealed admissible DK/FD extract + coverage manifest; sqlite included; conflicts refused not loosened",
   "coverage_manifest": "data/ops/nfl-t5119u-r2-owned-coverage/COVERAGE_MANIFEST.json",
   "admissible_quotes": "data/ops/nfl-t5119u-r2-owned-coverage/ADMISSIBLE_QUOTES.jsonl",
   "rules": {
@@ -19,18 +19,18 @@
     "observation": "captured_at / snapshot_ts with explicit offset or Z \u2014 not file mtime / import / close label",
     "dedupe": "identical fingerprint collapse; conflict refuses"
   },
-  "staged_at_utc": "2026-11-01T21:04:52Z",
-  "admissible_quotes_n": 1667,
-  "admissible_quotes_sha256": "671cc7b390a1247318f4de9e978bfb7f9afcc834830f35657580e0fe6c12afc0",
-  "coverage_manifest_sha256": "b1dd579e5038258a50549b4a18f961562aee7e577f747ffb928e902c8d465399",
+  "staged_at_utc": "2026-11-01T21:48:12Z",
+  "admissible_quotes_n": 1475,
+  "admissible_quotes_sha256": "75c0b14c7391252dd5ca790c09d9d65071916ef4f39a20c81c88c57229917fb9",
+  "coverage_manifest_sha256": "bfcf8ff4b3c9dd933c6edb381a76d6bbb7abd6a1723120941d810425942e00d8",
   "sqlite_extract": {
-    "rows": 0,
-    "sha256": null,
-    "skipped": true,
-    "method": "skipped"
+    "rows": 19914,
+    "sha256": "96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0",
+    "skipped": null,
+    "method": "csv_plus_requests_event_id_index"
   },
   "t5116u_replay_n": 132,
-  "eval_r2_matched_n": 119,
-  "dev_r2_matched_n": 94,
+  "eval_r2_matched_n": 95,
+  "dev_r2_matched_n": 72,
   "authority_amend": "t5125u ad000a52"
 }

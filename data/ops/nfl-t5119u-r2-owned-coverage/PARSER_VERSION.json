@@ -3,7 +3,7 @@
   "reader_path": "scripts/nfl/t5119u_r2a/nfl_odds_reader.py",
   "reader_sha256": "7bc21d82c1c332eb9ad4e5ba773ecb1bc49cac2ed23f970ab89ec0f9ea591f0e",
   "builder_path": "scripts/nfl/t5119u_r2a/build_owned_coverage.py",
-  "builder_sha256": "96545facd05ffebcaa1814c15a0478a1ff4cec944abfed31b1f30696b41a9617",
+  "builder_sha256": "546f60ba215ab7141b9f682d03515b28b411468dfa9570f1dd9311bc7faf6373",
   "selection_books": [
     "draftkings",
     "fanduel"

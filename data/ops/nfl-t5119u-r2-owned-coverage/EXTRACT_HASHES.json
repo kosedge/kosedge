@@ -28,14 +28,38 @@
   },
   "gapfill_sqlite_original_bytes": 13877006336,
   "gapfill_sqlite_extract": {
+    "method": "csv_plus_requests_event_id_index",
+    "event_ids_queried": 1307,
+    "event_ids_with_rows": 720,
+    "event_ids_empty": 0,
+    "rows": 19914,
+    "sha256": "96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0",
+    "bytes": 8414374,
     "path": "/Users/ryankos/kosedge-cursor-k2t1c2/.cos-work/t5119u_r2/extracts/gapfill_nfl_2020_2023_dkfd_mainline.jsonl",
-    "rows": 0,
-    "sha256": null,
-    "skipped": true,
-    "reason": "sqlite CLI dump not finished; skip_scan=1",
+    "by_season": {
+      "2020": 3188,
+      "2021": 5966,
+      "2023": 6174,
+      "2022": 4586
+    },
+    "by_book": {
+      "draftkings": 12406,
+      "fanduel": 7508
+    },
+    "by_market": {
+      "spreads": 7780,
+      "h2h": 7094,
+      "totals": 5040
+    },
+    "by_snapshot_kind": {
+      "mid": 4894,
+      "pre1d": 4894,
+      "pre3d": 4656,
+      "pre7d": 5470
+    },
+    "dense_2025_opened": false,
     "original_sqlite_modified": false,
-    "extracted_at_utc": "2026-11-01T21:03:33Z",
-    "method": "skipped"
+    "extracted_at_utc": "2026-11-01T21:44:45Z"
   },
   "lake_2020_2023": [
     {
@@ -84,5 +108,5 @@
     }
   ],
   "reader_sha256": "7bc21d82c1c332eb9ad4e5ba773ecb1bc49cac2ed23f970ab89ec0f9ea591f0e",
-  "builder_sha256": "96545facd05ffebcaa1814c15a0478a1ff4cec944abfed31b1f30696b41a9617"
+  "builder_sha256": "546f60ba215ab7141b9f682d03515b28b411468dfa9570f1dd9311bc7faf6373"
 }

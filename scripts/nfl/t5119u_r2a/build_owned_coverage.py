@@ -339,6 +339,14 @@ def iter_cli_sqlite_csv(path: Path) -> Iterator[dict]:
 
 def extract_sqlite_from_cli_or_scan(*, skip_scan: bool) -> dict:
     dest = EXTRACTS / "gapfill_nfl_2020_2023_dkfd_mainline.jsonl"
+    targeted = RECEIPTS / "SQLITE_EXTRACT_TARGETED.json"
+    if dest.is_file() and targeted.is_file():
+        rec = json.loads(targeted.read_text(encoding="utf-8"))
+        live = sha256_file(dest)
+        if rec.get("sha256") == live and rec.get("rows"):
+            print(json.dumps({"phase": "sqlite_reuse_targeted_jsonl", "rows": rec.get("rows"), "sha256": live}), flush=True)
+            write_json(RECEIPTS / "SQLITE_EXTRACT.json", rec)
+            return rec
     cli = load_cli_sqlite_csv()
     if cli is not None:
         print(json.dumps({"phase": "sqlite_from_cli_csv", "path": str(cli)}), flush=True)

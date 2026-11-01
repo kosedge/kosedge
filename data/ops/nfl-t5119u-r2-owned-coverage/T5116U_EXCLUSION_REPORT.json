@@ -834,10 +834,10 @@
   },
   "why_t5116u_omitted_owned_sqlite": "run_nfl_eval_one_exec_t5116u.load_quotes used JSONL+CSV 2022-23 only",
   "r2_union_vs_eval": {
-    "matched_n": 119,
-    "missing_n": 330,
+    "matched_n": 95,
+    "missing_n": 354,
     "matched_by_season": {
-      "2022": 47,
+      "2022": 23,
       "2023": 72
     }
   },
@@ -1770,13 +1770,43 @@
       ]
     },
     "gapfill_sqlite": {
-      "quotes_kept_pre_collapse": 0,
-      "latest_n": 0,
+      "quotes_kept_pre_collapse": 952,
+      "latest_n": 621,
       "conflicts_n": 0,
-      "eval_matched_n": 0,
-      "eval_missing_n": 449,
-      "eval_matched_by_season": {},
-      "eval_matched_game_ids": [],
+      "eval_matched_n": 27,
+      "eval_missing_n": 422,
+      "eval_matched_by_season": {
+        "2022": 27
+      },
+      "eval_matched_game_ids": [
+        "2022_17_DAL_TEN",
+        "2022_17_ARI_ATL",
+        "2022_17_CAR_TB",
+        "2022_17_CHI_DET",
+        "2022_17_CLE_WAS",
+        "2022_17_DEN_KC",
+        "2022_17_IND_NYG",
+        "2022_17_JAX_HOU",
+        "2022_17_MIA_NE",
+        "2022_17_NO_PHI",
+        "2022_17_NYJ_SEA",
+        "2022_17_SF_LV",
+        "2022_17_LA_LAC",
+        "2022_17_MIN_GB",
+        "2022_18_KC_LV",
+        "2022_18_TEN_JAX",
+        "2022_18_CAR_NO",
+        "2022_18_CLE_PIT",
+        "2022_18_HOU_IND",
+        "2022_18_MIN_CHI",
+        "2022_18_NYJ_MIA",
+        "2022_18_TB_ATL",
+        "2022_18_ARI_SF",
+        "2022_18_DAL_WAS",
+        "2022_18_LAC_DEN",
+        "2022_18_LA_SEA",
+        "2022_18_NYG_PHI"
+      ],
       "eval_missing_game_ids": [
         "2022_02_LAC_KC",
         "2022_02_CAR_NYG",
@@ -1970,34 +2000,7 @@
         "2022_16_DEN_LA",
         "2022_16_TB_ARI",
         "2022_16_LAC_IND",
-        "2022_17_DAL_TEN",
-        "2022_17_ARI_ATL",
-        "2022_17_CAR_TB",
-        "2022_17_CHI_DET",
-        "2022_17_CLE_WAS",
-        "2022_17_DEN_KC",
-        "2022_17_IND_NYG",
-        "2022_17_JAX_HOU",
-        "2022_17_MIA_NE",
-        "2022_17_NO_PHI",
-        "2022_17_NYJ_SEA",
-        "2022_17_SF_LV",
-        "2022_17_LA_LAC",
-        "2022_17_MIN_GB",
         "2022_17_PIT_BAL",
-        "2022_18_KC_LV",
-        "2022_18_TEN_JAX",
-        "2022_18_CAR_NO",
-        "2022_18_CLE_PIT",
-        "2022_18_HOU_IND",
-        "2022_18_MIN_CHI",
-        "2022_18_NYJ_MIA",
-        "2022_18_TB_ATL",
-        "2022_18_ARI_SF",
-        "2022_18_DAL_WAS",
-        "2022_18_LAC_DEN",
-        "2022_18_LA_SEA",
-        "2022_18_NYG_PHI",
         "2022_18_DET_GB",
         "2023_02_MIN_PHI",
         "2023_02_CHI_TB",
@@ -3814,7 +3817,8 @@
       "in_r2_union_coverage": true,
       "stores_with_admissible_spread": [
         "jsonl",
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3822,9 +3826,10 @@
       "game_id": "2022_17_ARI_ATL",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3832,9 +3837,10 @@
       "game_id": "2022_17_CAR_TB",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3842,9 +3848,10 @@
       "game_id": "2022_17_CHI_DET",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3852,9 +3859,10 @@
       "game_id": "2022_17_CLE_WAS",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3862,9 +3870,10 @@
       "game_id": "2022_17_DEN_KC",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3872,9 +3881,10 @@
       "game_id": "2022_17_IND_NYG",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3882,9 +3892,10 @@
       "game_id": "2022_17_JAX_HOU",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3892,9 +3903,10 @@
       "game_id": "2022_17_MIA_NE",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3902,9 +3914,10 @@
       "game_id": "2022_17_NO_PHI",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3912,9 +3925,10 @@
       "game_id": "2022_17_NYJ_SEA",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3922,9 +3936,10 @@
       "game_id": "2022_17_SF_LV",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3932,9 +3947,10 @@
       "game_id": "2022_17_LA_LAC",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3942,9 +3958,10 @@
       "game_id": "2022_17_MIN_GB",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3963,7 +3980,8 @@
       "in_r2_union_coverage": true,
       "stores_with_admissible_spread": [
         "jsonl",
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3974,7 +3992,8 @@
       "in_r2_union_coverage": true,
       "stores_with_admissible_spread": [
         "jsonl",
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3982,9 +4001,10 @@
       "game_id": "2022_18_CAR_NO",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -3992,9 +4012,10 @@
       "game_id": "2022_18_CLE_PIT",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4002,9 +4023,10 @@
       "game_id": "2022_18_HOU_IND",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4012,9 +4034,10 @@
       "game_id": "2022_18_MIN_CHI",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4022,9 +4045,10 @@
       "game_id": "2022_18_NYJ_MIA",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4032,9 +4056,10 @@
       "game_id": "2022_18_TB_ATL",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4042,9 +4067,10 @@
       "game_id": "2022_18_ARI_SF",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4052,9 +4078,10 @@
       "game_id": "2022_18_DAL_WAS",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4062,9 +4089,10 @@
       "game_id": "2022_18_LAC_DEN",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4072,9 +4100,10 @@
       "game_id": "2022_18_LA_SEA",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
@@ -4082,9 +4111,10 @@
       "game_id": "2022_18_NYG_PHI",
       "season": 2022,
       "in_t5116u_replay_132_path": true,
-      "in_r2_union_coverage": true,
+      "in_r2_union_coverage": false,
       "stores_with_admissible_spread": [
-        "open_close_csv"
+        "open_close_csv",
+        "gapfill_sqlite"
       ],
       "reason": "matched_on_t5116u_replay"
     },
