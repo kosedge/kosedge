@@ -1,0 +1,1128 @@
+{
+  "awaiting": "Alex pre-compute verify / GO bound to this manifest",
+  "cited_tips_not_files": {
+    "8bea4ca3": "LOOK \u2014 cited tip, not a path on this tree",
+    "bd51eb3e": "ACCEPT \u2014 cited tip, not a path on this tree"
+  },
+  "code": {
+    "PROTOCOL.md": "a22b723bbd95a1c05f0481c2a6ae49fde74c49cb910c06cbbdc092e0edcf8c00",
+    "__init__.py": "9e16de5b1aeb2394396e43844432b81ea1ecf6bff12e1cf164920247315f1c09",
+    "constants.py": "eb31eb46a06de9bbe31c0153fca34238a6f7a858f998012fcc21057ff49fbff0",
+    "freeze.py": "8194f714f86fa5672ee35dd8c47afbdc68ee8952c876e3c10d3e617200e95c3b",
+    "hashutil.py": "48dbf4c699317c9798c29af0bd0ead1447dda1ab07dd721c670e4d7a87f24e1b",
+    "identities.py": "cecde5d402813c329f08a8d149a9e12a2a4680d06ecdee60b47b02e1d6231cce",
+    "load.py": "1688ea6e838d9e61d13bfaed73a4dce68e7ac66d5960bbbc60e11567b9353419",
+    "metrics.py": "1fe1ada15ad03a448903c269b7a74a82dc4662ad7a4d4134c1cf5f0f4201b220",
+    "run.py": "c7d41e0bab238d22f89aea8efdb78c9dcb16992e3abab07c6c43d349c358fa00",
+    "tests/__init__.py": "385e74ba959c97afdc70fb5e8f8eb50beb3db0883e4a17c36ca9e3ccb8ff1923",
+    "tests/test_g2_guards.py": "b16d901a61b9f8fafac131f71c97998752104b5282fc030f47b7bed0a9096b47",
+    "tests/test_g2_metrics.py": "1fb84d155dcac953186faca912bb6edf6d52a2edc56cff8e93b54d3b8aa7951e"
+  },
+  "code_catalog_sha256": "b26a0b8406e881230432dcba4e5dd71cf528b76cdfbde8bf58adb5df46d7f426",
+  "consume_head": "43b5a62233b3d1d03ad2b25f5ec7dc52be29b31b",
+  "executed": false,
+  "hard_stops": [
+    "no fitting/regen/retune/selection",
+    "no 2024-25 protected open",
+    "no spend/pull",
+    "no production release",
+    "no merge/C10/cert",
+    "no Q2 EVAL reopen",
+    "no LOOK invocation",
+    "no IF distribution regen"
+  ],
+  "identities": {
+    "n": 141,
+    "records": [
+      {
+        "away": "ARI",
+        "game_id": "2017_07_ARI_LA",
+        "home": "LAR",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "ATL",
+        "game_id": "2017_07_ATL_NE",
+        "home": "NE",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "BAL",
+        "game_id": "2017_07_BAL_MIN",
+        "home": "MIN",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "CAR",
+        "game_id": "2017_07_CAR_CHI",
+        "home": "CHI",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_07_DEN_LAC",
+        "home": "LAC",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "JAX",
+        "game_id": "2017_07_JAX_IND",
+        "home": "IND",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "KC",
+        "game_id": "2017_07_KC_OAK",
+        "home": "OAK",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "NO",
+        "game_id": "2017_07_NO_GB",
+        "home": "GB",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "NYJ",
+        "game_id": "2017_07_NYJ_MIA",
+        "home": "MIA",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "TEN",
+        "game_id": "2017_07_TEN_CLE",
+        "home": "CLE",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "WSH",
+        "game_id": "2017_07_WAS_PHI",
+        "home": "PHI",
+        "season": 2017,
+        "week": 7
+      },
+      {
+        "away": "ATL",
+        "game_id": "2017_08_ATL_NYJ",
+        "home": "NYJ",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "CAR",
+        "game_id": "2017_08_CAR_TB",
+        "home": "TB",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "CHI",
+        "game_id": "2017_08_CHI_NO",
+        "home": "NO",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "DAL",
+        "game_id": "2017_08_DAL_WAS",
+        "home": "WSH",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_08_DEN_KC",
+        "home": "KC",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "IND",
+        "game_id": "2017_08_IND_CIN",
+        "home": "CIN",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "LAC",
+        "game_id": "2017_08_LAC_NE",
+        "home": "NE",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "MIA",
+        "game_id": "2017_08_MIA_BAL",
+        "home": "BAL",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "MIN",
+        "game_id": "2017_08_MIN_CLE",
+        "home": "CLE",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "OAK",
+        "game_id": "2017_08_OAK_BUF",
+        "home": "BUF",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "SF",
+        "game_id": "2017_08_SF_PHI",
+        "home": "PHI",
+        "season": 2017,
+        "week": 8
+      },
+      {
+        "away": "ATL",
+        "game_id": "2017_09_ATL_CAR",
+        "home": "CAR",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "BUF",
+        "game_id": "2017_09_BUF_NYJ",
+        "home": "NYJ",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_09_DEN_PHI",
+        "home": "PHI",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "IND",
+        "game_id": "2017_09_IND_HOU",
+        "home": "HOU",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "KC",
+        "game_id": "2017_09_KC_DAL",
+        "home": "DAL",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "OAK",
+        "game_id": "2017_09_OAK_MIA",
+        "home": "MIA",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "TB",
+        "game_id": "2017_09_TB_NO",
+        "home": "NO",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "WSH",
+        "game_id": "2017_09_WAS_SEA",
+        "home": "SEA",
+        "season": 2017,
+        "week": 9
+      },
+      {
+        "away": "CIN",
+        "game_id": "2017_10_CIN_TEN",
+        "home": "TEN",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "DAL",
+        "game_id": "2017_10_DAL_ATL",
+        "home": "ATL",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "HOU",
+        "game_id": "2017_10_HOU_LA",
+        "home": "LAR",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "MIA",
+        "game_id": "2017_10_MIA_CAR",
+        "home": "CAR",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "NO",
+        "game_id": "2017_10_NO_BUF",
+        "home": "BUF",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "NYG",
+        "game_id": "2017_10_NYG_SF",
+        "home": "SF",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "NYJ",
+        "game_id": "2017_10_NYJ_TB",
+        "home": "TB",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "SEA",
+        "game_id": "2017_10_SEA_ARI",
+        "home": "ARI",
+        "season": 2017,
+        "week": 10
+      },
+      {
+        "away": "ARI",
+        "game_id": "2017_11_ARI_HOU",
+        "home": "HOU",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "ATL",
+        "game_id": "2017_11_ATL_SEA",
+        "home": "SEA",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "BUF",
+        "game_id": "2017_11_BUF_LAC",
+        "home": "LAC",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "CIN",
+        "game_id": "2017_11_CIN_DEN",
+        "home": "DEN",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "DET",
+        "game_id": "2017_11_DET_CHI",
+        "home": "CHI",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "JAX",
+        "game_id": "2017_11_JAX_CLE",
+        "home": "CLE",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "LAR",
+        "game_id": "2017_11_LA_MIN",
+        "home": "MIN",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "TB",
+        "game_id": "2017_11_TB_MIA",
+        "home": "MIA",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "TEN",
+        "game_id": "2017_11_TEN_PIT",
+        "home": "PIT",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "WSH",
+        "game_id": "2017_11_WAS_NO",
+        "home": "NO",
+        "season": 2017,
+        "week": 11
+      },
+      {
+        "away": "BUF",
+        "game_id": "2017_12_BUF_KC",
+        "home": "KC",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "CHI",
+        "game_id": "2017_12_CHI_PHI",
+        "home": "PHI",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "CLE",
+        "game_id": "2017_12_CLE_CIN",
+        "home": "CIN",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_12_DEN_OAK",
+        "home": "OAK",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "GB",
+        "game_id": "2017_12_GB_PIT",
+        "home": "PIT",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "HOU",
+        "game_id": "2017_12_HOU_BAL",
+        "home": "BAL",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "JAX",
+        "game_id": "2017_12_JAX_ARI",
+        "home": "ARI",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "LAC",
+        "game_id": "2017_12_LAC_DAL",
+        "home": "DAL",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "MIA",
+        "game_id": "2017_12_MIA_NE",
+        "home": "NE",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "MIN",
+        "game_id": "2017_12_MIN_DET",
+        "home": "DET",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "NO",
+        "game_id": "2017_12_NO_LA",
+        "home": "LAR",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "NYG",
+        "game_id": "2017_12_NYG_WAS",
+        "home": "WSH",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "TB",
+        "game_id": "2017_12_TB_ATL",
+        "home": "ATL",
+        "season": 2017,
+        "week": 12
+      },
+      {
+        "away": "CAR",
+        "game_id": "2017_13_CAR_NO",
+        "home": "NO",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "CLE",
+        "game_id": "2017_13_CLE_LAC",
+        "home": "LAC",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_13_DEN_MIA",
+        "home": "MIA",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "DET",
+        "game_id": "2017_13_DET_BAL",
+        "home": "BAL",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "HOU",
+        "game_id": "2017_13_HOU_TEN",
+        "home": "TEN",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "IND",
+        "game_id": "2017_13_IND_JAX",
+        "home": "JAX",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "KC",
+        "game_id": "2017_13_KC_NYJ",
+        "home": "NYJ",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "LAR",
+        "game_id": "2017_13_LA_ARI",
+        "home": "ARI",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "MIN",
+        "game_id": "2017_13_MIN_ATL",
+        "home": "ATL",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "NE",
+        "game_id": "2017_13_NE_BUF",
+        "home": "BUF",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "NYG",
+        "game_id": "2017_13_NYG_OAK",
+        "home": "OAK",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "PHI",
+        "game_id": "2017_13_PHI_SEA",
+        "home": "SEA",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "PIT",
+        "game_id": "2017_13_PIT_CIN",
+        "home": "CIN",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "SF",
+        "game_id": "2017_13_SF_CHI",
+        "home": "CHI",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "TB",
+        "game_id": "2017_13_TB_GB",
+        "home": "GB",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "WSH",
+        "game_id": "2017_13_WAS_DAL",
+        "home": "DAL",
+        "season": 2017,
+        "week": 13
+      },
+      {
+        "away": "BAL",
+        "game_id": "2017_14_BAL_PIT",
+        "home": "PIT",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "CHI",
+        "game_id": "2017_14_CHI_CIN",
+        "home": "CIN",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "DAL",
+        "game_id": "2017_14_DAL_NYG",
+        "home": "NYG",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "DET",
+        "game_id": "2017_14_DET_TB",
+        "home": "TB",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "GB",
+        "game_id": "2017_14_GB_CLE",
+        "home": "CLE",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "IND",
+        "game_id": "2017_14_IND_BUF",
+        "home": "BUF",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "MIN",
+        "game_id": "2017_14_MIN_CAR",
+        "home": "CAR",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "NE",
+        "game_id": "2017_14_NE_MIA",
+        "home": "MIA",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "NO",
+        "game_id": "2017_14_NO_ATL",
+        "home": "ATL",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "NYJ",
+        "game_id": "2017_14_NYJ_DEN",
+        "home": "DEN",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "OAK",
+        "game_id": "2017_14_OAK_KC",
+        "home": "KC",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "PHI",
+        "game_id": "2017_14_PHI_LA",
+        "home": "LAR",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "SEA",
+        "game_id": "2017_14_SEA_JAX",
+        "home": "JAX",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "SF",
+        "game_id": "2017_14_SF_HOU",
+        "home": "HOU",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "TEN",
+        "game_id": "2017_14_TEN_ARI",
+        "home": "ARI",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "WSH",
+        "game_id": "2017_14_WAS_LAC",
+        "home": "LAC",
+        "season": 2017,
+        "week": 14
+      },
+      {
+        "away": "ARI",
+        "game_id": "2017_15_ARI_WAS",
+        "home": "WSH",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "ATL",
+        "game_id": "2017_15_ATL_TB",
+        "home": "TB",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "BAL",
+        "game_id": "2017_15_BAL_CLE",
+        "home": "CLE",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "CHI",
+        "game_id": "2017_15_CHI_DET",
+        "home": "DET",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "CIN",
+        "game_id": "2017_15_CIN_MIN",
+        "home": "MIN",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "DAL",
+        "game_id": "2017_15_DAL_OAK",
+        "home": "OAK",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_15_DEN_IND",
+        "home": "IND",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "GB",
+        "game_id": "2017_15_GB_CAR",
+        "home": "CAR",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "HOU",
+        "game_id": "2017_15_HOU_JAX",
+        "home": "JAX",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "LAC",
+        "game_id": "2017_15_LAC_KC",
+        "home": "KC",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "LAR",
+        "game_id": "2017_15_LA_SEA",
+        "home": "SEA",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "MIA",
+        "game_id": "2017_15_MIA_BUF",
+        "home": "BUF",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "NE",
+        "game_id": "2017_15_NE_PIT",
+        "home": "PIT",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "NYJ",
+        "game_id": "2017_15_NYJ_NO",
+        "home": "NO",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "PHI",
+        "game_id": "2017_15_PHI_NYG",
+        "home": "NYG",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "TEN",
+        "game_id": "2017_15_TEN_SF",
+        "home": "SF",
+        "season": 2017,
+        "week": 15
+      },
+      {
+        "away": "ATL",
+        "game_id": "2017_16_ATL_NO",
+        "home": "NO",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "BUF",
+        "game_id": "2017_16_BUF_NE",
+        "home": "NE",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "CLE",
+        "game_id": "2017_16_CLE_CHI",
+        "home": "CHI",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "DEN",
+        "game_id": "2017_16_DEN_WAS",
+        "home": "WSH",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "DET",
+        "game_id": "2017_16_DET_CIN",
+        "home": "CIN",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "IND",
+        "game_id": "2017_16_IND_BAL",
+        "home": "BAL",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "JAX",
+        "game_id": "2017_16_JAX_SF",
+        "home": "SF",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "LAC",
+        "game_id": "2017_16_LAC_NYJ",
+        "home": "NYJ",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "LAR",
+        "game_id": "2017_16_LA_TEN",
+        "home": "TEN",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "MIA",
+        "game_id": "2017_16_MIA_KC",
+        "home": "KC",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "MIN",
+        "game_id": "2017_16_MIN_GB",
+        "home": "GB",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "NYG",
+        "game_id": "2017_16_NYG_ARI",
+        "home": "ARI",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "OAK",
+        "game_id": "2017_16_OAK_PHI",
+        "home": "PHI",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "PIT",
+        "game_id": "2017_16_PIT_HOU",
+        "home": "HOU",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "SEA",
+        "game_id": "2017_16_SEA_DAL",
+        "home": "DAL",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "TB",
+        "game_id": "2017_16_TB_CAR",
+        "home": "CAR",
+        "season": 2017,
+        "week": 16
+      },
+      {
+        "away": "ARI",
+        "game_id": "2017_17_ARI_SEA",
+        "home": "SEA",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "BUF",
+        "game_id": "2017_17_BUF_MIA",
+        "home": "MIA",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "CAR",
+        "game_id": "2017_17_CAR_ATL",
+        "home": "ATL",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "CHI",
+        "game_id": "2017_17_CHI_MIN",
+        "home": "MIN",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "CIN",
+        "game_id": "2017_17_CIN_BAL",
+        "home": "BAL",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "CLE",
+        "game_id": "2017_17_CLE_PIT",
+        "home": "PIT",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "DAL",
+        "game_id": "2017_17_DAL_PHI",
+        "home": "PHI",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "GB",
+        "game_id": "2017_17_GB_DET",
+        "home": "DET",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "HOU",
+        "game_id": "2017_17_HOU_IND",
+        "home": "IND",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "JAX",
+        "game_id": "2017_17_JAX_TEN",
+        "home": "TEN",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "KC",
+        "game_id": "2017_17_KC_DEN",
+        "home": "DEN",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "NO",
+        "game_id": "2017_17_NO_TB",
+        "home": "TB",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "NYJ",
+        "game_id": "2017_17_NYJ_NE",
+        "home": "NE",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "OAK",
+        "game_id": "2017_17_OAK_LAC",
+        "home": "LAC",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "SF",
+        "game_id": "2017_17_SF_LA",
+        "home": "LAR",
+        "season": 2017,
+        "week": 17
+      },
+      {
+        "away": "WSH",
+        "game_id": "2017_17_WAS_NYG",
+        "home": "NYG",
+        "season": 2017,
+        "week": 17
+      }
+    ],
+    "sha256": "b8fec2234c4eb49a667438cb2f2f2f2432973f4a6dbdac077c921d3d91410d6d",
+    "source": "forecast joint/q2s/IF_MUS alignment; outcomes not parsed"
+  },
+  "identity_boundary": {
+    "accept_tip": "bd51eb3e",
+    "look_consumed_sha8": "013d270a",
+    "look_tip": "8bea4ca3",
+    "note": "Cited identity boundary only. No LOOK invocation. No Q2 EVAL reopen. No counter rewrite.",
+    "q2_eval": "03a4dd90 CLOSED"
+  },
+  "inputs": {
+    "if_mus": {
+      "parse": "forecast",
+      "path": "phase4/artifacts/IF_MUS_W7W17.json",
+      "sha256": "32e9743483259f2a9c13efe9826e550f610a6068995fad3bc9fdb6b1698d5d43",
+      "sha8": "32e97434"
+    },
+    "joint_json": {
+      "parse": "forecast",
+      "path": "joint/artifacts/Q2S_JOINT_W7W17.json",
+      "sha256": "5076421ef1fba943df9c1e8eeaefede4f7a7e30a36ae2ed792a7f2bc295c4e27",
+      "sha8": "5076421e"
+    },
+    "joint_npz": {
+      "parse": "forecast",
+      "path": "joint/artifacts/Q2S_JOINT_DRAWS_W7W17.npz",
+      "sha256": "ce6b1244895df065ea8428851261becbb8012c7379d6184770116a7dfbcb0fc5",
+      "sha8": "ce6b1244"
+    },
+    "look_consumed": {
+      "parse": "checksum_only",
+      "path": "phase4/artifacts/LOOK_CONSUMED.json",
+      "sha256": "013d270a815511ebe6a77dc559eb2e2df47c47670c9dfc6b1f2a0f0193a46331",
+      "sha8": "013d270a"
+    },
+    "outcomes_score_only": {
+      "parse": "checksum_only",
+      "path": "pins/outcomes_2013_2022_score_only.csv",
+      "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+      "sha8": "50bda875"
+    },
+    "q2s_rows": {
+      "parse": "forecast",
+      "path": "phase4/artifacts/q2s_rows_w7w17.json",
+      "sha256": "55d8c8bc2155705c04e9ef88ba5637ea491bf5c245e4f7bb8fcfb3523f9ec925",
+      "sha8": "55d8c8bc"
+    }
+  },
+  "protocol": {
+    "cert": 0,
+    "consume_head": "43b5a62233b3d1d03ad2b25f5ec7dc52be29b31b",
+    "consume_head_sha8": "43b5a622",
+    "coverage_levels": [
+      0.5,
+      0.8,
+      0.9
+    ],
+    "exclude_actual_ties_from_binary": true,
+    "id": "g2-diagnostic-t5075u-v1",
+    "if_distribution": "UNAVAILABLE",
+    "join": [
+      "season",
+      "week",
+      "home",
+      "away"
+    ],
+    "label": "RETRO_FIT / DEV_RESEARCH",
+    "logloss_clip": [
+      0.000125,
+      0.999875
+    ],
+    "logloss_eps": 0.000125,
+    "logloss_n": 4000,
+    "n_draws": 4000,
+    "n_games": 141,
+    "n_t2_sealed_out": 24,
+    "nfl": "NO-GO",
+    "no_look_invocation": true,
+    "no_pass_edge_retune_selection": true,
+    "outcomes_parse_before_alex_go": false,
+    "point_candidate_total": "UNAVAILABLE",
+    "point_candidate_wp": "UNAVAILABLE",
+    "protocol_sha256": "a22b723bbd95a1c05f0481c2a6ae49fde74c49cb910c06cbbdc092e0edcf8c00",
+    "q2_eval": "03a4dd90 CLOSED",
+    "season": 2017,
+    "ticket": "t5075u",
+    "weeks": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ]
+  },
+  "protocol_id": "g2-diagnostic-t5075u-v1",
+  "status": "PREVERIFY",
+  "ticket": "t5075u"
+}
