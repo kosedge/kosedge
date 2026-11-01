@@ -28,6 +28,10 @@ from .q2 import (  # noqa: F401
     q2_pm_new,
     verify_q2_transfer_policy,
 )
+from .dev_research import (  # noqa: F401
+    LABEL as DEV_RESEARCH_LABEL,
+    run_dev_research_e2e,
+)
 from .evaluator import (  # noqa: F401
     EvalRefuse,
     freeze_eligible_cohorts,
@@ -35,6 +39,7 @@ from .evaluator import (  # noqa: F401
     run_eval_score,
     run_paired_margin_eval,
 )
+from .outcome_gate import ScoringOutcomeLoader  # noqa: F401
 from .if_produce import produce_if_mu  # noqa: F401
 from .one_run import OneRunRefuse, bind_one_run  # noqa: F401
 from .recon_driver import (  # noqa: F401

@@ -45,6 +45,11 @@ from .one_run import (
     load_one_run,
     verify_one_run,
 )
+from .outcome_gate import (
+    OutcomeGateRefuse,
+    invoke_after_gates,
+    refuse_both_preload_and_loader,
+)
 from .q2 import SEALED_SEASONS
 
 CUTOFF_MINUTES = 60
@@ -610,8 +615,9 @@ def run_paired_margin_eval(
 
 def run_eval_score(
     frozen: FrozenCohort,
-    outcomes: Mapping[str, Mapping[str, Any]],
+    outcomes: Mapping[str, Mapping[str, Any]] | None = None,
     *,
+    outcome_loader: Any = None,
     exec_bind: str | None = None,
     market_points: Sequence[Mapping[str, Any]] | None = None,
     bootstrap_b: int = BOOT_B,
@@ -627,7 +633,18 @@ def run_eval_score(
     input_path: Any = None,
     score_body: Any = None,
 ) -> dict[str, Any]:
-    """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS."""
+    """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS.
+
+    SOURCE READ (quotes / forecasts / metadata) may precede this function.
+    TARGET JOIN (scoring outcomes) must not. Prefer ``outcome_loader``; it is
+    invoked only after HOLD, hash verify, and exclusive claim. Preloaded
+    ``outcomes`` is the t5116u exposure and is accepted only as a back-compat
+    JOIN input after those same gates — it is never a reason to skip them.
+    """
+    try:
+        refuse_both_preload_and_loader(outcomes, outcome_loader)
+    except OutcomeGateRefuse as exc:
+        raise EvalRefuse(str(exc)) from exc
     if not frozen.sealed_before_outcome_join:
         raise EvalRefuse("cohort was not sealed before outcome join")
     rehash = freeze_forecast_cohort(frozen.payload)
@@ -673,9 +690,10 @@ def run_eval_score(
         allow = list((eligible_cohorts.get("margin_cohort") or {}).get("game_ids") or [])
     score_fn = score_body or run_paired_margin_eval
     try:
+        joined_outcomes = invoke_after_gates(outcomes, outcome_loader)
         scored = score_fn(
             list(frozen.payload.get("forecasts") or []),
-            outcomes,
+            joined_outcomes,
             eligible_game_ids=allow,
             market_points=market_points,
             bootstrap_b=bootstrap_b,
@@ -684,8 +702,8 @@ def run_eval_score(
         complete_one_run(one_run_path, record["bind_id"], result={"n": scored.get("n")})
     except Exception as exc:
         fail_one_run(one_run_path, record["bind_id"], str(exc))
-        if isinstance(exc, (EvalRefuse, OneRunRefuse)):
-            raise
+        if isinstance(exc, (EvalRefuse, OneRunRefuse, OutcomeGateRefuse)):
+            raise EvalRefuse(str(exc)) from exc
         raise EvalRefuse(
             f"one-run claimed then failed — refuse automatic rerun: {exc}"
         ) from exc
@@ -694,6 +712,7 @@ def run_eval_score(
     scored["one_run_bind_id"] = record["bind_id"]
     scored["alex_go_id"] = record["alex_go_id"]
     scored["one_run_status"] = "CONSUMED"
+    scored["target_join_phase"] = "AFTER_HOLD_HASH_CLAIM"
     return scored
 
 

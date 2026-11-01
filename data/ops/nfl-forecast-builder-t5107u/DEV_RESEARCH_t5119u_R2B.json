@@ -1,0 +1,101 @@
+{
+  "schema_version": "nfl-t5119u-dev-research-v1",
+  "label": "DEV_RESEARCH",
+  "cert_candidate": 0,
+  "eval": null,
+  "scoring": null,
+  "look": null,
+  "exec_scoring": "REFUSED_DEV_RESEARCH_NOT_EVAL",
+  "one_run_claim": false,
+  "synthetic": false,
+  "dev_reg_n": 437,
+  "dev_reg_sha256": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+  "wildcard_n": 6,
+  "wildcard_sha256": "f81d381e0553a82a87a86b5e1a980cc2792be2e12f73203e48aa1435199d0722",
+  "wildcard_excluded": true,
+  "selection_rule": "first_eligible_after_metadata_freeze_dev_reg_pin_order",
+  "eligibility_sha256": "65e1ce84c6509961975f4ff5356cd53e7eccfb5b124e9b92143dcb882024f623",
+  "eligible_n": 437,
+  "game_id": "2020_02_CIN_CLE",
+  "input": {
+    "game_id": "2020_02_CIN_CLE",
+    "season": 2020,
+    "week": 2,
+    "season_type": "REG",
+    "home": "CLE",
+    "away": "CIN",
+    "kickoff_utc": "2020-09-18T00:20:00Z",
+    "m_if": 0.07714026611934685,
+    "m_q2": 2.94683323036635,
+    "m_challenger": 1.5119867482428484
+  },
+  "if_pinned": {
+    "m_if": 0.07714026611934685,
+    "if_status": "reconstructed",
+    "if_label": "RECONSTRUCTED_IF_6ca03716",
+    "source": "forecast_freeze_pin"
+  },
+  "candidate": {
+    "weight_if": 0.5,
+    "weight_q2": 0.5,
+    "m_if": 0.07714026611934685,
+    "m_q2": 2.94683323036635,
+    "m_challenger": 1.5119867482428484,
+    "m_challenger_recomputed": 1.5119867482428484,
+    "match": true,
+    "extra_hfa": 0.0,
+    "market_blend": 0.0,
+    "fit": false,
+    "selection": false,
+    "probability_invented": false
+  },
+  "market": {
+    "status": "MISSING",
+    "market_margin": null,
+    "spread_home": null,
+    "p_home_fair": null,
+    "p_compare": "unavailable",
+    "books_used": [],
+    "book_count": 0,
+    "reason": "no_admissible_quotes_supplied"
+  },
+  "outcome": {
+    "status": "JOINED",
+    "game_id": "2020_02_CIN_CLE",
+    "season": 2020,
+    "week": 2,
+    "home_score": 35.0,
+    "away_score": 30.0,
+    "actual_margin": 5.0,
+    "reason": "target_join_after_metadata_freeze_and_pick"
+  },
+  "numerical_error": {
+    "status": "COMPUTED",
+    "actual_margin": 5.0,
+    "err_challenger": -3.4880132517571516,
+    "err_if": -4.922859733880653,
+    "L_challenger": 3.4880132517571516,
+    "L_if": 4.922859733880653,
+    "signed_diff_vs_if": -1.4348464821235014,
+    "err_market": null,
+    "L_market": null,
+    "signed_diff_vs_market": null,
+    "market_status": "MISSING",
+    "reason": "no_admissible_quotes_supplied"
+  },
+  "r2a_coverage": {
+    "status": "not_ready",
+    "path": null,
+    "pins": null,
+    "reason": "R2-A coverage manifest not present; existing admissible quotes only"
+  },
+  "target_join_phase": "AFTER_METADATA_ELIGIBILITY_AND_PICK",
+  "notes": [
+    "SOURCE READ (forecasts/quotes/metadata) \u2260 TARGET JOIN (scoring outcomes).",
+    "t5116u loaded EVAL outcomes to memory pre-HOLD; R2 path does not.",
+    "Fixed 0.5/0.5 candidate. No fit, no selection, no invented probabilities.",
+    "Missing market labeled honestly. No EVAL EXEC. No one-run claim. CERT=0.",
+    "DEV REG pin 437/92b91585; WC 6 excluded."
+  ],
+  "record_sha256": "621f0f843da8ac219d284448ac1cd3124bbcdba629c6df49a54b3b518fad30fc"
+}
