@@ -34,6 +34,10 @@ from .dev_research import (  # noqa: F401
 )
 from .dev_research_cohort import run_dev_research_cohort  # noqa: F401
 from .dev_research_matched72 import build_matched72_dev_research_record  # noqa: F401
+from .r3_dev_calibration import (  # noqa: F401
+    build_pre_fit_freeze_package,
+    run_r3_calibration,
+)
 from .r2_eval_runner import run_eval_score_r2  # noqa: F401
 from .r2_market_e2e import run_market_e2e  # noqa: F401
 from .r2_byte_rehash import (  # noqa: F401

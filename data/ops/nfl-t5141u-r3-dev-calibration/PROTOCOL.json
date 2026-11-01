@@ -1,0 +1,83 @@
+{
+  "schema_version": "nfl-t5141u-r3-dev-calibration-v1",
+  "ticket": "t5141u",
+  "experiment": "R3-DEV-CALIBRATION",
+  "cert_candidate": 0,
+  "eval": null,
+  "label": "DEV_RESEARCH",
+  "authority": {
+    "owner_clear_sha8": "714ced10",
+    "cos_order_sha8": "1155f43f",
+    "preflight_sha8": "a23e01dd"
+  },
+  "model": {
+    "x_w": "x(w)=(1-w)*IF_margin + w*Q2_complete_margin (home-away points)",
+    "extra_hfa": false,
+    "inputs_already_include_intercept_hfa": true,
+    "blend_reproduce_tol": 1e-09,
+    "q2_recovery": "Q2=2*m_challenger-m_if after lineage that m_challenger is frozen 50/50",
+    "q2_not_newly_generated": true,
+    "no_imputation": true,
+    "no_original_q2_2017_look": true,
+    "no_if_q2_refit": true
+  },
+  "arms": {
+    "C0": "unchanged IF (m_if)",
+    "C1": "unchanged frozen 50/50 (m_challenger = x(0.5))",
+    "C2": "x(0.5)+b ; b=median(actual_margin-x(0.5)) fit on 2020 only",
+    "C3": "w in {0,0.01,...,1}; b(w)=median(actual-x(w)) on 2020 only; select minimum unrounded 2020 MAE; exact ties prefer w closest to 0.5 then smaller w; freeze (w,b) and ALL candidate training losses BEFORE any 2021 calculation",
+    "no_2021_or_market_tuning": true,
+    "no_extra_families": true
+  },
+  "diagnostic_2021": {
+    "n": 227,
+    "comparisons": [
+      "C2 vs C0",
+      "C2 vs C1",
+      "C3 vs C0",
+      "C3 vs C1"
+    ],
+    "metrics": [
+      "MAE",
+      "RMSE",
+      "mean_signed_bias",
+      "per_game",
+      "paired_mean_signed_abs_loss_diff"
+    ],
+    "intervals": "game + season-week cluster 95% CI; B=10000 seed 20261101",
+    "interval_conditioning": "conditional_on_fitted_parameters_not_full_fitting_uncertainty",
+    "negative_diff_favors": "calibrated arm",
+    "crossing_zero_or_mixed": "INCONCLUSIVE",
+    "no_winner_selection": true,
+    "no_refit_from_2021": true,
+    "training_2020_reported_separately": true
+  },
+  "market_n37": {
+    "n": 37,
+    "source": "matched72 \u2229 2021",
+    "matched72_sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6",
+    "quotes_sha256": "75c0b14c7391252dd5ca790c09d9d65071916ef4f39a20c81c88c57229917fb9",
+    "manifest_sha256": "bfcf8ff4b3c9dd933c6edb381a76d6bbb7abd6a1723120941d810425942e00d8",
+    "selection_limited": true,
+    "representative_market_validation": false,
+    "normalized_94_refused": "0a49afa3",
+    "no_invented_probabilities": true,
+    "same_cutoff_dk_fd_sign_rules_as_market_e2e": true
+  },
+  "rng": {
+    "bootstrap_B": 10000,
+    "bootstrap_seed": 20261101
+  },
+  "stops": [
+    "No EVAL bind/claim",
+    "No post-result retune",
+    "No gate waiver",
+    "No Stage C release",
+    "No production merge/deploy",
+    "No enterprise/edge claim",
+    "R2-C remains DATA_COVERAGE_BLOCKED",
+    "G5 unchanged"
+  ],
+  "outcomes_already_consumed": true,
+  "retro_fit_limitations_preserved": true
+}

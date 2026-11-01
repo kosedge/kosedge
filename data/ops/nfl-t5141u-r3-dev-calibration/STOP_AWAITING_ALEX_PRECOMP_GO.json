@@ -1,0 +1,19 @@
+{
+  "status": "STOP_AWAITING_ALEX_PRECOMP_GO",
+  "ticket": "t5141u",
+  "experiment": "R3-DEV-CALIBRATION",
+  "cert_candidate": 0,
+  "eval": null,
+  "diagnostic_executed": false,
+  "c2_c3_fitted": false,
+  "go_token_required": "t5141u-alex-precomp-go",
+  "go_env": "T5141U_ALEX_PRECOMP_GO",
+  "hard_end": "00:35 UTC / 19:35 America/New_York",
+  "notes": [
+    "These DEV outcomes are ALREADY CONSUMED. RETRO_FIT / forecast-vintage limitations remain. Calibration cannot repair them. NOT EVAL. CERT=0.",
+    "Protocol/code/input/identity hashes frozen before any C2/C3 fit.",
+    "C3 (w,b) and candidate training losses are NOT computed until Alex GO.",
+    "One 2021 DEV diagnostic + n=37 market diagnostic after GO only.",
+    "R2-C remains DATA_COVERAGE_BLOCKED. G5 unchanged. Isolated new directory."
+  ]
+}
