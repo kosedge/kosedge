@@ -1,0 +1,16 @@
+{
+  "helper_sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "season": 2023,
+  "week": 2,
+  "n_targets": 16,
+  "n_eligible": 16,
+  "n_excluded": 16,
+  "completeness_sha256": "3d9231cead0ba75b939293cf6826e6a0474acdb475dca90d79077ed5ce2f2958",
+  "matrix_sha256": "44aa0ddacfde177c752fb72221c4ea5551aee43c2f71d3fc575a0dfb082a696c",
+  "matrix_file_sha256": "129dca2192246c7ea7b0c1c97b6e15b3416db072e47adfb4af75338df9355ab2",
+  "n_complete_27": 15,
+  "n_partial": 1,
+  "n_cells": 432,
+  "label": "RECONSTRUCTED",
+  "cert_candidate": 0
+}

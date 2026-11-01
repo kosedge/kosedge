@@ -1,0 +1,434 @@
+{
+  "schema_version": "nfl-t5111u-completeness-seal-v1",
+  "frozen_before_errors": true,
+  "frozen_before_pbp_open": true,
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "n_targets": 32,
+  "n_eligible": 16,
+  "n_excluded": 16,
+  "selection_hash": "91eb1771755d5e34d1ae62c3f0e0a0a621a2616034a1c771cb2c1dd6a05315b3",
+  "eligible_game_ids": [
+    "2023_02_BAL_CIN",
+    "2023_02_CHI_TB",
+    "2023_02_CLE_PIT",
+    "2023_02_GB_ATL",
+    "2023_02_IND_HOU",
+    "2023_02_KC_JAX",
+    "2023_02_LAC_TEN",
+    "2023_02_LV_BUF",
+    "2023_02_MIA_NE",
+    "2023_02_MIN_PHI",
+    "2023_02_NO_CAR",
+    "2023_02_NYG_ARI",
+    "2023_02_NYJ_DAL",
+    "2023_02_SEA_DET",
+    "2023_02_SF_LA",
+    "2023_02_WAS_DEN"
+  ],
+  "excluded": [
+    {
+      "game_id": "2023_01_DET_KC",
+      "season": 2023,
+      "week": 1,
+      "home": "KC",
+      "away": "DET",
+      "kickoff_utc": "2023-09-08T00:20:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_ARI_WAS",
+      "season": 2023,
+      "week": 1,
+      "home": "WSH",
+      "away": "ARI",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_CAR_ATL",
+      "season": 2023,
+      "week": 1,
+      "home": "ATL",
+      "away": "CAR",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_CIN_CLE",
+      "season": 2023,
+      "week": 1,
+      "home": "CLE",
+      "away": "CIN",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_DAL_NYG",
+      "season": 2023,
+      "week": 1,
+      "home": "NYG",
+      "away": "DAL",
+      "kickoff_utc": "2023-09-11T00:20:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_GB_CHI",
+      "season": 2023,
+      "week": 1,
+      "home": "CHI",
+      "away": "GB",
+      "kickoff_utc": "2023-09-10T20:25:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_HOU_BAL",
+      "season": 2023,
+      "week": 1,
+      "home": "BAL",
+      "away": "HOU",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_JAX_IND",
+      "season": 2023,
+      "week": 1,
+      "home": "IND",
+      "away": "JAX",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_LA_SEA",
+      "season": 2023,
+      "week": 1,
+      "home": "SEA",
+      "away": "LAR",
+      "kickoff_utc": "2023-09-10T20:25:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_LV_DEN",
+      "season": 2023,
+      "week": 1,
+      "home": "DEN",
+      "away": "LV",
+      "kickoff_utc": "2023-09-10T20:25:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_MIA_LAC",
+      "season": 2023,
+      "week": 1,
+      "home": "LAC",
+      "away": "MIA",
+      "kickoff_utc": "2023-09-10T20:25:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_PHI_NE",
+      "season": 2023,
+      "week": 1,
+      "home": "NE",
+      "away": "PHI",
+      "kickoff_utc": "2023-09-10T20:25:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_SF_PIT",
+      "season": 2023,
+      "week": 1,
+      "home": "PIT",
+      "away": "SF",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_TB_MIN",
+      "season": 2023,
+      "week": 1,
+      "home": "MIN",
+      "away": "TB",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_TEN_NO",
+      "season": 2023,
+      "week": 1,
+      "home": "NO",
+      "away": "TEN",
+      "kickoff_utc": "2023-09-10T17:00:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2023_01_BUF_NYJ",
+      "season": 2023,
+      "week": 1,
+      "home": "NYJ",
+      "away": "BUF",
+      "kickoff_utc": "2023-09-12T00:15:00Z",
+      "rating_week": 0,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    }
+  ],
+  "eligible": [
+    {
+      "game_id": "2023_02_MIN_PHI",
+      "season": 2023,
+      "week": 2,
+      "home": "PHI",
+      "away": "MIN",
+      "kickoff_utc": "2023-09-15T00:15:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_BAL_CIN",
+      "season": 2023,
+      "week": 2,
+      "home": "CIN",
+      "away": "BAL",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_CHI_TB",
+      "season": 2023,
+      "week": 2,
+      "home": "TB",
+      "away": "CHI",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_GB_ATL",
+      "season": 2023,
+      "week": 2,
+      "home": "ATL",
+      "away": "GB",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_IND_HOU",
+      "season": 2023,
+      "week": 2,
+      "home": "HOU",
+      "away": "IND",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_KC_JAX",
+      "season": 2023,
+      "week": 2,
+      "home": "JAX",
+      "away": "KC",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_LAC_TEN",
+      "season": 2023,
+      "week": 2,
+      "home": "TEN",
+      "away": "LAC",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_LV_BUF",
+      "season": 2023,
+      "week": 2,
+      "home": "BUF",
+      "away": "LV",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_MIA_NE",
+      "season": 2023,
+      "week": 2,
+      "home": "NE",
+      "away": "MIA",
+      "kickoff_utc": "2023-09-18T00:20:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_NYG_ARI",
+      "season": 2023,
+      "week": 2,
+      "home": "ARI",
+      "away": "NYG",
+      "kickoff_utc": "2023-09-17T20:05:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_NYJ_DAL",
+      "season": 2023,
+      "week": 2,
+      "home": "DAL",
+      "away": "NYJ",
+      "kickoff_utc": "2023-09-17T20:25:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_SEA_DET",
+      "season": 2023,
+      "week": 2,
+      "home": "DET",
+      "away": "SEA",
+      "kickoff_utc": "2023-09-17T17:00:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "0-1",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_SF_LA",
+      "season": 2023,
+      "week": 2,
+      "home": "LAR",
+      "away": "SF",
+      "kickoff_utc": "2023-09-17T20:05:00Z",
+      "rating_week": 1,
+      "record_asof_home": "1-0",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_WAS_DEN",
+      "season": 2023,
+      "week": 2,
+      "home": "DEN",
+      "away": "WSH",
+      "kickoff_utc": "2023-09-17T20:25:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_CLE_PIT",
+      "season": 2023,
+      "week": 2,
+      "home": "PIT",
+      "away": "CLE",
+      "kickoff_utc": "2023-09-19T00:15:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    },
+    {
+      "game_id": "2023_02_NO_CAR",
+      "season": 2023,
+      "week": 2,
+      "home": "CAR",
+      "away": "NO",
+      "kickoff_utc": "2023-09-18T23:15:00Z",
+      "rating_week": 1,
+      "record_asof_home": "0-1",
+      "record_asof_away": "1-0",
+      "n_home": 1,
+      "n_away": 1
+    }
+  ],
+  "completeness_sha256": "3d9231cead0ba75b939293cf6826e6a0474acdb475dca90d79077ed5ce2f2958"
+}

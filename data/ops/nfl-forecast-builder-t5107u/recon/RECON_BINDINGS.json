@@ -1,0 +1,92 @@
+{
+  "archived_if_mus_required": false,
+  "cert_candidate": 0,
+  "completeness_sha256": "b2ded70823363d1a8a002824ae4c3d32476640cbffa66814b2ada081f027401c",
+  "contract_sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+  "helper_sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "helper_tip": "43b5a62233b3d1d03ad2b25f5ec7dc52be29b31b",
+  "incompatibilities": [
+    {
+      "detail": "2017-era helper remaps LV\u2192OAK. 2020\u201323 games.csv 4fe1cdd7 and outcomes 50bda875 use LV (OAK count=0). Driver replaces mod.PBP_TO_CANON with {LA:LAR, WAS:WSH} so Raiders stay LV. LA\u2192LAR and WAS\u2192WSH transfer unchanged (PBP still emits LA/WAS).",
+      "helper": "build_recon_t4893u.py:128",
+      "item": "PBP_TO_CANON['LV']='OAK'",
+      "status": "OVERLAID_IDENTITY_ONLY"
+    },
+    {
+      "detail": "t4_from_t2_sides applies helper.main T4 contract: diff_off=h-a, diff_def_allowed=a-h, diff_pg=h-a, diff_pa=a-h, diff_rz=h-a, diff_sr=mean((h_so-a_so),(a_sd-h_sd)). Not a new feature. Not loosened.",
+      "helper": "build_recon_t4893u.py:938-950 / rebuild_w7w17.py:712-740",
+      "item": "T4 diffs not a helper export",
+      "status": "APPLIED_UNCHANGED_FROM_HELPER_MAIN"
+    },
+    {
+      "detail": "Old 2017 OOS reader and quarantined 1ee90fac are not opened.",
+      "helper": "build_recon_t4893u.py:229,522",
+      "item": "helper.main / load_oos_2016_2017 / 1ee90fac",
+      "status": "REFUSED"
+    },
+    {
+      "detail": "2020\u201322 T5 W-L from 50bda875. 2023 T5 from owned PBP score-only extract 253e178b (game_id join). Not a formula change.",
+      "helper": "stops 2022",
+      "item": "outcomes 50bda875 season coverage",
+      "status": "PATH_PLUMBING"
+    },
+    {
+      "detail": "2017 artifact cannot share row hashes with newly generated 2020\u201323 rows. Bind new reconstruction hashes + per-field provenance.",
+      "helper": "expected",
+      "item": "old b41f4b43 2017 row hashes vs 2020\u201323 rows",
+      "status": "NEW_HASHES_BOUND"
+    }
+  ],
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "matrix_sha256": "dd3593dca5fc4969197a915b69a2b000912bbd2c023972e5f666c233cd923b4a",
+  "n_cells": 6912,
+  "n_complete_27": 228,
+  "n_partial": 28,
+  "old_b41f4b43_row_hash_match_expected": false,
+  "provenance": [
+    {
+      "field": "game_id,home_team,away_team,matchup_season,matchup_week",
+      "notes": "do not use games.csv rest_days_* or epa_* columns",
+      "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+      "source": "games.csv 4fe1cdd7 identity + kickoff_utc UTC Z",
+      "status": "hashed"
+    },
+    {
+      "field": "rest_days_home,rest_days_away",
+      "notes": "existing rest contract; both sides same value",
+      "sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+      "source": "helper.rest_days_et (ET DOW Thu=4 Mon=6 else=7)",
+      "status": "imported"
+    },
+    {
+      "field": "offense_index_*,defense_index_*",
+      "notes": "2020-22 50bda875; 2023 PBP extract; same-season; W1 no-fill",
+      "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081 / 253e178b72094f809264ff7a38b6792fbd99ffac092b26a00a8e8693416a63da",
+      "source": "helper.team_strength_from_record + record_asof",
+      "status": "imported"
+    },
+    {
+      "field": "T1/T2 5g EPA/success/pass/pressure/RZ",
+      "notes": "owned PBP 2020-23; exact rating_week=week-1; no last-played fill",
+      "sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+      "source": "helper.t1_from_plays + rolling_5g + lookup_t2",
+      "status": "imported"
+    },
+    {
+      "field": "T4 matchup_diff_*",
+      "notes": "not a helper export; not a new feature",
+      "sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+      "source": "helper.main T4 contract applied to imported T2 rows",
+      "status": "applied_unchanged"
+    },
+    {
+      "field": "Stage C / 1ee90fac / old OOS",
+      "notes": "not opened; not a missing-to-invent source",
+      "sha256": "1ee90fac",
+      "source": "forbidden",
+      "status": "FORBIDDEN"
+    }
+  ],
+  "schema_version": "nfl-t5111u-recon-bindings-v1",
+  "written_at_utc": "2026-11-01T19:27:25Z"
+}
