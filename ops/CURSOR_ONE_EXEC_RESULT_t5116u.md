@@ -71,5 +71,6 @@ No ΔMAE / bootstrap. No CONSUMED receipt.
 | bind_id                          | `39909c61ce9429896bd20edd37259803cad0e11f1e2d3c3828ee04c9faab1830` |
 | Alex GO                          | `c122b1088a404db550ae570ccf0c2099e084d900233bd5d317b84990288eef3b` |
 | EVAL-only forecast_sha256 (bind) | `989b85c6150bdd84b1a84c200e4f9d83b5e7081c094063405a6ae46de94b8e1a` |
+| this implementation tip          | `f10abd948c1d7758e6b8f5f603e65f5b321ae648`                         |
 
 CERT=0 · DRAFT≠merge · no merge · failure≠second look.
