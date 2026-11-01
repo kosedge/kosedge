@@ -34,6 +34,7 @@ from .dev_research import (  # noqa: F401
 )
 from .dev_research_cohort import run_dev_research_cohort  # noqa: F401
 from .r2_eval_runner import run_eval_score_r2  # noqa: F401
+from .r2_market_e2e import run_market_e2e  # noqa: F401
 from .r2_byte_rehash import (  # noqa: F401
     bind_r2_runtime_bytes,
     enumerate_admitted_extracts,

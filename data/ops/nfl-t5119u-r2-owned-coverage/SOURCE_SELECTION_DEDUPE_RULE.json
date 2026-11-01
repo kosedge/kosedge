@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-t5119u-r2a-source-selection-dedupe-v1",
+  "books": [
+    "draftkings",
+    "fanduel"
+  ],
+  "all_admissible_dk_fd": true,
+  "performance_selected": false,
+  "stores_in": [
+    "clean_jsonl_2020_2023",
+    "open_close_csv_2020_2023",
+    "gapfill_sqlite_2020_2023_extract"
+  ],
+  "markets": [
+    "spread",
+    "moneyline",
+    "total"
+  ],
+  "cutoff": "captured_at <= kickoff_utc - 60 minutes",
+  "max_age_hours": 24,
+  "duplicate_collapse": "identical fingerprint keeps one; conflicting fingerprint refuses",
+  "latest_slot": "(game_id, book, market) latest captured_at still <= cutoff",
+  "unresolved_conflict": "refuse",
+  "undocumented_tz_sign_identity": "refuse"
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "nfl-t5119u-r2b-consume-v1",
+  "cert_candidate": 0,
+  "eval_claim": false,
+  "g5_loosened": false,
+  "time_rule_loosened": false,
+  "book_rule_loosened": false,
+  "market_e2e": "READY_FOR_R2B_DEV_E2E",
+  "reason": "sealed admissible DK/FD extract + coverage manifest; sqlite included; conflicts refused not loosened",
+  "coverage_manifest": "data/ops/nfl-t5119u-r2-owned-coverage/COVERAGE_MANIFEST.json",
+  "admissible_quotes": "data/ops/nfl-t5119u-r2-owned-coverage/ADMISSIBLE_QUOTES.jsonl",
+  "rules": {
+    "books": [
+      "draftkings",
+      "fanduel"
+    ],
+    "cutoff_minutes_before_kickoff": 60,
+    "max_quote_age_hours": 24,
+    "observation": "captured_at / snapshot_ts with explicit offset or Z \u2014 not file mtime / import / close label",
+    "dedupe": "identical fingerprint collapse; conflict refuses"
+  },
+  "staged_at_utc": "2026-11-01T21:48:12Z",
+  "admissible_quotes_n": 1475,
+  "admissible_quotes_sha256": "75c0b14c7391252dd5ca790c09d9d65071916ef4f39a20c81c88c57229917fb9",
+  "coverage_manifest_sha256": "bfcf8ff4b3c9dd933c6edb381a76d6bbb7abd6a1723120941d810425942e00d8",
+  "sqlite_extract": {
+    "rows": 19914,
+    "sha256": "96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0",
+    "skipped": null,
+    "method": "csv_plus_requests_event_id_index"
+  },
+  "t5116u_replay_n": 132,
+  "eval_r2_matched_n": 95,
+  "dev_r2_matched_n": 72,
+  "authority_amend": "t5125u ad000a52"
+}
