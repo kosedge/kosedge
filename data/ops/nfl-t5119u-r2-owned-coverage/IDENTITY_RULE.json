@@ -1,0 +1,19 @@
+{
+  "schema": "nfl-t5119u-r2a-identity-v1",
+  "games_csv_sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+  "kickoff_field": "kickoff_utc (explicit Z)",
+  "refused_as_kickoff": [
+    "schedule_results.start_time_raw",
+    "pbp.start_time",
+    "file mtime",
+    "import time"
+  ],
+  "jsonl": "unique (nflverse_gameday, home_abbr, away_abbr)",
+  "csv_sqlite": "unique (home_abbr, away_abbr, commence_time == kickoff_utc)",
+  "no_slack_minutes": true,
+  "observation": "captured_at / snapshot_ts with explicit offset or Z",
+  "eval_sha256": "fac21ebed92b6ef91e27095026751f088440dbd81e47ca368d256c580b58d7f0",
+  "dev_sha256": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+  "wc_sha256": "f81d381e0553a82a87a86b5e1a980cc2792be2e12f73203e48aa1435199d0722",
+  "games_missing_kickoff_tz": []
+}

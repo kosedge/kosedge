@@ -1,0 +1,18 @@
+{
+  "parser_id": "nfl-t5119u-r2a-owned-coverage-v1",
+  "reader_path": "scripts/nfl/t5119u_r2a/nfl_odds_reader.py",
+  "reader_sha256": "7bc21d82c1c332eb9ad4e5ba773ecb1bc49cac2ed23f970ab89ec0f9ea591f0e",
+  "builder_path": "scripts/nfl/t5119u_r2a/build_owned_coverage.py",
+  "builder_sha256": "546f60ba215ab7141b9f682d03515b28b411468dfa9570f1dd9311bc7faf6373",
+  "selection_books": [
+    "draftkings",
+    "fanduel"
+  ],
+  "cutoff_minutes_before_kickoff": 60,
+  "max_quote_age_hours": 24,
+  "commence_vs_kickoff": "exact_datetime_utc",
+  "jsonl_identity": "nflverse_gameday + resolved home/away abbr",
+  "sign": "odds_api_spread_home_negative_when_home_favored; flattened home outcome required",
+  "performance_selection": false,
+  "outcome_scoring": false
+}

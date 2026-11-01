@@ -1,0 +1,1117 @@
+{
+  "schema": "nfl-t5119u-t5136u-b1-no-game-match-audit-v1",
+  "identity_rule_unchanged": "exact commence_time == kickoff_utc; no slack minutes",
+  "approximate_time_admitted": false,
+  "kickoff_cutoff_semantics_changed": false,
+  "csv_tally": 1071,
+  "sqlite_tally": 1071,
+  "jsonl_tally": 163,
+  "sample_n": 16,
+  "sample": [
+    {
+      "event_id": "6949d550341669d3bc47132f340b9a7c",
+      "home_team": "Chicago Bears",
+      "away_team": "Indianapolis Colts",
+      "home_abbr": "CHI",
+      "away_abbr": "IND",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-10-04T17:00:00Z",
+      "commence_utc": "2020-10-04T17:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-10-04T17:00:00Z CHI vs IND != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_04_IND_CHI"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_04_IND_CHI"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_04_IND_CHI",
+        "kickoff_utc": "2020-10-04T20:25:00Z",
+        "nflverse_gameday": "2020-10-04",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "a0157c4e83feb736acb4c5b6b8d26f11",
+      "home_team": "Tennessee Titans",
+      "away_team": "Pittsburgh Steelers",
+      "home_abbr": "TEN",
+      "away_abbr": "PIT",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-10-04T17:00:00Z",
+      "commence_utc": "2020-10-04T17:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-10-04T17:00:00Z TEN vs PIT != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_07_PIT_TEN"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 2,
+      "nearest_same_teams": {
+        "game_id": "2020_07_PIT_TEN",
+        "kickoff_utc": "2020-10-25T17:00:00Z",
+        "nflverse_gameday": "2020-10-25",
+        "delta_seconds": 1814400.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "26486a2a8144aba4ed313f68b673577d",
+      "home_team": "Los Angeles Chargers",
+      "away_team": "New York Jets",
+      "home_abbr": "LAC",
+      "away_abbr": "NYJ",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-10-18T20:05:00Z",
+      "commence_utc": "2020-10-18T20:05:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-10-18T20:05:00Z LAC vs NYJ != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_11_NYJ_LAC"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2020_11_NYJ_LAC",
+        "kickoff_utc": "2020-11-22T21:05:00Z",
+        "nflverse_gameday": "2020-11-22",
+        "delta_seconds": 3027600.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "260da74dedca34ddf46590069f5cad4d",
+      "home_team": "Denver Broncos",
+      "away_team": "Miami Dolphins",
+      "home_abbr": "DEN",
+      "away_abbr": "MIA",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-10-18T20:05:00Z",
+      "commence_utc": "2020-10-18T20:05:00Z",
+      "snapshot_ts": "2020-09-08T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-10-18T20:05:00Z DEN vs MIA != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_11_MIA_DEN"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2020_11_MIA_DEN",
+        "kickoff_utc": "2020-11-22T21:05:00Z",
+        "nflverse_gameday": "2020-11-22",
+        "delta_seconds": 3027600.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "3789a146251eaf59becfec2ae2a1b402",
+      "home_team": "Baltimore Ravens",
+      "away_team": "Pittsburgh Steelers",
+      "home_abbr": "BAL",
+      "away_abbr": "PIT",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-10-25T17:00:00Z",
+      "commence_utc": "2020-10-25T17:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-10-25T17:00:00Z BAL vs PIT != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_08_PIT_BAL",
+        "2021_18_PIT_BAL",
+        "2022_17_PIT_BAL",
+        "2023_18_PIT_BAL"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2020_08_PIT_BAL",
+        "kickoff_utc": "2020-11-01T18:00:00Z",
+        "nflverse_gameday": "2020-11-01",
+        "delta_seconds": 608400.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "255028b4109b9afea28c76396c4a3aa8",
+      "home_team": "Pittsburgh Steelers",
+      "away_team": "Cincinnati Bengals",
+      "home_abbr": "PIT",
+      "away_abbr": "CIN",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-11-15T18:00:00Z",
+      "commence_utc": "2020-11-15T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-11-15T18:00:00Z PIT vs CIN != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_10_CIN_PIT",
+        "2021_03_CIN_PIT",
+        "2022_11_CIN_PIT",
+        "2023_16_CIN_PIT"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_10_CIN_PIT"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2020_10_CIN_PIT",
+        "kickoff_utc": "2020-11-15T21:25:00Z",
+        "nflverse_gameday": "2020-11-15",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "30d88d7228674f8d9471a634e52b4f07",
+      "home_team": "Miami Dolphins",
+      "away_team": "New York Jets",
+      "home_abbr": "MIA",
+      "away_abbr": "NYJ",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-11-15T21:05:00Z",
+      "commence_utc": "2020-11-15T21:05:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-11-15T21:05:00Z MIA vs NYJ != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_06_NYJ_MIA",
+        "2021_15_NYJ_MIA",
+        "2022_18_NYJ_MIA",
+        "2023_15_NYJ_MIA"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2020_06_NYJ_MIA",
+        "kickoff_utc": "2020-10-18T20:05:00Z",
+        "nflverse_gameday": "2020-10-18",
+        "delta_seconds": -2422800.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0025395ededd4edf2eaafd161aaf9bf5",
+      "home_team": "Indianapolis Colts",
+      "away_team": "Green Bay Packers",
+      "home_abbr": "IND",
+      "away_abbr": "GB",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-11-22T18:00:00Z",
+      "commence_utc": "2020-11-22T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-11-22T18:00:00Z IND vs GB != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_11_GB_IND"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_11_GB_IND"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_11_GB_IND",
+        "kickoff_utc": "2020-11-22T21:25:00Z",
+        "nflverse_gameday": "2020-11-22",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "a246a180ed9c713daa705527b90250ca",
+      "home_team": "Denver Broncos",
+      "away_team": "Los Angeles Chargers",
+      "home_abbr": "DEN",
+      "away_abbr": "LAC",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-11-22T21:05:00Z",
+      "commence_utc": "2020-11-22T21:05:00Z",
+      "snapshot_ts": "2020-09-08T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-11-22T21:05:00Z DEN vs LAC != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_08_LAC_DEN",
+        "2021_12_LAC_DEN",
+        "2022_18_LAC_DEN",
+        "2023_17_LAC_DEN"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2020_08_LAC_DEN",
+        "kickoff_utc": "2020-11-01T21:05:00Z",
+        "nflverse_gameday": "2020-11-01",
+        "delta_seconds": -1814400.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "523586235ef0f38ead376d550aa0ae23",
+      "home_team": "Pittsburgh Steelers",
+      "away_team": "Washington Football Team",
+      "home_abbr": "PIT",
+      "away_abbr": "WAS",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-06T18:00:00Z",
+      "commence_utc": "2020-12-06T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-12-06T18:00:00Z PIT vs WAS != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_13_WAS_PIT"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_13_WAS_PIT",
+        "kickoff_utc": "2020-12-07T22:00:00Z",
+        "nflverse_gameday": "2020-12-07",
+        "delta_seconds": 100800.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0b79bd5823ff675e1edc807e843d6b04",
+      "home_team": "New York Giants",
+      "away_team": "Cleveland Browns",
+      "home_abbr": "NYG",
+      "away_abbr": "CLE",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-20T18:00:00Z",
+      "commence_utc": "2020-12-20T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-12-20T18:00:00Z NYG vs CLE != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_15_CLE_NYG"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_15_CLE_NYG"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_15_CLE_NYG",
+        "kickoff_utc": "2020-12-21T01:20:00Z",
+        "nflverse_gameday": "2020-12-20",
+        "delta_seconds": 26400.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "3299f7988dbed959237486dd82db58eb",
+      "home_team": "Los Angeles Rams",
+      "away_team": "New York Jets",
+      "home_abbr": "LA",
+      "away_abbr": "NYJ",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-20T18:00:00Z",
+      "commence_utc": "2020-12-20T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-12-20T18:00:00Z LA vs NYJ != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_15_NYJ_LA"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_15_NYJ_LA"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_15_NYJ_LA",
+        "kickoff_utc": "2020-12-20T21:05:00Z",
+        "nflverse_gameday": "2020-12-20",
+        "delta_seconds": 11100.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0029b5a01dfabbfe71e606ab55c50533",
+      "home_team": "Denver Broncos",
+      "away_team": "Buffalo Bills",
+      "home_abbr": "DEN",
+      "away_abbr": "BUF",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-20T18:00:00Z",
+      "commence_utc": "2020-12-20T18:00:00Z",
+      "snapshot_ts": "2020-09-08T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-12-20T18:00:00Z DEN vs BUF != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_15_BUF_DEN"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2020_15_BUF_DEN",
+        "kickoff_utc": "2020-12-19T21:30:00Z",
+        "nflverse_gameday": "2020-12-19",
+        "delta_seconds": -73800.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "fccefe725a0f4e59f85347a276983d41",
+      "home_team": "New York Jets",
+      "away_team": "Cleveland Browns",
+      "home_abbr": "NYJ",
+      "away_abbr": "CLE",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-27T18:03:00Z",
+      "commence_utc": "2020-12-27T18:03:00Z",
+      "snapshot_ts": "2020-12-27T17:55:00Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "open_close_csv",
+      "detail": "commence 2020-12-27T18:03:00Z NYJ vs CLE != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_16_CLE_NYJ"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_16_CLE_NYJ"
+      ],
+      "swapped_home_away_n": 2,
+      "nearest_same_teams": {
+        "game_id": "2020_16_CLE_NYJ",
+        "kickoff_utc": "2020-12-27T18:00:00Z",
+        "nflverse_gameday": "2020-12-27",
+        "delta_seconds": -180.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "51e43ca09704599cd854645ba6703784",
+      "home_team": "Houston Texans",
+      "away_team": "Tennessee Titans",
+      "home_abbr": "HOU",
+      "away_abbr": "TEN",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2021-01-03T18:00:00Z",
+      "commence_utc": "2021-01-03T18:00:00Z",
+      "snapshot_ts": "2021-01-02T17:55:00Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "open_close_csv",
+      "detail": "commence 2021-01-03T18:00:00Z HOU vs TEN != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_17_TEN_HOU",
+        "2021_18_TEN_HOU",
+        "2022_08_TEN_HOU",
+        "2023_17_TEN_HOU"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_17_TEN_HOU"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2020_17_TEN_HOU",
+        "kickoff_utc": "2021-01-03T21:25:00Z",
+        "nflverse_gameday": "2021-01-03",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "44724bc8d245e6417778b569e2be00a8",
+      "home_team": "Seattle Seahawks",
+      "away_team": "Los Angeles Rams",
+      "home_abbr": "SEA",
+      "away_abbr": "LA",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2021-01-09T21:42:00Z",
+      "commence_utc": "2021-01-09T21:42:00Z",
+      "snapshot_ts": "2021-01-09T21:35:00Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "open_close_csv",
+      "detail": "commence 2021-01-09T21:42:00Z SEA vs LA != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 5,
+      "same_home_away_game_ids": [
+        "2020_16_LA_SEA",
+        "2020_18_LA_SEA",
+        "2021_05_LA_SEA",
+        "2022_18_LA_SEA",
+        "2023_01_LA_SEA"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_18_LA_SEA"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2020_18_LA_SEA",
+        "kickoff_utc": "2021-01-09T21:40:00Z",
+        "nflverse_gameday": "2021-01-09",
+        "delta_seconds": -120.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    }
+  ],
+  "sqlite_sample": [
+    {
+      "event_id": "0025395ededd4edf2eaafd161aaf9bf5",
+      "home_team": "Indianapolis Colts",
+      "away_team": "Green Bay Packers",
+      "home_abbr": "IND",
+      "away_abbr": "GB",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-11-22T18:00:00Z",
+      "commence_utc": "2020-11-22T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2020-11-22T18:00:00Z IND vs GB != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_11_GB_IND"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_11_GB_IND"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_11_GB_IND",
+        "kickoff_utc": "2020-11-22T21:25:00Z",
+        "nflverse_gameday": "2020-11-22",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0029b5a01dfabbfe71e606ab55c50533",
+      "home_team": "Denver Broncos",
+      "away_team": "Buffalo Bills",
+      "home_abbr": "DEN",
+      "away_abbr": "BUF",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-20T18:00:00Z",
+      "commence_utc": "2020-12-20T18:00:00Z",
+      "snapshot_ts": "2020-09-08T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2020-12-20T18:00:00Z DEN vs BUF != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_15_BUF_DEN"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2020_15_BUF_DEN",
+        "kickoff_utc": "2020-12-19T21:30:00Z",
+        "nflverse_gameday": "2020-12-19",
+        "delta_seconds": -73800.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0a28f0143dfea152e45ae5c423bec9e7",
+      "home_team": "Dallas Cowboys",
+      "away_team": "Green Bay Packers",
+      "home_abbr": "DAL",
+      "away_abbr": "GB",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2024-01-14T21:31:00Z",
+      "commence_utc": "2024-01-14T21:31:00Z",
+      "snapshot_ts": "2024-01-10T21:30:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2024-01-14T21:31:00Z DAL vs GB != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2023_19_GB_DAL"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2023_19_GB_DAL"
+      ],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2023_19_GB_DAL",
+        "kickoff_utc": "2024-01-14T21:30:00Z",
+        "nflverse_gameday": "2024-01-14",
+        "delta_seconds": -60.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0a2ff22cc0b88ac0a5224c1b9c85d1fa",
+      "home_team": "Las Vegas Raiders",
+      "away_team": "Denver Broncos",
+      "home_abbr": "LV",
+      "away_abbr": "DEN",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2024-01-07T18:00:00Z",
+      "commence_utc": "2024-01-07T18:00:00Z",
+      "snapshot_ts": "2023-09-07T00:20:40Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2024-01-07T18:00:00Z LV vs DEN != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_10_DEN_LV",
+        "2021_16_DEN_LV",
+        "2022_04_DEN_LV",
+        "2023_18_DEN_LV"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2023_18_DEN_LV"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2023_18_DEN_LV",
+        "kickoff_utc": "2024-01-07T21:25:00Z",
+        "nflverse_gameday": "2024-01-07",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "0b79bd5823ff675e1edc807e843d6b04",
+      "home_team": "New York Giants",
+      "away_team": "Cleveland Browns",
+      "home_abbr": "NYG",
+      "away_abbr": "CLE",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2020-12-20T18:00:00Z",
+      "commence_utc": "2020-12-20T18:00:00Z",
+      "snapshot_ts": "2020-09-10T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2020-12-20T18:00:00Z NYG vs CLE != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2020_15_CLE_NYG"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2020_15_CLE_NYG"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2020_15_CLE_NYG",
+        "kickoff_utc": "2020-12-21T01:20:00Z",
+        "nflverse_gameday": "2020-12-20",
+        "delta_seconds": 26400.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "14bb012748bd2bcf1543c833b56d9b85",
+      "home_team": "Seattle Seahawks",
+      "away_team": "Los Angeles Rams",
+      "home_abbr": "SEA",
+      "away_abbr": "LA",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2023-01-08T18:00:00Z",
+      "commence_utc": "2023-01-08T18:00:00Z",
+      "snapshot_ts": "2022-12-29T01:10:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2023-01-08T18:00:00Z SEA vs LA != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 5,
+      "same_home_away_game_ids": [
+        "2020_16_LA_SEA",
+        "2020_18_LA_SEA",
+        "2021_05_LA_SEA",
+        "2022_18_LA_SEA",
+        "2023_01_LA_SEA"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2022_18_LA_SEA"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2022_18_LA_SEA",
+        "kickoff_utc": "2023-01-08T21:25:00Z",
+        "nflverse_gameday": "2023-01-08",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "16a80e7ed9a8c42dd1bc5e00b0490e0b",
+      "home_team": "Indianapolis Colts",
+      "away_team": "Los Angeles Rams",
+      "home_abbr": "IND",
+      "away_abbr": "LA",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2021-09-19T17:01:00Z",
+      "commence_utc": "2021-09-19T17:01:00Z",
+      "snapshot_ts": "2021-09-09T00:15:00Z",
+      "book": "draftkings",
+      "market": "spreads",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2021-09-19T17:01:00Z IND vs LA != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 2,
+      "same_home_away_game_ids": [
+        "2021_02_LA_IND",
+        "2023_04_LA_IND"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2021_02_LA_IND"
+      ],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2021_02_LA_IND",
+        "kickoff_utc": "2021-09-19T17:00:00Z",
+        "nflverse_gameday": "2021-09-19",
+        "delta_seconds": -60.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "179977a061c9f44b3ead0b6130c5f51d",
+      "home_team": "Detroit Lions",
+      "away_team": "Los Angeles Rams",
+      "home_abbr": "DET",
+      "away_abbr": "LA",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2024-01-15T01:16:00Z",
+      "commence_utc": "2024-01-15T01:16:00Z",
+      "snapshot_ts": "2024-01-13T21:30:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2024-01-15T01:16:00Z DET vs LA != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2023_19_LA_DET"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2023_19_LA_DET",
+        "kickoff_utc": "2024-01-15T01:00:00Z",
+        "nflverse_gameday": "2024-01-14",
+        "delta_seconds": -960.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "197a147aadc3cada5add424e6f1eebe1",
+      "home_team": "Indianapolis Colts",
+      "away_team": "Pittsburgh Steelers",
+      "home_abbr": "IND",
+      "away_abbr": "PIT",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2023-12-17T18:00:00Z",
+      "commence_utc": "2023-12-17T18:00:00Z",
+      "snapshot_ts": "2023-09-07T00:20:40Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2023-12-17T18:00:00Z IND vs PIT != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 2,
+      "same_home_away_game_ids": [
+        "2022_12_PIT_IND",
+        "2023_15_PIT_IND"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2023_15_PIT_IND",
+        "kickoff_utc": "2023-12-16T21:30:00Z",
+        "nflverse_gameday": "2023-12-16",
+        "delta_seconds": -73800.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "1af4db621a6b51de898048346195eca8",
+      "home_team": "Jacksonville Jaguars",
+      "away_team": "Tennessee Titans",
+      "home_abbr": "JAX",
+      "away_abbr": "TEN",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2023-01-08T18:00:00Z",
+      "commence_utc": "2023-01-08T18:00:00Z",
+      "snapshot_ts": "2022-12-29T01:10:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2023-01-08T18:00:00Z JAX vs TEN != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_14_TEN_JAX",
+        "2021_05_TEN_JAX",
+        "2022_18_TEN_JAX",
+        "2023_11_TEN_JAX"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2022_18_TEN_JAX",
+        "kickoff_utc": "2023-01-08T01:15:00Z",
+        "nflverse_gameday": "2023-01-07",
+        "delta_seconds": -60300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "1e5633073b585f9550959cc85872c68d",
+      "home_team": "Kansas City Chiefs",
+      "away_team": "Detroit Lions",
+      "home_abbr": "KC",
+      "away_abbr": "DET",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2024-02-11T23:31:00Z",
+      "commence_utc": "2024-02-11T23:31:00Z",
+      "snapshot_ts": "2024-01-27T19:55:38Z",
+      "book": "fanduel",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2024-02-11T23:31:00Z KC vs DET != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2023_01_DET_KC"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 0,
+      "nearest_same_teams": {
+        "game_id": "2023_01_DET_KC",
+        "kickoff_utc": "2023-09-08T00:20:00Z",
+        "nflverse_gameday": "2023-09-07",
+        "delta_seconds": -13561860.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "20118ff754f561dc7df2bc1f85531b65",
+      "home_team": "Cincinnati Bengals",
+      "away_team": "Buffalo Bills",
+      "home_abbr": "CIN",
+      "away_abbr": "BUF",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2023-01-03T01:30:00Z",
+      "commence_utc": "2023-01-03T01:30:00Z",
+      "snapshot_ts": "2022-12-29T01:10:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2023-01-03T01:30:00Z CIN vs BUF != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 1,
+      "same_home_away_game_ids": [
+        "2023_09_BUF_CIN"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 1,
+      "nearest_same_teams": {
+        "game_id": "2023_09_BUF_CIN",
+        "kickoff_utc": "2023-11-06T01:20:00Z",
+        "nflverse_gameday": "2023-11-05",
+        "delta_seconds": 26524200.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "2024f90b5afee95087816f636b83ebf8",
+      "home_team": "Washington Commanders",
+      "away_team": "Dallas Cowboys",
+      "home_abbr": "WAS",
+      "away_abbr": "DAL",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2023-01-08T18:00:00Z",
+      "commence_utc": "2023-01-08T18:00:00Z",
+      "snapshot_ts": "2022-12-29T01:10:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2023-01-08T18:00:00Z WAS vs DAL != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_07_DAL_WAS",
+        "2021_14_DAL_WAS",
+        "2022_18_DAL_WAS",
+        "2023_18_DAL_WAS"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2022_18_DAL_WAS"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2022_18_DAL_WAS",
+        "kickoff_utc": "2023-01-08T21:25:00Z",
+        "nflverse_gameday": "2023-01-08",
+        "delta_seconds": 12300.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "20a35d24ca8a5d672a6520effdcbacb6",
+      "home_team": "Houston Texans",
+      "away_team": "Cleveland Browns",
+      "home_abbr": "HOU",
+      "away_abbr": "CLE",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2024-01-13T21:31:00Z",
+      "commence_utc": "2024-01-13T21:31:00Z",
+      "snapshot_ts": "2024-01-10T21:30:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2024-01-13T21:31:00Z HOU vs CLE != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 3,
+      "same_home_away_game_ids": [
+        "2022_13_CLE_HOU",
+        "2023_16_CLE_HOU",
+        "2023_19_CLE_HOU"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2023_19_CLE_HOU"
+      ],
+      "swapped_home_away_n": 2,
+      "nearest_same_teams": {
+        "game_id": "2023_19_CLE_HOU",
+        "kickoff_utc": "2024-01-13T21:30:00Z",
+        "nflverse_gameday": "2024-01-13",
+        "delta_seconds": -60.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "212efd429ff2e264f51cc34be34e8c10",
+      "home_team": "Green Bay Packers",
+      "away_team": "Detroit Lions",
+      "home_abbr": "GB",
+      "away_abbr": "DET",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2023-01-08T18:00:00Z",
+      "commence_utc": "2023-01-08T18:00:00Z",
+      "snapshot_ts": "2022-12-29T01:10:39Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2023-01-08T18:00:00Z GB vs DET != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_02_DET_GB",
+        "2021_02_DET_GB",
+        "2022_18_DET_GB",
+        "2023_04_DET_GB"
+      ],
+      "same_gameday_home_away_n": 1,
+      "same_gameday_home_away_game_ids": [
+        "2022_18_DET_GB"
+      ],
+      "swapped_home_away_n": 4,
+      "nearest_same_teams": {
+        "game_id": "2022_18_DET_GB",
+        "kickoff_utc": "2023-01-09T01:20:00Z",
+        "nflverse_gameday": "2023-01-08",
+        "delta_seconds": 26400.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    },
+    {
+      "event_id": "21c424e894d25de9acd3fbe80fd2e11c",
+      "home_team": "Los Angeles Rams",
+      "away_team": "Seattle Seahawks",
+      "home_abbr": "LA",
+      "away_abbr": "SEA",
+      "home_status": "resolved",
+      "away_status": "resolved",
+      "commence_time": "2021-12-19T21:25:00Z",
+      "commence_utc": "2021-12-19T21:25:00Z",
+      "snapshot_ts": "2021-12-16T01:15:00Z",
+      "book": "draftkings",
+      "market": "h2h",
+      "provenance": "odds_gapfill_sqlite",
+      "detail": "commence 2021-12-19T21:25:00Z LA vs SEA != any kickoff_utc (exact; no undocumented slack)",
+      "same_home_away_games_n": 4,
+      "same_home_away_game_ids": [
+        "2020_10_SEA_LA",
+        "2021_15_SEA_LA",
+        "2022_13_SEA_LA",
+        "2023_11_SEA_LA"
+      ],
+      "same_gameday_home_away_n": 0,
+      "same_gameday_home_away_game_ids": [],
+      "swapped_home_away_n": 5,
+      "nearest_same_teams": {
+        "game_id": "2021_15_SEA_LA",
+        "kickoff_utc": "2021-12-22T00:00:00Z",
+        "nflverse_gameday": "2021-12-21",
+        "delta_seconds": 182100.0,
+        "exact_commence_eq_kickoff": false
+      },
+      "proven_exact_one_to_one": false,
+      "verdict": "keep_refused_no_approximate_time_admit"
+    }
+  ],
+  "proven_one_to_one_n": 0,
+  "kept_refused_n": 16,
+  "verdict": "no proven exact one-to-one identity in sample; all sampled no_game_match rows stay refused"
+}
