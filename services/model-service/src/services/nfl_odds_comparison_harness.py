@@ -40,13 +40,16 @@ CERT_CANDIDATE = 0
 
 READER_PATH = "services/model-service/src/services/nfl_odds_reader.py"
 HARNESS_PATH = "services/model-service/src/services/nfl_odds_comparison_harness.py"
-PACKAGE_A_HEAD = "f6b5b4c3ec4021fc64d86a36c863b483246be78b"
+PACKAGE_A_HEAD = "26aad919876074504bfeda0e2200d9f50416c539"
 CLEAR_TIP = "4f3b9666"
 ALEX_PASS_RO = "db8d27a2"
 COS_ACCEPT = "7f9f7918"
+COS_ACCEPT_PRIOR = "e549d23f"
+T5105U_ORDER = "ec7e0a36"
 
 MISSING_PROBABILITY = "missing_probability"
 INCOMPATIBLE_LINE = "incompatible_line"
+UNBOUND_PROBABILITY_LINE = "unbound_probability_line"
 DUPLICATE_GAME = "duplicate_game"
 NO_ELIGIBLE_QUOTE = "no_eligible_quote"
 MISSING_FORECAST = "missing_forecast"
@@ -116,6 +119,7 @@ class ComparisonRow:
     forecast_provenance: str
     sign_convention: str = SIGN_CONVENTION
     synthetic_outcome: Optional[Dict[str, Any]] = None
+    p_compare: str = "bound"
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -421,6 +425,7 @@ def _quote_price(quote: EligibleQuote) -> Optional[float]:
 
 
 def _lines_compatible(market: str, forecast_line: Optional[float], quote: EligibleQuote) -> bool:
+    """Point-line comparability only. Does not authorize a probability delta."""
     code = canonical_market(market)
     if code != quote.market:
         return False
@@ -429,6 +434,66 @@ def _lines_compatible(market: str, forecast_line: Optional[float], quote: Eligib
     if code == "moneyline":
         return quote.line is None
     return False
+
+
+def _forecast_probability_line(body: Mapping[str, Any]) -> Optional[float]:
+    if body.get("probability_line") not in (None, ""):
+        return _as_float(body.get("probability_line"))
+    if body.get("p_line") not in (None, ""):
+        return _as_float(body.get("p_line"))
+    return None
+
+
+def _forecast_probability_side(body: Mapping[str, Any]) -> Optional[str]:
+    raw = body.get("probability_side")
+    if raw in (None, ""):
+        raw = body.get("p_side")
+    if raw in (None, ""):
+        return None
+    return str(raw).strip().lower()
+
+
+def _quoted_line_for_side(quote: EligibleQuote, side: Optional[str]) -> Optional[float]:
+    code = quote.market
+    if code == "spread":
+        home = quote.spread_home if quote.spread_home is not None else quote.line
+        if home is None:
+            return None
+        token = side or "home"
+        if token == "home":
+            return home
+        if token == "away":
+            return line_for_side(home, "away")
+        return None
+    if code == "total":
+        if side in (None, "", "over", "under"):
+            return quote.line
+        return None
+    return None
+
+
+def _probability_bound_to_quote(
+    market: str,
+    body: Mapping[str, Any],
+    forecast_line: Optional[float],
+    quote: EligibleQuote,
+) -> bool:
+    """True only when forecast p is evaluated at the actual quoted line/side."""
+    code = canonical_market(market)
+    if code != quote.market:
+        return False
+    p_line = _forecast_probability_line(body)
+    p_side = _forecast_probability_side(body)
+    if code == "moneyline":
+        return p_side in (None, "", "home")
+    quoted = _quoted_line_for_side(quote, p_side)
+    if quoted is None:
+        return False
+    if p_line is not None:
+        return p_line == quoted
+    if forecast_line is None:
+        return False
+    return forecast_line == quoted
 
 
 def _outcome_map(outcomes: Iterable[Mapping[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -460,7 +525,13 @@ def compare_forecasts_to_manifest(
     if global_cutoff in (None, "") and forecasts:
         global_cutoff = forecasts[0].get("forecast_cutoff")
 
-    join = join_quotes_at_cutoff(quotes, games, global_cutoff)
+    join = join_quotes_at_cutoff(
+        quotes,
+        games,
+        global_cutoff,
+        source_timezone=forecast_payload.get("source_timezone")
+        or manifest_payload.get("source_timezone"),
+    )
     excluded: List[ExcludedRow] = list(join.excluded)
     comparisons: List[ComparisonRow] = []
 
@@ -567,6 +638,11 @@ def compare_forecasts_to_manifest(
                 away_line = None
                 if code == "spread" and home_line is not None:
                     away_line = line_for_side(home_line, "away")
+                bound = _probability_bound_to_quote(code, body, forecast_line, quote)
+                p_compare = "bound" if bound else UNBOUND_PROBABILITY_LINE
+                p_delta = None
+                if bound and implied is not None:
+                    p_delta = p_value - implied
                 synthetic = None
                 if outcome is not None:
                     result = grade_synthetic_outcome(
@@ -601,7 +677,8 @@ def compare_forecasts_to_manifest(
                         ),
                         forecast_p=p_value,
                         implied_p=implied,
-                        p_delta=None if implied is None else p_value - implied,
+                        p_delta=p_delta,
+                        p_compare=p_compare,
                         home_line=home_line,
                         away_line=away_line,
                         price=_quote_price(quote),
@@ -627,7 +704,8 @@ def compare_forecasts_to_manifest(
         "Synthetic forecasts and synthetic outcomes only.",
         "No fitting, scoring, retuning, or real-outcome EVAL.",
         "Package A reader reused; later/closing quotes are never substituted.",
-        f"CLEAR {CLEAR_TIP}; Alex PASS_RO {ALEX_PASS_RO}; CoS ACCEPT {COS_ACCEPT}.",
+        "p_delta is emitted only when forecast probability is bound to the quoted line/side.",
+        f"CLEAR {CLEAR_TIP}; Alex PASS_RO {ALEX_PASS_RO}; CoS ACCEPT {COS_ACCEPT}; prior {COS_ACCEPT_PRIOR}; t5105u {T5105U_ORDER}.",
     ]
     return ComparisonReport(
         generated_at_utc=_now_utc(),
@@ -640,6 +718,8 @@ def compare_forecasts_to_manifest(
             "clear_tip": CLEAR_TIP,
             "alex_pass_ro": ALEX_PASS_RO,
             "cos_accept": COS_ACCEPT,
+            "cos_accept_prior": COS_ACCEPT_PRIOR,
+            "t5105u_order": T5105U_ORDER,
         },
         inputs={
             "forecast_path": forecast_path,

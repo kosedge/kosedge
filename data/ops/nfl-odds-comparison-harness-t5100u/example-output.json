@@ -6,16 +6,18 @@
   "refused": false,
   "refuse_reason": null,
   "refuse_detail": null,
-  "generated_at_utc": "2026-11-01T16:15:27Z",
+  "generated_at_utc": "2026-11-01T17:56:33Z",
   "code_pin": {
     "branch": "cursor/nfl-odds-comparison-harness-t5100u-f42c",
-    "commit": "20a67d5b5d210dd93c5ae81d55a42d92579370c9",
-    "package_a_head": "f6b5b4c3ec4021fc64d86a36c863b483246be78b",
+    "commit": "d8298845e9bd785e516837824c8bc7b8165f0f79",
+    "package_a_head": "26aad919876074504bfeda0e2200d9f50416c539",
     "reader": "services/model-service/src/services/nfl_odds_reader.py",
     "harness": "services/model-service/src/services/nfl_odds_comparison_harness.py",
     "clear_tip": "4f3b9666",
     "alex_pass_ro": "db8d27a2",
-    "cos_accept": "7f9f7918"
+    "cos_accept": "7f9f7918",
+    "cos_accept_prior": "e549d23f",
+    "t5105u_order": "ec7e0a36"
   },
   "inputs": {
     "forecast_path": "data/ops/nfl-odds-comparison-harness-t5100u/fixtures/example-forecasts.json",
@@ -57,7 +59,7 @@
       "line_delta": 0.5,
       "forecast_p": 0.58,
       "implied_p": 0.5238095238095238,
-      "p_delta": 0.056190476190476124,
+      "p_delta": null,
       "home_line": -9.5,
       "away_line": 9.5,
       "price": -110.0,
@@ -71,7 +73,8 @@
         "away_score": 20,
         "result": "home_cover",
         "source": "synthetic"
-      }
+      },
+      "p_compare": "unbound_probability_line"
     },
     {
       "game_id": "2020_01_HOU_KC",
@@ -87,7 +90,7 @@
       "line_delta": -1.0,
       "forecast_p": 0.51,
       "implied_p": 0.5192307692307693,
-      "p_delta": -0.009230769230769265,
+      "p_delta": null,
       "home_line": 54.5,
       "away_line": null,
       "price": -108.0,
@@ -101,7 +104,8 @@
         "away_score": 20,
         "result": "under",
         "source": "synthetic"
-      }
+      },
+      "p_compare": "unbound_probability_line"
     },
     {
       "game_id": "2020_01_HOU_KC",
@@ -131,7 +135,8 @@
         "away_score": 20,
         "result": "home",
         "source": "synthetic"
-      }
+      },
+      "p_compare": "bound"
     },
     {
       "game_id": "2020_01_NYJ_BUF",
@@ -147,7 +152,7 @@
       "line_delta": -0.5,
       "forecast_p": 0.47,
       "implied_p": 0.5121951219512195,
-      "p_delta": -0.04219512195121955,
+      "p_delta": null,
       "home_line": 3.0,
       "away_line": -3.0,
       "price": -105.0,
@@ -161,7 +166,8 @@
         "away_score": 17,
         "result": "home_cover",
         "source": "synthetic"
-      }
+      },
+      "p_compare": "unbound_probability_line"
     }
   ],
   "excluded": [
@@ -191,7 +197,8 @@
     "Synthetic forecasts and synthetic outcomes only.",
     "No fitting, scoring, retuning, or real-outcome EVAL.",
     "Package A reader reused; later/closing quotes are never substituted.",
-    "CLEAR 4f3b9666; Alex PASS_RO db8d27a2; CoS ACCEPT 7f9f7918."
+    "p_delta is emitted only when forecast probability is bound to the quoted line/side.",
+    "CLEAR 4f3b9666; Alex PASS_RO db8d27a2; CoS ACCEPT 7f9f7918; prior e549d23f; t5105u ec7e0a36."
   ],
   "eval": null,
   "scoring": null,

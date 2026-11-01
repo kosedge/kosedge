@@ -22,6 +22,7 @@ from src.services.nfl_odds_comparison_harness import (
     SEASON_OUT_OF_BOUNDS,
     SYNTHETIC_LABEL,
     SYNTHETIC_PURPOSE,
+    UNBOUND_PROBABILITY_LINE,
     HarnessRefusal,
     american_implied_prob,
     compare_forecasts_to_manifest,
@@ -403,3 +404,55 @@ def test_e2e_library_path_matches_cli_on_example_files() -> None:
     assert len(report.comparisons) == 4
     assert american_implied_prob(-110) == pytest.approx(110 / 210)
     assert report.as_dict()["eval"] is None
+
+
+def test_codex_counterexample_unbound_probability_refuses_p_delta() -> None:
+    """Forecast −3.5 / p=0.58 vs quote −7.5 / −110 must not emit p_delta≈0.056."""
+    report = _run(
+        [_forecast(markets={"spread": {"prediction": -3.5, "p_home_cover": 0.58}})],
+        [_game()],
+        [_quote(spread_home=-7.5, price_home=-110)],
+    )
+    assert len(report.comparisons) == 1
+    row = report.comparisons[0]
+    assert row.forecast_line == -3.5
+    assert row.market_line == -7.5
+    assert row.line_delta == pytest.approx(4.0)
+    assert row.implied_p == pytest.approx(110 / 210)
+    assert row.p_delta is None
+    assert row.p_compare == UNBOUND_PROBABILITY_LINE
+    implied = american_implied_prob(-110)
+    assert implied == pytest.approx(0.5238095238095238)
+    assert 0.58 - implied == pytest.approx(0.056190476190476124)
+
+
+def test_probability_bound_at_quoted_line_emits_p_delta() -> None:
+    matched = _run(
+        [_forecast(markets={"spread": {"prediction": -7.5, "p_home_cover": 0.58}})],
+        [_game()],
+        [_quote(spread_home=-7.5, price_home=-110)],
+    )
+    assert len(matched.comparisons) == 1
+    bound = matched.comparisons[0]
+    assert bound.p_compare == "bound"
+    assert bound.p_delta == pytest.approx(0.58 - (110 / 210))
+
+    explicit = _run(
+        [
+            _forecast(
+                markets={
+                    "spread": {
+                        "prediction": -3.5,
+                        "p_home_cover": 0.58,
+                        "probability_line": -7.5,
+                        "probability_side": "home",
+                    }
+                }
+            )
+        ],
+        [_game()],
+        [_quote(spread_home=-7.5, price_home=-110)],
+    )
+    assert explicit.comparisons[0].p_compare == "bound"
+    assert explicit.comparisons[0].p_delta == pytest.approx(0.58 - (110 / 210))
+    assert explicit.comparisons[0].line_delta == pytest.approx(4.0)
