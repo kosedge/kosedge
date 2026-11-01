@@ -1,8 +1,10 @@
 """Smallest reusable local NFL odds reader + game/cutoff join (2020–2023).
 
 Read-only. Does not ingest, write, or call paid Odds. Reuses the later
-warehouse identity maps and UTC timestamp rules (odds_lake / leakage)
-without depending on modules that are absent from restore-working-ui.
+warehouse identity maps without depending on modules that are absent
+from restore-working-ui. Timestamps must carry an explicit offset or an
+explicit source-timezone contract; naive values are refused, not coerced
+to UTC.
 
 Season bound is hard: commence-derived season in {2020, 2021, 2022, 2023}.
 Quotes after 2024-03-01 (2024 regular season and later) are refused.
@@ -16,9 +18,10 @@ import re
 import sqlite3
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
-from datetime import date, datetime, timezone
+from datetime import date, datetime, tzinfo, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, Iterator, List, Mapping, Optional, Sequence, Tuple
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 PERMITTED_SEASONS = frozenset({2020, 2021, 2022, 2023})
 SEASON_WINDOW_START = "2020-03-01"
@@ -282,28 +285,64 @@ def join_key(game_date: Any, home: str, away: str) -> Tuple[str, str, str]:
     )
 
 
-def normalize_quote_timestamp(value: Any) -> Optional[datetime]:
-    """Timezone-normalize to UTC. Naive values are treated as UTC. None if unparseable."""
+def _resolve_source_timezone(source_timezone: Any) -> Optional[tzinfo]:
+    """Return a tzinfo only when the caller named an explicit contract."""
+    if source_timezone is None or source_timezone == "":
+        return None
+    if isinstance(source_timezone, tzinfo):
+        return source_timezone
+    text = str(source_timezone).strip()
+    if not text:
+        return None
+    if text.upper() in {"UTC", "Z", "GMT", "ETC/UTC"}:
+        return timezone.utc
+    try:
+        return ZoneInfo(text)
+    except (ZoneInfoNotFoundError, ValueError):
+        return None
+
+
+def _first_source_timezone(*candidates: Any) -> Any:
+    for candidate in candidates:
+        if candidate not in (None, ""):
+            return candidate
+    return None
+
+
+def normalize_quote_timestamp(value: Any, source_timezone: Any = None) -> Optional[datetime]:
+    """Normalize to UTC when the source timezone is explicit. Refuse naive values.
+
+    A timestamp is qualified when it carries an offset/Z, a tz-aware datetime,
+    or the caller supplies an explicit ``source_timezone`` contract. Unqualified
+    timestamps return None — they are never silently assigned UTC.
+    """
     if value is None or value == "":
         return None
+    tz_contract = _resolve_source_timezone(source_timezone)
     if isinstance(value, datetime):
         dt = value
         if dt.tzinfo is None:
-            return dt.replace(tzinfo=timezone.utc)
+            if tz_contract is None:
+                return None
+            dt = dt.replace(tzinfo=tz_contract)
         return dt.astimezone(timezone.utc)
     if isinstance(value, date) and not isinstance(value, datetime):
-        return datetime(value.year, value.month, value.day, tzinfo=timezone.utc)
+        if tz_contract is None:
+            return None
+        return datetime(value.year, value.month, value.day, tzinfo=tz_contract).astimezone(timezone.utc)
     text = str(value).strip()
     if not text:
         return None
-    if text.endswith("Z"):
+    if text.endswith("Z") or text.endswith("z"):
         text = text[:-1] + "+00:00"
     try:
         dt = datetime.fromisoformat(text)
     except ValueError:
         return None
     if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
+        if tz_contract is None:
+            return None
+        dt = dt.replace(tzinfo=tz_contract)
     return dt.astimezone(timezone.utc)
 
 
@@ -311,8 +350,8 @@ def timestamp_to_iso(dt: datetime) -> str:
     return dt.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def season_from_commence(commence: Any) -> Optional[int]:
-    dt = normalize_quote_timestamp(commence)
+def season_from_commence(commence: Any, *, source_timezone: Any = None) -> Optional[int]:
+    dt = normalize_quote_timestamp(commence, source_timezone=source_timezone)
     if dt is None:
         text = str(commence or "")
         if len(text) < 10:
@@ -641,12 +680,15 @@ def join_quotes_at_cutoff(
     *,
     requested_markets: Optional[Iterable[str]] = None,
     per_game_cutoff_key: str = "forecast_cutoff",
+    source_timezone: Any = None,
 ) -> JoinResult:
     """Select quotes with source timestamp ≤ an explicit cutoff. Never invent a later close.
 
     ``forecast_cutoff`` is required. A per-game cutoff on the game row
     (``forecast_cutoff`` or ``kickoff`` when the caller set it as the cutoff)
     overrides the global value for that game. Missing cutoff rejects the row.
+    Naive timestamps are refused unless ``source_timezone`` (function argument
+    or ``source_timezone`` on the quote/game row) names an explicit contract.
     """
     excluded: List[ExcludedRow] = []
     eligible: List[EligibleQuote] = []
@@ -678,10 +720,19 @@ def join_quotes_at_cutoff(
         ):
             excluded.append(ExcludedRow(MISSING_CUTOFF, "forecast_cutoff is required", dict(row)))
             continue
-        cutoff_dt = normalize_quote_timestamp(cutoff_raw)
+        tz_contract = _first_source_timezone(
+            row.get("source_timezone"),
+            None if game is None else game.get("source_timezone"),
+            source_timezone,
+        )
+        cutoff_dt = normalize_quote_timestamp(cutoff_raw, source_timezone=tz_contract)
         if cutoff_dt is None:
             excluded.append(
-                ExcludedRow(UNRESOLVABLE_TIMESTAMP, f"cutoff unparseable: {cutoff_raw!r}", dict(row))
+                ExcludedRow(
+                    UNRESOLVABLE_TIMESTAMP,
+                    f"cutoff unparseable or missing timezone contract: {cutoff_raw!r}",
+                    dict(row),
+                )
             )
             continue
 
@@ -726,12 +777,15 @@ def join_quotes_at_cutoff(
             excluded.append(ExcludedRow(MISSING_VALUE, "missing book", dict(row)))
             continue
 
-        captured = normalize_quote_timestamp(row.get("captured_at") or row.get("snapshot_ts"))
+        captured = normalize_quote_timestamp(
+            row.get("captured_at") or row.get("snapshot_ts"),
+            source_timezone=tz_contract,
+        )
         if captured is None:
             excluded.append(
                 ExcludedRow(
                     UNRESOLVABLE_TIMESTAMP,
-                    f"captured_at={row.get('captured_at')!r}",
+                    f"captured_at={row.get('captured_at')!r} (unparseable or missing timezone contract)",
                     dict(row),
                 )
             )
