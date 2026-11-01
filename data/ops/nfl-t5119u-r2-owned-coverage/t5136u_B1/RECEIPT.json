@@ -1,0 +1,22 @@
+{
+  "schema": "nfl-t5119u-t5136u-b1-receipt-v1",
+  "owner_clear_sha8": "a5f7c364",
+  "cos_order_sha8": "80c38680",
+  "parent_tip": "3821941d758feb7ba05e680da6ecec283291dd2a",
+  "addendum_path": "ops/CURSOR_ADDENDUM_t5119u_R2A_COVERAGE_v1.md",
+  "addendum_sha256": "fefa2a57da5739023ceab7b979afae4aa1bd0cafc6ed696c8a77e486421eb8fd",
+  "addendum_sha8": "fefa2a57",
+  "coverage_record_file_sha256": "6517aab7d45ed62058856df43ad93171606d0fe3a59aa000f13de06a3f0239d5",
+  "coverage_record_canonical_sha256": "c1b752655a79cf621881a87eb6e8a6ca49aebb34d42ce2d053e4dcfa32bc1438",
+  "conflict_pair_evidence_sha256": "870bdf99a1a1d228e4c75a1bb6ac8c0abfc15e8d9e9591cbc7f09a23987da2a3",
+  "no_game_match_audit_sha256": "a2d4639ac040b544b2da3bc7b28a387ae21f1cceaf6d4cf6b2fd080d2224bfed",
+  "admissible_quotes_b1_sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6",
+  "artifact_sha256_file_sha256": "5c0c15fd6f371711e7f56f7757c689902b17fff47212f5e5cddacfc58d452a1c",
+  "sealed_extract_sha256": "96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0",
+  "conflict_false_type_mismatch": 480,
+  "conflict_genuine": 0,
+  "eval_b1_matched_n": 119,
+  "dev_b1_matched_n": 94,
+  "status": "DATA_COVERAGE_BLOCKED",
+  "eval_claim": false
+}

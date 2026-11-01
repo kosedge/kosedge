@@ -10,6 +10,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import math
 import os
 import sqlite3
 import sys
@@ -17,7 +18,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from statistics import median
-from typing import Any, Dict, Iterable, Iterator, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Mapping, Optional, Sequence, Tuple
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
@@ -71,6 +72,27 @@ MAX_QUOTE_AGE_HOURS = 24
 BOOKS = frozenset({"draftkings", "fanduel"})
 DECLARED_REG = {2020: 256, 2021: 272, 2022: 271, 2023: 272}
 PARSER_ID = "nfl-t5119u-r2a-owned-coverage-v1"
+PARSER_ID_B1 = "nfl-t5119u-r2a-owned-coverage-v1-t5136u-b1"
+SEALED_EXTRACT_SHA256 = "96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0"
+R2A_SEAL_ARTIFACT_SHA256 = {
+    "SOURCE_INVENTORY.json": "8dfa93e3947f074f80f7733c685ea8ee4035364d02e8e28261d5873ff538c2cb",
+    "IDENTITY_RULE.json": "ca8f374fb9dd7e493add8407df8155d12fa815fbd06471897cd7194240b9fe7e",
+    "SOURCE_SELECTION_DEDUPE_RULE.json": "9a43d73b5f6638206e59e08a2532b91a94991fbd4b7dac45a3a91440e16208d2",
+    "PARSER_VERSION.json": "e2871178ca0e408b8ce1d33c32c0f4c8a2e0e93b986260a13bbdc109a4da9f0d",
+    "EXTRACT_HASHES.json": "e09066ee7275f238d78dc04ad75652e176f38827824e7ef7bc43ce74811a2eb0",
+    "T5116U_EXCLUSION_REPORT.json": "08646e335b5a62ec23278618732e568face3fc74d48680acaabc9e67766576fc",
+    "T5116U_REPLAY.json": "a9c7fbc6fb6a019f18da844573e0cbd05950d59015521fe9210bdb476d38a20d",
+    "EVAL_MATCHED_GAME_IDS.json": "d24f12db2df591756f2ad55be66537c8111ed6beed60854a0e7263ed62f4a202",
+    "EVAL_MISSING_GAME_IDS.json": "8b3b3d3a10f4651c9025e2e49560d8c13881c238120bec4f92677483bc0caa60",
+    "DEV_MATCHED_GAME_IDS.json": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6",
+    "DEV_MISSING_GAME_IDS.json": "7b58bcc7eec8c468c52acd94a70f014294bb40c6aae9bdaba33dbad4a5389047",
+    "WC_MATCHED_GAME_IDS.json": "8223a8a2eda3695a31e62690820dd4df818e921f2f48a7f25f003bd825c2e0df",
+    "WC_MISSING_GAME_IDS.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "DUPLICATE_CONFLICTS.json": "31d4d89367c742bc9b0c5001976c7102ea7a805649e6c6b90426a09c278bff0c",
+    "COVERAGE_MANIFEST.json": "bfcf8ff4b3c9dd933c6edb381a76d6bbb7abd6a1723120941d810425942e00d8",
+    "ADMISSIBLE_QUOTES.jsonl": "75c0b14c7391252dd5ca790c09d9d65071916ef4f39a20c81c88c57229917fb9",
+    "R2B_CONSUME.json": "09c3b86f14ea7d03888c3d99c3c70144bd30760ab247aa7274ae68075db6b92e",
+}
 
 # silence unused import if join path is only used in replay
 _ = join_quotes_at_cutoff
@@ -97,6 +119,53 @@ def sha256_bytes(data: bytes) -> str:
 
 def sha256_json(obj: Any) -> str:
     return sha256_bytes(json.dumps(obj, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8"))
+
+
+def finite_numeric(value: Any) -> Any:
+    """Canonical finite number for fingerprint/dedupe only.
+
+    Semantically identical representations collapse (str '-110', int -110,
+    float -110.0 → -110.0). No rounding and no tolerance band. Bool, NaN,
+    Inf, and unparsable values are tagged so they cannot silently equal a
+    number. None and blank stay None.
+    """
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return ("non_numeric", "bool", value)
+    if isinstance(value, str):
+        text = value.strip()
+        if text == "":
+            return None
+        try:
+            number = float(text)
+        except ValueError:
+            return ("non_numeric", "str", value)
+        if math.isfinite(number):
+            return number
+        return ("non_finite", "str", value)
+    if isinstance(value, (int, float)):
+        number = float(value)
+        if math.isfinite(number):
+            return number
+        return ("non_finite", type(value).__name__, value)
+    return ("non_numeric", type(value).__name__, str(value))
+
+
+def store_number(value: Any) -> Any:
+    """Representation-only coerce: finite number stays that float; otherwise raw."""
+    canon = finite_numeric(value)
+    if canon is None or isinstance(canon, float):
+        return canon
+    return value
+
+
+def value_type_meta(value: Any) -> dict:
+    return {
+        "py_type": type(value).__name__,
+        "repr": repr(value),
+        "finite_numeric": finite_numeric(value),
+    }
 
 
 def write_json(path: Path, obj: Any) -> str:
@@ -216,6 +285,71 @@ def match_commence_game(row: Mapping[str, Any], idx: dict) -> Tuple[Optional[dic
     if len(hits) > 1:
         return None, "ambiguous_identity", f"commence exact hits {len(hits)}"
     return hits[0], "", ""
+
+
+def describe_no_game_match(row: Mapping[str, Any], idx: dict, detail: str) -> dict:
+    """Bounded audit row: event/teams/schedule vs exact commence. Does not admit slack."""
+    home_abbr, home_st = resolve_abbr(str(row.get("home_team") or row.get("home") or ""))
+    away_abbr, away_st = resolve_abbr(str(row.get("away_team") or row.get("away") or ""))
+    commence = normalize_quote_timestamp(row.get("commence_time"))
+    commence_iso = timestamp_to_iso(commence) if commence is not None else None
+    same_teams = [
+        g
+        for g in idx["by_id"].values()
+        if g.get("home_abbr") == home_abbr and g.get("away_abbr") == away_abbr and g.get("kickoff_dt") is not None
+    ]
+    same_teams_swapped = [
+        g
+        for g in idx["by_id"].values()
+        if g.get("home_abbr") == away_abbr and g.get("away_abbr") == home_abbr and g.get("kickoff_dt") is not None
+    ]
+    gameday = str(row.get("commence_time") or "")[:10]
+    same_gameday = [
+        g
+        for g in same_teams
+        if str(g.get("nflverse_gameday") or "")[:10] == gameday
+    ]
+    nearest = None
+    if commence is not None and same_teams:
+        nearest_game = min(same_teams, key=lambda g: abs((g["kickoff_dt"] - commence).total_seconds()))
+        delta = (nearest_game["kickoff_dt"] - commence).total_seconds()
+        nearest = {
+            "game_id": nearest_game["game_id"],
+            "kickoff_utc": nearest_game.get("kickoff_utc"),
+            "nflverse_gameday": nearest_game.get("nflverse_gameday"),
+            "delta_seconds": delta,
+            "exact_commence_eq_kickoff": delta == 0,
+        }
+    exact_same_teams = [g["game_id"] for g in same_teams if commence is not None and g.get("kickoff_dt") == commence]
+    proven_one_to_one = len(exact_same_teams) == 1
+    return {
+        "event_id": str(row.get("event_id") or ""),
+        "home_team": row.get("home_team") or row.get("home"),
+        "away_team": row.get("away_team") or row.get("away"),
+        "home_abbr": home_abbr,
+        "away_abbr": away_abbr,
+        "home_status": home_st,
+        "away_status": away_st,
+        "commence_time": row.get("commence_time"),
+        "commence_utc": commence_iso,
+        "snapshot_ts": row.get("snapshot_ts") or row.get("captured_at"),
+        "book": row.get("book"),
+        "market": row.get("market"),
+        "provenance": row.get("provenance"),
+        "detail": detail,
+        "same_home_away_games_n": len(same_teams),
+        "same_home_away_game_ids": [g["game_id"] for g in same_teams],
+        "same_gameday_home_away_n": len(same_gameday),
+        "same_gameday_home_away_game_ids": [g["game_id"] for g in same_gameday],
+        "swapped_home_away_n": len(same_teams_swapped),
+        "nearest_same_teams": nearest,
+        "proven_exact_one_to_one": proven_one_to_one,
+        "verdict": (
+            "admit_exact_commence_identity"
+            if proven_one_to_one
+            else "keep_refused_no_approximate_time_admit"
+        ),
+    }
 
 
 def observation_dt(row: Mapping[str, Any]) -> Tuple[Optional[datetime], str]:
@@ -553,21 +687,37 @@ def normalize_flat_group(rows: Sequence[Mapping[str, Any]], game: Mapping[str, A
                 return None, "market_line_mismatch"
             if abs(spread_home + away_point) > 1e-9:
                 return None, "sign_conflict_home_plus_away_nonzero"
-        return {
-            "market": "spread",
+        raw = {
             "spread_home": spread_home,
             "price_home": home_side[0].get("price"),
             "price_away": away_side[0].get("price") if away_side else None,
+            "total_points": None,
             "line": spread_home,
+        }
+        return {
+            "market": "spread",
+            "spread_home": spread_home,
+            "price_home": store_number(raw["price_home"]),
+            "price_away": store_number(raw["price_away"]),
+            "line": spread_home,
+            "_raw": raw,
         }, ""
     if market == "moneyline":
         if len(home_side) != 1 or len(away_side) != 1:
             return None, "missing_ml_pair"
-        return {
-            "market": "moneyline",
+        raw = {
+            "spread_home": None,
             "price_home": home_side[0].get("price"),
             "price_away": away_side[0].get("price"),
+            "total_points": None,
             "line": None,
+        }
+        return {
+            "market": "moneyline",
+            "price_home": store_number(raw["price_home"]),
+            "price_away": store_number(raw["price_away"]),
+            "line": None,
+            "_raw": raw,
         }, ""
     if market == "total":
         if len(over_side) != 1:
@@ -576,12 +726,22 @@ def normalize_flat_group(rows: Sequence[Mapping[str, Any]], game: Mapping[str, A
             total = float(over_side[0].get("point"))
         except (TypeError, ValueError):
             return None, "market_line_mismatch"
-        return {
-            "market": "total",
+        raw = {
+            "spread_home": None,
+            "price_home": None,
+            "price_away": None,
             "total_points": total,
             "over_price": over_side[0].get("price"),
             "under_price": under_side[0].get("price") if under_side else None,
             "line": total,
+        }
+        return {
+            "market": "total",
+            "total_points": total,
+            "over_price": store_number(raw["over_price"]),
+            "under_price": store_number(raw["under_price"]),
+            "line": total,
+            "_raw": raw,
         }, ""
     return None, "incompatible_market"
 
@@ -627,30 +787,52 @@ def consider_quote(
         "book": book,
         "market": market,
         "line": None if line is None else float(line),
-        "spread_home": extra.get("spread_home"),
-        "price_home": extra.get("price_home"),
-        "price_away": extra.get("price_away"),
-        "total_points": extra.get("total_points"),
+        "spread_home": store_number(extra.get("spread_home")),
+        "price_home": store_number(extra.get("price_home")),
+        "price_away": store_number(extra.get("price_away")),
+        "total_points": store_number(extra.get("total_points")),
         "source": source,
         "provenance": provenance,
         "snapshot_kind": snapshot_kind,
         "event_id": event_id,
         "observation_is_not_file_mtime": True,
     }
+    if extra.get("_raw") is not None:
+        rec["_raw"] = dict(extra["_raw"])
     return rec, "", ""
 
 
-def fingerprint(q: Mapping[str, Any]) -> Tuple[Any, ...]:
+def fingerprint_raw(q: Mapping[str, Any]) -> Tuple[Any, ...]:
+    """Pre-normalize fingerprint: compares raw stored / _raw payload types."""
+    raw = q.get("_raw") if isinstance(q.get("_raw"), Mapping) else None
+    src = raw if raw is not None else q
     return (
         q.get("game_id"),
         q.get("book"),
         q.get("market"),
         q.get("captured_at"),
-        q.get("spread_home"),
-        q.get("price_home"),
-        q.get("price_away"),
-        q.get("total_points"),
-        q.get("line"),
+        src.get("spread_home"),
+        src.get("price_home"),
+        src.get("price_away"),
+        src.get("total_points"),
+        src.get("line"),
+    )
+
+
+def fingerprint(q: Mapping[str, Any]) -> Tuple[Any, ...]:
+    """Fingerprint after finite-numeric type-normalize. No rounding / no band."""
+    raw = q.get("_raw") if isinstance(q.get("_raw"), Mapping) else None
+    src = raw if raw is not None else q
+    return (
+        q.get("game_id"),
+        q.get("book"),
+        q.get("market"),
+        q.get("captured_at"),
+        finite_numeric(src.get("spread_home")),
+        finite_numeric(src.get("price_home")),
+        finite_numeric(src.get("price_away")),
+        finite_numeric(src.get("total_points")),
+        finite_numeric(src.get("line")),
     )
 
 
@@ -658,7 +840,11 @@ def conflict_key(q: Mapping[str, Any]) -> Tuple[Any, ...]:
     return (q.get("game_id"), q.get("book"), q.get("market"), q.get("captured_at"))
 
 
-def collapse(quotes: Sequence[Mapping[str, Any]]) -> Tuple[List[dict], int, List[dict]]:
+def collapse(
+    quotes: Sequence[Mapping[str, Any]],
+    *,
+    fingerprint_fn: Callable[[Mapping[str, Any]], Tuple[Any, ...]] = fingerprint,
+) -> Tuple[List[dict], int, List[dict]]:
     by_conflict: Dict[Tuple[Any, ...], List[dict]] = defaultdict(list)
     for q in quotes:
         by_conflict[conflict_key(q)].append(dict(q))
@@ -666,7 +852,7 @@ def collapse(quotes: Sequence[Mapping[str, Any]]) -> Tuple[List[dict], int, List
     identical = 0
     refused: List[dict] = []
     for key, group in by_conflict.items():
-        fps = {fingerprint(q) for q in group}
+        fps = {fingerprint_fn(q) for q in group}
         if len(fps) > 1:
             refused.append(
                 {
@@ -710,6 +896,13 @@ def ingest_jsonl(idx: dict, seasons: Iterable[int]) -> Tuple[List[dict], Counter
             "price_home": row.get("price_home"),
             "price_away": row.get("price_away"),
             "total_points": row.get("total_points"),
+            "_raw": {
+                "spread_home": row.get("spread_home"),
+                "price_home": row.get("price_home"),
+                "price_away": row.get("price_away"),
+                "total_points": row.get("total_points"),
+                "line": row.get("spread_home") if market == "spread" else row.get("total_points") if market == "total" else None,
+            },
         }
         line = extra["spread_home"] if market == "spread" else extra["total_points"] if market == "total" else None
         rec, reason, _detail = consider_quote(
@@ -733,10 +926,18 @@ def ingest_jsonl(idx: dict, seasons: Iterable[int]) -> Tuple[List[dict], Counter
     return out, reasons
 
 
-def ingest_flat(rows: Iterable[Mapping[str, Any]], idx: dict, default_source: str) -> Tuple[List[dict], Counter]:
+def ingest_flat(
+    rows: Iterable[Mapping[str, Any]],
+    idx: dict,
+    default_source: str,
+    *,
+    no_game_samples: Optional[List[dict]] = None,
+    no_game_sample_limit: int = 16,
+) -> Tuple[List[dict], Counter]:
     """Group flattened CSV/sqlite rows, then match + sign-resolve."""
     reasons: Counter = Counter()
     grouped: Dict[Tuple[Any, ...], List[dict]] = defaultdict(list)
+    seen_no_game_events: set = set()
     n = 0
     for row in rows:
         n += 1
@@ -768,6 +969,15 @@ def ingest_flat(rows: Iterable[Mapping[str, Any]], idx: dict, default_source: st
         game, reason, detail = match_commence_game(group[0], idx)
         if reason:
             reasons[reason] += 1
+            if (
+                reason == "no_game_match"
+                and no_game_samples is not None
+                and len(no_game_samples) < no_game_sample_limit
+            ):
+                eid = str(group[0].get("event_id") or "")
+                if eid not in seen_no_game_events:
+                    seen_no_game_events.add(eid)
+                    no_game_samples.append(describe_no_game_match(group[0], idx, detail))
             continue
         captured, err = observation_dt(group[0])
         if captured is None:
@@ -957,7 +1167,321 @@ def write_r2b_consume(*, ready: bool, reason: str, manifest_name: str, quotes_na
     return write_json(OUT / "R2B_CONSUME.json", body)
 
 
+def strip_internal(q: Mapping[str, Any]) -> dict:
+    return {k: v for k, v in q.items() if not str(k).startswith("_")}
+
+
+def classify_conflict_group(group: Sequence[Mapping[str, Any]]) -> dict:
+    raw_fps = {fingerprint_raw(q) for q in group}
+    norm_fps = {fingerprint(q) for q in group}
+    members = []
+    for q in group:
+        raw = q.get("_raw") if isinstance(q.get("_raw"), Mapping) else q
+        members.append(
+            {
+                "provenance": q.get("provenance"),
+                "source": q.get("source"),
+                "snapshot_kind": q.get("snapshot_kind"),
+                "event_id": q.get("event_id"),
+                "spread_home": value_type_meta(raw.get("spread_home")),
+                "price_home": value_type_meta(raw.get("price_home")),
+                "price_away": value_type_meta(raw.get("price_away")),
+                "total_points": value_type_meta(raw.get("total_points")),
+                "line": value_type_meta(raw.get("line")),
+            }
+        )
+    type_only = len(raw_fps) > 1 and len(norm_fps) == 1
+    genuine = len(norm_fps) > 1
+    return {
+        "game_id": group[0].get("game_id"),
+        "book": group[0].get("book"),
+        "market": group[0].get("market"),
+        "captured_at": group[0].get("captured_at"),
+        "canonical_key": [
+            group[0].get("game_id"),
+            group[0].get("book"),
+            group[0].get("market"),
+            group[0].get("captured_at"),
+        ],
+        "n": len(group),
+        "sources": sorted({str(q.get("provenance")) for q in group}),
+        "raw_fingerprint_n": len(raw_fps),
+        "normalized_fingerprint_n": len(norm_fps),
+        "class": "false_type_mismatch" if type_only else ("genuine_value_conflict" if genuine else "identical"),
+        "members": members,
+    }
+
+
+def assert_r2a_seal_untouched() -> dict:
+    live = {}
+    mismatches = []
+    for name, expected in R2A_SEAL_ARTIFACT_SHA256.items():
+        path = OUT / name
+        if not path.is_file():
+            mismatches.append({"name": name, "error": "missing"})
+            continue
+        digest = sha256_file(path)
+        live[name] = digest
+        if digest != expected:
+            mismatches.append({"name": name, "expected": expected, "live": digest})
+    return {"live": live, "mismatches": mismatches, "ok": not mismatches}
+
+
+def run_t5136u_b1() -> int:
+    """Append-only B-1: inspect conflicts, type-normalize where proven, audit no_game_match."""
+    print(json.dumps({"phase": "t5136u_b1_start", "at": utc_now()}), flush=True)
+    dest = OUT / "t5136u_B1"
+    dest.mkdir(parents=True, exist_ok=True)
+    seal = assert_r2a_seal_untouched()
+    if not seal["ok"]:
+        raise SystemExit(f"R2-A seal mutated before B1: {seal['mismatches']}")
+
+    extract_path = EXTRACTS / "gapfill_nfl_2020_2023_dkfd_mainline.jsonl"
+    live_extract = sha256_file(extract_path) if extract_path.is_file() else None
+    if live_extract != SEALED_EXTRACT_SHA256:
+        raise SystemExit(f"sealed extract sha mismatch {live_extract} != {SEALED_EXTRACT_SHA256}")
+
+    cohorts, games, _ = load_pins()
+    idx = build_game_indexes(games)
+    eval_ids = list(cohorts["eval"]["game_ids"])
+    dev_ids = list(cohorts["dev_reg"]["game_ids"])
+    wc_ids = list(cohorts["non_reg_wildcard"]["game_ids"])
+
+    print(json.dumps({"phase": "ingest_jsonl"}), flush=True)
+    jsonl_quotes, jsonl_reasons = ingest_jsonl(idx, (2020, 2021, 2022, 2023))
+    csv_no_game: List[dict] = []
+    print(json.dumps({"phase": "ingest_csv"}), flush=True)
+    csv_quotes, csv_reasons = ingest_flat(
+        iter_open_close_csv_quotes(seasons=(2020, 2021, 2022, 2023)),
+        idx,
+        str(HD_CSV),
+        no_game_samples=csv_no_game,
+        no_game_sample_limit=16,
+    )
+    print(json.dumps({"phase": "sqlite_reuse"}), flush=True)
+    sqlite_extract = extract_sqlite_from_cli_or_scan(skip_scan=True)
+    if sqlite_extract.get("sha256") != SEALED_EXTRACT_SHA256:
+        raise SystemExit("reuse path did not return sealed 19914-row extract")
+    sql_no_game: List[dict] = []
+    print(json.dumps({"phase": "ingest_sqlite"}), flush=True)
+    sql_quotes, sql_reasons = ingest_flat(
+        iter_sqlite_extract(),
+        idx,
+        str(HD_SQLITE),
+        no_game_samples=sql_no_game,
+        no_game_sample_limit=16,
+    )
+
+    all_quotes = jsonl_quotes + csv_quotes + sql_quotes
+    raw_latest, raw_identical, raw_conflicts = collapse(all_quotes, fingerprint_fn=fingerprint_raw)
+    norm_latest, norm_identical, norm_conflicts = collapse(all_quotes, fingerprint_fn=fingerprint)
+
+    by_raw_key: Dict[Tuple[Any, ...], List[dict]] = defaultdict(list)
+    for q in all_quotes:
+        by_raw_key[conflict_key(q)].append(q)
+    raw_conflict_keys = {(c["game_id"], c["book"], c["market"], c["captured_at"]) for c in raw_conflicts}
+    classified = [classify_conflict_group(by_raw_key[key]) for key in sorted(raw_conflict_keys)]
+    class_counts = Counter(row["class"] for row in classified)
+    sample_keys = [
+        ("2020_01_HOU_KC", "draftkings", "moneyline", "2020-09-10T00:15:00Z"),
+        ("2020_01_HOU_KC", "draftkings", "spread", "2020-09-10T00:15:00Z"),
+        ("2020_01_HOU_KC", "fanduel", "moneyline", "2020-09-10T00:15:00Z"),
+        ("2020_01_HOU_KC", "fanduel", "spread", "2020-09-10T00:15:00Z"),
+        ("2020_16_CAR_WAS", "draftkings", "moneyline", "2020-12-27T17:55:00Z"),
+        ("2020_16_CAR_WAS", "draftkings", "spread", "2020-12-27T17:55:00Z"),
+        ("2020_16_CAR_WAS", "fanduel", "moneyline", "2020-12-27T17:55:00Z"),
+        ("2020_16_CAR_WAS", "fanduel", "spread", "2020-12-27T17:55:00Z"),
+    ]
+    evidence_samples = []
+    for key in sample_keys:
+        group = by_raw_key.get(key)
+        if group:
+            evidence_samples.append(classify_conflict_group(group))
+
+    r2_eval = coverage_from_latest(norm_latest, eval_ids)
+    r2_dev = coverage_from_latest(norm_latest, dev_ids)
+    r2_wc = coverage_from_latest(norm_latest, wc_ids)
+    parent_eval = json.loads((OUT / "EVAL_MATCHED_GAME_IDS.json").read_text())
+    parent_dev = json.loads((OUT / "DEV_MATCHED_GAME_IDS.json").read_text())
+
+    no_game_audit = {
+        "schema": "nfl-t5119u-t5136u-b1-no-game-match-audit-v1",
+        "identity_rule_unchanged": "exact commence_time == kickoff_utc; no slack minutes",
+        "approximate_time_admitted": False,
+        "kickoff_cutoff_semantics_changed": False,
+        "csv_tally": int(csv_reasons.get("no_game_match", 0)),
+        "sqlite_tally": int(sql_reasons.get("no_game_match", 0)),
+        "jsonl_tally": int(jsonl_reasons.get("no_game_match", 0)),
+        "sample_n": len(csv_no_game),
+        "sample": csv_no_game,
+        "sqlite_sample": sql_no_game,
+        "proven_one_to_one_n": sum(1 for r in csv_no_game if r.get("proven_exact_one_to_one")),
+        "kept_refused_n": sum(1 for r in csv_no_game if r.get("verdict") == "keep_refused_no_approximate_time_admit"),
+        "verdict": (
+            "no proven exact one-to-one identity in sample; all sampled no_game_match rows stay refused"
+            if all(r.get("verdict") == "keep_refused_no_approximate_time_admit" for r in csv_no_game)
+            else "sample contained exact commence identity — unexpected; see rows"
+        ),
+    }
+
+    parser = {
+        "parser_id": PARSER_ID_B1,
+        "parent_parser_id": PARSER_ID,
+        "reader_path": "scripts/nfl/t5119u_r2a/nfl_odds_reader.py",
+        "reader_sha256": sha256_file(HERE / "nfl_odds_reader.py"),
+        "builder_path": "scripts/nfl/t5119u_r2a/build_owned_coverage.py",
+        "builder_sha256": sha256_file(Path(__file__)),
+        "fingerprint": "finite_numeric type-normalize on spread_home/price_home/price_away/total_points/line",
+        "rounding": False,
+        "tolerance_band": False,
+        "price_line_rewrite": False,
+        "selection_books": sorted(BOOKS),
+        "cutoff_minutes_before_kickoff": CUTOFF_MINUTES,
+        "max_quote_age_hours": MAX_QUOTE_AGE_HOURS,
+        "performance_selection": False,
+        "outcome_scoring": False,
+    }
+
+    g5 = per_season_vs_declared(r2_eval["matched_game_ids"])
+    g5_hold = any(rec.get("hold_gt_30pct") for rec in g5.values())
+
+    record = {
+        "schema": "nfl-t5119u-t5136u-b1-coverage-record-v1",
+        "appended_to_r2a_seal": True,
+        "rewrote_r2a_seal": False,
+        "parent_tip": "3821941d758feb7ba05e680da6ecec283291dd2a",
+        "authority": {
+            "owner_clear": "OWNER_CLEAR_t5136u_B1_RETAIN_CONFLICT_NORM",
+            "owner_clear_sha8": "a5f7c364",
+            "cos_order": "COS_ORDER_CURSOR_t5136u_CONFLICT_TYPE_NORMALIZE",
+            "cos_order_sha8": "80c38680",
+        },
+        "cert_candidate": 0,
+        "eval_claim": False,
+        "g5_loosened": False,
+        "time_rule_loosened": False,
+        "book_rule_loosened": False,
+        "data_coverage_blocked": True,
+        "label": "R2_OWNED_COVERAGE_T5136U_B1_APPEND",
+        "sealed_extract_sha256": SEALED_EXTRACT_SHA256,
+        "sealed_extract_rows": 19914,
+        "new_scan": False,
+        "new_acquisition": False,
+        "parser": parser,
+        "parent_r2a_artifact_sha256": R2A_SEAL_ARTIFACT_SHA256,
+        "parent_r2a_seal_verified": seal["ok"],
+        "ingest_reason_tallies": {
+            "jsonl": dict(jsonl_reasons),
+            "open_close_csv": dict(csv_reasons),
+            "gapfill_sqlite": dict(sql_reasons),
+        },
+        "collapse_raw_types": {
+            "input_n": len(all_quotes),
+            "latest_n": len(raw_latest),
+            "identical_duplicate_n": raw_identical,
+            "conflict_n": len(raw_conflicts),
+        },
+        "collapse_finite_numeric": {
+            "input_n": len(all_quotes),
+            "latest_n": len(norm_latest),
+            "identical_duplicate_n": norm_identical,
+            "conflict_n": len(norm_conflicts),
+        },
+        "conflict_breakdown": {
+            "raw_conflict_n": len(classified),
+            "false_type_mismatch": int(class_counts.get("false_type_mismatch", 0)),
+            "genuine_value_conflict": int(class_counts.get("genuine_value_conflict", 0)),
+            "identical": int(class_counts.get("identical", 0)),
+            "remaining_conflict_n": len(norm_conflicts),
+        },
+        "eval": {
+            "n": 449,
+            "parent_r2_matched_n": len(parent_eval),
+            "b1_matched_n": r2_eval["matched_n"],
+            "b1_missing_n": r2_eval["missing_n"],
+            "b1_matched_game_ids": r2_eval["matched_game_ids"],
+            "b1_missing_game_ids": r2_eval["missing_game_ids"],
+            "b1_vs_declared": g5,
+        },
+        "dev_reg": {
+            "n": 437,
+            "parent_r2_matched_n": len(parent_dev),
+            "b1_matched_n": r2_dev["matched_n"],
+            "b1_missing_n": r2_dev["missing_n"],
+            "b1_matched_game_ids": r2_dev["matched_game_ids"],
+            "b1_missing_game_ids": r2_dev["missing_game_ids"],
+        },
+        "non_reg_wildcard": {
+            "n": 6,
+            "b1_matched_n": r2_wc["matched_n"],
+            "b1_missing_n": r2_wc["missing_n"],
+            "b1_matched_game_ids": r2_wc["matched_game_ids"],
+            "b1_missing_game_ids": r2_wc["missing_game_ids"],
+        },
+        "g5_hold": g5_hold,
+        "status": "DATA_COVERAGE_BLOCKED",
+        "eval_ready": False,
+        "sealed_at_utc": utc_now(),
+    }
+    record["record_sha256"] = sha256_json({k: v for k, v in record.items() if k != "record_sha256"})
+
+    hashes = {
+        "COVERAGE_RECORD.json": write_json(dest / "COVERAGE_RECORD.json", record),
+        "CONFLICT_PAIR_EVIDENCE.json": write_json(
+            dest / "CONFLICT_PAIR_EVIDENCE.json",
+            {
+                "schema": "nfl-t5119u-t5136u-b1-conflict-pair-evidence-v1",
+                "outcomes": False,
+                "sealed_extract_sha256": SEALED_EXTRACT_SHA256,
+                "hypothesis": "CSV string price vs sqlite numeric price can false-conflict",
+                "breakdown": record["conflict_breakdown"],
+                "samples": evidence_samples,
+                "all_raw_conflicts": classified,
+            },
+        ),
+        "NO_GAME_MATCH_AUDIT.json": write_json(dest / "NO_GAME_MATCH_AUDIT.json", no_game_audit),
+        "DUPLICATE_CONFLICTS_B1.json": write_json(dest / "DUPLICATE_CONFLICTS_B1.json", norm_conflicts),
+        "EVAL_MATCHED_GAME_IDS_B1.json": write_json(dest / "EVAL_MATCHED_GAME_IDS_B1.json", r2_eval["matched_game_ids"]),
+        "DEV_MATCHED_GAME_IDS_B1.json": write_json(dest / "DEV_MATCHED_GAME_IDS_B1.json", r2_dev["matched_game_ids"]),
+        "WC_MATCHED_GAME_IDS_B1.json": write_json(dest / "WC_MATCHED_GAME_IDS_B1.json", r2_wc["matched_game_ids"]),
+    }
+    quotes_path = dest / "ADMISSIBLE_QUOTES_B1.jsonl"
+    qh = hashlib.sha256()
+    with quotes_path.open("w", encoding="utf-8") as fh:
+        for q in sorted(norm_latest, key=lambda r: (str(r["game_id"]), str(r["book"]), str(r["market"]), str(r["captured_at"]))):
+            line = json.dumps(strip_internal(q), separators=(",", ":"), default=str)
+            fh.write(line + "\n")
+            qh.update((line + "\n").encode("utf-8"))
+    hashes["ADMISSIBLE_QUOTES_B1.jsonl"] = qh.hexdigest()
+    hashes["ARTIFACT_SHA256.json"] = write_json(dest / "ARTIFACT_SHA256.json", hashes)
+    post = assert_r2a_seal_untouched()
+    if not post["ok"]:
+        raise SystemExit(f"R2-A seal mutated during B1 write: {post['mismatches']}")
+    print(
+        json.dumps(
+            {
+                "phase": "t5136u_b1_sealed",
+                "raw_conflicts": len(raw_conflicts),
+                "false_type_mismatch": record["conflict_breakdown"]["false_type_mismatch"],
+                "genuine_value_conflict": record["conflict_breakdown"]["genuine_value_conflict"],
+                "remaining_conflicts": len(norm_conflicts),
+                "eval_parent": len(parent_eval),
+                "eval_b1": r2_eval["matched_n"],
+                "dev_b1": r2_dev["matched_n"],
+                "wc_b1": r2_wc["matched_n"],
+                "no_game_match_verdict": no_game_audit["verdict"],
+                "dest": str(dest),
+            },
+            indent=2,
+        ),
+        flush=True,
+    )
+    return 0
+
+
 def main() -> int:
+    if "--t5136u-b1" in sys.argv:
+        return run_t5136u_b1()
     skip_sqlite_scan = "--skip-sqlite-scan" in sys.argv
     print(json.dumps({"phase": "start", "at": utc_now(), "skip_sqlite_scan": skip_sqlite_scan}), flush=True)
     OUT.mkdir(parents=True, exist_ok=True)

@@ -167,3 +167,57 @@ First DEV eligible id is in `DEV_MATCHED_GAME_IDS.json` — not claimed here. No
 - t5116u 132 reproduced. Conflicts refused. No G5 loosen. No ONE_RUN. No PE. No merge.
 
 CERT=0 · DRAFT≠merge · failure of t5116u ≠ second look.
+
+## t5136u B-1 append — conflict-type normalize + no_game_match audit
+
+Authority: OWNER_CLEAR_t5136u **a5f7c364** · COS_ORDER **80c38680** · parent tip **3821941d** · R2-A seal **preserved** (not rewritten).
+CERT=0 · DRAFT≠merge · no EVAL · G5/KO−60/≤24h/DK-FD unchanged · no new scan/acquisition.
+
+Hypothesis **proven**: all **480** raw CSV↔sqlite fingerprint conflicts were type-only (`str` `'-435.0'` vs `float` `-435.0`). **0** genuine economic differences. Finite-numeric fingerprint (no rounding, no tolerance, no price/line rewrite) collapses those 480; remaining conflict_n = **0**.
+
+Sealed extract reused: `96c679d73abb16c54dd9de3b0f1844855708dfb1c898864098d7739aaa7b88f0` (19 914 rows). Parent R2-A `ARTIFACT_SHA256.json` re-verified after write.
+
+### Sampled real pairs (no outcomes)
+
+Canonical key `2020_01_HOU_KC` / `draftkings` / `moneyline` / `2020-09-10T00:15:00Z` · event_id `d30066bfc17b9a038eed91e8a01e98e2` · n=4 (CSV mid+pre1d + sqlite mid+pre1d):
+
+| Provenance | `price_home` (KC) | type | `price_away` (HOU) | type |
+|---|---|---|---|---|
+| open_close_csv | `-435.0` | str `'-435.0'` | `330.0` | str |
+| odds_gapfill_sqlite | `-435.0` | float | `330.0` | float |
+
+Same key spread: home `-9.0` / prices `-111.0` / `-109.0` — CSV str vs sqlite float; economics identical. `2020_16_CAR_WAS` same pattern. Full 480 classified in `t5136u_B1/CONFLICT_PAIR_EVIDENCE.json`.
+
+### Counts after proven collapse
+
+| | Parent R2-A (raw types) | B-1 (finite-numeric) |
+|---|---|---|
+| input quotes | 3689 | 3689 |
+| latest | 1475 | **1667** |
+| identical dups | 571 | 1355 |
+| conflicts | **480 refused** | **0** |
+| EVAL fac21ebe | 95 / 354 | **119** / 330 |
+| DEV 92b91585 | 72 / 365 | **94** / 343 |
+| WC f81d381e | 6 / 0 | **6** / 0 |
+
+EVAL 119 = prior JSONL+CSV documented-sign union (conflicts had been dropping the CSV-only slots). G5 still HOLD: 2022 47/271 (82.66%) · 2023 72/272 (73.53%). **DATA_COVERAGE_BLOCKED**. Not EVAL-ready. Scoring 119 as EVAL is refused.
+
+Tests: `scripts/nfl/t5119u_r2a/test_t5136u_b1_conflict_norm.py` — string/number equivalence collapses; `-110` vs `-111` and `-3.5` vs `-3.0` still refuse.
+
+### no_game_match audit (bounded; exact commence only)
+
+CSV 1071 · sqlite 1071 · JSONL 163. Sample n=16 CSV event_ids + 16 sqlite. Teams resolve. Same-gameday home/away often exists, but `commence_time != kickoff_utc` (examples: IND@CHI +12300s; NYJ@CLE −180s; SEA@LA −120s; DAL@GB −60s). **0** proven exact 1:1 identity. Approximate-time **not** admitted. Kickoff/cutoff semantics **unchanged**. Rows stay refused.
+
+### Append hashes (do not replace R2-A)
+
+| Artifact | sha256 |
+|---|---|
+| `t5136u_B1/COVERAGE_RECORD.json` | `6517aab7d45ed62058856df43ad93171606d0fe3a59aa000f13de06a3f0239d5` |
+| record_sha256 (canonical) | `c1b752655a79cf621881a87eb6e8a6ca49aebb34d42ce2d053e4dcfa32bc1438` |
+| `CONFLICT_PAIR_EVIDENCE.json` | `870bdf99a1a1d228e4c75a1bb6ac8c0abfc15e8d9e9591cbc7f09a23987da2a3` |
+| `NO_GAME_MATCH_AUDIT.json` | `a2d4639ac040b544b2da3bc7b28a387ae21f1cceaf6d4cf6b2fd080d2224bfed` |
+| `ADMISSIBLE_QUOTES_B1.jsonl` | `b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6` |
+| builder | `94938f6a1520ce6a89a439c6ca9997468f5e7fb01412349e4cda6e0c2b33bf9f` |
+| reader (unchanged) | `7bc21d82c1c332eb9ad4e5ba773ecb1bc49cac2ed23f970ab89ec0f9ea591f0e` |
+
+CERT=0 · DRAFT≠merge · no EVAL claim · G5 retained.
