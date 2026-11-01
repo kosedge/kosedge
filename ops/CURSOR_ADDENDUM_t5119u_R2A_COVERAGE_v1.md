@@ -84,18 +84,78 @@ Parser pin (copied reader, not modified originals): `scripts/nfl/t5119u_r2a/nfl_
 7. Across stores, identical fingerprints collapse; conflicts refuse. No source is preferred because it “covers more EVAL games.”
 8. A game is coverage-positive for **margin** when ≥1 admissible DK/FD mainline spread remains after collapse. Missing market is labeled missing — not imputed.
 
-## t5116u 132/449 — what is already known vs what this run will list
+## t5116u 132/449 — reproduced, not re-bound
 
-Spent result (do not re-bind): quote-eligible margin **132 / 449** = 2022 **47** + 2023 **85**. HOLD vs declared PBP REG dens 271/272: 2022 224/271 = 82.66%; 2023 187/272 = 68.75%.
+Spent look untouched (ONE_RUN **96478f6b**). Outcome-blind replay of the **same source subset** (JSONL 2022–23 + open_close CSV 2022–23, no sqlite) reproduced **132 / 449 = 47 + 85**. `T5116U_REPLAY.json` `reproduced_spent_132=true`.
 
-Load that produced 132: `iter_jsonl_quotes(seasons=(2022,2023))` + `iter_open_close_csv_quotes(seasons=(2022,2023))` only. **SQLite was not in that load.** JSONL 2020–21 and CSV 2020–21 were also not in that load (DEV was not scored).
+| Season | Declared PBP REG den | Replay quote-eligible | Excluded | Rate | G5 HOLD (>30%) |
+|---|---|---|---|---|---|
+| 2020 | 256 | 0 (not in t5116u load) | 256 | 100% | yes (DEV, not scored) |
+| 2021 | 272 | 0 (not in t5116u load) | 272 | 100% | yes (DEV, not scored) |
+| 2022 | **271** | **47** | **224** | **82.66%** | **YES** |
+| 2023 | **272** | **85** | **187** | **68.75%** | **YES** |
 
-This package will emit exact matched + missing `game_id` lists vs EVAL 449 and vs dens 271/272, with per-game reason, under `data/ops/nfl-t5119u-r2-owned-coverage/` — **before any outcome scoring**. No EVAL claim attaches to those lists.
+Exact lists: `T5116U_EXCLUSION_REPORT.json` / `T5116U_REPLAY.json` (`matched_game_ids`, `missing_game_ids`, `replay_missing_2022` n=174, `replay_missing_2023` n=143 vs EVAL 449).
+
+### Why those 317 EVAL games were out (source / season / reason)
+
+t5116u `load_quotes` never opened sqlite or 2020–21 files. Replay join tallies on that subset (EVAL games as the only cutoff-bearing identities):
+
+| Reason | n | Meaning |
+|---|---|---|
+| `missing_cutoff` | 177635 | quote did not match an EVAL identity (other games / no cutoff row) |
+| `incompatible_market` | 161194 | props / periods / non-mainline |
+| `quote_too_old` | 3609 | observation older than 24h before KO−60 |
+| `book_not_benchmark` | 1763 | not DK/FD |
+| `post_cutoff` | 614 | `captured_at` after KO−60 |
+| `kept_latest` then no spread | remainder of 317 games | identity matched but no admissible DK/FD **spread** after latest-slot collapse |
+
+Per-source EVAL margin after **this** freeze’s documented home-side sign rule (not loosened to chase 132):
+
+| Store | EVAL matched | 2022 | 2023 | Notes |
+|---|---|---|---|---|
+| JSONL | 95 | 23 | 72 | 2022 JSONL capture ends 2022-12-29; mid-season sparse |
+| open_close CSV | 27 | 27 | 0 | 2023 CSV mainline failed exact `commence_time == kickoff_utc` or home-side flatten |
+| gapfill sqlite | pending | — | — | **not in t5116u load**; extract in progress via event_id index |
+| Union (R2 sign) | **119** | 47 | 72 | 13 of the spent 132 fail the frozen home-side sign rule |
+
+Those 13 stay refused here. **G5 / KO−60 / ≤24h / DK+FD were not loosened** (t5125u ad000a52). t5116u’s `latest_per_book_market` can treat an away-side flattened `point` as `spread_home`; R2-A does not.
+
+All 317 replay-missing EVAL ids carry reason `no_admissible_dk_fd_spread_after_identity_cutoff_age` in `per_game`. Full ids in the JSON report.
+
+## R2-A coverage freeze (JSONL+CSV sealed; sqlite still required)
+
+`data/ops/nfl-t5119u-r2-owned-coverage/COVERAGE_MANIFEST.json` (file sha `b1dd579e…`) · parser reader `7bc21d82…` · builder `96545fac…` · CSV `ed072346…` · JSONL hashes above.
+
+| Cohort | n | R2 matched (JSONL+CSV, documented sign) | Missing |
+|---|---|---|---|
+| EVAL fac21ebe | 449 | 119 | 330 |
+| DEV REG 92b91585 | 437 | 94 | 343 |
+| NON_REG_WILDCARD f81d381e | 6 | **6** | 0 |
+
+Admissible latest quotes: `ADMISSIBLE_QUOTES.jsonl` n=1667 sha `671cc7b3…`. Collapse: 2737 → 1667, identical dups 403, **conflicts 0**. Observation = `captured_at` / `snapshot_ts` with offset/Z. File mtime / import / `close_*` label not used as observation.
+
+`requests.snapshot_kind=dense` date_params are **2025-01-*** — not opened (protected). Sqlite 2020–23 extract uses CSV event_ids (720) + in-window request hashes only.
+
+## R2-B consume (t5125u)
+
+`data/ops/nfl-t5119u-r2-owned-coverage/R2B_CONSUME.json`
+
+| Field | Value |
+|---|---|
+| `market_e2e` | **NOT_READY** |
+| reason | sqlite 2020–23 DK/FD extract not sealed |
+| g5_loosened / time_rule_loosened / book_rule_loosened | **false** |
+| eval_claim | **false** |
+| CERT | 0 |
+
+R2-B must not start market E2E until this flips to `READY_FOR_R2B_DEV_E2E` after sqlite extract hashes land on this same DRAFT. First DEV eligible id after that freeze (currently among `DEV_MATCHED_GAME_IDS.json`, e.g. `2020_02_CIN_CLE`) is the hand-check candidate — not claimed here.
 
 ## Status
 
-- Receipt: **this file** (v1 first milestone).
-- Mapping / sqlite extract / sealed `COVERAGE_MANIFEST.json`: running after this receipt; hashes appended in place on this same DRAFT PR.
-- No forecast / weight / feature change. No ONE_RUN. No merge.
+- First-milestone receipt: landed on #694.
+- JSONL+CSV coverage + t5116u exclusion lists: **sealed** on this DRAFT.
+- Sqlite extract: running (event_id index; no full 13GB scan; no 2025 dense).
+- No forecast / weight / feature change. No ONE_RUN. No PE fixtures. No merge.
 
 CERT=0 · DRAFT≠merge · failure of t5116u ≠ second look.

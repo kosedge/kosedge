@@ -311,7 +311,104 @@ def inventory_sources(csv_lake_hashes: Optional[dict] = None) -> dict:
     }
 
 
-def extract_sqlite() -> dict:
+def load_cli_sqlite_csv() -> Optional[Path]:
+    """Return completed CLI dump path, or None if still writing / absent."""
+    done = EXTRACTS / "SQLITE_CLI.DONE"
+    path = EXTRACTS / "gapfill_nfl_2020_2023_dkfd_mainline.csv"
+    if not done.is_file() or not path.is_file() or path.stat().st_size < 64:
+        return None
+    with path.open("rb") as fh:
+        head = fh.readline()
+        if b"event_id" not in head:
+            return None
+        rest = fh.read(16)
+        if not rest:
+            return None
+    return path
+
+
+def iter_cli_sqlite_csv(path: Path) -> Iterator[dict]:
+    with path.open(newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            row["book"] = str(row.get("book") or "").strip().lower()
+            row["source"] = str(HD_SQLITE)
+            row["provenance"] = "odds_gapfill_sqlite"
+            row["captured_at"] = row.get("snapshot_ts")
+            yield row
+
+
+def extract_sqlite_from_cli_or_scan(*, skip_scan: bool) -> dict:
+    dest = EXTRACTS / "gapfill_nfl_2020_2023_dkfd_mainline.jsonl"
+    cli = load_cli_sqlite_csv()
+    if cli is not None:
+        print(json.dumps({"phase": "sqlite_from_cli_csv", "path": str(cli)}), flush=True)
+        n = 0
+        kept = 0
+        by_season = Counter()
+        by_book = Counter()
+        by_market = Counter()
+        events: Dict[str, dict] = {}
+        h = hashlib.sha256()
+        EXTRACTS.mkdir(parents=True, exist_ok=True)
+        with dest.open("w", encoding="utf-8") as out:
+            for row in iter_cli_sqlite_csv(cli):
+                n += 1
+                season = season_from_commence(row.get("commence_time"))
+                if season not in PERMITTED_SEASONS:
+                    continue
+                row["season"] = season
+                line = json.dumps(row, separators=(",", ":"), default=str)
+                out.write(line + "\n")
+                h.update((line + "\n").encode("utf-8"))
+                kept += 1
+                by_season[season] += 1
+                by_book[row["book"]] += 1
+                by_market[str(row.get("market") or "")] += 1
+                eid = str(row.get("event_id") or "")
+                if eid and eid not in events:
+                    events[eid] = {
+                        "event_id": eid,
+                        "commence_time": row.get("commence_time"),
+                        "home_team": row.get("home_team"),
+                        "away_team": row.get("away_team"),
+                        "season": season,
+                    }
+        rec = {
+            "path": str(dest),
+            "source": str(cli),
+            "source_sha256": sha256_file(cli),
+            "source_bytes": cli.stat().st_size,
+            "rows": kept,
+            "filter_hits": n,
+            "sha256": h.hexdigest(),
+            "bytes": dest.stat().st_size if dest.is_file() else 0,
+            "by_season": dict(by_season),
+            "by_book": dict(by_book),
+            "by_market": dict(by_market),
+            "distinct_event_ids": len(events),
+            "original_sqlite_modified": False,
+            "extracted_at_utc": utc_now(),
+            "method": "cli_csv",
+        }
+        write_json(RECEIPTS / "SQLITE_EXTRACT.json", rec)
+        return rec
+    if skip_scan:
+        rec = {
+            "path": str(dest),
+            "rows": 0,
+            "sha256": None,
+            "skipped": True,
+            "reason": "sqlite CLI dump not finished; skip_scan=1",
+            "original_sqlite_modified": False,
+            "extracted_at_utc": utc_now(),
+            "method": "skipped",
+        }
+        write_json(RECEIPTS / "SQLITE_EXTRACT.json", rec)
+        return rec
+    return extract_sqlite_scan()
+
+
+def extract_sqlite_scan() -> dict:
     dest = EXTRACTS / "gapfill_nfl_2020_2023_dkfd_mainline.jsonl"
     EXTRACTS.mkdir(parents=True, exist_ok=True)
     events_dest = EXTRACTS / "gapfill_nfl_2020_2023_events.jsonl"
@@ -827,8 +924,34 @@ def per_season_vs_declared(matched_ids: Sequence[str]) -> dict:
     return out
 
 
+def write_r2b_consume(*, ready: bool, reason: str, manifest_name: str, quotes_name: str, extra: dict) -> str:
+    body = {
+        "schema": "nfl-t5119u-r2b-consume-v1",
+        "cert_candidate": 0,
+        "eval_claim": False,
+        "g5_loosened": False,
+        "time_rule_loosened": False,
+        "book_rule_loosened": False,
+        "market_e2e": "READY_FOR_R2B_DEV_E2E" if ready else "NOT_READY",
+        "reason": reason,
+        "coverage_manifest": f"data/ops/nfl-t5119u-r2-owned-coverage/{manifest_name}",
+        "admissible_quotes": f"data/ops/nfl-t5119u-r2-owned-coverage/{quotes_name}",
+        "rules": {
+            "books": sorted(BOOKS),
+            "cutoff_minutes_before_kickoff": CUTOFF_MINUTES,
+            "max_quote_age_hours": MAX_QUOTE_AGE_HOURS,
+            "observation": "captured_at / snapshot_ts with explicit offset or Z — not file mtime / import / close label",
+            "dedupe": "identical fingerprint collapse; conflict refuses",
+        },
+        "staged_at_utc": utc_now(),
+        **extra,
+    }
+    return write_json(OUT / "R2B_CONSUME.json", body)
+
+
 def main() -> int:
-    print(json.dumps({"phase": "start", "at": utc_now()}), flush=True)
+    skip_sqlite_scan = "--skip-sqlite-scan" in sys.argv
+    print(json.dumps({"phase": "start", "at": utc_now(), "skip_sqlite_scan": skip_sqlite_scan}), flush=True)
     OUT.mkdir(parents=True, exist_ok=True)
     EXTRACTS.mkdir(parents=True, exist_ok=True)
     RECEIPTS.mkdir(parents=True, exist_ok=True)
@@ -855,14 +978,13 @@ def main() -> int:
     dev_ids = list(cohorts["dev_reg"]["game_ids"])
     wc_ids = list(cohorts["non_reg_wildcard"]["game_ids"])
 
-    print(json.dumps({"phase": "sqlite_extract"}), flush=True)
-    sqlite_extract = extract_sqlite()
-
     print(json.dumps({"phase": "ingest_jsonl"}), flush=True)
     jsonl_quotes, jsonl_reasons = ingest_jsonl(idx, (2020, 2021, 2022, 2023))
     print(json.dumps({"phase": "ingest_csv"}), flush=True)
     csv_quotes, csv_reasons = ingest_flat(iter_open_close_csv_quotes(seasons=(2020, 2021, 2022, 2023)), idx, str(HD_CSV))
-    print(json.dumps({"phase": "ingest_sqlite"}), flush=True)
+    print(json.dumps({"phase": "sqlite_extract"}), flush=True)
+    sqlite_extract = extract_sqlite_from_cli_or_scan(skip_scan=skip_sqlite_scan)
+    print(json.dumps({"phase": "ingest_sqlite", "extract": {k: sqlite_extract.get(k) for k in ("rows", "skipped", "method")}}), flush=True)
     sql_quotes, sql_reasons = ingest_flat(iter_sqlite_extract(), idx, str(HD_SQLITE))
 
     by_store = {
@@ -897,7 +1019,7 @@ def main() -> int:
         }
 
     # t5116u missing reasons vs EVAL, using R2 identity on the same two stores
-    t5116_subset, _ = collapse(jsonl_quotes + csv_quotes)
+    t5116_subset, _, _ = collapse(jsonl_quotes + csv_quotes)
     # restrict to quotes whose provenance is the two t5116u stores and seasons 2022-23 games
     t5116_latest = [q for q in t5116_subset if int(q["season"]) in (2022, 2023)]
     t5116_r2path = coverage_from_latest(t5116_latest, eval_ids)
@@ -1112,6 +1234,36 @@ def main() -> int:
         "DUPLICATE_CONFLICTS.json": write_json(OUT / "DUPLICATE_CONFLICTS.json", conflicts),
         "COVERAGE_MANIFEST.json": write_json(OUT / "COVERAGE_MANIFEST.json", manifest),
     }
+    quotes_path = OUT / "ADMISSIBLE_QUOTES.jsonl"
+    qh = hashlib.sha256()
+    with quotes_path.open("w", encoding="utf-8") as fh:
+        for q in sorted(latest, key=lambda r: (str(r["game_id"]), str(r["book"]), str(r["market"]), str(r["captured_at"]))):
+            line = json.dumps(q, separators=(",", ":"), default=str)
+            fh.write(line + "\n")
+            qh.update((line + "\n").encode("utf-8"))
+    hashes["ADMISSIBLE_QUOTES.jsonl"] = qh.hexdigest()
+    sqlite_ready = bool(sqlite_extract.get("rows")) and not sqlite_extract.get("skipped")
+    ready = sqlite_ready
+    hashes["R2B_CONSUME.json"] = write_r2b_consume(
+        ready=ready,
+        reason=(
+            "sealed admissible DK/FD extract + coverage manifest; sqlite included; conflicts refused not loosened"
+            if ready
+            else "sqlite 2020-23 DK/FD extract not sealed yet — market E2E stays NOT_READY"
+        ),
+        manifest_name="COVERAGE_MANIFEST.json",
+        quotes_name="ADMISSIBLE_QUOTES.jsonl",
+        extra={
+            "admissible_quotes_n": len(latest),
+            "admissible_quotes_sha256": qh.hexdigest(),
+            "coverage_manifest_sha256": hashes["COVERAGE_MANIFEST.json"],
+            "sqlite_extract": {k: sqlite_extract.get(k) for k in ("rows", "sha256", "skipped", "method")},
+            "t5116u_replay_n": replay["margin_eligible_n"],
+            "eval_r2_matched_n": r2_eval["matched_n"],
+            "dev_r2_matched_n": r2_dev["matched_n"],
+            "authority_amend": "t5125u ad000a52",
+        },
+    )
     write_json(OUT / "ARTIFACT_SHA256.json", hashes)
 
     print(

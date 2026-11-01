@@ -1,0 +1,207 @@
+{
+  "generated_at_utc": "2026-11-01T21:04:52Z",
+  "volume": "/Volumes/KosEdgeData",
+  "originals_modified": false,
+  "new_pulls": false,
+  "protected_2024_26_opened": false,
+  "stores": {
+    "jsonl_2020_2023": [
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2020-20260806.jsonl",
+        "exists": true,
+        "bytes": 1010737,
+        "mtime_utc": "2026-08-06T18:34:06Z",
+        "mtime_is_not_observation": true,
+        "season_filename": 2020,
+        "filename_season_is_not_game_season": true,
+        "sha256": "9716af4548c1c6c61e66c1f787f0034f008801aa18a057adce64280c8bc854ed",
+        "used_in_t5116u_6a1c1b37_load": false
+      },
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2021-20260806.jsonl",
+        "exists": true,
+        "bytes": 1153810,
+        "mtime_utc": "2026-08-06T18:34:07Z",
+        "mtime_is_not_observation": true,
+        "season_filename": 2021,
+        "filename_season_is_not_game_season": true,
+        "sha256": "4e3f9f789f5413cfe941e54f23daadf6429c8771d8514380fbd87e2e7de32036",
+        "used_in_t5116u_6a1c1b37_load": false
+      },
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2022-20260806.jsonl",
+        "exists": true,
+        "bytes": 1242382,
+        "mtime_utc": "2026-08-06T18:34:07Z",
+        "mtime_is_not_observation": true,
+        "season_filename": 2022,
+        "filename_season_is_not_game_season": true,
+        "sha256": "973c327fa65045698b5f278f4b324b61feeb09d39a93de73e140a15a83484ad7",
+        "used_in_t5116u_6a1c1b37_load": true
+      },
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2023-20260806.jsonl",
+        "exists": true,
+        "bytes": 3533310,
+        "mtime_utc": "2026-08-06T18:34:09Z",
+        "mtime_is_not_observation": true,
+        "season_filename": 2023,
+        "filename_season_is_not_game_season": true,
+        "sha256": "fe35b2cc48240eccdddba736404f0d9cc1266c32b2177ece7f4484231c4bbbc5",
+        "used_in_t5116u_6a1c1b37_load": true
+      }
+    ],
+    "open_close_csv": {
+      "path": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv",
+      "exists": true,
+      "bytes": 1078200270,
+      "mtime_utc": "2026-08-19T00:29:51Z",
+      "mtime_is_not_observation": true,
+      "sha256": "ed072346d4a59a995817831f8308647c559f0ac2d820bb3469bce01d3d9d2745",
+      "used_in_t5116u_6a1c1b37_load": true,
+      "schema": "sport_key,event_id,commence_time,home_team,away_team,snapshot_kind,snapshot_ts,book,market,outcome,price,point"
+    },
+    "gapfill_sqlite": {
+      "path": "/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite",
+      "exists": true,
+      "bytes": 13877006336,
+      "mtime_utc": "2026-08-19T12:41:53Z",
+      "mtime_is_not_observation": true,
+      "tables": [
+        "lines",
+        "requests"
+      ],
+      "used_in_t5116u_6a1c1b37_load": false,
+      "extract_path": "/Users/ryankos/kosedge-cursor-k2t1c2/.cos-work/t5119u_r2/extracts/gapfill_nfl_2020_2023_dkfd_mainline.jsonl",
+      "note": "13GB original left untouched; coverage uses 2020-23 NFL DK/FD mainline extract only",
+      "extract": {
+        "path": "/Users/ryankos/kosedge-cursor-k2t1c2/.cos-work/t5119u_r2/extracts/gapfill_nfl_2020_2023_dkfd_mainline.jsonl",
+        "rows": 0,
+        "sha256": null,
+        "skipped": true,
+        "reason": "sqlite CLI dump not finished; skip_scan=1",
+        "original_sqlite_modified": false,
+        "extracted_at_utc": "2026-11-01T21:03:33Z",
+        "method": "skipped"
+      }
+    },
+    "lake_parquet_2020_2023": [
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-2020.parquet",
+        "exists": true,
+        "bytes": 47834,
+        "mtime_utc": "2026-08-19T14:27:53Z",
+        "mtime_is_not_observation": true,
+        "season": 2020,
+        "sha256": "b63ebc1723deda7956e091d50fa60837b33da4eb8c04ac29a972c283b2c0f88d",
+        "used_in_t5116u_6a1c1b37_load": false,
+        "2024_26_parquet_opened": false
+      },
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-2021.parquet",
+        "exists": true,
+        "bytes": 88054,
+        "mtime_utc": "2026-08-19T14:27:54Z",
+        "mtime_is_not_observation": true,
+        "season": 2021,
+        "sha256": "52eaa7d87f7b45218516f441e36ec85bd08e08e9a436d68c3166a5149602fb62",
+        "used_in_t5116u_6a1c1b37_load": false,
+        "2024_26_parquet_opened": false
+      },
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-2022.parquet",
+        "exists": true,
+        "bytes": 79480,
+        "mtime_utc": "2026-08-19T14:27:54Z",
+        "mtime_is_not_observation": true,
+        "season": 2022,
+        "sha256": "458e495154a1a0df1d138437c3aeb383f637a2e63a14570a99d223b713ce4902",
+        "used_in_t5116u_6a1c1b37_load": false,
+        "2024_26_parquet_opened": false
+      },
+      {
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-2023.parquet",
+        "exists": true,
+        "bytes": 64705,
+        "mtime_utc": "2026-08-19T14:27:54Z",
+        "mtime_is_not_observation": true,
+        "season": 2023,
+        "sha256": "1cc89168b89f9e6bf96b106ce3906bc7fe6308eb66a079e204092f036bee0385",
+        "used_in_t5116u_6a1c1b37_load": false,
+        "2024_26_parquet_opened": false
+      }
+    ],
+    "lake_inventory_json": {
+      "path": "/Volumes/KosEdgeData/clean/odds/nfl/lake/inventory.json",
+      "exists": true,
+      "bytes": 382,
+      "mtime_utc": "2026-08-19T14:27:58Z",
+      "mtime_is_not_observation": true,
+      "sha256": "22982a0f0e7f96f4af483b67e2bf374a6cb32ea579852ddab288ade6e71db4eb",
+      "note": "contains later-season count keys; those parquet files were not opened"
+    },
+    "raw_historical_2020_2023": {
+      "2020": {
+        "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2020",
+        "n_files": 8,
+        "sample": [
+          "2020-09-01_events_probe_2020-09-01T160000Z.json",
+          "2020-09-04_odds_pre7d_2020-09-04T002000Z.json",
+          "2020-09-08_odds_pre3d_2020-09-08T002000Z.json",
+          "2020-09-10_odds_mid_2020-09-10T002000Z.json",
+          "2020-09-10_odds_pre1d_2020-09-10T002000Z.json",
+          "2020-12-27_odds_pre7d_2020-12-27T180000Z.json",
+          "2020-12-29_events_probe_2020-12-29T160000Z.json",
+          "2020-12-31_odds_pre3d_2020-12-31T180000Z.json"
+        ]
+      },
+      "2021": {
+        "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2021",
+        "n_files": 50,
+        "sample": [
+          "2021-01-02_odds_mid_2021-01-02T180000Z.json",
+          "2021-01-02_odds_pre1d_2021-01-02T180000Z.json",
+          "2021-01-02_odds_pre7d_2021-01-02T180500Z.json",
+          "2021-01-06_events_probe_2021-01-06T160000Z.json",
+          "2021-01-06_odds_pre3d_2021-01-06T180500Z.json",
+          "2021-01-08_odds_mid_2021-01-08T180500Z.json",
+          "2021-01-08_odds_pre1d_2021-01-08T180500Z.json",
+          "2021-01-09_odds_pre7d_2021-01-09T213500Z.json"
+        ]
+      },
+      "2022": {
+        "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2022",
+        "n_files": 145,
+        "sample": [
+          "2022-01-01_odds_mid_2022-01-01T180000Z.json",
+          "2022-01-01_odds_pre1d_2022-01-01T180000Z.json",
+          "2022-01-01_odds_pre7d_2022-01-01T213000Z.json",
+          "2022-01-05_odds_pre3d_2022-01-05T213000Z.json",
+          "2022-01-06_events_probe_2022-01-06T160000Z.json",
+          "2022-01-07_odds_mid_2022-01-07T213000Z.json",
+          "2022-01-07_odds_pre1d_2022-01-07T213000Z.json",
+          "2022-01-08_odds_pre7d_2022-01-08T213000Z.json"
+        ]
+      },
+      "2023": {
+        "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2023",
+        "n_files": 935,
+        "sample": [
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#0ba747b1414a31b05ef37f0bf3d7fbe9.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#2ed3fd0d267bbae31360e9f19d5adbab.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#335b8f6f84d4027f163c4ea9497b18e6.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#3e9bb086d9b182718cec5e60572e46fa.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#86fb4b3606466b0a6186ddedcebfef95.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#8e79b92901b727337fd6d3526074c4ec.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#95bf9c20b0339f7d13e4e383b86ef840.json",
+          "2023-01-01_odds_close_period_2023-01-01T174000Z#a512a48a58c4329048174217b2cc7ce0.json"
+        ]
+      }
+    }
+  },
+  "forbidden": [
+    "Did not open clean/odds/nfl/snapshots-2024|2025|2026 JSONL",
+    "Did not open lake snapshots-2024|2025|2026.parquet",
+    "Did not open raw/odds/.../historical/2024|2025|2026 file contents"
+  ]
+}
