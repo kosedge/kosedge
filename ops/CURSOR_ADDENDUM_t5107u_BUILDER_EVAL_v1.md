@@ -18,6 +18,10 @@ Prior ACCEPT history stands. This addendum is a new tip only.
 | Paper tip                      | `7139f8d9eed71b47eabf8827c0593932a38fea9a36686c66df3f6311282628c7` |
 | Prior #689 draft head (t5105u) | `f33637db75def870bc9b9ca84a73ce754b21cdae`                         |
 | Prior #690 draft head (t5105u) | `cc594b6fb09b8fdb5368e13be72a263e88920e4c`                         |
+| #689 prettier tip              | `4d702163f766c7fb9620376cdd49ebc7cb0b33bf`                         |
+| #690 prettier tip              | `4c93e48318483576f7c27897119b9fddfd5fc013`                         |
+| Track A #691 tip               | `5f13fa1c23a8d53808b8698496f12eef58858d2e`                         |
+| Track A PR                     | https://github.com/kosedge/kosedge/pull/691                        |
 
 PRs remain DRAFT. No merge / deploy / paid Odds. No EXEC scoring. Paper controls stay immutable.
 
@@ -31,7 +35,7 @@ PRs remain DRAFT. No merge / deploy / paid Odds. No EXEC scoring. Paper controls
 - `eval_generation`: NOT_RUN
 - `exec_scoring`: REFUSED_PENDING_ALEX_PREFLIGHT_AND_COS_BIND
 
-Builder / evaluator (new DRAFT PR, unmerged):
+Builder / evaluator (new DRAFT [PR #691](https://github.com/kosedge/kosedge/pull/691), unmerged; tip `5f13fa1c2`):
 
 | Item                         | Path                                                           |
 | ---------------------------- | -------------------------------------------------------------- |
