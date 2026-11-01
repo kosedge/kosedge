@@ -1,0 +1,152 @@
+{
+  "schema_version": "nfl-t5108u-input-bindings-v1",
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "design_seal_is_forecast_freeze": false,
+  "archive": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01",
+  "permitted_seasons": [2020, 2021, 2022, 2023],
+  "sealed_seasons_not_opened": [2024, 2025, 2026],
+  "prepared": [
+    {
+      "name": "schedule_results_2020_2023",
+      "path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
+      "status": "hashed",
+      "sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+      "n": 1071,
+      "owner": "t5108u / owned nflverse PBP 2026-11-01 archive",
+      "dependent_field": "game identity / scores / game_date / rest_days"
+    },
+    {
+      "name": "schedule_results_2023",
+      "path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2023.csv",
+      "status": "hashed",
+      "sha256": "253e178b72094f809264ff7a38b6792fbd99ffac092b26a00a8e8693416a63da",
+      "n": 272,
+      "owner": "t5108u / play_by_play_2023.csv (publisher 4aeca98e)",
+      "dependent_field": "2023 REG scores + schedule (Q2 as-of / EVAL outcomes)"
+    }
+  ],
+  "sources": [
+    {
+      "season": 2020,
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2020.csv",
+      "status": "available",
+      "publisher_sha256": "a7700b519197ec563aabf24ce7791896d8803f67cb73a45fcad0e8ae7db7245f",
+      "n_reg_games": 256
+    },
+    {
+      "season": 2021,
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2021.csv",
+      "status": "available",
+      "publisher_sha256": "35f5d0b49905daa7d63ace9710346c48c7eb32ce0b8686629491954308013354",
+      "n_reg_games": 272
+    },
+    {
+      "season": 2022,
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2022.csv",
+      "status": "available",
+      "publisher_sha256": "8aeb0e505d43950e09fec35a241a4e62720422454cdd3ac8f98c95650d54ab54",
+      "n_reg_games": 271
+    },
+    {
+      "season": 2023,
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2023.csv",
+      "status": "available",
+      "publisher_sha256": "4aeca98ebe6357c5f1a13165533007964605d1f17bd54561937769b952c67613",
+      "n_reg_games": 272
+    }
+  ],
+  "availability": [
+    {
+      "input": "nflverse PBP archive 2020\u201323",
+      "status": "available",
+      "sha256_or_pin": "see SOURCE_SHA / MANIFEST.md",
+      "owner": "owned archive /Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/",
+      "dependent_field": "schedule / scores extract"
+    },
+    {
+      "input": "prepared schedule_results_2020_2023.csv",
+      "status": "hashed",
+      "sha256_or_pin": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+      "owner": "t5108u inputs.py",
+      "dependent_field": "game_id, season, week, home, away, scores, game_date, rest_days"
+    },
+    {
+      "input": "prepared schedule_results_2023.csv",
+      "status": "hashed",
+      "sha256_or_pin": "253e178b72094f809264ff7a38b6792fbd99ffac092b26a00a8e8693416a63da",
+      "owner": "t5108u inputs.py / 4aeca98e publisher",
+      "dependent_field": "2023 REG outcomes + in-season Q2 as-of scores"
+    },
+    {
+      "input": "games.csv 4fe1cdd7 kickoff_utc",
+      "status": "hashed",
+      "sha256_or_pin": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+      "owner": "Q2 / t4422u games.csv (pin sidecar 8155fd194; Alex 69710b9c verified UTC Z for 2020\u201323)",
+      "dependent_field": "kickoff_utc (NOT missing; explicit UTC Z for 2020\u201323; KO\u221260 cutoff)"
+    },
+    {
+      "input": "outcomes extract 50bda875",
+      "status": "hashed",
+      "sha256_or_pin": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+      "owner": "Q2 outcomes_2013_2022_score_only.csv (stops 2022; pin sidecar 8155fd194)",
+      "dependent_field": "pre-2023 scored history; 2023 REG scores from PBP extract 253e178b"
+    },
+    {
+      "input": "quote/odds join manifest 2020\u201323",
+      "status": "hashed",
+      "sha256_or_pin": "6a1c1b378b91abd5e2ed185649536468192147057a2ea535a23e8ae5b14e6984",
+      "owner": "t5105u reader join manifest",
+      "dependent_field": "data/ops/nfl-odds-reader-2020-2023-join-manifest.json"
+    },
+    {
+      "input": "PBP start_time raw (not used for kickoff_utc)",
+      "status": "available",
+      "sha256_or_pin": "",
+      "owner": "nflverse start_time is naive; kickoff_utc comes from games.csv 4fe1cdd7 (UTC Z)",
+      "dependent_field": "start_time_raw only \u2014 kickoff_utc is bound from games.csv"
+    },
+    {
+      "input": "b41f4b43 hist inputs / efficiency+index 5g",
+      "status": "MISSING",
+      "sha256_or_pin": "b41f4b43",
+      "owner": "t4873u / paper \u00a72 \u2014 do not invent formulas",
+      "dependent_field": "offense_index_home,offense_index_away,defense_index_home,defense_index_away,home_off_epa_5g,away_off_epa_5g,home_def_epa_allowed_5g,away_def_epa_allowed_5g,home_pass_rate_5g,away_pass_rate_5g,home_success_offense_5g,away_success_offense_5g,home_success_defense_allowed_5g,away_success_defense_allowed_5g,matchup_diff_off_epa_5g,matchup_diff_def_epa_allowed_5g,matchup_diff_success_rate_5g,matchup_diff_pressure_generated_5g,matchup_diff_pressure_allowed_5g,matchup_diff_red_zone_td_rate_5g"
+    },
+    {
+      "input": "RECON_MATRIX_2020_2023_REG",
+      "status": "MISSING",
+      "sha256_or_pin": "b56be146 / 7be71acff (2017 only)",
+      "owner": "IF recon matrix owner",
+      "dependent_field": "offense_index_home,offense_index_away,defense_index_home,defense_index_away,home_off_epa_5g,away_off_epa_5g,home_def_epa_allowed_5g,away_def_epa_allowed_5g,home_pass_rate_5g,away_pass_rate_5g,home_success_offense_5g,away_success_offense_5g,home_success_defense_allowed_5g,away_success_defense_allowed_5g,matchup_diff_off_epa_5g,matchup_diff_def_epa_allowed_5g,matchup_diff_success_rate_5g,matchup_diff_pressure_generated_5g,matchup_diff_pressure_allowed_5g,matchup_diff_red_zone_td_rate_5g"
+    },
+    {
+      "input": "archived IF mus 2020\u201323 @ 6ca03716",
+      "status": "MISSING",
+      "sha256_or_pin": "6ca03716",
+      "owner": "IF archive / 19c6a4607 consume lineage",
+      "dependent_field": "if_margin_mu (archived)"
+    },
+    {
+      "input": "frozen IF tree 6ca03716",
+      "status": "available",
+      "sha256_or_pin": "52d9e909 simulator / a0051cc4 framework",
+      "owner": "git tip 6ca03716fe52930332d5ffba302c312a651980cc",
+      "dependent_field": "produce-\u03bc reconstruction"
+    },
+    {
+      "input": "Stage C / scored columns",
+      "status": "FORBIDDEN",
+      "sha256_or_pin": "1ee90fac",
+      "owner": "held \u2014 not a missing-to-invent source",
+      "dependent_field": "none (refused)"
+    }
+  ],
+  "notes": [
+    "Schedule/results only. No Stage C. No invented efficiency/index formulas.",
+    "start_time in PBP is naive (e.g. '9/10/23, 13:02:43'); kickoff_utc is MISSING TZ.",
+    "Design seal e5bb682d is not a forecast freeze."
+  ],
+  "prepared_at_utc": "2026-11-01T18:52:12Z",
+  "bindings_sha256": "662d7c3e4a47c08da9042d6498a93f6c8d97334e0fc95189f93866238eb59c5e"
+}

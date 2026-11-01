@@ -1,0 +1,199 @@
+{
+  "season": 2021,
+  "split": "DEV",
+  "weeks": "2-18",
+  "n_identity": 272,
+  "n_targets_reconstructed": 256,
+  "n_eligible": 256,
+  "n_excluded": 16,
+  "completeness_sha256": "8a5cffd0046d3f6b4a4d950b879e9bfefec449f2b70aedffc5a910a1885d25c6",
+  "completeness_file_sha256": "328f7d70a3d8519fea19546df0254a53ae077f0cb71df99cff64aaf1502650da",
+  "matrix_sha256": "0448f29d834bf1b7d067e29f3e1054a0036460e85a88f4aeffe235acd213741c",
+  "matrix_file_sha256": "d51b3b1ba54da2a9a5b7c91246f7db599a321d1e01e09065df2ab0c996b306e0",
+  "n_complete_27": 227,
+  "n_partial": 29,
+  "n_cells": 6912,
+  "partial": [
+    {
+      "game_id": "2021_07_ATL_MIA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_07_IND_SF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_07_NYJ_NE",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_07_NO_SEA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_08_DAL_MIN",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_08_JAX_SEA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_08_MIA_BUF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_08_NE_LAC",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_08_PIT_CLE",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_09_LV_NYG",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_09_MIN_BAL",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_10_DET_PIT",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_10_SEA_GB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_10_TB_WAS",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_11_BAL_CHI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_11_CIN_LV",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_11_HOU_TEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_11_NYG_TB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_12_LAC_DEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_12_LA_GB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_13_ARI_CHI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_13_DEN_KC",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_14_ATL_CAR",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_14_BAL_CLE",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_14_CHI_GB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_14_JAX_TEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_15_NE_IND",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_15_NYJ_MIA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2021_15_WAS_PHI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    }
+  ],
+  "label": "RECONSTRUCTED",
+  "fit_label": "RETRO_FIT",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "helper_sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "frozen_before_errors": true,
+  "opened_1ee90fac": false
+}

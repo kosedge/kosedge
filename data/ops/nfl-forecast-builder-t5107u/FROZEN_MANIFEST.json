@@ -1,0 +1,304 @@
+{
+  "schema_version": "nfl-t5107u-frozen-manifest-v1",
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "purpose": "seal_design_input_source_fit_policy_before_eval",
+  "sealed": true,
+  "sealed_before_eval_generation": true,
+  "eval_generation": "NOT_RUN",
+  "exec_scoring": "REFUSED_PENDING_ALEX_PREFLIGHT_AND_COS_BIND",
+  "paper_tip": "7139f8d9eed71b47eabf8827c0593932a38fea9a36686c66df3f6311282628c7",
+  "paper_cover": "af08183c674ab51ff87c75f5bc90cc12c69e8f4569a66ce2e9f314021da926f3",
+  "authority": "OWNER AMEND+CLEAR t5107u G1\u2013G7",
+  "reuse": {
+    "t5105u_689": "f33637db75def870bc9b9ca84a73ce754b21cdae",
+    "t5105u_690": "cc594b6fb09b8fdb5368e13be72a263e88920e4c",
+    "accept": "e68a11cb",
+    "pass_ro": "e78176c3",
+    "if_consume": "19c6a4607",
+    "q2_library": "8155fd194",
+    "q2_handoff": "43b5a6223"
+  },
+  "design": {
+    "challenger": "mC = 0.5*mIF + 0.5*mQ2 (home-away points)",
+    "challenger_weight": 0.5,
+    "extra_hfa": 0.0,
+    "market_blend": 0.0,
+    "weight_search": false,
+    "control": "IF @ 6ca03716 retained; archived vs reconstructed labeled",
+    "silent_if_drop": false,
+    "dev_seasons": [2020, 2021],
+    "eval_seasons": [2022, 2023],
+    "season_type": "REG",
+    "no_2024_25": true,
+    "no_stage_c": true,
+    "label": "RESEARCH_CONSUMED_RETRO"
+  },
+  "input_source": {
+    "games_csv_prefix": "4fe1cdd7",
+    "outcomes_prefix": "50bda875",
+    "asof_rule": "cf514078",
+    "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "if_simulator": "52d9e909",
+    "if_framework": "a0051cc4",
+    "if_efficiency_contract": "b41f4b43",
+    "if_required_fields": [
+      "game_id",
+      "home_team",
+      "away_team",
+      "matchup_season",
+      "matchup_week",
+      "rest_days_home",
+      "rest_days_away",
+      "offense_index_home",
+      "offense_index_away",
+      "defense_index_home",
+      "defense_index_away",
+      "home_off_epa_5g",
+      "away_off_epa_5g",
+      "home_def_epa_allowed_5g",
+      "away_def_epa_allowed_5g",
+      "home_pass_rate_5g",
+      "away_pass_rate_5g",
+      "home_success_offense_5g",
+      "away_success_offense_5g",
+      "home_success_defense_allowed_5g",
+      "away_success_defense_allowed_5g",
+      "matchup_diff_off_epa_5g",
+      "matchup_diff_def_epa_allowed_5g",
+      "matchup_diff_success_rate_5g",
+      "matchup_diff_pressure_generated_5g",
+      "matchup_diff_pressure_allowed_5g",
+      "matchup_diff_red_zone_td_rate_5g"
+    ],
+    "prior_game_only": true,
+    "target_outcome_in_own_forecast": false
+  },
+  "fit_policy": {
+    "fit_policy": "TRANSFER_FROZEN_DEV_2013_2016",
+    "parameter_label": "FROZEN_Q2PB_DEV_2013_2016_TRANSFER",
+    "parameter_status": "original_frozen",
+    "training_seasons": [2013, 2014, 2015, 2016],
+    "training_end_season": 2016,
+    "transfer_max_training_season": 2021,
+    "transfer_verified": true,
+    "refit_authorized": false,
+    "refit_performed": false,
+    "a_q2": 2.5637441292077354,
+    "b_q2": 1.660624056183471,
+    "lam": 20.0,
+    "regress_frac": 0.5,
+    "fit_object_sha256": "70db070dad3fcdb4d4ff165ba09b7840c173c232a71c8fcd670ba9c3c0bc5571",
+    "config_sha256": "aa2b47b3f0b504f39b785d0cb6fc2918bb7a36fb5a22242e80fb37707b790d49",
+    "proof": "Q2 DEV OLS trained on REG (2013, 2014, 2015, 2016) only (end 2016 \u2264 2021); coeffs transfer; no 2020\u201321 intercept/slope refit.",
+    "dev_2020_21_refit": false
+  },
+  "market": {
+    "cutoff_minutes_before_kickoff": 60,
+    "max_quote_age_hours": 24,
+    "books": ["draftkings", "fanduel"],
+    "de_vig": "multiplicative qH/(qH+qA)",
+    "consensus": "median eligible books",
+    "p_bind": "refuse unbound probability line/side (t5105u harness)",
+    "timezone": "explicit offset or named source_timezone; naive refused"
+  },
+  "metrics": {
+    "primary": "paired_delta_MAE vs market and vs IF",
+    "secondary": ["MAE", "RMSE", "bias", "per_season"],
+    "win_brier_logloss": "only if genuine probabilities exist",
+    "ties": "reported separately; excluded from binary metrics",
+    "logloss_clip": "1/8000",
+    "bootstrap_B": 10000,
+    "bootstrap_seed": 20261101,
+    "min_n": 100,
+    "n_lt_100": "DESCRIPTIVE_ONLY",
+    "per_season_exclusion_hold": 0.3,
+    "ci_cross_zero": "INCONCLUSIVE",
+    "enterprise_pass": false
+  },
+  "blockers": [
+    {
+      "artifact": "RECON_MATRIX_2020_2023_REG",
+      "detail": "only 2017 W7\u2013W17 RECON_MATRIX exists (b56be146 / 7be71acff)"
+    },
+    {
+      "artifact": "b41f4b43_hist_inputs",
+      "detail": "IF hist inputs reconstruction MISSING (t4873u / paper \u00a72)"
+    },
+    {
+      "artifact": "if_tree_6ca03716",
+      "detail": "frozen IF checkout 6ca03716fe52930332d5ffba302c312a651980cc not mounted"
+    },
+    {
+      "artifact": "archived_IF_mus_2020_2023",
+      "detail": "no in-repo IF mus @ 6ca03716 for 2020\u201323 REG (2017 only)"
+    },
+    {
+      "artifact": "outcomes_2023_score_only",
+      "detail": "50bda875 extract stops at 2022; 2023 REG in-season Q2 as-of blocked"
+    }
+  ],
+  "notes": [
+    "Seal is design/input-source/fit-policy only.",
+    "EVAL sequential generation and EXEC scoring are NOT authorized by this seal alone.",
+    "Alex preflight GO + CoS one-run bind required before scoring."
+  ],
+  "sealed_at_utc": "2026-11-01T18:31:18Z",
+  "manifest_sha256": "e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd",
+  "design_seal_sha256": "e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd",
+  "design_seal_is_forecast_freeze": false,
+  "input_bindings": {
+    "status": "appended",
+    "availability": [
+      {
+        "input": "nflverse PBP archive 2020\u201323",
+        "status": "available",
+        "sha256_or_pin": "see SOURCE_SHA / MANIFEST.md",
+        "owner": "owned archive /Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/",
+        "dependent_field": "schedule / scores extract"
+      },
+      {
+        "input": "prepared schedule_results_2020_2023.csv",
+        "status": "hashed",
+        "sha256_or_pin": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+        "owner": "t5108u inputs.py",
+        "dependent_field": "game_id, season, week, home, away, scores, game_date, rest_days"
+      },
+      {
+        "input": "prepared schedule_results_2023.csv",
+        "status": "hashed",
+        "sha256_or_pin": "253e178b72094f809264ff7a38b6792fbd99ffac092b26a00a8e8693416a63da",
+        "owner": "t5108u inputs.py / 4aeca98e publisher",
+        "dependent_field": "2023 REG outcomes + in-season Q2 as-of scores"
+      },
+      {
+        "input": "games.csv 4fe1cdd7 kickoff_utc",
+        "status": "hashed",
+        "sha256_or_pin": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+        "owner": "Q2 / t4422u games.csv (pin sidecar 8155fd194; Alex 69710b9c verified UTC Z for 2020\u201323)",
+        "dependent_field": "kickoff_utc (NOT missing; explicit UTC Z for 2020\u201323; KO\u221260 cutoff)"
+      },
+      {
+        "input": "outcomes extract 50bda875",
+        "status": "hashed",
+        "sha256_or_pin": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+        "owner": "Q2 outcomes_2013_2022_score_only.csv (stops 2022; pin sidecar 8155fd194)",
+        "dependent_field": "pre-2023 scored history; 2023 REG scores from PBP extract 253e178b"
+      },
+      {
+        "input": "quote/odds join manifest 2020\u201323",
+        "status": "hashed",
+        "sha256_or_pin": "6a1c1b378b91abd5e2ed185649536468192147057a2ea535a23e8ae5b14e6984",
+        "owner": "t5105u reader join manifest",
+        "dependent_field": "data/ops/nfl-odds-reader-2020-2023-join-manifest.json"
+      },
+      {
+        "input": "PBP start_time raw (not used for kickoff_utc)",
+        "status": "available",
+        "sha256_or_pin": "",
+        "owner": "nflverse start_time is naive; kickoff_utc comes from games.csv 4fe1cdd7 (UTC Z)",
+        "dependent_field": "start_time_raw only \u2014 kickoff_utc is bound from games.csv"
+      },
+      {
+        "input": "b41f4b43 hist inputs / efficiency+index 5g",
+        "status": "MISSING",
+        "sha256_or_pin": "b41f4b43",
+        "owner": "t4873u / paper \u00a72 \u2014 do not invent formulas",
+        "dependent_field": "offense_index_home,offense_index_away,defense_index_home,defense_index_away,home_off_epa_5g,away_off_epa_5g,home_def_epa_allowed_5g,away_def_epa_allowed_5g,home_pass_rate_5g,away_pass_rate_5g,home_success_offense_5g,away_success_offense_5g,home_success_defense_allowed_5g,away_success_defense_allowed_5g,matchup_diff_off_epa_5g,matchup_diff_def_epa_allowed_5g,matchup_diff_success_rate_5g,matchup_diff_pressure_generated_5g,matchup_diff_pressure_allowed_5g,matchup_diff_red_zone_td_rate_5g"
+      },
+      {
+        "input": "RECON_MATRIX_2020_2023_REG",
+        "status": "MISSING",
+        "sha256_or_pin": "b56be146 / 7be71acff (2017 only)",
+        "owner": "IF recon matrix owner",
+        "dependent_field": "offense_index_home,offense_index_away,defense_index_home,defense_index_away,home_off_epa_5g,away_off_epa_5g,home_def_epa_allowed_5g,away_def_epa_allowed_5g,home_pass_rate_5g,away_pass_rate_5g,home_success_offense_5g,away_success_offense_5g,home_success_defense_allowed_5g,away_success_defense_allowed_5g,matchup_diff_off_epa_5g,matchup_diff_def_epa_allowed_5g,matchup_diff_success_rate_5g,matchup_diff_pressure_generated_5g,matchup_diff_pressure_allowed_5g,matchup_diff_red_zone_td_rate_5g"
+      },
+      {
+        "input": "archived IF mus 2020\u201323 @ 6ca03716",
+        "status": "MISSING",
+        "sha256_or_pin": "6ca03716",
+        "owner": "IF archive / 19c6a4607 consume lineage",
+        "dependent_field": "if_margin_mu (archived)"
+      },
+      {
+        "input": "frozen IF tree 6ca03716",
+        "status": "available",
+        "sha256_or_pin": "52d9e909 simulator / a0051cc4 framework",
+        "owner": "git tip 6ca03716fe52930332d5ffba302c312a651980cc",
+        "dependent_field": "produce-\u03bc reconstruction"
+      },
+      {
+        "input": "Stage C / scored columns",
+        "status": "FORBIDDEN",
+        "sha256_or_pin": "1ee90fac",
+        "owner": "held \u2014 not a missing-to-invent source",
+        "dependent_field": "none (refused)"
+      }
+    ],
+    "prepared": [
+      {
+        "name": "schedule_results_2020_2023",
+        "path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
+        "status": "hashed",
+        "sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+        "n": 1071,
+        "owner": "t5108u / owned nflverse PBP 2026-11-01 archive",
+        "dependent_field": "game identity / scores / game_date / rest_days"
+      },
+      {
+        "name": "schedule_results_2023",
+        "path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2023.csv",
+        "status": "hashed",
+        "sha256": "253e178b72094f809264ff7a38b6792fbd99ffac092b26a00a8e8693416a63da",
+        "n": 272,
+        "owner": "t5108u / play_by_play_2023.csv (publisher 4aeca98e)",
+        "dependent_field": "2023 REG scores + schedule (Q2 as-of / EVAL outcomes)"
+      }
+    ],
+    "sources": [
+      {
+        "season": 2020,
+        "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2020.csv",
+        "status": "available",
+        "publisher_sha256": "a7700b519197ec563aabf24ce7791896d8803f67cb73a45fcad0e8ae7db7245f",
+        "n_reg_games": 256
+      },
+      {
+        "season": 2021,
+        "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2021.csv",
+        "status": "available",
+        "publisher_sha256": "35f5d0b49905daa7d63ace9710346c48c7eb32ce0b8686629491954308013354",
+        "n_reg_games": 272
+      },
+      {
+        "season": 2022,
+        "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2022.csv",
+        "status": "available",
+        "publisher_sha256": "8aeb0e505d43950e09fec35a241a4e62720422454cdd3ac8f98c95650d54ab54",
+        "n_reg_games": 271
+      },
+      {
+        "season": 2023,
+        "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2023.csv",
+        "status": "available",
+        "publisher_sha256": "4aeca98ebe6357c5f1a13165533007964605d1f17bd54561937769b952c67613",
+        "n_reg_games": 272
+      }
+    ],
+    "bindings_sha256": "662d7c3e4a47c08da9042d6498a93f6c8d97334e0fc95189f93866238eb59c5e",
+    "notes": [
+      "Appended t5108u. Design seal e5bb682d is design/input-source/fit-policy only.",
+      "This append is NOT a forecast freeze and does not authorize EXEC scoring.",
+      "t5110u pin correction: games.csv 4fe1cdd7 full sha; kickoff_utc UTC Z NOT missing.",
+      "outcomes 50bda875 full sha pinned; quote join manifest hashed.",
+      "b41f4b43 / RECON_MATRIX remain MISSING \u2014 no invented formulas / no Stage C."
+    ]
+  },
+  "t5108u_append": {
+    "authority": "OWNER t5108u IMPLEMENTATION CORRECTION",
+    "if_tree": "fetched 6ca03716 via git worktree (not a missing-source claim)",
+    "produce_mu": "reconstructed_if_produce"
+  },
+  "appended_at_utc": "2026-11-01T19:16:20Z",
+  "appended_manifest_sha256": "f3e5e4b96bf1f2983ceba13ec455f4f39f040e5bb43bedcdf0a81b927bb34711"
+}
