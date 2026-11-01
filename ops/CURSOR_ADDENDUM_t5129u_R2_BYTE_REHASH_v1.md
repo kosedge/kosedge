@@ -81,6 +81,6 @@ t5125u R2 runner tests now bind tmp freeze/manifest/extract so byte verify prece
 | first-case record        | `621f0f843da8ac219d284448ac1cd3124bbcdba629c6df49a54b3b518fad30fc` |
 | 437 record_sha256        | `0550ef9b498a2240919d8cf570ccb7c94b67f6815ba3625789901f8390143637` |
 | parent #693 tip          | `6c54d729` / impl `f0013d62`                                       |
-| this implementation tip  | *(stamped after commit)*                                           |
+| this implementation tip  | `f4f6e311e8af4d72163d71f389d6294e0e5d5f3b`                         |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
