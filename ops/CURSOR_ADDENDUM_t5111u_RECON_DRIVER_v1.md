@@ -10,7 +10,7 @@ Authority: OWNER t5111u · CoS ORDER t5111u · same #691 · authorized reconstru
 | ----------------------------------- | ------------------------------------------------------------------ |
 | PR                                  | https://github.com/kosedge/kosedge/pull/691 (DRAFT)                |
 | Parent tip (t5110u stamp)           | `3033b4d6854ab92623a3dcf54376c43df2e280e5`                         |
-| This implementation tip             | `THIS_TIP`                                                         |
+| This implementation tip             | `c6d229783e8a35432c56b24835435c688233ceb9`                         |
 | Design seal (not a forecast freeze) | `e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd` |
 | Helper pin                          | `7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64` |
 | Helper source                       | #686 @ `43b5a62233b3d1d03ad2b25f5ec7dc52be29b31b`                  |
