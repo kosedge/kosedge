@@ -31,6 +31,7 @@ from src.services.nfl_odds_reader import (
 )
 
 from .builder import SCHEMA as FORECAST_SCHEMA
+from .metric_cohorts import MetricCohortRefuse, refuse_pooled_or_default_eval
 from .one_run import (
     OneRunRefuse,
     claim_one_run,
@@ -619,6 +620,13 @@ def run_eval_score(
         raise EvalRefuse("forecast/cohort hash mismatch — refuse scoring")
     if bootstrap_b != BOOT_B or bootstrap_seed != BOOT_SEED:
         raise EvalRefuse("bootstrap hyperparameters are frozen")
+    try:
+        refuse_pooled_or_default_eval(
+            list(frozen.payload.get("forecasts") or []),
+            eligible_cohorts,
+        )
+    except MetricCohortRefuse as exc:
+        raise EvalRefuse(str(exc)) from exc
     if exec_bind in (None, COS_ONE_RUN_BIND) or not load_one_run(one_run_path):
         raise EvalRefuse(
             "EXEC scoring refused until independent Alex preflight GO and "
