@@ -1,0 +1,91 @@
+{
+  "generated_at_utc": "2026-11-01T15:51:47Z",
+  "code_pin": {
+    "branch": "cursor/nfl-odds-reader-cutoff-join-17f0",
+    "commit": "5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610",
+    "base": "origin/restore-working-ui",
+    "base_commit": "5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610",
+    "reader": "services/model-service/src/services/nfl_odds_reader.py",
+    "tests": "services/model-service/tests/test_nfl_odds_reader.py"
+  },
+  "source_pins": {
+    "kosedge_data_mounted": true,
+    "sqlite": {
+      "path": "/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite",
+      "bytes": 13877006336
+    },
+    "jsonl_2020_2023": [
+      {
+        "season": 2020,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2020-20260806.jsonl",
+        "bytes": 1010737
+      },
+      {
+        "season": 2021,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2021-20260806.jsonl",
+        "bytes": 1153810
+      },
+      {
+        "season": 2022,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2022-20260806.jsonl",
+        "bytes": 1242382
+      },
+      {
+        "season": 2023,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2023-20260806.jsonl",
+        "bytes": 3533310
+      }
+    ],
+    "open_close_csv": {
+      "path": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv",
+      "bytes": 1078200270
+    },
+    "forbidden": [
+      "Did not open clean/odds/nfl/snapshots-2024|2025|2026 JSONL",
+      "Did not open lake snapshots-2024|2025|2026.parquet",
+      "Did not treat 2026 nflverse/odds archive as a live feed"
+    ]
+  },
+  "joins": [
+    {
+      "mode": "jsonl_self_join_explicit_max_captured_cutoff",
+      "note": "Cutoff is the max captured_at already on that game in the JSONL. This does not substitute a later/closing quote from another file.",
+      "quotes_in": 22078,
+      "games_in": 1117,
+      "eligible_n": 21671,
+      "excluded_n": 0,
+      "identical_duplicate_n": 407,
+      "reason_tallies": {},
+      "latest_per_book_market_n": 6561
+    },
+    {
+      "mode": "open_close_csv_mainline_commence_as_forecast_cutoff",
+      "note": "Full 2020\u20132023 CSV stream. Join uses mainline rows only. Each game's explicit forecast_cutoff is Odds API commence_time. Quotes with captured_at > commence_time are post_cutoff and are not replaced by a later close.",
+      "truncated": false,
+      "quotes_in": 126276,
+      "games_in": 720,
+      "eligible_n": 95236,
+      "excluded_n": 190,
+      "identical_duplicate_n": 30850,
+      "reason_tallies": {
+        "post_cutoff": 190
+      },
+      "latest_per_book_market_n": 19288
+    }
+  ],
+  "exclusion_contract": [
+    "missing_cutoff",
+    "unresolvable_timestamp",
+    "post_cutoff",
+    "ambiguous_identity",
+    "unknown_team",
+    "incompatible_market",
+    "market_line_mismatch",
+    "missing_value",
+    "duplicate_conflict",
+    "season_out_of_bounds",
+    "no_game_match"
+  ],
+  "cutoff_rule": "source timestamp <= explicit forecast_cutoff; never substitute a later/closing quote",
+  "sign_convention": "odds_api_spread_home_negative_when_home_favored"
+}

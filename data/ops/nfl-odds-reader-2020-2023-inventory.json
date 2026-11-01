@@ -1,0 +1,543 @@
+{
+  "generated_at_utc": "2026-11-01T15:51:47Z",
+  "season_bound": [
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "overlap_warning": "Old harvest / lake / jsonl / csv / sqlite counts may overlap. Do not add them into a current deduplicated total.",
+  "code_pin": {
+    "branch": "cursor/nfl-odds-reader-cutoff-join-17f0",
+    "commit": "5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610",
+    "base": "origin/restore-working-ui",
+    "base_commit": "5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610",
+    "reader": "services/model-service/src/services/nfl_odds_reader.py",
+    "tests": "services/model-service/tests/test_nfl_odds_reader.py"
+  },
+  "source_pins": {
+    "kosedge_data_mounted": true,
+    "sqlite": {
+      "path": "/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite",
+      "bytes": 13877006336
+    },
+    "jsonl_2020_2023": [
+      {
+        "season": 2020,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2020-20260806.jsonl",
+        "bytes": 1010737
+      },
+      {
+        "season": 2021,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2021-20260806.jsonl",
+        "bytes": 1153810
+      },
+      {
+        "season": 2022,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2022-20260806.jsonl",
+        "bytes": 1242382
+      },
+      {
+        "season": 2023,
+        "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2023-20260806.jsonl",
+        "bytes": 3533310
+      }
+    ],
+    "open_close_csv": {
+      "path": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv",
+      "bytes": 1078200270
+    },
+    "forbidden": [
+      "Did not open clean/odds/nfl/snapshots-2024|2025|2026 JSONL",
+      "Did not open lake snapshots-2024|2025|2026.parquet",
+      "Did not treat 2026 nflverse/odds archive as a live feed"
+    ]
+  },
+  "stores": [
+    {
+      "store": "clean_jsonl_2020_2023",
+      "note": "2024\u201326 JSONL files were not opened.",
+      "rows": 22078,
+      "distinct_games": 1117,
+      "by_season": [
+        {
+          "season": 2020,
+          "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2020-20260806.jsonl",
+          "bytes": 1010737,
+          "rows": 3216,
+          "distinct_games": 247,
+          "by_book": {
+            "draftkings": 1693,
+            "fanduel": 1523
+          },
+          "by_market": {
+            "moneyline": 1044,
+            "total": 1014,
+            "spread": 1158
+          },
+          "by_market_class": {
+            "mainline": 3216
+          },
+          "capture_time_min": "2020-09-09T13:47:54-04:00",
+          "capture_time_max": "2021-01-24T11:48:20-05:00",
+          "game_date_min": "2020-09-10",
+          "game_date_max": "2021-02-07"
+        },
+        {
+          "season": 2021,
+          "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2021-20260806.jsonl",
+          "bytes": 1153810,
+          "rows": 3671,
+          "distinct_games": 275,
+          "by_book": {
+            "draftkings": 1980,
+            "fanduel": 1691
+          },
+          "by_market": {
+            "spread": 1253,
+            "total": 1229,
+            "moneyline": 1189
+          },
+          "by_market_class": {
+            "mainline": 3671
+          },
+          "capture_time_min": "2021-01-02T12:47:53-05:00",
+          "capture_time_max": "2022-01-30T11:47:32-05:00",
+          "game_date_min": "2021-01-03",
+          "game_date_max": "2022-02-13"
+        },
+        {
+          "season": 2022,
+          "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2022-20260806.jsonl",
+          "bytes": 1242382,
+          "rows": 3954,
+          "distinct_games": 287,
+          "by_book": {
+            "draftkings": 1981,
+            "fanduel": 1973
+          },
+          "by_market": {
+            "spread": 1327,
+            "total": 1300,
+            "moneyline": 1327
+          },
+          "by_market_class": {
+            "mainline": 3954
+          },
+          "capture_time_min": "2022-01-01T12:47:24-05:00",
+          "capture_time_max": "2022-12-29T11:51:51-05:00",
+          "game_date_min": "2022-01-02",
+          "game_date_max": "2023-01-03"
+        },
+        {
+          "season": 2023,
+          "path": "/Volumes/KosEdgeData/clean/odds/nfl/snapshots-2023-20260806.jsonl",
+          "bytes": 3533310,
+          "rows": 11237,
+          "distinct_games": 308,
+          "by_book": {
+            "fanduel": 5181,
+            "draftkings": 6056
+          },
+          "by_market": {
+            "moneyline": 3903,
+            "spread": 3915,
+            "total": 3419
+          },
+          "by_market_class": {
+            "mainline": 11237
+          },
+          "capture_time_min": "2022-12-21T12:55:27-05:00",
+          "capture_time_max": "2024-01-28T11:54:19-05:00",
+          "game_date_min": "2023-01-01",
+          "game_date_max": "2024-02-11"
+        }
+      ],
+      "capture_time_ranges": {
+        "2020": {
+          "min": "2020-09-09T13:47:54-04:00",
+          "max": "2021-01-24T11:48:20-05:00"
+        },
+        "2021": {
+          "min": "2021-01-02T12:47:53-05:00",
+          "max": "2022-01-30T11:47:32-05:00"
+        },
+        "2022": {
+          "min": "2022-01-01T12:47:24-05:00",
+          "max": "2022-12-29T11:51:51-05:00"
+        },
+        "2023": {
+          "min": "2022-12-21T12:55:27-05:00",
+          "max": "2024-01-28T11:54:19-05:00"
+        }
+      },
+      "game_date_ranges": {
+        "2020": {
+          "min": "2020-09-10",
+          "max": "2021-02-07"
+        },
+        "2021": {
+          "min": "2021-01-03",
+          "max": "2022-02-13"
+        },
+        "2022": {
+          "min": "2022-01-02",
+          "max": "2023-01-03"
+        },
+        "2023": {
+          "min": "2023-01-01",
+          "max": "2024-02-11"
+        }
+      }
+    },
+    {
+      "store": "open_close_csv_2020_2023",
+      "path": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv",
+      "bytes": 1078200270,
+      "note": "Flattened outcome rows. Mainline vs props/periods counted separately. Capture-time ranges are not game dates. Not a sqlite dedupe total.",
+      "rows": 429642,
+      "distinct_games": 694,
+      "by_market_class": {
+        "mainline": 126276,
+        "unknown": 1720,
+        "period": 148682,
+        "prop": 152964
+      },
+      "by_snapshot_kind": {
+        "mid": 31264,
+        "pre1d": 31264,
+        "pre3d": 30276,
+        "pre7d": 35192,
+        "close_period": 148682,
+        "close_props": 94760,
+        "open_props": 58204
+      },
+      "by_season": [
+        {
+          "season": 2020,
+          "rows": 20256,
+          "distinct_games": 137,
+          "by_book": {
+            "betfair": 768,
+            "betonlineag": 1246,
+            "betrivers": 2040,
+            "bookmaker": 860,
+            "bovada": 1128,
+            "draftkings": 2040,
+            "fanduel": 1148,
+            "gtbets": 912,
+            "intertops": 1100,
+            "lowvig": 1036,
+            "mybookieag": 1302,
+            "pointsbetus": 1256,
+            "unibet": 2040,
+            "williamhill_us": 1408,
+            "betmgm": 764,
+            "caesars": 408,
+            "sugarhouse": 800
+          },
+          "by_market": {
+            "h2h": 6472,
+            "h2h_lay": 384,
+            "spreads": 7570,
+            "totals": 5830
+          },
+          "by_market_class": {
+            "mainline": 19872,
+            "unknown": 384
+          },
+          "by_snapshot_kind": {
+            "mid": 5186,
+            "pre1d": 5186,
+            "pre3d": 4560,
+            "pre7d": 5324
+          },
+          "capture_time_min": "2020-09-04T00:15:00Z",
+          "capture_time_max": "2021-02-06T23:35:00Z",
+          "game_date_min": "2020-09-11",
+          "game_date_max": "2021-02-07"
+        },
+        {
+          "season": 2021,
+          "rows": 47338,
+          "distinct_games": 156,
+          "by_book": {
+            "barstool": 3148,
+            "betfair": 1744,
+            "betonlineag": 2472,
+            "betrivers": 3158,
+            "bovada": 2302,
+            "draftkings": 3060,
+            "fanduel": 2906,
+            "gtbets": 2468,
+            "intertops": 2276,
+            "pointsbetus": 1806,
+            "sugarhouse": 3164,
+            "unibet": 3164,
+            "williamhill_us": 2772,
+            "betmgm": 2422,
+            "mybookieag": 2282,
+            "lowvig": 738,
+            "betus": 2028,
+            "foxbet": 2174,
+            "twinspires": 2292,
+            "wynnbet": 962
+          },
+          "by_market": {
+            "h2h": 16056,
+            "spreads": 15638,
+            "totals": 14772,
+            "h2h_lay": 872
+          },
+          "by_market_class": {
+            "mainline": 46466,
+            "unknown": 872
+          },
+          "by_snapshot_kind": {
+            "mid": 11584,
+            "pre1d": 11584,
+            "pre3d": 11690,
+            "pre7d": 12480
+          },
+          "capture_time_min": "2021-09-03T00:15:00Z",
+          "capture_time_max": "2022-02-12T23:25:00Z",
+          "game_date_min": "2021-09-10",
+          "game_date_max": "2022-02-13"
+        },
+        {
+          "season": 2022,
+          "rows": 39166,
+          "distinct_games": 107,
+          "by_book": {
+            "barstool": 2204,
+            "betfair": 928,
+            "betmgm": 1538,
+            "betonlineag": 1952,
+            "betrivers": 2204,
+            "betus": 1614,
+            "bovada": 2178,
+            "circasports": 1560,
+            "draftkings": 2440,
+            "fanduel": 2146,
+            "foxbet": 1542,
+            "gtbets": 1326,
+            "intertops": 510,
+            "lowvig": 1952,
+            "mybookieag": 2106,
+            "pointsbetus": 1528,
+            "sugarhouse": 2204,
+            "superbook": 2040,
+            "unibet": 944,
+            "williamhill_us": 2198,
+            "wynnbet": 1892,
+            "twinspires": 1080,
+            "unibet_us": 1080
+          },
+          "by_market": {
+            "h2h": 12758,
+            "spreads": 13310,
+            "totals": 12634,
+            "h2h_lay": 464
+          },
+          "by_market_class": {
+            "mainline": 38702,
+            "unknown": 464
+          },
+          "by_snapshot_kind": {
+            "mid": 9186,
+            "pre1d": 9186,
+            "pre3d": 9096,
+            "pre7d": 11698
+          },
+          "capture_time_min": "2022-09-02T00:15:00Z",
+          "capture_time_max": "2023-02-11T23:40:38Z",
+          "game_date_min": "2022-09-09",
+          "game_date_max": "2023-02-12"
+        },
+        {
+          "season": 2023,
+          "rows": 322882,
+          "distinct_games": 294,
+          "by_book": {
+            "barstool": 14416,
+            "betmgm": 29684,
+            "betonlineag": 11329,
+            "betrivers": 51300,
+            "betus": 2702,
+            "bovada": 16094,
+            "draftkings": 43441,
+            "fanduel": 30677,
+            "pointsbetus": 22469,
+            "unibet_us": 51350,
+            "williamhill_us": 44426,
+            "lowvig": 918,
+            "mybookieag": 1148,
+            "superbook": 804,
+            "twinspires": 480,
+            "wynnbet": 1644
+          },
+          "by_market": {
+            "alternate_spreads": 70099,
+            "alternate_totals": 62607,
+            "h2h_h1": 1812,
+            "team_totals": 11238,
+            "spreads_h1": 1602,
+            "totals_h1": 1324,
+            "player_anytime_td": 38682,
+            "player_pass_tds": 6872,
+            "player_pass_yds": 10137,
+            "player_reception_yds": 48458,
+            "player_receptions": 27471,
+            "player_rush_yds": 21344,
+            "h2h": 6676,
+            "spreads": 10054,
+            "totals": 4506
+          },
+          "by_market_class": {
+            "period": 148682,
+            "prop": 152964,
+            "mainline": 21236
+          },
+          "by_snapshot_kind": {
+            "close_period": 148682,
+            "close_props": 94760,
+            "mid": 5308,
+            "open_props": 58204,
+            "pre1d": 5308,
+            "pre3d": 4930,
+            "pre7d": 5690
+          },
+          "capture_time_min": "2023-09-01T00:20:42Z",
+          "capture_time_max": "2024-02-11T23:15:38Z",
+          "game_date_min": "2023-09-08",
+          "game_date_max": "2024-02-11"
+        }
+      ]
+    },
+    {
+      "store": "nflverse_pbp_csv_2020_2023",
+      "note": "Distinct game_id from existing PBP CSVs. start_time has no timezone and is not used as a cutoff.",
+      "distinct_games": 1123,
+      "by_season": {
+        "2020": 269,
+        "2021": 285,
+        "2022": 284,
+        "2023": 285
+      },
+      "paths": [
+        "/Volumes/KosEdgeData/nflverse/play_by_play_2020.csv",
+        "/Volumes/KosEdgeData/nflverse/play_by_play_2021.csv",
+        "/Volumes/KosEdgeData/nflverse/play_by_play_2022.csv",
+        "/Volumes/KosEdgeData/nflverse/play_by_play_2023.csv"
+      ]
+    },
+    {
+      "store": "gapfill_sqlite_requests",
+      "path": "/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite",
+      "bytes": 13877006336,
+      "window": [
+        "2020-03-01",
+        "2024-03-01"
+      ],
+      "note": "Request ledger only (not a deduplicated line total). Old harvest counts may overlap.",
+      "by_kind_snapshot": [
+        {
+          "kind": "events",
+          "snapshot_kind": "probe",
+          "n": 31,
+          "date_param_min": "2020-09-01T16:00:00Z",
+          "date_param_max": "2024-02-13T16:00:00Z"
+        },
+        {
+          "kind": "odds",
+          "snapshot_kind": "close_period",
+          "n": 361,
+          "date_param_min": "2023-01-01T17:40:00Z#0ba747b1414a31b05ef37f0bf3d7fbe9",
+          "date_param_max": "2024-02-11T23:11:00Z#e89a34588d65a68265c104373ffdc28a"
+        },
+        {
+          "kind": "odds",
+          "snapshot_kind": "mid",
+          "n": 31,
+          "date_param_min": "2020-09-10T00:20:00Z",
+          "date_param_max": "2024-02-10T23:40:28Z"
+        },
+        {
+          "kind": "odds",
+          "snapshot_kind": "pre1d",
+          "n": 31,
+          "date_param_min": "2020-09-10T00:20:00Z",
+          "date_param_max": "2024-02-10T23:40:28Z"
+        },
+        {
+          "kind": "odds",
+          "snapshot_kind": "pre3d",
+          "n": 31,
+          "date_param_min": "2020-09-08T00:20:00Z",
+          "date_param_max": "2024-02-08T23:40:28Z"
+        },
+        {
+          "kind": "odds",
+          "snapshot_kind": "pre7d",
+          "n": 31,
+          "date_param_min": "2020-09-04T00:20:00Z",
+          "date_param_max": "2024-02-04T23:40:28Z"
+        },
+        {
+          "kind": "props",
+          "snapshot_kind": "close_props",
+          "n": 378,
+          "date_param_min": "2022-09-09T00:00:00Z#6bde759afa450fe673e70e555be88ba4",
+          "date_param_max": "2024-02-11T23:20:28Z#821066e2d2f7a99b660ffc6aec1cb85f"
+        },
+        {
+          "kind": "props",
+          "snapshot_kind": "open_props",
+          "n": 378,
+          "date_param_min": "2022-09-07T12:20:00Z#6bde759afa450fe673e70e555be88ba4",
+          "date_param_max": "2024-02-10T11:40:28Z#821066e2d2f7a99b660ffc6aec1cb85f"
+        }
+      ]
+    },
+    {
+      "store": "raw_americanfootball_nfl_historical",
+      "note": "File counts only for 2020\u20132023 directories. 2024\u201326 dirs were not listed for content.",
+      "by_season": [
+        {
+          "season": 2020,
+          "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2020",
+          "files": 8
+        },
+        {
+          "season": 2021,
+          "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2021",
+          "files": 50
+        },
+        {
+          "season": 2022,
+          "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2022",
+          "files": 145
+        },
+        {
+          "season": 2023,
+          "path": "/Volumes/KosEdgeData/raw/odds/americanfootball_nfl/historical/2023",
+          "files": 935
+        }
+      ]
+    },
+    {
+      "store": "lake_inventory_json_2020_2023_keys_only",
+      "path": "/Volumes/KosEdgeData/clean/odds/nfl/lake/inventory.json",
+      "as_of": "2026-08-19",
+      "source": "/tmp/nfl_oc_lines.csv",
+      "by_season_rows": {
+        "2020": 9936,
+        "2021": 23233,
+        "2022": 19351,
+        "2023": 10618
+      },
+      "in_scope_row_sum": 63138,
+      "note": "Full lake inventory.json also lists later seasons; those parquet files were not opened. These are export snapshot counts, not a current deduplicated sqlite total. Old harvest counts may overlap."
+    }
+  ]
+}
