@@ -6,10 +6,10 @@
   "refused": false,
   "refuse_reason": null,
   "refuse_detail": null,
-  "generated_at_utc": "2026-11-01T16:15:07Z",
+  "generated_at_utc": "2026-11-01T16:15:27Z",
   "code_pin": {
     "branch": "cursor/nfl-odds-comparison-harness-t5100u-f42c",
-    "commit": "f6b5b4c3ec4021fc64d86a36c863b483246be78b",
+    "commit": "20a67d5b5d210dd93c5ae81d55a42d92579370c9",
     "package_a_head": "f6b5b4c3ec4021fc64d86a36c863b483246be78b",
     "reader": "services/model-service/src/services/nfl_odds_reader.py",
     "harness": "services/model-service/src/services/nfl_odds_comparison_harness.py",
