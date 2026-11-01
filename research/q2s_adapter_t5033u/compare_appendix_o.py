@@ -21,6 +21,10 @@ from q2s.bootstrap import (  # noqa: E402
     paired_delta_mae,
     paired_game_bootstrap_ci,
 )
+from q2s.freeze_guard import (  # noqa: E402
+    FreezeGuardRefuse,
+    assert_freeze_and_rows,
+)
 
 ROWS = ROOT / "artifacts" / "q2s_rows_t5033u.json"
 FREEZE = ROOT / "artifacts" / "PROTOCOL_FREEZE.json"
@@ -45,6 +49,10 @@ def _rmse(pred, act) -> float:
 def main() -> int:
     if not FREEZE.exists():
         raise LookRefuse("PROTOCOL_FREEZE missing — freeze before the look")
+    try:
+        assert_freeze_and_rows(ROOT)
+    except FreezeGuardRefuse as exc:
+        raise LookRefuse(str(exc)) from exc
     if LOOK.exists() or OUT_JSON.exists():
         raise LookRefuse("Appendix O look already consumed — no second look")
     if not ROWS.exists():

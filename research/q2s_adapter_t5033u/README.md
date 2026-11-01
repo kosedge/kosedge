@@ -5,6 +5,9 @@
 
 Cite t5033u · fdf91ff5 · d7e0a6bc · 2db90f76 · 2b9f302e · 03a4dd90 CLOSED.
 Guardrails `52c79ee6`. #684 ACCEPT `9982d42f` undisturbed.
+t5035u guard-only follow-up: Alex RETURN `404a4ab2` · `d47934ca`.
+`PROTOCOL_FREEZE` is not rewritten; rows are bound in
+`artifacts/FREEZE_ADDENDUM.json` (`0d6a5e14…`). No second look.
 
 ## What this is
 
