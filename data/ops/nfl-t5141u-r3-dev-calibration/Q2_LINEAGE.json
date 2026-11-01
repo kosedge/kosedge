@@ -1,0 +1,10 @@
+{
+  "note": "DEV_RESEARCH_t5125u_R2B2_437.json has no separate m_q2 column. m_challenger on these rows is the frozen 50/50 blend x(0.5)=(1-0.5)*IF_margin + 0.5*Q2_complete_margin from prior R2-B2. Algebraic recovery Q2=2*m_challenger-m_if is permitted solely after that lineage is documented. Recovered Q2 is NOT a newly generated forecast and is not an original-Q2 / 2017 look or IF/Q2 refit.",
+  "json_lacks_m_q2": true,
+  "recovery": "Q2=2*m_challenger-m_if",
+  "not_newly_generated_forecast": true,
+  "max_abs_blend_residual": 0.0,
+  "n_checked": 437,
+  "tol": 1e-09,
+  "outcomes_already_consumed": true
+}

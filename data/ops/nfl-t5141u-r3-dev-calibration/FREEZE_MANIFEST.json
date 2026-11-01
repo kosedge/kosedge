@@ -1,0 +1,40 @@
+{
+  "schema_version": "nfl-t5141u-r3-dev-calibration-v1",
+  "label": "DEV_RESEARCH",
+  "experiment": "R3-DEV-CALIBRATION",
+  "cert_candidate": 0,
+  "eval": null,
+  "isolated_dir": "data/ops/nfl-t5141u-r3-dev-calibration",
+  "frozen_before_fit": true,
+  "c2_c3_fitted": false,
+  "diagnostic_executed": false,
+  "file_sha256": {
+    "PROTOCOL.json": "46e10a0a408c201ffafce39618af2b6290fd01fb4baab8b75aaa12930a8b75cc",
+    "INPUT_PINS.json": "6c816b2bad56dbfe89b03f2159bfa2b5f2d22a15d106476df23194f540a72204",
+    "IDENTITY_FREEZE.json": "5b2369cbe9092372c2bc1b7bcf5cbd3e940a3ea9a9eb4690e8dc36f7afd64533",
+    "Q2_LINEAGE.json": "fc23f94253accb92080319869d588196fb7719ae01c4e0e11cc80f188c9d75c4",
+    "MARKET_N37_IDENTITY.json": "c91cd2c6665a3f80ad5f682f22938d99dc24f6f011db68aebffdbf4b60c17fc8",
+    "STOP_AWAITING_ALEX_PRECOMP_GO.json": "f6eef77f32f0bd9fa351c3c904aad4bf2cf286640587da2f0dbb4834ccc54b57"
+  },
+  "input_pins": {
+    "frozen_before_fit": true,
+    "dev437_path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
+    "dev437_file_sha256": "66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50",
+    "dev437_record_sha256": "0550ef9b498a2240919d8cf570ccb7c94b67f6815ba3625789901f8390143637",
+    "matched72_sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6",
+    "admissible_quotes_sha256": "75c0b14c7391252dd5ca790c09d9d65071916ef4f39a20c81c88c57229917fb9",
+    "coverage_manifest_sha256": "bfcf8ff4b3c9dd933c6edb381a76d6bbb7abd6a1723120941d810425942e00d8",
+    "first_case_game_id": "2020_02_CIN_CLE",
+    "first_case_record_sha256": "621f0f843da8ac219d284448ac1cd3124bbcdba629c6df49a54b3b518fad30fc",
+    "first_case_file_sha256": "8cb9a2a1dbde5be9f27370622ab46934117b86e3e0597daf78374b9c5fe27a82",
+    "code_path": "services/model-service/src/services/nfl_t5107u/r3_dev_calibration.py",
+    "code_sha256": "8b9ebc68f71dca033c1813e7099abb63d38b712a45ece8b42aa10c2e369c4e88",
+    "protocol_canonical_sha256": "e3c8f2df4f4397c60f5dcdb8bccc0f793466249f03296d418554aaf8df0adbb7",
+    "identity_canonical_sha256": "dcc049484d5d64957f45bcd1c0a7c04f1f54e26f251a03ea047d636c65a3fbb0",
+    "q2_lineage_max_abs_residual": 0.0
+  },
+  "outcomes_already_consumed": true,
+  "g5_status": "DATA_COVERAGE_BLOCKED",
+  "g5_loosened": false,
+  "status": "STOP_AWAITING_ALEX_PRECOMP_GO"
+}
