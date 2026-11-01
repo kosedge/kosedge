@@ -1,0 +1,27 @@
+{
+  "season": 2026,
+  "lines": [
+    {
+      "game_id": "synth-kei-c10-001",
+      "home_team": "Kansas City Chiefs",
+      "away_team": "Buffalo Bills",
+      "home_abbr": "KC",
+      "away_abbr": "BUF",
+      "start_time": "2026-09-10T20:20:00-04:00",
+      "game_date": "2026-09-10",
+      "spread_home": -3.264,
+      "total_mean": 47.551,
+      "venue": "GEHA Field at Arrowhead Stadium"
+    },
+    {
+      "game_id": "synth-kei-c10-skip-blank-home",
+      "home_team": "   ",
+      "away_team": "New York Jets",
+      "home_abbr": "NE",
+      "away_abbr": "NYJ",
+      "start_time": "2026-09-11T13:00:00-04:00",
+      "spread_home": 1.5,
+      "total_mean": 40.0
+    }
+  ]
+}
