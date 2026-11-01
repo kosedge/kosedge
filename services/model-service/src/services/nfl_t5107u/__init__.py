@@ -36,6 +36,8 @@ from .dev_research_cohort import run_dev_research_cohort  # noqa: F401
 from .r2_eval_runner import run_eval_score_r2  # noqa: F401
 from .r2_byte_rehash import (  # noqa: F401
     bind_r2_runtime_bytes,
+    enumerate_admitted_extracts,
+    r2_hash_set,
     sha256_file_bytes,
     verify_r2_runtime_bytes,
 )

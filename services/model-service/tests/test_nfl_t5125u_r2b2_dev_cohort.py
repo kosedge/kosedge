@@ -32,7 +32,11 @@ from src.services.nfl_t5107u.outcome_gate import (
     ScoringOutcomeLoader,
     refuse_overwrite_first_case_record,
 )
-from src.services.nfl_t5107u.r2_byte_rehash import bind_r2_runtime_bytes
+from src.services.nfl_t5107u.r2_byte_rehash import (
+    bind_r2_runtime_bytes,
+    r2_hash_set,
+    sha256_file_bytes,
+)
 from src.services.nfl_t5107u.r2_eval_runner import run_eval_score_r2
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -86,7 +90,7 @@ def _eligible(*, hold=None):
     }
 
 
-def _bind(path: Path, frozen):
+def _bind(path: Path, frozen, r2=None):
     return bind_one_run(
         effective_spec_sha256="1" * 64,
         code_sha256="2" * 64,
@@ -95,6 +99,7 @@ def _bind(path: Path, frozen):
         cohort_sha256=frozen.cohort_sha256,
         alex_go_id="ALEX_GO_T5125U",
         path=path,
+        r2_runtime_bytes=None if r2 is None else r2_hash_set(r2),
     )
 
 
@@ -107,12 +112,22 @@ def _loader():
 def _byte_pins(tmp_path: Path, payload: dict | None = None) -> dict:
     freeze = tmp_path / "freeze.json"
     freeze.write_text(json.dumps(payload or _eval_payload(), sort_keys=True) + "\n")
-    manifest = tmp_path / "quote_manifest.json"
-    manifest.write_text('{"admitted":true,"note":"tmp-not-r2a"}\n')
     extract = tmp_path / "quote_extract.jsonl"
     extract.write_text('{"game_id":"e"}\n')
+    manifest = tmp_path / "quote_manifest.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "admitted_extracts": [
+                    {"path": str(extract.resolve()), "sha256": sha256_file_bytes(extract)}
+                ]
+            },
+            sort_keys=True,
+        )
+        + "\n"
+    )
     bind_path = tmp_path / "R2_RUNTIME_BYTES.json"
-    bind_r2_runtime_bytes(
+    record = bind_r2_runtime_bytes(
         forecast_file=freeze,
         quote_manifest_file=manifest,
         quote_extract_files=[extract],
@@ -123,6 +138,7 @@ def _byte_pins(tmp_path: Path, payload: dict | None = None) -> dict:
         quote_manifest_file=manifest,
         quote_extract_files=[extract],
         r2_byte_bind=bind_path,
+        bind_record=record,
     )
 
 
@@ -138,20 +154,29 @@ def _r2_kwargs(path: Path, rec, eligible, loader, *, pins=None):
         eligible_cohorts=eligible,
         score_body=lambda *a, **k: {"n": 1, "mae_challenger": 1.0, "mean_signed_diff_vs_if": -1.0},
     )
-    kwargs.update(pins if pins is not None else _byte_pins(path.parent))
+    files = pins if pins is not None else _byte_pins(path.parent)
+    kwargs.update(
+        {
+            "forecast_file": files["forecast_file"],
+            "quote_manifest_file": files["quote_manifest_file"],
+            "quote_extract_files": files["quote_extract_files"],
+            "r2_byte_bind": files["r2_byte_bind"],
+        }
+    )
     return kwargs
 
 
 def test_r2_runner_refuses_preloaded_outcomes_loader_count_zero(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _byte_pins(tmp_path)
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
     with pytest.raises(EvalRefuse, match="refuses preloaded scoring outcomes"):
         run_eval_score_r2(
             frozen,
             {"e": {"season": 2022, "week": 2, "home_score": 1, "away_score": 0}},
-            **_r2_kwargs(path, rec, _eligible(), loader),
+            **_r2_kwargs(path, rec, _eligible(), loader, pins=pins),
         )
     assert loader.call_count == 0
     assert load_one_run(path)["status"] == STATUS_BOUND
@@ -165,11 +190,16 @@ def test_r2_runner_requires_outcome_loader():
 
 def test_r2_hold_refuse_loader_count_zero(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _byte_pins(tmp_path)
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
     with pytest.raises(EvalRefuse, match="HOLD tripped"):
-        run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, _eligible(hold=_hold(trip=True)), loader))
+        run_eval_score_r2(
+            frozen,
+            None,
+            **_r2_kwargs(path, rec, _eligible(hold=_hold(trip=True)), loader, pins=pins),
+        )
     assert loader.call_count == 0
 
 
@@ -186,28 +216,30 @@ def test_r2_hash_refuse_loader_count_zero(tmp_path: Path):
     )
     loader = _loader()
     pins = _byte_pins(tmp_path, payload)
-    with pytest.raises(EvalRefuse, match="hash mismatch"):
+    with pytest.raises(EvalRefuse, match="hash mismatch|frozen.payload"):
         run_eval_score_r2(tampered, None, outcome_loader=loader, exec_bind="b" * 64, **pins)
     assert loader.call_count == 0
 
 
 def test_r2_claim_refuse_loader_count_zero(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _byte_pins(tmp_path)
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     claim_one_run(path, rec["bind_id"])
     loader = _loader()
     with pytest.raises(EvalRefuse, match="claim|IN_PROGRESS|second"):
-        run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, _eligible(), loader))
+        run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, _eligible(), loader, pins=pins))
     assert loader.call_count == 0
 
 
 def test_r2_success_calls_loader_once(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _byte_pins(tmp_path)
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
-    scored = run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, _eligible(), loader))
+    scored = run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, _eligible(), loader, pins=pins))
     assert loader.call_count == 1
     assert scored["r2_runner"] == "run_eval_score_r2"
     assert scored["preloaded_outcomes"] is False

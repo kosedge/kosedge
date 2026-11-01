@@ -154,6 +154,100 @@ def _extract_entries(extracts: Sequence[Path]) -> list[dict[str, str]]:
     return entries
 
 
+def r2_hash_set(record: Mapping[str, Any]) -> dict[str, Any]:
+    """Canonical bind_id + freeze/manifest/extract hash set for ONE_RUN."""
+    return {
+        "bind_id": str(record["bind_id"]),
+        "forecast_file_sha256": str(record["forecast_file_sha256"]),
+        "quote_manifest_sha256": str(record["quote_manifest_sha256"]),
+        "quote_extract_sha256s": [str(x) for x in record["quote_extract_sha256s"]],
+    }
+
+
+def enumerate_admitted_extracts(manifest_file: Path | str) -> list[Path]:
+    """Admitted extract paths come from hashed manifest **contents**, not the caller."""
+    dest = Path(manifest_file)
+    try:
+        body = json.loads(dest.read_bytes().decode("utf-8"))
+    except Exception as exc:
+        raise R2ByteRefuse(f"quote manifest file is not JSON: {exc}") from exc
+    listed = None
+    for key in ("admitted_extracts", "admitted_quote_extracts", "quote_extracts"):
+        if body.get(key):
+            listed = body[key]
+            break
+    if not listed:
+        raise R2ByteRefuse(
+            "manifest contents do not enumerate admitted extracts — pin string insufficient"
+        )
+    if not isinstance(listed, list):
+        raise R2ByteRefuse("manifest admitted extracts must be a list")
+    root = dest.resolve().parent
+    paths: list[Path] = []
+    for item in listed:
+        if isinstance(item, str):
+            raw_path, expect_sha = item, None
+        elif isinstance(item, Mapping) and item.get("path"):
+            raw_path, expect_sha = str(item["path"]), item.get("sha256")
+        else:
+            raise R2ByteRefuse("manifest admitted extract entry missing path")
+        path = Path(raw_path)
+        if not path.is_absolute():
+            path = root / path
+        path = path.resolve()
+        if not path.is_file():
+            raise R2ByteRefuse(f"manifest-listed extract missing: {path}")
+        if expect_sha and sha256_file_bytes(path) != expect_sha:
+            raise R2ByteRefuse("manifest-listed extract sha256 mismatch")
+        paths.append(path)
+    return paths
+
+
+def refuse_caller_extract_set_mismatch(
+    manifest_file: Path | str,
+    quote_extract_files: Sequence[Any] | None,
+) -> list[Path]:
+    admitted = {p.resolve() for p in enumerate_admitted_extracts(manifest_file)}
+    if not quote_extract_files:
+        raise R2ByteRefuse(
+            "admitted quote extract files required — manifest pin alone insufficient"
+        )
+    caller = {Path(p).resolve() for p in quote_extract_files}
+    if caller != admitted:
+        raise R2ByteRefuse(
+            "caller-supplied extract set ≠ manifest admitted set — refuse before claim"
+        )
+    return sorted(admitted, key=lambda p: str(p))
+
+
+def frozen_from_forecast_file(path: Path | str):
+    """Derive FrozenCohort from freeze **file** bytes (not caller memory)."""
+    from .evaluator import EvalRefuse, freeze_forecast_cohort
+
+    dest = Path(path)
+    try:
+        payload = json.loads(dest.read_bytes().decode("utf-8"))
+    except Exception as exc:
+        raise R2ByteRefuse(f"frozen forecast file is not JSON: {exc}") from exc
+    try:
+        return freeze_forecast_cohort(payload)
+    except EvalRefuse as exc:
+        raise R2ByteRefuse(f"forecast file bytes do not yield a frozen cohort: {exc}") from exc
+
+
+def refuse_unrelated_forecast_file(frozen: Any, forecast_file: Path | str) -> Any:
+    file_frozen = frozen_from_forecast_file(forecast_file)
+    if (
+        file_frozen.forecast_sha256 != getattr(frozen, "forecast_sha256", None)
+        or file_frozen.cohort_sha256 != getattr(frozen, "cohort_sha256", None)
+        or list(file_frozen.game_ids) != list(getattr(frozen, "game_ids", []) or [])
+    ):
+        raise R2ByteRefuse(
+            "forecast file bytes do not match frozen.payload — refuse before claim"
+        )
+    return file_frozen
+
+
 def bind_r2_runtime_bytes(
     *,
     forecast_file: Path | str,
@@ -174,6 +268,7 @@ def bind_r2_runtime_bytes(
         quote_manifest_file=quote_manifest_file,
         quote_extract_files=quote_extract_files,
     )
+    extracts = refuse_caller_extract_set_mismatch(manifest, extracts)
     extract_rows = _extract_entries(extracts)
     record = {
         "schema_version": SCHEMA,
@@ -223,6 +318,7 @@ def verify_r2_runtime_bytes(
         quote_manifest_file=quote_manifest_file,
         quote_extract_files=quote_extract_files,
     )
+    extracts = refuse_caller_extract_set_mismatch(manifest, extracts)
     record = load_r2_byte_bind(r2_byte_bind)
     if record.get("schema_version") != SCHEMA:
         raise R2ByteRefuse("R2 runtime-byte bind schema mismatch")

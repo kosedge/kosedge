@@ -30,6 +30,7 @@ from src.services.nfl_t5107u.outcome_gate import (
 from src.services.nfl_t5107u.r2_byte_rehash import (
     R2ByteRefuse,
     bind_r2_runtime_bytes,
+    r2_hash_set,
     sha256_file_bytes,
     verify_r2_runtime_bytes,
 )
@@ -88,7 +89,7 @@ def _eligible():
     }
 
 
-def _bind(path: Path, frozen):
+def _bind(path: Path, frozen, r2=None):
     return bind_one_run(
         effective_spec_sha256="1" * 64,
         code_sha256="2" * 64,
@@ -97,6 +98,7 @@ def _bind(path: Path, frozen):
         cohort_sha256=frozen.cohort_sha256,
         alex_go_id="ALEX_GO_T5129U",
         path=path,
+        r2_runtime_bytes=None if r2 is None else r2_hash_set(r2),
     )
 
 
@@ -109,11 +111,18 @@ def _loader():
     )
 
 
+def _write_manifest(path: Path, extracts: list[Path]) -> None:
+    body = {
+        "admitted_extracts": [
+            {"path": str(p.resolve()), "sha256": sha256_file_bytes(p)} for p in extracts
+        ]
+    }
+    path.write_bytes((json.dumps(body, sort_keys=True) + "\n").encode("utf-8"))
+
+
 def _pins(tmp_path: Path, *, extra_extract: bool = False):
     freeze = tmp_path / "freeze.json"
     freeze.write_bytes(json.dumps(_eval_payload(), sort_keys=True).encode("utf-8") + b"\n")
-    manifest = tmp_path / "quote_manifest.json"
-    manifest.write_bytes(b'{"admitted":true,"tmp":"not-r2a"}\n')
     extract_a = tmp_path / "quote_extract_a.jsonl"
     extract_a.write_bytes(b'{"game_id":"d"}\n')
     extracts = [extract_a]
@@ -121,6 +130,8 @@ def _pins(tmp_path: Path, *, extra_extract: bool = False):
         extract_b = tmp_path / "quote_extract_b.jsonl"
         extract_b.write_bytes(b'{"game_id":"e"}\n')
         extracts.append(extract_b)
+    manifest = tmp_path / "quote_manifest.json"
+    _write_manifest(manifest, extracts)
     bind_path = tmp_path / "R2_RUNTIME_BYTES.json"
     record = bind_r2_runtime_bytes(
         forecast_file=freeze,
@@ -220,8 +231,8 @@ def test_bind_refuses_empty_extracts_and_preserved_dests(tmp_path: Path):
 def test_mutated_file_bytes_refuse_before_claim_and_loader(tmp_path: Path, mutate: str):
     frozen = freeze_forecast_cohort(_eval_payload())
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
     pins = _pins(tmp_path, extra_extract=True)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     if mutate == "freeze":
         pins["forecast_file"].write_bytes(pins["forecast_file"].read_bytes() + b" ")
         match = "forecast file bytes mutated"
@@ -232,7 +243,7 @@ def test_mutated_file_bytes_refuse_before_claim_and_loader(tmp_path: Path, mutat
         pins["quote_extract_files"][0].write_bytes(
             pins["quote_extract_files"][0].read_bytes() + b" "
         )
-        match = "extract file bytes mutated"
+        match = "extract file bytes mutated|manifest-listed extract"
     loader = _loader()
     with pytest.raises(EvalRefuse, match=match):
         run_eval_score_r2(
@@ -257,9 +268,9 @@ def test_in_memory_hash_ok_but_file_mutation_still_refuses(tmp_path: Path):
     rehash = freeze_forecast_cohort(payload)
     assert rehash.forecast_sha256 == frozen.forecast_sha256
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
     pins = _pins(tmp_path)
-    pins["forecast_file"].write_bytes(pins["forecast_file"].read_bytes() + b"#")
+    rec = _bind(path, frozen, r2=pins["bind_record"])
+    pins["forecast_file"].write_bytes(pins["forecast_file"].read_bytes() + b" ")
     loader = _loader()
     with pytest.raises(EvalRefuse, match="forecast file bytes mutated"):
         run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, loader, pins))
@@ -270,10 +281,10 @@ def test_in_memory_hash_ok_but_file_mutation_still_refuses(tmp_path: Path):
 def test_empty_extracts_refuse_before_claim(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
     pins = _pins(tmp_path)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
-    with pytest.raises(EvalRefuse, match="extract files required|manifest pin"):
+    with pytest.raises(EvalRefuse, match="extract files required|manifest pin|extract set"):
         run_eval_score_r2(
             frozen,
             None,
@@ -289,8 +300,8 @@ def test_empty_extracts_refuse_before_claim(tmp_path: Path):
 def test_verify_passes_then_attaches_runtime_bytes(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
     pins = _pins(tmp_path)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
     scored = run_eval_score_r2(
         frozen,
@@ -371,23 +382,24 @@ def test_if_and_market_passes_eval_result_contract():
     assert "ci95" in scored["bootstrap_season_week_vs_market"]
 
 
-def test_r2_real_score_if_only_refuses_contract_after_loader(tmp_path: Path):
+def test_r2_real_score_if_only_refuses_before_claim(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
     pins = _pins(tmp_path)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
-    with pytest.raises(EvalRefuse, match="IF and market|IF-only|incomplete"):
+    with pytest.raises(EvalRefuse, match="market incomplete|refuse before claim"):
         run_eval_score_r2(frozen, None, **_r2_kwargs(path, rec, loader, pins))
-    assert loader.call_count == 1
-    assert load_one_run(path)["status"] == "FAILED"
+    assert loader.call_count == 0
+    assert load_one_run(path)["status"] == STATUS_BOUND
+    assert not _claim_path(path, rec["bind_id"]).is_file()
 
 
 def test_r2_real_score_if_and_market_emits_contract(tmp_path: Path):
     frozen = freeze_forecast_cohort(_eval_payload())
     path = tmp_path / "ONE_RUN.json"
-    rec = _bind(path, frozen)
     pins = _pins(tmp_path)
+    rec = _bind(path, frozen, r2=pins["bind_record"])
     loader = _loader()
     market = [
         {"game_id": "d", "market_margin": 10.0},
@@ -404,6 +416,133 @@ def test_r2_real_score_if_and_market_emits_contract(tmp_path: Path):
     assert "bootstrap_season_week_vs_market" in scored
     assert scored["r2_runtime_bytes"]["quote_extract_n"] == 1
     assert scored["one_run_status"] == "CONSUMED"
+
+
+def test_mutate_and_fresh_rebind_refuses_before_claim(tmp_path: Path):
+    frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _pins(tmp_path)
+    path = tmp_path / "ONE_RUN.json"
+    rec = _bind(path, frozen, r2=pins["bind_record"])
+    pins["forecast_file"].write_bytes(pins["forecast_file"].read_bytes() + b" ")
+    fresh = tmp_path / "R2_RUNTIME_BYTES_FRESH.json"
+    bind_r2_runtime_bytes(
+        forecast_file=pins["forecast_file"],
+        quote_manifest_file=pins["quote_manifest_file"],
+        quote_extract_files=pins["quote_extract_files"],
+        path=fresh,
+    )
+    loader = _loader()
+    with pytest.raises(EvalRefuse, match="ONE_RUN r2_runtime_bytes mismatch"):
+        run_eval_score_r2(
+            frozen,
+            None,
+            **{
+                **_r2_kwargs(
+                    path,
+                    rec,
+                    loader,
+                    pins,
+                    score_body=lambda *a, **k: {"n": 1},
+                ),
+                "r2_byte_bind": fresh,
+            },
+        )
+    assert loader.call_count == 0
+    assert load_one_run(path)["status"] == STATUS_BOUND
+    assert not _claim_path(path, rec["bind_id"]).is_file()
+
+
+def test_unrelated_freeze_file_plus_rebind_refuses(tmp_path: Path):
+    frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _pins(tmp_path)
+    path = tmp_path / "ONE_RUN.json"
+    rec = _bind(path, frozen, r2=pins["bind_record"])
+    other_payload = {
+        "schema_version": "nfl-t5107u-forecast-v1",
+        "eval": None,
+        "fit_policy": "TRANSFER_FROZEN_DEV_2013_2016",
+        "if_arm": {"total": 1, "archived": 0, "reconstructed": 1, "blocked": 0},
+        "forecasts": [_row("zz", 2022, 1)],
+    }
+    other = tmp_path / "other_freeze.json"
+    other.write_bytes(json.dumps(other_payload, sort_keys=True).encode("utf-8") + b"\n")
+    fresh = tmp_path / "R2_RUNTIME_BYTES_OTHER.json"
+    bind_r2_runtime_bytes(
+        forecast_file=other,
+        quote_manifest_file=pins["quote_manifest_file"],
+        quote_extract_files=pins["quote_extract_files"],
+        path=fresh,
+    )
+    loader = _loader()
+    with pytest.raises(EvalRefuse, match="do not match frozen.payload"):
+        run_eval_score_r2(
+            frozen,
+            None,
+            **{
+                **_r2_kwargs(
+                    path,
+                    rec,
+                    loader,
+                    pins,
+                    score_body=lambda *a, **k: {"n": 1},
+                ),
+                "forecast_file": other,
+                "r2_byte_bind": fresh,
+            },
+        )
+    assert loader.call_count == 0
+    assert load_one_run(path)["status"] == STATUS_BOUND
+    assert not _claim_path(path, rec["bind_id"]).is_file()
+
+
+def test_caller_extract_set_must_match_manifest(tmp_path: Path):
+    frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _pins(tmp_path)
+    path = tmp_path / "ONE_RUN.json"
+    rec = _bind(path, frozen, r2=pins["bind_record"])
+    extra = tmp_path / "not_in_manifest.jsonl"
+    extra.write_bytes(b'{"game_id":"extra"}\n')
+    loader = _loader()
+    with pytest.raises(EvalRefuse, match="extract set"):
+        run_eval_score_r2(
+            frozen,
+            None,
+            **{
+                **_r2_kwargs(
+                    path,
+                    rec,
+                    loader,
+                    pins,
+                    score_body=lambda *a, **k: {"n": 1},
+                ),
+                "quote_extract_files": list(pins["quote_extract_files"]) + [extra],
+            },
+        )
+    assert loader.call_count == 0
+    assert not _claim_path(path, rec["bind_id"]).is_file()
+
+
+def test_market_incomplete_refuses_before_claim(tmp_path: Path):
+    frozen = freeze_forecast_cohort(_eval_payload())
+    pins = _pins(tmp_path)
+    path = tmp_path / "ONE_RUN.json"
+    rec = _bind(path, frozen, r2=pins["bind_record"])
+    loader = _loader()
+    with pytest.raises(EvalRefuse, match="market incomplete"):
+        run_eval_score_r2(
+            frozen,
+            None,
+            **_r2_kwargs(
+                path,
+                rec,
+                loader,
+                pins,
+                market_points=[{"game_id": "d", "market_margin": 10.0}],
+            ),
+        )
+    assert loader.call_count == 0
+    assert load_one_run(path)["status"] == STATUS_BOUND
+    assert not _claim_path(path, rec["bind_id"]).is_file()
 
 
 def test_dev437_does_not_complete_eval_contract():

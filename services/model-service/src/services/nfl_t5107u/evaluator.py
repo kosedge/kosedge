@@ -689,6 +689,8 @@ def run_eval_score(
     spec_path: Any = None,
     input_path: Any = None,
     score_body: Any = None,
+    r2_runtime_bytes: Mapping[str, Any] | None = None,
+    require_r2_runtime_bytes: bool = False,
 ) -> dict[str, Any]:
     """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS.
 
@@ -735,6 +737,8 @@ def run_eval_score(
             spec_path=spec_path,
             input_path=input_path,
             path=one_run_path,
+            r2_runtime_bytes=r2_runtime_bytes,
+            require_r2_runtime_bytes=require_r2_runtime_bytes,
         )
         record = claim_one_run(one_run_path, record["bind_id"])
     except OneRunRefuse as exc:

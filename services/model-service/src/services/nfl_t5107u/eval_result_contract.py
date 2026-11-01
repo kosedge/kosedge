@@ -12,7 +12,7 @@ Schema/tests only. No live EVAL EXEC. CERT=0. DRAFT≠merge.
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 from .evaluator import BOOT_B, BOOT_SEED
 
@@ -133,3 +133,25 @@ def apply_eval_result_contract(scored: dict[str, Any]) -> dict[str, Any]:
     scored["eval_result_contract"] = SCHEMA
     scored["eval_result_sides"] = ["if", "market"]
     return scored
+
+
+def refuse_incomplete_market_before_claim(
+    *,
+    eligible_cohorts: Mapping[str, Any] | None,
+    market_points: Sequence[Mapping[str, Any]] | None,
+) -> None:
+    """IF-only / partial market must not claim (look burn). Pre-claim, pre-loader."""
+    allow = list(((eligible_cohorts or {}).get("margin_cohort") or {}).get("game_ids") or [])
+    if not allow:
+        raise EvalResultContractRefuse(
+            "eligible margin cohort required for market-completeness gate"
+        )
+    market_by = {str(p.get("game_id")): p for p in (market_points or [])}
+    missing = [
+        gid for gid in allow if (market_by.get(gid) or {}).get("market_margin") is None
+    ]
+    if missing:
+        raise EvalResultContractRefuse(
+            "market incomplete for eligible cohort — refuse before claim "
+            f"(missing {len(missing)} of {len(allow)})"
+        )

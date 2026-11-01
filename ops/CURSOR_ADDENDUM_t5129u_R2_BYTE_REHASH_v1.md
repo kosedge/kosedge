@@ -83,4 +83,10 @@ t5125u R2 runner tests now bind tmp freeze/manifest/extract so byte verify prece
 | parent #693 tip          | `6c54d729` / impl `f0013d62`                                       |
 | this implementation tip  | `f4f6e311e8af4d72163d71f389d6294e0e5d5f3b`                         |
 
+## RETURN-FIX (Alex f5788f7c)
+
+See `ops/CURSOR_ADDENDUM_t5129u_BYTE_REHASH_RETURN_FIX_v1.md` and
+`ops/COS_ORDER_CURSOR_t5129u_BYTE_REHASH_RETURN_FIX.md` (sha8 `2a099402`).
+ONE_RUN now binds the R2 hash set; `verify_one_run` before claim.
+
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
