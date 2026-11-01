@@ -10,7 +10,7 @@ Continue under t5107u G1–G7 on the same #691 branch.
 | --- | --- |
 | PR | https://github.com/kosedge/kosedge/pull/691 (DRAFT) |
 | Parent tip (Ryan inspected) | `a0cc26564eac995dac0bacc0443ecd1850ed21d4` |
-| This tip | `TIP_PENDING` |
+| This tip | `2058e78b3cb328fd318a3e7c9f239cffc96b4658` |
 | Design seal (body, not a forecast freeze) | `e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd` |
 | Appended manifest sha256 | `ecbdf98a3610eb21256c9ad195ab050ed56fd227a8f8095d76fc685192bd3e96` |
 | Paper tip | `7139f8d9eed71b47eabf8827c0593932a38fea9a36686c66df3f6311282628c7` |
