@@ -49,6 +49,19 @@ from .builder import CHALLENGER_WEIGHT, LABEL
 
 FROZEN_MANIFEST_SCHEMA = "nfl-t5107u-frozen-manifest-v1"
 DEFAULT_PATH = Path("data/ops/nfl-forecast-builder-t5107u/FROZEN_MANIFEST.json")
+DESIGN_SEAL_SHA256 = "e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd"
+APPEND_KEYS = frozenset(
+    {
+        "manifest_sha256",
+        "input_bindings",
+        "design_seal_sha256",
+        "design_seal_is_forecast_freeze",
+        "appended_at_utc",
+        "appended_manifest_sha256",
+        "t5108u_append",
+        "_path",
+    }
+)
 
 
 def build_frozen_manifest(*, extra: Mapping[str, Any] | None = None) -> dict[str, Any]:
@@ -143,7 +156,15 @@ def build_frozen_manifest(*, extra: Mapping[str, Any] | None = None) -> dict[str
         + [
             {
                 "artifact": "outcomes_2023_score_only",
-                "detail": "50bda875 extract stops at 2022; 2023 REG in-season Q2 as-of blocked",
+                "detail": "50bda875 extract stops at 2022; 2023 REG scores now extracted from owned PBP (see appended input_bindings)",
+                "owner": "t5108u PBP extract / Q2 50bda875",
+                "dependent_field": "2023 home_score/away_score",
+            },
+            {
+                "artifact": "kickoff_utc_timezone",
+                "detail": "PBP start_time is naive; games.csv 4fe1cdd7 kickoff TZ not on this worktree",
+                "owner": "t5105u TZ contract / Q2 games.csv",
+                "dependent_field": "kickoff_utc",
             },
         ],
         "notes": [
@@ -160,6 +181,67 @@ def build_frozen_manifest(*, extra: Mapping[str, Any] | None = None) -> dict[str
 def sha256_bytes(payload: Mapping[str, Any]) -> str:
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def design_body_sha256(payload: Mapping[str, Any]) -> str:
+    body = {k: v for k, v in payload.items() if k not in APPEND_KEYS}
+    return sha256_bytes(body)
+
+
+def append_input_bindings(
+    path: Path | None = None,
+    *,
+    bindings: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Preserve design seal e5bb682d; append input bindings/status only."""
+    from .inputs import input_availability_table, prepare_local_inputs
+
+    dest = Path(path) if path else DEFAULT_PATH
+    payload = json.loads(dest.read_text(encoding="utf-8"))
+    original_seal = payload.get("manifest_sha256")
+    body_sha = design_body_sha256(payload)
+    if body_sha != DESIGN_SEAL_SHA256:
+        raise ValueError(
+            f"refusing append: design body sha {body_sha} != seal {DESIGN_SEAL_SHA256}"
+        )
+    if original_seal != DESIGN_SEAL_SHA256:
+        raise ValueError(f"on-disk design seal {original_seal} != {DESIGN_SEAL_SHA256}")
+
+    try:
+        prepared = dict(bindings) if bindings is not None else prepare_local_inputs()
+    except Exception as exc:  # noqa: BLE001 — record MISSING, do not invent
+        prepared = {
+            "status": "PARTIAL",
+            "error": str(exc),
+            "availability": input_availability_table(),
+        }
+
+    payload["design_seal_sha256"] = DESIGN_SEAL_SHA256
+    payload["design_seal_is_forecast_freeze"] = False
+    payload["input_bindings"] = {
+        "status": prepared.get("status") or "appended",
+        "availability": prepared.get("availability") or input_availability_table(),
+        "prepared": prepared.get("prepared"),
+        "sources": prepared.get("sources"),
+        "bindings_sha256": prepared.get("bindings_sha256"),
+        "notes": [
+            "Appended t5108u. Design seal e5bb682d is design/input-source/fit-policy only.",
+            "This append is NOT a forecast freeze and does not authorize EXEC scoring.",
+            *(prepared.get("notes") or []),
+        ],
+    }
+    payload["t5108u_append"] = {
+        "authority": "OWNER t5108u IMPLEMENTATION CORRECTION",
+        "if_tree": "fetched 6ca03716 via git worktree (not a missing-source claim)",
+        "produce_mu": "reconstructed_if_produce",
+    }
+    payload["appended_at_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    if design_body_sha256(payload) != DESIGN_SEAL_SHA256:
+        raise ValueError("append mutated design body — refuse")
+    payload["appended_manifest_sha256"] = sha256_bytes(payload)
+    dest.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    payload["_path"] = str(dest)
+    return payload
 
 
 def seal_frozen_manifest(path: Path | None = None) -> dict[str, Any]:

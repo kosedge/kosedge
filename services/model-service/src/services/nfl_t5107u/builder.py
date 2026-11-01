@@ -192,7 +192,7 @@ def build_forecasts(
     archived_if: Mapping[str, Mapping[str, Any]] | None = None,
     recon_packets: Mapping[str, Mapping[str, Any]] | None = None,
     reconstructed_if_mus: Mapping[str, float] | None = None,
-    if_tree_present: bool = False,
+    if_tree_present: bool | None = None,
     allow_eval_generation: bool = False,
     frozen_manifest_sealed: bool = False,
 ) -> dict[str, Any]:
@@ -223,9 +223,10 @@ def build_forecasts(
             "only after seal. Scoring remains refused."
         )
 
+    if reconstructed_if_mus:
+        raise BuilderRefuse("produce-μ required; supplied reconstructed_if_mus is not authorized")
     archived_if = archived_if or {}
     recon_packets = recon_packets or {}
-    reconstructed_if_mus = reconstructed_if_mus or {}
 
     q2_by_id: dict[str, tuple[float, float, int]] = {}
     q2_block_reason: str | None = None
@@ -245,8 +246,6 @@ def build_forecasts(
             game.game_id,
             archived=archived_if.get(game.game_id),
             recon_packet=recon_packets.get(game.game_id),
-            reconstructed_margin_mu=reconstructed_if_mus.get(game.game_id),
-            if_tree_present=if_tree_present,
         )
         if_resolutions.append(if_res)
 

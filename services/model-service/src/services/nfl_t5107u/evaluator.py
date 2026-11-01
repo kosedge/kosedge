@@ -31,6 +31,7 @@ from src.services.nfl_odds_reader import (
 )
 
 from .builder import SCHEMA as FORECAST_SCHEMA
+from .one_run import OneRunRefuse, load_one_run, verify_one_run
 from .q2 import SEALED_SEASONS
 
 CUTOFF_MINUTES = 60
@@ -151,6 +152,87 @@ def freeze_forecast_cohort(forecast_payload: Mapping[str, Any]) -> FrozenCohort:
         sealed_before_outcome_join=True,
         payload=dict(forecast_payload),
     )
+
+
+def _cohort_sha(game_ids: Sequence[str]) -> str:
+    return hashlib.sha256(
+        json.dumps({"game_ids": list(game_ids)}, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def freeze_eligible_cohorts(
+    forecast_payload: Mapping[str, Any],
+    market_result: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Freeze per-metric cohorts after cutoff/quote eligibility, before outcomes."""
+    base = freeze_forecast_cohort(forecast_payload)
+    declared = set(base.game_ids)
+    points = list(market_result.get("points") or [])
+    if any("actual_margin" in (p or {}) or "home_score" in (p or {}) for p in points):
+        if any((p or {}).get("actual_margin") is not None or (p or {}).get("home_score") is not None for p in points):
+            raise EvalRefuse("market points already joined to outcomes — refuse freeze-after-eligibility")
+    extra = {str(p.get("game_id")) for p in points} - declared
+    if extra:
+        raise EvalRefuse(f"eligible market games not in frozen forecasts: {sorted(extra)}")
+
+    margin_ids = [
+        str(p["game_id"])
+        for p in points
+        if str(p.get("game_id")) in declared and p.get("market_margin") is not None
+    ]
+    prob_ids = [
+        str(p["game_id"])
+        for p in points
+        if str(p.get("game_id")) in declared
+        and p.get("p_compare") == "bound"
+        and p.get("p_home_fair") is not None
+    ]
+    if len(margin_ids) != len(set(margin_ids)) or len(prob_ids) != len(set(prob_ids)):
+        raise EvalRefuse("duplicate game_id in eligible cohort")
+    return {
+        "forecast_sha256": base.forecast_sha256,
+        "declared_cohort_sha256": base.cohort_sha256,
+        "declared_game_ids": list(base.game_ids),
+        "margin_cohort": {
+            "game_ids": margin_ids,
+            "n": len(margin_ids),
+            "sha256": _cohort_sha(margin_ids),
+        },
+        "probability_cohort": {
+            "game_ids": prob_ids,
+            "n": len(prob_ids),
+            "sha256": _cohort_sha(prob_ids),
+        },
+        "sealed_after_eligibility_before_outcome_join": True,
+        "label": LABEL,
+        "cert_candidate": CERT_CANDIDATE,
+        "payload": dict(forecast_payload),
+    }
+
+
+def mean_stat(values: Sequence[float]) -> float:
+    """MEAN of signed values. Used for bootstrap CI on paired loss diffs."""
+    if not values:
+        raise EvalRefuse("mean on empty list")
+    return sum(float(x) for x in values) / len(values)
+
+
+def signed_abs_loss(forecast: float, actual: float) -> float:
+    return abs(float(forecast) - float(actual))
+
+
+def signed_loss_diffs(
+    challenger: Sequence[float],
+    control: Sequence[float],
+    actuals: Sequence[float],
+) -> list[float]:
+    """Per-game L_challenger − L_control. Negative = challenger improved."""
+    if not (len(challenger) == len(control) == len(actuals)):
+        raise EvalRefuse("signed loss diffs require aligned challenger/control/actual")
+    return [
+        signed_abs_loss(c, a) - signed_abs_loss(k, a)
+        for c, k, a in zip(challenger, control, actuals)
+    ]
 
 
 def paired_mae(errors: Sequence[float]) -> float:
@@ -401,6 +483,103 @@ def select_market_quotes(
     }
 
 
+def run_paired_margin_eval(
+    forecasts: Sequence[Mapping[str, Any]],
+    outcomes: Mapping[str, Mapping[str, Any]],
+    *,
+    eligible_game_ids: Sequence[str] | None = None,
+    market_points: Sequence[Mapping[str, Any]] | None = None,
+    bootstrap_b: int = BOOT_B,
+    bootstrap_seed: int = BOOT_SEED,
+) -> dict[str, Any]:
+    """Executable paired-margin runner. Synthetic fixtures are hand-checkable.
+
+    Real EVAL must still go through ``run_eval_score`` (one-run + Alex GO).
+    """
+    if bootstrap_b != BOOT_B or bootstrap_seed != BOOT_SEED:
+        raise EvalRefuse("bootstrap hyperparameters are frozen")
+    by_id = {str(row["game_id"]): row for row in forecasts}
+    allow = list(eligible_game_ids) if eligible_game_ids is not None else [str(r["game_id"]) for r in forecasts]
+    if len(allow) != len(set(allow)):
+        raise EvalRefuse("duplicate eligible game_id")
+    market_by = {str(p["game_id"]): p for p in (market_points or [])}
+
+    joined: list[dict[str, Any]] = []
+    for gid in allow:
+        row = by_id.get(gid)
+        out = outcomes.get(gid)
+        if row is None or out is None:
+            continue
+        if int(out.get("season") or 0) in SEALED_SEASONS or int(row.get("season") or 0) in SEALED_SEASONS:
+            raise EvalRefuse(f"outcome {gid} is 2024–26")
+        hs, aws = out.get("home_score"), out.get("away_score")
+        if hs in (None, "") or aws in (None, ""):
+            continue
+        actual = float(hs) - float(aws)
+        m_c = row.get("m_challenger")
+        m_if = row.get("m_if")
+        if m_c is None or m_if is None:
+            continue
+        market = market_by.get(gid) or {}
+        m_mkt = market.get("market_margin")
+        week = int(out.get("week") or row.get("week") or 0)
+        season = int(out.get("season") or row.get("season") or 0)
+        item = {
+            "game_id": gid,
+            "season": season,
+            "week": week,
+            "season_week": f"{season}-{week:02d}",
+            "actual_margin": actual,
+            "m_challenger": float(m_c),
+            "m_if": float(m_if),
+            "err_challenger": float(m_c) - actual,
+            "err_if": float(m_if) - actual,
+            "L_challenger": signed_abs_loss(float(m_c), actual),
+            "L_if": signed_abs_loss(float(m_if), actual),
+            "signed_diff_vs_if": signed_abs_loss(float(m_c), actual) - signed_abs_loss(float(m_if), actual),
+        }
+        if m_mkt is not None:
+            item["m_market"] = float(m_mkt)
+            item["err_market"] = float(m_mkt) - actual
+            item["L_market"] = signed_abs_loss(float(m_mkt), actual)
+            item["signed_diff_vs_market"] = item["L_challenger"] - item["L_market"]
+        joined.append(item)
+
+    if not joined:
+        raise EvalRefuse("no paired games after eligibility join")
+
+    diffs_if = [r["signed_diff_vs_if"] for r in joined]
+    clusters = [r["season_week"] for r in joined]
+    err_c = [r["err_challenger"] for r in joined]
+    err_if = [r["err_if"] for r in joined]
+    result: dict[str, Any] = {
+        "n": len(joined),
+        "games": joined,
+        "mae_challenger": paired_mae(err_c),
+        "mae_if": paired_mae(err_if),
+        "delta_mae_vs_if": paired_mae(err_c) - paired_mae(err_if),
+        "mean_signed_diff_vs_if": mean_stat(diffs_if),
+        "bootstrap_game": bootstrap_ci(diffs_if, stat=mean_stat),
+        "bootstrap_season_week": bootstrap_ci(diffs_if, stat=mean_stat, clusters=clusters),
+        "reporting_class": reporting_class(len(joined)),
+        "label": LABEL,
+        "cert_candidate": CERT_CANDIDATE,
+        "eval": None,
+        "scoring": "synthetic_or_gated",
+        "notes": [
+            "signed per-game loss diffs L_c−L_if; CI on MEAN; B=10000 seed 20261101",
+            "negative mean = challenger improved (lower loss than control)",
+        ],
+    }
+    diffs_mkt = [r["signed_diff_vs_market"] for r in joined if "signed_diff_vs_market" in r]
+    if diffs_mkt and len(diffs_mkt) == len(joined):
+        result["mean_signed_diff_vs_market"] = mean_stat(diffs_mkt)
+        result["bootstrap_game_vs_market"] = bootstrap_ci(diffs_mkt, stat=mean_stat)
+        result["mae_market"] = paired_mae([r["err_market"] for r in joined])
+        result["delta_mae_vs_market"] = paired_mae(err_c) - result["mae_market"]
+    return result
+
+
 def run_eval_score(
     frozen: FrozenCohort,
     outcomes: Mapping[str, Mapping[str, Any]],
@@ -409,16 +588,11 @@ def run_eval_score(
     market_points: Sequence[Mapping[str, Any]] | None = None,
     bootstrap_b: int = BOOT_B,
     bootstrap_seed: int = BOOT_SEED,
+    one_run_path: Any = None,
+    alex_go_id: str | None = None,
+    eligible_cohorts: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Single EVAL score pass. Refused until CoS one-run bind after Alex GO."""
-    if exec_bind != COS_ONE_RUN_BIND or exec_bind is None:
-        raise EvalRefuse(
-            "EXEC scoring refused until independent Alex preflight GO and "
-            "CoS one-run bind of FROZEN_MANIFEST (G7). "
-            f"got exec_bind={exec_bind!r}"
-        )
-    # The bind token is not issued in this package. The branch below is
-    # scaffolding only; tests never pass the production bind.
+    """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS."""
     if not frozen.sealed_before_outcome_join:
         raise EvalRefuse("cohort was not sealed before outcome join")
     rehash = freeze_forecast_cohort(frozen.payload)
@@ -426,22 +600,41 @@ def run_eval_score(
         raise EvalRefuse("forecast/cohort hash mismatch — refuse scoring")
     if bootstrap_b != BOOT_B or bootstrap_seed != BOOT_SEED:
         raise EvalRefuse("bootstrap hyperparameters are frozen")
+    if exec_bind in (None, COS_ONE_RUN_BIND) or not load_one_run(one_run_path):
+        raise EvalRefuse(
+            "EXEC scoring refused until independent Alex preflight GO and "
+            "CoS one-run bind of FROZEN_MANIFEST (G7). "
+            f"got exec_bind={exec_bind!r}"
+        )
+    try:
+        record = verify_one_run(
+            load_one_run(one_run_path),
+            forecast_sha256=frozen.forecast_sha256,
+            cohort_sha256=frozen.cohort_sha256,
+            exec_bind=exec_bind,
+            alex_go_id=alex_go_id,
+        )
+    except OneRunRefuse as exc:
+        raise EvalRefuse(f"one-run bind refused: {exc}") from exc
 
-    rows = []
-    for gid in frozen.game_ids:
-        out = outcomes.get(gid)
-        if not out:
-            continue
-        if int(out.get("season") or 0) in SEALED_SEASONS:
-            raise EvalRefuse(f"outcome {gid} is 2024–26")
-        rows.append(gid)
-    # Never invent ATS/OU probabilities from continuous draws.
-    return {
-        "refused": False,
-        "n_joined": len(rows),
-        "note": "scaffolding path only; token is not issued in t5107u builder package",
-        "eval": "NOT_AUTHORIZED_IN_THIS_PACKAGE",
-    }
+    allow = list(frozen.game_ids)
+    if eligible_cohorts:
+        if not eligible_cohorts.get("sealed_after_eligibility_before_outcome_join"):
+            raise EvalRefuse("eligible cohorts were not sealed before outcome join")
+        allow = list((eligible_cohorts.get("margin_cohort") or {}).get("game_ids") or [])
+    scored = run_paired_margin_eval(
+        list(frozen.payload.get("forecasts") or []),
+        outcomes,
+        eligible_game_ids=allow,
+        market_points=market_points,
+        bootstrap_b=bootstrap_b,
+        bootstrap_seed=bootstrap_seed,
+    )
+    scored["eval"] = "REAL_EVAL_GATED_PATH"
+    scored["scoring"] = "authorized_one_run_only"
+    scored["one_run_bind_id"] = record["bind_id"]
+    scored["alex_go_id"] = record["alex_go_id"]
+    return scored
 
 
 def refuse_invented_ats_ou_probs(draws: Iterable[Any]) -> None:

@@ -58,22 +58,67 @@ REQUIRED_FIELDS = (
 )
 
 # Exact artifacts that block 2020–23 IF reconstruction on this box.
+# if_tree_6ca03716 is fetched via ordinary git (not a missing-source claim).
 KNOWN_MISSING_ARTIFACTS = (
     {
         "artifact": "RECON_MATRIX_2020_2023_REG",
         "detail": "only 2017 W7–W17 RECON_MATRIX exists (b56be146 / 7be71acff)",
+        "owner": "t4873u / paper §2 reconstruction matrix",
+        "dependent_fields": [
+            "offense_index_home",
+            "offense_index_away",
+            "defense_index_home",
+            "defense_index_away",
+            "home_off_epa_5g",
+            "away_off_epa_5g",
+            "home_def_epa_allowed_5g",
+            "away_def_epa_allowed_5g",
+            "home_pass_rate_5g",
+            "away_pass_rate_5g",
+            "home_success_offense_5g",
+            "away_success_offense_5g",
+            "home_success_defense_allowed_5g",
+            "away_success_defense_allowed_5g",
+            "matchup_diff_off_epa_5g",
+            "matchup_diff_def_epa_allowed_5g",
+            "matchup_diff_success_rate_5g",
+            "matchup_diff_pressure_generated_5g",
+            "matchup_diff_pressure_allowed_5g",
+            "matchup_diff_red_zone_td_rate_5g",
+        ],
     },
     {
         "artifact": "b41f4b43_hist_inputs",
-        "detail": "IF hist inputs reconstruction MISSING (t4873u / paper §2)",
-    },
-    {
-        "artifact": "if_tree_6ca03716",
-        "detail": "frozen IF checkout 6ca03716fe52930332d5ffba302c312a651980cc not mounted",
+        "detail": "IF hist inputs reconstruction MISSING (t4873u / paper §2); no invented efficiency/index formulas",
+        "owner": "t4873u / b41f4b43 efficiency contract",
+        "dependent_fields": [
+            "offense_index_home",
+            "offense_index_away",
+            "defense_index_home",
+            "defense_index_away",
+            "home_off_epa_5g",
+            "away_off_epa_5g",
+            "home_def_epa_allowed_5g",
+            "away_def_epa_allowed_5g",
+            "home_pass_rate_5g",
+            "away_pass_rate_5g",
+            "home_success_offense_5g",
+            "away_success_offense_5g",
+            "home_success_defense_allowed_5g",
+            "away_success_defense_allowed_5g",
+            "matchup_diff_off_epa_5g",
+            "matchup_diff_def_epa_allowed_5g",
+            "matchup_diff_success_rate_5g",
+            "matchup_diff_pressure_generated_5g",
+            "matchup_diff_pressure_allowed_5g",
+            "matchup_diff_red_zone_td_rate_5g",
+        ],
     },
     {
         "artifact": "archived_IF_mus_2020_2023",
         "detail": "no in-repo IF mus @ 6ca03716 for 2020–23 REG (2017 only)",
+        "owner": "IF archive / 6ca03716 consume lineage",
+        "dependent_fields": ["if_margin_mu (archived)"],
     },
 )
 
@@ -138,15 +183,20 @@ def resolve_if_margin(
     archived: Mapping[str, Any] | None = None,
     recon_packet: Mapping[str, Any] | None = None,
     reconstructed_margin_mu: float | None = None,
-    if_tree_present: bool = False,
+    if_tree_present: bool | None = None,
     allow_silent_drop: bool = False,
+    produce: bool = True,
 ) -> IFResolution:
-    """Resolve IF margin. Archived pin wins; else reconstructed; else block.
+    """Resolve IF margin. Archived pin wins; else produce reconstructed μ; else block.
 
-    ``allow_silent_drop`` is accepted only so tests can prove it is refused.
+    ``reconstructed_margin_mu`` and ``if_tree_present`` are accepted only so the
+    consume path can be refused. ``allow_silent_drop`` is accepted only so
+    tests can prove it is refused.
     """
     if allow_silent_drop:
         raise IFRefuse("G3 forbids silent IF drop; IF arm must remain labeled")
+    if reconstructed_margin_mu is not None:
+        raise IFRefuse("produce-μ required; supplied reconstructed μ is not authorized")
 
     if archived:
         tip = archived.get("if_tip") or archived.get("tip")
@@ -178,26 +228,42 @@ def resolve_if_margin(
     if missing:
         artifacts.append("RECON_MATRIX_2020_2023_REG")
         artifacts.append("b41f4b43_hist_inputs")
-    if not if_tree_present:
-        artifacts.append("if_tree_6ca03716")
-    if reconstructed_margin_mu is None:
-        artifacts.append("reconstructed_IF_margin_mu")
 
-    if (
-        not missing
-        and if_tree_present
-        and reconstructed_margin_mu is not None
-    ):
+    if not missing and produce:
+        from .if_produce import IFProduceRefuse, produce_if_mu
+
+        try:
+            produced = produce_if_mu(recon_packet or {})
+        except IFProduceRefuse as exc:
+            detail = str(exc)
+            if "not found" in detail or "worktree" in detail:
+                artifacts.append("if_tree_6ca03716")
+            notes = [
+                "IF control retained as a blocked scoring leg (not dropped).",
+                "Challenger mC depends on mIF — challenger blocked for this game.",
+                f"produce-μ refused: {detail}",
+            ]
+            return IFResolution(
+                game_id=game_id,
+                status="blocked",
+                label=LABEL_BLOCKED,
+                margin_mu=None,
+                source="blocked",
+                missing_fields=missing,
+                missing_artifacts=sorted(set(artifacts)),
+                notes=notes,
+            )
         return IFResolution(
             game_id=game_id,
             status="reconstructed",
             label=LABEL_RECONSTRUCTED,
-            margin_mu=float(reconstructed_margin_mu),
-            source="reconstructed_if_consume",
+            margin_mu=float(produced["if_margin_mu"]),
+            source="reconstructed_if_produce",
             parameter_status="rebuilt_inputs_pre_2022_or_asof",
             notes=[
-                "newly reconstructed IF forecast; not an archived 6ca03716 output",
+                "newly reconstructed IF forecast produced from frozen 6ca03716; not an archived output",
                 "algorithm pin frozen; inputs labeled reconstructed",
+                f"seed={produced['seed']} simulations={produced['simulations']}",
             ],
         )
 
@@ -207,8 +273,6 @@ def resolve_if_margin(
     ]
     if missing:
         notes.append("missing DERIVED_PREGAME fields: " + ", ".join(missing))
-    if not if_tree_present:
-        notes.append("frozen IF tree 6ca03716 is not mounted on this worker")
     return IFResolution(
         game_id=game_id,
         status="blocked",

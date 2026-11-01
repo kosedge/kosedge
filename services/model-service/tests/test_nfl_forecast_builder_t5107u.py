@@ -14,7 +14,6 @@ from src.services.nfl_t5107u.builder import (
 from src.services.nfl_t5107u.if_control import (
     IF_TIP,
     LABEL_ARCHIVED,
-    LABEL_RECONSTRUCTED,
     REQUIRED_FIELDS,
     resolve_if_margin,
     retained_if_arm,
@@ -167,19 +166,17 @@ def test_archived_vs_reconstructed_if_labels():
     assert archived.label == LABEL_ARCHIVED
     assert archived.margin_mu == 3.25
 
-    recon = resolve_if_margin(
-        "g2",
-        recon_packet=_complete_packet("g2"),
-        reconstructed_margin_mu=2.5,
-        if_tree_present=True,
-    )
-    assert recon.status == "reconstructed"
-    assert recon.label == LABEL_RECONSTRUCTED
-    assert recon.parameter_status != "original_frozen"
+    with pytest.raises(Exception, match="produce-μ"):
+        resolve_if_margin(
+            "g2",
+            recon_packet=_complete_packet("g2"),
+            reconstructed_margin_mu=2.5,
+            if_tree_present=True,
+        )
 
     blocked = resolve_if_margin("g3")
     assert blocked.status == "blocked"
-    assert "if_tree_6ca03716" in blocked.missing_artifacts
+    assert "if_tree_6ca03716" not in blocked.missing_artifacts
     assert "RECON_MATRIX_2020_2023_REG" in blocked.missing_artifacts
     assert set(REQUIRED_FIELDS) <= set(blocked.missing_fields)
 
@@ -321,5 +318,6 @@ def test_frozen_manifest_seals_design_input_fit_before_eval():
     blockers = {row["artifact"] for row in manifest["blockers"]}
     assert "b41f4b43_hist_inputs" in blockers
     assert "RECON_MATRIX_2020_2023_REG" in blockers
-    assert "if_tree_6ca03716" in blockers
+    assert "if_tree_6ca03716" not in blockers
     assert "outcomes_2023_score_only" in blockers
+    assert "kickoff_utc_timezone" in blockers

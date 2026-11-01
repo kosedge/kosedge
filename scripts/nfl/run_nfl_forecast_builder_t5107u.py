@@ -21,7 +21,8 @@ sys.path.insert(0, str(ROOT / "services" / "model-service"))
 
 from src.services.nfl_t5107u.builder import BuilderRefuse, build_forecasts  # noqa: E402
 from src.services.nfl_t5107u.evaluator import EvalRefuse, freeze_forecast_cohort  # noqa: E402
-from src.services.nfl_t5107u.manifest import DEFAULT_PATH, seal_frozen_manifest  # noqa: E402
+from src.services.nfl_t5107u.inputs import prepare_local_inputs  # noqa: E402
+from src.services.nfl_t5107u.manifest import DEFAULT_PATH, append_input_bindings, seal_frozen_manifest  # noqa: E402
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -35,11 +36,34 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--allow-eval-generation", action="store_true")
     parser.add_argument("--frozen-manifest-sealed", action="store_true")
     parser.add_argument("--score", action="store_true", help="Refused: EXEC scoring is not authorized")
+    parser.add_argument("--prepare-inputs", action="store_true", help="Extract/hash 2020–23 PBP schedule+results")
+    parser.add_argument("--append-bindings", action="store_true", help="Append input bindings; keep design seal")
     args = parser.parse_args(argv)
 
     if args.score:
         print("REFUSED: EXEC scoring is not authorized in this package (G7).", file=sys.stderr)
         return 2
+
+    if args.prepare_inputs:
+        payload = prepare_local_inputs()
+        print(json.dumps({k: payload[k] for k in ("_path", "bindings_sha256", "prepared") if k in payload}, indent=2))
+        if not args.append_bindings:
+            return 0
+
+    if args.append_bindings:
+        payload = append_input_bindings(args.manifest_path)
+        print(
+            json.dumps(
+                {
+                    "path": payload.get("_path"),
+                    "design_seal_sha256": payload.get("design_seal_sha256"),
+                    "design_seal_is_forecast_freeze": payload.get("design_seal_is_forecast_freeze"),
+                    "appended_manifest_sha256": payload.get("appended_manifest_sha256"),
+                },
+                indent=2,
+            )
+        )
+        return 0
 
     if args.seal_manifest:
         payload = seal_frozen_manifest(args.manifest_path)
