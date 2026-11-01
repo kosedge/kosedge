@@ -1,7 +1,7 @@
 # NFL odds reader inventory — 2020–2023 only
 
 Generated: `2026-11-01T15:51:47Z`
-Code pin: `5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610` on `cursor/nfl-odds-reader-cutoff-join-17f0`
+Code pin: `5042d496f46b3f6255fa67ff7e6b14cf3540051d` on `cursor/nfl-odds-reader-cutoff-join-17f0`
 
 Read-only. CERT=0. No merge. Paid Odds paused. 2024–25 contents not opened.
 

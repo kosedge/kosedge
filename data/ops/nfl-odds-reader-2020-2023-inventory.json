@@ -9,7 +9,7 @@
   "overlap_warning": "Old harvest / lake / jsonl / csv / sqlite counts may overlap. Do not add them into a current deduplicated total.",
   "code_pin": {
     "branch": "cursor/nfl-odds-reader-cutoff-join-17f0",
-    "commit": "5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610",
+    "commit": "5042d496f46b3f6255fa67ff7e6b14cf3540051d",
     "base": "origin/restore-working-ui",
     "base_commit": "5bcb6e88eab562ca400bdcfd71ba28ca4e8a9610",
     "reader": "services/model-service/src/services/nfl_odds_reader.py",
