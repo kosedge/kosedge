@@ -10,7 +10,7 @@ Authority: Alex RE-PREFLIGHT RETURN **69710b9c** · CoS ORDER t5110u · same #69
 | PR                                        | https://github.com/kosedge/kosedge/pull/691 (DRAFT)                |
 | Parent tip (Alex inspected)               | `7168c3794dc5b2d69b58e32a271adea9ff6fb624`                         |
 | Implementation parent                     | `2058e78b3cb328fd318a3e7c9f239cffc96b4658`                         |
-| This tip                                  | `TIP_PENDING`                                                      |
+| This tip                                  | `c71057f7c1c3aeb882a064b81aaaafb98610ddde`                         |
 | Design seal (not a forecast freeze)       | `e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd` |
 | Appended manifest sha256 (canonical body) | `f3e5e4b96bf1f2983ceba13ec455f4f39f040e5bb43bedcdf0a81b927bb34711` |
 | Alex RETURN                               | `69710b9c40b3a19b0d259bb65a208d9ecc15296b49eae9843aa356d250c9c62a` |
