@@ -32,6 +32,8 @@ from .dev_research import (  # noqa: F401
     LABEL as DEV_RESEARCH_LABEL,
     run_dev_research_e2e,
 )
+from .dev_research_cohort import run_dev_research_cohort  # noqa: F401
+from .r2_eval_runner import run_eval_score_r2  # noqa: F401
 from .evaluator import (  # noqa: F401
     EvalRefuse,
     freeze_eligible_cohorts,

@@ -538,6 +538,9 @@ def run_dev_research_e2e(
 
 def write_dev_research_record(record: Mapping[str, Any], dest: Path) -> Path:
     refuse_preserved_t5116u_path(dest)
+    from .outcome_gate import refuse_overwrite_first_case_record
+
+    refuse_overwrite_first_case_record(dest)
     dest = Path(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(record, indent=2, default=str) + "\n"

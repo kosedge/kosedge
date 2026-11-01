@@ -27,6 +27,10 @@ PRESERVED_T5116U = frozenset(
         "CURSOR_ONE_EXEC_RESULT_t5116u.md",
     }
 )
+PRESERVED_T5119U_FIRST_CASE = frozenset({"DEV_RESEARCH_t5119u_R2B.json"})
+FIRST_CASE_RECORD_SHA256 = "621f0f843da8ac219d284448ac1cd3124bbcdba629c6df49a54b3b518fad30fc"
+FIRST_CASE_FILE_SHA256 = "8cb9a2a1dbde5be9f27370622ab46934117b86e3e0597daf78374b9c5fe27a82"
+FIRST_CASE_GAME_ID = "2020_02_CIN_CLE"
 
 
 class OutcomeGateRefuse(ValueError):
@@ -82,4 +86,30 @@ def refuse_preserved_t5116u_path(path: Any) -> None:
     if name in PRESERVED_T5116U:
         raise OutcomeGateRefuse(
             f"refusing write to preserved t5116u artifact {name} — look SPENT"
+        )
+
+
+def refuse_preloaded_scoring_outcomes(outcomes: Any) -> None:
+    """R2 runner rule: preloaded scoring outcomes are forbidden (t5116u exposure)."""
+    if outcomes is not None:
+        raise OutcomeGateRefuse(
+            "R2 runner refuses preloaded scoring outcomes — pass outcome_loader only "
+            "(outcomes=None required)"
+        )
+
+
+def refuse_overwrite_first_case_record(path: Any) -> None:
+    """Refuse the sealed first-case repo file (any dest that resolves to it)."""
+    if path is None:
+        return
+    from pathlib import Path
+
+    dest = Path(path).resolve()
+    sealed = (
+        Path(__file__).resolve().parents[5]
+        / "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5119u_R2B.json"
+    )
+    if dest == sealed.resolve():
+        raise OutcomeGateRefuse(
+            "refusing overwrite of preserved first-case DEV_RESEARCH_t5119u_R2B.json"
         )
