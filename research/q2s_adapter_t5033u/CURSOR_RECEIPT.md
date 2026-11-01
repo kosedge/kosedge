@@ -14,3 +14,4 @@
 | #684 ACCEPT         | 9982d42f undisturbed                                             |
 | Implementation head | `71f769b0efb324eff1cf4ef5b091e42fd9c01399`                       |
 | t5035u guard        | Alex RETURN `404a4ab2` · `d47934ca` — FREEZE_ADDENDUM rows `0d6a5e14` |
+| t5039u feasibility  | `FEASIBILITY_2017_W7_W17_t5039u.md` — READ-ONLY; W7–W17 IF+Q2s **not available**; no look |

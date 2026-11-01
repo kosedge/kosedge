@@ -9,6 +9,12 @@ t5035u guard-only follow-up: Alex RETURN `404a4ab2` · `d47934ca`.
 `PROTOCOL_FREEZE` is not rewritten; rows are bound in
 `artifacts/FREEZE_ADDENDUM.json` (`0d6a5e14…`). No second look.
 
+t5039u READ-ONLY feasibility (no rebuild / score / look): 2017 REG W7–W17
+excluding the consumed 70 is **not** available for the same IF+Q2s
+comparison — sealed IF `forecast_margin` exists only on `SCORE_RESULTS`
+`2b9f302e`. See `FEASIBILITY_2017_W7_W17_t5039u.md`. Cite t5039u ·
+d7e0a6bc · 404a4ab2 · 2b9f302e. Guard @ `2805f42e` undisturbed.
+
 ## What this is
 
 New research-tree offline **Layer-2** adapter (pattern `score_t4910u` @
