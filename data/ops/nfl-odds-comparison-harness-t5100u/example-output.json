@@ -1,0 +1,199 @@
+{
+  "schema_version": "nfl-odds-comparison-report-v1",
+  "label": "SYNTHETIC",
+  "cert_candidate": 0,
+  "purpose": "synthetic_comparison_only",
+  "refused": false,
+  "refuse_reason": null,
+  "refuse_detail": null,
+  "generated_at_utc": "2026-11-01T16:15:07Z",
+  "code_pin": {
+    "branch": "cursor/nfl-odds-comparison-harness-t5100u-f42c",
+    "commit": "f6b5b4c3ec4021fc64d86a36c863b483246be78b",
+    "package_a_head": "f6b5b4c3ec4021fc64d86a36c863b483246be78b",
+    "reader": "services/model-service/src/services/nfl_odds_reader.py",
+    "harness": "services/model-service/src/services/nfl_odds_comparison_harness.py",
+    "clear_tip": "4f3b9666",
+    "alex_pass_ro": "db8d27a2",
+    "cos_accept": "7f9f7918"
+  },
+  "inputs": {
+    "forecast_path": "data/ops/nfl-odds-comparison-harness-t5100u/fixtures/example-forecasts.json",
+    "manifest_path": "data/ops/nfl-odds-comparison-harness-t5100u/fixtures/example-odds-manifest.json",
+    "forecast_n": 2,
+    "game_n": 2,
+    "quote_n": 5,
+    "synthetic_outcome_n": 2
+  },
+  "join": {
+    "eligible_n": 4,
+    "excluded_n": 1,
+    "identical_duplicate_n": 0,
+    "reason_tallies": {
+      "post_cutoff": 1
+    },
+    "latest_per_book_market_n": 4,
+    "cutoff_rule": "source timestamp <= explicit forecast_cutoff; never substitute a later/closing quote",
+    "sign_convention": "odds_api_spread_home_negative_when_home_favored"
+  },
+  "comparison_n": 4,
+  "excluded_n": 1,
+  "identical_duplicate_n": 0,
+  "reason_tallies": {
+    "post_cutoff": 1
+  },
+  "comparisons": [
+    {
+      "game_id": "2020_01_HOU_KC",
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home_abbr": "KC",
+      "away_abbr": "HOU",
+      "book": "draftkings",
+      "market": "spread",
+      "forecast_line": -9.0,
+      "market_line": -9.5,
+      "line_delta": 0.5,
+      "forecast_p": 0.58,
+      "implied_p": 0.5238095238095238,
+      "p_delta": 0.056190476190476124,
+      "home_line": -9.5,
+      "away_line": 9.5,
+      "price": -110.0,
+      "captured_at": "2020-09-10T19:50:00Z",
+      "forecast_cutoff": "2020-09-10T20:00:00Z",
+      "quote_provenance": "synthetic_owned_odds",
+      "forecast_provenance": "synthetic_forecast",
+      "sign_convention": "odds_api_spread_home_negative_when_home_favored",
+      "synthetic_outcome": {
+        "home_score": 34,
+        "away_score": 20,
+        "result": "home_cover",
+        "source": "synthetic"
+      }
+    },
+    {
+      "game_id": "2020_01_HOU_KC",
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home_abbr": "KC",
+      "away_abbr": "HOU",
+      "book": "draftkings",
+      "market": "total",
+      "forecast_line": 53.5,
+      "market_line": 54.5,
+      "line_delta": -1.0,
+      "forecast_p": 0.51,
+      "implied_p": 0.5192307692307693,
+      "p_delta": -0.009230769230769265,
+      "home_line": 54.5,
+      "away_line": null,
+      "price": -108.0,
+      "captured_at": "2020-09-10T19:50:00Z",
+      "forecast_cutoff": "2020-09-10T20:00:00Z",
+      "quote_provenance": "synthetic_owned_odds",
+      "forecast_provenance": "synthetic_forecast",
+      "sign_convention": "odds_api_spread_home_negative_when_home_favored",
+      "synthetic_outcome": {
+        "home_score": 34,
+        "away_score": 20,
+        "result": "under",
+        "source": "synthetic"
+      }
+    },
+    {
+      "game_id": "2020_01_HOU_KC",
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home_abbr": "KC",
+      "away_abbr": "HOU",
+      "book": "draftkings",
+      "market": "moneyline",
+      "forecast_line": null,
+      "market_line": null,
+      "line_delta": null,
+      "forecast_p": 0.72,
+      "implied_p": 0.7619047619047619,
+      "p_delta": -0.04190476190476189,
+      "home_line": null,
+      "away_line": null,
+      "price": -320.0,
+      "captured_at": "2020-09-10T19:50:00Z",
+      "forecast_cutoff": "2020-09-10T20:00:00Z",
+      "quote_provenance": "synthetic_owned_odds",
+      "forecast_provenance": "synthetic_forecast",
+      "sign_convention": "odds_api_spread_home_negative_when_home_favored",
+      "synthetic_outcome": {
+        "home_score": 34,
+        "away_score": 20,
+        "result": "home",
+        "source": "synthetic"
+      }
+    },
+    {
+      "game_id": "2020_01_NYJ_BUF",
+      "event_id": "evt-buf-nyj",
+      "season": 2020,
+      "game_date": "2020-09-13",
+      "home_abbr": "BUF",
+      "away_abbr": "NYJ",
+      "book": "fanduel",
+      "market": "spread",
+      "forecast_line": 2.5,
+      "market_line": 3.0,
+      "line_delta": -0.5,
+      "forecast_p": 0.47,
+      "implied_p": 0.5121951219512195,
+      "p_delta": -0.04219512195121955,
+      "home_line": 3.0,
+      "away_line": -3.0,
+      "price": -105.0,
+      "captured_at": "2020-09-13T16:30:00Z",
+      "forecast_cutoff": "2020-09-13T17:00:00Z",
+      "quote_provenance": "synthetic_owned_odds",
+      "forecast_provenance": "synthetic_forecast",
+      "sign_convention": "odds_api_spread_home_negative_when_home_favored",
+      "synthetic_outcome": {
+        "home_score": 17,
+        "away_score": 17,
+        "result": "home_cover",
+        "source": "synthetic"
+      }
+    }
+  ],
+  "excluded": [
+    {
+      "reason": "post_cutoff",
+      "detail": "2020-09-10T20:15:00Z > 2020-09-10T20:00:00Z",
+      "row": {
+        "event_id": "evt-kc-hou",
+        "season": 2020,
+        "game_date": "2020-09-10",
+        "home": "Kansas City Chiefs",
+        "away": "Houston Texans",
+        "book": "draftkings",
+        "market": "spreads",
+        "spread_home": -10.5,
+        "price_home": -110,
+        "price_away": -110,
+        "captured_at": "2020-09-10T20:15:00Z",
+        "snapshot_kind": "close",
+        "source": "synthetic",
+        "provenance": "synthetic_owned_odds"
+      }
+    }
+  ],
+  "notes": [
+    "CERT=0. DRAFT\u2260merge.",
+    "Synthetic forecasts and synthetic outcomes only.",
+    "No fitting, scoring, retuning, or real-outcome EVAL.",
+    "Package A reader reused; later/closing quotes are never substituted.",
+    "CLEAR 4f3b9666; Alex PASS_RO db8d27a2; CoS ACCEPT 7f9f7918."
+  ],
+  "eval": null,
+  "scoring": null,
+  "fitting": null
+}
