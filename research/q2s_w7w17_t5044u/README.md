@@ -11,18 +11,18 @@ NEW bounded package. Does **not** amend [#685](https://github.com/kosedge/kosedg
 | Gate | Result |
 |---|---|
 | 1 Identity seal | **PASS** — 165/165 scheduled identities from games `4fe1cdd7`, sealed before PBP |
-| 2 Reconstruct | **STOP** — PBP `84eacd96` **not on this VM** (no fetch). W7–W8 reused from owned Stage B #674 after hash match. W9–W17 not reconstructed. |
+| 2 Reconstruct | **PASS** after owned PBP remount — sha **84eacd96** verified. W7–W17 rebuilt with `7e77c57f`. W7–W8 parity vs Stage B `cd9af285` PASS. |
 
 Stop for **Alex pre-IF**. Phases 3–6 are design-only in `later_phases/FREEZE_DESIGN.md`.
 
-## Completeness (this run)
+## Completeness (Gate 2 complete)
 
 | Class | N | Reason |
 |---:|---:|---|
 | Identity sealed | 165 | all 4fe1cdd7 2017 REG W7–W17 |
-| Complete 27/27 (recon available) | 22 | Stage B W7–W8 reuse |
-| Partial T2 (recon available) | 6 | sealed bye-return; cells retained missing |
-| Recon not attempted | 137 | W9–W17; PBP `84eacd96` absent |
+| Complete 27/27 | 141 | rebuilt T1–T5 |
+| Partial T2 | 24 | sealed bye-return; cells retained missing |
+| Recon not attempted | 0 | PBP verified |
 | Outcome-excluded | 0 | forbidden |
 | Unexpected missing | 0 | — |
 
@@ -35,11 +35,14 @@ W7 hash `6030f79c…` and W8 hash `3bf4a0dc…` match Stage B t4923u.
 ```bash
 python3 research/q2s_w7w17_t5044u/gate1/seal_identities.py
 python3 research/q2s_w7w17_t5044u/gate2/run_gate2.py
+python3 research/q2s_w7w17_t5044u/gate2/rebuild_w7w17.py
 python3 research/q2s_w7w17_t5044u/tests/test_gate1_identity_seal.py -v
 python3 research/q2s_w7w17_t5044u/tests/test_gate2_stop_and_reuse.py -v
+python3 research/q2s_w7w17_t5044u/tests/test_gate2_rebuild_w7w17.py -v
 ```
 
-Gate 1 aborts if PBP is already remounted. Gate 2 writes the PBP blocker and transfers W7–W8 only.
+Gate 1 aborts if PBP is already remounted (seal already on this branch).
+Gate 2 rebuild requires hash-verified `84eacd96` at the documented restage path.
 
 ## Locks
 

@@ -1,0 +1,11 @@
+{
+  "bytes": 19050401,
+  "clear_tip": "12763c08",
+  "fetched": false,
+  "path": "/workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet",
+  "receipt_tip": "cce2414a",
+  "sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+  "sha8": "84eacd96",
+  "transfer": "uploads/t5044u_pbp_2017_84eacd96.parquet.gz gunzip owned",
+  "verified": true
+}

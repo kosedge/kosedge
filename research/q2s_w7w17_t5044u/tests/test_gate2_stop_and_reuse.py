@@ -21,15 +21,13 @@ class Gate2StopAndReuseTests(unittest.TestCase):
             (PACKET / "gate2" / "stage_b_w7w8" / "COVERAGE_SLICE.json").read_text()
         )
 
-    def test_pbp_not_verified_no_fetch(self) -> None:
-        self.assertFalse(self.pbp["verified"])
-        self.assertFalse(self.pbp["fetched"])
-        self.assertFalse(self.pbp["present"])
-        self.assertIn("84eacd96", self.pbp["blocker"])
+    def test_pbp_verified_on_resume(self) -> None:
+        self.assertTrue(self.pbp["verified"])
         self.assertEqual(
-            self.pbp["expected_sha256"],
+            self.pbp["sha256"],
             "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
         )
+        self.assertFalse(self.pbp.get("fetched", False))
 
     def test_no_if_q2s_look(self) -> None:
         self.assertFalse(self.status["if_invoked"])
@@ -57,12 +55,11 @@ class Gate2StopAndReuseTests(unittest.TestCase):
             },
         )
 
-    def test_w9_w17_blocked(self) -> None:
-        self.assertEqual(self.status["w9_w17"]["n_identity"], 137)
-        self.assertFalse(self.status["w9_w17"]["reconstructed"])
-        self.assertEqual(self.status["completeness"]["n_recon_not_attempted"], 137)
+    def test_w9_w17_now_reconstructed(self) -> None:
+        self.assertEqual(self.status["completeness"]["n_recon_not_attempted"], 0)
         self.assertEqual(self.status["completeness"]["n_unexpected_missing"], 0)
         self.assertEqual(self.status["completeness"]["n_outcome_excluded"], 0)
+        self.assertEqual(self.status["completeness"]["n_complete_27_of_27"], 141)
 
     def test_transferred_matrix_pin(self) -> None:
         self.assertEqual(

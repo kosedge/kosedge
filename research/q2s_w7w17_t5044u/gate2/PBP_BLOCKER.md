@@ -1,16 +1,13 @@
-# Gate 2 STOP — PBP `84eacd96` not on this VM
+# Gate 2 PBP — resolved on owned transfer
 
-Exact blocker (no fetch, no spend, no substitute):
+Prior STOP (head `aac861fa` / receipt `cce2414a`): file absent.
 
-`/workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet`
-is absent. Sealed sha256
-`84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710`
-was **not** verified.
+Resume under CLEAR **12763c08**: owned gunzip of
+`t5044u_pbp_2017_84eacd96.parquet.gz` →
+`data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet`.
 
-W9–W17 (137 identities) are **not reconstructed**.
+Verified sha256 `84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710`
+(sha8 **84eacd96**). Not a fetch. Parquet is **not** committed.
 
-W7–W8 (28) reused from owned Stage B #674 matrix `cd9af285` after Gate 1
-week-hash match. 22 complete / 6 T2 partial. No IF invoke.
-
-Escalate remount of owned PBP `84eacd96` to ChatGPT / Owner before any
-W9–W17 rebuild. Do not score unexpected holes.
+W7–W17 reconstructed. W7–W8 rebuilt values match Stage B matrix `cd9af285`
+within sealed tolerances. Stop for Alex pre-IF.

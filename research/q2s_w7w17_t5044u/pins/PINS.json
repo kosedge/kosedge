@@ -21,8 +21,10 @@
   "pbp_2017": {
     "sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
     "sha8": "84eacd96",
-    "verified_this_run": false,
-    "present_this_vm": false
+    "verified_this_run": true,
+    "present_this_vm": true,
+    "path": "data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet",
+    "committed": false
   },
   "as_of": "cf514078",
   "fit": "70db070d",
