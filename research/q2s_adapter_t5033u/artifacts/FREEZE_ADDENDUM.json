@@ -1,0 +1,41 @@
+{
+  "ticket": "t5035u",
+  "alex_return": "404a4ab2",
+  "cite": "d47934ca",
+  "parent_ticket": "t5033u",
+  "pr": 685,
+  "executed_head": "672d7957b2e41fb98de6d79d573260ebcdefbbf3",
+  "label": "RETRO_FIT / DEV_RESEARCH",
+  "cert": 0,
+  "nfl": "NO-GO",
+  "mode": "guard_only_addendum",
+  "rewrote_protocol_freeze": false,
+  "rewrote_appendix_o": false,
+  "second_look": false,
+  "weight_change": false,
+  "note": "PROTOCOL_FREEZE omitted scored q2s rows; this addendum binds them. Original PROTOCOL_FREEZE and Appendix O result artifacts are not rewritten.",
+  "emitted_rows": {
+    "path": "artifacts/q2s_rows_t5033u.json",
+    "sha256": "0d6a5e144ef13c3ebe65d601404445909fb3f504ec3e9e34b101db643b8423ae",
+    "sha8": "0d6a5e14"
+  },
+  "executed_artifacts_unchanged": {
+    "artifacts/PROTOCOL_FREEZE.json": "0bd9993a48bf305acbf1a2576e4f89ac3605169f73ec94a1bf2a6e7031b3727b",
+    "artifacts/APPENDIX_O.json": "be7013251a45206d5ac21da58dd35636d941d02309ddd10a3c5100b86cc0bdae",
+    "APPENDIX_O_COMPARISON.md": "058b6a9c66393ed7344b1a05fc7ba44734d96948ff6d315c5f6700018b7fc44e",
+    "artifacts/LOOK_CONSUMED.json": "16aaf2ffb70377754901de514f1fc1bb714a61917ce5828ee51d4abe1dab603e"
+  },
+  "post_look_guard_amends": {
+    "compare_appendix_o.py": {
+      "executed_sha256": "0a5bf11112eb9dcfb3e316ba4ab50e93a769d4db10d157e58d993dadacbadf99",
+      "guard_sha256": "a516c5c17477b4bcc3ed37fc12c1023e5ba48fbf8bfaafe4eab4cfff5f78ea29",
+      "ticket": "t5035u",
+      "reason": "Alex RETURN 404a4ab2 M1: re-hash PROTOCOL_FREEZE entries + rows addendum before any look. Guard only."
+    }
+  },
+  "new_guard_module": {
+    "path": "q2s/freeze_guard.py",
+    "sha256": "d6cf9d0eacad7f1c364cd1bc7fd6a16eff3bef285609f1a5a4bce540354b566c",
+    "note": "Not in original PROTOCOL_FREEZE. Re-hash helper only."
+  }
+}

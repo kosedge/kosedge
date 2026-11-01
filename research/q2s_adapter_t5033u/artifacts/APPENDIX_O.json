@@ -1,0 +1,96 @@
+{
+  "amend": "fdf91ff5",
+  "annotate_684_accept": "9982d42f undisturbed",
+  "cert": 0,
+  "delegation": "d7e0a6bc",
+  "descriptive": {
+    "per_week": {
+      "2": {
+        "delta_mae": -0.4881741579095534,
+        "mae_baseline": 11.66044479028636,
+        "mae_candidate": 11.172270632376806,
+        "n": 14.0,
+        "rmse_baseline": 14.087126778747644,
+        "rmse_candidate": 13.439065446415349
+      },
+      "3": {
+        "delta_mae": -0.2990229935204777,
+        "mae_baseline": 11.803656419508663,
+        "mae_candidate": 11.504633425988184,
+        "n": 16.0,
+        "rmse_baseline": 15.942414525777371,
+        "rmse_candidate": 15.593470033109172
+      },
+      "4": {
+        "delta_mae": -0.2456054300780334,
+        "mae_baseline": 12.482413064490387,
+        "mae_candidate": 12.236807634412354,
+        "n": 16.0,
+        "rmse_baseline": 17.092812500440232,
+        "rmse_candidate": 16.44495183178401
+      },
+      "5": {
+        "delta_mae": -0.29156768234442454,
+        "mae_baseline": 8.117732735314966,
+        "mae_candidate": 7.826165052970543,
+        "n": 14.0,
+        "rmse_baseline": 10.954111761944032,
+        "rmse_candidate": 11.07033553442803
+      },
+      "6": {
+        "delta_mae": -0.321262282810748,
+        "mae_baseline": 8.665750919184774,
+        "mae_candidate": 8.344488636374026,
+        "n": 10.0,
+        "rmse_baseline": 9.26044318219295,
+        "rmse_candidate": 9.054407010055941
+      }
+    },
+    "rmse_baseline": 14.170850904952937,
+    "rmse_candidate": 13.77448892630254
+  },
+  "guardrails": "52c79ee6",
+  "holds": [
+    "CERT=0",
+    "NFL NO-GO",
+    "no merge/deploy/pub/bet",
+    "no second look",
+    "no second weight"
+  ],
+  "label": "RETRO_FIT / DEV_RESEARCH",
+  "limitations": [
+    "Paired game-bootstrap treats games as exchangeable; repeated-team and same-week dependence is not modeled.",
+    "Research-consumed exposure: this 70-game SCORE_RESULTS tip is now used for one Q2s look.",
+    "w=0.5 was not selected on these outcomes; a failed or inconclusive result does not authorize another weight.",
+    "Baseline IF mus/sigma/MC draws were not redrawn; no candidate win/ATS/OU probabilities are claimed.",
+    "Original Q2 EVAL 03a4dd90 remains CLOSED.",
+    "No market/edge/CERT claim.",
+    "RETRO_FIT / DEV_RESEARCH"
+  ],
+  "looked_at_utc": "2026-11-01T02:33:36Z",
+  "n": 70,
+  "nfl": "NO-GO",
+  "primary": {
+    "bootstrap": {
+      "B": 10000.0,
+      "ci_hi": 0.04933341875003935,
+      "ci_lo": -0.6999891541067707,
+      "mean": -0.3263294767034192,
+      "n": 70.0,
+      "seed": 20261101.0
+    },
+    "ci_crosses_zero": true,
+    "delta_mae": -0.3263294767034192,
+    "mae_baseline": 10.7447015184893,
+    "mae_candidate": 10.418372041785883,
+    "n": 70,
+    "sign_note": "Negative \u0394 = point improvement; CI crossing zero = inconclusive, NOT FQ PASS"
+  },
+  "q2_eval_closed": "03a4dd90 CLOSED",
+  "score_results_control": "2b9f302e",
+  "ticket": "t5033u",
+  "verdict": "INCONCLUSIVE \u2014 CI crosses zero; NOT FQ PASS",
+  "weight": 0.5,
+  "weight_note": "predeclared research candidate \u2014 NOT fitted or proven optimum",
+  "work_package": "2db90f76"
+}

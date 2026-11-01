@@ -34,3 +34,10 @@ apps/android-odds-widget/local.properties
 # Ops artifacts / reports (not source; keep CI format check focused)
 data/
 services/model-service/data/
+
+# Q2s research sealed pins + generated adapter artifacts (do not reformat)
+research/q2s_adapter_t5033u/frozen/FROZEN_CONFIG_Q2PB_t5009u.json
+research/q2s_adapter_t5033u/frozen/FROZEN_CONFIG_Q2PB_t5009u.md
+research/q2s_adapter_t5033u/artifacts/
+research/q2s_adapter_t5033u/data/
+research/q2s_adapter_t5033u/pins/

@@ -1,0 +1,76 @@
+# SCORE_RESULTS
+
+Forecast vs realized. SU is **not** ATS-vs-0. No 2017 odds consumed.
+
+| game_id | f_margin | r_margin | f_total | r_total | f_wp_h | IF pick | real SU | IF SU |
+|---|---|---|---|---|---|---|---|---|
+| 2017_02_ARI_IND | -0.092 | -3.0 | 44.03 | 29.0 | 0.496 | AWAY | AWAY | True |
+| 2017_02_BUF_CAR | 1.570 | 6.0 | 43.25 | 12.0 | 0.537 | HOME | HOME | True |
+| 2017_02_CLE_BAL | 7.796 | 14.0 | 42.96 | 34.0 | 0.702 | HOME | HOME | True |
+| 2017_02_DAL_DEN | 0.258 | 25.0 | 44.57 | 59.0 | 0.507 | HOME | HOME | True |
+| 2017_02_DET_NYG | -4.880 | -14.0 | 44.87 | 34.0 | 0.352 | AWAY | AWAY | True |
+| 2017_02_GB_ATL | 1.672 | 11.0 | 45.89 | 57.0 | 0.539 | HOME | HOME | True |
+| 2017_02_HOU_CIN | 1.745 | -4.0 | 43.76 | 22.0 | 0.556 | HOME | AWAY | False |
+| 2017_02_MIN_PIT | 1.022 | 17.0 | 47.62 | 35.0 | 0.528 | HOME | HOME | True |
+| 2017_02_NE_NO | 1.817 | -16.0 | 46.93 | 56.0 | 0.545 | HOME | AWAY | False |
+| 2017_02_NYJ_OAK | 7.612 | 25.0 | 46.54 | 65.0 | 0.704 | HOME | HOME | True |
+| 2017_02_PHI_KC | 0.478 | 7.0 | 45.11 | 47.0 | 0.521 | HOME | HOME | True |
+| 2017_02_SF_SEA | 1.581 | 3.0 | 43.88 | 21.0 | 0.548 | HOME | HOME | True |
+| 2017_02_TEN_JAX | 7.223 | -21.0 | 43.85 | 53.0 | 0.697 | HOME | AWAY | False |
+| 2017_02_WAS_LA | 6.422 | -7.0 | 44.25 | 47.0 | 0.680 | HOME | AWAY | False |
+| 2017_03_ATL_DET | 0.974 | -4.0 | 44.63 | 56.0 | 0.533 | HOME | AWAY | False |
+| 2017_03_BAL_JAX | -2.346 | 37.0 | 42.54 | 51.0 | 0.424 | AWAY | HOME | False |
+| 2017_03_CIN_GB | 4.463 | 3.0 | 44.50 | 51.0 | 0.626 | HOME | HOME | True |
+| 2017_03_CLE_IND | 1.111 | 3.0 | 43.78 | 59.0 | 0.530 | HOME | HOME | True |
+| 2017_03_DAL_ARI | 1.116 | -11.0 | 44.38 | 45.0 | 0.530 | HOME | AWAY | False |
+| 2017_03_DEN_BUF | -2.206 | 10.0 | 43.26 | 42.0 | 0.433 | AWAY | HOME | False |
+| 2017_03_HOU_NE | 0.916 | 3.0 | 44.46 | 69.0 | 0.522 | HOME | HOME | True |
+| 2017_03_KC_LAC | -5.571 | -14.0 | 47.49 | 34.0 | 0.347 | AWAY | AWAY | True |
+| 2017_03_LA_SF | -2.543 | -2.0 | 43.81 | 80.0 | 0.427 | AWAY | AWAY | True |
+| 2017_03_MIA_NYJ | -6.187 | 14.0 | 47.58 | 26.0 | 0.327 | AWAY | HOME | False |
+| 2017_03_NO_CAR | 7.532 | -21.0 | 45.19 | 47.0 | 0.703 | HOME | AWAY | False |
+| 2017_03_NYG_PHI | 4.967 | 3.0 | 44.69 | 51.0 | 0.636 | HOME | HOME | True |
+| 2017_03_OAK_WAS | -1.666 | 17.0 | 46.15 | 37.0 | 0.455 | AWAY | HOME | False |
+| 2017_03_PIT_CHI | -5.491 | 6.0 | 46.22 | 40.0 | 0.356 | AWAY | HOME | False |
+| 2017_03_SEA_TEN | 0.552 | 6.0 | 44.24 | 60.0 | 0.515 | HOME | HOME | True |
+| 2017_03_TB_MIN | -2.519 | 17.0 | 45.42 | 51.0 | 0.428 | AWAY | HOME | False |
+| 2017_04_BUF_ATL | 3.230 | -6.0 | 44.40 | 40.0 | 0.595 | HOME | AWAY | False |
+| 2017_04_CAR_NE | 0.699 | -3.0 | 45.73 | 63.0 | 0.516 | HOME | AWAY | False |
+| 2017_04_CHI_GB | 3.271 | 21.0 | 45.71 | 49.0 | 0.593 | HOME | HOME | True |
+| 2017_04_CIN_CLE | 0.381 | -24.0 | 43.99 | 38.0 | 0.509 | HOME | AWAY | False |
+| 2017_04_DET_MIN | 0.771 | -7.0 | 44.77 | 21.0 | 0.525 | HOME | AWAY | False |
+| 2017_04_IND_SEA | 1.501 | 28.0 | 43.58 | 64.0 | 0.547 | HOME | HOME | True |
+| 2017_04_JAX_NYJ | -1.934 | 3.0 | 43.71 | 43.0 | 0.444 | AWAY | HOME | False |
+| 2017_04_LA_DAL | 0.350 | -5.0 | 44.95 | 65.0 | 0.508 | HOME | AWAY | False |
+| 2017_04_NO_MIA | 2.160 | -20.0 | 47.33 | 20.0 | 0.563 | HOME | AWAY | False |
+| 2017_04_NYG_TB | 4.193 | 2.0 | 45.56 | 48.0 | 0.620 | HOME | HOME | True |
+| 2017_04_OAK_DEN | 1.120 | 6.0 | 45.00 | 26.0 | 0.530 | HOME | HOME | True |
+| 2017_04_PHI_LAC | -3.819 | -2.0 | 45.95 | 50.0 | 0.400 | AWAY | AWAY | True |
+| 2017_04_PIT_BAL | 0.240 | -17.0 | 42.85 | 35.0 | 0.503 | HOME | AWAY | False |
+| 2017_04_SF_ARI | 3.749 | 3.0 | 44.64 | 33.0 | 0.615 | HOME | HOME | True |
+| 2017_04_TEN_HOU | -1.593 | 43.0 | 44.45 | 71.0 | 0.454 | AWAY | HOME | False |
+| 2017_04_WAS_KC | 2.507 | 9.0 | 44.99 | 49.0 | 0.569 | HOME | HOME | True |
+| 2017_05_ARI_PHI | 2.628 | 27.0 | 45.51 | 41.0 | 0.585 | HOME | HOME | True |
+| 2017_05_BAL_OAK | 1.313 | -13.0 | 44.47 | 47.0 | 0.536 | HOME | AWAY | False |
+| 2017_05_BUF_CIN | -2.044 | 4.0 | 43.09 | 36.0 | 0.446 | AWAY | HOME | False |
+| 2017_05_CAR_DET | 1.130 | -3.0 | 43.95 | 51.0 | 0.537 | HOME | AWAY | False |
+| 2017_05_GB_DAL | -0.832 | -4.0 | 45.91 | 66.0 | 0.485 | AWAY | AWAY | True |
+| 2017_05_JAX_PIT | 2.893 | -21.0 | 43.40 | 39.0 | 0.584 | HOME | AWAY | False |
+| 2017_05_KC_HOU | -2.003 | -8.0 | 44.63 | 76.0 | 0.442 | AWAY | AWAY | True |
+| 2017_05_LAC_NYG | 0.981 | -5.0 | 46.10 | 49.0 | 0.536 | HOME | AWAY | False |
+| 2017_05_MIN_CHI | -0.745 | -3.0 | 45.58 | 37.0 | 0.481 | AWAY | AWAY | True |
+| 2017_05_NE_TB | 2.000 | -5.0 | 47.51 | 33.0 | 0.561 | HOME | AWAY | False |
+| 2017_05_NYJ_CLE | -2.783 | -3.0 | 44.80 | 31.0 | 0.423 | AWAY | AWAY | True |
+| 2017_05_SEA_LA | 2.999 | -6.0 | 44.89 | 26.0 | 0.594 | HOME | AWAY | False |
+| 2017_05_SF_IND | 1.931 | 3.0 | 43.91 | 49.0 | 0.549 | HOME | HOME | True |
+| 2017_05_TEN_MIA | -0.212 | 6.0 | 45.68 | 26.0 | 0.494 | AWAY | HOME | False |
+| 2017_06_CHI_BAL | 4.245 | -3.0 | 43.79 | 51.0 | 0.626 | HOME | AWAY | False |
+| 2017_06_CLE_HOU | 4.122 | 16.0 | 44.65 | 50.0 | 0.615 | HOME | HOME | True |
+| 2017_06_GB_MIN | -0.217 | 13.0 | 46.10 | 33.0 | 0.489 | AWAY | HOME | False |
+| 2017_06_IND_TEN | 1.598 | 14.0 | 44.12 | 58.0 | 0.544 | HOME | HOME | True |
+| 2017_06_LAC_OAK | 2.049 | -1.0 | 46.64 | 33.0 | 0.563 | HOME | AWAY | False |
+| 2017_06_LA_JAX | 0.988 | -10.0 | 43.44 | 44.0 | 0.526 | HOME | AWAY | False |
+| 2017_06_NE_NYJ | 0.849 | -7.0 | 45.97 | 41.0 | 0.509 | HOME | AWAY | False |
+| 2017_06_PHI_CAR | 1.066 | -5.0 | 45.18 | 51.0 | 0.528 | HOME | AWAY | False |
+| 2017_06_PIT_KC | 3.168 | -6.0 | 45.50 | 32.0 | 0.584 | HOME | AWAY | False |
+| 2017_06_TB_ARI | 0.204 | 5.0 | 45.14 | 71.0 | 0.506 | HOME | HOME | True |
