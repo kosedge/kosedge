@@ -1,0 +1,68 @@
+{
+  "status": "FAILED",
+  "error": "G5 30% per-season HOLD tripped \u2014 refuse scoring",
+  "bind_id": "39909c61ce9429896bd20edd37259803cad0e11f1e2d3c3828ee04c9faab1830",
+  "eval_n": 449,
+  "quote_eligible_n": 132,
+  "dev_reg_n": 437,
+  "wildcard_n": 6,
+  "partials_119": 119,
+  "g5_hold": {
+    "hold_threshold": 0.3,
+    "any_season_hold": true,
+    "seasons": [
+      {
+        "declared_n": 256,
+        "excluded_n": 46,
+        "exclusion_rate": 0.1796875,
+        "hold_threshold": 0.3,
+        "hold": false,
+        "season": 2020,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 262,
+        "pin_minus_declared": 6
+      },
+      {
+        "declared_n": 272,
+        "excluded_n": 45,
+        "exclusion_rate": 0.16544117647058823,
+        "hold_threshold": 0.3,
+        "hold": false,
+        "season": 2021,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 272,
+        "pin_minus_declared": 0
+      },
+      {
+        "declared_n": 271,
+        "excluded_n": 224,
+        "exclusion_rate": 0.8265682656826568,
+        "hold_threshold": 0.3,
+        "hold": true,
+        "season": 2022,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 271,
+        "pin_minus_declared": 0
+      },
+      {
+        "declared_n": 272,
+        "excluded_n": 187,
+        "exclusion_rate": 0.6875,
+        "hold_threshold": 0.3,
+        "hold": true,
+        "season": 2023,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 272,
+        "pin_minus_declared": 0
+      }
+    ],
+    "quote_eligibility": "REQUIRED_FAIL_CLOSED_t5116u",
+    "notes": [
+      "Declared n is owned PBP REG, not games.csv week\u226418.",
+      "2020 pin 262 \u2212 declared 256 = 6 Wild Card rows preserved, not extra REG games.",
+      "Owned-quote eligibility must still run before metrics; HOLD is reapplied after that filter."
+    ]
+  },
+  "second_look": false,
+  "failed_at_utc": "2026-11-01T20:25:27Z"
+}
