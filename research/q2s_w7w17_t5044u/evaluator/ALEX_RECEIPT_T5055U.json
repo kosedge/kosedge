@@ -1,0 +1,30 @@
+{
+  "ticket": "t5055u",
+  "role": "Alex_independent",
+  "binds_final_freeze_sha256": "60b5f4b0140c147e519e3c2d904bbc0f162282af79e542e779499569b0f87291",
+  "binds_final_freeze_sha8": "60b5f4b0",
+  "authorizes_look": true,
+  "alex_ro_tip": "3e499d6c9b8a048e91447c889d22260015f1cdef4c598133b177842f6a19da26",
+  "alex_ro_tip_sha8": "3e499d6c",
+  "bound_head": "d1d513a3e8e7a483e3e45d35b2928f03927a3851",
+  "bound_head_sha8": "d1d513a3",
+  "bound_predictions": {
+    "PROTOCOL_FREEZE": "90774bd4",
+    "IF_MUS": "32e97434",
+    "q2s_rows": "55d8c8bc",
+    "RECON_MATRIX": "b56be146"
+  },
+  "history_does_not_authorize": [
+    "a4652323",
+    "6b71b106",
+    "8b80ad7b"
+  ],
+  "owner_clear": "12763c08",
+  "owner_corrections": "a276faca",
+  "cos_accept_tip": "6b9b2722",
+  "cos_authorize_tip": "06247e62",
+  "scope": "ONE exploratory look gate only \u2014 Alex independent receipt binds FINAL_PRELOOK_FREEZE_t5055u 60b5f4b0; does not execute look; Cursor runs look_real once after CoS execute receipt also planted; Alex RO after LOOK_CONSUMED",
+  "look_run": false,
+  "cert": 0,
+  "sealed_at_edt": "2026-11-01T00:06:39-0400"
+}
