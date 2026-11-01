@@ -59,6 +59,7 @@ Quote join / metrics / EXEC were **not** run.
 | ------------------- | ------------------------------------------------------------------ |
 | Alex RETURN tip     | `ee5af10b7a8e0333a40f57a674882756b2549bdcfc6ff13ba6f64055a160c829` |
 | parent #692 HEAD    | `2a4e22174b11c44f430cb80a9ee3f08f86beaaa9`                         |
+| this impl tip       | `a9668540c94e76fcf6f542097c0bf350c213b2a4`                         |
 | EVAL 449            | `fac21ebed92b6ef91e27095026751f088440dbd81e47ca368d256c580b58d7f0` |
 | DEV REG 437         | `92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49` |
 | NON_REG_WILDCARD 6  | `f81d381e0553a82a87a86b5e1a980cc2792be2e12f73203e48aa1435199d0722` |
