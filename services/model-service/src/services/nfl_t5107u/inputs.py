@@ -19,6 +19,10 @@ SEALED_SEASONS = (2024, 2025, 2026)
 DEFAULT_ARCHIVE = Path("/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01")
 DEFAULT_OUT = Path("data/ops/nfl-forecast-builder-t5107u/inputs")
 PUBLISHER_SHA_2023 = "4aeca98ebe6357c5f1a13165533007964605d1f17bd54561937769b952c67613"
+GAMES_SHA256 = "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8"
+OUTCOMES_SHA256 = "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081"
+QUOTE_MANIFEST_SHA256 = "6a1c1b378b91abd5e2ed185649536468192147057a2ea535a23e8ae5b14e6984"
+QUOTE_MANIFEST_PATH = "data/ops/nfl-odds-reader-2020-2023-join-manifest.json"
 SOURCE_SHA = {
     2020: "a7700b519197ec563aabf24ce7791896d8803f67cb73a45fcad0e8ae7db7245f",
     2021: "35f5d0b49905daa7d63ace9710346c48c7eb32ce0b8686629491954308013354",
@@ -285,25 +289,32 @@ def input_availability_table(all_sha: str = "", y2023_sha: str = "") -> list[dic
             "dependent_field": "2023 REG outcomes + in-season Q2 as-of scores",
         },
         {
-            "input": "games.csv 4fe1cdd7 kickoff TZ",
-            "status": "MISSING",
-            "sha256_or_pin": "4fe1cdd7",
-            "owner": "Q2 extract / t5009u games.csv",
-            "dependent_field": "kickoff_utc (KO−60 cutoff; same-day as-of order)",
+            "input": "games.csv 4fe1cdd7 kickoff_utc",
+            "status": "hashed",
+            "sha256_or_pin": GAMES_SHA256,
+            "owner": "Q2 / t4422u games.csv (pin sidecar 8155fd194; Alex 69710b9c verified UTC Z for 2020–23)",
+            "dependent_field": "kickoff_utc (NOT missing; explicit UTC Z for 2020–23; KO−60 cutoff)",
         },
         {
             "input": "outcomes extract 50bda875",
-            "status": "MISSING",
-            "sha256_or_pin": "50bda875",
-            "owner": "Q2 outcomes extract (stops 2022)",
-            "dependent_field": "pre-2023 scored history file; 2023 scores now from PBP extract",
+            "status": "hashed",
+            "sha256_or_pin": OUTCOMES_SHA256,
+            "owner": "Q2 outcomes_2013_2022_score_only.csv (stops 2022; pin sidecar 8155fd194)",
+            "dependent_field": "pre-2023 scored history; 2023 REG scores from PBP extract 253e178b",
         },
         {
-            "input": "PBP start_time timezone",
-            "status": "MISSING",
+            "input": "quote/odds join manifest 2020–23",
+            "status": "hashed",
+            "sha256_or_pin": QUOTE_MANIFEST_SHA256,
+            "owner": "t5105u reader join manifest",
+            "dependent_field": QUOTE_MANIFEST_PATH,
+        },
+        {
+            "input": "PBP start_time raw (not used for kickoff_utc)",
+            "status": "available",
             "sha256_or_pin": "",
-            "owner": "t5105u TZ contract / nflverse start_time is naive",
-            "dependent_field": "kickoff_utc",
+            "owner": "nflverse start_time is naive; kickoff_utc comes from games.csv 4fe1cdd7 (UTC Z)",
+            "dependent_field": "start_time_raw only — kickoff_utc is bound from games.csv",
         },
         {
             "input": "b41f4b43 hist inputs / efficiency+index 5g",

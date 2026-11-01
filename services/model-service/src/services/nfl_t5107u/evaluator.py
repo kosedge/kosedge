@@ -31,7 +31,7 @@ from src.services.nfl_odds_reader import (
 )
 
 from .builder import SCHEMA as FORECAST_SCHEMA
-from .one_run import OneRunRefuse, load_one_run, verify_one_run
+from .one_run import OneRunRefuse, consume_one_run, load_one_run, verify_one_run
 from .q2 import SEALED_SEASONS
 
 CUTOFF_MINUTES = 60
@@ -262,12 +262,17 @@ def delta_mae(errors_a: Sequence[float], errors_b: Sequence[float]) -> float:
 def bootstrap_ci(
     values: Sequence[float],
     *,
-    stat=paired_mae,
+    stat=None,
     b: int = BOOT_B,
     seed: int = BOOT_SEED,
     clusters: Sequence[str] | None = None,
 ) -> dict[str, Any]:
-    """Game-unit (default) or week-cluster bootstrap. 95% interval."""
+    """Game-unit (default) or week-cluster bootstrap. 95% interval.
+
+    Default statistic is MEAN of signed per-game loss diffs (not |x| MAE).
+    """
+    if stat is None:
+        stat = mean_stat
     if seed != BOOT_SEED:
         raise EvalRefuse(f"bootstrap seed is frozen at {BOOT_SEED}")
     if b != BOOT_B:
@@ -591,6 +596,12 @@ def run_eval_score(
     one_run_path: Any = None,
     alex_go_id: str | None = None,
     eligible_cohorts: Mapping[str, Any] | None = None,
+    live_effective_spec_sha256: str | None = None,
+    live_code_sha256: str | None = None,
+    live_input_sha256: str | None = None,
+    code_root: Any = None,
+    spec_path: Any = None,
+    input_path: Any = None,
 ) -> dict[str, Any]:
     """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS."""
     if not frozen.sealed_before_outcome_join:
@@ -613,6 +624,12 @@ def run_eval_score(
             cohort_sha256=frozen.cohort_sha256,
             exec_bind=exec_bind,
             alex_go_id=alex_go_id,
+            live_effective_spec_sha256=live_effective_spec_sha256,
+            live_code_sha256=live_code_sha256,
+            live_input_sha256=live_input_sha256,
+            code_root=code_root,
+            spec_path=spec_path,
+            input_path=input_path,
         )
     except OneRunRefuse as exc:
         raise EvalRefuse(f"one-run bind refused: {exc}") from exc
@@ -630,10 +647,15 @@ def run_eval_score(
         bootstrap_b=bootstrap_b,
         bootstrap_seed=bootstrap_seed,
     )
+    try:
+        consume_one_run(one_run_path, record["bind_id"])
+    except OneRunRefuse as exc:
+        raise EvalRefuse(f"one-run consume refused: {exc}") from exc
     scored["eval"] = "REAL_EVAL_GATED_PATH"
     scored["scoring"] = "authorized_one_run_only"
     scored["one_run_bind_id"] = record["bind_id"]
     scored["alex_go_id"] = record["alex_go_id"]
+    scored["one_run_status"] = "CONSUMED"
     return scored
 
 

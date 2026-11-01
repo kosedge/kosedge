@@ -12,6 +12,7 @@ from src.services.nfl_t5107u.evaluator import (
     BOOT_B,
     BOOT_SEED,
     EvalRefuse,
+    bootstrap_ci,
     freeze_eligible_cohorts,
     freeze_forecast_cohort,
     mean_stat,
@@ -34,7 +35,7 @@ from src.services.nfl_t5107u.inputs import (
     prepare_local_inputs,
 )
 from src.services.nfl_t5107u.manifest import DESIGN_SEAL_SHA256, append_input_bindings, design_body_sha256
-from src.services.nfl_t5107u.one_run import OneRunRefuse, bind_one_run, load_one_run
+from src.services.nfl_t5107u.one_run import OneRunRefuse, bind_one_run, load_one_run, verify_one_run
 from src.services.nfl_t5107u.q2 import Game
 
 
@@ -213,11 +214,26 @@ def test_real_eval_gate_and_one_run_numerical_path(tmp_path: Path):
         exec_bind=rec["bind_id"],
         alex_go_id="ALEX_GO_SYNTHETIC",
         one_run_path=path,
+        live_effective_spec_sha256="1" * 64,
+        live_code_sha256="2" * 64,
+        live_input_sha256="3" * 64,
     )
     assert scored["n"] == 1
     assert scored["mae_challenger"] == pytest.approx(1.0)
     assert scored["mean_signed_diff_vs_if"] == pytest.approx(-3.0)
     assert scored["one_run_bind_id"] == rec["bind_id"]
+    assert scored["one_run_status"] == "CONSUMED"
+    with pytest.raises(EvalRefuse, match="CONSUMED|second execution"):
+        run_eval_score(
+            frozen,
+            outcomes,
+            exec_bind=rec["bind_id"],
+            alex_go_id="ALEX_GO_SYNTHETIC",
+            one_run_path=path,
+            live_effective_spec_sha256="1" * 64,
+            live_code_sha256="2" * 64,
+            live_input_sha256="3" * 64,
+        )
 
 
 def test_input_availability_lists_missing_with_owner_and_field():
@@ -225,6 +241,11 @@ def test_input_availability_lists_missing_with_owner_and_field():
     by = {row["input"]: row for row in table}
     assert by["b41f4b43 hist inputs / efficiency+index 5g"]["status"] == "MISSING"
     assert "offense_index_home" in by["b41f4b43 hist inputs / efficiency+index 5g"]["dependent_field"]
+    assert by["games.csv 4fe1cdd7 kickoff_utc"]["status"] == "hashed"
+    assert by["games.csv 4fe1cdd7 kickoff_utc"]["sha256_or_pin"].startswith("4fe1cdd7f2eb")
+    assert "NOT missing" in by["games.csv 4fe1cdd7 kickoff_utc"]["dependent_field"]
+    assert by["outcomes extract 50bda875"]["sha256_or_pin"].startswith("50bda875daa8")
+    assert by["quote/odds join manifest 2020–23"]["status"] == "hashed"
     assert by["frozen IF tree 6ca03716"]["status"] == "available"
     assert by["Stage C / scored columns"]["status"] == "FORBIDDEN"
     assert set(PERMITTED_SEASONS) == {2020, 2021, 2022, 2023}
@@ -264,3 +285,54 @@ def test_append_preserves_design_seal(tmp_path: Path):
     assert appended["appended_manifest_sha256"]
     assert design_body_sha256(appended) == DESIGN_SEAL_SHA256
     assert appended["input_bindings"]["availability"]
+
+
+def test_bootstrap_ci_default_is_mean_of_signed_diffs():
+    diffs = [-3.0, -2.0, -2.5, -4.0]
+    ci = bootstrap_ci(diffs)
+    assert ci["B"] == BOOT_B
+    assert ci["seed"] == BOOT_SEED
+    assert ci["point"] == pytest.approx(mean_stat(diffs))
+    assert ci["ci95"][1] < 0
+    assert ci["verdict"] == "CI_EXCLUDES_ZERO"
+
+
+def test_verify_one_run_rehashes_code_spec_input(tmp_path: Path):
+    path = tmp_path / "ONE_RUN.json"
+    rec = bind_one_run(
+        effective_spec_sha256="1" * 64,
+        code_sha256="2" * 64,
+        input_sha256="3" * 64,
+        forecast_sha256="4" * 64,
+        cohort_sha256="5" * 64,
+        alex_go_id="ALEX_GO_REHASH",
+        path=path,
+    )
+    ok = verify_one_run(
+        rec,
+        forecast_sha256="4" * 64,
+        cohort_sha256="5" * 64,
+        exec_bind=rec["bind_id"],
+        alex_go_id="ALEX_GO_REHASH",
+        live_effective_spec_sha256="1" * 64,
+        live_code_sha256="2" * 64,
+        live_input_sha256="3" * 64,
+    )
+    assert ok["bind_id"] == rec["bind_id"]
+    with pytest.raises(OneRunRefuse, match="code hash mismatch at run time"):
+        verify_one_run(
+            rec,
+            forecast_sha256="4" * 64,
+            cohort_sha256="5" * 64,
+            exec_bind=rec["bind_id"],
+            live_effective_spec_sha256="1" * 64,
+            live_code_sha256="9" * 64,
+            live_input_sha256="3" * 64,
+        )
+    with pytest.raises(OneRunRefuse, match="runtime rehash"):
+        verify_one_run(
+            rec,
+            forecast_sha256="4" * 64,
+            cohort_sha256="5" * 64,
+            exec_bind=rec["bind_id"],
+        )

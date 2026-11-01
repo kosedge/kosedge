@@ -4,17 +4,8 @@
   "cert_candidate": 0,
   "design_seal_is_forecast_freeze": false,
   "archive": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01",
-  "permitted_seasons": [
-    2020,
-    2021,
-    2022,
-    2023
-  ],
-  "sealed_seasons_not_opened": [
-    2024,
-    2025,
-    2026
-  ],
+  "permitted_seasons": [2020, 2021, 2022, 2023],
+  "sealed_seasons_not_opened": [2024, 2025, 2026],
   "prepared": [
     {
       "name": "schedule_results_2020_2023",
@@ -88,25 +79,32 @@
       "dependent_field": "2023 REG outcomes + in-season Q2 as-of scores"
     },
     {
-      "input": "games.csv 4fe1cdd7 kickoff TZ",
-      "status": "MISSING",
-      "sha256_or_pin": "4fe1cdd7",
-      "owner": "Q2 extract / t5009u games.csv",
-      "dependent_field": "kickoff_utc (KO\u221260 cutoff; same-day as-of order)"
+      "input": "games.csv 4fe1cdd7 kickoff_utc",
+      "status": "hashed",
+      "sha256_or_pin": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+      "owner": "Q2 / t4422u games.csv (pin sidecar 8155fd194; Alex 69710b9c verified UTC Z for 2020\u201323)",
+      "dependent_field": "kickoff_utc (NOT missing; explicit UTC Z for 2020\u201323; KO\u221260 cutoff)"
     },
     {
       "input": "outcomes extract 50bda875",
-      "status": "MISSING",
-      "sha256_or_pin": "50bda875",
-      "owner": "Q2 outcomes extract (stops 2022)",
-      "dependent_field": "pre-2023 scored history file; 2023 scores now from PBP extract"
+      "status": "hashed",
+      "sha256_or_pin": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+      "owner": "Q2 outcomes_2013_2022_score_only.csv (stops 2022; pin sidecar 8155fd194)",
+      "dependent_field": "pre-2023 scored history; 2023 REG scores from PBP extract 253e178b"
     },
     {
-      "input": "PBP start_time timezone",
-      "status": "MISSING",
+      "input": "quote/odds join manifest 2020\u201323",
+      "status": "hashed",
+      "sha256_or_pin": "6a1c1b378b91abd5e2ed185649536468192147057a2ea535a23e8ae5b14e6984",
+      "owner": "t5105u reader join manifest",
+      "dependent_field": "data/ops/nfl-odds-reader-2020-2023-join-manifest.json"
+    },
+    {
+      "input": "PBP start_time raw (not used for kickoff_utc)",
+      "status": "available",
       "sha256_or_pin": "",
-      "owner": "t5105u TZ contract / nflverse start_time is naive",
-      "dependent_field": "kickoff_utc"
+      "owner": "nflverse start_time is naive; kickoff_utc comes from games.csv 4fe1cdd7 (UTC Z)",
+      "dependent_field": "start_time_raw only \u2014 kickoff_utc is bound from games.csv"
     },
     {
       "input": "b41f4b43 hist inputs / efficiency+index 5g",
@@ -150,5 +148,5 @@
     "Design seal e5bb682d is not a forecast freeze."
   ],
   "prepared_at_utc": "2026-11-01T18:52:12Z",
-  "bindings_sha256": "38f788455ba3bd671a0abe974223948eeeaad7a12df8a90a384eb0ad1139093d"
+  "bindings_sha256": "662d7c3e4a47c08da9042d6498a93f6c8d97334e0fc95189f93866238eb59c5e"
 }
