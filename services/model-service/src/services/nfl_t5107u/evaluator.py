@@ -585,13 +585,21 @@ def run_paired_margin_eval(
     clusters = [r["season_week"] for r in joined]
     err_c = [r["err_challenger"] for r in joined]
     err_if = [r["err_if"] for r in joined]
+    diffs_mkt = [r["signed_diff_vs_market"] for r in joined if "signed_diff_vs_market" in r]
+    market_complete = bool(diffs_mkt) and len(diffs_mkt) == len(joined)
     result: dict[str, Any] = {
         "n": len(joined),
+        "n_by_season": _count_seasons(joined),
         "games": joined,
         "mae_challenger": paired_mae(err_c),
         "mae_if": paired_mae(err_if),
+        "rmse_challenger": paired_rmse(err_c),
+        "rmse_if": paired_rmse(err_if),
+        "bias_challenger": paired_bias(err_c),
+        "bias_if": paired_bias(err_if),
         "delta_mae_vs_if": paired_mae(err_c) - paired_mae(err_if),
         "mean_signed_diff_vs_if": mean_stat(diffs_if),
+        "per_season": _per_season_table(joined, include_market=market_complete),
         "bootstrap_game": bootstrap_ci(diffs_if, stat=mean_stat),
         "bootstrap_season_week": bootstrap_ci(diffs_if, stat=mean_stat, clusters=clusters),
         "reporting_class": reporting_class(len(joined)),
@@ -604,13 +612,62 @@ def run_paired_margin_eval(
             "negative mean = challenger improved (lower loss than control)",
         ],
     }
-    diffs_mkt = [r["signed_diff_vs_market"] for r in joined if "signed_diff_vs_market" in r]
-    if diffs_mkt and len(diffs_mkt) == len(joined):
+    if market_complete:
+        err_m = [r["err_market"] for r in joined]
         result["mean_signed_diff_vs_market"] = mean_stat(diffs_mkt)
         result["bootstrap_game_vs_market"] = bootstrap_ci(diffs_mkt, stat=mean_stat)
-        result["mae_market"] = paired_mae([r["err_market"] for r in joined])
+        result["bootstrap_season_week_vs_market"] = bootstrap_ci(
+            diffs_mkt, stat=mean_stat, clusters=clusters
+        )
+        result["mae_market"] = paired_mae(err_m)
+        result["rmse_market"] = paired_rmse(err_m)
+        result["bias_market"] = paired_bias(err_m)
         result["delta_mae_vs_market"] = paired_mae(err_c) - result["mae_market"]
     return result
+
+
+def _count_seasons(games: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = defaultdict(int)
+    for row in games:
+        counts[str(int(row["season"]))] += 1
+    return dict(sorted(counts.items()))
+
+
+def _per_season_table(
+    games: Sequence[Mapping[str, Any]],
+    *,
+    include_market: bool,
+) -> dict[str, Any]:
+    by: dict[int, list[Mapping[str, Any]]] = defaultdict(list)
+    for row in games:
+        by[int(row["season"])].append(row)
+    out: dict[str, Any] = {}
+    for season in sorted(by):
+        rows = by[season]
+        err_c = [r["err_challenger"] for r in rows]
+        err_if = [r["err_if"] for r in rows]
+        diffs = [r["signed_diff_vs_if"] for r in rows]
+        body: dict[str, Any] = {
+            "n": len(rows),
+            "mae_challenger": paired_mae(err_c),
+            "mae_if": paired_mae(err_if),
+            "rmse_challenger": paired_rmse(err_c),
+            "rmse_if": paired_rmse(err_if),
+            "bias_challenger": paired_bias(err_c),
+            "bias_if": paired_bias(err_if),
+            "delta_mae_vs_if": paired_mae(err_c) - paired_mae(err_if),
+            "mean_signed_diff_vs_if": mean_stat(diffs),
+        }
+        if include_market:
+            err_m = [r["err_market"] for r in rows]
+            diffs_m = [r["signed_diff_vs_market"] for r in rows]
+            body["mae_market"] = paired_mae(err_m)
+            body["rmse_market"] = paired_rmse(err_m)
+            body["bias_market"] = paired_bias(err_m)
+            body["delta_mae_vs_market"] = paired_mae(err_c) - paired_mae(err_m)
+            body["mean_signed_diff_vs_market"] = mean_stat(diffs_m)
+        out[str(season)] = body
+    return out
 
 
 def run_eval_score(

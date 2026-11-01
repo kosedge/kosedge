@@ -32,6 +32,7 @@ from src.services.nfl_t5107u.outcome_gate import (
     ScoringOutcomeLoader,
     refuse_overwrite_first_case_record,
 )
+from src.services.nfl_t5107u.r2_byte_rehash import bind_r2_runtime_bytes
 from src.services.nfl_t5107u.r2_eval_runner import run_eval_score_r2
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -103,8 +104,30 @@ def _loader():
     )
 
 
-def _r2_kwargs(path: Path, rec, eligible, loader):
+def _byte_pins(tmp_path: Path, payload: dict | None = None) -> dict:
+    freeze = tmp_path / "freeze.json"
+    freeze.write_text(json.dumps(payload or _eval_payload(), sort_keys=True) + "\n")
+    manifest = tmp_path / "quote_manifest.json"
+    manifest.write_text('{"admitted":true,"note":"tmp-not-r2a"}\n')
+    extract = tmp_path / "quote_extract.jsonl"
+    extract.write_text('{"game_id":"e"}\n')
+    bind_path = tmp_path / "R2_RUNTIME_BYTES.json"
+    bind_r2_runtime_bytes(
+        forecast_file=freeze,
+        quote_manifest_file=manifest,
+        quote_extract_files=[extract],
+        path=bind_path,
+    )
     return dict(
+        forecast_file=freeze,
+        quote_manifest_file=manifest,
+        quote_extract_files=[extract],
+        r2_byte_bind=bind_path,
+    )
+
+
+def _r2_kwargs(path: Path, rec, eligible, loader, *, pins=None):
+    kwargs = dict(
         outcome_loader=loader,
         exec_bind=rec["bind_id"],
         alex_go_id="ALEX_GO_T5125U",
@@ -115,6 +138,8 @@ def _r2_kwargs(path: Path, rec, eligible, loader):
         eligible_cohorts=eligible,
         score_body=lambda *a, **k: {"n": 1, "mae_challenger": 1.0, "mean_signed_diff_vs_if": -1.0},
     )
+    kwargs.update(pins if pins is not None else _byte_pins(path.parent))
+    return kwargs
 
 
 def test_r2_runner_refuses_preloaded_outcomes_loader_count_zero(tmp_path: Path):
@@ -148,7 +173,7 @@ def test_r2_hold_refuse_loader_count_zero(tmp_path: Path):
     assert loader.call_count == 0
 
 
-def test_r2_hash_refuse_loader_count_zero():
+def test_r2_hash_refuse_loader_count_zero(tmp_path: Path):
     payload = _eval_payload()
     frozen = freeze_forecast_cohort(payload)
     tampered = FrozenCohort(
@@ -160,8 +185,9 @@ def test_r2_hash_refuse_loader_count_zero():
         payload=payload,
     )
     loader = _loader()
+    pins = _byte_pins(tmp_path, payload)
     with pytest.raises(EvalRefuse, match="hash mismatch"):
-        run_eval_score_r2(tampered, None, outcome_loader=loader, exec_bind="b" * 64)
+        run_eval_score_r2(tampered, None, outcome_loader=loader, exec_bind="b" * 64, **pins)
     assert loader.call_count == 0
 
 
