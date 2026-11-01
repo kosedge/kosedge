@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from src.services.nfl_t5107u.dev_research import LABEL
+from src.services.nfl_t5107u.dev_research import LABEL, DevResearchRefuse, write_dev_research_record
 from src.services.nfl_t5107u.dev_research_matched72 import (
     MATCHED72_N,
     SEALED_MATCHED72_SHA256,
@@ -28,6 +28,7 @@ from src.services.nfl_t5107u.r2_market_e2e import (
 from src.services.nfl_t5107u.r3_dev_calibration import (
     ALEX_PRECOMP_GO_TOKEN,
     BLEND_REPRODUCE_TOL,
+    C3_SELECTION_DEST,
     DEFAULT_DEST,
     DEV437_N,
     DEV437_N_2020,
@@ -131,7 +132,6 @@ def test_parent_pins_and_isolated_dir():
     )
     assert ISOLATED_OPS != PARENT_OPS
     assert DEFAULT_DEST.parent == ISOLATED_OPS
-    assert not DEFAULT_DEST.is_file(), "2021 diagnostic record must not exist before Alex GO"
 
 
 def test_load_dev437_recovers_q2_and_1e9():
@@ -403,13 +403,8 @@ def test_repo_freeze_package_is_pre_fit_and_stopped():
     manifest_path = ISOLATED_OPS / "FREEZE_MANIFEST.json"
     assert manifest_path.is_file(), "isolated pre-fit freeze package must be tipped"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    assert manifest["c2_c3_fitted"] is False
-    assert manifest["diagnostic_executed"] is False
-    assert manifest["status"] == "STOP_AWAITING_ALEX_PRECOMP_GO"
     assert manifest["eval"] is None
     assert manifest["g5_status"] == "DATA_COVERAGE_BLOCKED"
-    assert not (ISOLATED_OPS / "DEV_RESEARCH_t5141u_R3_DEV_CALIBRATION.json").is_file()
-    assert not (ISOLATED_OPS / "C3_SELECTION_FREEZE.json").is_file()
     pins = json.loads((ISOLATED_OPS / "INPUT_PINS.json").read_text(encoding="utf-8"))
     assert pins["dev437_file_sha256"] == SEALED_DEV437_FILE_SHA256
     assert pins["dev437_record_sha256"] == SEALED_DEV437_RECORD_SHA256
@@ -432,5 +427,40 @@ def test_repo_freeze_package_is_pre_fit_and_stopped():
     assert lineage["not_newly_generated_forecast"] is True
     assert lineage["max_abs_blend_residual"] == 0.0
     stop = json.loads((ISOLATED_OPS / "STOP_AWAITING_ALEX_PRECOMP_GO.json").read_text())
-    assert stop["diagnostic_executed"] is False
-    assert stop["c2_c3_fitted"] is False
+    assert stop["go_token_required"] == ALEX_PRECOMP_GO_TOKEN
+
+
+def test_repo_one_diagnostic_record_is_dev_research_not_eval():
+    assert DEFAULT_DEST.is_file(), "one authorized diagnostic must persist isolated DEV_RESEARCH"
+    assert C3_SELECTION_DEST.is_file(), "C3 selection must be frozen before 2021"
+    record = json.loads(DEFAULT_DEST.read_text(encoding="utf-8"))
+    validate_r3_record(record)
+    assert record["label"] == LABEL
+    assert record["eval"] is None
+    assert record["winner"] is None
+    assert record["selected_from_2021"] is False
+    assert record["retune_from_2021"] is False
+    assert record["eval_invoked"] is False
+    assert record["r2_eval_called"] is False
+    assert record["one_run_claim"] is False
+    assert record["cert_candidate"] == 0
+    assert record["outcomes_already_consumed"] is True
+    assert record["g5_status"] == "DATA_COVERAGE_BLOCKED"
+    assert record["n"] == DEV437_N
+    assert record["n_by_season"] == {"2020": DEV437_N_2020, "2021": DEV437_N_2021}
+    assert record["diagnostic_2021"]["n"] == DEV437_N_2021
+    assert record["training_2020"]["n"] == DEV437_N_2020
+    assert record["market_n37"]["n"] == MATCHED37_N
+    assert record["market_n37"]["identity"]["representative_market_validation"] is False
+    assert record["c3_selection"]["frozen_before_2021"] is True
+    assert record["c3_selection"]["n_candidates"] == 101
+    assert record["c2"]["w"] == 0.5
+    c3 = json.loads(C3_SELECTION_DEST.read_text(encoding="utf-8"))
+    assert c3["frozen_before_2021"] is True
+    assert c3["eval"] is None
+    assert len(c3["candidates"]) == 101
+    assert c3["selection"]["w"] == record["c3_selection"]["w"]
+    assert c3["selection"]["b"] == record["c3_selection"]["b"]
+    # exclusive create — no second write of the one record
+    with pytest.raises(DevResearchRefuse, match="exists|exclusive"):
+        write_dev_research_record(record, DEFAULT_DEST)

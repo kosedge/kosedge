@@ -1,9 +1,10 @@
-# CURSOR ADDENDUM t5141u — R3-DEV-CALIBRATION (pre-fit freeze + STOP) · tip `acffed20`
+# CURSOR ADDENDUM t5141u — R3-DEV-CALIBRATION (one diagnostic + STOP for Phase B RO)
 
 Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5141u **714ced10** · Cos ORDER **1155f43f** · PREFLIGHT **a23e01dd**
 Parent #693 HEAD **316345fa**. Isolated new directory. No EVAL EXEC. No claim.
-**STOP — awaiting Alex pre-computation GO.** Diagnostic not executed.
+Alex PRECOMP GO tip **51752d97** accepted. **One** diagnostic executed.
+**STOP — awaiting Alex Phase B numerical RO.** No retune. No second fit. No winner.
 
 ## What this is
 
@@ -95,24 +96,101 @@ cd services/model-service && PYTHONPATH=. python3 -m pytest \
   tests/test_nfl_t5119u_r2b_market_e2e.py \
   tests/test_nfl_t5125u_r2b2_dev_cohort.py \
   tests/test_nfl_t5129u_r2_byte_rehash.py
-# 71 passed
+# 71 passed pre-GO; re-run after one record + contract tests
 ```
 
 Covered: refusal (missing/nonfinite, extra HFA, EVAL bind, 94-sub, parent
 overwrite, no GO), 1e-9 blend identity, C3 tie-break, freeze-before-2021,
-seed 20261101 / B=10000, no imputation, repo freeze is pre-fit + STOP.
+seed 20261101 / B=10000, no imputation, exclusive create, materialized
+DEV_RESEARCH contract (`eval=null`, `winner=null`).
 
-## After Alex pre-computation GO (not done)
+## One authorized diagnostic (Alex GO 51752d97)
 
-One diagnostic execution only:
+Exact command run once:
 
 ```
 python3 scripts/nfl/run_nfl_r3_dev_calibration_t5141u.py --go t5141u-alex-precomp-go
 ```
 
-Then: persist isolated DEV_RESEARCH record (2020 training + 2021 n=227 +
-market n=37); tip CURSOR_ADDENDUM sha8. No winner. No 2021/market retune.
-No EVAL bind. Intervals are conditional on fitted parameters.
+C3 frozen before 2021: **w=0.75**, **b=−1.8046804298045456**, 2020 MAE
+10.300814509116526, 101 candidate losses persisted. C2: w=0.5,
+b=−1.7997529471434337. `winner=null`. `selected_from_2021=false`.
+`eval=null`. Intervals conditional on fitted parameters. Negative diffs
+favor the calibrated arm. Crossing zero / mixed = INCONCLUSIVE.
+
+### 2020 training (in-sample; reported separately; n=210)
+
+| Arm | MAE | RMSE | bias |
+| --- | --- | ---- | ---- |
+| C0 | 10.59784751645663 | 13.857689151991654 | +1.4890595938369624 |
+| C1 | 10.409584852635769 | 13.53639633770918 | +2.2075173923531795 |
+| C2 | 10.313501682098197 | 13.361405787445493 | +0.40776444520974536 |
+| C3 | 10.300814509116526 | 13.307471503037403 | +0.7620658618067421 |
+
+Paired mean signed |loss| diffs (B=10000, seed 20261101):
+
+| Compare | mean | game CI95 | week CI95 |
+| ------- | ---- | --------- | --------- |
+| C2 vs C0 | −0.2843458343584324 | [−0.61842, +0.03722] INCONCLUSIVE | [−0.52702, −0.04001] CI_EXCLUDES_ZERO |
+| C2 vs C1 | −0.09608317053757108 | [−0.33704, +0.14019] INCONCLUSIVE | [−0.32228, +0.12045] INCONCLUSIVE |
+| C3 vs C0 | −0.29703300734010296 | [−0.74879, +0.14321] INCONCLUSIVE | [−0.61737, +0.03726] INCONCLUSIVE |
+| C3 vs C1 | −0.10877034351924164 | [−0.34896, +0.12790] INCONCLUSIVE | [−0.28775, +0.06970] INCONCLUSIVE |
+
+### 2021 diagnostic (n=227; all fixed identities)
+
+| Arm | MAE | RMSE | bias |
+| --- | --- | ---- | ---- |
+| C0 | 12.072358138517242 | 15.12918462779174 | −0.37797144296101337 |
+| C1 | 11.619278251160985 | 14.467722324087264 | +0.19547570238588982 |
+| C2 | 11.587351395480002 | 14.55508447157613 | −1.604277244757544 |
+| C3 | 11.424322690707815 | 14.362386201990473 | −1.322481154745204 |
+
+| Compare | mean | game CI95 | week CI95 |
+| ------- | ---- | --------- | --------- |
+| C2 vs C0 | −0.4850067430372398 | [−0.84172, −0.11697] CI_EXCLUDES_ZERO | [−0.81591, −0.16561] CI_EXCLUDES_ZERO |
+| C2 vs C1 | −0.03192685568098301 | [−0.26367, +0.20167] INCONCLUSIVE | [−0.26107, +0.22886] INCONCLUSIVE |
+| C3 vs C0 | −0.6480354478094289 | [−1.13590, −0.13955] CI_EXCLUDES_ZERO | [−1.10627, −0.20169] CI_EXCLUDES_ZERO |
+| C3 vs C1 | −0.19495556045317217 | [−0.44911, +0.06540] INCONCLUSIVE | [−0.45321, +0.07432] INCONCLUSIVE |
+
+C2 vs C1 and C3 vs C1 cross zero — INCONCLUSIVE vs the frozen 50/50.
+Unfavorable / mixed results reported unchanged. **No winner selected.**
+
+### Secondary market n=37 (selection-limited ≠ representative)
+
+| Arm | MAE | RMSE | bias |
+| --- | --- | ---- | ---- |
+| C0 | 10.415547950987794 | 13.939186763559066 | −2.017919813068005 |
+| C1 | 9.615512144106612 | 12.758784178402353 | −0.8250746302546401 |
+| C2 | 9.758498586145333 | 12.999828667202879 | −2.6248275773980736 |
+| C3 | 9.516997422770345 | 12.611114640892874 | −2.0333324686525036 |
+| market | 8.614864864864865 | 11.245344382021845 | −1.6689189189189189 |
+
+| Compare | mean | game CI95 | week CI95 |
+| ------- | ---- | --------- | --------- |
+| C2 vs C0 | −0.6570493648424599 | INCONCLUSIVE | CI_EXCLUDES_ZERO |
+| C2 vs C1 | **+0.14298644203872027** | INCONCLUSIVE | INCONCLUSIVE |
+| C3 vs C0 | −0.8985505282174489 | INCONCLUSIVE | INCONCLUSIVE |
+| C3 vs C1 | −0.09851472133626855 | INCONCLUSIVE | INCONCLUSIVE |
+| C0 vs market | +1.8006830861229284 | CI_EXCLUDES_ZERO | CI_EXCLUDES_ZERO |
+| C1 vs market | +1.0006472792417482 | INCONCLUSIVE | INCONCLUSIVE |
+| C2 vs market | +1.1436337212804686 | INCONCLUSIVE | INCONCLUSIVE |
+| C3 vs market | +0.9021325579054796 | INCONCLUSIVE | INCONCLUSIVE |
+
+C2 MAE on n=37 is **worse** than uncalibrated C1 (+0.143 mean signed |loss|).
+All four arms have higher MAE than market. Mixed / crossing zero =
+INCONCLUSIVE. Not representative market validation. No probabilities
+invented. No retune.
+
+## Isolated result files
+
+| File | sha256 |
+| ---- | ------ |
+| `DEV_RESEARCH_t5141u_R3_DEV_CALIBRATION.json` file | `4dcd7cbccedeb7c4652793ac30b827a67ff07c4a310c7900336e8d3426b2501b` |
+| payload `record_sha256` | `8d5e454345ac3c2954932223b3f8fe97547b0f1e079c5d02b0907fa6376b54c0` |
+| `C3_SELECTION_FREEZE.json` file | `3792726da7b6fb69b4639521111e3e9054cb6e7de1cec916d8a9c2ba9de48a5f` |
+| C3 selection payload | `6efa32a22f97b2de073513a1a67065f65a2b909673f0bcc8e1ede49fc5036b58` |
+
+Pre-fit freeze files are byte-unchanged (`FREEZE_MANIFEST` `999c9ece…`).
 
 ## Labels
 
@@ -127,9 +205,11 @@ G5 `DATA_COVERAGE_BLOCKED`
 | OWNER CLEAR t5141u | `714ced10` |
 | Cos ORDER | `1155f43f` |
 | PREFLIGHT | `a23e01dd` |
+| Alex PRECOMP GO | `51752d97` |
 | uploaded/on-branch DEV437 file | `66c3bde1` |
 | DEV437 record | `0550ef9b` |
 | parent #693 HEAD | `316345fa` |
-| this implementation tip | `acffed2057a937a8bbd8ee3bba7c88eaa358ebcb` |
+| implementation tip | `acffed20` |
+| this one-exec result tip | *(stamped after commit)* |
 
-CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC · STOP for Alex precomp.
+CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC · STOP for Alex Phase B RO.
