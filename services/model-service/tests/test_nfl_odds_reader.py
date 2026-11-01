@@ -127,6 +127,49 @@ def test_offset_timestamp_normalizes_to_utc_before_cutoff_compare() -> None:
     assert result.eligible[0].captured_at == "2020-09-10T20:00:00Z"
 
 
+def test_naive_timestamp_is_refused_without_timezone_contract() -> None:
+    """Codex: normalize_quote_timestamp('2020-09-10T16:00:00') must not become 16:00 UTC."""
+    assert normalize_quote_timestamp("2020-09-10T16:00:00") is None
+    assert normalize_quote_timestamp(datetime(2020, 9, 10, 16, 0, 0)) is None
+    naive = join_quotes_at_cutoff(
+        [_quote(captured_at="2020-09-10T16:00:00")],
+        [GAME],
+        CUTOFF,
+    )
+    assert naive.eligible == []
+    assert naive.reason_tallies[UNRESOLVABLE_TIMESTAMP] == 1
+    naive_cutoff = join_quotes_at_cutoff(
+        [_quote()],
+        [{**GAME, "forecast_cutoff": "2020-09-10T20:00:00"}],
+        "2020-09-10T20:00:00",
+    )
+    assert naive_cutoff.eligible == []
+    assert naive_cutoff.reason_tallies[UNRESOLVABLE_TIMESTAMP] == 1
+
+
+def test_naive_timestamp_accepted_only_with_explicit_source_timezone() -> None:
+    dt = normalize_quote_timestamp("2020-09-10T16:00:00", source_timezone="America/New_York")
+    assert dt == datetime(2020, 9, 10, 20, 0, tzinfo=timezone.utc)
+    utc_contract = normalize_quote_timestamp("2020-09-10T16:00:00", source_timezone="UTC")
+    assert utc_contract == datetime(2020, 9, 10, 16, 0, tzinfo=timezone.utc)
+    assert normalize_quote_timestamp("2020-09-10T16:00:00", source_timezone="not-a-zone") is None
+    result = join_quotes_at_cutoff(
+        [_quote(captured_at="2020-09-10T16:00:00", source_timezone="America/New_York")],
+        [GAME],
+        CUTOFF,
+    )
+    assert len(result.eligible) == 1
+    assert result.eligible[0].captured_at == "2020-09-10T20:00:00Z"
+    via_arg = join_quotes_at_cutoff(
+        [_quote(captured_at="2020-09-10T16:00:00")],
+        [GAME],
+        CUTOFF,
+        source_timezone="America/New_York",
+    )
+    assert len(via_arg.eligible) == 1
+    assert via_arg.eligible[0].captured_at == "2020-09-10T20:00:00Z"
+
+
 def test_same_timestamp_on_different_games_is_not_a_conflict() -> None:
     other_game = {
         "game_id": "2020_01_NYJ_BUF",
