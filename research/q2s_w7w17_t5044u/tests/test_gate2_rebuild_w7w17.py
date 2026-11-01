@@ -74,6 +74,13 @@ class Gate2RebuildTests(unittest.TestCase):
         parity = self.cov["w7w8_parity_vs_stage_b"]
         self.assertTrue(parity["pass"])
         self.assertEqual(parity["n_cells"], 28 * 27)
+        self.assertEqual(len(parity.get("asserted_fields", [])), 27)
+        self.assertEqual(parity.get("n_exact_numeric_compared"), 138)
+        self.assertEqual(parity.get("max_abs_delta_exact_numeric"), 0.0)
+        self.assertEqual(parity.get("tolerances", {}).get("pass_rate_pressure_rz_def_epa_diff"), 0.0)
+        self.assertEqual(parity.get("tolerances", {}).get("index"), 1e-6)
+        self.assertEqual(parity.get("tolerances", {}).get("epa_success"), 1e-9)
+        self.assertEqual(parity.get("tolerances", {}).get("rest"), 1e-9)
 
     def test_matrix_sha(self) -> None:
         path = PACKET / "gate2" / "RECON_MATRIX_W7W17.csv"

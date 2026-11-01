@@ -400,15 +400,61 @@
   "stop_for_alex_pre_if": true,
   "ticket": "t5044u",
   "w7w8_parity_vs_stage_b": {
+    "asserted_fields": [
+      "game_id",
+      "home_team",
+      "away_team",
+      "matchup_season",
+      "matchup_week",
+      "rest_days_home",
+      "rest_days_away",
+      "offense_index_home",
+      "offense_index_away",
+      "defense_index_home",
+      "defense_index_away",
+      "home_off_epa_5g",
+      "away_off_epa_5g",
+      "home_def_epa_allowed_5g",
+      "away_def_epa_allowed_5g",
+      "home_success_offense_5g",
+      "away_success_offense_5g",
+      "home_success_defense_allowed_5g",
+      "away_success_defense_allowed_5g",
+      "home_pass_rate_5g",
+      "away_pass_rate_5g",
+      "matchup_diff_off_epa_5g",
+      "matchup_diff_def_epa_allowed_5g",
+      "matchup_diff_success_rate_5g",
+      "matchup_diff_pressure_allowed_5g",
+      "matchup_diff_pressure_generated_5g",
+      "matchup_diff_red_zone_td_rate_5g"
+    ],
+    "exact_numeric_fields": [
+      "away_pass_rate_5g",
+      "home_pass_rate_5g",
+      "matchup_diff_def_epa_allowed_5g",
+      "matchup_diff_pressure_allowed_5g",
+      "matchup_diff_pressure_generated_5g",
+      "matchup_diff_red_zone_td_rate_5g"
+    ],
+    "fails": [],
     "max_abs_delta_epa_success": 0.0,
+    "max_abs_delta_exact_numeric": 0.0,
     "max_abs_delta_index": 0.0,
+    "max_abs_delta_rest": 0.0,
     "n_cells": 756,
     "n_epa_compared": 244,
+    "n_exact_numeric_compared": 138,
+    "n_fails": 0,
     "n_index_compared": 112,
+    "n_rest_compared": 56,
+    "n_text_compared": 140,
     "pass": true,
     "tolerances": {
       "epa_success": 1e-09,
-      "index": 1e-06
+      "index": 1e-06,
+      "pass_rate_pressure_rz_def_epa_diff": 0.0,
+      "rest": 1e-09
     }
   }
 }
