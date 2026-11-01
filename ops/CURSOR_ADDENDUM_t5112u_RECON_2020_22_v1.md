@@ -10,7 +10,7 @@ Authority: Alex RETURN **7e888509** · CLEAR 61906c87 G2 · OWNER a498c092 · sa
 | ------------------------- | ------------------------------------------------------------------ |
 | PR                        | https://github.com/kosedge/kosedge/pull/691 (DRAFT)                |
 | Parent tip (t5111u stamp) | `3f0675bddfdfbdc246a19e2530ec02f34eba66e1`                         |
-| This implementation tip   | `THIS_TIP`                                                         |
+| This implementation tip   | `0505da820912214365199bfbb935485cb5828e95`                         |
 | Alex RETURN               | `7e88850996588a3467c234e74f74cce994c56bd77837a56b0ebb2921888d5220` |
 | Helper pin                | `7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64` |
 | Design seal               | `e5bb682db1a6183b0c68e5ba1ad537c9096ca833b285190d6e3bdd9bf875addd` |

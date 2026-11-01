@@ -37,7 +37,7 @@ Prior sequential CONSUMED test retained.
 | ----------------------- | --------------------------------------------------- |
 | PR                      | https://github.com/kosedge/kosedge/pull/691 (DRAFT) |
 | Parent                  | `3f0675bddfdfbdc246a19e2530ec02f34eba66e1`          |
-| This implementation tip | `THIS_TIP`                                          |
+| This implementation tip | `0505da820912214365199bfbb935485cb5828e95`          |
 | Design seal             | `e5bb682d…addd` (unchanged; not a forecast freeze)  |
 
 ## Remaining
