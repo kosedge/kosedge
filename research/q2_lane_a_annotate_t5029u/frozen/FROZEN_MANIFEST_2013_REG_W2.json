@@ -1,0 +1,164 @@
+{
+  "authority": {
+    "card": "20dd7940",
+    "guardrails": "52c79ee6",
+    "mode": "CLEAR_ANNOTATE",
+    "order_n1": "09f70480",
+    "owner": "t5029u",
+    "proposal_head": "eabd49a6",
+    "wiring_card": "013ec7f8",
+    "work_package": "2db90f76",
+    "writer_accept": "d17b30fa",
+    "writer_head": "7d89a974"
+  },
+  "cert": 0,
+  "frozen_before_run": true,
+  "identities": [
+    {
+      "away": "NYJ",
+      "game_id": "2013_02_NYJ_NE",
+      "home": "NE",
+      "kickoff_utc": "2013-09-13T00:25:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "CAR",
+      "game_id": "2013_02_CAR_BUF",
+      "home": "BUF",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "CLE",
+      "game_id": "2013_02_CLE_BAL",
+      "home": "BAL",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "DAL",
+      "game_id": "2013_02_DAL_KC",
+      "home": "KC",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "MIA",
+      "game_id": "2013_02_MIA_IND",
+      "home": "IND",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "MIN",
+      "game_id": "2013_02_MIN_CHI",
+      "home": "CHI",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "SD",
+      "game_id": "2013_02_SD_PHI",
+      "home": "PHI",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "STL",
+      "game_id": "2013_02_STL_ATL",
+      "home": "ATL",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "TEN",
+      "game_id": "2013_02_TEN_HOU",
+      "home": "HOU",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "WSH",
+      "game_id": "2013_02_WAS_GB",
+      "home": "GB",
+      "kickoff_utc": "2013-09-15T17:00:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "DET",
+      "game_id": "2013_02_DET_ARI",
+      "home": "ARI",
+      "kickoff_utc": "2013-09-15T20:05:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "NO",
+      "game_id": "2013_02_NO_TB",
+      "home": "TB",
+      "kickoff_utc": "2013-09-15T20:05:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "DEN",
+      "game_id": "2013_02_DEN_NYG",
+      "home": "NYG",
+      "kickoff_utc": "2013-09-15T20:25:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "JAX",
+      "game_id": "2013_02_JAX_OAK",
+      "home": "OAK",
+      "kickoff_utc": "2013-09-15T20:25:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "SF",
+      "game_id": "2013_02_SF_SEA",
+      "home": "SEA",
+      "kickoff_utc": "2013-09-16T00:30:00+00:00",
+      "season": 2013,
+      "week": 2
+    },
+    {
+      "away": "PIT",
+      "game_id": "2013_02_PIT_CIN",
+      "home": "CIN",
+      "kickoff_utc": "2013-09-17T00:30:00+00:00",
+      "season": 2013,
+      "week": 2
+    }
+  ],
+  "label": "DEV_RESEARCH",
+  "n_identities": 16,
+  "not_a_forecast_quality_claim": true,
+  "pins": {
+    "asof": "cf514078",
+    "config": "aa2b47b3",
+    "fit": "70db070d",
+    "frozen_md": "28c582a1",
+    "games": "4fe1cdd7",
+    "outcomes": "50bda875"
+  },
+  "research_consumed_only": true,
+  "scope": {
+    "note": "2013 REG W2 demo scope + eligible matching identities only. No silent expansion.",
+    "season": 2013,
+    "season_type": "REG",
+    "week": 2
+  }
+}
