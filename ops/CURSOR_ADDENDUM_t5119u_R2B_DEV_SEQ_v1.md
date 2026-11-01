@@ -120,6 +120,6 @@ cd services/model-service && PYTHONPATH=. python3 -m pytest \
 | DEV_RESEARCH record_sha256    | `621f0f843da8ac219d284448ac1cd3124bbcdba629c6df49a54b3b518fad30fc` |
 | DEV_RESEARCH file             | `8cb9a2a1dbde5be9f27370622ab46934117b86e3e0597daf78374b9c5fe27a82` |
 | parent t5116u HEAD            | `61436fdb98fdbd4908a9af52563a2656677e2902`                         |
-| this implementation tip       | _pending commit_                                                   |
+| this implementation tip       | `8204c77f35038373c4a4c417c9a5109cd89c25e5`                         |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
