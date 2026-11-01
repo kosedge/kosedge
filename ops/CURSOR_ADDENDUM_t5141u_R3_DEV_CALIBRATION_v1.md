@@ -210,6 +210,6 @@ G5 `DATA_COVERAGE_BLOCKED`
 | DEV437 record | `0550ef9b` |
 | parent #693 HEAD | `316345fa` |
 | implementation tip | `acffed20` |
-| this one-exec result tip | *(stamped after commit)* |
+| this one-exec result tip | `dda41caa7b89bb6e4ac8844d3c32d8102ca564c3` |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC · STOP for Alex Phase B RO.
