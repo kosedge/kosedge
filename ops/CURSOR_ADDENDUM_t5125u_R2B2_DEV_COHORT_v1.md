@@ -97,6 +97,6 @@ cd services/model-service && PYTHONPATH=. python3 -m pytest \
 | 437 record_sha256        | `0550ef9b498a2240919d8cf570ccb7c94b67f6815ba3625789901f8390143637` |
 | 437 file                 | `66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50` |
 | parent #693 tip          | `a676faaa` / impl `8204c77f`                                       |
-| this implementation tip  | _pending commit_                                                   |
+| this implementation tip  | `f0013d62c321a5dc94fcc9c713decc6af8538465`                         |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
