@@ -1,11 +1,6 @@
 {
   "generated_at_utc": "2026-11-01T15:51:47Z",
-  "season_bound": [
-    2020,
-    2021,
-    2022,
-    2023
-  ],
+  "season_bound": [2020, 2021, 2022, 2023],
   "overlap_warning": "Old harvest / lake / jsonl / csv / sqlite counts may overlap. Do not add them into a current deduplicated total.",
   "code_pin": {
     "branch": "cursor/nfl-odds-reader-cutoff-join-17f0",
@@ -435,10 +430,7 @@
       "store": "gapfill_sqlite_requests",
       "path": "/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite",
       "bytes": 13877006336,
-      "window": [
-        "2020-03-01",
-        "2024-03-01"
-      ],
+      "window": ["2020-03-01", "2024-03-01"],
       "note": "Request ledger only (not a deduplicated line total). Old harvest counts may overlap.",
       "by_kind_snapshot": [
         {

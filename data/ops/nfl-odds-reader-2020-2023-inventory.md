@@ -408,10 +408,7 @@ Old harvest / lake / jsonl / csv / sqlite counts may overlap. Do not add them in
   "store": "gapfill_sqlite_requests",
   "path": "/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite",
   "bytes": 13877006336,
-  "window": [
-    "2020-03-01",
-    "2024-03-01"
-  ],
+  "window": ["2020-03-01", "2024-03-01"],
   "note": "Request ledger only (not a deduplicated line total). Old harvest counts may overlap.",
   "by_kind_snapshot": [
     {
@@ -555,4 +552,3 @@ Old harvest / lake / jsonl / csv / sqlite counts may overlap. Do not add them in
   }
 ]
 ```
-

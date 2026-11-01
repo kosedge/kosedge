@@ -26,13 +26,13 @@ Covered: home/away sign, city-alias ambiguity, post-cutoff rejection (later clos
 
 ## First source pin (RO, 2020–2023 only)
 
-| Store | Path | Note |
-| --- | --- | --- |
-| Primary warehouse | `/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite` (13,877,006,336 bytes) | Mixed-season file; reader uses `commence_time >= 2020-03-01 AND < 2024-03-01` |
-| Isolated clean JSONL | `/Volumes/KosEdgeData/clean/odds/nfl/snapshots-202{0,1,2,3}-20260806.jsonl` | 2024–26 JSONL **not opened** |
-| Open/close CSV | `/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv` | Flattened lines; season filter on read |
-| nflverse PBP (games) | `/Volumes/KosEdgeData/nflverse/play_by_play_202{0,1,2,3}.csv` | Existing archive; not re-downloaded |
-| Lake parquet 2020–23 | `/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-202{0,1,2,3}.parquet` | Cited via `inventory.json` by_season keys only; 2024–26 parquet **not opened** |
+| Store                | Path                                                                                 | Note                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Primary warehouse    | `/Volumes/KosEdgeData/clean/odds/gapfill/odds_gapfill.sqlite` (13,877,006,336 bytes) | Mixed-season file; reader uses `commence_time >= 2020-03-01 AND < 2024-03-01`  |
+| Isolated clean JSONL | `/Volumes/KosEdgeData/clean/odds/nfl/snapshots-202{0,1,2,3}-20260806.jsonl`          | 2024–26 JSONL **not opened**                                                   |
+| Open/close CSV       | `/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv`          | Flattened lines; season filter on read                                         |
+| nflverse PBP (games) | `/Volumes/KosEdgeData/nflverse/play_by_play_202{0,1,2,3}.csv`                        | Existing archive; not re-downloaded                                            |
+| Lake parquet 2020–23 | `/Volumes/KosEdgeData/clean/odds/nfl/lake/snapshots-202{0,1,2,3}.parquet`            | Cited via `inventory.json` by_season keys only; 2024–26 parquet **not opened** |
 
 ## First artifact / join result (available at checkpoint; refined after)
 

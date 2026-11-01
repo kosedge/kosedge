@@ -9,12 +9,12 @@ Place a copy at `/workspace/ops/nfl_enterprise_green_t4359u/CURSOR_ADDENDUM_t510
 
 Prior ACCEPT history stands. This addendum is a new tip only.
 
-| Pin | Value |
-| --- | --- |
-| CoS ACCEPT | `7f9f7918` |
-| CoS ACCEPT prior | `e549d23f` |
-| Alex PASS_RO | `db8d27a2` / `43c04127` |
-| CLEAR | `4f3b9666` / `02ca8367` |
+| Pin                   | Value                                      |
+| --------------------- | ------------------------------------------ |
+| CoS ACCEPT            | `7f9f7918`                                 |
+| CoS ACCEPT prior      | `e549d23f`                                 |
+| Alex PASS_RO          | `db8d27a2` / `43c04127`                    |
+| CLEAR                 | `4f3b9666` / `02ca8367`                    |
 | Prior #689 draft head | `f6b5b4c3ec4021fc64d86a36c863b483246be78b` |
 | Prior #690 draft head | `45c6ee6efe0f1597ca29b6794e21640c209ec5c9` |
 
@@ -73,9 +73,9 @@ Prettier CI was **not** fixed in this chain. Do not treat focused local passes a
 
 ## New commit tips (code fixes; addendum commit is additional)
 
-| PR | Branch | Code-fix commit |
-| --- | --- | --- |
-| #689 | `cursor/nfl-odds-reader-cutoff-join-17f0` | `26aad919876074504bfeda0e2200d9f50416c539` |
+| PR   | Branch                                           | Code-fix commit                            |
+| ---- | ------------------------------------------------ | ------------------------------------------ |
+| #689 | `cursor/nfl-odds-reader-cutoff-join-17f0`        | `26aad919876074504bfeda0e2200d9f50416c539` |
 | #690 | `cursor/nfl-odds-comparison-harness-t5100u-f42c` | `ce51244aa5e24bf9a22bfc63bc5a01f44cfe2540` |
 
 #690 also contains merge `d8298845e` (Package A timezone fix into the harness draft).
