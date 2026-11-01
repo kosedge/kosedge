@@ -1,0 +1,110 @@
+{
+  "authority": {
+    "clear": "CLEAR-P1",
+    "decision": "23c825de",
+    "order": "a39c8f63",
+    "plan_sha8": "69b9ef5f",
+    "schema_version": "handicap-ledger-v0-clear-a",
+    "ticket": "t4768u"
+  },
+  "blended_default_path": {
+    "has_if_chrome": false,
+    "match": true,
+    "pin": "75ee2ee90dfb423c21cd66c8caab999cea20fda7277676e4944416596fac6224",
+    "sha256": "75ee2ee90dfb423c21cd66c8caab999cea20fda7277676e4944416596fac6224"
+  },
+  "distribution": {
+    "away_win_prob": 0.5025,
+    "home_win_prob": 0.4975,
+    "margin_mu": 0.15714686663257818,
+    "market_blend": 0,
+    "markets_total_mean": 43.82,
+    "r1_f8_note": "markets.total_mean may differ from independent_fair.total_mu because linear totals calibration still runs on markets (R1/F8).",
+    "sigma": 10.0182,
+    "total_mu": 43.8164760328315,
+    "total_p10": 26.22,
+    "total_p50": 43.73,
+    "total_p90": 61.11
+  },
+  "fixture": {
+    "away": "BAL",
+    "game_id": "d3ii-clear-a-baseline",
+    "home": "CLE",
+    "pinned_market_spread_home": 3.5,
+    "pinned_market_total": 43.5,
+    "season": 2026,
+    "seed": 47401,
+    "simulations": 800,
+    "week": 8
+  },
+  "independent_fair": {
+    "forecast_label": "independent_fair",
+    "margin_mu": 0.15714686663257818,
+    "market_blend": 0,
+    "nfl_independent_fair_path": false,
+    "sigma": 10.0182,
+    "total_mu": 43.8164760328315
+  },
+  "ledger": {
+    "distinct_prediction_ids": 4,
+    "hf_rows": 0,
+    "l0_prediction_id": "hl_c89bedb2217a92df2765d715d7dc9c56",
+    "l1_factors": [
+      "injury_availability",
+      "weather"
+    ],
+    "l1_missing": true,
+    "l1_prediction_ids": [
+      "hl_e72bc1a4046ff83b63c698a2d3f3ff1e",
+      "hl_b69c567e4c2bc6804a51ea9cd2fa1339"
+    ],
+    "l4_prediction_id": "hl_4f4c060ac0c4ad17838560f7c8e5a8bc",
+    "path": "data/ops/nfl-shadow-e2e-t4768u/ledger.jsonl",
+    "row_count": 4,
+    "schema_version": "handicap-ledger-v0-clear-a"
+  },
+  "locks": {
+    "c10_hold": true,
+    "cert": 0,
+    "coming_soon": "ON",
+    "f2_frozen": true,
+    "h_ift1_e2_e3_not_executed": true,
+    "nfl_nogo": true,
+    "overlays_off": true,
+    "p2_p3_hold": true
+  },
+  "market_compare": {
+    "market_snapshot_id": "pin-d3ii-3.5-43.5",
+    "pinned_spread_home": 3.5,
+    "pinned_total": 43.5,
+    "spread_delta_if_minus_pinned": -3.6571,
+    "total_delta_if_minus_pinned": 0.3165,
+    "used_as_fair": false
+  },
+  "publication_control": {
+    "FOOTBALL_PUBLIC_NUMBERS_HEADING": "pinned",
+    "NFL_EDGE_BOARD_PUBLIC_ENABLED": "pinned",
+    "NFL_FAIR_LINES_CERTIFIED_AT": "pinned",
+    "NFL_FAIR_LINES_CERTIFIED_RUN_ID": "pinned",
+    "NFL_FAIR_LINES_CERTIFIED_SHA256": "pinned",
+    "NFL_FAIR_LINES_KELLY_ENABLED": "pinned",
+    "NFL_FAIR_LINES_PLAY_ENABLED": "pinned",
+    "NFL_FAIR_LINES_PUBLIC_ML_ENABLED": "pinned",
+    "NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED": "pinned",
+    "NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED": "pinned",
+    "cert": "0",
+    "coming_soon": "ON",
+    "public_paint": "closed",
+    "source": "apps/web/lib/cfb-edge-board-public.ts"
+  },
+  "receipt_path": "data/ops/nfl-shadow-e2e-t4768u/receipt.json",
+  "receipt_sha256": "80b31800a30432db22133400825cf09d578e26665702f5f81399d51f21772b3b",
+  "refusals": {
+    "ddl": true,
+    "hf_layer": true,
+    "live_callers": true,
+    "odds": true,
+    "railway_c10": true,
+    "unlock_overlays": true
+  }
+}
