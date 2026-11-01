@@ -23,3 +23,7 @@ Phase 1 = Gate 1 + Gate 2 + tests + STOP for Alex pre-IF.
 Phase 4 IF+emit authorized by CoS ACCEPT **adbcf11d** (v3) under CLEAR **12763c08**.
 IF @ **6ca03716** (not 90bf65ab). Rest BIND_PACKET_ONLY / **155d3ca0**.
 HARD STOP after freeze (row identity). No look.
+
+t5053u: evaluator bound under CLEAR **12763c08**. Prediction freeze **90774bd4**
+is history. Final pre-look freeze `evaluator/FINAL_PRELOOK_FREEZE.json`.
+`8b80ad7b` does not authorize a look on the final freeze. No real outcomes join.

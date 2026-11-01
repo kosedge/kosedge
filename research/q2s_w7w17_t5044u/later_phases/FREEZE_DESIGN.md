@@ -24,7 +24,11 @@ Alex timestamped pre-look PASS must bind to those hashes
 (not `FREEZE.exists()` — t5035u / `404a4ab2`). Compare re-hashes
 and refuses if the receipt is absent or mismatched.
 
-## 6. ONE look
+## 6. ONE look — NOT RUN (t5053u)
+
+Evaluator + protocol are frozen in `evaluator/FINAL_PRELOOK_FREEZE.json`
+(appended onto **90774bd4**). Do **not** look until Alex PASS on that
+final freeze and CoS re-authorizes. `8b80ad7b` is not sufficient.
 
 Paired ΔMAE + paired bootstrap B=10000 seed **20261102**. Week-block
 sensitivity: 11 blocks, same B/seed. RMSE / weekly descriptive only.

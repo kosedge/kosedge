@@ -15,8 +15,9 @@ NEW bounded package. Does **not** amend [#685](https://github.com/kosedge/kosedg
 | t5049u compare | **PASS** — all 27 fields asserted vs Stage B |
 | 3 Alex pre-IF | **ACCEPT** tip **adbcf11d** |
 | 4 IF + emit | **DONE** — 141 scored / 24 T2 sealed not scored. Freeze has **row identity** |
-| 5 Alex pre-look | **WAIT** — do not look until `PASS_RO_PRE_LOOK` bound to this freeze |
-| 6 ONE look | **NOT RUN** |
+| 5 Alex pre-look | **SUPERSEDED for look** — `8b80ad7b` does not bind the final evaluator freeze |
+| t5053u evaluator bind | **DONE** — code + protocol frozen; synthetic tests only |
+| 6 ONE look | **NOT RUN** — await Alex RO of `evaluator/FINAL_PRELOOK_FREEZE.json` |
 
 ## Completeness
 
@@ -35,7 +36,8 @@ Matrix: `gate2/RECON_MATRIX_W7W17.csv` sha256 `b56be1462e591ac5e04cfaf860938118e
 |---|---|
 | `phase4/artifacts/IF_MUS_W7W17.json` | **32e97434…** |
 | `phase4/artifacts/q2s_rows_w7w17.json` | **55d8c8bc…** |
-| `phase4/artifacts/PROTOCOL_FREEZE.json` | **90774bd4…** (binds both row files) |
+| `phase4/artifacts/PROTOCOL_FREEZE.json` | **90774bd4…** (history — not rewritten) |
+| `evaluator/FINAL_PRELOOK_FREEZE.json` | **a4652323…** (appends evaluator + parent hashes) |
 
 `research.q2s.margin_mu_q2s = 0.5*IF.margin_mu + 0.5*q2_pm_new`. Fit **70db070d** excludes 2017. Rest BIND_PACKET_ONLY / **155d3ca0**. Never opened **1ee90fac**.
 
