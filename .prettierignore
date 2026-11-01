@@ -34,3 +34,12 @@ apps/android-odds-widget/local.properties
 # Ops artifacts / reports (not source; keep CI format check focused)
 data/
 services/model-service/data/
+
+# Q2 Lane A research sealed pins + generated annotation artifacts (do not reformat)
+research/q2_lane_a_annotate_t5029u/frozen/FROZEN_CONFIG_Q2PB_t5009u.json
+research/q2_lane_a_annotate_t5029u/frozen/FROZEN_CONFIG_Q2PB_t5009u.md
+research/q2_lane_a_annotate_t5029u/frozen/FROZEN_MANIFEST_2013_REG_W2.json
+research/q2_lane_a_annotate_t5029u/artifacts/
+research/q2_lane_a_annotate_t5029u/data/
+research/q2_lane_a_annotate_t5029u/inputs/q2_asof_sidecar_t5018u.json
+research/q2_lane_a_annotate_t5029u/inputs/if_demo_inputs_2013_reg_w2.json
