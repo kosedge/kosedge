@@ -1,0 +1,892 @@
+{
+  "artifact": "T2_BYE_RETURN_RISKS",
+  "n": 24,
+  "risks": [
+    {
+      "away_team": "TB",
+      "bye_sides": [
+        "BUF"
+      ],
+      "bye_week": 6,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_07_TB_BUF",
+      "home_team": "BUF",
+      "n_cells_expected_missing": 11,
+      "rating_week": 6,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "BUF"
+        }
+      ],
+      "substituted": false,
+      "week": 7
+    },
+    {
+      "away_team": "DAL",
+      "bye_sides": [
+        "DAL"
+      ],
+      "bye_week": 6,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_07_DAL_SF",
+      "home_team": "SF",
+      "n_cells_expected_missing": 11,
+      "rating_week": 6,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "DAL"
+        }
+      ],
+      "substituted": false,
+      "week": 7
+    },
+    {
+      "away_team": "CIN",
+      "bye_sides": [
+        "CIN"
+      ],
+      "bye_week": 6,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_07_CIN_PIT",
+      "home_team": "PIT",
+      "n_cells_expected_missing": 11,
+      "rating_week": 6,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "CIN"
+        }
+      ],
+      "substituted": false,
+      "week": 7
+    },
+    {
+      "away_team": "SEA",
+      "bye_sides": [
+        "SEA"
+      ],
+      "bye_week": 6,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_07_SEA_NYG",
+      "home_team": "NYG",
+      "n_cells_expected_missing": 11,
+      "rating_week": 6,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "SEA"
+        }
+      ],
+      "substituted": false,
+      "week": 7
+    },
+    {
+      "away_team": "HOU",
+      "bye_sides": [
+        "HOU"
+      ],
+      "bye_week": 7,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_08_HOU_SEA",
+      "home_team": "SEA",
+      "n_cells_expected_missing": 11,
+      "rating_week": 7,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "HOU"
+        }
+      ],
+      "substituted": false,
+      "week": 8
+    },
+    {
+      "away_team": "PIT",
+      "bye_sides": [
+        "DET"
+      ],
+      "bye_week": 7,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_08_PIT_DET",
+      "home_team": "DET",
+      "n_cells_expected_missing": 11,
+      "rating_week": 7,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "DET"
+        }
+      ],
+      "substituted": false,
+      "week": 8
+    },
+    {
+      "away_team": "ARI",
+      "bye_sides": [
+        "ARI"
+      ],
+      "bye_week": 8,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_09_ARI_SF",
+      "home_team": "SF",
+      "n_cells_expected_missing": 11,
+      "rating_week": 8,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "ARI"
+        }
+      ],
+      "substituted": false,
+      "week": 9
+    },
+    {
+      "away_team": "BAL",
+      "bye_sides": [
+        "TEN"
+      ],
+      "bye_week": 8,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_09_BAL_TEN",
+      "home_team": "TEN",
+      "n_cells_expected_missing": 11,
+      "rating_week": 8,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "TEN"
+        }
+      ],
+      "substituted": false,
+      "week": 9
+    },
+    {
+      "away_team": "CIN",
+      "bye_sides": [
+        "JAX"
+      ],
+      "bye_week": 8,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_09_CIN_JAX",
+      "home_team": "JAX",
+      "n_cells_expected_missing": 11,
+      "rating_week": 8,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "JAX"
+        }
+      ],
+      "substituted": false,
+      "week": 9
+    },
+    {
+      "away_team": "LAR",
+      "bye_sides": [
+        "NYG",
+        "LAR"
+      ],
+      "bye_week": 8,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_09_LA_NYG",
+      "home_team": "NYG",
+      "n_cells_expected_missing": 16,
+      "rating_week": 8,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "NYG"
+        },
+        {
+          "role": "away",
+          "team": "LAR"
+        }
+      ],
+      "substituted": false,
+      "week": 9
+    },
+    {
+      "away_team": "DET",
+      "bye_sides": [
+        "GB"
+      ],
+      "bye_week": 8,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_09_DET_GB",
+      "home_team": "GB",
+      "n_cells_expected_missing": 11,
+      "rating_week": 8,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "GB"
+        }
+      ],
+      "substituted": false,
+      "week": 9
+    },
+    {
+      "away_team": "CLE",
+      "bye_sides": [
+        "CLE"
+      ],
+      "bye_week": 9,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_10_CLE_DET",
+      "home_team": "DET",
+      "n_cells_expected_missing": 11,
+      "rating_week": 9,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "CLE"
+        }
+      ],
+      "substituted": false,
+      "week": 10
+    },
+    {
+      "away_team": "GB",
+      "bye_sides": [
+        "CHI"
+      ],
+      "bye_week": 9,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_10_GB_CHI",
+      "home_team": "CHI",
+      "n_cells_expected_missing": 11,
+      "rating_week": 9,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "CHI"
+        }
+      ],
+      "substituted": false,
+      "week": 10
+    },
+    {
+      "away_team": "LAC",
+      "bye_sides": [
+        "LAC"
+      ],
+      "bye_week": 9,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_10_LAC_JAX",
+      "home_team": "JAX",
+      "n_cells_expected_missing": 11,
+      "rating_week": 9,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "LAC"
+        }
+      ],
+      "substituted": false,
+      "week": 10
+    },
+    {
+      "away_team": "MIN",
+      "bye_sides": [
+        "MIN"
+      ],
+      "bye_week": 9,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_10_MIN_WAS",
+      "home_team": "WSH",
+      "n_cells_expected_missing": 11,
+      "rating_week": 9,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "MIN"
+        }
+      ],
+      "substituted": false,
+      "week": 10
+    },
+    {
+      "away_team": "NE",
+      "bye_sides": [
+        "NE"
+      ],
+      "bye_week": 9,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_10_NE_DEN",
+      "home_team": "DEN",
+      "n_cells_expected_missing": 11,
+      "rating_week": 9,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "NE"
+        }
+      ],
+      "substituted": false,
+      "week": 10
+    },
+    {
+      "away_team": "PIT",
+      "bye_sides": [
+        "PIT"
+      ],
+      "bye_week": 9,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_10_PIT_IND",
+      "home_team": "IND",
+      "n_cells_expected_missing": 11,
+      "rating_week": 9,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "PIT"
+        }
+      ],
+      "substituted": false,
+      "week": 10
+    },
+    {
+      "away_team": "BAL",
+      "bye_sides": [
+        "BAL"
+      ],
+      "bye_week": 10,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_11_BAL_GB",
+      "home_team": "GB",
+      "n_cells_expected_missing": 11,
+      "rating_week": 10,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "BAL"
+        }
+      ],
+      "substituted": false,
+      "week": 11
+    },
+    {
+      "away_team": "KC",
+      "bye_sides": [
+        "KC"
+      ],
+      "bye_week": 10,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_11_KC_NYG",
+      "home_team": "NYG",
+      "n_cells_expected_missing": 11,
+      "rating_week": 10,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "KC"
+        }
+      ],
+      "substituted": false,
+      "week": 11
+    },
+    {
+      "away_team": "NE",
+      "bye_sides": [
+        "OAK"
+      ],
+      "bye_week": 10,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_11_NE_OAK",
+      "home_team": "OAK",
+      "n_cells_expected_missing": 11,
+      "rating_week": 10,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "OAK"
+        }
+      ],
+      "substituted": false,
+      "week": 11
+    },
+    {
+      "away_team": "PHI",
+      "bye_sides": [
+        "PHI"
+      ],
+      "bye_week": 10,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_11_PHI_DAL",
+      "home_team": "DAL",
+      "n_cells_expected_missing": 11,
+      "rating_week": 10,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "away",
+          "team": "PHI"
+        }
+      ],
+      "substituted": false,
+      "week": 11
+    },
+    {
+      "away_team": "CAR",
+      "bye_sides": [
+        "NYJ",
+        "CAR"
+      ],
+      "bye_week": 11,
+      "cells_expected_missing": [
+        "away_def_epa_allowed_5g",
+        "away_off_epa_5g",
+        "away_pass_rate_5g",
+        "away_success_defense_allowed_5g",
+        "away_success_offense_5g",
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_12_CAR_NYJ",
+      "home_team": "NYJ",
+      "n_cells_expected_missing": 16,
+      "rating_week": 11,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "NYJ"
+        },
+        {
+          "role": "away",
+          "team": "CAR"
+        }
+      ],
+      "substituted": false,
+      "week": 12
+    },
+    {
+      "away_team": "SEA",
+      "bye_sides": [
+        "SF"
+      ],
+      "bye_week": 11,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_12_SEA_SF",
+      "home_team": "SF",
+      "n_cells_expected_missing": 11,
+      "rating_week": 11,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "SF"
+        }
+      ],
+      "substituted": false,
+      "week": 12
+    },
+    {
+      "away_team": "TEN",
+      "bye_sides": [
+        "IND"
+      ],
+      "bye_week": 11,
+      "cells_expected_missing": [
+        "home_def_epa_allowed_5g",
+        "home_off_epa_5g",
+        "home_pass_rate_5g",
+        "home_success_defense_allowed_5g",
+        "home_success_offense_5g",
+        "matchup_diff_def_epa_allowed_5g",
+        "matchup_diff_off_epa_5g",
+        "matchup_diff_pressure_allowed_5g",
+        "matchup_diff_pressure_generated_5g",
+        "matchup_diff_red_zone_td_rate_5g",
+        "matchup_diff_success_rate_5g"
+      ],
+      "game_id": "2017_12_TEN_IND",
+      "home_team": "IND",
+      "n_cells_expected_missing": 11,
+      "rating_week": 11,
+      "retained": true,
+      "rule": "exact lookup_t2(rating_week); no last-played fill",
+      "season": 2017,
+      "selection_excluded": false,
+      "sides": [
+        {
+          "role": "home",
+          "team": "IND"
+        }
+      ],
+      "substituted": false,
+      "week": 12
+    }
+  ],
+  "rule": "exact lookup_t2(rating_week); no last-played fill; retain",
+  "ticket": "t5044u"
+}

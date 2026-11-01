@@ -1,0 +1,44 @@
+{
+  "ticket": "t5044u",
+  "owner_clear_tip": "12763c08",
+  "cert": 0,
+  "games": {
+    "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "sha8": "4fe1cdd7",
+    "path": "pins/games_4fe1cdd7.csv"
+  },
+  "outcomes_score_only": {
+    "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+    "sha8": "50bda875",
+    "path": "pins/outcomes_2013_2022_score_only.csv"
+  },
+  "stage_b_recon_matrix": {
+    "sha256": "cd9af2858e21fac5247a489051f0cc61b9490cb97ffdec9ac41a31a2d224d810",
+    "sha8": "cd9af285",
+    "pr": 674,
+    "ticket": "t4923u"
+  },
+  "pbp_2017": {
+    "sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+    "sha8": "84eacd96",
+    "verified_this_run": true,
+    "present_this_vm": true,
+    "path": "data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet",
+    "committed": false
+  },
+  "as_of": "cf514078",
+  "fit": "70db070d",
+  "config": "aa2b47b3",
+  "config_md": "28c582a1",
+  "if_tip": "6ca03716",
+  "if_tip_forbidden": "90bf65ab",
+  "rest": "BIND_PACKET_ONLY",
+  "rest_heuristic": "155d3ca0",
+  "quarantined_index": {
+    "sha8": "1ee90fac",
+    "gate": "83646d78",
+    "opened": false
+  },
+  "contract": "b41f4b43",
+  "builder": "7e77c57f"
+}

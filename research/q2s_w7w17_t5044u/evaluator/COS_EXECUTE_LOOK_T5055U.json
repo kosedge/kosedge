@@ -1,0 +1,22 @@
+{
+  "ticket": "t5055u",
+  "role": "CoS_execute",
+  "binds_final_freeze_sha256": "60b5f4b0140c147e519e3c2d904bbc0f162282af79e542e779499569b0f87291",
+  "binds_final_freeze_sha8": "60b5f4b0",
+  "authorizes_execute": true,
+  "authorizes_look": false,
+  "bound_head": "d1d513a3e8e7a483e3e45d35b2928f03927a3851",
+  "bound_predictions": {
+    "PROTOCOL_FREEZE": "90774bd4",
+    "IF_MUS": "32e97434",
+    "q2s_rows": "55d8c8bc",
+    "RECON_MATRIX": "b56be146"
+  },
+  "alex_ro_tip": "3e499d6c9b8a048e91447c889d22260015f1cdef4c598133b177842f6a19da26",
+  "owner_clear": "12763c08",
+  "owner_corrections": "a276faca",
+  "scope": "ONE exploratory look only — ΔMAE + paired game bootstrap B=10000 seed 20261102 + week-cluster 11 WR; score-only pin 50bda875; n=141; no second look; no weight change; no merge; CERT=0",
+  "look_run": false,
+  "cert": 0,
+  "sealed_at_edt": "2026-11-01T00:04:00-04:00"
+}

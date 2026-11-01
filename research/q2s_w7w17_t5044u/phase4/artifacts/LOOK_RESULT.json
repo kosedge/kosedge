@@ -1,0 +1,164 @@
+{
+  "label": "RETRO_FIT / DEV_RESEARCH",
+  "cert": 0,
+  "n": 141,
+  "weight": 0.5,
+  "B": 10000,
+  "seed": 20261102,
+  "primary": {
+    "delta_mae": -0.6907208498732802,
+    "mae_baseline": 11.227008463232384,
+    "mae_candidate": 10.536287613359102,
+    "n": 141,
+    "bootstrap": {
+      "mean": -0.6907208498732802,
+      "ci_lo": -1.0632020006143281,
+      "ci_hi": -0.3072354332820263,
+      "B": 10000.0,
+      "seed": 20261102.0,
+      "n": 141.0,
+      "method": "game"
+    },
+    "week_cluster_bootstrap": {
+      "mean": -0.6907208498732803,
+      "ci_lo": -1.0806564124218285,
+      "ci_hi": -0.26483428738627657,
+      "B": 10000.0,
+      "seed": 20261102.0,
+      "n": 141.0,
+      "n_clusters": 11.0,
+      "method": "week_cluster"
+    },
+    "ci_crosses_zero": false,
+    "sign_note": "Negative \u0394 = point improvement; either pooled CI including zero, or the two CIs disagreeing in direction, = inconclusive, NOT FQ PASS. Per-week signs are descriptive."
+  },
+  "uncertainty": {
+    "game_bootstrap": {
+      "mean": -0.6907208498732802,
+      "ci_lo": -1.0632020006143281,
+      "ci_hi": -0.3072354332820263,
+      "B": 10000.0,
+      "seed": 20261102.0,
+      "n": 141.0,
+      "method": "game"
+    },
+    "week_cluster_bootstrap": {
+      "mean": -0.6907208498732803,
+      "ci_lo": -1.0806564124218285,
+      "ci_hi": -0.26483428738627657,
+      "B": 10000.0,
+      "seed": 20261102.0,
+      "n": 141.0,
+      "n_clusters": 11.0,
+      "method": "week_cluster"
+    },
+    "game_ci_includes_zero": false,
+    "week_cluster_ci_includes_zero": false,
+    "direction_disagree": false,
+    "per_week_sign_not_required": true
+  },
+  "descriptive": {
+    "rmse_baseline": 14.064062252776084,
+    "rmse_candidate": 13.492334655368603,
+    "week_blocks": {
+      "7": {
+        "n": 11.0,
+        "mae_baseline": 12.42349599544225,
+        "mae_candidate": 11.919758416714284,
+        "delta_mae": -0.5037375787279676,
+        "rmse_baseline": 15.858215288325798,
+        "rmse_candidate": 15.437336678242046
+      },
+      "8": {
+        "n": 11.0,
+        "mae_baseline": 12.750436175395453,
+        "mae_candidate": 11.40833929521349,
+        "delta_mae": -1.3420968801819642,
+        "rmse_baseline": 16.331617491745725,
+        "rmse_candidate": 15.14496346751762
+      },
+      "9": {
+        "n": 8.0,
+        "mae_baseline": 10.66303646146973,
+        "mae_candidate": 11.100822220746801,
+        "delta_mae": 0.4377857592770722,
+        "rmse_baseline": 12.70930202794949,
+        "rmse_candidate": 12.778234477798144
+      },
+      "10": {
+        "n": 8.0,
+        "mae_baseline": 15.38476914491471,
+        "mae_candidate": 14.654620608431564,
+        "delta_mae": -0.730148536483148,
+        "rmse_baseline": 18.985624349933467,
+        "rmse_candidate": 18.3968998897173
+      },
+      "11": {
+        "n": 10.0,
+        "mae_baseline": 10.907758179738916,
+        "mae_candidate": 10.022512485908502,
+        "delta_mae": -0.8852456938304133,
+        "rmse_baseline": 13.902090675127662,
+        "rmse_candidate": 12.770803258179116
+      },
+      "12": {
+        "n": 13.0,
+        "mae_baseline": 9.592824943804818,
+        "mae_candidate": 8.47982877517392,
+        "delta_mae": -1.1129961686308967,
+        "rmse_baseline": 11.604703651798854,
+        "rmse_candidate": 10.307776368598937
+      },
+      "13": {
+        "n": 16.0,
+        "mae_baseline": 11.222663858994286,
+        "mae_candidate": 10.582377189496203,
+        "delta_mae": -0.6402866694980845,
+        "rmse_baseline": 13.59023532807974,
+        "rmse_candidate": 12.998211004720039
+      },
+      "14": {
+        "n": 16.0,
+        "mae_baseline": 9.798537542457456,
+        "mae_candidate": 9.615286631165812,
+        "delta_mae": -0.1832509112916451,
+        "rmse_baseline": 12.37192042049427,
+        "rmse_candidate": 12.70157281318725
+      },
+      "15": {
+        "n": 16.0,
+        "mae_baseline": 11.382413131499206,
+        "mae_candidate": 9.8729302620686,
+        "delta_mae": -1.5094828694306077,
+        "rmse_baseline": 15.517489838355791,
+        "rmse_candidate": 14.486714182676419
+      },
+      "16": {
+        "n": 16.0,
+        "mae_baseline": 11.177040943685226,
+        "mae_candidate": 9.819685598447219,
+        "delta_mae": -1.3573553452380063,
+        "rmse_baseline": 12.875832144198037,
+        "rmse_candidate": 11.77228676821407
+      },
+      "17": {
+        "n": 16.0,
+        "mae_baseline": 10.414856305777818,
+        "mae_candidate": 10.89103513648811,
+        "delta_mae": 0.4761788307102893,
+        "rmse_baseline": 12.299915457405817,
+        "rmse_candidate": 12.839879539661231
+      }
+    },
+    "n_week_blocks": 11,
+    "week_blocks_role": "descriptive_only"
+  },
+  "verdict": "POINT_IMPROVEMENT \u2014 negative \u0394MAE; both pooled CIs exclude 0 and agree; not FQ PASS; CERT=0",
+  "look_run": true,
+  "realized_source": {
+    "path": "/workspace/research/q2s_w7w17_t5044u/pins/outcomes_2013_2022_score_only.csv",
+    "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+    "join": "season,week,home,away",
+    "n_paired": 141
+  }
+}

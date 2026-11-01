@@ -1,0 +1,64 @@
+{
+  "cert": 0,
+  "cite": [
+    "12763c08",
+    "adbcf11d",
+    "7cefecef",
+    "1114f24e",
+    "6ca03716",
+    "84eacd96",
+    "d7e0a6bc"
+  ],
+  "cos_accept_tip": "adbcf11d",
+  "existence_only": false,
+  "files": {
+    "gate1/IDENTITY_MANIFEST.json": "60617413916815df2603b8a41a696e726282cbc1e7e611990cbfacc627378851",
+    "gate1/SELECTION_HASH_SEAL.json": "2d4007bb3b88a55220f068af0ae79e0f7880a51f73176d06a7c9a2a5b8c583e7",
+    "gate2/RECON_MATRIX_W7W17.csv": "b56be1462e591ac5e04cfaf860938118e013664a2c661e156afdf5c5f41bc216",
+    "phase4/ASSUMPTIONS.md": "e6b1db95cfbc193e1dc40f496ea91fd9f782eb3be926fdd9d750c5e2b991adc6",
+    "phase4/AUTHORITY_PHASE4.md": "a3f526f524b7990972361df7731bc36e6d110d4a778405ca092b43b75f740f51",
+    "phase4/artifacts/IF_MUS_W7W17.json": "32e9743483259f2a9c13efe9826e550f610a6068995fad3bc9fdb6b1698d5d43",
+    "phase4/artifacts/q2s_rows_w7w17.json": "55d8c8bc2155705c04e9ef88ba5637ea491bf5c245e4f7bb8fcfb3523f9ec925",
+    "phase4/emit_q2s_w7w17.py": "e1825e9067863e5338912af60169c44ee459a936dd874783cbcfa37732ab6fe7",
+    "phase4/freeze_protocol.py": "ffd3b113be8d49616b8840fff313ad99e3bb11dac0a5fe86d2b3592e3bf20554",
+    "phase4/frozen/FROZEN_CONFIG_Q2PB_t5009u.json": "de6a6ca699769638a156fcc2488245e571da139136c2c8fed1eb444ec58052eb",
+    "phase4/frozen/FROZEN_CONFIG_Q2PB_t5009u.md": "28c582a1b2b9ac49fcb4b9ea2c3ab264fd81786e6332669db9e071b2995c4f94",
+    "phase4/q2pb/__init__.py": "b501d388e739eadc0742ea9c5fd9435bee1ab29da6149b2acccbc42c94009975",
+    "phase4/q2pb/constants.py": "987e8d187038807e1a8e88ccd8925fb6022f5fb3a3c9a3036db35c875d7202d3",
+    "phase4/q2pb/data.py": "08657c2cd7159ed94dd5e5da3b51d355b388edf05162ec4e186acfb8acaff7ff",
+    "phase4/q2pb/metrics.py": "de1ac103d3b2e35fd69b8d848ed8a47fabbb17ad5696fc5727b07506d800a4ee",
+    "phase4/q2pb/strength.py": "43d25c925550910b2b9d338dfd3f66cec8524c3f91ac3b395df8b12b57794f1d",
+    "phase4/q2s/__init__.py": "3cb39b6cb20eb99bf9bce675d5085c9a753e7787cfdb6b055521591de3f4d5c3",
+    "phase4/q2s/blend.py": "f47ef8c84b43fe905d9174822f2a6d50e9c734d866b39304d8fd959f9699a0be",
+    "phase4/q2s/coverage.py": "ea545abe061969cbb84d4ec60a4434e92471a6f95af06ec3ac3c140ecbb1a675",
+    "phase4/run_phase4.py": "d912dde0f54fac95bc17b0b44d5175a6a3feef9d5be632d500cc4707ef305441",
+    "phase4/score_if_w7w17.py": "71ec1daba6235fe0900a5d6a8abc8de6d3c2e452e063ac91f5b98cb39cdf50e2",
+    "pins/games_4fe1cdd7.csv": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "pins/outcomes_2013_2022_score_only.csv": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081"
+  },
+  "frozen_at_utc": "2026-11-01T03:27:49Z",
+  "label": "RETRO_FIT / DEV_RESEARCH",
+  "look_authorized": false,
+  "look_run": false,
+  "matrix_sha256": "b56be1462e591ac5e04cfaf860938118e013664a2c661e156afdf5c5f41bc216",
+  "matrix_sha8": "b56be146",
+  "nfl": "NO-GO",
+  "note": "Code/config/source/manifest/IF rows/Q2s rows frozen. Row identity is hashed, not existence-only (P1 / #685). Do NOT look until Alex timestamped PASS_RO_PRE_LOOK bound to these hashes.",
+  "owner_clear_tip": "12763c08",
+  "phase": 4,
+  "rows": {
+    "if_mus": {
+      "n_rows": 141,
+      "path": "phase4/artifacts/IF_MUS_W7W17.json",
+      "sha256": "32e9743483259f2a9c13efe9826e550f610a6068995fad3bc9fdb6b1698d5d43",
+      "sha8": "32e97434"
+    },
+    "q2s_rows": {
+      "n_rows": 141,
+      "path": "phase4/artifacts/q2s_rows_w7w17.json",
+      "sha256": "55d8c8bc2155705c04e9ef88ba5637ea491bf5c245e4f7bb8fcfb3523f9ec925",
+      "sha8": "55d8c8bc"
+    }
+  },
+  "ticket": "t5044u"
+}

@@ -1,0 +1,138 @@
+{
+  "artifact": "GATE1_IDENTITY_SEAL_2017_W7_W17",
+  "cert": 0,
+  "cites": [
+    "12763c08",
+    "189ed49d",
+    "8be58684",
+    "51d02c20",
+    "d7e0a6bc",
+    "2db90f76",
+    "404a4ab2",
+    "4334b7a3"
+  ],
+  "completeness_rules": {
+    "builder": "7e77c57f",
+    "complete_for_later_if": "27/27 DERIVED_PREGAME only (phase 4; not this run)",
+    "context_fields": [
+      "game_id",
+      "home_team",
+      "away_team",
+      "matchup_season",
+      "matchup_week",
+      "rest_days_home",
+      "rest_days_away"
+    ],
+    "contract": "b41f4b43",
+    "efficiency_fields": [
+      "offense_index_home",
+      "offense_index_away",
+      "defense_index_home",
+      "defense_index_away",
+      "home_off_epa_5g",
+      "away_off_epa_5g",
+      "home_def_epa_allowed_5g",
+      "away_def_epa_allowed_5g",
+      "home_success_offense_5g",
+      "away_success_offense_5g",
+      "home_success_defense_allowed_5g",
+      "away_success_defense_allowed_5g",
+      "home_pass_rate_5g",
+      "away_pass_rate_5g",
+      "matchup_diff_off_epa_5g",
+      "matchup_diff_def_epa_allowed_5g",
+      "matchup_diff_success_rate_5g",
+      "matchup_diff_pressure_allowed_5g",
+      "matchup_diff_pressure_generated_5g",
+      "matchup_diff_red_zone_td_rate_5g"
+    ],
+    "fields_per_game": 27,
+    "no_new_index_formula": true,
+    "t2_exact_week": "lookup_t2(rating_week=week-1) only. Bye-return sides keep MISSING_RECORD on T2 cells. No last-played-week fill.",
+    "zero_completed_asof": "If either side has 0 completed same-season games as-of kickoff (cf514078), mark ineligible/MISSING \u2014 retain, do not replace. Count source unresolved at this seal (not 1ee90fac). Expected 0 in this window."
+  },
+  "exclusion_rule": "All 4fe1cdd7 scheduled rows for 2017 REG W7\u2013W17 stay in the identity universe. Zero-completed-as-of is a completeness rule, not an identity drop. T2 exact-week misses stay listed. No last-played, fills, replacement games, or outcome-based exclusion.",
+  "games_csv_pin": {
+    "columns_not_read": [
+      "market_*",
+      "epa_*",
+      "*_prob",
+      "trailing_*",
+      "packaged_*",
+      "record_offense_index_*",
+      "record_defense_index_*",
+      "rest_days_*"
+    ],
+    "columns_read": [
+      "season",
+      "week",
+      "game_id",
+      "home",
+      "away",
+      "kickoff_utc"
+    ],
+    "path": "pins/games_4fe1cdd7.csv",
+    "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "sha8": "4fe1cdd7"
+  },
+  "if_authorized": false,
+  "labels": [
+    "RETRO_FIT",
+    "DEV_RESEARCH",
+    "A1"
+  ],
+  "look_authorized": false,
+  "n_filled": 0,
+  "n_identity_sealed": 165,
+  "n_outcome_excluded": 0,
+  "n_replaced": 0,
+  "n_scheduled": 165,
+  "n_t2_bye_return_risks": 24,
+  "nfl_nogo": true,
+  "outcomes_50bda875": {
+    "opened_at_gate1": false,
+    "use": "deferred_until_independent_matrix_parity"
+  },
+  "owner_clear_tip": "12763c08",
+  "pbp_absent_at_seal_start": true,
+  "pbp_opened_at_seal": false,
+  "pbp_paths_checked_absent": [
+    "/workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet",
+    "/workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2016.parquet",
+    "/workspace/research/q2s_w7w17_t5044u/pbp/play_by_play_2017.parquet"
+  ],
+  "phase": 1,
+  "q2s_emit_authorized": false,
+  "quarantined_index": {
+    "gate": "83646d78",
+    "opened": false,
+    "scored_from": false,
+    "sha8": "1ee90fac"
+  },
+  "rest": {
+    "bind": "BIND_PACKET_ONLY",
+    "heuristic": "155d3ca0_ET_DOW",
+    "if_tip_forbidden": "90bf65ab",
+    "if_tip_later": "6ca03716"
+  },
+  "sealed_before_pbp_open": true,
+  "selection_hash_by_week": {
+    "10": "e148c4bc636e2cbeaa58970a5c3a81c7a044edb604d446abb7868675fa7a30ea",
+    "11": "12c592a1cafc32b468cbc978a0979d5a54dc9508a8eb58d9214eb7ed243549cb",
+    "12": "0429735e5ceea8a59bdbdb8169cf3e49bf75fd1c0dd2585963946c011966f2e4",
+    "13": "7ca79ee02297846699b27010e950c1034d3aeec76dbb21d488aa8f8938d24e8c",
+    "14": "0de7442d1c5c984b3f008137a81e215df68029e1268075a6a4f3b9819e7349d3",
+    "15": "a00036aae9755d5f95e65b3995520d199b0b06362b715cd0954607c24002eb2d",
+    "16": "ecd5895dfb883e10a5a0a26fbbfc93412e504dd219806b88718e768e3439f2d4",
+    "17": "0afe2da119427f4a840efe102527f488cbd89a41d68ae13bfadb7c753057927c",
+    "7": "6030f79c2a9690b818c7ae2b4b9ac9edd0c5c47741b222f715429753d6b29856",
+    "8": "3bf4a0dc29237f0b97ef6a4bf12396385f4564e4f7cd3470aeccbc1f7ecdc58e",
+    "9": "0cb8fc3fc3cc87c8c3b42a212e8b1f976151918b58de46c5fa09ac8f77905561"
+  },
+  "selection_hash_combined": "41f211b639f39f98f8630f6774181dc9faaaeac34c9d67f486d0a16bae1dad3c",
+  "selection_hash_recipe": "sha256(utf-8 of sorted canonical game_id list joined by \\n with trailing \\n)",
+  "stage_b_w7_hash_match": true,
+  "stage_b_w8_hash_match": true,
+  "stage_c_authorized": false,
+  "ticket": "t5044u"
+}
