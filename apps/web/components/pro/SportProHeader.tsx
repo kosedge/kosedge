@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import UserMenu from "@/components/auth/UserMenu";
 import { SPORTS } from "@/lib/sports";
 import {
   SPORT_TAGLINE,
@@ -29,7 +30,7 @@ export default function SportProHeader({
   return (
     <header className="sticky top-0 z-40 border-b border-kos-border/80 bg-kos-black/90 backdrop-blur-xl [--kos-pro-header-h:6.75rem] sm:[--kos-pro-header-h:7.5rem]">
       <div className="mx-auto flex max-w-7xl flex-col gap-0 px-4 sm:px-6">
-        <div className="flex items-center justify-between gap-3 py-2 sm:gap-4 sm:py-3">
+        <div className="flex min-w-0 items-center justify-between gap-3 py-2 sm:gap-4 sm:py-3">
           <Link
             href="/"
             className="flex min-h-11 shrink-0 items-center gap-2.5 sm:gap-3"
@@ -42,7 +43,7 @@ export default function SportProHeader({
               priority
               className="h-11 w-auto sm:h-12"
             />
-            <div className="leading-tight">
+            <div className="hidden leading-tight sm:block">
               <div className="text-lg font-extrabold tracking-wide text-kos-text sm:text-xl">
                 KosEdge Analytics
               </div>
@@ -54,7 +55,7 @@ export default function SportProHeader({
 
           {showSportsNav ? (
             <nav
-              className="-mx-1 flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:flex-wrap sm:gap-1.5 sm:overflow-visible"
+              className="-mx-1 flex min-w-0 flex-1 items-center justify-end gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-1.5"
               aria-label="Sport hubs"
             >
               {SPORTS.map((s) => {
@@ -75,7 +76,16 @@ export default function SportProHeader({
                 );
               })}
             </nav>
-          ) : null}
+          ) : (
+            <div className="min-w-0 flex-1" aria-hidden />
+          )}
+
+          <div
+            className="shrink-0 [&_a]:max-sm:px-2.5 [&_a]:max-sm:py-1.5 [&_.flex.items-center]:max-sm:gap-1.5"
+            data-testid="sport-pro-header-user-menu"
+          >
+            <UserMenu />
+          </div>
         </div>
 
         <nav
