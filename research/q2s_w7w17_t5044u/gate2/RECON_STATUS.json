@@ -1,0 +1,210 @@
+{
+  "builder": "7e77c57f",
+  "cert": 0,
+  "completeness": {
+    "complete_game_ids": [
+      "2017_07_ARI_LA",
+      "2017_07_ATL_NE",
+      "2017_07_BAL_MIN",
+      "2017_07_CAR_CHI",
+      "2017_07_DEN_LAC",
+      "2017_07_JAX_IND",
+      "2017_07_KC_OAK",
+      "2017_07_NO_GB",
+      "2017_07_NYJ_MIA",
+      "2017_07_TEN_CLE",
+      "2017_07_WAS_PHI",
+      "2017_08_ATL_NYJ",
+      "2017_08_CAR_TB",
+      "2017_08_CHI_NO",
+      "2017_08_DAL_WAS",
+      "2017_08_DEN_KC",
+      "2017_08_IND_CIN",
+      "2017_08_LAC_NE",
+      "2017_08_MIA_BAL",
+      "2017_08_MIN_CLE",
+      "2017_08_OAK_BUF",
+      "2017_08_SF_PHI"
+    ],
+    "n_complete_27_of_27": 22,
+    "n_identity": 165,
+    "n_outcome_excluded": 0,
+    "n_partial_preregistered_t2": 24,
+    "n_partial_recon_available": 6,
+    "n_recon_not_attempted": 137,
+    "n_unexpected_missing": 0,
+    "partial_available": [
+      {
+        "game_id": "2017_07_CIN_PIT",
+        "missing_fields": [
+          "away_off_epa_5g",
+          "away_def_epa_allowed_5g",
+          "away_success_offense_5g",
+          "away_success_defense_allowed_5g",
+          "away_pass_rate_5g",
+          "matchup_diff_off_epa_5g",
+          "matchup_diff_def_epa_allowed_5g",
+          "matchup_diff_success_rate_5g",
+          "matchup_diff_pressure_allowed_5g",
+          "matchup_diff_pressure_generated_5g",
+          "matchup_diff_red_zone_td_rate_5g"
+        ],
+        "n_derived": 16,
+        "n_missing": 11,
+        "reason": "T2 bye-return exact rating_week miss (Stage B)",
+        "retained": true,
+        "selection_excluded": false
+      },
+      {
+        "game_id": "2017_07_DAL_SF",
+        "missing_fields": [
+          "away_off_epa_5g",
+          "away_def_epa_allowed_5g",
+          "away_success_offense_5g",
+          "away_success_defense_allowed_5g",
+          "away_pass_rate_5g",
+          "matchup_diff_off_epa_5g",
+          "matchup_diff_def_epa_allowed_5g",
+          "matchup_diff_success_rate_5g",
+          "matchup_diff_pressure_allowed_5g",
+          "matchup_diff_pressure_generated_5g",
+          "matchup_diff_red_zone_td_rate_5g"
+        ],
+        "n_derived": 16,
+        "n_missing": 11,
+        "reason": "T2 bye-return exact rating_week miss (Stage B)",
+        "retained": true,
+        "selection_excluded": false
+      },
+      {
+        "game_id": "2017_07_SEA_NYG",
+        "missing_fields": [
+          "away_off_epa_5g",
+          "away_def_epa_allowed_5g",
+          "away_success_offense_5g",
+          "away_success_defense_allowed_5g",
+          "away_pass_rate_5g",
+          "matchup_diff_off_epa_5g",
+          "matchup_diff_def_epa_allowed_5g",
+          "matchup_diff_success_rate_5g",
+          "matchup_diff_pressure_allowed_5g",
+          "matchup_diff_pressure_generated_5g",
+          "matchup_diff_red_zone_td_rate_5g"
+        ],
+        "n_derived": 16,
+        "n_missing": 11,
+        "reason": "T2 bye-return exact rating_week miss (Stage B)",
+        "retained": true,
+        "selection_excluded": false
+      },
+      {
+        "game_id": "2017_07_TB_BUF",
+        "missing_fields": [
+          "home_off_epa_5g",
+          "home_def_epa_allowed_5g",
+          "home_success_offense_5g",
+          "home_success_defense_allowed_5g",
+          "home_pass_rate_5g",
+          "matchup_diff_off_epa_5g",
+          "matchup_diff_def_epa_allowed_5g",
+          "matchup_diff_success_rate_5g",
+          "matchup_diff_pressure_allowed_5g",
+          "matchup_diff_pressure_generated_5g",
+          "matchup_diff_red_zone_td_rate_5g"
+        ],
+        "n_derived": 16,
+        "n_missing": 11,
+        "reason": "T2 bye-return exact rating_week miss (Stage B)",
+        "retained": true,
+        "selection_excluded": false
+      },
+      {
+        "game_id": "2017_08_HOU_SEA",
+        "missing_fields": [
+          "away_off_epa_5g",
+          "away_def_epa_allowed_5g",
+          "away_success_offense_5g",
+          "away_success_defense_allowed_5g",
+          "away_pass_rate_5g",
+          "matchup_diff_off_epa_5g",
+          "matchup_diff_def_epa_allowed_5g",
+          "matchup_diff_success_rate_5g",
+          "matchup_diff_pressure_allowed_5g",
+          "matchup_diff_pressure_generated_5g",
+          "matchup_diff_red_zone_td_rate_5g"
+        ],
+        "n_derived": 16,
+        "n_missing": 11,
+        "reason": "T2 bye-return exact rating_week miss (Stage B)",
+        "retained": true,
+        "selection_excluded": false
+      },
+      {
+        "game_id": "2017_08_PIT_DET",
+        "missing_fields": [
+          "home_off_epa_5g",
+          "home_def_epa_allowed_5g",
+          "home_success_offense_5g",
+          "home_success_defense_allowed_5g",
+          "home_pass_rate_5g",
+          "matchup_diff_off_epa_5g",
+          "matchup_diff_def_epa_allowed_5g",
+          "matchup_diff_success_rate_5g",
+          "matchup_diff_pressure_allowed_5g",
+          "matchup_diff_pressure_generated_5g",
+          "matchup_diff_red_zone_td_rate_5g"
+        ],
+        "n_derived": 16,
+        "n_missing": 11,
+        "reason": "T2 bye-return exact rating_week miss (Stage B)",
+        "retained": true,
+        "selection_excluded": false
+      }
+    ]
+  },
+  "contract": "b41f4b43",
+  "if_invoked": false,
+  "labels": [
+    "RETRO_FIT",
+    "DEV_RESEARCH",
+    "A1"
+  ],
+  "look_run": false,
+  "new_index_formula": false,
+  "owner_clear_tip": "12763c08",
+  "pbp": {
+    "blocker": "PBP 2017 pin 84eacd96 is not on this VM at /workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet. Gate 2 reconstruction of W9\u2013W17 STOPPED. No fetch/spend. W7\u2013W8 may reuse owned Stage B matrix after identity-hash match.",
+    "expected_path": "/workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet",
+    "expected_sha256": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+    "expected_sha8": "84eacd96",
+    "fetched": false,
+    "present": false,
+    "verified": false
+  },
+  "phase": 1,
+  "q2s_emitted": false,
+  "quarantined_1ee90fac_scored": false,
+  "stop_for_alex_pre_if": true,
+  "ticket": "t5044u",
+  "w7w8_reuse": {
+    "identity_hash_w7": "6030f79c2a9690b818c7ae2b4b9ac9edd0c5c47741b222f715429753d6b29856",
+    "identity_hash_w8": "3bf4a0dc29237f0b97ef6a4bf12396385f4564e4f7cd3470aeccbc1f7ecdc58e",
+    "n_complete_27_of_27": 22,
+    "n_games": 28,
+    "n_partial_t2": 6,
+    "provenance_match": true,
+    "slice_sha256": "3ab291d66a5b5da88daa073413635196e7361ffc9e1e2eafb35c652bedc7c441",
+    "source": "PR #674 / t4923u",
+    "source_full_matrix_sha256": "cd9af2858e21fac5247a489051f0cc61b9490cb97ffdec9ac41a31a2d224d810"
+  },
+  "w9_w17": {
+    "blocker": "PBP 2017 pin 84eacd96 is not on this VM at /workspace/data/raw/nfl/pbp/t4696u_s1_restage/play_by_play_2017.parquet. Gate 2 reconstruction of W9\u2013W17 STOPPED. No fetch/spend. W7\u2013W8 may reuse owned Stage B matrix after identity-hash match.",
+    "n_identity": 137,
+    "reconstructed": false
+  },
+  "wl_parity_50bda875": {
+    "independent_parity_proven": true,
+    "n_match": 28,
+    "n_mismatch": 0
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "compared_to": "Stage B SAMPLE_MANIFEST W7\u2013W8 record_asof (not 1ee90fac columns)",
+  "independent_parity_proven": true,
+  "mismatches": [],
+  "n_compared": 28,
+  "n_match": 28,
+  "n_mismatch": 0,
+  "note": "Parity authorizes using 50bda875 W-L/counts for later completeness bookkeeping only. It does not authorize IF invoke or dropping games.",
+  "outcomes_sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+  "outcomes_sha8": "50bda875",
+  "unresolved": [],
+  "use_for_dependent_scoring": true
+}
