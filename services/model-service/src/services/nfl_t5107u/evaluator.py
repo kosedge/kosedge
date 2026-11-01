@@ -31,6 +31,12 @@ from src.services.nfl_odds_reader import (
 )
 
 from .builder import SCHEMA as FORECAST_SCHEMA
+from .inputs import QUOTE_MANIFEST_SHA256
+from .metric_cohorts import (
+    MetricCohortRefuse,
+    refuse_eval_quote_and_hold,
+    refuse_pooled_or_default_eval,
+)
 from .one_run import (
     OneRunRefuse,
     claim_one_run,
@@ -170,6 +176,9 @@ def _cohort_sha(game_ids: Sequence[str]) -> str:
 def freeze_eligible_cohorts(
     forecast_payload: Mapping[str, Any],
     market_result: Mapping[str, Any],
+    *,
+    quote_manifest_sha256: str | None = None,
+    g5_hold: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Freeze per-metric cohorts after cutoff/quote eligibility, before outcomes."""
     base = freeze_forecast_cohort(forecast_payload)
@@ -196,7 +205,9 @@ def freeze_eligible_cohorts(
     ]
     if len(margin_ids) != len(set(margin_ids)) or len(prob_ids) != len(set(prob_ids)):
         raise EvalRefuse("duplicate game_id in eligible cohort")
-    return {
+    if quote_manifest_sha256 is not None and quote_manifest_sha256 != QUOTE_MANIFEST_SHA256:
+        raise EvalRefuse("quote manifest pin mismatch vs 6a1c1b37")
+    out = {
         "forecast_sha256": base.forecast_sha256,
         "declared_cohort_sha256": base.cohort_sha256,
         "declared_game_ids": list(base.game_ids),
@@ -215,6 +226,11 @@ def freeze_eligible_cohorts(
         "cert_candidate": CERT_CANDIDATE,
         "payload": dict(forecast_payload),
     }
+    if quote_manifest_sha256 is not None:
+        out["quote_manifest_sha256"] = quote_manifest_sha256
+    if g5_hold is not None:
+        out["g5_hold"] = dict(g5_hold)
+    return out
 
 
 def mean_stat(values: Sequence[float]) -> float:
@@ -619,6 +635,12 @@ def run_eval_score(
         raise EvalRefuse("forecast/cohort hash mismatch — refuse scoring")
     if bootstrap_b != BOOT_B or bootstrap_seed != BOOT_SEED:
         raise EvalRefuse("bootstrap hyperparameters are frozen")
+    try:
+        forecasts = list(frozen.payload.get("forecasts") or [])
+        refuse_pooled_or_default_eval(forecasts, eligible_cohorts)
+        refuse_eval_quote_and_hold(forecasts, eligible_cohorts)
+    except MetricCohortRefuse as exc:
+        raise EvalRefuse(str(exc)) from exc
     if exec_bind in (None, COS_ONE_RUN_BIND) or not load_one_run(one_run_path):
         raise EvalRefuse(
             "EXEC scoring refused until independent Alex preflight GO and "

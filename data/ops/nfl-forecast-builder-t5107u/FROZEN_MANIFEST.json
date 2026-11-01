@@ -291,7 +291,7 @@
       "This append is NOT a forecast freeze and does not authorize EXEC scoring.",
       "t5110u pin correction: games.csv 4fe1cdd7 full sha; kickoff_utc UTC Z NOT missing.",
       "outcomes 50bda875 full sha pinned; quote join manifest hashed.",
-      "b41f4b43 / RECON_MATRIX remain MISSING \u2014 no invented formulas / no Stage C."
+      "RECON_BINDINGS_2020_2023 supersedes stale RECON MISSING note (file sha 942b3398); b41f4b43 efficiency/index formulas still not invented; no Stage C."
     ]
   },
   "t5108u_append": {
@@ -300,5 +300,5 @@
     "produce_mu": "reconstructed_if_produce"
   },
   "appended_at_utc": "2026-11-01T19:16:20Z",
-  "appended_manifest_sha256": "f3e5e4b96bf1f2983ceba13ec455f4f39f040e5bb43bedcdf0a81b927bb34711"
+  "appended_manifest_sha256": "f899392aa8ee78614d5b4e02375c3748b4f2324fb9019918b1c0098316241b63"
 }

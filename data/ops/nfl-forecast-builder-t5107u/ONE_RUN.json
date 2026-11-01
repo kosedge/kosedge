@@ -1,0 +1,17 @@
+{
+  "schema_version": "nfl-t5108u-one-run-v1",
+  "effective_spec_sha256": "3c54b9a815b67f225222d623bb546d5d2de67f70f3c77816ffb76a5848371060",
+  "code_sha256": "0180e2eed5fe7f7569749867a6350a71b4bf3b93a8b494c32970d031079c8472",
+  "input_sha256": "9e704b980b6ce33acc883725823c39766ea19f8a86a7a781ac2a02d95344a732",
+  "forecast_sha256": "989b85c6150bdd84b1a84c200e4f9d83b5e7081c094063405a6ae46de94b8e1a",
+  "cohort_sha256": "fac21ebed92b6ef91e27095026751f088440dbd81e47ca368d256c580b58d7f0",
+  "alex_go_id": "c122b1088a404db550ae570ccf0c2099e084d900233bd5d317b84990288eef3b",
+  "status": "FAILED",
+  "bound_at_utc": "2026-11-01T20:25:27Z",
+  "exec_scoring": "BOUND_NOT_AUTHORIZED_UNTIL_COS_GO",
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "bind_id": "39909c61ce9429896bd20edd37259803cad0e11f1e2d3c3828ee04c9faab1830",
+  "failed_at_utc": "2026-11-01T20:25:27Z",
+  "failure": "G5 30% per-season HOLD tripped \u2014 refuse scoring"
+}
