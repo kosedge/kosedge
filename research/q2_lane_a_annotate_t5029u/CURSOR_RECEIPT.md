@@ -5,7 +5,7 @@
 ## Head
 
 - Branch: `cursor/q2-lane-a-annotate-7e82`
-- Head sha: _filled after commit_
+- Head sha: `0119aac8090a4ea4a164f6fde1b4e4c80766c5cb`
 - Base: `origin/deploy-vercel` @ `f5e3bb58`
 
 ## Changed
