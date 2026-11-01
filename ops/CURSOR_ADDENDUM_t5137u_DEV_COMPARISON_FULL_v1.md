@@ -100,6 +100,6 @@ cd services/model-service && PYTHONPATH=. python3 -m pytest \
 | market E2E impl | `4c84cb55` |
 | matched72 record (payload) | `72a1f1f9ad1befa95b0cdb10588935da1e39fb857b06ee4f9a5778b1af1c3437` |
 | matched72 record (file) | `88d63eb7f6b09e967fcf60122f525c2873072aaada93bb0dab3d8c3ff17fd9ea` |
-| this implementation tip | *(stamped after commit)* |
+| this implementation tip | `db08fdb77cc568d82131ab12d28b837c1c59ccdf` |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
