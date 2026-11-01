@@ -64,6 +64,6 @@ cd services/model-service && PYTHONPATH=. python3 -m pytest \
 | Cos ORDER market E2E    | `e7330717`                                 |
 | R2-A sealed tip         | `3821941d758feb7ba05e680da6ecec283291dd2a` |
 | RETURN-FIX parent       | `a957745a` / HEAD `7368be5c`               |
-| this implementation tip | *(stamped after commit)*                   |
+| this implementation tip | `4c84cb550db64968b7213f43442be64275cf5c75` |
 
 CERT=0 · DRAFT≠merge · no merge/send · no EVAL EXEC.
