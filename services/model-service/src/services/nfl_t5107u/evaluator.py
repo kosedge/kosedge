@@ -45,6 +45,11 @@ from .one_run import (
     load_one_run,
     verify_one_run,
 )
+from .outcome_gate import (
+    OutcomeGateRefuse,
+    invoke_after_gates,
+    refuse_both_preload_and_loader,
+)
 from .q2 import SEALED_SEASONS
 
 CUTOFF_MINUTES = 60
@@ -580,13 +585,21 @@ def run_paired_margin_eval(
     clusters = [r["season_week"] for r in joined]
     err_c = [r["err_challenger"] for r in joined]
     err_if = [r["err_if"] for r in joined]
+    diffs_mkt = [r["signed_diff_vs_market"] for r in joined if "signed_diff_vs_market" in r]
+    market_complete = bool(diffs_mkt) and len(diffs_mkt) == len(joined)
     result: dict[str, Any] = {
         "n": len(joined),
+        "n_by_season": _count_seasons(joined),
         "games": joined,
         "mae_challenger": paired_mae(err_c),
         "mae_if": paired_mae(err_if),
+        "rmse_challenger": paired_rmse(err_c),
+        "rmse_if": paired_rmse(err_if),
+        "bias_challenger": paired_bias(err_c),
+        "bias_if": paired_bias(err_if),
         "delta_mae_vs_if": paired_mae(err_c) - paired_mae(err_if),
         "mean_signed_diff_vs_if": mean_stat(diffs_if),
+        "per_season": _per_season_table(joined, include_market=market_complete),
         "bootstrap_game": bootstrap_ci(diffs_if, stat=mean_stat),
         "bootstrap_season_week": bootstrap_ci(diffs_if, stat=mean_stat, clusters=clusters),
         "reporting_class": reporting_class(len(joined)),
@@ -599,19 +612,69 @@ def run_paired_margin_eval(
             "negative mean = challenger improved (lower loss than control)",
         ],
     }
-    diffs_mkt = [r["signed_diff_vs_market"] for r in joined if "signed_diff_vs_market" in r]
-    if diffs_mkt and len(diffs_mkt) == len(joined):
+    if market_complete:
+        err_m = [r["err_market"] for r in joined]
         result["mean_signed_diff_vs_market"] = mean_stat(diffs_mkt)
         result["bootstrap_game_vs_market"] = bootstrap_ci(diffs_mkt, stat=mean_stat)
-        result["mae_market"] = paired_mae([r["err_market"] for r in joined])
+        result["bootstrap_season_week_vs_market"] = bootstrap_ci(
+            diffs_mkt, stat=mean_stat, clusters=clusters
+        )
+        result["mae_market"] = paired_mae(err_m)
+        result["rmse_market"] = paired_rmse(err_m)
+        result["bias_market"] = paired_bias(err_m)
         result["delta_mae_vs_market"] = paired_mae(err_c) - result["mae_market"]
     return result
 
 
+def _count_seasons(games: Sequence[Mapping[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = defaultdict(int)
+    for row in games:
+        counts[str(int(row["season"]))] += 1
+    return dict(sorted(counts.items()))
+
+
+def _per_season_table(
+    games: Sequence[Mapping[str, Any]],
+    *,
+    include_market: bool,
+) -> dict[str, Any]:
+    by: dict[int, list[Mapping[str, Any]]] = defaultdict(list)
+    for row in games:
+        by[int(row["season"])].append(row)
+    out: dict[str, Any] = {}
+    for season in sorted(by):
+        rows = by[season]
+        err_c = [r["err_challenger"] for r in rows]
+        err_if = [r["err_if"] for r in rows]
+        diffs = [r["signed_diff_vs_if"] for r in rows]
+        body: dict[str, Any] = {
+            "n": len(rows),
+            "mae_challenger": paired_mae(err_c),
+            "mae_if": paired_mae(err_if),
+            "rmse_challenger": paired_rmse(err_c),
+            "rmse_if": paired_rmse(err_if),
+            "bias_challenger": paired_bias(err_c),
+            "bias_if": paired_bias(err_if),
+            "delta_mae_vs_if": paired_mae(err_c) - paired_mae(err_if),
+            "mean_signed_diff_vs_if": mean_stat(diffs),
+        }
+        if include_market:
+            err_m = [r["err_market"] for r in rows]
+            diffs_m = [r["signed_diff_vs_market"] for r in rows]
+            body["mae_market"] = paired_mae(err_m)
+            body["rmse_market"] = paired_rmse(err_m)
+            body["bias_market"] = paired_bias(err_m)
+            body["delta_mae_vs_market"] = paired_mae(err_c) - paired_mae(err_m)
+            body["mean_signed_diff_vs_market"] = mean_stat(diffs_m)
+        out[str(season)] = body
+    return out
+
+
 def run_eval_score(
     frozen: FrozenCohort,
-    outcomes: Mapping[str, Mapping[str, Any]],
+    outcomes: Mapping[str, Mapping[str, Any]] | None = None,
     *,
+    outcome_loader: Any = None,
     exec_bind: str | None = None,
     market_points: Sequence[Mapping[str, Any]] | None = None,
     bootstrap_b: int = BOOT_B,
@@ -626,8 +689,21 @@ def run_eval_score(
     spec_path: Any = None,
     input_path: Any = None,
     score_body: Any = None,
+    r2_runtime_bytes: Mapping[str, Any] | None = None,
+    require_r2_runtime_bytes: bool = False,
 ) -> dict[str, Any]:
-    """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS."""
+    """Real EVAL score pass. Gated on persistent one-run bind + Alex GO + CoS.
+
+    SOURCE READ (quotes / forecasts / metadata) may precede this function.
+    TARGET JOIN (scoring outcomes) must not. Prefer ``outcome_loader``; it is
+    invoked only after HOLD, hash verify, and exclusive claim. Preloaded
+    ``outcomes`` is the t5116u exposure and is accepted only as a back-compat
+    JOIN input after those same gates — it is never a reason to skip them.
+    """
+    try:
+        refuse_both_preload_and_loader(outcomes, outcome_loader)
+    except OutcomeGateRefuse as exc:
+        raise EvalRefuse(str(exc)) from exc
     if not frozen.sealed_before_outcome_join:
         raise EvalRefuse("cohort was not sealed before outcome join")
     rehash = freeze_forecast_cohort(frozen.payload)
@@ -661,6 +737,8 @@ def run_eval_score(
             spec_path=spec_path,
             input_path=input_path,
             path=one_run_path,
+            r2_runtime_bytes=r2_runtime_bytes,
+            require_r2_runtime_bytes=require_r2_runtime_bytes,
         )
         record = claim_one_run(one_run_path, record["bind_id"])
     except OneRunRefuse as exc:
@@ -673,9 +751,10 @@ def run_eval_score(
         allow = list((eligible_cohorts.get("margin_cohort") or {}).get("game_ids") or [])
     score_fn = score_body or run_paired_margin_eval
     try:
+        joined_outcomes = invoke_after_gates(outcomes, outcome_loader)
         scored = score_fn(
             list(frozen.payload.get("forecasts") or []),
-            outcomes,
+            joined_outcomes,
             eligible_game_ids=allow,
             market_points=market_points,
             bootstrap_b=bootstrap_b,
@@ -684,8 +763,8 @@ def run_eval_score(
         complete_one_run(one_run_path, record["bind_id"], result={"n": scored.get("n")})
     except Exception as exc:
         fail_one_run(one_run_path, record["bind_id"], str(exc))
-        if isinstance(exc, (EvalRefuse, OneRunRefuse)):
-            raise
+        if isinstance(exc, (EvalRefuse, OneRunRefuse, OutcomeGateRefuse)):
+            raise EvalRefuse(str(exc)) from exc
         raise EvalRefuse(
             f"one-run claimed then failed — refuse automatic rerun: {exc}"
         ) from exc
@@ -694,6 +773,7 @@ def run_eval_score(
     scored["one_run_bind_id"] = record["bind_id"]
     scored["alex_go_id"] = record["alex_go_id"]
     scored["one_run_status"] = "CONSUMED"
+    scored["target_join_phase"] = "AFTER_HOLD_HASH_CLAIM"
     return scored
 
 

@@ -1,0 +1,39 @@
+{
+  "schema_version": "nfl-t5119u-r2b-market-e2e-receipt-v1",
+  "cert_candidate": 0,
+  "eval": null,
+  "eval_invoked": false,
+  "one_run_claim": false,
+  "r2a_tip": "3821941d758feb7ba05e680da6ecec283291dd2a",
+  "cos_accept": "770f72da",
+  "cos_order": "e7330717",
+  "eval_cohort": {
+    "eligible_n": 449,
+    "joined_n": 95,
+    "missing_n": 354,
+    "bind_ready": false
+  },
+  "dev_reg_cohort": {
+    "eligible_n": 437,
+    "joined_n": 72,
+    "missing_n": 365,
+    "bind_ready": false
+  },
+  "dev_matched_subset": {
+    "eligible_n": 72,
+    "joined_n": 72,
+    "bind_ready": true,
+    "mae_market": 9.38888888888889,
+    "rmse_market": 11.97791660144247,
+    "bias_market": 0.5486111111111112
+  },
+  "market_ready_for_eval_bind": false,
+  "market_ready_for_dev_matched_bind": true,
+  "reason": "EVAL 449 incomplete (95/449). DEV 437 incomplete (72/437). DEV matched 72 has sealed market_margin. No EVAL invoked.",
+  "g5_loosened": false,
+  "notes": [
+    "Consumed sealed R2-A ADMISSIBLE_QUOTES + manifest. Coverage files not rewritten.",
+    "G5 / KO\u221260 / \u226424h / DK-FD unchanged. Conflicts fail-closed.",
+    "EVAL was not invoked. one_run_claim=false. CERT=0."
+  ]
+}

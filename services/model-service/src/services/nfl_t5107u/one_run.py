@@ -37,8 +37,20 @@ def _canonical(payload: Mapping[str, Any]) -> str:
     return json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
 
 
+def _r2_hash_set(payload: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "bind_id": str(payload["bind_id"]),
+        "forecast_file_sha256": str(payload["forecast_file_sha256"]),
+        "quote_manifest_sha256": str(payload["quote_manifest_sha256"]),
+        "quote_extract_sha256s": [str(x) for x in payload["quote_extract_sha256s"]],
+    }
+
+
 def bind_id_for(payload: Mapping[str, Any]) -> str:
     body = {k: payload[k] for k in HASH_FIELDS}
+    r2 = payload.get("r2_runtime_bytes")
+    if r2:
+        body["r2_runtime_bytes"] = _r2_hash_set(r2)
     return hashlib.sha256(_canonical(body).encode("utf-8")).hexdigest()
 
 
@@ -89,6 +101,7 @@ def bind_one_run(
     cohort_sha256: str,
     alex_go_id: str,
     path: Path | None = None,
+    r2_runtime_bytes: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Atomically persist the one-run record via exclusive create. Refuse duplicate/mismatch."""
     if not str(alex_go_id or "").strip():
@@ -117,6 +130,13 @@ def bind_one_run(
         "label": "RESEARCH_CONSUMED_RETRO",
         "cert_candidate": 0,
     }
+    if r2_runtime_bytes is not None:
+        try:
+            record["r2_runtime_bytes"] = _r2_hash_set(r2_runtime_bytes)
+        except KeyError as exc:
+            raise OneRunRefuse(
+                "r2_runtime_bytes requires bind_id + freeze/manifest/extract hash sets"
+            ) from exc
     record["bind_id"] = bind_id_for(record)
 
     dest = Path(path) if path else DEFAULT_PATH
@@ -133,6 +153,8 @@ def bind_one_run(
             for name in HASH_FIELDS
             if existing and str(existing.get(name) or "") != str(record.get(name) or "")
         ]
+        if existing and existing.get("r2_runtime_bytes") != record.get("r2_runtime_bytes"):
+            mismatched.append("r2_runtime_bytes")
         raise OneRunRefuse(
             "one-run mismatch vs existing record: " + ", ".join(mismatched or ["bind_id"])
         )
@@ -271,6 +293,8 @@ def verify_one_run(
     spec_path: Path | None = None,
     input_path: Path | None = None,
     path: Path | None = None,
+    r2_runtime_bytes: Mapping[str, Any] | None = None,
+    require_r2_runtime_bytes: bool = False,
 ) -> dict[str, Any]:
     if not record:
         raise OneRunRefuse("no persistent one-run record")
@@ -311,6 +335,25 @@ def verify_one_run(
         raise OneRunRefuse("effective-spec hash mismatch at run time")
     if live_input != record.get("input_sha256"):
         raise OneRunRefuse("input hash mismatch at run time")
+    bound_r2 = record.get("r2_runtime_bytes")
+    if require_r2_runtime_bytes and not bound_r2:
+        raise OneRunRefuse(
+            "ONE_RUN missing r2_runtime_bytes — side bind alone insufficient"
+        )
+    if bound_r2 is not None or require_r2_runtime_bytes:
+        if r2_runtime_bytes is None:
+            raise OneRunRefuse("live R2 file-byte hashes required for verify_one_run")
+        try:
+            live_r2 = _r2_hash_set(r2_runtime_bytes)
+            expected_r2 = _r2_hash_set(bound_r2 or {})
+        except KeyError as exc:
+            raise OneRunRefuse(
+                "r2_runtime_bytes requires bind_id + freeze/manifest/extract hash sets"
+            ) from exc
+        if live_r2 != expected_r2:
+            raise OneRunRefuse(
+                "ONE_RUN r2_runtime_bytes mismatch — refuse before claim"
+            )
     return dict(record)
 
 
