@@ -20,5 +20,6 @@ This package lives under `research/q2s_w7w17_t5044u/` only. It does not rewrite
 
 Phase 1 = Gate 1 + Gate 2 + tests + STOP for Alex pre-IF.
 
-IF tip later (not this run): **6ca03716** (not 90bf65ab). Rest BIND_PACKET_ONLY.
-Hist rest heuristic sealed **155d3ca0** ET DOW.
+Phase 4 IF+emit authorized by CoS ACCEPT **adbcf11d** (v3) under CLEAR **12763c08**.
+IF @ **6ca03716** (not 90bf65ab). Rest BIND_PACKET_ONLY / **155d3ca0**.
+HARD STOP after freeze (row identity). No look.
