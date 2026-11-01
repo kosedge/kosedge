@@ -1,0 +1,1325 @@
+{
+  "schema_version": "nfl-t5137u-dev-research-matched72-v1",
+  "label": "DEV_RESEARCH",
+  "metric_split": "DEV",
+  "split": "dev_reg",
+  "cohort": "matched72",
+  "cert_candidate": 0,
+  "eval": null,
+  "scoring": null,
+  "look": null,
+  "exec_scoring": "REFUSED_DEV_RESEARCH_NOT_EVAL",
+  "one_run_claim": false,
+  "eval_invoked": false,
+  "r2_eval_called": false,
+  "g5_loosened": false,
+  "g5_status": "DATA_COVERAGE_BLOCKED",
+  "reporting": "REPORTING_REPRODUCTION",
+  "reporting_class": "DESCRIPTIVE_ONLY",
+  "reporting_disclosure": "Reproduced the already-approved fixed DEV calculation solely to persist omitted market_contract fields (candidate/IF errors, paired diffs, frozen CIs, per-season tables). Not independent confirmation.",
+  "not_normalized_94": true,
+  "normalized_94_tip_refused": "0a49afa3",
+  "dev_reg_parent_n": 437,
+  "dev_reg_parent_sha256": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+  "n": 72,
+  "joined_n": 72,
+  "eligible_n": 72,
+  "missing_n": 0,
+  "bind_ready": true,
+  "n_by_season": {
+    "2020": 35,
+    "2021": 37
+  },
+  "game_ids": [
+    "2020_02_CIN_CLE",
+    "2020_03_MIA_JAX",
+    "2020_04_DEN_NYJ",
+    "2020_05_TB_CHI",
+    "2020_05_LAC_NO",
+    "2020_07_NYG_PHI",
+    "2020_08_ATL_CAR",
+    "2020_09_GB_SF",
+    "2020_10_IND_TEN",
+    "2020_11_ARI_SEA",
+    "2020_12_HOU_DET",
+    "2020_12_WAS_DAL",
+    "2020_12_BAL_PIT",
+    "2020_13_WAS_PIT",
+    "2020_13_BUF_SF",
+    "2020_13_DAL_BAL",
+    "2020_14_NE_LA",
+    "2020_15_LAC_LV",
+    "2020_16_MIN_NO",
+    "2020_17_ATL_TB",
+    "2020_17_BAL_CIN",
+    "2020_17_DAL_NYG",
+    "2020_17_MIA_BUF",
+    "2020_17_MIN_DET",
+    "2020_17_NYJ_NE",
+    "2020_17_PIT_CLE",
+    "2020_17_ARI_LA",
+    "2020_17_GB_CHI",
+    "2020_17_JAX_IND",
+    "2020_17_LAC_KC",
+    "2020_17_LV_DEN",
+    "2020_17_NO_CAR",
+    "2020_17_SEA_SF",
+    "2020_17_TEN_HOU",
+    "2020_17_WAS_PHI",
+    "2021_02_NYG_WAS",
+    "2021_03_CAR_HOU",
+    "2021_04_JAX_CIN",
+    "2021_05_LA_SEA",
+    "2021_06_TB_PHI",
+    "2021_07_DEN_CLE",
+    "2021_08_GB_ARI",
+    "2021_09_NYJ_IND",
+    "2021_10_BAL_MIA",
+    "2021_11_NE_ATL",
+    "2021_12_CHI_DET",
+    "2021_12_LV_DAL",
+    "2021_12_BUF_NO",
+    "2021_13_DAL_NO",
+    "2021_14_PIT_MIN",
+    "2021_15_KC_LAC",
+    "2021_15_LV_CLE",
+    "2021_15_MIN_CHI",
+    "2021_15_SEA_LA",
+    "2021_16_SF_TEN",
+    "2021_17_ATL_BUF",
+    "2021_17_JAX_NE",
+    "2021_17_KC_CIN",
+    "2021_17_LA_BAL",
+    "2021_17_LV_IND",
+    "2021_17_MIA_TEN",
+    "2021_17_NYG_CHI",
+    "2021_17_PHI_WAS",
+    "2021_17_TB_NYJ",
+    "2021_17_DEN_LAC",
+    "2021_17_HOU_SF",
+    "2021_17_ARI_DAL",
+    "2021_17_CAR_NO",
+    "2021_17_DET_SEA",
+    "2021_17_MIN_GB",
+    "2021_18_KC_DEN",
+    "2021_18_DAL_PHI"
+  ],
+  "matched72_sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6",
+  "input_hashes": {
+    "matched72_game_ids": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6",
+    "admissible_quotes": "75c0b14c7391252dd5ca790c09d9d65071916ef4f39a20c81c88c57229917fb9",
+    "coverage_manifest": "bfcf8ff4b3c9dd933c6edb381a76d6bbb7abd6a1723120941d810425942e00d8",
+    "r2b_consume": "09c3b86f14ea7d03888c3d99c3c70144bd30760ab247aa7274ae68075db6b92e",
+    "forecast_freeze": "9e704b980b6ce33acc883725823c39766ea19f8a86a7a781ac2a02d95344a732",
+    "schedule_results": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+    "parent_market_e2e_receipt": "380d530041892043902949ded7382a0f631261c3423565f36b094ccc814d93f0",
+    "dev_reg_437": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+    "r2a_tip": "3821941d758feb7ba05e680da6ecec283291dd2a"
+  },
+  "parent_receipt": {
+    "path": "/workspace/data/ops/nfl-forecast-builder-t5107u/MARKET_E2E_R2B_CONSUME.json",
+    "file_sha256": "380d530041892043902949ded7382a0f631261c3423565f36b094ccc814d93f0",
+    "immutable": true,
+    "schema_version": "nfl-t5119u-r2b-market-e2e-receipt-v1",
+    "mae_market": 9.38888888888889,
+    "rmse_market": 11.97791660144247,
+    "bias_market": 0.5486111111111112
+  },
+  "mae_challenger": 10.180880751963878,
+  "mae_if": 10.820458179881213,
+  "mae_market": 9.38888888888889,
+  "rmse_challenger": 13.296695234977054,
+  "rmse_if": 14.143476032703353,
+  "rmse_market": 11.97791660144247,
+  "bias_challenger": 1.6946080719830368,
+  "bias_if": 0.6027899379308674,
+  "bias_market": 0.5486111111111112,
+  "delta_mae_vs_if": -0.6395774279173345,
+  "delta_mae_vs_market": 0.7919918630749887,
+  "mean_signed_diff_vs_if": -0.639577427917335,
+  "mean_signed_diff_vs_market": 0.7919918630749896,
+  "bootstrap_game": {
+    "point": -0.639577427917335,
+    "ci95": [
+      -1.27866213106826,
+      0.006675011566590686
+    ],
+    "B": 10000,
+    "seed": 20261101,
+    "n": 72,
+    "verdict": "INCONCLUSIVE",
+    "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+  },
+  "bootstrap_season_week": {
+    "point": -0.639577427917335,
+    "ci95": [
+      -1.1104447578792114,
+      0.20427831413155706
+    ],
+    "B": 10000,
+    "seed": 20261101,
+    "n": 72,
+    "verdict": "INCONCLUSIVE",
+    "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+  },
+  "bootstrap_game_vs_market": {
+    "point": 0.7919918630749896,
+    "ci95": [
+      -0.10526357435833605,
+      1.696574436866821
+    ],
+    "B": 10000,
+    "seed": 20261101,
+    "n": 72,
+    "verdict": "INCONCLUSIVE",
+    "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+  },
+  "bootstrap_season_week_vs_market": {
+    "point": 0.7919918630749896,
+    "ci95": [
+      0.1879104958949432,
+      1.5471600530464356
+    ],
+    "B": 10000,
+    "seed": 20261101,
+    "n": 72,
+    "verdict": "CI_EXCLUDES_ZERO",
+    "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+  },
+  "per_season": {
+    "2020": {
+      "n": 35,
+      "mae_challenger": 10.778556137412986,
+      "mae_if": 11.248506136139971,
+      "rmse_challenger": 13.842634217791653,
+      "rmse_if": 14.356278374111177,
+      "bias_challenger": 4.358272642920009,
+      "bias_if": 3.3732545318439615,
+      "delta_mae_vs_if": -0.4699499987269853,
+      "mean_signed_diff_vs_if": -0.4699499987269844,
+      "mae_market": 10.207142857142857,
+      "rmse_market": 12.706508456018009,
+      "bias_market": 2.892857142857143,
+      "delta_mae_vs_market": 0.5714132802701286,
+      "mean_signed_diff_vs_market": 0.5714132802701304
+    },
+    "2021": {
+      "n": 37,
+      "mae_challenger": 9.615512144106612,
+      "mae_if": 10.415547950987794,
+      "rmse_challenger": 12.758784178402353,
+      "rmse_if": 13.939186763559066,
+      "bias_challenger": -0.8250746302546401,
+      "bias_if": -2.017919813068005,
+      "delta_mae_vs_if": -0.8000358068811817,
+      "mean_signed_diff_vs_if": -0.8000358068811803,
+      "mae_market": 8.614864864864865,
+      "rmse_market": 11.245344382021845,
+      "bias_market": -1.6689189189189189,
+      "delta_mae_vs_market": 1.000647279241747,
+      "mean_signed_diff_vs_market": 1.0006472792417482
+    }
+  },
+  "market_points": [
+    {
+      "game_id": "2020_02_CIN_CLE",
+      "season": 2020,
+      "week": 2,
+      "market_margin": 6.25,
+      "spread_home": -6.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_03_MIA_JAX",
+      "season": 2020,
+      "week": 3,
+      "market_margin": 3.0,
+      "spread_home": -3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_04_DEN_NYJ",
+      "season": 2020,
+      "week": 4,
+      "market_margin": 1.25,
+      "spread_home": -1.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_05_TB_CHI",
+      "season": 2020,
+      "week": 5,
+      "market_margin": -3.5,
+      "spread_home": 3.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_05_LAC_NO",
+      "season": 2020,
+      "week": 5,
+      "market_margin": 7.0,
+      "spread_home": -7.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_07_NYG_PHI",
+      "season": 2020,
+      "week": 7,
+      "market_margin": 4.5,
+      "spread_home": -4.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_08_ATL_CAR",
+      "season": 2020,
+      "week": 8,
+      "market_margin": 2.0,
+      "spread_home": -2.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_09_GB_SF",
+      "season": 2020,
+      "week": 9,
+      "market_margin": -7.25,
+      "spread_home": 7.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_10_IND_TEN",
+      "season": 2020,
+      "week": 10,
+      "market_margin": -1.0,
+      "spread_home": 1.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_11_ARI_SEA",
+      "season": 2020,
+      "week": 11,
+      "market_margin": 2.5,
+      "spread_home": -2.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_12_HOU_DET",
+      "season": 2020,
+      "week": 12,
+      "market_margin": -3.0,
+      "spread_home": 3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_12_WAS_DAL",
+      "season": 2020,
+      "week": 12,
+      "market_margin": 2.75,
+      "spread_home": -2.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_12_BAL_PIT",
+      "season": 2020,
+      "week": 12,
+      "market_margin": 10.5,
+      "spread_home": -10.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_13_WAS_PIT",
+      "season": 2020,
+      "week": 13,
+      "market_margin": 6.25,
+      "spread_home": -6.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_13_BUF_SF",
+      "season": 2020,
+      "week": 13,
+      "market_margin": 1.25,
+      "spread_home": -1.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_13_DAL_BAL",
+      "season": 2020,
+      "week": 13,
+      "market_margin": 8.75,
+      "spread_home": -8.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_14_NE_LA",
+      "season": 2020,
+      "week": 14,
+      "market_margin": 4.5,
+      "spread_home": -4.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_15_LAC_LV",
+      "season": 2020,
+      "week": 15,
+      "market_margin": 3.0,
+      "spread_home": -3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_16_MIN_NO",
+      "season": 2020,
+      "week": 16,
+      "market_margin": 6.5,
+      "spread_home": -6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_ATL_TB",
+      "season": 2020,
+      "week": 17,
+      "market_margin": 7.0,
+      "spread_home": -7.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_BAL_CIN",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -13.25,
+      "spread_home": 13.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_DAL_NYG",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -1.5,
+      "spread_home": 1.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_MIA_BUF",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -3.0,
+      "spread_home": 3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_MIN_DET",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -3.0,
+      "spread_home": 3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_NYJ_NE",
+      "season": 2020,
+      "week": 17,
+      "market_margin": 3.0,
+      "spread_home": -3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_PIT_CLE",
+      "season": 2020,
+      "week": 17,
+      "market_margin": 10.0,
+      "spread_home": -10.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_ARI_LA",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -0.75,
+      "spread_home": 0.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_GB_CHI",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -4.5,
+      "spread_home": 4.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_JAX_IND",
+      "season": 2020,
+      "week": 17,
+      "market_margin": 15.25,
+      "spread_home": -15.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_LAC_KC",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -5.5,
+      "spread_home": 5.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_LV_DEN",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -2.5,
+      "spread_home": 2.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_NO_CAR",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -5.75,
+      "spread_home": 5.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_SEA_SF",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -7.0,
+      "spread_home": 7.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_TEN_HOU",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -7.0,
+      "spread_home": 7.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2020_17_WAS_PHI",
+      "season": 2020,
+      "week": 17,
+      "market_margin": -5.5,
+      "spread_home": 5.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_02_NYG_WAS",
+      "season": 2021,
+      "week": 2,
+      "market_margin": 3.25,
+      "spread_home": -3.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_03_CAR_HOU",
+      "season": 2021,
+      "week": 3,
+      "market_margin": -7.75,
+      "spread_home": 7.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_04_JAX_CIN",
+      "season": 2021,
+      "week": 4,
+      "market_margin": 7.5,
+      "spread_home": -7.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_05_LA_SEA",
+      "season": 2021,
+      "week": 5,
+      "market_margin": -2.0,
+      "spread_home": 2.0,
+      "books_used": [
+        "draftkings"
+      ],
+      "book_count": 1,
+      "quote_n": 1,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_06_TB_PHI",
+      "season": 2021,
+      "week": 6,
+      "market_margin": -6.5,
+      "spread_home": 6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_07_DEN_CLE",
+      "season": 2021,
+      "week": 7,
+      "market_margin": 1.25,
+      "spread_home": -1.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_08_GB_ARI",
+      "season": 2021,
+      "week": 8,
+      "market_margin": 6.5,
+      "spread_home": -6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_09_NYJ_IND",
+      "season": 2021,
+      "week": 9,
+      "market_margin": 10.25,
+      "spread_home": -10.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_10_BAL_MIA",
+      "season": 2021,
+      "week": 10,
+      "market_margin": -7.5,
+      "spread_home": 7.5,
+      "books_used": [
+        "draftkings"
+      ],
+      "book_count": 1,
+      "quote_n": 1,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_11_NE_ATL",
+      "season": 2021,
+      "week": 11,
+      "market_margin": -6.5,
+      "spread_home": 6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_12_CHI_DET",
+      "season": 2021,
+      "week": 12,
+      "market_margin": -3.0,
+      "spread_home": 3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_12_LV_DAL",
+      "season": 2021,
+      "week": 12,
+      "market_margin": 7.5,
+      "spread_home": -7.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_12_BUF_NO",
+      "season": 2021,
+      "week": 12,
+      "market_margin": -6.5,
+      "spread_home": 6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_13_DAL_NO",
+      "season": 2021,
+      "week": 13,
+      "market_margin": -6.0,
+      "spread_home": 6.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_14_PIT_MIN",
+      "season": 2021,
+      "week": 14,
+      "market_margin": 3.0,
+      "spread_home": -3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_15_KC_LAC",
+      "season": 2021,
+      "week": 15,
+      "market_margin": -3.25,
+      "spread_home": 3.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_15_LV_CLE",
+      "season": 2021,
+      "week": 15,
+      "market_margin": -3.0,
+      "spread_home": 3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_15_MIN_CHI",
+      "season": 2021,
+      "week": 15,
+      "market_margin": -6.5,
+      "spread_home": 6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_15_SEA_LA",
+      "season": 2021,
+      "week": 15,
+      "market_margin": 6.75,
+      "spread_home": -6.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_16_SF_TEN",
+      "season": 2021,
+      "week": 16,
+      "market_margin": -3.0,
+      "spread_home": 3.0,
+      "books_used": [
+        "draftkings"
+      ],
+      "book_count": 1,
+      "quote_n": 1,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_ATL_BUF",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 14.25,
+      "spread_home": -14.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_JAX_NE",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 17.25,
+      "spread_home": -17.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_KC_CIN",
+      "season": 2021,
+      "week": 17,
+      "market_margin": -3.5,
+      "spread_home": 3.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_LA_BAL",
+      "season": 2021,
+      "week": 17,
+      "market_margin": -7.0,
+      "spread_home": 7.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_LV_IND",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 8.25,
+      "spread_home": -8.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_MIA_TEN",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 3.0,
+      "spread_home": -3.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_NYG_CHI",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 6.5,
+      "spread_home": -6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_PHI_WAS",
+      "season": 2021,
+      "week": 17,
+      "market_margin": -6.5,
+      "spread_home": 6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_TB_NYJ",
+      "season": 2021,
+      "week": 17,
+      "market_margin": -14.0,
+      "spread_home": 14.0,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_DEN_LAC",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 7.5,
+      "spread_home": -7.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_HOU_SF",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 13.25,
+      "spread_home": -13.25,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_ARI_DAL",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 6.5,
+      "spread_home": -6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_CAR_NO",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 6.5,
+      "spread_home": -6.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_DET_SEA",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 8.5,
+      "spread_home": -8.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_17_MIN_GB",
+      "season": 2021,
+      "week": 17,
+      "market_margin": 12.5,
+      "spread_home": -12.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_18_KC_DEN",
+      "season": 2021,
+      "week": 18,
+      "market_margin": -10.5,
+      "spread_home": 10.5,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    },
+    {
+      "game_id": "2021_18_DAL_PHI",
+      "season": 2021,
+      "week": 18,
+      "market_margin": -3.75,
+      "spread_home": 3.75,
+      "books_used": [
+        "draftkings",
+        "fanduel"
+      ],
+      "book_count": 2,
+      "quote_n": 2,
+      "cutoff_minutes": 60,
+      "max_quote_age_hours": 24
+    }
+  ],
+  "first_case_preserved": {
+    "game_id": "2020_02_CIN_CLE",
+    "record_sha256": "621f0f843da8ac219d284448ac1cd3124bbcdba629c6df49a54b3b518fad30fc",
+    "file_sha256": "8cb9a2a1dbde5be9f27370622ab46934117b86e3e0597daf78374b9c5fe27a82",
+    "in_matched72": true
+  },
+  "old_72_immutable": true,
+  "rng": {
+    "bootstrap_B": 10000,
+    "bootstrap_seed": 20261101,
+    "source": "approved fixed DEV calculation \u2014 reporting reproduction"
+  },
+  "target_join_phase": "AFTER_MARKET_JOIN",
+  "r2a_tip": "3821941d758feb7ba05e680da6ecec283291dd2a",
+  "notes": [
+    "Append-only persist of omitted matched72 model-vs-market fields.",
+    "Parent MARKET_E2E_R2B_CONSUME.json left byte-immutable (380d5300).",
+    "Explicit DEV: split=dev_reg, metric_split=DEV, label=DEV_RESEARCH.",
+    "REPORTING_REPRODUCTION of the already-approved fixed DEV calculation. Not independent confirmation.",
+    "matched72 only (9f754b0e). #694 normalized 94-DEV (0a49afa3) not substituted.",
+    "EVAL not invoked. one_run_claim=false. CERT=0. G5 DATA_COVERAGE_BLOCKED."
+  ],
+  "record_sha256": "72a1f1f9ad1befa95b0cdb10588935da1e39fb857b06ee4f9a5778b1af1c3437"
+}

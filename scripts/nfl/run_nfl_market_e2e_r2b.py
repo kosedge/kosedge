@@ -24,6 +24,7 @@ def main() -> int:
     matched = [p["game_id"] for p in dev_rec["market_points"]]
     loader = default_outcome_loader(matched)
     matched_rec = run_market_e2e(
+        split="dev_reg",
         eligible_ids=matched,
         outcome_loader=loader,
         emit_metrics=True,
