@@ -99,6 +99,7 @@ File: `data/ops/nfl-forecast-builder-t5107u/IDENTITY_RESOLUTION_2020_t5115u.json
 | METRIC_COHORTS file         | `4c35e7d006fd374a961e91dd946ddc94f6a2b4f5dccdc138c3192b11af9e7f41` |
 | IDENTITY_RESOLUTION file    | `7adc43b0145ee73ec4cc361c27d5730b87bdc90dd1d8e1921c94e6e1e2af207d` |
 | parent tip                  | `931a532c698b3034f840bf719ed5b90da325f6ad`                         |
+| this implementation tip     | `39a25343943fec7b14aaacf020df0c313c6624f8`                         |
 
 ## E. EXEC
 
