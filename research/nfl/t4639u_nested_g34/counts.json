@@ -1,0 +1,75 @@
+{
+  "B1": {
+    "MAE_model": 10.213651453980091,
+    "MAE_ref": 10.208793460035341,
+    "binding_CI": {
+      "B": 10000,
+      "ci95_hi": 0.12652192597001785,
+      "ci95_lo": -0.13473485801068658,
+      "ci_excludes_0": false,
+      "method": "paired_game_percentile_95",
+      "n": 1105,
+      "point": -0.004857993944750069,
+      "seed": 4141
+    },
+    "c_REPORT_ONLY": 0.05655786454805182,
+    "\u0394MAE_mkt_REPORT_ONLY": -0.3629727209484166,
+    "\u0394MAE_ref": -0.00485799394474995
+  },
+  "B2_pooled_\u0394MAE_ref_report_only": 0.09442523050659801,
+  "F_B1_sha256": "14d25d4c2eba9c9c024c799e4cd8a575297b0aa9088e8fa9548d1d75fa82428e",
+  "F_B1_sha8": "14d25d4c",
+  "cert_candidate": 0,
+  "coming_soon": true,
+  "decision_sha8": "c51b4280",
+  "exp_a_reopened": false,
+  "exp_dr_reopened": false,
+  "f2_frozen": true,
+  "label": "RESEARCH_DIAGNOSTIC_NESTED_G34",
+  "lane_a_reclassified": false,
+  "locked_scoring_touched": false,
+  "n_rows_season_ge_2024_derived": 0,
+  "n_rows_season_ge_2024_source_counted_only": 586,
+  "nfl_nogo": true,
+  "odds_api_called": false,
+  "predictions_b1_ref_sha256": "63880ec0fddf446309146c1c6cc5c81e9d4a1d720d256292e7780f4ae4b55650",
+  "predictions_b1_sha256": "4b24447e5f4bdd9191a2306c07bbe90e544ef1f49f5b1b701fb8827e630d2676",
+  "protocol_edited": false,
+  "protocol_sha8": "59161fbb",
+  "ref_cell_id": "G27",
+  "scope_line": "PASS_PROTOCOL \u2260 CLEAR \u2260 PASS_RESEARCH \u2260 CERT; Lane B label applies only to new nested artifacts; does not reclassify Exp A 0d1f4f9b or the existing G34 \u22642022 OOF (stays Lane A DEVELOPMENT_ONLY).",
+  "selected_cfg_id": "G52",
+  "selection_n": {
+    "P_sel_games": 1335,
+    "P_sel_seasons": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018
+    ],
+    "inner_cv_n_oof": 1068,
+    "inner_cv_validate_seasons": [
+      2015,
+      2016,
+      2017,
+      2018
+    ],
+    "n_overlap": 0,
+    "scored_n": 1105,
+    "scored_seasons": [
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "selection_intersect_scored": false
+  },
+  "simulate_nfl_game_called": false,
+  "ticket": "t4639u",
+  "unstable_b2": false,
+  "verdict": "FAIL_RESEARCH",
+  "verdict_note": "invariants hold; B1 criterion not met",
+  "winner_eq_ref": false,
+  "y2023_\u0394MAE_ref_report_only": 0.13585690870050193
+}

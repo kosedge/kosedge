@@ -1,0 +1,10 @@
+{
+  "binding_CI_only": true,
+  "ci_excludes_0": false,
+  "note": "invariants hold; B1 criterion not met",
+  "point_ge_0_10": false,
+  "unstable_b2": false,
+  "verdict": "FAIL_RESEARCH",
+  "winner_eq_ref": false,
+  "\u0394MAE_ref": -0.00485799394474995
+}

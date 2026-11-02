@@ -1,0 +1,49 @@
+{
+  "binding_oof": {
+    "n": 2440,
+    "n_drest_nonzero": 876,
+    "n_rest_missing": 145,
+    "n_short_a": 145,
+    "n_short_h": 145
+  },
+  "panel": {
+    "n_drest_nonzero": 1076,
+    "n_games": 2992,
+    "n_rest_missing": 177,
+    "n_rest_nan_away": 176,
+    "n_rest_nan_home": 176,
+    "n_short_a": 179,
+    "n_short_h": 179,
+    "rate_drest_nonzero": 0.35962566844919786,
+    "rate_nan_away": 0.058823529411764705,
+    "rate_nan_home": 0.058823529411764705,
+    "rate_rest_missing": 0.05915775401069519,
+    "rate_short_a": 0.05982620320855615,
+    "rate_short_h": 0.05982620320855615
+  },
+  "recipe": {
+    "clip_abs": 7.0,
+    "date_sot": "nflverse_gameday",
+    "dow_heuristic": false,
+    "emit_placeholder_used": false,
+    "kickoff_fractional_feature": false,
+    "layoff_nan_gt": 21,
+    "pbp_2012_used": false,
+    "r_prime_nan_to_0": true,
+    "short_le": 5.0,
+    "x_cols": [
+      "drest_clip",
+      "short_h",
+      "short_a",
+      "rest_missing"
+    ]
+  },
+  "rest_emit_sha256": "32090818bea9baff303c1e273d05bb52c89a2604c21fb36392a935305857f26e",
+  "source": "hashed rest_emit from nflverse_gameday date-diff (not emit placeholder 7.0)",
+  "supportive_2023": {
+    "n": 285,
+    "n_rest_missing": 16,
+    "n_short_a": 18,
+    "n_short_h": 18
+  }
+}

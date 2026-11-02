@@ -1,0 +1,127 @@
+[e] H1 close-on-run FIRST (hash before any input parse)
+[h1] download https://raw.githubusercontent.com/kosedge/kosedge/82ffb211d389b20e4d6ec305e4a0466532a48a6d/data/ops/nfl-t4422u-walkforward-pergame-unblended-2013-2023/games.csv
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 1831k  100 1831k    0     0  10.7M      0 --:--:-- --:--:-- --:--:-- 10.8M
+[h1] sha256 games.csv 4fe1cdd7 bytes=1875548
+[h1] sha256 historical_oos_games.csv 1ee90fac bytes=758703
+[h1] git-show #646 rolling CSV (cite; not a merge)
+[h1] sha256 rolling_features_weekly_pbp_strict_asof_2013_2023.csv 1b07654e bytes=823791
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2012.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.4M  100 18.4M    0     0  74.9M      0 --:--:-- --:--:-- --:--:-- 74.9M
+[h1] sha256 play_by_play_2012.parquet 447b9078 bytes=19322039
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2013.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.6M  100 18.6M    0     0  84.0M      0 --:--:-- --:--:-- --:--:-- 84.0M
+[h1] sha256 play_by_play_2013.parquet f454605a bytes=19521610
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2014.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.4M  100 18.4M    0     0  83.8M      0 --:--:-- --:--:-- --:--:-- 83.8M
+[h1] sha256 play_by_play_2014.parquet 54c01408 bytes=19360792
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2015.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.6M  100 18.6M    0     0  91.9M      0 --:--:-- --:--:-- --:--:-- 91.9M
+[h1] sha256 play_by_play_2015.parquet 01b5ae7d bytes=19545842
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2016.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.4M  100 18.4M    0     0  89.9M      0 --:--:-- --:--:-- --:--:-- 89.9M
+[h1] sha256 play_by_play_2016.parquet 95eba04e bytes=19344382
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2017.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.1M  100 18.1M    0     0  85.7M      0 --:--:-- --:--:-- --:--:-- 85.7M
+[h1] sha256 play_by_play_2017.parquet 84eacd96 bytes=19050401
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2018.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 18.1M  100 18.1M    0     0  88.6M      0 --:--:-- --:--:-- --:--:--  245M
+[h1] sha256 play_by_play_2018.parquet 2e6f2dce bytes=19072097
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2019.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.2M  100 18.2M    0     0   102M      0 --:--:-- --:--:-- --:--:--  102M
+[h1] sha256 play_by_play_2019.parquet 60c30670 bytes=19119729
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2020.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 18.3M  100 18.3M    0     0  92.7M      0 --:--:-- --:--:-- --:--:-- 92.7M
+[h1] sha256 play_by_play_2020.parquet 8889f5d8 bytes=19286459
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 19.3M  100 19.3M    0     0   101M      0 --:--:-- --:--:-- --:--:--  101M
+[h1] sha256 play_by_play_2021.parquet 333ad343 bytes=20249925
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2022.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 19.4M  100 19.4M    0     0  93.2M      0 --:--:-- --:--:-- --:--:-- 93.2M
+[h1] sha256 play_by_play_2022.parquet 931121d8 bytes=20426548
+[h1] download https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2023.parquet
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 19.5M  100 19.5M    0     0   102M      0 --:--:-- --:--:-- --:--:--  102M
+[h1] sha256 play_by_play_2023.parquet bd348473 bytes=20534088
+[h1] wrote /workspace/research/nfl/t4586u_exp_e_kickoff_asof/SHA256SUMS n=15 (before any input parse)
+[pbp] load 2012 bytes=19322039
+[pbp] load 2013 bytes=19521610
+[pbp] load 2014 bytes=19360792
+[pbp] load 2015 bytes=19545842
+[pbp] load 2016 bytes=19344382
+[pbp] load 2017 bytes=19050401
+[pbp] load 2018 bytes=19072097
+[pbp] load 2019 bytes=19119729
+[pbp] load 2020 bytes=19286459
+[pbp] load 2021 bytes=20249925
+[pbp] load 2022 bytes=20426548
+[pbp] load 2023 bytes=20534088
+[pbp] weekly_rows=6518 tw_keys=6518 game_meta=3259 n_plays_season_ge_2024=0
+{
+  "verdict": "FAIL",
+  "n_kickoff_fail": 0,
+  "sha8": {
+    "counts.json": "55e3430d",
+    "covid_flex_flags.csv": "531cadcc",
+    "games.csv": "4fe1cdd7",
+    "historical_oos_games.csv": "1ee90fac",
+    "intraweek_conservative.csv": "a67c89e2",
+    "inversions.csv": "62ac348e",
+    "neutral_catalog.csv": "14a48a60",
+    "pbp_weather_game_2012_2023.csv": "6934509a",
+    "play_by_play_2012.parquet": "447b9078",
+    "play_by_play_2013.parquet": "f454605a",
+    "play_by_play_2014.parquet": "54c01408",
+    "play_by_play_2015.parquet": "01b5ae7d",
+    "play_by_play_2016.parquet": "95eba04e",
+    "play_by_play_2017.parquet": "84eacd96",
+    "play_by_play_2018.parquet": "2e6f2dce",
+    "play_by_play_2019.parquet": "60c30670",
+    "play_by_play_2020.parquet": "8889f5d8",
+    "play_by_play_2021.parquet": "333ad343",
+    "play_by_play_2022.parquet": "931121d8",
+    "play_by_play_2023.parquet": "bd348473",
+    "rest_catalog.csv": "82b956ec",
+    "rolling_features_weekly_pbp_strict_asof_2013_2023.csv": "1b07654e",
+    "schedule_2012_offpanel_kickoffs.csv": "69350c2f",
+    "week1_windows.csv": "08ef1fa3",
+    "manifest.json": "71fa2a0e",
+    "REPORT.md": "ec068883"
+  }
+}

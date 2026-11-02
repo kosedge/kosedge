@@ -1,0 +1,74 @@
+{
+  "B": 10000,
+  "bounds": {
+    "P_score": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "P_sel": [
+      2014,
+      2015,
+      2016,
+      2017
+    ],
+    "burn_in": 2013
+  },
+  "cert_candidate": 0,
+  "code_tip": "23feb61b21119fb6b27ba5aa482a9551819590a5",
+  "cut_attestation_s4_1": "B1 cut 2014\u20132018/2019\u20132022 pre-specified by Alex on design grounds (burn-in 2013; ~equal halves; scored window = latest \u22642022 seasons) before any Lane B score; author attests no per-season Lane A OOF MAE was used to choose the cut. CoS ACCEPT b63560f2 = Alex-proposed, not Ryan-locked.",
+  "document": "F_A1",
+  "estimator": "84a28a05",
+  "estimator_id": "nfl-research-opp-adj-epa-v0-ridge-joint",
+  "grid_hash": "db2cf4b24bfa9c441f7eafea19d5c24624541f9cb7225759e9882f61cb6c6463",
+  "label": "RESEARCH_DIAGNOSTIC_NESTED_G34",
+  "metric_definitions_s8": {
+    "MAE_model": "mean |m - margin_A| on P_score; primary",
+    "PASS_RESEARCH": "B1 pooled 2019\u20132022: \u0394MAE_ref \u2265 0.10 vs frozen ref only AND binding CI excludes 0 AND invariants hold; winner==ref \u21d2 FAIL_RESEARCH",
+    "bias": "mean(m - margin_A); diagnostic",
+    "binding_CI": "Paired game-level bootstrap of per-game \u0394 (|m\u2212ref|\u2212|m\u2212model|) on B1 2019\u20132022 pooled, B=10000, seed 4141, percentile 95% CI \u2014 only CI that can PASS/FAIL",
+    "c": "OLS (m - mm) = c\u00b7(margin_A - mm) + e; intercept-free; HC1 diagnostic; REPORT-ONLY NOTE",
+    "season_block_CI": "season-block bootstrap; supportive sensitivity; report-only; cannot PASS/FAIL",
+    "\u0394MAE_mkt": "MAE_mkt - MAE_model; MAE_mkt = mean |m - mm|; REPORT-ONLY NOTE; no beats-market PASS/claim path; expected sign < 0",
+    "\u0394MAE_ref": "MAE_ref - MAE_model; ref = frozen ref_cell_id G27 (\u03c1=0.95 \u03bb=1 \u03c1_s=0.67 HFA off); PRIMARY GATE; never vs best/any other cell"
+  },
+  "n0_base": 4.0,
+  "n_rows_season_ge_2024_derived": 0,
+  "n_rows_season_ge_2024_source_counted_only": 586,
+  "protocol_sha256": "59161fbb462eb04ab68810e4de56bef4b4ff36508a3ba742b6316b4376767c30",
+  "protocol_sha8": "59161fbb",
+  "ref_cell": {
+    "cfg_id": "G27",
+    "hfa_mode": "off",
+    "lambda": 1.0,
+    "n0": 4.0,
+    "rho": 0.95,
+    "rho_s": 0.67
+  },
+  "research_diagnostic": true,
+  "role": "alt_cut_report_only_cannot_PASS_or_FAIL",
+  "scope_line_s2": "PASS_PROTOCOL \u2260 CLEAR \u2260 PASS_RESEARCH \u2260 CERT; Lane B label applies only to new nested artifacts; does not reclassify Exp A 0d1f4f9b or the existing G34 \u22642022 OOF (stays Lane A DEVELOPMENT_ONLY).",
+  "seed": 4141,
+  "selected_cell": {
+    "cfg_id": "G34",
+    "hfa_mode": "fold_fit",
+    "inner_cv_mae": 10.162529359186346,
+    "lambda": 2.0,
+    "n0": 8.0,
+    "n_oof": 801,
+    "rho": 0.95,
+    "rho_s": 0.67
+  },
+  "sha256_P_score_input": "ed5f2350f55d48e1ed36ef9d266acd84eb46923db6edea89e5e1400c6cbcdb1f",
+  "sha256_P_sel_only_filtered_input": "9904db71698e7d51d1225bae7d5537beff354c971fbb60e6df5f8c148bbe093a",
+  "sha256_le2023_derivative_of_1ee90fac": "40559105d9cbb3cb2841fa5f4b4aa3822fd5cc189ae88e0a9fe6c7dcc3c57d6d",
+  "upstream_hashes": {
+    "epa_wf_features_2013_2023.csv": "02f6b2e2baa425cab7703dd1d3d5064fc0dabfc69e330a846e54d736c49430a2",
+    "games.csv": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "historical_oos_games.csv": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+    "rolling_features_weekly_pbp_strict_asof_2013_2023.csv": "1b07654ea500535ff445e0f3c20acc26a6c3006857951562755e406adff52479"
+  },
+  "winner_eq_ref": false
+}

@@ -1,0 +1,126 @@
+{
+  "A1": {
+    "metrics": {
+      "MAE_mkt": 9.855320699708455,
+      "MAE_model": 10.177262623049929,
+      "MAE_ref": 10.236515952107522,
+      "beats_market_claim": false,
+      "bias": -0.9248978723152288,
+      "binding_CI": {
+        "B": 10000,
+        "ci95_hi": 0.1792546224754229,
+        "ci95_lo": -0.06148524552357397,
+        "ci_excludes_0": false,
+        "method": "paired_game_percentile_95",
+        "n": 1372,
+        "point": 0.059253329057593625,
+        "seed": 4141
+      },
+      "c_report_only": {
+        "c": 0.08367139898521614,
+        "c_ci95_hi": 0.29350379419905737,
+        "c_ci95_lo": -0.12616099622862512,
+        "c_se_hc1": 0.10705734449685779,
+        "equation": "(m-mm) = c*(margin_A-mm) + e",
+        "role": "REPORT_ONLY_NOTE_HC1_diagnostic"
+      },
+      "label": "A1",
+      "market_CI_report_only": {
+        "B": 10000,
+        "ci95_hi": -0.17059433802548205,
+        "ci95_lo": -0.474882784333727,
+        "ci_excludes_0": true,
+        "method": "paired_game_percentile_95",
+        "n": 1372,
+        "point": -0.32194192334147403,
+        "seed": 4141
+      },
+      "n": 1372,
+      "role": "report_only",
+      "season_block_CI_report_only": {
+        "B": 10000,
+        "ci95_hi": 0.18879571206273163,
+        "ci95_lo": -0.0632835145249445,
+        "ci_excludes_0": false,
+        "method": "season_block_percentile_95",
+        "n_seasons": 5,
+        "point": 0.059253329057593625,
+        "role": "report_only_cannot_PASS_FAIL",
+        "seed": 4141
+      },
+      "seasons": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "\u0394MAE_mkt": -0.3219419233414733,
+      "\u0394MAE_mkt_expected_sign": "<0",
+      "\u0394MAE_mkt_role": "REPORT_ONLY_NOTE",
+      "\u0394MAE_ref": 0.05925332905759362
+    },
+    "winner": "G34"
+  },
+  "A2": {
+    "metrics": {
+      "MAE_mkt": 9.747016706443913,
+      "MAE_model": 10.093201068954663,
+      "MAE_ref": 10.14497270325464,
+      "beats_market_claim": false,
+      "bias": -0.5422362275414039,
+      "binding_CI": {
+        "B": 10000,
+        "ci95_hi": 0.19005251126054548,
+        "ci95_lo": -0.08959770510344184,
+        "ci_excludes_0": false,
+        "method": "paired_game_percentile_95",
+        "n": 838,
+        "point": 0.05177163429997783,
+        "seed": 4141
+      },
+      "c_report_only": {
+        "c": 0.05677853181068444,
+        "c_ci95_hi": 0.3218230149245814,
+        "c_ci95_lo": -0.20826595130321252,
+        "c_se_hc1": 0.13522677709892703,
+        "equation": "(m-mm) = c*(margin_A-mm) + e",
+        "role": "REPORT_ONLY_NOTE_HC1_diagnostic"
+      },
+      "label": "A2",
+      "market_CI_report_only": {
+        "B": 10000,
+        "ci95_hi": -0.15032119579464379,
+        "ci95_lo": -0.5430638482175555,
+        "ci_excludes_0": true,
+        "method": "paired_game_percentile_95",
+        "n": 838,
+        "point": -0.346184362510748,
+        "seed": 4141
+      },
+      "n": 838,
+      "role": "report_only",
+      "season_block_CI_report_only": {
+        "B": 10000,
+        "ci95_hi": 0.12191568867883575,
+        "ci95_lo": -0.02187616317719941,
+        "ci_excludes_0": false,
+        "method": "season_block_percentile_95",
+        "n_seasons": 3,
+        "point": 0.05177163429997783,
+        "role": "report_only_cannot_PASS_FAIL",
+        "seed": 4141
+      },
+      "seasons": [
+        2020,
+        2021,
+        2022
+      ],
+      "\u0394MAE_mkt": -0.34618436251074947,
+      "\u0394MAE_mkt_expected_sign": "<0",
+      "\u0394MAE_mkt_role": "REPORT_ONLY_NOTE",
+      "\u0394MAE_ref": 0.051771634299976554
+    },
+    "winner": "G34"
+  }
+}

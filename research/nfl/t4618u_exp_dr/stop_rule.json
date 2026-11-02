@@ -1,0 +1,198 @@
+{
+  "B": 10000,
+  "authority": "Alex 6bd07cc8 \u00a75 STOP BOX; ACK 82c71d64 D7; FEAS 9906430e \u00a78 withdrawn",
+  "binding": {
+    "by_season": {
+      "2014": {
+        "beats_market": false,
+        "delta_DR": 0.0,
+        "mae_DR": 11.49320936329588,
+        "mae_G34": 11.49320936329588,
+        "mae_market": 11.284644194756554,
+        "n": 267
+      },
+      "2015": {
+        "beats_market": false,
+        "delta_DR": -0.2618634529277344,
+        "mae_DR": 10.549942797497023,
+        "mae_G34": 10.288079344569288,
+        "mae_market": 10.117977528089888,
+        "n": 267
+      },
+      "2016": {
+        "beats_market": false,
+        "delta_DR": 0.02260114817701364,
+        "mae_DR": 9.59313916642973,
+        "mae_G34": 9.615740314606743,
+        "mae_market": 9.043071161048688,
+        "n": 267
+      },
+      "2017": {
+        "beats_market": false,
+        "delta_DR": -0.0034001437626098863,
+        "mae_DR": 10.587168604436767,
+        "mae_G34": 10.583768460674158,
+        "mae_market": 10.08052434456929,
+        "n": 267
+      },
+      "2018": {
+        "beats_market": false,
+        "delta_DR": 0.0337060414562842,
+        "mae_DR": 10.031131239442592,
+        "mae_G34": 10.064837280898876,
+        "mae_market": 9.874531835205993,
+        "n": 267
+      },
+      "2019": {
+        "beats_market": false,
+        "delta_DR": -0.005907739069026974,
+        "mae_DR": 10.55942930086678,
+        "mae_G34": 10.553521561797753,
+        "mae_market": 10.176029962546817,
+        "n": 267
+      },
+      "2020": {
+        "beats_market": false,
+        "delta_DR": -0.03367743905075393,
+        "mae_DR": 10.11916134239648,
+        "mae_G34": 10.085483903345725,
+        "mae_market": 9.78996282527881,
+        "n": 269
+      },
+      "2021": {
+        "beats_market": false,
+        "delta_DR": 0.02972272536104903,
+        "mae_DR": 11.034767632533688,
+        "mae_G34": 11.064490357894737,
+        "mae_market": 10.666666666666666,
+        "n": 285
+      },
+      "2022": {
+        "beats_market": false,
+        "delta_DR": 0.014703266765526024,
+        "mae_DR": 9.111098092389403,
+        "mae_G34": 9.125801359154929,
+        "mae_market": 8.783450704225352,
+        "n": 284
+      }
+    },
+    "delta_DR": -0.022041497389756637,
+    "delta_DR_vs_epa_report_only": 0.3558448767905702,
+    "epa_secondary_report_only": true,
+    "floor_0_10_applied": false,
+    "label": "pooled_le_2022_OOF",
+    "mae_DR": 10.338466598619265,
+    "mae_G34": 10.316425101229509,
+    "mae_epa": 10.694311475409835,
+    "mae_gap_DR_vs_market": 0.3622370904225427,
+    "mae_gap_G34_vs_market": 0.3401955930327869,
+    "mae_market": 9.976229508196722,
+    "n": 2440,
+    "path_m": {
+      "a": -0.22974017079272352,
+      "a_se_hc1": 0.28407671642768817,
+      "b": 0.9874490263927328,
+      "b_se_hc1": 0.08164285806979713,
+      "c": 0.020260899415023483,
+      "c_ci95_hi": 0.1888741395693621,
+      "c_ci95_lo": -0.14835234073931514,
+      "c_ci_excludes_0": false,
+      "c_gt_0": true,
+      "c_se_hc1": 0.08602716334405032,
+      "equation": "m ~ a + b*mm + c*pm_DR",
+      "estimator": "OLS HC1",
+      "pass": false
+    },
+    "seasons_beating_market": 0,
+    "vs_g34": {
+      "B": 10000,
+      "ci": "percentile 95",
+      "ci_excludes_0": false,
+      "delta_ci95_hi": 0.005288081052182504,
+      "delta_ci95_lo": -0.049514747237931894,
+      "delta_definition": "mae_G34 - mae_DR = mean(gap_G34)-mean(gap_DR); gap_X=|m-pm_X|-|m-mm|",
+      "delta_point": -0.022041497389756637,
+      "floor": 0.05,
+      "pass": false,
+      "point_ge_0_05": false,
+      "seed": 4141
+    }
+  },
+  "binding_surface": "pooled_le_2022_OOF",
+  "conjuncts": {
+    "d4_artifacts": true,
+    "path_m": false,
+    "vs_g34": false
+  },
+  "d4_artifacts_pass": true,
+  "epa_secondary_report_only": true,
+  "equation": "pm_DR = pm_G34 + X_rest \u00b7 beta_rest",
+  "feas_section_8_applied": false,
+  "fit": "intercept-free OLS (m-pm_G34)~X_rest on seasons < S; HC1 diagnostic",
+  "floor_0_10_applied": false,
+  "path_m_mandatory": true,
+  "research_floor_vs_g34": 0.05,
+  "seed": 4141,
+  "supportive_2023": {
+    "by_season": {
+      "2023": {
+        "beats_market": false,
+        "delta_DR": 0.055494386400530615,
+        "mae_DR": 10.420226950441576,
+        "mae_G34": 10.475721336842106,
+        "mae_market": 9.98421052631579,
+        "n": 285
+      }
+    },
+    "delta_DR": 0.05549438640052984,
+    "delta_DR_vs_epa_report_only": 0.26331690920754625,
+    "epa_secondary_report_only": true,
+    "floor_0_10_applied": false,
+    "label": "2023_supportive",
+    "mae_DR": 10.420226950441576,
+    "mae_G34": 10.475721336842106,
+    "mae_epa": 10.683543859649122,
+    "mae_gap_DR_vs_market": 0.43601642412578556,
+    "mae_gap_G34_vs_market": 0.4915108105263162,
+    "mae_market": 9.98421052631579,
+    "n": 285,
+    "path_m": {
+      "a": 1.1231705807945187,
+      "a_se_hc1": 0.829615807810987,
+      "b": 1.095029401941989,
+      "b_se_hc1": 0.23931390825648807,
+      "c": -0.08604765013960783,
+      "c_ci95_hi": 0.4333521696493807,
+      "c_ci95_lo": -0.6054474699285963,
+      "c_ci_excludes_0": false,
+      "c_gt_0": false,
+      "c_se_hc1": 0.2649999080556064,
+      "equation": "m ~ a + b*mm + c*pm_DR",
+      "estimator": "OLS HC1",
+      "pass": false
+    },
+    "seasons_beating_market": 0,
+    "vs_g34": {
+      "B": 10000,
+      "ci": "percentile 95",
+      "ci_excludes_0": false,
+      "delta_ci95_hi": 0.11750197711147282,
+      "delta_ci95_lo": -0.004143736611619968,
+      "delta_definition": "mae_G34 - mae_DR = mean(gap_G34)-mean(gap_DR); gap_X=|m-pm_X|-|m-mm|",
+      "delta_point": 0.05549438640052984,
+      "floor": 0.05,
+      "pass": false,
+      "point_ge_0_05": true,
+      "seed": 4141
+    }
+  },
+  "supportive_2023_cannot_alone_PASS": true,
+  "verdict_binding": "FAIL",
+  "void_if_changed_post_run": true,
+  "x_rest_cols": [
+    "drest_clip",
+    "short_h",
+    "short_a",
+    "rest_missing"
+  ]
+}

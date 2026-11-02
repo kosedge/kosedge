@@ -1,0 +1,21 @@
+{
+  "fail_run": {
+    "commit": "3abbcb9031146a059ded3cb214be9597b59fb7ac",
+    "commit_sha8": "3abbcb90",
+    "script_path": "research/nfl/t4586u_exp_e_kickoff_asof_audit.py",
+    "script_sha256": "3e71aa004f79c16f3db65ed1461148c575984481b2dd0ff62459d55d0f986b60",
+    "script_sha8": "3e71aa00"
+  },
+  "pass_run": {
+    "commit": "c9844c9e32e19321d53f66fefce114ca18341e92",
+    "commit_sha8": "c9844c9e",
+    "script_sha256": "7fb6cf196bf825a3d99370bb2168b88417d8bf7de69173f37eaff2cb99ca0f2d",
+    "script_sha8": "7fb6cf19"
+  },
+  "sealed_pass_tip_parent": {
+    "commit": "d7cc7d9513b200147561e3ac8b0ae0635e01e7ae",
+    "commit_sha8": "d7cc7d95",
+    "note": "script blob identical to c9844c9e; d7cc7d95 added PASS outputs only",
+    "script_sha256": "7fb6cf196bf825a3d99370bb2168b88417d8bf7de69173f37eaff2cb99ca0f2d"
+  }
+}

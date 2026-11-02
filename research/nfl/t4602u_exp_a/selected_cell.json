@@ -1,0 +1,23 @@
+{
+  "beta_2023_supportive": {
+    "beta": 49.728150367265954,
+    "beta_ci95_hi": 54.38395671395285,
+    "beta_ci95_lo": 45.07234402057906,
+    "beta_se_hc1": 2.375411401370864,
+    "hfa": 1.919009205721998,
+    "hfa_se_hc1": 0.2557570011813746,
+    "k": 2,
+    "n": 2707
+  },
+  "cfg_id": "G34",
+  "declared_epsilon": 1e-09,
+  "estimator_id": "nfl-research-opp-adj-epa-v0-ridge-joint",
+  "hfa_mode": "fold_fit",
+  "inner_cv_mae": 10.316425094613239,
+  "lambda": 2.0,
+  "n0": 8.0,
+  "n_oof": 2440,
+  "rho": 0.95,
+  "rho_s": 0.67,
+  "tie_break_verbatim": "tie-break = HFA off, then \u03c1=0.95, \u03bb=1, \u03c1_s=0.67; tie = |\u0394MAE| < 1e-9 (or declared \u03b5)"
+}

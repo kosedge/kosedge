@@ -1,0 +1,13 @@
+{
+  "REPORT.md": "cb55e493",
+  "betas_by_fold.csv": "8fbeaa7c",
+  "counts.json": "b60deb6a",
+  "fold_table.csv": "380538a5",
+  "grid_mae.csv": "170cec7a",
+  "manifest.json": "11b161c4",
+  "metrics_2023.json": "76b94beb",
+  "metrics_binding.json": "1cac09ff",
+  "predictions.csv": "c3248302",
+  "selected_cell.json": "3172b236",
+  "stop_rule.json": "e14e235d"
+}

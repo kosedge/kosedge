@@ -1,0 +1,831 @@
+{
+  "beta": {
+    "definition": "ONE fold-fit beta from prior seasons only",
+    "forbidden_fiat": [
+      20.9
+    ],
+    "hc1": "diagnostics only; point beta used; frozen for all of season S",
+    "market_as_target": false,
+    "market_role": "label only",
+    "neutral_hfa_indicator": 0,
+    "not_on_grid": true,
+    "ols": "actual_margin_home ~ beta * rating_diff_home (+ HFA term iff hfa_mode=fold_fit; intercept-free when HFA=off)"
+  },
+  "beta_fit": false,
+  "binds": {
+    "alex_spec": "ddffb72e",
+    "cos_accept_imv_pass": "b3367bfd",
+    "cos_order_h2_freeze": "b2f0376b",
+    "cursor_ack": "6fcc0af6",
+    "estimator_addendum": "84a28a05",
+    "exp_e_counts_sha256": "b0365365251400715144ff5fdb3ddeae68024a33efccade044249e2e1fceeec2",
+    "exp_e_counts_sha8": "b0365365",
+    "exp_e_h1_sha256sums_path": "research/nfl/t4586u_exp_e_kickoff_asof/SHA256SUMS",
+    "exp_e_h1_sha256sums_sha256": "97774e08985cba90f23196857807b3e69144630867bc9d000007cfa4e93bc8da",
+    "feasibility_v11": "15ee3a1b",
+    "h1_addendum_sha256": "5d426ae9eddf2f8657b04c2ac8bb5fca97a9ec84393450bcc6d472a9056d1663",
+    "h1_addendum_sha8": "5d426ae9",
+    "imv_pass_exp_e": "3d79c41b",
+    "imv_pass_exp_e_sha256": "3d79c41b2848ef3ea6350f10dec2d3c3d4bde859091a1ef03c4b75afc84e8b28",
+    "pass_protocol": "60c18a4c",
+    "ryan_clear_e_only": "5bb608d0",
+    "tip_0940a289": "0940a28941959c77d510c05e9e56198a08812869"
+  },
+  "cert_candidate": 0,
+  "coming_soon": true,
+  "document": "CURSOR_EXP_A_H2_GRID_FOLD_MANIFEST_t4598u_v1",
+  "estimator_id": "nfl-research-opp-adj-epa-v0-ridge-joint",
+  "execution": false,
+  "exp_a_run": false,
+  "f2_frozen": true,
+  "fold_2023_supportive": {
+    "S": 2023,
+    "cannot_alone_PASS": true,
+    "grid_and_beta": "frozen from <=2022 selection",
+    "refit": false,
+    "status": "supportive only"
+  },
+  "fold_2024_plus": {
+    "n_rows_season_ge_2024": 0,
+    "status": "forbidden"
+  },
+  "folds_primary": [
+    {
+      "S": 2014,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2014,
+      "fit_beta": "prior seasons only",
+      "fold": "F1",
+      "ratings_train": "seasons < 2014 (2013 burn-in)",
+      "status": "primary"
+    },
+    {
+      "S": 2015,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2015,
+      "fit_beta": "prior seasons only",
+      "fold": "F2",
+      "ratings_train": "seasons < 2015",
+      "status": "primary"
+    },
+    {
+      "S": 2016,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2016,
+      "fit_beta": "prior seasons only",
+      "fold": "F3",
+      "ratings_train": "seasons < 2016",
+      "status": "primary"
+    },
+    {
+      "S": 2017,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2017,
+      "fit_beta": "prior seasons only",
+      "fold": "F4",
+      "ratings_train": "seasons < 2017",
+      "status": "primary"
+    },
+    {
+      "S": 2018,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2018,
+      "fit_beta": "prior seasons only",
+      "fold": "F5",
+      "ratings_train": "seasons < 2018",
+      "status": "primary"
+    },
+    {
+      "S": 2019,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2019,
+      "fit_beta": "prior seasons only",
+      "fold": "F6",
+      "ratings_train": "seasons < 2019",
+      "status": "primary"
+    },
+    {
+      "S": 2020,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2020,
+      "fit_beta": "prior seasons only",
+      "fold": "F7",
+      "ratings_train": "seasons < 2020",
+      "status": "primary"
+    },
+    {
+      "S": 2021,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2021,
+      "fit_beta": "prior seasons only",
+      "fold": "F8",
+      "ratings_train": "seasons < 2021",
+      "status": "primary"
+    },
+    {
+      "S": 2022,
+      "binding_surface": "pooled_le_2022_OOF",
+      "evaluate": 2022,
+      "fit_beta": "prior seasons only",
+      "fold": "F9",
+      "ratings_train": "seasons < 2022",
+      "status": "primary"
+    }
+  ],
+  "forbidden_this_file": [
+    "Exp A execution",
+    "beta fit",
+    "simulate_nfl_game",
+    "Odds API",
+    "merge #646/#647/#648",
+    "LOCKED_SCORING / config_overrides change",
+    "2024+",
+    "F2 PHI@WSH touch",
+    "CERT claims"
+  ],
+  "grid": [
+    {
+      "cfg_id": "G01",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G02",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G03",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G04",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G05",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G06",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G07",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G08",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G09",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G10",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G11",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G12",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G13",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G14",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G15",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G16",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G17",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G18",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.9,
+      "rho": 0.9,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G19",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G20",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G21",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G22",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G23",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G24",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G25",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G26",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G27",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G28",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G29",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G30",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G31",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G32",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G33",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G34",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G35",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G36",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.95,
+      "rho": 0.95,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G37",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G38",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G39",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G40",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G41",
+      "hfa_mode": "off",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G42",
+      "hfa_mode": "fold_fit",
+      "lambda": 0.5,
+      "n0": 2.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G43",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G44",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G45",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G46",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G47",
+      "hfa_mode": "off",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G48",
+      "hfa_mode": "fold_fit",
+      "lambda": 1.0,
+      "n0": 4.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G49",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G50",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.5,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.5
+    },
+    {
+      "cfg_id": "G51",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G52",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.67,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.67
+    },
+    {
+      "cfg_id": "G53",
+      "hfa_mode": "off",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "off",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.8
+    },
+    {
+      "cfg_id": "G54",
+      "hfa_mode": "fold_fit",
+      "lambda": 2.0,
+      "n0": 8.0,
+      "offseason_shrink": 0.8,
+      "output_hfa": "fold_fit_ols",
+      "prior_decay": 0.98,
+      "rho": 0.98,
+      "rho_s": 0.8
+    }
+  ],
+  "grid_shape": "3x3x3x2",
+  "grid_size": 54,
+  "kalman": "CLOSED",
+  "knobs": {
+    "hfa_mode": {
+      "alex": "{fold-fit scalar, off}; neutral=0",
+      "cursor": "output-layer HFA",
+      "rating_model_h": "internal only; h is NOT output HFA; do not add h into margin_A",
+      "values": [
+        "off",
+        "fold_fit"
+      ]
+    },
+    "lambda": {
+      "alex": "ridge lambda (relative)",
+      "cursor": "n0 = lambda * n0_base",
+      "values": [
+        0.5,
+        1.0,
+        2.0
+      ]
+    },
+    "rho": {
+      "alex": "weekly persistence",
+      "cursor": "prior_decay",
+      "values": [
+        0.9,
+        0.95,
+        0.98
+      ],
+      "weight": "rho^k for a game k weeks old"
+    },
+    "rho_s": {
+      "alex": "offseason regression",
+      "cursor": "offseason_shrink",
+      "values": [
+        0.5,
+        0.67,
+        0.8
+      ],
+      "week1_prior": "rho_s * prior-season posterior, league-centered"
+    }
+  },
+  "n0_base": 4.0,
+  "n0_formula": "n0 = lambda * n0_base",
+  "n0_values": [
+    2.0,
+    4.0,
+    8.0
+  ],
+  "nfl_nogo": true,
+  "option1_no_beta": "REJECTED",
+  "option2_simulate_path": "SUPERSEDED",
+  "output": {
+    "asof_cutoff": "kickoff (Exp E PASS)",
+    "config_overrides": false,
+    "equation": "margin_A = beta * rating_diff_home + HFA",
+    "locked_scoring_change": false,
+    "pm_A": "margin_A",
+    "simulate_nfl_game": false
+  },
+  "selection": {
+    "declared_epsilon": 1e-09,
+    "eligible": "<=2022 only",
+    "metric": "inner-CV MAE vs actual margin (not market)",
+    "tie_break_verbatim": "tie-break = HFA off, then \u03c1=0.95, \u03bb=1, \u03c1_s=0.67; tie = |\u0394MAE| < 1e-9 (or declared \u03b5)",
+    "tie_order": [
+      "hfa_mode=off",
+      "rho=0.95",
+      "lambda=1",
+      "rho_s=0.67"
+    ]
+  },
+  "status": "FROZEN",
+  "stop_rule_cite": {
+    "governs": "Alex ddffb72e \u00a74",
+    "not_executed": true,
+    "tokens": [
+      "c>0",
+      "OLS HC1",
+      "B=10000",
+      "seed 4141",
+      "point \u0394 \u2265 0.10",
+      "binding = pooled \u22642022 OOF",
+      "2023 cannot alone PASS",
+      "VOID if changed post-run"
+    ]
+  },
+  "ticket": "t4598u"
+}
