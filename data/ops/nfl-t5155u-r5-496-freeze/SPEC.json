@@ -1,0 +1,22 @@
+{
+  "schema_version": "nfl-t5155u-r5-496-freeze-v1",
+  "path_id": "DEV_R5_496",
+  "ticket": "t5155u",
+  "opt_in": true,
+  "phase": 1,
+  "experiment": "DEV_R5_496",
+  "owner_clear_sha8": "659cd7d9",
+  "cos_order_sha8": "3e14602b",
+  "cert_candidate": 0,
+  "eval": null,
+  "production": false,
+  "market_edge": false,
+  "green": false,
+  "preserve_earlier_runners": true,
+  "r3_stop": "81b6c0fc",
+  "candidate": "0.5*IF+0.5*Q2",
+  "labels": [
+    "RECONSTRUCTED",
+    "RETRO_FIT"
+  ]
+}
