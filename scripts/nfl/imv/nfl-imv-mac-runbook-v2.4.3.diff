@@ -1,0 +1,60 @@
+--- nfl-imv-mac-runbook-v2.4.2.md	2026-10-22 17:04:27.013229665 +0000
++++ nfl-imv-mac-runbook-v2.4.3.md	2026-10-22 17:39:09.044632276 +0000
+@@ -1,4 +1,4 @@
+-# Mac runbook v2.4.2 — N-1, N-2, conditions 4 and 7 (04fd87a1)
++# Mac runbook v2.4.3 — pin bash-3.2-safe builder v2.4.1
+ 
+ Ryan's Mac. Dedicated **b1d857d3** worktree. **Not** `~/kosedge`. No W7.
+ No Odds / Railway / prod DB on the seal. Re-run = **new** snapshot.
+@@ -47,7 +47,9 @@
+   cp "$SRC/$name" "$IMV/$name"
+ done < "$SUMS_V25"
+ cp "$SRC"/nfl_imv_v26.py "$IMV"/
+-cp "$SRC"/nfl-imv-mac-runbook-v2.4.2.md "$IMV"/
++cp "$SRC"/nfl_imv_v27.py "$IMV"/
++cp "$SRC"/nfl-imv-mac-runbook-v2.4.3.md "$IMV"/
++cp "$SRC"/nfl-imv-feature-build-v2.4.1.sh "$IMV"/
+ cp "$SRC"/nfl-imv-v2.6-r-trace.md "$IMV"/
+ cp "$SRC"/nfl-imv-feature-path-v2.6.md "$IMV"/
+ cp "$SRC"/SHA256SUMS.v2.5 "$IMV"/SHA256SUMS.v2.5
+@@ -58,16 +60,20 @@
+   "582eb6cea720ab2e019e7085b731dab682bb61ee2438ccd3c7cf367064161565"
+ test "$(shasum -a 256 nfl-imv-feature-build-v2.4.sh | awk '{print $1}')" = \
+   "105ac5be2daf40b57ccfdfe9a3daa1568e522d3366eb14a1498121096b6c921d"
++test "$(shasum -a 256 nfl-imv-feature-build-v2.4.1.sh | awk '{print $1}')" = \
++  "c3a521569e80e980600e07829f0d9535cd65efda5efc7843e79f43bfdc758a0a"
+ test "$(shasum -a 256 nfl-imv-sealed-v2.4.sh | awk '{print $1}')" = \
+   "3a5da768e1b83c9a213be554f2865bf6b26fa17f21e89a08c337be8ef5898b2a"
+ test "$(shasum -a 256 nfl-imv-prestage-nflverse.sh | awk '{print $1}')" = \
+   "cba5a4032f35a2c727771eda97ea97a661f6caa10f492a60b6aa604612aad059"
+ test "$(shasum -a 256 nfl_imv_v26.py | awk '{print $1}')" = \
+   "b86b64d5ffcfe403fbf063db695a79e0ca1c65daecb869cfe45180d71d3d9ffe"
+-python3 "$IMV/nfl_imv_v26.py" check-pins --imv-dir "$IMV" --sums-v25 "$SUMS_V25"
++test "$(shasum -a 256 nfl_imv_v27.py | awk '{print $1}')" = \
++  "4c5cd242650eef54ea6e6aa8d2f670122dab9fe9222b750ebcdb57a9a032a780"
++python3 "$IMV/nfl_imv_v27.py" check-pins --imv-dir "$IMV" --sums-v25 "$SUMS_V25"
+ # must print ok=true
+ # v21 05027146…  v22 57a419b4…  v23 fe66b374…  v24 7c3f4dc7…  v25 582eb6ce…
+-# v26 b86b64d5…  shells 105ac5be… / 3a5da768… / cba5a403…
++# v26 b86b64d5…  v27 (this packet)  shells 105ac5be… / c3a52156… / 3a5da768… / cba5a403…
+ # FAIL if IMV is inside BASE
+ ```
+ 
+@@ -157,7 +163,7 @@
+ 
+ ```bash
+ OUT6=/var/tmp/nfl-imv-features/w6-$(date -u +%Y%m%dT%H%M%SZ)
+-bash "$IMV/nfl-imv-feature-build-v2.4.sh" --base "$BASE" --prestage "$PRE_RETRO" \
++bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$BASE" --prestage "$PRE_RETRO" \
+   --out "$OUT6" --game-week-cap 6 --pbp-week-cap 5
+ # condition 4: EPERM_OK in OUT
+ test "$(cat "$OUT6/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -192,7 +198,7 @@
+ 
+ ```bash
+ OUT8=/var/tmp/nfl-imv-features/w8-$(date -u +%Y%m%dT%H%M%SZ)
+-bash "$IMV/nfl-imv-feature-build-v2.4.sh" --base "$BASE" --prestage "$PRE_W8" \
++bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$BASE" --prestage "$PRE_W8" \
+   --out "$OUT8" --game-week-cap 8 --pbp-week-cap 7
+ test "$(cat "$OUT8/EPERM_PROBE.txt")" = "EPERM_OK"
+ # K-4 W8: box the store sha, IMV timestamp, THEN seal

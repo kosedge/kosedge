@@ -1,0 +1,49 @@
+MANIFEST_BODY_SHA256=ae364a78e0c136a59fd924c1b3150997eddf6034b02e4ede419db079dac5a948
+NFL IMV PRE_RETRO sha256 manifest
+PRE_RETRO=/var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z
+retrieval_utc=2026-10-22T17:33:38Z
+prestage_end_utc=2026-10-22T17:33:42Z
+data_cutoff_utc=2026-10-22T17:17:28Z
+data_cutoff_raw=2026-10-22 13:17:28 EDT
+approval=Ryan 2026-10-22 13:32 ET one public nflverse pre-stage for W4-W6 retro only
+never_reuse_for_w8=1
+
+SOURCE_URLS
+https://api.github.com/repos/nflverse/nflverse-data/releases/tags/schedules
+https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv
+https://github.com/nflverse/nflverse-data/releases/download/schedules/games.parquet
+https://github.com/nflverse/nflverse-data/releases/download/schedules/timestamp.json
+https://github.com/nflverse/nflverse-data/releases/download/schedules/timestamp.txt
+https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet
+https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.parquet
+
+DOWNLOADED_FILES sha256 path url retrieval_utc
+e2e8444608eeebfae8016f97e0624519dc066c41c7480aa654fa5b8bcf42206d  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/games.csv  https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv  2026-10-22T17:33:38Z
+52ece61f40845c116425f006fe098ac154c154443083e9be8aa428351f8d81c1  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/games.parquet  https://github.com/nflverse/nflverse-data/releases/download/schedules/games.parquet  2026-10-22T17:33:38Z
+e91e4f888efe93d9b3d76b59404797b94d7af90b88bcf9351232d06aa0a4ddec  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/timestamp.json  https://github.com/nflverse/nflverse-data/releases/download/schedules/timestamp.json  2026-10-22T17:33:38Z
+3874d45afa854cbbda2e99ab8fb410054f355f2a985bcf9d12c83e70b1b35617  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/timestamp.txt  https://github.com/nflverse/nflverse-data/releases/download/schedules/timestamp.txt  2026-10-22T17:33:38Z
+31b5bf6437c8f36ef28ef4b2372cf2318305ac7de85b97f95daf23d19ba0b668  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/github-release-schedules.json  https://api.github.com/repos/nflverse/nflverse-data/releases/tags/schedules  2026-10-22T17:33:38Z
+c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/play_by_play_2025.parquet  https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet  2026-10-22T17:33:38Z
+947b1cfa02fbcfb554609ec3517bc4f186b2cf6a6fa0e53aa2fb9ec94214d0da  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/play_by_play_2026.parquet  https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.parquet  2026-10-22T17:33:38Z
+
+EVERY_FILE sha256 path
+1d354aa9ae14644d63b0ef0ed4a50eebba508d164cc578c3674459a5758b3960  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/DOWNLOAD_SHA256
+b631aa6b57e491998d3ed3cadf795dd2a9603ea964db2b90eafcd4cc44816366  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/SHA256SUMS
+3dfa3fb239f56c778a1e9b33eb31328349edd155a95806dac4378904e88527e5  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/STATUS
+3206c59741436080819ad6b1bcb9ea6f85157e1a2fcb429d3b57e651a1731323  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/console.log
+246d0178364e1d6a308e03246cd49dfa8f128051d3fe6c211da9451c65f032be  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/file-records.json
+7ec2561faa91754cb2641d4616c0c8e5b07fcc1af4e8f375bca297258e4b6edb  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/file-records.jsonl
+e2e8444608eeebfae8016f97e0624519dc066c41c7480aa654fa5b8bcf42206d  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/games.csv
+52ece61f40845c116425f006fe098ac154c154443083e9be8aa428351f8d81c1  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/games.parquet
+31b5bf6437c8f36ef28ef4b2372cf2318305ac7de85b97f95daf23d19ba0b668  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/github-release-schedules.json
+c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/play_by_play_2025.parquet
+947b1cfa02fbcfb554609ec3517bc4f186b2cf6a6fa0e53aa2fb9ec94214d0da  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/play_by_play_2026.parquet
+e91e4f888efe93d9b3d76b59404797b94d7af90b88bcf9351232d06aa0a4ddec  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/timestamp.json
+3874d45afa854cbbda2e99ab8fb410054f355f2a985bcf9d12c83e70b1b35617  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/files/timestamp.txt
+ecc1604b5ae808425545477f2fa7fa99b76461e65c8c4ac5ea7bf03ee91456a2  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/imv-manifest.tsv
+003efa27842144990f161f5a66a2ec4c9390387a8924d407b851f40405630276  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/imv-manifest.tsv.sha256
+638bd615b08d3d872f8d86fff388d06d2642dd6bdfa34287fd092e6b1feb9340  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/imv-w7-manifest.tsv
+d216429f193650448804c0bef6242295e6e122d7bbd35eaee06b71fc75329ad8  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/prestage-report.json
+ad23d7cb075b3424c6d331fd3652ebf0fae7ce3800dd288f3a2c4366ae755c57  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/release-metadata.json
+02326c5222a127e251b89d97db04060710564a056e1225509c7943a3b279595f  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/w6-finals.jsonl
+ec983e02ea22da426ffce7c461a5ca40680b647db68a9cb1066d8be3e05f8ca7  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/w7-schedule-nflverse.jsonl

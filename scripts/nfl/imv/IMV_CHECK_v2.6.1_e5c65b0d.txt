@@ -1,0 +1,117 @@
+IMV CHECK — v2.6.1: build shell v2.4.1, helper nfl_imv_v27.py, runbook v2.4.3 vs IMV 4e06f04c. Filed 2026-10-22 13:44:30 EDT.
+Method: text only. Nothing executed (no bash -n, no tests, no project code), no DB, no network.
+  Cited lines re-read from source. Full shas compared by tool, never printed.
+Bundle: /workspace/ops/nfl_t4132u_audit_2026-10-22/v2.6.1/
+
+SHAS (test -s, then sha256sum; all requested MATCH)
+  SHA256SUMS 5d64a848 (32 entries; sha256sum -c all OK)
+  build-v2.4.1.sh c3a52156 (282 lines)
+  nfl_imv_v27.py 4c5cd242 (194 lines)
+  runbook v2.4.3 df277c4c (258 lines)
+  diff aab277f8 (byte-exact vs a fresh diff -u of v2.4.2 -> v2.4.3, timestamp header aside)
+  bash32 trace edb9012e
+  Byte-identical (cmp) to v2.6: every other file, including v21-v26, build-v2.4.sh, sealed-v2.4.sh, prestage, SQL v3, SHA256SUMS.v2.5, register.
+  SHA256SUMS vs v2.6: adds only 5 entries (build-v2.4.1, runbook v2.4.3 .md/.diff, bash32 trace, v27).
+
+VERDICTS
+  (1) Shell v2.4.1 ..... PASS (static; bash 3.2 behaviour UNVERIFIED by execution)
+  (2) Helper v27 ....... PASS WITH CONDITIONS (P-1, P-2)
+  (3) Runbook v2.4.3 ... RETURN (required rulings absent; L-1/L-2 not written in)
+
+(1) SHELL v2.4.1 (line numbers are v2.4.1 unless marked)
+  Diff vs v2.4.sh (whole file, four hunks):
+    a) header name l.2
+    b) added comment l.4
+    c) SCRIPT_ID "...-v2.4.1" l.20 (cosmetic; changes the printed id only)
+    d) the two guarded expansions: l.251 ${PBP_ARGS[@]+"${PBP_ARGS[@]}"} and l.255 ${PACK_ARG[@]+"${PACK_ARG[@]}"}
+    Nothing else changed.
+  set -euo pipefail is still at l.16.
+    Note: l.247 set +e / l.257 set -e do not lift -u. That is why the v2.4 l.254 expansion ("PACK_ARG[@]: unbound") failed inside the set +e block.
+  The guard idiom is valid bash 3.2 and is the standard nounset-safe form. Empty gives no words; non-empty gives the quoted elements.
+  Audit of the three shells (grep for [@], [*], =(, declare, mapfile, readarray, local -n, printf -v, |&, ,, ^^, [-1], coproc, &>>):
+    build v2.4.1:
+      PBP_ARGS=() l.149, += l.167, length test ${#PBP_ARGS[@]} l.170. The length read on an assigned empty array is not the fatal form (believed safe on 3.2, not executed).
+      PACK_ARG=() l.236/238.
+      Both expansions guarded.
+      No other array use and no bash-4 constructs.
+    sealed v2.4.sh: no array expansions and no bash-4 constructs.
+      set -euo pipefail l.33.
+      set +e l.140/150 (P-a), with no -u relaxation, so no exposure.
+    prestage: set -euo pipefail l.31.
+      declare -a FILES=( 4 literals ) l.95, expanded "${FILES[@]}" l.105. It is never empty. declare -a is bash-3.2-valid (no -A).
+      W6_PRODUCT=( 14 literals ) l.43 is never expanded with [@] in the shell.
+      Safe.
+    No other unsafe expansion found. This agrees with the bash32 trace table.
+  Python heredocs inside the shells were not audited for bash syntax; they are not bash.
+
+(2) HELPER v27 (line numbers are v27)
+  Pins:
+    build-v2.4.1 BUILD_241_PIN l.26: MATCH
+    v26 V26_PIN l.24: MATCH
+    v21-v25, the three v2.4 shells, SUMS v2.5 and SQL v3 are inherited from v26 (l.30-45), verified MATCH in 4e06f04c and unchanged (v26 cmp-identical).
+  Not pinned in v27:
+    v2.6 SHA256SUMS e493b4bc, and the new SHA256SUMS 5d64a848. --sums checks entries but not the file's own sha (v26 l.401-413).
+    v27 itself (only presence, l.67-69). Runbook l.70-71 pins v27 (MATCH).
+  Criteria: unchanged.
+    No tolerance, coverage or criteria code; parity, export and SQL bind are aliases of v26 (l.47-52, 123-124).
+    c57032db unchanged.
+  check-pins fail-closed:
+    Mostly. Every flag gives ok=false and exit 6 (l.83, 139-146). v26 flags are kept (l.61-63). Missing v26 is flagged by v26 l.376. Missing or mismatched build-v2.4.1 is flagged (l.70-74).
+    FAIL-OPEN on omission: --sums-v25 and --sums default to "" (l.177-178), and then the SUMS checks are skipped and ok=true is still possible.
+  P-1: the runbook must pass --sums-v25 (it does, at l.73) and should pin the bundle SHA256SUMS 5d64a848 by full sha before the copy (nothing does today).
+  P-2: the builder still stamps via v24 (build l.256), so store HELPERS.json omits v26/v27/build-v2.4.1.
+    Record them via v27 stamp-helpers into OUT (not into the store, which would break SUMS-last), or accept it as a logged deviation.
+
+(3) RUNBOOK v2.4.3 vs v2.4.2 (diff aab277f8; line numbers are v2.4.3)
+  Changes, and only these:
+    title l.1
+    cp v27, runbook v2.4.3 and build-v2.4.1 (l.50-52)
+    pin build-v2.4.1 l.63-64 (MATCH) and v27 l.70-71 (MATCH)
+    check-pins via v27 l.73
+    comment l.76
+    the two builds switched to v2.4.1 (l.169, 204)
+  The new pins and the new shell are correct.
+  ABSENT (grep for ABORTED, PARTIAL, plumb2, RD-3, sparse, skip, strict, model-service, a-w, re-download: 0 hits):
+    A-1 W4 partial dir marked ABORTED-PARTIAL and left in place (no rm).
+    A-2 a fresh stamped OUT for the rerun. Present only by the existing $(date -u) OUT pattern; the W4 partial is never named.
+    A-3 PRE_RETRO imv-manifest.tsv (+ .sha256) CopyToBox, then sha256sum -c on the box, then chmod -R a-w on PRE_RETRO.
+    A-4 no re-download. §1 retro (l.94-117) still re-runs prestage and curls pbp, which contradicts the ruling. It must instead reuse the recorded PRE_RETRO.txt and verify its manifest.
+    A-5 the seven plumb2 checks before each build (including sparse, skip, strict per-path, sim path services/model-service/...).
+    A-6 RD-3.
+  Launch items from 4e06f04c not written in:
+    L-1 set -euo pipefail (0 hits)
+    L-2 SUMS_V25 is still the box path (l.39, 41)
+    L-3..L-5 unchanged (operator-applied)
+  Holds:
+    K-1..K-4, conditions 1-8 (as in 4e06f04c, with condition-7 wording still per L-4), tar rules.
+    No rm (l.5 and 36 are prohibitions), no pkill, no checkout, no ~/kosedge, no prod env, no secret echo.
+  Caveat:
+    I hold no IMV filing on the box that states A-1..A-6, the plumb2 seven or RD-3. They are taken from the CoS relay of the ruling.
+    The exact text of the seven plumb2 checks and of RD-3 must be in v2.4.4 verbatim for a closure check.
+
+EXECUTION RULING — W4-W6 RETRO RERUN (PLUMBING-ONLY): NOT YET.
+  The rerun may launch only on runbook v2.4.4 that:
+    (i) writes A-1..A-6 in concrete commands. That means:
+        - the W4 partial dir is recorded and marked ABORTED-PARTIAL, with no deletion and no reuse;
+        - a new stamped OUT;
+        - the PRE_RETRO manifest + sha goes to the box, the IMV runs sha256sum -c, and chmod -R a-w is applied on the Mac before any build;
+        - no prestage or curl for retro;
+        - the seven plumb2 checks before each build, each STOP on fail;
+        - RD-3.
+    (ii) writes L-1 (set -euo pipefail in every block) and L-2 (SUMS_V25="$SRC/SHA256SUMS.v2.5", anchored by l.42-43).
+    (iii) pins SHA256SUMS 5d64a848 by full sha, and passes --sums-v25 to v27 check-pins with exit 0 and ok=true required.
+    (iv) passes an IMV text-check with a new sha.
+  Shell v2.4.1 and v27 need no change to launch, with P-2 logged.
+  Then: K-4 order (store sha to box + IMV ack, then seal), EPERM_OK in OUT and in the seal, tar with zero parquet to box before any results talk. A BLOCKED run is not evidence.
+  W8: unchanged from 4e06f04c (re-pre-stage on/after 2026-10-27 ET with W7 final, seal START < 2026-10-29 20:15 ET, W7 refused), and it also needs v2.4.4.
+  No gate, tolerance or criterion changed.
+
+PARITY: NOT_RUN (no sealed v3 export).
+EVIDENCE GRADE: PLUMBING-ONLY. The W4 attempt produced no evidence (aborted partial).
+
+CAVEATS
+  - Static review only. bash 3.2 behaviour is reasoned, not executed.
+  - The rulings A-1..A-6 / plumb2 / RD-3 are not on file under my filings; they are from the relay.
+  - No 64-hex string printed; no forbidden folder, parquet or .rds opened.
+
+NO-GO, Coming Soon ON.

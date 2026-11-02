@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Legacy curl-to-model-service grader. Platform Reliability owns when this
+# hits a deployed MODEL_SERVICE_URL. The enterprise local path is
+# scripts/nfl/run_weekly_operate.py stage postweek_grade (RETROSPECTIVE,
+# sha-pinned nflverse finals + stored B0 — never invents).
 set -euo pipefail
 
 MODEL_SERVICE_URL="${MODEL_SERVICE_URL:-http://127.0.0.1:8000}"

@@ -1,0 +1,127 @@
+IMV CHECK — v2.6.2 / runbook v2.4.4 vs IMV items 1-7 (CoS relay, authoritative text) and e5c65b0d. Filed 2026-10-22 13:57:03 EDT.
+Text only. Nothing executed. No DB, no network. Cited lines re-read. Full shas compared by tool, never printed. __pycache__ not opened.
+
+FILING NOTE
+- IMV_CHECK_NFL_IMV_V262_RUNBOOK_V244_v1.txt in this folder is a 0-byte, 0444 stray created by an earlier aborted write.
+- It has no content and no sidecar. It is not a filing.
+- It was left untouched (E-02, delete nothing). This _v2 file is the filing.
+
+SHAS (test -s; all MATCH)
+- SHA256SUMS a63150b5: 38 entries, sha256sum -c all OK.
+- runbook v2.4.4 7314aa71 (368 lines).
+- diff 7d4d5aab: byte-exact vs a fresh diff -u of v2.4.3 -> v2.4.4.
+- register addendum rd-p2 9cdfc185.
+- trace d0bd1485.
+- Box manifest prestage_retro/nfl-imv-prestage-retro-manifest.txt = 4c287d5b (0444; its sidecar agrees).
+- Every other file is byte-identical to v2.6.1. New files besides the above:
+  - IMV_CHECK_v2.6.1_e5c65b0d.txt (identical to the filed e5c65b0d);
+  - SHA256SUMS.v2.6.1 (identical to v2.6.1/SHA256SUMS 5d64a848).
+- No v2.6.1 file is missing.
+
+VERDICT: runbook v2.4.4 RETURN.
+- Items 1, 3, 5, 6 and 7: closed in form.
+- Items 2 and 4: NOT closed.
+- Seal-ack gate missing (B-3).
+- Register addendum rd-p2: PASS, with one wording note.
+
+CLOSURE TABLE (line numbers are runbook v2.4.4)
+ 1 W4 ABORTED-PARTIAL, fresh dir ..... CLOSED.
+   - l.10-11, 27-45: recorded in RUN_REPORT.
+   - No edit, delete, seal or reuse.
+   - OUT4/5/6/8 are fresh: stamped, != W4_PARTIAL, test ! -e (l.216-218, 235-237, 254-256, 306-308).
+ 2 PRE_RETRO box copy / -c / a-w ..... NOT CLOSED (B-1).
+   - OK:
+     - l.114 PRE_RETRO = 20261022T173338Z;
+     - l.115 MANIFEST_PIN = 4c287d5b (tool MATCH vs the box file);
+     - l.124 Desktop copy vs pin;
+     - l.125-126 chmod -R a-w + test ! -w;
+     - no --ignore-missing.
+   - B-1: l.123 checks PRE_RETRO/imv-manifest.tsv against MANIFEST_PIN.
+     - The pin is the sha of the retro manifest listing file, not of imv-manifest.tsv. The listing's own entry for imv-manifest.tsv != pin (tool).
+     - So l.123 always fails. It fails closed, but the rerun can never pass.
+     - The required per-file -c against PRE_RETRO is never done.
+     - Fix: delete l.123 and, after l.124, run:
+         awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
+       Then chmod -R a-w.
+   - B-1b: use shasum -a 256 (as elsewhere in the runbook), not sha256sum. sha256sum on the Mac is UNVERIFIED.
+   - COS_BOX_MANIFEST_OK (l.121): test "${COS_BOX_MANIFEST_OK:-}" = "1" under set -euo pipefail.
+     - FAIL-CLOSED when unset or not 1, with no unbound-variable error.
+     - It is operator-asserted, which is acceptable as the CoS ack.
+ 3 No re-download for retro .......... CLOSED.
+   - l.107-110.
+   - W8 has its own prestage on/after 2026-10-27 ET (l.133-167; PRE_W8 != PRE_RETRO).
+ 4 plumb2 x7 before each build ....... NOT CLOSED (B-2).
+   - Present before W4/W5/W6/W8 (l.204-215, 223-234, 242-253, 294-305), but labeled "verbatim" and is not.
+   (1) HEAD = b1d857d3 full ..... CLOSED (tool MATCH, l.177/205/224/243/295).
+   (2) diff --quiet HEAD ........ MISSING. Replaced by status --porcelain empty.
+   (3) ls-files --others --exclude-standard = 0 ... MISSING. Porcelain hides untracked files if status.showUntrackedFiles=no.
+   (4) sparse .................. PARTIAL.
+       - core.sparseCheckout check: OK.
+       - The file test is "! -s $BASE/.git/info/sparse-checkout":
+         (a) empty is accepted, but item 4 says ABSENT;
+         (b) in a worktree $BASE/.git is a FILE, so the test is vacuous.
+       - Use: test ! -e "$(git -C "$BASE" rev-parse --git-path info/sparse-checkout)".
+   (5) ls-files -v '^[a-zS]' = 0 ... CLOSED in substance (/^S/ + /^[[:lower:]]/).
+   (6) strict per-path MISSING = 0 ... MISSING. Only 3 named files are checked (l.188-190). Required verbatim, in $BASE:
+       git ls-files -z | while IFS= read -r -d '' p; do [ -e "$p" ] || [ -L "$p" ] || echo "MISSING $p"; done | wc -l  -> 0
+       (mode-160000 gitlinks excluded only by name)
+   (7) sim path ................ PARTIAL.
+       - test -f services/model-service/src/services/nfl_simulator.py: OK.
+       - git ls-files --error-unmatch: MISSING.
+ 5 Register RD-1/RD-2/RD-3/P-2 ....... CLOSED (rd-p2 l.6-45).
+   - Note: RD-1 l.12 says "absent or empty". Align it to "absent".
+ 6 L-1 / L-2 ......................... CLOSED.
+   - set -euo pipefail in every block.
+   - l.61 SUMS_V25="$SRC/SHA256SUMS.v2.5".
+   - No box path is executed on the Mac: l.103/328 are text, and l.269 BOX= is unused.
+ 7 5d64a848 / check-pins ............. CLOSED in form.
+   - l.68-69: full sha MATCH.
+   - l.95-97: --sums + --sums-v25; ok is True or exit 6. A nonzero exit also stops under set -e.
+   - All other pins tool MATCH: l.66, 81, 83, 85, 87, 89, 91, 93.
+
+PIN RULING
+- The operator runs the v2.6.2 bundle. A 5d64a848-only pin leaves runbook v2.4.4 and rd-p2 unverified (copied at l.74-75 with no check).
+- Ruling: pin BOTH.
+  - SUMS="$SRC/SHA256SUMS" with full sha a63150b5 (it lists SHA256SUMS.v2.6.1, runbook v2.4.4 and rd-p2).
+  - Keep the 5d64a848 full-sha test on SHA256SUMS.v2.6.1.
+  - Copy loop over a63150b5.
+  - check-pins --sums on a63150b5 and --sums-v25 "$SUMS_V25".
+- SRC != v2.6.2 is a STOP.
+
+OTHER REQUIREMENTS
+- STOP on failure: yes (set -e in every block; the tar grep form is correct).
+- B-3 (blocking): the K-4 seal-ack order is not enforced.
+  - The retro block (l.268-282) and the W8 block (l.292-322) run box copy -> "IMV acks" comment -> seal in ONE block, with no stop.
+  - Add a fail-closed test "${IMV_STORE_ACK_OK:-}" = "1" before each sealed-v2.4.sh call, or put the seal in its own block.
+- Condition 7 wording (l.23, 262-263) is still inverted.
+  - In practice, set -e stops on a BLOCKED build (exit 6), so no seal follows.
+  - Reword: "a BLOCKED build is not sealed."
+- O-4: OUT4/OUT5 feed no seal, box copy or tar. State their purpose. They are never evidence unless sealed.
+- These still hold:
+  - L-3 (<STAMP> paths operator-filled), L-4 (with wording), L-5.
+  - Conditions 1-8 (7 as above).
+  - W8 seal START < 2026-10-29 20:15 ET (l.169-170). W7 refused.
+  - Zero parquet in the tar.
+  - No rm (l.5 and 59 are prohibitions), pkill or checkout.
+- P-2 is logged and accepted.
+
+EXECUTION RULING — W4-W6 RETRO RERUN: NOT YET.
+Launch requires runbook v2.4.5 with:
+- B-1 (item 2 per-file shasum -c, l.123 removed);
+- B-2 (item 4 checks 2, 3, 4-absent via --git-path, 6 verbatim, 7 --error-unmatch; each a STOP before every build);
+- B-3 (store-ack gate before each seal);
+- PIN (a63150b5 + 5d64a848, check-pins --sums a63150b5);
+- the condition-7 wording fix;
+- a passing IMV text-check.
+The W4 partial is never used. W8 also needs v2.4.5. No gate, tolerance or criterion was changed.
+
+PARITY: NOT_RUN.
+EVIDENCE GRADE: PLUMBING-ONLY. The W4 ABORTED-PARTIAL is not evidence.
+
+CAVEATS
+- Static review only.
+- The worktree .git-file point and macOS sha256sum availability are reasoned, not executed.
+- No 64- or 40-hex string was printed.
+- No forbidden folder, parquet, .rds or __pycache__ was opened.
+
+NO-GO, Coming Soon ON.

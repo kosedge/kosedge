@@ -1,16 +1,21 @@
-# NFL weekly operate — documented-only until Season Week ≥ 1.
+# NFL weekly operate — invoke-only.
 #
-# Enable the cron when REG Week 1 has kicked off. Until then this workflow
-# is workflow_dispatch / manual only. Do not also enable Railway + launchd.
+# Platform Reliability owns enabling the Tuesday cron / Beat / launchd.
+# This workflow must stay workflow_dispatch until they turn the schedule on.
+# Do not also enable Railway + launchd from this change.
+#
+# t4141u: research pin may remain the preseason lock. Operate week is
+# resolved from the canonical schedule (or --week) and must not skip ingest
+# solely because the pin is preseason.
 name: NFL Weekly Operate
 
 on:
   workflow_dispatch:
     inputs:
       week:
-        description: "Finished REG week (0 = preseason skip ingest)"
-        required: true
-        default: "0"
+        description: "Finished REG week (empty = resolve from schedule; 0 = preseason skip ingest)"
+        required: false
+        default: ""
       dry_run:
         description: "Dry-run (plan + read-only; never flips research pin)"
         type: boolean
@@ -36,9 +41,11 @@ jobs:
       - name: Run weekly operate
         run: |
           WEEK="${{ github.event.inputs.week }}"
-          WEEK="${WEEK:-0}"
           DRY="${{ github.event.inputs.dry_run }}"
-          ARGS=(--week "$WEEK" --last-run data/ops/nfl-weekly-operate-last.json)
+          ARGS=(--last-run data/ops/nfl-weekly-operate-last.json)
+          if [[ -n "${WEEK}" ]]; then
+            ARGS+=(--week "$WEEK")
+          fi
           if [[ "${DRY}" != "false" ]]; then
             ARGS+=(--dry-run)
           fi
@@ -47,11 +54,15 @@ jobs:
       - name: Confirm research pin untouched
         run: |
           python - <<'PY'
-          import json
+          import json, subprocess
           from pathlib import Path
-          p = json.loads(Path("data/ops/nfl-web-launch-bundle.json").read_text())
-          tag = p.get("lock_tag")
-          assert tag == "nfl-season-engine-2026-preseason-lock", tag
+          # Pin must match HEAD — do not require the preseason lock forever.
+          before = subprocess.check_output(
+              ["git", "show", "HEAD:data/ops/nfl-web-launch-bundle.json"], text=True
+          )
+          after = Path("data/ops/nfl-web-launch-bundle.json").read_text(encoding="utf-8")
+          assert after == before, "weekly operate must not write the research pin"
+          p = json.loads(after)
           assert p.get("locked_snapshot") is True
-          print("pin ok", tag)
+          print("pin unchanged", p.get("lock_tag"))
           PY

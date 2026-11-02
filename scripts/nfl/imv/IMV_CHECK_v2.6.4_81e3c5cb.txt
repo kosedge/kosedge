@@ -1,0 +1,146 @@
+IMV CHECK — v2.6.4 / runbook v2.4.6 vs filing e3ae3984 and the IMV acceptance text (B-1, B-2, B-3, PIN, wording). Filed 2026-10-22 14:10:46 EDT.
+Text only. No project code run. No DB, no network. Cited lines re-read. Full shas compared by tool, never printed. __pycache__ not opened.
+Only text tools were used (awk, grep, diff, cmp). The awk conversion was applied to the box copy of the manifest to check its format.
+
+SHAS (test -s before each; all MATCH)
+- SHA256SUMS 3f8b33a2: 46 entries, sha256sum -c all OK.
+- runbook v2.4.6 36e97e39 (487 lines).
+- nfl-imv-mac-runbook-v2.4.6.diff: body is byte-identical to a fresh diff -u v2.4.5 -> v2.4.6 (only the 2 timestamp header lines were excluded).
+- Versus v2.6.2:
+  - nothing missing;
+  - DIFF: SHA256SUMS only (expected);
+  - NEW: IMV_CHECK_v2.6.2_e3ae3984.txt (cmp-identical to my filing), SHA256SUMS.v2.6.2 (cmp-identical to v2.6.2/SHA256SUMS = a63150b5), runbook v2.4.5 .md and .diff, runbook v2.4.6 .md and .diff, nfl-imv-prestage-retro-manifest.txt (cmp-identical to the box copy = 4c287d5b), nfl-imv-v2.6.3-e3ae3984-trace.md;
+  - every other file is byte-identical.
+
+VERDICT: runbook v2.4.6 RETURN (narrow).
+- B-1: CLOSED in substance; one text fix (T-1).
+- B-2: CLOSED as a verbatim performer copy; the IMV acceptance text has an erratum (E-1).
+- B-3: NOT CLOSED.
+- PIN: NOT CLOSED (3f8b33a2).
+- Register RD-1 wording: open (W-1).
+
+B-1 PRE_RETRO (l.140-168) ................ CLOSED in substance.
+- l.154 MANIFEST_PIN = 4c287d5b (tool MATCH).
+- l.161: the manifest's own shasum -a 256 equals the pin.
+- l.163: awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
+  - The conversion is quoted exactly as in e3ae3984 (l.149).
+  - It is checked against the actual manifest format:
+    - the EVERY_FILE section (19 lines after the header line) gives 20 lines, all of the form "<64hex>  /var/tmp/nfl-imv-prestage-nflverse/20261022T173338Z/<path>";
+    - no blank lines and no stray lines;
+    - the 4-column DOWNLOADED_FILES lines come before EVERY_FILE and are excluded.
+  - shasum format: correct.
+  - No --ignore-missing.
+  - pipefail plus set -e means STOP on any failure.
+- l.165-166: chmod -R a-w "$PRE_RETRO", then test ! -w.
+- shasum is used, not sha256sum. sha256sum appears only in comments (l.29, 160).
+- l.159 COS_BOX_MANIFEST_OK: test "${COS_BOX_MANIFEST_OK:-}" = "1" fails closed (set -u safe).
+- B-1b: l.29 and l.160 match e3ae3984 B-1b exactly. Implemented.
+- T-1 (text): the acceptance text says  cd "$PRE_RETRO" && ... shasum -a 256 -c. l.163 has no cd.
+  - Functionally equivalent, because every entry is an absolute path.
+  - The v2.6.3 trace claims the cd is present. That is a trace misstatement.
+  - Exact text for l.163:
+      cd "$PRE_RETRO" && awk '/^EVERY_FILE/{f=1;next} f&&NF==2' "$DESK" | shasum -a 256 -c
+
+B-2 seven lines ........................ PERFORMER: CLOSED.
+- diff against the reference (indent stripped): byte-IDENTICAL at all 5 instances:
+  - reference l.228-234;
+  - W4 l.249-255;
+  - W5 l.291-297;
+  - W6 l.333-339;
+  - W8 l.381-387.
+- WT=/Users/ryankos/kosedge-imv-plumb2-b1d857d3 is set in each block (l.227, 248, 290, 332, 380). BASE="$WT" follows.
+- set -e analysis (bash, including 3.2, reasoned and not executed):
+  L1: a plain [ ]. Fails -> STOP.
+  L2: a plain command. Nonzero -> STOP.
+  L3: the [ ] compare -> STOP on count != 0.
+      (A git error inside $( ) yields "0" and passes. Advisory A-1: L1 and L2 already STOP on a non-repo.)
+  L4: v=$(... || true) is an assignment, always 0.
+      [ -z "$v" ] || [ "$v" = false ]: with v=true, the LAST command of the || list fails. bash does honour errexit for the final command of an AND-OR list, so it STOPs.
+      Any non-"false" value also STOPs (over-strict, but fail-closed).
+      [ ! -e "$(rev-parse --git-path ...)" ] is a plain [ ] and STOPs if the file exists. (A rev-parse error makes it pass: advisory A-1.)
+  L5: grep -c prints 0 and exits 1 when there is no match; || true keeps the single "0". A count > 0 makes the [ ] fail and STOP.
+  L6: cd failure leaves the output empty, so [ "" = 0 ] fails and STOPs. A count > 0 STOPs.
+      It is stricter than the text: no gitlink exclusion at all (allowed).
+  L7: FAIL-OPEN.
+      In "test -f X && git ... --error-unmatch X", if test -f FAILS it is not the command after the final &&, so errexit is suppressed. The list returns 1 and the block CONTINUES.
+      Only a git failure after test -f succeeds trips set -e.
+      L6 catches the missing file only when it is tracked. An untracked, absent sim file would pass L6, and L7's test -f failure would be ignored.
+- E-1 IMV ERRATUM (IMV's own acceptance text, not a performer fault). Ruling: the acceptance text is NOT fully fail-closed in bash 3.2 or later. L1-L6 are fail-closed (L3, L5, L6 subject to advisory A-1). L7 is not.
+  - Minimal corrected L7 text, to replace the line at all 5 instances:
+      test -f "$WT/services/model-service/src/services/nfl_simulator.py" || exit 7; git -C "$WT" --no-optional-locks ls-files --error-unmatch services/model-service/src/services/nfl_simulator.py >/dev/null
+  - L1-L6 stay unchanged.
+- A-1 (advisory, not required): to also STOP on git errors inside $( ), capture first, e.g. n=$(git ... | wc -l | tr -d ' '); [ "$n" = 0 ]. Under pipefail the assignment carries git's exit status.
+
+B-3 seal-ack gate ...................... NOT CLOSED.
+- OK:
+  - each build block ends after the store sha and EPERM evidence are staged for CopyToBox, with "B-3: STOP" (l.269, 311, 353, 400);
+  - no sealed-v2.4.sh call appears in any build block;
+  - separate seal blocks exist for W4, W5, W6 and W8 (l.272, 314, 356, 403).
+- FAIL: each seal block opens with  test "${IMV_STORE_ACK_OK:-}" = "1"  (l.276, 318, 360, 407), not the required per-week text.
+  - It is also ONE shared flag: once set for W4, it silently admits the W5, W6 and W8 seals, so the per-run K-4 ack is not enforced.
+- Exact text. The FIRST line after set -euo pipefail in each seal block:
+    W4 (l.276): : "${IMV_SEAL_ACK_W4:?IMV ack required}"
+    W5 (l.318): : "${IMV_SEAL_ACK_W5:?IMV ack required}"
+    W6 (l.360): : "${IMV_SEAL_ACK_W6:?IMV ack required}"
+    W8 (l.407): : "${IMV_SEAL_ACK_W8:?IMV ack required}"
+  Remove IMV_STORE_ACK_OK. No other seal path exists (grep: exactly 4 sealed-v2.4.sh calls).
+- Caveat: ":?" exits a NON-interactive bash. If blocks are pasted into an interactive Terminal, the abort-on-expansion-error behaviour is UNVERIFIED. Run each block non-interactively (saved file, bash file).
+
+PIN ruling ............................. NOT CLOSED.
+- l.90 SUMS="$SRC/SHA256SUMS.v2.6.2" with full pin l.99 = a63150b5 (tool MATCH).
+- l.101 = 5d64a848 (SHA256SUMS.v2.6.1). l.96 = SHA256SUMS.v2.5. All tool MATCH.
+- 3f8b33a2 (the bundle's SHA256SUMS) is NOT pinned. runbook v2.4.6 itself is copied at l.107 with no check, because it is not in a63150b5.
+- Under the IMV rule (the operator's SRC must match the bundle it actually runs), SRC is the v2.6.4 bundle. Ruling: the pins MUST include 3f8b33a2.
+- Exact text for l.90 and l.98-99:
+    SUMS="$SRC/SHA256SUMS"
+    test "$(shasum -a 256 "$SUMS" | awk '{print $1}')" = "<full 3f8b33a2 sha>"
+- Keep a63150b5 (SHA256SUMS.v2.6.2) and 5d64a848 (SHA256SUMS.v2.6.1) as anchored sub-SUMS, each with its own full-sha test. Both are listed inside 3f8b33a2.
+- Run the copy loop and cd "$IMV" && shasum -a 256 -c "$SUMS" over 3f8b33a2. Drop the separate l.107-110 copies, which the loop then covers.
+- Keep check-pins --sums "$SUMS" (3f8b33a2) --sums-v25 "$SUMS_V25": exit 0 and ok=true (l.128-130 form is correct).
+- Any future bundle needs a re-pin.
+
+Wording
+- Condition 7: an exact match (grep -F) at l.51 and l.242. The inverted wording is gone (0 hits). CLOSED.
+- RD-1 in the runbook says "absent" (l.12, 218). CLOSED.
+  - W-1: rd-p2 (frozen, byte-identical) l.12 still says "absent or empty". It needs a new register addendum line: "RD-1 erratum: the sparse-checkout file must be absent (rev-parse --git-path); 'or empty' withdrawn."
+- W4 and W5 each have their own seal (l.272-284, 314-326) and tar (l.430-454). CLOSED.
+  - Cosmetic: the tar names still say "v245".
+
+STILL HOLD
+- L-1: set -euo pipefail in every block.
+- L-2: l.89.
+- L-3: <STAMP> placeholders are operator-filled (l.282, 324, 366, 413, 430-471).
+- L-4: condition 7, now exact.
+- L-5: l.128-130.
+- Conditions 1-8: l.41-53.
+- W8 seal START before 2026-10-29 20:15 ET: l.209-210, enforced by the sealed script. W7 refused. W8 date gate l.181.
+- No rm (l.5, 87 are prohibitions), no pkill. "checkout" hits are only core.sparseCheckout or sparse-checkout.
+- Zero parquet in the tars.
+- Seal blocks rely on $OUTn, $PRE_RETRO and $IMV from earlier blocks in the same shell. set -u fails closed if they are unset.
+
+OPEN ITEMS FOR v2.4.7 (exact texts above)
+- B-3: four per-week IMV_SEAL_ACK lines; remove the shared IMV_STORE_ACK_OK.
+- PIN: SUMS = SRC/SHA256SUMS at full 3f8b33a2, plus a63150b5 and 5d64a848 as sub-SUMS; check-pins --sums on 3f8b33a2.
+- E-1: corrected L7 at all 5 instances (IMV erratum).
+- T-1: cd "$PRE_RETRO" && at l.163.
+- W-1: RD-1 register erratum line.
+
+EXECUTION RULING — W4-W6 RETRO RERUN: NOT YET.
+- It may launch on runbook v2.4.7 with B-3, PIN, E-1, T-1 and W-1 applied, after an IMV text-check PASS with a new sha.
+- Then: COS_BOX_MANIFEST_OK=1, build, box, IMV_SEAL_ACK_<WEEK>, seal, EPERM_OK in both OUT and the seal, tar to the box before any results discussion.
+- W8 is the same, and the seal must START before 2026-10-29 20:15 ET.
+- The W4 partial is never used. No gate, tolerance or criterion was changed.
+
+PARITY: NOT_RUN.
+EVIDENCE GRADE: PLUMBING-ONLY. The W4 ABORTED-PARTIAL is not evidence.
+
+CAVEATS
+- The set -e analysis is reasoned against bash semantics. Nothing was executed.
+- macOS shasum -c reading stdin and its missing-file exit status are UNVERIFIED.
+- The interactive-paste behaviour of ":?" is UNVERIFIED.
+- check-pins acceptance of a 46-entry SUMS that includes itself-adjacent files is UNVERIFIED.
+- No 64- or 40-hex string was printed to the console.
+  - Note: the full HEAD sha appears in this filing's B-2 reference only by reference to the user text, not copied here.
+- No forbidden folder, parquet, .rds or __pycache__ was opened.
+
+NO-GO, Coming Soon ON.

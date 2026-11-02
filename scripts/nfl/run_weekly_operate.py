@@ -27,6 +27,13 @@ from typing import Any, Callable, Dict, List, Mapping, Optional
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "nfl"))
 
+from nfl_computation_trace import empty_in_season_trace  # noqa: E402
+from nfl_historical_eval_contract import contract_report  # noqa: E402
+from nfl_local_inputs import (  # noqa: E402
+    REQUIRED_ROLES_SCORES,
+    LocalInputError,
+    load_manifest,
+)
 from nfl_operate_contract import (  # noqa: E402
     HOOKS,
     POINTER_PATH,
@@ -46,6 +53,7 @@ from nfl_operate_contract import (  # noqa: E402
     utc_now,
     write_json,
 )
+from nfl_operate_week import resolve_operate_week  # noqa: E402
 
 SCRIPTS = ROOT / "scripts" / "nfl"
 
@@ -82,23 +90,25 @@ def stage_results_ingest(
             hook=hook,
         )
     if dry_run:
+        pin_note = ""
+        if pointer.get("preseason"):
+            pin_note = " research pin still preseason (decoupled; ingest not skipped)."
         return stage(
             "results_ingest",
             "pass",
             (
                 f"dry-run: would run SEASON=2026 WEEK={week} {hook} --dry-run "
                 f"+ {HOOKS['projection_actuals']} --from-db + "
-                f"{HOOKS['rolling_features']} --dry-run"
+                f"{HOOKS['rolling_features']} --dry-run.{pin_note}"
             ),
             hook=hook,
         )
+    # Research pin may remain preseason (locked snapshot). That must not
+    # block in-season operate ingest — week is resolved separately.
     if pointer.get("preseason"):
-        return stage(
-            "results_ingest",
-            "skip",
-            "research pointer still preseason; no REG results to fold in",
-            hook=hook,
-        )
+        extra_note = " research pin still preseason (decoupled; not a skip)."
+    else:
+        extra_note = ""
     script = ROOT / hook
     cmd = [str(script)]
     env = os.environ.copy()
@@ -130,7 +140,7 @@ def stage_results_ingest(
     return stage(
         "results_ingest",
         "pass",
-        f"ran {hook} for week {week}",
+        f"ran {hook} for week {week}.{extra_note}",
         hook=hook,
     )
 
@@ -311,6 +321,17 @@ def stage_kei_board(
             "--skip-kei",
             hook=hook,
         )
+    if week >= 2:
+        return stage(
+            "kei_board_rebuild",
+            "skip",
+            (
+                f"week {week} ≥ 2: Week-1 slate check is not the B0 producer. "
+                "B0 lives in stage b0_snapshot. Injury KEI nowcast is not invented here."
+            ),
+            hook=hook,
+            extra={"week": week, "week1_slate_bypassed": True},
+        )
     board = _load_script("check_edge_board_week1")
     results = board.check_week1(board_rows=None)
     failed = [f"{cid}: {detail}" for cid, ok, detail in results if not ok]
@@ -419,6 +440,187 @@ def stage_health_smoke(
     )
 
 
+def stage_operate_week(
+    *,
+    week: int,
+    week_meta: Mapping[str, Any],
+) -> Dict[str, Any]:
+    slim = {
+        k: week_meta.get(k)
+        for k in (
+            "season",
+            "as_of_utc",
+            "operate_week",
+            "inferred_finished_week",
+            "week_source",
+            "in_season",
+            "research_pin_decoupled",
+            "next_kickoff_utc",
+            "next_game_id",
+            "schedule_pack_as_of",
+        )
+    }
+    return stage(
+        "operate_week",
+        "pass",
+        (
+            f"operate_week={week} source={week_meta.get('week_source')} "
+            f"inferred_finished={week_meta.get('inferred_finished_week')} "
+            f"research_pin_decoupled=true"
+        ),
+        hook="scripts/nfl/nfl_operate_week.py",
+        extra=slim,
+    )
+
+
+def stage_local_inputs(*, manifest: Optional[str], week: int) -> Dict[str, Any]:
+    hook = HOOKS["b0_snapshot"]
+    path = (os.environ.get("IMV_MANIFEST") or manifest or "").strip()
+    if not path:
+        return stage(
+            "local_inputs",
+            "skip",
+            (
+                "no IMV_MANIFEST — file-backed nflverse inputs not attached. "
+                "Missing inputs are flagged, not defaulted. B0 will not invent fairs."
+            ),
+            hook=hook,
+            extra={"never_silent_default": True},
+        )
+    try:
+        report = load_manifest(Path(path), required_roles=REQUIRED_ROLES_SCORES)
+    except LocalInputError as exc:
+        return stage(
+            "local_inputs",
+            "fail",
+            f"local input error: {exc}",
+            hook=hook,
+        )
+    status = "pass" if report.get("status") == "READY" else "fail"
+    return stage(
+        "local_inputs",
+        status,
+        (
+            f"manifest {path} status={report.get('status')} "
+            f"missing_roles={report.get('missing_roles')}"
+        ),
+        hook=hook,
+        extra={"report": report, "week": week},
+    )
+
+
+def stage_b0_snapshot(*, week: int, dry_run: bool, as_of_utc: str) -> Dict[str, Any]:
+    hook = HOOKS["b0_snapshot"]
+    if week < 1:
+        return stage(
+            "b0_snapshot",
+            "skip",
+            "week < 1 — not writing a fabricated preseason B0",
+            hook=hook,
+        )
+    # After kickoff the only honest label is RETROSPECTIVE unless a stored
+    # pregame snapshot already exists (none on this checkout).
+    record_class = "RETROSPECTIVE"
+    if dry_run:
+        return stage(
+            "b0_snapshot",
+            "skip",
+            (
+                f"dry-run week {week}: would write B0 only from sha-pinned local "
+                f"features + BASE model. record_class={record_class}. "
+                "Null model output is BLOCKED. No prod DB / Odds / Railway."
+            ),
+            hook=hook,
+            extra={"record_class": record_class, "as_of_utc": as_of_utc},
+        )
+    store = (os.environ.get("IMV_FEATURE_STORE") or "").strip()
+    if not store:
+        return stage(
+            "b0_snapshot",
+            "fail",
+            (
+                "no IMV_FEATURE_STORE — refusing to invent B0 fairs. "
+                "Build the file-backed feature path first (nfl-imv-feature-path-v2)."
+            ),
+            hook=hook,
+            extra={"record_class": record_class},
+        )
+    return stage(
+        "b0_snapshot",
+        "fail",
+        (
+            f"feature store {store} present but live sim is not invoked from this "
+            "job (no prod DB). Attach a sealed local snapshot or leave BLOCKED. "
+            f"record_class={record_class}."
+        ),
+        hook=hook,
+        extra={"record_class": record_class, "feature_store": store},
+    )
+
+
+def stage_postweek_grade(*, week: int, dry_run: bool) -> Dict[str, Any]:
+    hook = HOOKS["postweek_grade"]
+    if week < 1:
+        return stage(
+            "postweek_grade",
+            "skip",
+            "week < 1 — no post-week grade (would fabricate results)",
+            hook=hook,
+        )
+    if dry_run:
+        return stage(
+            "postweek_grade",
+            "skip",
+            (
+                f"dry-run week {week}: local grade would join sha-pinned nflverse "
+                "finals to a stored B0. reconstructions=RETROSPECTIVE. "
+                "Does not curl Railway / MODEL_SERVICE_URL "
+                "(see scripts/nfl/run-postweek-grading.sh — Platform Reliability)."
+            ),
+            hook=hook,
+            extra={"record_class": "RETROSPECTIVE", "n_2998": "RETRACTED"},
+        )
+    return stage(
+        "postweek_grade",
+        "fail",
+        (
+            "no stored B0 + nflverse finals pair — refusing to fabricate a "
+            "RETROSPECTIVE grade. n=2998 remains RETRACTED."
+        ),
+        hook=hook,
+        extra={"record_class": "RETROSPECTIVE"},
+    )
+
+
+def stage_computation_trace(
+    *,
+    week: int,
+    record_class: str,
+    week_meta: Mapping[str, Any],
+) -> Dict[str, Any]:
+    hook = HOOKS["computation_trace"]
+    if week < 1:
+        return stage(
+            "computation_trace",
+            "skip",
+            "week < 1 — no slate trace",
+            hook=hook,
+        )
+    trace = empty_in_season_trace(
+        season=int(week_meta.get("season") or 2026),
+        week=week,
+        record_class=record_class,
+        reason="local hops not yet built; skeleton only (no invented numbers)",
+    )
+    return stage(
+        "computation_trace",
+        "pass",
+        f"trace status={trace.get('status')} record_class={record_class} (honest missing hops)",
+        hook=hook,
+        extra={"trace": trace},
+    )
+
+
 def run_weekly(
     *,
     week: int,
@@ -428,16 +630,38 @@ def run_weekly(
     last_run_path: Path = WEEKLY_LAST_RUN_PATH,
     pointer_path: Path = POINTER_PATH,
     audit_fn: Optional[Callable[[], Mapping[str, Any]]] = None,
+    manifest: Optional[str] = None,
+    as_of: Optional[Any] = None,
+    week_explicit: bool = True,
 ) -> Dict[str, Any]:
     pointer_before = read_pointer(pointer_path)
     lock_before = pointer_lock_tag(pointer_before)
+    week_meta = resolve_operate_week(
+        as_of=as_of,
+        explicit_week=int(week) if week_explicit else None,
+    )
+    operate_week = int(week_meta["operate_week"])
+    record_class = "RETROSPECTIVE" if operate_week >= 1 else "PROSPECTIVE-RESEARCH"
     stages: List[Dict[str, Any]] = [
-        stage_results_ingest(week=week, dry_run=dry_run, pointer=pointer_before),
-        stage_proof_log(week=week, dry_run=dry_run),
+        stage_operate_week(week=operate_week, week_meta=week_meta),
+        stage_local_inputs(manifest=manifest, week=operate_week),
+        stage_results_ingest(week=operate_week, dry_run=dry_run, pointer=pointer_before),
+        stage_b0_snapshot(
+            week=operate_week,
+            dry_run=dry_run,
+            as_of_utc=str(week_meta.get("as_of_utc") or ""),
+        ),
+        stage_postweek_grade(week=operate_week, dry_run=dry_run),
+        stage_proof_log(week=operate_week, dry_run=dry_run),
         stage_depth_injury(dry_run=dry_run),
         stage_identity_audit(skip=skip_audit, audit_fn=audit_fn),
-        stage_kei_board(skip=skip_kei, dry_run=dry_run, week=week),
+        stage_kei_board(skip=skip_kei, dry_run=dry_run, week=operate_week),
         stage_health_smoke(pointer=pointer_before, dry_run=dry_run),
+        stage_computation_trace(
+            week=operate_week,
+            record_class=record_class,
+            week_meta=week_meta,
+        ),
     ]
     # Safety: weekly never publishes / never writes the research pointer.
     pointer_after = read_pointer(pointer_path)
@@ -456,7 +680,14 @@ def run_weekly(
         "schema": WEEKLY_SCHEMA,
         "generated_at_utc": utc_now(),
         "season": 2026,
-        "week": int(week),
+        "week": operate_week,
+        "operate_week": operate_week,
+        "week_source": week_meta.get("week_source"),
+        "inferred_finished_week": week_meta.get("inferred_finished_week"),
+        "research_pin_preseason": bool(pointer_before.get("preseason")),
+        "research_pin_decoupled": True,
+        "record_class": record_class,
+        "historical_eval": contract_report(),
         "dry_run": bool(dry_run),
         "status": overall_status(stages),
         "stages": stages,
@@ -482,10 +713,16 @@ def run_weekly(
 
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--week", type=int, default=0, help="Finished REG week (0 = preseason)")
+    ap.add_argument(
+        "--week",
+        type=int,
+        default=None,
+        help="Finished REG week. Omit to resolve from the canonical schedule (as-of now).",
+    )
     ap.add_argument("--dry-run", action="store_true", help="Plan + read-only stages; no writes except last-run JSON")
     ap.add_argument("--skip-kei", action="store_true")
     ap.add_argument("--skip-audit", action="store_true")
+    ap.add_argument("--manifest", type=str, default="", help="Sha-pinned local input manifest")
     ap.add_argument(
         "--last-run",
         type=Path,
@@ -493,13 +730,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         help="Override last-run JSON path",
     )
     args = ap.parse_args(argv)
+    explicit = args.week is not None
+    week = int(args.week) if explicit else 0
 
     payload = run_weekly(
-        week=args.week,
+        week=week,
         dry_run=args.dry_run,
         skip_kei=args.skip_kei,
         skip_audit=args.skip_audit,
         last_run_path=args.last_run,
+        manifest=args.manifest or None,
+        week_explicit=explicit,
     )
     print(json.dumps(payload, indent=2))
     if payload["status"] == "fail":

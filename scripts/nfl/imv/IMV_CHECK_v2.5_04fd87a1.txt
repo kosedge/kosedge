@@ -1,0 +1,166 @@
+IMV CHECK: v2.5 bundle (runbook v2.4.1, reader nfl_imv_v25.py, register) against IMV 54ba672b. Filed 2026-10-22 12:58:02 EDT.
+Text only: nothing executed (no tests, no project code), no DB, no network. Cited lines were re-read from source this turn.
+Bundle: /workspace/ops/nfl_t4132u_audit_2026-10-22/v2.5/.
+
+SHAS (test -s, then sha256sum)
+ Requested, all match:
+  - SHA256SUMS b0cf91da (20 l.; all 20 entries verify OK)
+  - runbook v2.4.1 5136088e (176)
+  - nfl_imv_v25.py 582eb6ce (1293)
+  - register 39561f48 (210)
+  - r-trace 06ce936b (23)
+ Byte-identical (cmp) to the v2.4 copies: v21 05027146, v22 57a419b4, v23 fe66b374, v24 7c3f4dc7, sealed-v2.4.sh 3a5da768, feature-build-v2.4.sh 105ac5be.
+ Also present:
+  - IMV_CHECK_v2.4_54ba672b.txt, identical to the filed 54ba672b
+  - prestage-nflverse.sh cba5a403 (373), now in SHA256SUMS
+  - feature-path-v2.5 06b963f5
+  - parity-protocol copy 25a52e95
+ Parity-protocol copy 25a52e95 (was 0554fdd8 in v2.4): the diff shows ONLY an appended "v2.5 (54ba672b)" note (l.43-52). No criteria lines changed.
+
+VERDICTS
+ (1) Runbook v2.4.1 ..... RETURN (narrow: N-1, N-2; conditions 4/7 wording)
+ (2) Reader v2.5 ........ RETURN (R-1 still OPEN; fails safe to NOT_RUN)
+ (3) Register 39561f48 .. PASS (D-1, D-2 closed)
+
+(1) RUNBOOK v2.4.1: CLOSURE (54ba672b K-1..K-4). Line numbers are the runbook.
+ K-1 no rm -rf ................ CLOSED. l.5; fresh stamped IMV dir with test ! -e and mkdir without -p (l.20-22). No rm or pkill anywhere in the file.
+ K-2 every file sha-checked .... PARTIAL (N-2).
+  - shasum -c against SHA256SUMS (l.30-32) and check-pins (l.33-36). The prestage script is now in SHA256SUMS.
+  - But SHA256SUMS is copied from the same SRC (l.30), so it is self-attesting. It is not anchored to the IMV-verified b0cf91da.
+  - --ignore-missing (l.32) silently passes a file whose cp failed.
+  - v25 check-pins records v25 and the shells but does not pin them. It only flags missing files (v25 l.581-590).
+ K-3 W8 order, separate pre-stage . PARTIAL (N-1).
+  - W8: on or after 2026-10-27 ET (l.68, date test l.73), all W7 REG final (l.69, 74), new stamped PRE_W8 (l.75-77), retro manifest not overwritten (l.69-70, 80), seal START before 2026-10-29 20:15 ET with no extension (l.83-84; enforced, sealed l.117).
+  - But the retro and W8 pre-stage steps are not executable as written (N-1).
+ K-4 store sha to box, then seal (per run) . CLOSED. Retro l.98-113 ("IMV records the box timestamp and acknowledges receipt. ONLY THEN"); W8 l.124-132.
+ Tar: explicit stamp dirs, zero parquet, manifest + sha . CLOSED. l.142-171, check at l.156, 170.
+ Safety:
+  - rm -rf, pkill: none.
+  - ~/kosedge: never (l.3). Read-only git on BASE (l.15-16).
+  - No prod env vars exported: the only env set is IMV_* (l.109-111, 129-131). The scripts refuse prod vars (build l.126-131, sealed l.238-245).
+  - No secrets echoed. Only shas are tee'd.
+ Pre-run conditions 1-8 (54ba672b):
+  1 worktree pinned and clean: present (l.14-16).
+  2 stamped IMV dir plus sha-check: present (l.20-36), see N-2.
+  3 no prod env vars: present (l.4, enforced by scripts).
+  4 sandbox deny plus EPERM_OK sealed: NOT stated in the runbook. It is enforced by the scripts (build l.95-101, 178-206; sealed l.104-110, 193-228). Add a line: confirm EPERM_OK in OUT and in the seal.
+  5 store sha before seal: present (l.98-106, 124-127).
+  6 tar zero parquet plus timing: present (l.140-171).
+  7 BLOCKED build not sealed: present (l.96). "A BLOCKED seal still seals and is reported BLOCKED" is not stated. Add it.
+  8 parity NOT_RUN: present (l.8-9, 174-176).
+ N-1 (blocking) PRE-STAGE STEPS ARE PLACEHOLDERS.
+  - l.53-55 makes an empty PRE_RETRO.
+  - l.56 then runs prestage-nflverse.sh. That script writes its own stamped OUT under /var/tmp/nfl-imv-prestage-nflverse and repoints LATEST (script l.37, 360-361), not into PRE_RETRO.
+  - l.57-58 says "copy that stamp into PRE_RETRO" without a command.
+  - l.60 is literally "… fetch pbp + write $PRE/imv-manifest.tsv as in v2.4 …".
+  - W8 l.78 "re-pre-stage into PRE_W8 only" has no command either.
+  - As written, the builder's --prestage "$PRE_RETRO" (l.92) would find no imv-manifest.tsv or an incomplete one.
+  - Fix in v2.4.2:
+    - set PRE_RETRO to the script's own new stamped dir, read via readlink of LATEST immediately after the run, and record it;
+    - write the pbp fetch and the manifest lines into that dir explicitly (the v2.4 l.47-62 commands with $PRE=$PRE_RETRO);
+    - the same for PRE_W8;
+    - drop the empty mkdir dirs.
+ N-2 (blocking) ANCHOR THE SUMS.
+  - Before l.32: test "$(shasum -a 256 SHA256SUMS | cut -c1-8)" = b0cf91da, or better the full sha IMV records.
+  - Drop --ignore-missing, or check that every listed helper and shell is present.
+  - A mismatch means STOP.
+
+(2) READER v2.5: CLOSURE (54ba672b R-1..R-9, C-3, C-4). Line numbers are nfl_imv_v25.py.
+ R-1 41 cols in the v3 order .................. OPEN (see re-derivation).
+ R-2 types fixed, bad cell NOT_RUN, bool t/f ... PARTIAL. l.134-181, 513-532 (bool t/f only l.49-50, 527; an untyped column raises). The type map omits 7 real v3 columns (see R-1), which would raise "untyped column".
+ R-3 roof-flagged rows block cert ............. CLOSED. l.1022-1033, 1064, 1154-1155 NOT_RUN_ROOF_VOCAB.
+ R-4 rest raw vs derived ...................... CLOSED. l.52-56, 535-574 (recompute from schedule_game_date - prev date; mismatch or NULL prev gives REST_RAW_DERIVED_MISMATCH as SOURCE-CHECK fail), used at l.1005-1008.
+ R-5 retired codes, unparseable game_id ....... CLOSED. l.46-47, 421-426, 460-463 (STL/SD/OAK for season >= 2020 give FAIL), 470-472. LA/WSH/JAC alias only.
+ R-6 exported dups, per-key, row count ........ CLOSED. l.745-775 (dup > 0 or per-key > 1 gives FAIL; row count null gives NOT_RUN; row count != parsed rows gives NOT_RUN).
+ R-7 no tolerance override .................... CLOSED.
+  - Cert: tolerances= gives TOLERANCE_OVERRIDE_REFUSED (l.1094-1104).
+  - Plumbing: the argument is accepted but never applied. tols is built only from the frozen constants (l.1133).
+  - No CLI path passes tolerances.
+ R-8 REPORTED label, PASS_PLUMBING ............ CLOSED. l.37, 1072-1079, 1165-1170; on NOT_RUN paths, l.843.
+ R-9 query_sha = v3 pin only, export sha, build-start required . CLOSED.
+  - l.825-826 build-start required, l.905-906 unparseable gives NOT_RUN.
+  - l.857-860 meta sha256 required.
+  - l.892 query_sha == SQL_V3_PIN only.
+  - l.907 captured after build gives FAIL.
+  - Minor: EXPORT.sha256 is checked only if present (l.869-870). The seal order makes it mandatory, so require it.
+ C-3 cert 0.005, separate from plumbing ....... CLOSED. l.202-203 inherit v24 l.190-196 unchanged; override refused (R-7).
+ C-4 capture, as-of, query sha, post-build .... CLOSED via R-9 (l.881-916).
+ Frozen c57032db criteria ..................... UNCHANGED.
+  - COVERAGE_MIN, cert tolerances and the key split come from v24 (l.201-209).
+  - The PASS chain is: zero matched FAIL (l.1147), diffs FAIL (l.1149), coverage < 0.90 FAIL (l.1152), roof NOT_RUN blocks (l.1154), source, internal and team must be perfect (l.1156-1161).
+  - The protocol copy diff only adds a note.
+ Reader pin ................................... PARTIAL.
+  - v25 is NOT pinned in the build or seal scripts. They are the unchanged v2.4 files, and they do not use v25.
+  - The runbook covers v25 only via the self-copied SHA256SUMS (N-2).
+  - v25 does not pin itself (l.581, record only).
+  - Required for the parity step: the parity run's command records v25's full sha, and that sha must equal the IMV-recorded 582eb6ce entry in SHA256SUMS b0cf91da.
+
+ R-1 RE-DERIVATION (SQL v3 /workspace/ops/platform/PR_PROD_PARITY_EXPORT_v3.sql b10d6cfd, read this turn)
+  Parser csv_columns_from_sql (l.250-314):
+  - It strips "--" comments (l.223-224), finds COPY (SQL l.36) and sets target_depth 1.
+  - It skips the CTE SELECTs at depth 2-3 (SQL l.38, 45, 46, 50, 52, 55) and takes the SELECT at SQL l.59 (depth 1).
+  - It skips "FROM sched_dups" inside the l.102 sub-select (depth 2) and ends at "FROM public.nfl_dp_matchup_features_weekly" (SQL l.103, depth 1).
+  - _split_select_aliases at depth 0 then yields exactly the 41 aliases of SQL l.60-102, in order.
+  - So the PARSER is now correct.
+  The 41 aliases in SQL order:
+   1-6    season, week, game_id, game_date, home_team, away_team
+   7-24   the 18 *_5g features, SQL l.66-83
+   25-30  diff_off_epa_5g, feature_updated_at, schedule_game_type, schedule_roof, schedule_game_date, schedule_updated_at
+   31-36  home_rest_days, away_rest_days, home_prev_reg_game_date, away_prev_reg_game_date, roof_dome, roof_vocab_unknown
+   37-41  feature_as_of_max_utc, schedule_as_of_max_utc, export_row_count, export_distinct_week_game_count_per_key, schedule_dup_game_rows
+  The bind then requires tuple(cols) == PINNED_V3_COLUMNS (l.390). PINNED_V3_COLUMNS (l.91-133) is NOT the v3 list.
+  - It omits 7 real columns: game_date, feature_updated_at, schedule_game_type, schedule_roof, schedule_updated_at, feature_as_of_max_utc, schedule_as_of_max_utc.
+  - It adds 7 columns that v3 does not export: diff_def_epa_allowed_5g, diff_pressure_generated_5g, diff_pressure_allowed_5g, diff_red_zone_td_rate_5g, diff_success_rate_5g, diff_rest_days, surface_turf.
+  - Its order differs after position 24. Its comment (l.88-90) admits it awaits confirmation of the file's aliases.
+  Result:
+  - Every bind gives SQL_V3_COLUMN_MISMATCH, so every export is NOT_RUN. This fails safe, but the reader is still unusable.
+  - The pinned tuple is an invented column list, contrary to "never invent the list" (v24 l.119).
+  - The type map also lacks the 7 omitted columns: CSV_STR_COLS has "roof", not "schedule_roof" (l.149), and there are no types for game_date, schedule_game_type or the 4 *_updated_at/*_as_of timestamps. Even after a pin fix, those would raise "untyped column".
+  Fix (v2.6):
+  - set PINNED_V3_COLUMNS to exactly the 41 above, in that order;
+  - types: game_date and schedule_game_date are date; schedule_game_type and schedule_roof are str; the 4 *_updated_at and *_as_of columns are ISO-UTC timestamps (parse, never raise on a valid value);
+  - roof_dome int, roof_vocab_unknown bool t/f, counts int (already right);
+  - remove keys that v3 does not export from the type sets, or leave them inert.
+
+(3) REGISTER 39561f48
+ D-1 bye-week / cross-season mixing .......... CLOSED. Own entry at l.184-196: same-season prod vs local 2025 tail, with the W4-W6 effect stated.
+ D-2 Cursor-authored fixtures withdrawn ...... CLOSED. l.198-207: named fixtures are withdrawn as evidence, cannot be cited, and the reader refuses authored kinds.
+ Also added: SOURCE-CHECK is against the PR SQL v3 derivation, not tasks.py (l.128-130, 206-207).
+ The diff vs db7d5613 contains only these additions.
+
+NEW / REGRESSED
+ - N-1 runbook pre-stage placeholders. New in v2.4.1; v2.4 had concrete commands.
+ - R-1 now fails on an invented pinned tuple rather than the parser.
+ - Shells and v25 are recorded but not pinned (K-2 residual).
+ - EXPORT.sha256 is optional in the reader.
+ - Nothing regressed in v21-v24 or the shell scripts (byte-identical).
+
+EXECUTION RULING
+ W4-W6 RETRO, PLUMBING-ONLY: NOT YET.
+  - Launch is authorized once runbook v2.4.2 closes N-1 (concrete pre-stage commands into the script's own stamped dir) and N-2 (SHA256SUMS anchored to the IMV-recorded sha, no --ignore-missing), states conditions 4 and 7 in full, and passes an IMV text-check with a new sha.
+  - The reader RETURN does NOT block plumbing builds or seals.
+  - All 54ba672b pre-run conditions 1-8 apply.
+ W8 PLUMBING-ONLY:
+  - Same gate (v2.4.2 passed).
+  - Then re-pre-stage on or after 2026-10-27 ET with all W7 REG final, into a new stamped dir.
+  - Build, then seal START before 2026-10-29 20:15 ET. Late = not a seal. No extension. W7 refused.
+ This ruling changes no gate or tolerance.
+
+PARITY STATUS: NOT_RUN. It stays NOT_RUN until (a) reader v2.6 closes R-1 (true v3 column tuple plus types) and passes IMV review, and (b) Ryan's authorized single v3 export (c2c97b61 packet) exists and is sealed in order (seal, then sha+meta to box, then build).
+
+EVIDENCE GRADE: PLUMBING-ONLY (unchanged).
+ MODEL-RESEARCH (REPORTED) needs:
+  - the real sealed v3 export;
+  - reader v2.6 IMV-passed;
+  - cert parity PASS per c57032db (0.005 on 10 keys, >=90% coverage, >=1 matched, 100% SOURCE-CHECK and INTERNAL, zero roof NOT_RUN, no team or duplicate fails);
+  - matching sealed local builds;
+  - results labelled REPORTED.
+ Even then it certifies feature definitions on 10 keys only, not model quality.
+
+CAVEATS
+ - Static reading only. The R-1 derivation traces the parser by hand against the SQL v3 bytes and was not executed.
+ - The prestage script was only grepped (l.23-37, 324-371), not fully reviewed.
+ - No 64-hex string was printed this turn. Full shas were compared by tool only.
+ - No forbidden folder, parquet or .rds was opened.
+
+NO-GO, Coming Soon ON.

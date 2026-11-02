@@ -1,0 +1,56 @@
+--- /workspace/scripts/nfl/imv/nfl-imv-mac-runbook-v2.4.8.md	2026-10-22 18:22:08.701438254 +0000
++++ /workspace/scripts/nfl/imv/nfl-imv-mac-runbook-v2.4.9.md	2026-10-22 19:02:15.031737052 +0000
+@@ -1,4 +1,4 @@
+-# Mac runbook v2.4.8 — a3e80242 F-2 / F-3 PIN
++# Mac runbook v2.4.9 — RD-4 PY pin
+ 
+ Ryan's Mac. Dedicated **b1d857d3** worktree. **Not** `~/kosedge`. No W7.
+ No Odds / Railway / prod DB on the seal. Re-run = **new** snapshot.
+@@ -257,6 +257,11 @@
+ OUT4=/var/tmp/nfl-imv-features/w4-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT4" != "$W4_PARTIAL"
+ test ! -e "$OUT4"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_RETRO" \
+   --out "$OUT4" --game-week-cap 4 --pbp-week-cap 3
+ test "$(cat "$OUT4/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -299,6 +304,11 @@
+ OUT5=/var/tmp/nfl-imv-features/w5-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT5" != "$W4_PARTIAL"
+ test ! -e "$OUT5"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_RETRO" \
+   --out "$OUT5" --game-week-cap 5 --pbp-week-cap 4
+ test "$(cat "$OUT5/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -341,6 +351,11 @@
+ OUT6=/var/tmp/nfl-imv-features/w6-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT6" != "$W4_PARTIAL"
+ test ! -e "$OUT6"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_RETRO" \
+   --out "$OUT6" --game-week-cap 6 --pbp-week-cap 5
+ test "$(cat "$OUT6/EPERM_PROBE.txt")" = "EPERM_OK"
+@@ -389,6 +404,11 @@
+ OUT8=/var/tmp/nfl-imv-features/w8-$(date -u +%Y%m%dT%H%M%SZ)
+ test "$OUT8" != "$W4_PARTIAL"
+ test ! -e "$OUT8"
++PY="${IMV_PY:?IMV pinned python required}"
++test -x "$PY"
++[ "$("$PY" -c 'import sys;print(sys.version.split()[0])')" = "${IMV_PY_VERSION:?}" ]
++"$PY" -c 'import pandas,pyarrow,numpy'
++[ "$("$PY" -m pip freeze --all | LC_ALL=C sort | shasum -a 256 | awk '{print $1}')" = "${IMV_PY_FREEZE_SHA:?}" ]
+ bash "$IMV/nfl-imv-feature-build-v2.4.1.sh" --base "$WT" --prestage "$PRE_W8" \
+   --out "$OUT8" --game-week-cap 8 --pbp-week-cap 7
+ test "$(cat "$OUT8/EPERM_PROBE.txt")" = "EPERM_OK"
