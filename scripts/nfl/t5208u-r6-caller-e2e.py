@@ -89,11 +89,17 @@ def main(argv: list[str] | None = None) -> int:
         print("INTEGRATION PARTIAL")
         return 2
     print(f"a_path {result['a_path']}")
+    print(f"a_api {result.get('a_api')}")
+    print(f"a_tip {result.get('a_tip')}")
+    print(f"means_source {result.get('means_source')}")
     print(f"sealed_n {len(result['sealed'])}")
-    for row in result["sealed"]:
+    for proj, row in zip(result.get("projected") or [], result["sealed"]):
         if_mean = row["arms"]["IF"]["mean"]
         c_mean = row["arms"]["C"]["mean"]
-        print(f"seal {row['game_id']} if={if_mean} c={c_mean} id={row['seal_id'][:12]}")
+        print(
+            f"seal {row['game_id']} if={if_mean} q2={proj.get('q2_mean')} "
+            f"c={c_mean} seed={proj.get('seed')} id={row['seal_id']}"
+        )
     print(json.dumps({"manifest_id": result["sealed"][0]["manifest_id"]}, separators=(",", ":")))
     print("INTEGRATION OK")
     print("OK")

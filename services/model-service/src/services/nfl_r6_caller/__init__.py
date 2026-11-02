@@ -16,6 +16,7 @@ from src.services.nfl_r6_caller.contract import (
 )
 from src.services.nfl_r6_caller.ledger import PairedArmLedger, make_seal_record
 from src.services.nfl_r6_caller.caller import (
+    bind_a_api,
     locate_a_output,
     prove_real_mode_refuse,
     prove_seal_refuses,
@@ -33,6 +34,7 @@ __all__ = [
     "R6Refuse",
     "R6RefuseCode",
     "expected_c_mean",
+    "bind_a_api",
     "locate_a_output",
     "make_seal_record",
     "pin_block",

@@ -8,6 +8,13 @@ from pathlib import Path
 import pytest
 
 from src.services.nfl_r6_caller.caller import (
+    A_DEMO_C,
+    A_DEMO_GAME_ID,
+    A_DEMO_IF,
+    A_DEMO_Q2,
+    A_DEMO_RESULT,
+    A_DEMO_SEED,
+    bind_a_api,
     consume_a_packet,
     locate_a_output,
     project_game,
@@ -113,6 +120,21 @@ def test_formula_mismatch_refuses(tmp_path: Path) -> None:
     with pytest.raises(R6Refuse) as caught:
         project_game(consume_a_packet(packet)["games"][0])
     assert caught.value.code == R6RefuseCode.REFUSE_FORMULA
+
+
+def test_consumes_actual_a_demo_result(tmp_path: Path) -> None:
+    assert A_DEMO_RESULT.is_file()
+    assert bind_a_api() == "call_r6_point_margin"
+    result = run_synthetic_e2e(ledger_root=tmp_path, a_path=A_DEMO_RESULT)
+    assert result["status"] == "OK"
+    assert result["means_source"] == "A demo_result.json artifact only"
+    row = result["projected"][0]
+    assert row["game_id"] == A_DEMO_GAME_ID
+    assert row["if_mean"] == A_DEMO_IF
+    assert row["q2_mean"] == A_DEMO_Q2
+    assert row["c_mean"] == A_DEMO_C
+    assert int(row["seed"]) == A_DEMO_SEED
+    assert result["sealed"][0]["seal_id"]
 
 
 def test_make_seal_requires_both_arms(tmp_path: Path) -> None:
