@@ -12,6 +12,11 @@ Reuse: #699 Package A **42ff285c** / stamp **f7ec09ee** · #700 RETURN-FIX
 No merge. No prod default. No real EVAL. No GREEN. No self-ACCEPT.
 No target scoring loader / ONE DEV diagnostic. CERT=0.
 
+Implementation tip **34be2d06c456b2399e3541fc691f53aa520d0a89** (N1 + market freeze).
+One-command result: `CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false`
+· `output_sha256` **b7487bbc** · focused tests **71 passed**. Worker A forecast
+freeze still **PENDING**.
+
 ## Exact offline commands
 
 ```
@@ -82,6 +87,7 @@ invented history · Stage C / R2-C / R3 changes.
 
 | Item                    | Value                                                              |
 | ----------------------- | ------------------------------------------------------------------ |
+| Implementation tip      | `34be2d06c456b2399e3541fc691f53aa520d0a89`                         |
 | OWNER CLEAR t5155u      | `659cd7d9`                                                         |
 | Cos ORDER               | `3e14602b`                                                         |
 | #700 tip                | `12ccc482db54dd53bc6d79cea5f4af01c5540950`                         |
