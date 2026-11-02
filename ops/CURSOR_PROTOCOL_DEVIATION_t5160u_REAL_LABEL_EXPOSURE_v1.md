@@ -43,9 +43,11 @@ R2-a `bfd3cbdc0` (2026-11-01 22:59:13 −0500) switched the positive test to
 
 ## Eventual DEV result
 
-None yet. Authorized bound EXEC was superseded before bind/claim/score.
-Link later: same #701 RECEIPT after a later Cos bind that is not 5d029306
-unless Cos re-issues.
+Bound EXEC landed under Cos ORDER **b319c428** (Alex GO **da9668eb** ·
+ACCEPT **d0cc1ed6**). Machine bind_id `4eef5d1f…` · status **CONSUMED**.
+Receipt: `data/ops/nfl-t5155u-r5-phase2/RECEIPT.json`.
+Result seal: `ops/CURSOR_ONE_EXEC_RESULT_t5160u.md`.
+This does not convert the 255adf78 exposure into a clean first-look.
 
 ## Frozen bytes (must remain)
 

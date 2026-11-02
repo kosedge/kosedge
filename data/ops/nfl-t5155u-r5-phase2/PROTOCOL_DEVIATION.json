@@ -41,7 +41,14 @@
   ],
   "later_synthetic_fix_commit": "bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45",
   "later_synthetic_fix_at": "2026-11-01T22:59:13-05:00",
-  "eventual_dev_result": null,
+  "eventual_dev_result": {
+    "cos_order": "b319c428",
+    "alex_go": "da9668eb",
+    "bind_id": "4eef5d1f843bb17327d0d81d3cdae3a8d7d91917d9763691b55808c365d0caa6",
+    "status": "CONSUMED",
+    "receipt": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+    "result_md": "ops/CURSOR_ONE_EXEC_RESULT_t5160u.md"
+  },
   "pins": {
     "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
     "q2_completed_sha256": "eeb6fff73383289c1e69a1a1b30f6df5eed38c7201c58ca9de16feaa8f06cc04",
