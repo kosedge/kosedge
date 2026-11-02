@@ -1,0 +1,31 @@
+{
+  "schema_version": "nfl-t5155u-r5-496-freeze-v1",
+  "pins": {
+    "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+    "feature_matrix": "a3b9d8ecb94902078ddcb89206a5a1ff16d5f1a3b4e8080186238d6578c52409",
+    "reg496_identity": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "dev_if437_identity": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+    "old_if_freeze": "9e704b980b6ce33acc883725823c39766ea19f8a86a7a781ac2a02d95344a732",
+    "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "simulator": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "framework": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+    "games": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "outcomes": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+    "schedule": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+    "r4_496_tip": "bc1b62fc13a1c16ba1e39ccce39fb60180dc565e",
+    "r4_496_stamp": "c58ec422204406950d5605cdff5c172b54bd1a82"
+  },
+  "code_hashes": {
+    "r5_496_freeze.py": "24d118bb2453107002779937613de83ac27160ac4c9ca3d2cf7adb0298bf09ea",
+    "if_produce.py": "534db16cfc5c6d9d275a18f813a496104e0f16dc81110d9c7c61959ff2dba516",
+    "q2.py": "faf539602f9ada91dcbd404be03e092de0a88113bac0bc9d8ede7492c50c5c3c",
+    "cohort_enforcement.py": "488c96d8441a643803024b418854447442096abc11ea1a907e4f9426cbb8cd28",
+    "run_nfl_r5_496_freeze_t5155u.py": "fd9a2437c9857d50897f4b0319784f3726f8d9003a374dc4041779bd3ab409b8"
+  },
+  "holds": {
+    "R3_STOP": "81b6c0fc",
+    "R2_C": "unchanged",
+    "Stage_C": "unchanged",
+    "Q2_2017": "not reopened"
+  }
+}

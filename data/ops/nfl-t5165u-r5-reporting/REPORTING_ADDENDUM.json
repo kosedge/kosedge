@@ -1,0 +1,547 @@
+{
+  "schema_version": "nfl-t5165u-r5-reporting-addendum-v1",
+  "ticket": "t5165u",
+  "owner_clear_sha8": "0ac66543",
+  "cos_order_sha8": "9ad857bb",
+  "tracker": "46283",
+  "cert_candidate": 0,
+  "draft": true,
+  "verified": false,
+  "self_accept": false,
+  "nfl_green": false,
+  "real_eval_executed": false,
+  "new_scientific_look": false,
+  "kind": "reporting_reconstruction",
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "note": "no new scientific look \u2014 reporting-arithmetic completion under t5165u/46283 on already-consumed frozen rows",
+  "exec_tip": "093a51dc9d6ef4c18fb16101a02c7395ce074096",
+  "exec_stamp": "3001dcc32f4425596727a3c0ebb4a052bc1bd37f",
+  "exec_bind_id": "4eef5d1f843bb17327d0d81d3cdae3a8d7d91917d9763691b55808c365d0caa6",
+  "exec_one_run_status": "CONSUMED",
+  "exec_one_run_path": "data/ops/nfl-t5155u-r5-phase2/ONE_RUN.json",
+  "exec_one_run_sha256": "9a72c55be94e0fc04778da22748a70b2e159c4c95e4803c41449cbb8abfc13cc",
+  "exec_receipt_path": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+  "exec_receipt_sha256": "f8da3deab88858405fc55c0af829fde53ef4a689b697cd7a773442e564355869",
+  "joined_path": "data/ops/nfl-t5165u-r5-reporting/JOINED_ROWS.json",
+  "joined_sha256": "9dc82c7b1a97f049bf6fee89f475dae031ee9f6b9a1ba63296b1bdc3343198e9",
+  "joined_n": 496,
+  "joined_not_persisted_at_exec": true,
+  "if_q2_candidate": {
+    "full496": {
+      "label": "full496",
+      "n": 496,
+      "n_by_season": {
+        "2020": 240,
+        "2021": 256
+      },
+      "n_clusters": 33,
+      "finite": true,
+      "mae_if": 11.191977970428045,
+      "rmse_if": 14.30982561605269,
+      "bias_if": 0.15101189011750624,
+      "mae_q2": 10.83445842218113,
+      "rmse_q2": 13.731746068601762,
+      "bias_q2": 1.576480235982242,
+      "mae_candidate": 10.852833619638773,
+      "rmse_candidate": 13.797781635037808,
+      "bias_candidate": 0.8637460630498761,
+      "per_season": {
+        "2020": {
+          "n": 240,
+          "mae_if": 10.474125679707637,
+          "rmse_if": 13.66658410375269,
+          "bias_if": 1.1349456806207774,
+          "mae_q2": 10.435921644363178,
+          "rmse_q2": 13.45156915397509,
+          "bias_q2": 2.6436482518724134,
+          "mae_candidate": 10.296126697092582,
+          "rmse_candidate": 13.356514531210813,
+          "bias_candidate": 1.8892969662465948
+        },
+        "2021": {
+          "n": 256,
+          "mae_if": 11.864964492978396,
+          "rmse_if": 14.887644978393128,
+          "bias_if": -0.7714260384793091,
+          "mae_q2": 11.208086651385468,
+          "rmse_q2": 13.989316598539457,
+          "bias_q2": 0.576010221085206,
+          "mae_candidate": 11.374746359525858,
+          "rmse_candidate": 14.199020461719149,
+          "bias_candidate": -0.09770790869705209
+        }
+      },
+      "candidate_minus_if": {
+        "mean_signed_abs_loss_diff": -0.33914435078924593,
+        "bootstrap_game": {
+          "point": -0.33914435078924593,
+          "ci95": [
+            -0.5531998488645035,
+            -0.13253462410489025
+          ],
+          "B": 10000,
+          "seed": 20261101,
+          "n": 496,
+          "verdict": "CI_EXCLUDES_ZERO",
+          "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+        },
+        "bootstrap_season_week": {
+          "point": -0.33914435078924593,
+          "ci95": [
+            -0.5453849197322003,
+            -0.14001715858183744
+          ],
+          "B": 10000,
+          "seed": 20261101,
+          "n": 496,
+          "verdict": "CI_EXCLUDES_ZERO",
+          "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+        },
+        "B": 10000,
+        "seed": 20261101,
+        "n_clusters": 33,
+        "method": "MEAN signed paired absolute-loss difference L_candidate\u2212L_if"
+      },
+      "q2": "COMPLETED",
+      "candidate": "COMPLETED",
+      "label_status": "RESEARCH_CONSUMED_RETRO",
+      "kind": "reporting_reconstruction",
+      "cited_exec_overall": {
+        "path": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+        "sha256": "f8da3deab88858405fc55c0af829fde53ef4a689b697cd7a773442e564355869",
+        "n": 496,
+        "n_by_season": {
+          "2020": 240,
+          "2021": 256
+        },
+        "mae_if": 11.191977970428045,
+        "rmse_if": 14.30982561605269,
+        "bias_if": 0.15101189011750624,
+        "mae_q2": 10.83445842218113,
+        "rmse_q2": 13.731746068601762,
+        "bias_q2": 1.576480235982242,
+        "mae_candidate": 10.852833619638773,
+        "rmse_candidate": 13.797781635037808,
+        "bias_candidate": 0.8637460630498761
+      }
+    },
+    "old437": {
+      "label": "old437",
+      "n": 437,
+      "n_by_season": {
+        "2020": 210,
+        "2021": 227
+      },
+      "n_clusters": 33,
+      "finite": true,
+      "mae_if": 11.363783240044176,
+      "rmse_if": 14.5320604179377,
+      "bias_if": 0.5192288264384708,
+      "mae_q2": 11.029384217873076,
+      "rmse_q2": 13.968312912629969,
+      "bias_q2": 1.8049544522506404,
+      "mae_candidate": 11.040111458097389,
+      "rmse_candidate": 14.028448488850092,
+      "bias_candidate": 1.1620916393445573,
+      "per_season": {
+        "2020": {
+          "n": 210,
+          "mae_if": 10.597847516456628,
+          "rmse_if": 13.857689151991655,
+          "bias_if": 1.4890595938369615,
+          "mae_q2": 10.533419900838087,
+          "rmse_q2": 13.627531111481584,
+          "bias_q2": 2.9207016586272276,
+          "mae_candidate": 10.409178398385494,
+          "rmse_candidate": 13.534306386531538,
+          "bias_candidate": 2.2048806262320944
+        },
+        "2021": {
+          "n": 227,
+          "mae_if": 12.072358138517236,
+          "rmse_if": 15.129184627791743,
+          "bias_if": -0.37797144296101326,
+          "mae_q2": 11.48820583275128,
+          "rmse_q2": 14.276331834514913,
+          "bias_q2": 0.7727654067040184,
+          "mae_candidate": 11.623794024350696,
+          "rmse_candidate": 14.470566361137228,
+          "bias_candidate": 0.19739698187150137
+        }
+      },
+      "candidate_minus_if": {
+        "mean_signed_abs_loss_diff": -0.32367178194678475,
+        "bootstrap_game": {
+          "point": -0.32367178194678475,
+          "ci95": [
+            -0.5489632280715598,
+            -0.09757399988992434
+          ],
+          "B": 10000,
+          "seed": 20261101,
+          "n": 437,
+          "verdict": "CI_EXCLUDES_ZERO",
+          "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+        },
+        "bootstrap_season_week": {
+          "point": -0.32367178194678475,
+          "ci95": [
+            -0.5373419389228231,
+            -0.11641743196955587
+          ],
+          "B": 10000,
+          "seed": 20261101,
+          "n": 437,
+          "verdict": "CI_EXCLUDES_ZERO",
+          "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+        },
+        "B": 10000,
+        "seed": 20261101,
+        "n_clusters": 33,
+        "method": "MEAN signed paired absolute-loss difference L_candidate\u2212L_if"
+      },
+      "q2": "COMPLETED",
+      "candidate": "COMPLETED",
+      "label_status": "RESEARCH_CONSUMED_RETRO",
+      "kind": "reporting_reconstruction",
+      "cited_exec_overall": {
+        "path": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+        "sha256": "f8da3deab88858405fc55c0af829fde53ef4a689b697cd7a773442e564355869",
+        "n": 437,
+        "n_by_season": {
+          "2020": 210,
+          "2021": 227
+        },
+        "mae_if": 11.363783240044176,
+        "rmse_if": 14.5320604179377,
+        "bias_if": 0.5192288264384708,
+        "mae_q2": 11.029384217873076,
+        "rmse_q2": 13.968312912629969,
+        "bias_q2": 1.8049544522506404,
+        "mae_candidate": 11.040111458097389,
+        "rmse_candidate": 14.028448488850092,
+        "bias_candidate": 1.1620916393445573
+      }
+    },
+    "new59": {
+      "label": "new59",
+      "n": 59,
+      "n_by_season": {
+        "2020": 30,
+        "2021": 29
+      },
+      "n_clusters": 18,
+      "finite": true,
+      "mae_if": 9.919454193779611,
+      "rmse_if": 12.541773783385263,
+      "bias_if": -2.576289824666588,
+      "mae_q2": 9.390686003242424,
+      "rmse_q2": 11.833209564841045,
+      "bias_q2": -0.11577794214132676,
+      "mae_candidate": 9.465707934784335,
+      "rmse_candidate": 11.95147287640592,
+      "bias_candidate": -1.3460338834039578,
+      "per_season": {
+        "2020": {
+          "n": 30,
+          "mae_if": 9.608072822464674,
+          "rmse_if": 12.245624854901264,
+          "bias_if": -1.3438517118925168,
+          "mae_q2": 9.753433849038823,
+          "rmse_q2": 12.148681915031126,
+          "bias_q2": 0.704274404588708,
+          "mae_candidate": 9.504764788042179,
+          "rmse_candidate": 12.038675086071805,
+          "bias_candidate": -0.3197886536519049
+        },
+        "2021": {
+          "n": 29,
+          "mae_if": 10.241572853760577,
+          "rmse_if": 12.840949376457678,
+          "bias_if": -3.851225803398385,
+          "mae_q2": 9.01542961103925,
+          "rmse_q2": 11.497753752953537,
+          "bias_q2": -0.9641079559999836,
+          "mae_candidate": 9.425304293483121,
+          "rmse_candidate": 11.860589036038837,
+          "bias_candidate": -2.407666879699184
+        }
+      },
+      "candidate_minus_if": {
+        "mean_signed_abs_loss_diff": -0.45374625899527193,
+        "bootstrap_game": {
+          "point": -0.45374625899527193,
+          "ci95": [
+            -1.0024247875037444,
+            0.12203672542330485
+          ],
+          "B": 10000,
+          "seed": 20261101,
+          "n": 59,
+          "verdict": "INCONCLUSIVE",
+          "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+        },
+        "bootstrap_season_week": {
+          "point": -0.45374625899527193,
+          "ci95": [
+            -1.0020281852795232,
+            0.14337836713455315
+          ],
+          "B": 10000,
+          "seed": 20261101,
+          "n": 59,
+          "verdict": "INCONCLUSIVE",
+          "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+        },
+        "B": 10000,
+        "seed": 20261101,
+        "n_clusters": 18,
+        "method": "MEAN signed paired absolute-loss difference L_candidate\u2212L_if"
+      },
+      "q2": "COMPLETED",
+      "candidate": "COMPLETED",
+      "label_status": "RESEARCH_CONSUMED_RETRO",
+      "kind": "reporting_reconstruction",
+      "cited_exec_overall": {
+        "path": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+        "sha256": "f8da3deab88858405fc55c0af829fde53ef4a689b697cd7a773442e564355869",
+        "n": 59,
+        "n_by_season": {
+          "2020": 30,
+          "2021": 29
+        },
+        "mae_if": 9.919454193779611,
+        "rmse_if": 12.541773783385263,
+        "bias_if": -2.576289824666588,
+        "mae_q2": 9.390686003242424,
+        "rmse_q2": 11.833209564841045,
+        "bias_q2": -0.11577794214132676,
+        "mae_candidate": 9.465707934784335,
+        "rmse_candidate": 11.95147287640592,
+        "bias_candidate": -1.3460338834039578
+      }
+    }
+  },
+  "market96": {
+    "label": "market96",
+    "n": 96,
+    "n_by_season": {
+      "2020": 41,
+      "2021": 55
+    },
+    "n_clusters": 32,
+    "finite": true,
+    "mae_if": 11.194597975014347,
+    "rmse_if": 14.411356134087514,
+    "bias_if": -1.445373262858376,
+    "mae_q2": 10.65438196116495,
+    "rmse_q2": 13.568487164363079,
+    "bias_q2": 0.5499946585031519,
+    "mae_candidate": 10.663845829625265,
+    "rmse_candidate": 13.64557715108219,
+    "bias_candidate": -0.44768930217761244,
+    "per_season": {
+      "2020": {
+        "n": 41,
+        "mae_if": 11.737027691077536,
+        "rmse_if": 14.7686226174142,
+        "bias_if": 1.193569870662569,
+        "mae_q2": 11.090223147006432,
+        "rmse_q2": 14.205474653237438,
+        "bias_q2": 3.0686103871023978,
+        "mae_candidate": 11.27646707972113,
+        "rmse_candidate": 14.267982575079854,
+        "bias_candidate": 2.1310901288824833
+      },
+      "2021": {
+        "n": 55,
+        "mae_if": 10.790241277585421,
+        "rmse_if": 14.139158419867881,
+        "bias_if": -3.4125854169376253,
+        "mae_q2": 10.32948216808311,
+        "rmse_q2": 13.073465911849505,
+        "bias_q2": -1.3275188846344672,
+        "mae_candidate": 10.207164534099258,
+        "rmse_candidate": 13.16246873652163,
+        "bias_candidate": -2.3700521507860484
+      }
+    },
+    "candidate_minus_if": {
+      "mean_signed_abs_loss_diff": -0.5307521453890801,
+      "bootstrap_game": {
+        "point": -0.5307521453890801,
+        "ci95": [
+          -1.1427623106501963,
+          0.061613067523651456
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "INCONCLUSIVE",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "bootstrap_season_week": {
+        "point": -0.5307521453890801,
+        "ci95": [
+          -0.9809515173185319,
+          0.08037331172741063
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "INCONCLUSIVE",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "B": 10000,
+      "seed": 20261101,
+      "n_clusters": 32,
+      "method": "MEAN signed paired absolute-loss difference L_candidate\u2212L_if"
+    },
+    "q2": "COMPLETED",
+    "candidate": "COMPLETED",
+    "label_status": "RESEARCH_CONSUMED_RETRO",
+    "kind": "reporting_reconstruction",
+    "bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+    "reporting_class": "DESCRIPTIVE_ONLY",
+    "n100_guidance": "n<100 DESCRIPTIVE_ONLY \u2014 not GREEN",
+    "nfl_green": false,
+    "sparse_limits": {
+      "n": 96,
+      "n_clusters": 32,
+      "min_n_report": 100,
+      "n_lt_100": true,
+      "note": "n=96 < 100 \u2014 DESCRIPTIVE_ONLY; cluster bootstrap can be sparse"
+    },
+    "candidate_minus_if_market96": {
+      "mean_signed_abs_loss_diff": -0.5307521453890801,
+      "bootstrap_game": {
+        "point": -0.5307521453890801,
+        "ci95": [
+          -1.1427623106501963,
+          0.061613067523651456
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "INCONCLUSIVE",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "bootstrap_season_week": {
+        "point": -0.5307521453890801,
+        "ci95": [
+          -0.9809515173185319,
+          0.08037331172741063
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "INCONCLUSIVE",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "B": 10000,
+      "seed": 20261101,
+      "n_clusters": 32,
+      "method": "MEAN signed paired absolute-loss difference L_candidate\u2212L_if"
+    },
+    "cited_from_exec_receipt": {
+      "path": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+      "sha256": "f8da3deab88858405fc55c0af829fde53ef4a689b697cd7a773442e564355869",
+      "mean_signed_diff_if_vs_market": 1.150327141681012,
+      "mean_signed_diff_candidate_vs_market": 0.6195749962919322,
+      "bootstrap_game": {
+        "point": 1.150327141681012,
+        "ci95": [
+          0.1589192420473903,
+          2.1091718209581938
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "CI_EXCLUDES_ZERO",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "bootstrap_season_week": {
+        "point": 1.150327141681012,
+        "ci95": [
+          0.29895437426956134,
+          1.9251342603976018
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "CI_EXCLUDES_ZERO",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "bootstrap_game_candidate": {
+        "point": 0.6195749962919322,
+        "ci95": [
+          -0.1326587099987344,
+          1.3712921897949977
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "INCONCLUSIVE",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      },
+      "bootstrap_season_week_candidate": {
+        "point": 0.6195749962919322,
+        "ci95": [
+          0.0769240014931069,
+          1.3113035607626864
+        ],
+        "B": 10000,
+        "seed": 20261101,
+        "n": 96,
+        "verdict": "CI_EXCLUDES_ZERO",
+        "note": "CI crossing zero = INCONCLUSIVE (not retune permission)"
+      }
+    },
+    "eval": null
+  },
+  "consistency": {
+    "full496_n": 496,
+    "old437_n": 437,
+    "new59_n": 59,
+    "market96_n": 96,
+    "old_plus_new": 496,
+    "finite_full496": true,
+    "finite_old437": true,
+    "finite_new59": true,
+    "finite_market96": true,
+    "mae_if_matches_exec_receipt": true
+  },
+  "pins": {
+    "completed_forecasts_sha256": "f4b970f0138a5e2c5f1496711220282650ce4d79f9ae62aeecc6473cae535171",
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "q2_completed_sha256": "eeb6fff73383289c1e69a1a1b30f6df5eed38c7201c58ca9de16feaa8f06cc04",
+    "candidate_completed_sha256": "2f9a73e68d66878b984d5ae9e2e6fc01cfe16e45b0da4ad5389f90aabe9a87c7",
+    "identity_freeze_sha256": "561ae3e1f0a0b99201f3b4a0a00d5da13e75ec7924ad9b6b67218c802aef8b3f",
+    "reg496_identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "schedule_sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+    "market_bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "market_identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+    "exec_receipt_sha256": "f8da3deab88858405fc55c0af829fde53ef4a689b697cd7a773442e564355869",
+    "exec_one_run_sha256": "9a72c55be94e0fc04778da22748a70b2e159c4c95e4803c41449cbb8abfc13cc",
+    "exec_bind_id": "4eef5d1f843bb17327d0d81d3cdae3a8d7d91917d9763691b55808c365d0caa6"
+  },
+  "runner_code_hashes": {
+    "services/model-service/src/services/nfl_t5107u/r5_reporting_addendum.py": "ad724e6c9f24d0cc81e7a50285cbe3bf64dec28307d83075f5d147dd20349287",
+    "scripts/nfl/run_nfl_t5165u_r5_reporting_addendum.py": "9b8db57cbf1de3ad497373a454df546415b3118b23993bbf91ec1f1bceffc0fe"
+  },
+  "runner_code_sha256": "e9c71a4d4304f2908ecc51628c3f2147e2bf17ab04951a8bb016af4331ad318b",
+  "runner_input_sha256": "03e72a842aba066c64723eecfba277f5f5270ac9ba47bf9b144963086453c1df",
+  "eval": null,
+  "scoring": null,
+  "hashes": {
+    "code_sha256": "e9c71a4d4304f2908ecc51628c3f2147e2bf17ab04951a8bb016af4331ad318b",
+    "input_sha256": "03e72a842aba066c64723eecfba277f5f5270ac9ba47bf9b144963086453c1df",
+    "join_sha256": "9dc82c7b1a97f049bf6fee89f475dae031ee9f6b9a1ba63296b1bdc3343198e9",
+    "output_sha256": "b5e564df3054f7aca3c079b97041de15a40dfe9728c4bb4e2ddd337c4e9510b1"
+  },
+  "runtime": {
+    "interpreter": "python3",
+    "invoked_one_exec": false
+  }
+}

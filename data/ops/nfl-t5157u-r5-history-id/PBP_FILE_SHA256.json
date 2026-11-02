@@ -1,0 +1,76 @@
+{
+  "schema_version": "nfl-t5157u-r5-history-id-v1",
+  "archive": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01",
+  "manifest_path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/MANIFEST.md",
+  "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+  ],
+  "files": {
+    "2013": {
+      "filename": "play_by_play_2013.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2013.csv",
+      "sha256": "33f96de712a82cc772cfb882fcb5016b985c68647fdb7e78f642de2f9c7f9b22",
+      "bytes": 95406631,
+      "manifest_sha256": "33f96de712a82cc772cfb882fcb5016b985c68647fdb7e78f642de2f9c7f9b22",
+      "match": true
+    },
+    "2014": {
+      "filename": "play_by_play_2014.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2014.csv",
+      "sha256": "2125097012bb7ab743a07322484d77c66f0fd32fdcc4fe6ed51414cf15f27ff8",
+      "bytes": 94445465,
+      "manifest_sha256": "2125097012bb7ab743a07322484d77c66f0fd32fdcc4fe6ed51414cf15f27ff8",
+      "match": true
+    },
+    "2015": {
+      "filename": "play_by_play_2015.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2015.csv",
+      "sha256": "a6f608f40e762766526e62d44f9e2916596c69bcd2c18088e9571f41bb4f6f00",
+      "bytes": 95599819,
+      "manifest_sha256": "a6f608f40e762766526e62d44f9e2916596c69bcd2c18088e9571f41bb4f6f00",
+      "match": true
+    },
+    "2016": {
+      "filename": "play_by_play_2016.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2016.csv",
+      "sha256": "04884d035eb84527958bc39388aa05ed9ae30eaa4944da27df50bdb0903a80ca",
+      "bytes": 94657991,
+      "manifest_sha256": "04884d035eb84527958bc39388aa05ed9ae30eaa4944da27df50bdb0903a80ca",
+      "match": true
+    },
+    "2017": {
+      "filename": "play_by_play_2017.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2017.csv",
+      "sha256": "2f380b71b87edafbca7779adfd7d6e17022470cf8556a4186115986a92291b5a",
+      "bytes": 93727060,
+      "manifest_sha256": "2f380b71b87edafbca7779adfd7d6e17022470cf8556a4186115986a92291b5a",
+      "match": true
+    },
+    "2018": {
+      "filename": "play_by_play_2018.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2018.csv",
+      "sha256": "44ceb416cb54dd3f02dd4ebf3dac32237587c2abea5390c7198f400079b8dabf",
+      "bytes": 93444627,
+      "manifest_sha256": "44ceb416cb54dd3f02dd4ebf3dac32237587c2abea5390c7198f400079b8dabf",
+      "match": true
+    },
+    "2019": {
+      "filename": "play_by_play_2019.csv",
+      "path": "/Volumes/KosEdgeData/nflverse/archive/pbp/2026-11-01/play_by_play_2019.csv",
+      "sha256": "1ae56cecafcb48488d14de8f4e14bea706ac3fb15fcbcacaf8d91c43c1ce46e4",
+      "bytes": 93850458,
+      "manifest_sha256": "1ae56cecafcb48488d14de8f4e14bea706ac3fb15fcbcacaf8d91c43c1ce46e4",
+      "match": true
+    }
+  },
+  "n_files": 7,
+  "all_match": true,
+  "protected_2024_26_opened": false,
+  "pbp_2020_2023_opened": false
+}

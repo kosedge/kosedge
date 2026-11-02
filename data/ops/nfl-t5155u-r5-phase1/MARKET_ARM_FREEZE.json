@@ -1,0 +1,4829 @@
+{
+  "schema_version": "nfl-t5155u-market-arm-freeze-v1",
+  "ticket": "t5155u",
+  "package": "B_R5_PHASE1_MARKET_ARM_FREEZE",
+  "cert_candidate": 0,
+  "draft": true,
+  "verified": false,
+  "scoring": null,
+  "eval": null,
+  "real_eval_executed": false,
+  "odds_pulls": false,
+  "late_quotes": false,
+  "outcome_based_selection": false,
+  "selection_limited": "DEV_2020_2021_REG496",
+  "owner_clear_sha8": "659cd7d9",
+  "cos_order_sha8": "3e14602b",
+  "cos_accept_700_sha8": "4b23584a",
+  "alex_700_sha8": "f4147e76",
+  "alex_return_sha8": "7057e5a9",
+  "closed_700_tip": "12ccc482db54dd53bc6d79cea5f4af01c5540950",
+  "b1_universe": {
+    "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
+    "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6",
+    "n_rows": 1667
+  },
+  "reg496": {
+    "n": 496,
+    "n_by_season": {
+      "2020": 240,
+      "2021": 256
+    },
+    "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640"
+  },
+  "selection": {
+    "books": [
+      "draftkings",
+      "fanduel"
+    ],
+    "cutoff_minutes": 60,
+    "max_quote_age_hours": 24,
+    "market": "spread",
+    "dedup": "latest_per_game_book_spread after identical-fingerprint B1 seal",
+    "home_margin": "negation of median eligible DK/FD mainline home spread",
+    "performance_selection": false
+  },
+  "intersection": {
+    "n": 96,
+    "n_by_season": {
+      "2020": 41,
+      "2021": 55
+    },
+    "missing_n": 400,
+    "missing_n_by_season": {
+      "2020": 199,
+      "2021": 201
+    },
+    "one_book_n": 5,
+    "two_book_n": 91,
+    "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+    "bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "game_ids": [
+      "2020_02_CIN_CLE",
+      "2020_03_MIA_JAX",
+      "2020_04_DEN_NYJ",
+      "2020_05_BUF_TEN",
+      "2020_05_LAC_NO",
+      "2020_05_TB_CHI",
+      "2020_07_NYG_PHI",
+      "2020_08_ATL_CAR",
+      "2020_09_GB_SF",
+      "2020_10_IND_TEN",
+      "2020_11_ARI_SEA",
+      "2020_12_BAL_PIT",
+      "2020_12_HOU_DET",
+      "2020_12_WAS_DAL",
+      "2020_13_BUF_SF",
+      "2020_13_DAL_BAL",
+      "2020_13_WAS_PIT",
+      "2020_14_NE_LA",
+      "2020_15_LAC_LV",
+      "2020_16_CAR_WAS",
+      "2020_16_DEN_LAC",
+      "2020_16_LA_SEA",
+      "2020_16_MIN_NO",
+      "2020_16_PHI_DAL",
+      "2020_16_TEN_GB",
+      "2020_17_ARI_LA",
+      "2020_17_ATL_TB",
+      "2020_17_BAL_CIN",
+      "2020_17_DAL_NYG",
+      "2020_17_GB_CHI",
+      "2020_17_JAX_IND",
+      "2020_17_LAC_KC",
+      "2020_17_LV_DEN",
+      "2020_17_MIA_BUF",
+      "2020_17_MIN_DET",
+      "2020_17_NO_CAR",
+      "2020_17_NYJ_NE",
+      "2020_17_PIT_CLE",
+      "2020_17_SEA_SF",
+      "2020_17_TEN_HOU",
+      "2020_17_WAS_PHI",
+      "2021_02_NYG_WAS",
+      "2021_03_CAR_HOU",
+      "2021_04_JAX_CIN",
+      "2021_05_LA_SEA",
+      "2021_06_TB_PHI",
+      "2021_07_DEN_CLE",
+      "2021_08_GB_ARI",
+      "2021_09_NYJ_IND",
+      "2021_10_BAL_MIA",
+      "2021_11_NE_ATL",
+      "2021_12_BUF_NO",
+      "2021_12_CHI_DET",
+      "2021_12_LV_DAL",
+      "2021_13_DAL_NO",
+      "2021_14_PIT_MIN",
+      "2021_15_KC_LAC",
+      "2021_15_LV_CLE",
+      "2021_15_MIN_CHI",
+      "2021_15_SEA_LA",
+      "2021_15_WAS_PHI",
+      "2021_16_CHI_SEA",
+      "2021_16_DEN_LV",
+      "2021_16_PIT_KC",
+      "2021_16_SF_TEN",
+      "2021_16_WAS_DAL",
+      "2021_17_ARI_DAL",
+      "2021_17_ATL_BUF",
+      "2021_17_CAR_NO",
+      "2021_17_DEN_LAC",
+      "2021_17_DET_SEA",
+      "2021_17_HOU_SF",
+      "2021_17_JAX_NE",
+      "2021_17_KC_CIN",
+      "2021_17_LA_BAL",
+      "2021_17_LV_IND",
+      "2021_17_MIA_TEN",
+      "2021_17_MIN_GB",
+      "2021_17_NYG_CHI",
+      "2021_17_PHI_WAS",
+      "2021_17_TB_NYJ",
+      "2021_18_CAR_TB",
+      "2021_18_CHI_MIN",
+      "2021_18_CIN_CLE",
+      "2021_18_DAL_PHI",
+      "2021_18_GB_DET",
+      "2021_18_IND_JAX",
+      "2021_18_KC_DEN",
+      "2021_18_NE_MIA",
+      "2021_18_NO_ATL",
+      "2021_18_NYJ_BUF",
+      "2021_18_PIT_BAL",
+      "2021_18_SEA_ARI",
+      "2021_18_SF_LA",
+      "2021_18_TEN_HOU",
+      "2021_18_WAS_NYG"
+    ],
+    "missing_game_ids": [
+      "2020_02_ATL_DAL",
+      "2020_02_BAL_HOU",
+      "2020_02_BUF_MIA",
+      "2020_02_CAR_TB",
+      "2020_02_DEN_PIT",
+      "2020_02_DET_GB",
+      "2020_02_JAX_TEN",
+      "2020_02_KC_LAC",
+      "2020_02_LA_PHI",
+      "2020_02_MIN_IND",
+      "2020_02_NE_SEA",
+      "2020_02_NO_LV",
+      "2020_02_NYG_CHI",
+      "2020_02_SF_NYJ",
+      "2020_02_WAS_ARI",
+      "2020_03_CAR_LAC",
+      "2020_03_CHI_ATL",
+      "2020_03_CIN_PHI",
+      "2020_03_DAL_SEA",
+      "2020_03_DET_ARI",
+      "2020_03_GB_NO",
+      "2020_03_HOU_PIT",
+      "2020_03_KC_BAL",
+      "2020_03_LA_BUF",
+      "2020_03_LV_NE",
+      "2020_03_NYJ_IND",
+      "2020_03_SF_NYG",
+      "2020_03_TB_DEN",
+      "2020_03_TEN_MIN",
+      "2020_03_WAS_CLE",
+      "2020_04_ARI_CAR",
+      "2020_04_ATL_GB",
+      "2020_04_BAL_WAS",
+      "2020_04_BUF_LV",
+      "2020_04_CLE_DAL",
+      "2020_04_IND_CHI",
+      "2020_04_JAX_CIN",
+      "2020_04_LAC_TB",
+      "2020_04_MIN_HOU",
+      "2020_04_NE_KC",
+      "2020_04_NO_DET",
+      "2020_04_NYG_LA",
+      "2020_04_PHI_SF",
+      "2020_04_SEA_MIA",
+      "2020_05_ARI_NYJ",
+      "2020_05_CAR_ATL",
+      "2020_05_CIN_BAL",
+      "2020_05_IND_CLE",
+      "2020_05_JAX_HOU",
+      "2020_05_LA_WAS",
+      "2020_05_LV_KC",
+      "2020_05_MIA_SF",
+      "2020_05_MIN_SEA",
+      "2020_05_NYG_DAL",
+      "2020_05_PHI_PIT",
+      "2020_06_ARI_DAL",
+      "2020_06_ATL_MIN",
+      "2020_06_BAL_PHI",
+      "2020_06_CHI_CAR",
+      "2020_06_CIN_IND",
+      "2020_06_CLE_PIT",
+      "2020_06_DEN_NE",
+      "2020_06_DET_JAX",
+      "2020_06_GB_TB",
+      "2020_06_HOU_TEN",
+      "2020_06_KC_BUF",
+      "2020_06_LA_SF",
+      "2020_06_NYJ_MIA",
+      "2020_06_WAS_NYG",
+      "2020_07_BUF_NYJ",
+      "2020_07_CAR_NO",
+      "2020_07_CHI_LA",
+      "2020_07_CLE_CIN",
+      "2020_07_DAL_WAS",
+      "2020_07_DET_ATL",
+      "2020_07_GB_HOU",
+      "2020_07_JAX_LAC",
+      "2020_07_KC_DEN",
+      "2020_07_PIT_TEN",
+      "2020_07_SEA_ARI",
+      "2020_07_SF_NE",
+      "2020_07_TB_LV",
+      "2020_08_DAL_PHI",
+      "2020_08_IND_DET",
+      "2020_08_LAC_DEN",
+      "2020_08_LA_MIA",
+      "2020_08_LV_CLE",
+      "2020_08_MIN_GB",
+      "2020_08_NE_BUF",
+      "2020_08_NO_CHI",
+      "2020_08_NYJ_KC",
+      "2020_08_PIT_BAL",
+      "2020_08_SF_SEA",
+      "2020_08_TB_NYG",
+      "2020_08_TEN_CIN",
+      "2020_09_BAL_IND",
+      "2020_09_CAR_KC",
+      "2020_09_CHI_TEN",
+      "2020_09_DEN_ATL",
+      "2020_09_DET_MIN",
+      "2020_09_HOU_JAX",
+      "2020_09_LV_LAC",
+      "2020_09_MIA_ARI",
+      "2020_09_NE_NYJ",
+      "2020_09_NO_TB",
+      "2020_09_NYG_WAS",
+      "2020_09_PIT_DAL",
+      "2020_09_SEA_BUF",
+      "2020_10_BAL_NE",
+      "2020_10_BUF_ARI",
+      "2020_10_CIN_PIT",
+      "2020_10_DEN_LV",
+      "2020_10_HOU_CLE",
+      "2020_10_JAX_GB",
+      "2020_10_LAC_MIA",
+      "2020_10_MIN_CHI",
+      "2020_10_PHI_NYG",
+      "2020_10_SEA_LA",
+      "2020_10_SF_NO",
+      "2020_10_TB_CAR",
+      "2020_10_WAS_DET",
+      "2020_11_ATL_NO",
+      "2020_11_CIN_WAS",
+      "2020_11_DAL_MIN",
+      "2020_11_DET_CAR",
+      "2020_11_GB_IND",
+      "2020_11_KC_LV",
+      "2020_11_LA_TB",
+      "2020_11_MIA_DEN",
+      "2020_11_NE_HOU",
+      "2020_11_NYJ_LAC",
+      "2020_11_PHI_CLE",
+      "2020_11_PIT_JAX",
+      "2020_11_TEN_BAL",
+      "2020_12_ARI_NE",
+      "2020_12_CAR_MIN",
+      "2020_12_CHI_GB",
+      "2020_12_CLE_JAX",
+      "2020_12_KC_TB",
+      "2020_12_LAC_BUF",
+      "2020_12_LV_ATL",
+      "2020_12_MIA_NYJ",
+      "2020_12_NO_DEN",
+      "2020_12_NYG_CIN",
+      "2020_12_SEA_PHI",
+      "2020_12_SF_LA",
+      "2020_12_TEN_IND",
+      "2020_13_CIN_MIA",
+      "2020_13_CLE_TEN",
+      "2020_13_DEN_KC",
+      "2020_13_DET_CHI",
+      "2020_13_IND_HOU",
+      "2020_13_JAX_MIN",
+      "2020_13_LA_ARI",
+      "2020_13_LV_NYJ",
+      "2020_13_NE_LAC",
+      "2020_13_NO_ATL",
+      "2020_13_NYG_SEA",
+      "2020_13_PHI_GB",
+      "2020_14_ARI_NYG",
+      "2020_14_ATL_LAC",
+      "2020_14_BAL_CLE",
+      "2020_14_DAL_CIN",
+      "2020_14_DEN_CAR",
+      "2020_14_GB_DET",
+      "2020_14_HOU_CHI",
+      "2020_14_IND_LV",
+      "2020_14_KC_MIA",
+      "2020_14_MIN_TB",
+      "2020_14_NO_PHI",
+      "2020_14_NYJ_SEA",
+      "2020_14_PIT_BUF",
+      "2020_14_TEN_JAX",
+      "2020_14_WAS_SF",
+      "2020_15_BUF_DEN",
+      "2020_15_CAR_GB",
+      "2020_15_CHI_MIN",
+      "2020_15_CLE_NYG",
+      "2020_15_DET_TEN",
+      "2020_15_HOU_IND",
+      "2020_15_JAX_BAL",
+      "2020_15_KC_NO",
+      "2020_15_NE_MIA",
+      "2020_15_NYJ_LA",
+      "2020_15_PHI_ARI",
+      "2020_15_PIT_CIN",
+      "2020_15_SEA_WAS",
+      "2020_15_SF_DAL",
+      "2020_15_TB_ATL",
+      "2020_16_ATL_KC",
+      "2020_16_BUF_NE",
+      "2020_16_CHI_JAX",
+      "2020_16_CIN_HOU",
+      "2020_16_CLE_NYJ",
+      "2020_16_IND_PIT",
+      "2020_16_MIA_LV",
+      "2020_16_NYG_BAL",
+      "2020_16_SF_ARI",
+      "2020_16_TB_DET",
+      "2021_02_ATL_TB",
+      "2021_02_BUF_MIA",
+      "2021_02_CIN_CHI",
+      "2021_02_DAL_LAC",
+      "2021_02_DEN_JAX",
+      "2021_02_DET_GB",
+      "2021_02_HOU_CLE",
+      "2021_02_KC_BAL",
+      "2021_02_LA_IND",
+      "2021_02_LV_PIT",
+      "2021_02_MIN_ARI",
+      "2021_02_NE_NYJ",
+      "2021_02_NO_CAR",
+      "2021_02_SF_PHI",
+      "2021_02_TEN_SEA",
+      "2021_03_ARI_JAX",
+      "2021_03_ATL_NYG",
+      "2021_03_BAL_DET",
+      "2021_03_CHI_CLE",
+      "2021_03_CIN_PIT",
+      "2021_03_GB_SF",
+      "2021_03_IND_TEN",
+      "2021_03_LAC_KC",
+      "2021_03_MIA_LV",
+      "2021_03_NO_NE",
+      "2021_03_NYJ_DEN",
+      "2021_03_PHI_DAL",
+      "2021_03_SEA_MIN",
+      "2021_03_TB_LA",
+      "2021_03_WAS_BUF",
+      "2021_04_ARI_LA",
+      "2021_04_BAL_DEN",
+      "2021_04_CAR_DAL",
+      "2021_04_CLE_MIN",
+      "2021_04_DET_CHI",
+      "2021_04_HOU_BUF",
+      "2021_04_IND_MIA",
+      "2021_04_KC_PHI",
+      "2021_04_LV_LAC",
+      "2021_04_NYG_NO",
+      "2021_04_PIT_GB",
+      "2021_04_SEA_SF",
+      "2021_04_TB_NE",
+      "2021_04_TEN_NYJ",
+      "2021_04_WAS_ATL",
+      "2021_05_BUF_KC",
+      "2021_05_CHI_LV",
+      "2021_05_CLE_LAC",
+      "2021_05_DEN_PIT",
+      "2021_05_DET_MIN",
+      "2021_05_GB_CIN",
+      "2021_05_IND_BAL",
+      "2021_05_MIA_TB",
+      "2021_05_NE_HOU",
+      "2021_05_NO_WAS",
+      "2021_05_NYG_DAL",
+      "2021_05_NYJ_ATL",
+      "2021_05_PHI_CAR",
+      "2021_05_SF_ARI",
+      "2021_05_TEN_JAX",
+      "2021_06_ARI_CLE",
+      "2021_06_BUF_TEN",
+      "2021_06_CIN_DET",
+      "2021_06_DAL_NE",
+      "2021_06_GB_CHI",
+      "2021_06_HOU_IND",
+      "2021_06_KC_WAS",
+      "2021_06_LAC_BAL",
+      "2021_06_LA_NYG",
+      "2021_06_LV_DEN",
+      "2021_06_MIA_JAX",
+      "2021_06_MIN_CAR",
+      "2021_06_SEA_PIT",
+      "2021_07_ATL_MIA",
+      "2021_07_CAR_NYG",
+      "2021_07_CHI_TB",
+      "2021_07_CIN_BAL",
+      "2021_07_DET_LA",
+      "2021_07_HOU_ARI",
+      "2021_07_IND_SF",
+      "2021_07_KC_TEN",
+      "2021_07_NO_SEA",
+      "2021_07_NYJ_NE",
+      "2021_07_PHI_LV",
+      "2021_07_WAS_GB",
+      "2021_08_CAR_ATL",
+      "2021_08_CIN_NYJ",
+      "2021_08_DAL_MIN",
+      "2021_08_JAX_SEA",
+      "2021_08_LA_HOU",
+      "2021_08_MIA_BUF",
+      "2021_08_NE_LAC",
+      "2021_08_NYG_KC",
+      "2021_08_PHI_DET",
+      "2021_08_PIT_CLE",
+      "2021_08_SF_CHI",
+      "2021_08_TB_NO",
+      "2021_08_TEN_IND",
+      "2021_08_WAS_DEN",
+      "2021_09_ARI_SF",
+      "2021_09_ATL_NO",
+      "2021_09_BUF_JAX",
+      "2021_09_CHI_PIT",
+      "2021_09_CLE_CIN",
+      "2021_09_DEN_DAL",
+      "2021_09_GB_KC",
+      "2021_09_HOU_MIA",
+      "2021_09_LAC_PHI",
+      "2021_09_LV_NYG",
+      "2021_09_MIN_BAL",
+      "2021_09_NE_CAR",
+      "2021_09_TEN_LA",
+      "2021_10_ATL_DAL",
+      "2021_10_BUF_NYJ",
+      "2021_10_CAR_ARI",
+      "2021_10_CLE_NE",
+      "2021_10_DET_PIT",
+      "2021_10_JAX_IND",
+      "2021_10_KC_LV",
+      "2021_10_LA_SF",
+      "2021_10_MIN_LAC",
+      "2021_10_NO_TEN",
+      "2021_10_PHI_DEN",
+      "2021_10_SEA_GB",
+      "2021_10_TB_WAS",
+      "2021_11_ARI_SEA",
+      "2021_11_BAL_CHI",
+      "2021_11_CIN_LV",
+      "2021_11_DAL_KC",
+      "2021_11_DET_CLE",
+      "2021_11_GB_MIN",
+      "2021_11_HOU_TEN",
+      "2021_11_IND_BUF",
+      "2021_11_MIA_NYJ",
+      "2021_11_NO_PHI",
+      "2021_11_NYG_TB",
+      "2021_11_PIT_LAC",
+      "2021_11_SF_JAX",
+      "2021_11_WAS_CAR",
+      "2021_12_ATL_JAX",
+      "2021_12_CAR_MIA",
+      "2021_12_CLE_BAL",
+      "2021_12_LAC_DEN",
+      "2021_12_LA_GB",
+      "2021_12_MIN_SF",
+      "2021_12_NYJ_HOU",
+      "2021_12_PHI_NYG",
+      "2021_12_PIT_CIN",
+      "2021_12_SEA_WAS",
+      "2021_12_TB_IND",
+      "2021_12_TEN_NE",
+      "2021_13_ARI_CHI",
+      "2021_13_BAL_PIT",
+      "2021_13_DEN_KC",
+      "2021_13_IND_HOU",
+      "2021_13_JAX_LA",
+      "2021_13_LAC_CIN",
+      "2021_13_MIN_DET",
+      "2021_13_NE_BUF",
+      "2021_13_NYG_MIA",
+      "2021_13_PHI_NYJ",
+      "2021_13_SF_SEA",
+      "2021_13_TB_ATL",
+      "2021_13_WAS_LV",
+      "2021_14_ATL_CAR",
+      "2021_14_BAL_CLE",
+      "2021_14_BUF_TB",
+      "2021_14_CHI_GB",
+      "2021_14_DAL_WAS",
+      "2021_14_DET_DEN",
+      "2021_14_JAX_TEN",
+      "2021_14_LA_ARI",
+      "2021_14_LV_KC",
+      "2021_14_NO_NYJ",
+      "2021_14_NYG_LAC",
+      "2021_14_SEA_HOU",
+      "2021_14_SF_CIN",
+      "2021_15_ARI_DET",
+      "2021_15_ATL_SF",
+      "2021_15_CAR_BUF",
+      "2021_15_CIN_DEN",
+      "2021_15_DAL_NYG",
+      "2021_15_GB_BAL",
+      "2021_15_HOU_JAX",
+      "2021_15_NE_IND",
+      "2021_15_NO_TB",
+      "2021_15_NYJ_MIA",
+      "2021_15_TEN_PIT",
+      "2021_16_BAL_CIN",
+      "2021_16_BUF_NE",
+      "2021_16_CLE_GB",
+      "2021_16_DET_ATL",
+      "2021_16_IND_ARI",
+      "2021_16_JAX_NYJ",
+      "2021_16_LAC_HOU",
+      "2021_16_LA_MIN",
+      "2021_16_MIA_NO",
+      "2021_16_NYG_PHI",
+      "2021_16_TB_CAR",
+      "2021_17_CLE_PIT",
+      "2021_18_LAC_LV"
+    ],
+    "games": [
+      {
+        "game_id": "2020_02_CIN_CLE",
+        "season": 2020,
+        "week": 2,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.25,
+        "home_margin": 6.25,
+        "captured_at_latest": "2020-09-17T16:47:42Z",
+        "cutoff_utc": "2020-09-17T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_02_CIN_CLE",
+            "season": 2020,
+            "week": 2,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.0,
+            "home_margin": 6.0,
+            "captured_at": "2020-09-17T16:47:21Z",
+            "cutoff_utc": "2020-09-17T23:20:00Z",
+            "kickoff_utc": "2020-09-18T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_02_CIN_CLE",
+            "season": 2020,
+            "week": 2,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2020-09-17T16:47:42Z",
+            "cutoff_utc": "2020-09-17T23:20:00Z",
+            "kickoff_utc": "2020-09-18T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_03_MIA_JAX",
+        "season": 2020,
+        "week": 3,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.0,
+        "home_margin": 3.0,
+        "captured_at_latest": "2020-09-24T16:50:21Z",
+        "cutoff_utc": "2020-09-24T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_03_MIA_JAX",
+            "season": 2020,
+            "week": 3,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2020-09-24T16:50:21Z",
+            "cutoff_utc": "2020-09-24T23:20:00Z",
+            "kickoff_utc": "2020-09-25T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_03_MIA_JAX",
+            "season": 2020,
+            "week": 3,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2020-09-24T16:47:25Z",
+            "cutoff_utc": "2020-09-24T23:20:00Z",
+            "kickoff_utc": "2020-09-25T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_04_DEN_NYJ",
+        "season": 2020,
+        "week": 4,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -1.25,
+        "home_margin": 1.25,
+        "captured_at_latest": "2020-10-01T16:50:25Z",
+        "cutoff_utc": "2020-10-01T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_04_DEN_NYJ",
+            "season": 2020,
+            "week": 4,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -1.0,
+            "home_margin": 1.0,
+            "captured_at": "2020-10-01T16:48:30Z",
+            "cutoff_utc": "2020-10-01T23:20:00Z",
+            "kickoff_utc": "2020-10-02T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_04_DEN_NYJ",
+            "season": 2020,
+            "week": 4,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -1.5,
+            "home_margin": 1.5,
+            "captured_at": "2020-10-01T16:50:25Z",
+            "cutoff_utc": "2020-10-01T23:20:00Z",
+            "kickoff_utc": "2020-10-02T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_05_BUF_TEN",
+        "season": 2020,
+        "week": 5,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.5,
+        "home_margin": -3.5,
+        "captured_at_latest": "2020-10-13T16:46:05Z",
+        "cutoff_utc": "2020-10-13T22:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_05_BUF_TEN",
+            "season": 2020,
+            "week": 5,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2020-10-13T16:46:05Z",
+            "cutoff_utc": "2020-10-13T22:00:00Z",
+            "kickoff_utc": "2020-10-13T23:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_05_BUF_TEN",
+            "season": 2020,
+            "week": 5,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2020-10-13T16:46:00Z",
+            "cutoff_utc": "2020-10-13T22:00:00Z",
+            "kickoff_utc": "2020-10-13T23:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_05_LAC_NO",
+        "season": 2020,
+        "week": 5,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -7.0,
+        "home_margin": 7.0,
+        "captured_at_latest": "2020-10-12T17:48:49Z",
+        "cutoff_utc": "2020-10-12T23:15:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_05_LAC_NO",
+            "season": 2020,
+            "week": 5,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2020-10-12T17:48:49Z",
+            "cutoff_utc": "2020-10-12T23:15:00Z",
+            "kickoff_utc": "2020-10-13T00:15:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_05_LAC_NO",
+            "season": 2020,
+            "week": 5,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2020-10-12T17:48:20Z",
+            "cutoff_utc": "2020-10-12T23:15:00Z",
+            "kickoff_utc": "2020-10-13T00:15:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_05_TB_CHI",
+        "season": 2020,
+        "week": 5,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.5,
+        "home_margin": -3.5,
+        "captured_at_latest": "2020-10-08T16:46:16Z",
+        "cutoff_utc": "2020-10-08T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_05_TB_CHI",
+            "season": 2020,
+            "week": 5,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2020-10-08T16:46:16Z",
+            "cutoff_utc": "2020-10-08T23:20:00Z",
+            "kickoff_utc": "2020-10-09T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_05_TB_CHI",
+            "season": 2020,
+            "week": 5,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2020-10-08T16:45:47Z",
+            "cutoff_utc": "2020-10-08T23:20:00Z",
+            "kickoff_utc": "2020-10-09T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_07_NYG_PHI",
+        "season": 2020,
+        "week": 7,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -4.5,
+        "home_margin": 4.5,
+        "captured_at_latest": "2020-10-22T16:47:19Z",
+        "cutoff_utc": "2020-10-22T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_07_NYG_PHI",
+            "season": 2020,
+            "week": 7,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -4.5,
+            "home_margin": 4.5,
+            "captured_at": "2020-10-22T16:47:19Z",
+            "cutoff_utc": "2020-10-22T23:20:00Z",
+            "kickoff_utc": "2020-10-23T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_07_NYG_PHI",
+            "season": 2020,
+            "week": 7,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -4.5,
+            "home_margin": 4.5,
+            "captured_at": "2020-10-22T16:46:42Z",
+            "cutoff_utc": "2020-10-22T23:20:00Z",
+            "kickoff_utc": "2020-10-23T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_08_ATL_CAR",
+        "season": 2020,
+        "week": 8,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -2.0,
+        "home_margin": 2.0,
+        "captured_at_latest": "2020-10-29T16:46:04Z",
+        "cutoff_utc": "2020-10-29T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_08_ATL_CAR",
+            "season": 2020,
+            "week": 8,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -2.0,
+            "home_margin": 2.0,
+            "captured_at": "2020-10-29T16:46:04Z",
+            "cutoff_utc": "2020-10-29T23:20:00Z",
+            "kickoff_utc": "2020-10-30T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_08_ATL_CAR",
+            "season": 2020,
+            "week": 8,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -2.0,
+            "home_margin": 2.0,
+            "captured_at": "2020-10-29T16:46:02Z",
+            "cutoff_utc": "2020-10-29T23:20:00Z",
+            "kickoff_utc": "2020-10-30T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_09_GB_SF",
+        "season": 2020,
+        "week": 9,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 7.25,
+        "home_margin": -7.25,
+        "captured_at_latest": "2020-11-05T16:47:27Z",
+        "cutoff_utc": "2020-11-06T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_09_GB_SF",
+            "season": 2020,
+            "week": 9,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 7.5,
+            "home_margin": -7.5,
+            "captured_at": "2020-11-05T16:45:45Z",
+            "cutoff_utc": "2020-11-06T00:20:00Z",
+            "kickoff_utc": "2020-11-06T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_09_GB_SF",
+            "season": 2020,
+            "week": 9,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2020-11-05T16:47:27Z",
+            "cutoff_utc": "2020-11-06T00:20:00Z",
+            "kickoff_utc": "2020-11-06T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_10_IND_TEN",
+        "season": 2020,
+        "week": 10,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 1.0,
+        "home_margin": -1.0,
+        "captured_at_latest": "2020-11-12T16:47:47Z",
+        "cutoff_utc": "2020-11-13T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_10_IND_TEN",
+            "season": 2020,
+            "week": 10,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2020-11-12T16:47:47Z",
+            "cutoff_utc": "2020-11-13T00:20:00Z",
+            "kickoff_utc": "2020-11-13T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_10_IND_TEN",
+            "season": 2020,
+            "week": 10,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2020-11-12T16:47:05Z",
+            "cutoff_utc": "2020-11-13T00:20:00Z",
+            "kickoff_utc": "2020-11-13T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_11_ARI_SEA",
+        "season": 2020,
+        "week": 11,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -2.5,
+        "home_margin": 2.5,
+        "captured_at_latest": "2020-11-19T16:50:28Z",
+        "cutoff_utc": "2020-11-20T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_11_ARI_SEA",
+            "season": 2020,
+            "week": 11,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -2.5,
+            "home_margin": 2.5,
+            "captured_at": "2020-11-19T16:47:10Z",
+            "cutoff_utc": "2020-11-20T00:20:00Z",
+            "kickoff_utc": "2020-11-20T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_11_ARI_SEA",
+            "season": 2020,
+            "week": 11,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -2.5,
+            "home_margin": 2.5,
+            "captured_at": "2020-11-19T16:50:28Z",
+            "cutoff_utc": "2020-11-20T00:20:00Z",
+            "kickoff_utc": "2020-11-20T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_12_BAL_PIT",
+        "season": 2020,
+        "week": 12,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -10.5,
+        "home_margin": 10.5,
+        "captured_at_latest": "2020-12-02T16:50:31Z",
+        "cutoff_utc": "2020-12-02T19:40:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_12_BAL_PIT",
+            "season": 2020,
+            "week": 12,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -10.5,
+            "home_margin": 10.5,
+            "captured_at": "2020-12-02T16:50:31Z",
+            "cutoff_utc": "2020-12-02T19:40:00Z",
+            "kickoff_utc": "2020-12-02T20:40:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_12_BAL_PIT",
+            "season": 2020,
+            "week": 12,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -10.5,
+            "home_margin": 10.5,
+            "captured_at": "2020-12-02T16:47:44Z",
+            "cutoff_utc": "2020-12-02T19:40:00Z",
+            "kickoff_utc": "2020-12-02T20:40:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_12_HOU_DET",
+        "season": 2020,
+        "week": 12,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2020-11-25T17:48:35Z",
+        "cutoff_utc": "2020-11-26T16:30:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_12_HOU_DET",
+            "season": 2020,
+            "week": 12,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2020-11-25T17:46:29Z",
+            "cutoff_utc": "2020-11-26T16:30:00Z",
+            "kickoff_utc": "2020-11-26T17:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_12_HOU_DET",
+            "season": 2020,
+            "week": 12,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2020-11-25T17:48:35Z",
+            "cutoff_utc": "2020-11-26T16:30:00Z",
+            "kickoff_utc": "2020-11-26T17:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_12_WAS_DAL",
+        "season": 2020,
+        "week": 12,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -2.75,
+        "home_margin": 2.75,
+        "captured_at_latest": "2020-11-26T16:50:17Z",
+        "cutoff_utc": "2020-11-26T20:30:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_12_WAS_DAL",
+            "season": 2020,
+            "week": 12,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2020-11-26T16:49:10Z",
+            "cutoff_utc": "2020-11-26T20:30:00Z",
+            "kickoff_utc": "2020-11-26T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_12_WAS_DAL",
+            "season": 2020,
+            "week": 12,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -2.5,
+            "home_margin": 2.5,
+            "captured_at": "2020-11-26T16:50:17Z",
+            "cutoff_utc": "2020-11-26T20:30:00Z",
+            "kickoff_utc": "2020-11-26T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_13_BUF_SF",
+        "season": 2020,
+        "week": 13,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -1.25,
+        "home_margin": 1.25,
+        "captured_at_latest": "2020-12-07T17:49:00Z",
+        "cutoff_utc": "2020-12-08T00:15:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_13_BUF_SF",
+            "season": 2020,
+            "week": 13,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -1.0,
+            "home_margin": 1.0,
+            "captured_at": "2020-12-07T17:49:00Z",
+            "cutoff_utc": "2020-12-08T00:15:00Z",
+            "kickoff_utc": "2020-12-08T01:15:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_13_BUF_SF",
+            "season": 2020,
+            "week": 13,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -1.5,
+            "home_margin": 1.5,
+            "captured_at": "2020-12-07T17:47:48Z",
+            "cutoff_utc": "2020-12-08T00:15:00Z",
+            "kickoff_utc": "2020-12-08T01:15:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_13_DAL_BAL",
+        "season": 2020,
+        "week": 13,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -8.75,
+        "home_margin": 8.75,
+        "captured_at_latest": "2020-12-08T16:47:15Z",
+        "cutoff_utc": "2020-12-09T00:05:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_13_DAL_BAL",
+            "season": 2020,
+            "week": 13,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -9.0,
+            "home_margin": 9.0,
+            "captured_at": "2020-12-08T16:47:15Z",
+            "cutoff_utc": "2020-12-09T00:05:00Z",
+            "kickoff_utc": "2020-12-09T01:05:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_13_DAL_BAL",
+            "season": 2020,
+            "week": 13,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -8.5,
+            "home_margin": 8.5,
+            "captured_at": "2020-12-08T16:46:53Z",
+            "cutoff_utc": "2020-12-09T00:05:00Z",
+            "kickoff_utc": "2020-12-09T01:05:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_13_WAS_PIT",
+        "season": 2020,
+        "week": 13,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.25,
+        "home_margin": 6.25,
+        "captured_at_latest": "2020-12-07T17:49:00Z",
+        "cutoff_utc": "2020-12-07T21:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_13_WAS_PIT",
+            "season": 2020,
+            "week": 13,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.0,
+            "home_margin": 6.0,
+            "captured_at": "2020-12-07T17:49:00Z",
+            "cutoff_utc": "2020-12-07T21:00:00Z",
+            "kickoff_utc": "2020-12-07T22:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_13_WAS_PIT",
+            "season": 2020,
+            "week": 13,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2020-12-07T17:47:48Z",
+            "cutoff_utc": "2020-12-07T21:00:00Z",
+            "kickoff_utc": "2020-12-07T22:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_14_NE_LA",
+        "season": 2020,
+        "week": 14,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -4.5,
+        "home_margin": 4.5,
+        "captured_at_latest": "2020-12-10T16:50:01Z",
+        "cutoff_utc": "2020-12-11T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_14_NE_LA",
+            "season": 2020,
+            "week": 14,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -4.5,
+            "home_margin": 4.5,
+            "captured_at": "2020-12-10T16:50:01Z",
+            "cutoff_utc": "2020-12-11T00:20:00Z",
+            "kickoff_utc": "2020-12-11T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_14_NE_LA",
+            "season": 2020,
+            "week": 14,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -4.5,
+            "home_margin": 4.5,
+            "captured_at": "2020-12-10T16:47:35Z",
+            "cutoff_utc": "2020-12-11T00:20:00Z",
+            "kickoff_utc": "2020-12-11T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_15_LAC_LV",
+        "season": 2020,
+        "week": 15,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.0,
+        "home_margin": 3.0,
+        "captured_at_latest": "2020-12-17T16:47:48Z",
+        "cutoff_utc": "2020-12-18T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_15_LAC_LV",
+            "season": 2020,
+            "week": 15,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2020-12-17T16:47:40Z",
+            "cutoff_utc": "2020-12-18T00:20:00Z",
+            "kickoff_utc": "2020-12-18T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_15_LAC_LV",
+            "season": 2020,
+            "week": 15,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2020-12-17T16:47:48Z",
+            "cutoff_utc": "2020-12-18T00:20:00Z",
+            "kickoff_utc": "2020-12-18T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_16_CAR_WAS",
+        "season": 2020,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 1.0,
+        "home_margin": -1.0,
+        "captured_at_latest": "2020-12-27T17:55:00Z",
+        "cutoff_utc": "2020-12-27T20:05:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_16_CAR_WAS",
+            "season": 2020,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:05:00Z",
+            "kickoff_utc": "2020-12-27T21:05:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2020_16_CAR_WAS",
+            "season": 2020,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:05:00Z",
+            "kickoff_utc": "2020-12-27T21:05:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_16_DEN_LAC",
+        "season": 2020,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -2.5,
+        "home_margin": 2.5,
+        "captured_at_latest": "2020-12-27T17:55:00Z",
+        "cutoff_utc": "2020-12-27T20:05:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_16_DEN_LAC",
+            "season": 2020,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -2.5,
+            "home_margin": 2.5,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:05:00Z",
+            "kickoff_utc": "2020-12-27T21:05:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2020_16_DEN_LAC",
+            "season": 2020,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -2.5,
+            "home_margin": 2.5,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:05:00Z",
+            "kickoff_utc": "2020-12-27T21:05:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_16_LA_SEA",
+        "season": 2020,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -1.25,
+        "home_margin": 1.25,
+        "captured_at_latest": "2020-12-27T17:55:00Z",
+        "cutoff_utc": "2020-12-27T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_16_LA_SEA",
+            "season": 2020,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -1.5,
+            "home_margin": 1.5,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:25:00Z",
+            "kickoff_utc": "2020-12-27T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2020_16_LA_SEA",
+            "season": 2020,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -1.0,
+            "home_margin": 1.0,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:25:00Z",
+            "kickoff_utc": "2020-12-27T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_16_MIN_NO",
+        "season": 2020,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.5,
+        "home_margin": 6.5,
+        "captured_at_latest": "2020-12-25T16:50:22Z",
+        "cutoff_utc": "2020-12-25T20:30:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_16_MIN_NO",
+            "season": 2020,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2020-12-25T16:50:22Z",
+            "cutoff_utc": "2020-12-25T20:30:00Z",
+            "kickoff_utc": "2020-12-25T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_16_MIN_NO",
+            "season": 2020,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2020-12-25T16:49:31Z",
+            "cutoff_utc": "2020-12-25T20:30:00Z",
+            "kickoff_utc": "2020-12-25T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2020-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_16_PHI_DAL",
+        "season": 2020,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2020-12-27T17:55:00Z",
+        "cutoff_utc": "2020-12-27T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_16_PHI_DAL",
+            "season": 2020,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:25:00Z",
+            "kickoff_utc": "2020-12-27T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2020_16_PHI_DAL",
+            "season": 2020,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-27T20:25:00Z",
+            "kickoff_utc": "2020-12-27T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_16_TEN_GB",
+        "season": 2020,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.25,
+        "home_margin": 3.25,
+        "captured_at_latest": "2020-12-27T17:55:00Z",
+        "cutoff_utc": "2020-12-28T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_16_TEN_GB",
+            "season": 2020,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-28T00:20:00Z",
+            "kickoff_utc": "2020-12-28T01:20:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2020_16_TEN_GB",
+            "season": 2020,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.5,
+            "home_margin": 3.5,
+            "captured_at": "2020-12-27T17:55:00Z",
+            "cutoff_utc": "2020-12-28T00:20:00Z",
+            "kickoff_utc": "2020-12-28T01:20:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_ARI_LA",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 0.75,
+        "home_margin": -0.75,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_ARI_LA",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 0.5,
+            "home_margin": -0.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_ARI_LA",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_ATL_TB",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -7.0,
+        "home_margin": 7.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_ATL_TB",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_ATL_TB",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_BAL_CIN",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 13.25,
+        "home_margin": -13.25,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_BAL_CIN",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 13.0,
+            "home_margin": -13.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_BAL_CIN",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 13.5,
+            "home_margin": -13.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_DAL_NYG",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 1.5,
+        "home_margin": -1.5,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_DAL_NYG",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 1.5,
+            "home_margin": -1.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_DAL_NYG",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 1.5,
+            "home_margin": -1.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_GB_CHI",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 4.5,
+        "home_margin": -4.5,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_GB_CHI",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 4.5,
+            "home_margin": -4.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_GB_CHI",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 4.5,
+            "home_margin": -4.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_JAX_IND",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -15.25,
+        "home_margin": 15.25,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_JAX_IND",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -15.0,
+            "home_margin": 15.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_JAX_IND",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -15.5,
+            "home_margin": 15.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_LAC_KC",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 5.5,
+        "home_margin": -5.5,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_LAC_KC",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 5.5,
+            "home_margin": -5.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_LAC_KC",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 5.5,
+            "home_margin": -5.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_LV_DEN",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 2.5,
+        "home_margin": -2.5,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_LV_DEN",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 2.5,
+            "home_margin": -2.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_LV_DEN",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 2.5,
+            "home_margin": -2.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_MIA_BUF",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_MIA_BUF",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_MIA_BUF",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_MIN_DET",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_MIN_DET",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_MIN_DET",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_NO_CAR",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 5.75,
+        "home_margin": -5.75,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_NO_CAR",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 5.5,
+            "home_margin": -5.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_NO_CAR",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.0,
+            "home_margin": -6.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_NYJ_NE",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.0,
+        "home_margin": 3.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_NYJ_NE",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_NYJ_NE",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_PIT_CLE",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -10.0,
+        "home_margin": 10.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_PIT_CLE",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -10.0,
+            "home_margin": 10.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_PIT_CLE",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -10.0,
+            "home_margin": 10.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T17:00:00Z",
+            "kickoff_utc": "2021-01-03T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_SEA_SF",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 7.0,
+        "home_margin": -7.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_SEA_SF",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_SEA_SF",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_TEN_HOU",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 7.0,
+        "home_margin": -7.0,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-03T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_TEN_HOU",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_TEN_HOU",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-03T20:25:00Z",
+            "kickoff_utc": "2021-01-03T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2020_17_WAS_PHI",
+        "season": 2020,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 5.5,
+        "home_margin": -5.5,
+        "captured_at_latest": "2021-01-03T16:49:45Z",
+        "cutoff_utc": "2021-01-04T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2020_17_WAS_PHI",
+            "season": 2020,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 5.5,
+            "home_margin": -5.5,
+            "captured_at": "2021-01-03T16:49:45Z",
+            "cutoff_utc": "2021-01-04T00:20:00Z",
+            "kickoff_utc": "2021-01-04T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2020_17_WAS_PHI",
+            "season": 2020,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 5.5,
+            "home_margin": -5.5,
+            "captured_at": "2021-01-03T16:49:44Z",
+            "cutoff_utc": "2021-01-04T00:20:00Z",
+            "kickoff_utc": "2021-01-04T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_02_NYG_WAS",
+        "season": 2021,
+        "week": 2,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.25,
+        "home_margin": 3.25,
+        "captured_at_latest": "2021-09-16T16:49:17Z",
+        "cutoff_utc": "2021-09-16T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_02_NYG_WAS",
+            "season": 2021,
+            "week": 2,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2021-09-16T16:49:17Z",
+            "cutoff_utc": "2021-09-16T23:20:00Z",
+            "kickoff_utc": "2021-09-17T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_02_NYG_WAS",
+            "season": 2021,
+            "week": 2,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.5,
+            "home_margin": 3.5,
+            "captured_at": "2021-09-16T16:46:33Z",
+            "cutoff_utc": "2021-09-16T23:20:00Z",
+            "kickoff_utc": "2021-09-17T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_03_CAR_HOU",
+        "season": 2021,
+        "week": 3,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 7.75,
+        "home_margin": -7.75,
+        "captured_at_latest": "2021-09-23T16:45:07Z",
+        "cutoff_utc": "2021-09-23T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_03_CAR_HOU",
+            "season": 2021,
+            "week": 3,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 8.0,
+            "home_margin": -8.0,
+            "captured_at": "2021-09-23T16:45:06Z",
+            "cutoff_utc": "2021-09-23T23:20:00Z",
+            "kickoff_utc": "2021-09-24T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_03_CAR_HOU",
+            "season": 2021,
+            "week": 3,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 7.5,
+            "home_margin": -7.5,
+            "captured_at": "2021-09-23T16:45:07Z",
+            "cutoff_utc": "2021-09-23T23:20:00Z",
+            "kickoff_utc": "2021-09-24T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_04_JAX_CIN",
+        "season": 2021,
+        "week": 4,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -7.5,
+        "home_margin": 7.5,
+        "captured_at_latest": "2021-09-30T16:48:38Z",
+        "cutoff_utc": "2021-09-30T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_04_JAX_CIN",
+            "season": 2021,
+            "week": 4,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -7.5,
+            "home_margin": 7.5,
+            "captured_at": "2021-09-30T16:47:52Z",
+            "cutoff_utc": "2021-09-30T23:20:00Z",
+            "kickoff_utc": "2021-10-01T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_04_JAX_CIN",
+            "season": 2021,
+            "week": 4,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.5,
+            "home_margin": 7.5,
+            "captured_at": "2021-09-30T16:48:38Z",
+            "cutoff_utc": "2021-09-30T23:20:00Z",
+            "kickoff_utc": "2021-10-01T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_05_LA_SEA",
+        "season": 2021,
+        "week": 5,
+        "books_used": [
+          "draftkings"
+        ],
+        "book_count": 1,
+        "spread_home_median": 2.0,
+        "home_margin": -2.0,
+        "captured_at_latest": "2021-10-07T16:49:33Z",
+        "cutoff_utc": "2021-10-07T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_05_LA_SEA",
+            "season": 2021,
+            "week": 5,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 2.0,
+            "home_margin": -2.0,
+            "captured_at": "2021-10-07T16:49:33Z",
+            "cutoff_utc": "2021-10-07T23:20:00Z",
+            "kickoff_utc": "2021-10-08T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_06_TB_PHI",
+        "season": 2021,
+        "week": 6,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.5,
+        "home_margin": -6.5,
+        "captured_at_latest": "2021-10-14T16:48:29Z",
+        "cutoff_utc": "2021-10-14T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_06_TB_PHI",
+            "season": 2021,
+            "week": 6,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-10-14T16:46:32Z",
+            "cutoff_utc": "2021-10-14T23:20:00Z",
+            "kickoff_utc": "2021-10-15T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_06_TB_PHI",
+            "season": 2021,
+            "week": 6,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-10-14T16:48:29Z",
+            "cutoff_utc": "2021-10-14T23:20:00Z",
+            "kickoff_utc": "2021-10-15T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_07_DEN_CLE",
+        "season": 2021,
+        "week": 7,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -1.25,
+        "home_margin": 1.25,
+        "captured_at_latest": "2021-10-21T16:46:43Z",
+        "cutoff_utc": "2021-10-21T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_07_DEN_CLE",
+            "season": 2021,
+            "week": 7,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -1.0,
+            "home_margin": 1.0,
+            "captured_at": "2021-10-21T16:46:43Z",
+            "cutoff_utc": "2021-10-21T23:20:00Z",
+            "kickoff_utc": "2021-10-22T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_07_DEN_CLE",
+            "season": 2021,
+            "week": 7,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -1.5,
+            "home_margin": 1.5,
+            "captured_at": "2021-10-21T16:46:08Z",
+            "cutoff_utc": "2021-10-21T23:20:00Z",
+            "kickoff_utc": "2021-10-22T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_08_GB_ARI",
+        "season": 2021,
+        "week": 8,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.5,
+        "home_margin": 6.5,
+        "captured_at_latest": "2021-10-28T16:47:58Z",
+        "cutoff_utc": "2021-10-28T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_08_GB_ARI",
+            "season": 2021,
+            "week": 8,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2021-10-28T16:47:21Z",
+            "cutoff_utc": "2021-10-28T23:20:00Z",
+            "kickoff_utc": "2021-10-29T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_08_GB_ARI",
+            "season": 2021,
+            "week": 8,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2021-10-28T16:47:58Z",
+            "cutoff_utc": "2021-10-28T23:20:00Z",
+            "kickoff_utc": "2021-10-29T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_09_NYJ_IND",
+        "season": 2021,
+        "week": 9,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -10.25,
+        "home_margin": 10.25,
+        "captured_at_latest": "2021-11-04T16:47:58Z",
+        "cutoff_utc": "2021-11-04T23:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_09_NYJ_IND",
+            "season": 2021,
+            "week": 9,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -10.0,
+            "home_margin": 10.0,
+            "captured_at": "2021-11-04T16:47:58Z",
+            "cutoff_utc": "2021-11-04T23:20:00Z",
+            "kickoff_utc": "2021-11-05T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_09_NYJ_IND",
+            "season": 2021,
+            "week": 9,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -10.5,
+            "home_margin": 10.5,
+            "captured_at": "2021-11-04T16:46:37Z",
+            "cutoff_utc": "2021-11-04T23:20:00Z",
+            "kickoff_utc": "2021-11-05T00:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_10_BAL_MIA",
+        "season": 2021,
+        "week": 10,
+        "books_used": [
+          "draftkings"
+        ],
+        "book_count": 1,
+        "spread_home_median": 7.5,
+        "home_margin": -7.5,
+        "captured_at_latest": "2021-11-11T16:48:32Z",
+        "cutoff_utc": "2021-11-12T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_10_BAL_MIA",
+            "season": 2021,
+            "week": 10,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 7.5,
+            "home_margin": -7.5,
+            "captured_at": "2021-11-11T16:48:32Z",
+            "cutoff_utc": "2021-11-12T00:20:00Z",
+            "kickoff_utc": "2021-11-12T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_11_NE_ATL",
+        "season": 2021,
+        "week": 11,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.5,
+        "home_margin": -6.5,
+        "captured_at_latest": "2021-11-18T16:50:04Z",
+        "cutoff_utc": "2021-11-19T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_11_NE_ATL",
+            "season": 2021,
+            "week": 11,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-11-18T16:50:04Z",
+            "cutoff_utc": "2021-11-19T00:20:00Z",
+            "kickoff_utc": "2021-11-19T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_11_NE_ATL",
+            "season": 2021,
+            "week": 11,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-11-18T16:46:01Z",
+            "cutoff_utc": "2021-11-19T00:20:00Z",
+            "kickoff_utc": "2021-11-19T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_12_BUF_NO",
+        "season": 2021,
+        "week": 12,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.5,
+        "home_margin": -6.5,
+        "captured_at_latest": "2021-11-25T16:50:26Z",
+        "cutoff_utc": "2021-11-26T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_12_BUF_NO",
+            "season": 2021,
+            "week": 12,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-11-25T16:50:26Z",
+            "cutoff_utc": "2021-11-26T00:20:00Z",
+            "kickoff_utc": "2021-11-26T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_12_BUF_NO",
+            "season": 2021,
+            "week": 12,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-11-25T16:49:29Z",
+            "cutoff_utc": "2021-11-26T00:20:00Z",
+            "kickoff_utc": "2021-11-26T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_12_CHI_DET",
+        "season": 2021,
+        "week": 12,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2021-11-24T17:48:46Z",
+        "cutoff_utc": "2021-11-25T16:30:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_12_CHI_DET",
+            "season": 2021,
+            "week": 12,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-11-24T17:48:46Z",
+            "cutoff_utc": "2021-11-25T16:30:00Z",
+            "kickoff_utc": "2021-11-25T17:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_12_CHI_DET",
+            "season": 2021,
+            "week": 12,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-11-24T17:48:46Z",
+            "cutoff_utc": "2021-11-25T16:30:00Z",
+            "kickoff_utc": "2021-11-25T17:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_12_LV_DAL",
+        "season": 2021,
+        "week": 12,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -7.5,
+        "home_margin": 7.5,
+        "captured_at_latest": "2021-11-25T16:50:26Z",
+        "cutoff_utc": "2021-11-25T20:30:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_12_LV_DAL",
+            "season": 2021,
+            "week": 12,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -7.5,
+            "home_margin": 7.5,
+            "captured_at": "2021-11-25T16:50:26Z",
+            "cutoff_utc": "2021-11-25T20:30:00Z",
+            "kickoff_utc": "2021-11-25T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_12_LV_DAL",
+            "season": 2021,
+            "week": 12,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.5,
+            "home_margin": 7.5,
+            "captured_at": "2021-11-25T16:49:29Z",
+            "cutoff_utc": "2021-11-25T20:30:00Z",
+            "kickoff_utc": "2021-11-25T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_13_DAL_NO",
+        "season": 2021,
+        "week": 13,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.0,
+        "home_margin": -6.0,
+        "captured_at_latest": "2021-12-02T16:48:54Z",
+        "cutoff_utc": "2021-12-03T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_13_DAL_NO",
+            "season": 2021,
+            "week": 13,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.0,
+            "home_margin": -6.0,
+            "captured_at": "2021-12-02T16:48:54Z",
+            "cutoff_utc": "2021-12-03T00:20:00Z",
+            "kickoff_utc": "2021-12-03T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_13_DAL_NO",
+            "season": 2021,
+            "week": 13,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.0,
+            "home_margin": -6.0,
+            "captured_at": "2021-12-02T16:45:31Z",
+            "cutoff_utc": "2021-12-03T00:20:00Z",
+            "kickoff_utc": "2021-12-03T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_14_PIT_MIN",
+        "season": 2021,
+        "week": 14,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.0,
+        "home_margin": 3.0,
+        "captured_at_latest": "2021-12-09T16:48:55Z",
+        "cutoff_utc": "2021-12-10T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_14_PIT_MIN",
+            "season": 2021,
+            "week": 14,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2021-12-09T16:48:55Z",
+            "cutoff_utc": "2021-12-10T00:20:00Z",
+            "kickoff_utc": "2021-12-10T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_14_PIT_MIN",
+            "season": 2021,
+            "week": 14,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2021-12-09T16:48:01Z",
+            "cutoff_utc": "2021-12-10T00:20:00Z",
+            "kickoff_utc": "2021-12-10T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_15_KC_LAC",
+        "season": 2021,
+        "week": 15,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.25,
+        "home_margin": -3.25,
+        "captured_at_latest": "2021-12-16T16:50:08Z",
+        "cutoff_utc": "2021-12-17T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_15_KC_LAC",
+            "season": 2021,
+            "week": 15,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2021-12-16T16:50:08Z",
+            "cutoff_utc": "2021-12-17T00:20:00Z",
+            "kickoff_utc": "2021-12-17T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_15_KC_LAC",
+            "season": 2021,
+            "week": 15,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-12-16T16:48:01Z",
+            "cutoff_utc": "2021-12-17T00:20:00Z",
+            "kickoff_utc": "2021-12-17T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_15_LV_CLE",
+        "season": 2021,
+        "week": 15,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2021-12-20T17:48:54Z",
+        "cutoff_utc": "2021-12-20T21:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_15_LV_CLE",
+            "season": 2021,
+            "week": 15,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-12-20T17:48:54Z",
+            "cutoff_utc": "2021-12-20T21:00:00Z",
+            "kickoff_utc": "2021-12-20T22:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_15_LV_CLE",
+            "season": 2021,
+            "week": 15,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-12-20T17:48:54Z",
+            "cutoff_utc": "2021-12-20T21:00:00Z",
+            "kickoff_utc": "2021-12-20T22:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_15_MIN_CHI",
+        "season": 2021,
+        "week": 15,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.5,
+        "home_margin": -6.5,
+        "captured_at_latest": "2021-12-20T17:48:54Z",
+        "cutoff_utc": "2021-12-21T00:15:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_15_MIN_CHI",
+            "season": 2021,
+            "week": 15,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-12-20T17:48:54Z",
+            "cutoff_utc": "2021-12-21T00:15:00Z",
+            "kickoff_utc": "2021-12-21T01:15:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_15_MIN_CHI",
+            "season": 2021,
+            "week": 15,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2021-12-20T17:48:54Z",
+            "cutoff_utc": "2021-12-21T00:15:00Z",
+            "kickoff_utc": "2021-12-21T01:15:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_15_SEA_LA",
+        "season": 2021,
+        "week": 15,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.75,
+        "home_margin": 6.75,
+        "captured_at_latest": "2021-12-21T16:49:53Z",
+        "cutoff_utc": "2021-12-21T23:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_15_SEA_LA",
+            "season": 2021,
+            "week": 15,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2021-12-21T16:49:53Z",
+            "cutoff_utc": "2021-12-21T23:00:00Z",
+            "kickoff_utc": "2021-12-22T00:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_15_SEA_LA",
+            "season": 2021,
+            "week": 15,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2021-12-21T16:49:37Z",
+            "cutoff_utc": "2021-12-21T23:00:00Z",
+            "kickoff_utc": "2021-12-22T00:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_15_WAS_PHI",
+        "season": 2021,
+        "week": 15,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.5,
+        "home_margin": 6.5,
+        "captured_at_latest": "2021-12-21T16:49:53Z",
+        "cutoff_utc": "2021-12-21T23:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_15_WAS_PHI",
+            "season": 2021,
+            "week": 15,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2021-12-21T16:49:53Z",
+            "cutoff_utc": "2021-12-21T23:00:00Z",
+            "kickoff_utc": "2021-12-22T00:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_15_WAS_PHI",
+            "season": 2021,
+            "week": 15,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2021-12-21T16:49:37Z",
+            "cutoff_utc": "2021-12-21T23:00:00Z",
+            "kickoff_utc": "2021-12-22T00:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_16_CHI_SEA",
+        "season": 2021,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -7.0,
+        "home_margin": 7.0,
+        "captured_at_latest": "2021-12-26T17:55:00Z",
+        "cutoff_utc": "2021-12-26T20:05:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_16_CHI_SEA",
+            "season": 2021,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-26T20:05:00Z",
+            "kickoff_utc": "2021-12-26T21:05:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_16_CHI_SEA",
+            "season": 2021,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.0,
+            "home_margin": 7.0,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-26T20:05:00Z",
+            "kickoff_utc": "2021-12-26T21:05:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_16_DEN_LV",
+        "season": 2021,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 1.0,
+        "home_margin": -1.0,
+        "captured_at_latest": "2021-12-26T17:55:00Z",
+        "cutoff_utc": "2021-12-26T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_16_DEN_LV",
+            "season": 2021,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-26T20:25:00Z",
+            "kickoff_utc": "2021-12-26T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_16_DEN_LV",
+            "season": 2021,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 1.0,
+            "home_margin": -1.0,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-26T20:25:00Z",
+            "kickoff_utc": "2021-12-26T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_16_PIT_KC",
+        "season": 2021,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -10.25,
+        "home_margin": 10.25,
+        "captured_at_latest": "2021-12-26T17:55:00Z",
+        "cutoff_utc": "2021-12-26T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_16_PIT_KC",
+            "season": 2021,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -10.0,
+            "home_margin": 10.0,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-26T20:25:00Z",
+            "kickoff_utc": "2021-12-26T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_16_PIT_KC",
+            "season": 2021,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -10.5,
+            "home_margin": 10.5,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-26T20:25:00Z",
+            "kickoff_utc": "2021-12-26T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_16_SF_TEN",
+        "season": 2021,
+        "week": 16,
+        "books_used": [
+          "draftkings"
+        ],
+        "book_count": 1,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2021-12-23T16:49:40Z",
+        "cutoff_utc": "2021-12-24T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_16_SF_TEN",
+            "season": 2021,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2021-12-23T16:49:40Z",
+            "cutoff_utc": "2021-12-24T00:20:00Z",
+            "kickoff_utc": "2021-12-24T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2021-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_16_WAS_DAL",
+        "season": 2021,
+        "week": 16,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -8.75,
+        "home_margin": 8.75,
+        "captured_at_latest": "2021-12-26T17:55:00Z",
+        "cutoff_utc": "2021-12-27T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_16_WAS_DAL",
+            "season": 2021,
+            "week": 16,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -9.0,
+            "home_margin": 9.0,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-27T00:20:00Z",
+            "kickoff_utc": "2021-12-27T01:20:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_16_WAS_DAL",
+            "season": 2021,
+            "week": 16,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -8.5,
+            "home_margin": 8.5,
+            "captured_at": "2021-12-26T17:55:00Z",
+            "cutoff_utc": "2021-12-27T00:20:00Z",
+            "kickoff_utc": "2021-12-27T01:20:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_ARI_DAL",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.5,
+        "home_margin": 6.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_ARI_DAL",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T20:25:00Z",
+            "kickoff_utc": "2022-01-02T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_ARI_DAL",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T20:25:00Z",
+            "kickoff_utc": "2022-01-02T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_ATL_BUF",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -14.25,
+        "home_margin": 14.25,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_ATL_BUF",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -14.0,
+            "home_margin": 14.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_ATL_BUF",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -14.5,
+            "home_margin": 14.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_CAR_NO",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.5,
+        "home_margin": 6.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_CAR_NO",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T20:25:00Z",
+            "kickoff_utc": "2022-01-02T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_CAR_NO",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T20:25:00Z",
+            "kickoff_utc": "2022-01-02T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_DEN_LAC",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -7.5,
+        "home_margin": 7.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T20:05:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_DEN_LAC",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -7.5,
+            "home_margin": 7.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T20:05:00Z",
+            "kickoff_utc": "2022-01-02T21:05:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_DEN_LAC",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -7.5,
+            "home_margin": 7.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T20:05:00Z",
+            "kickoff_utc": "2022-01-02T21:05:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_DET_SEA",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -8.5,
+        "home_margin": 8.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_DET_SEA",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -8.5,
+            "home_margin": 8.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T20:25:00Z",
+            "kickoff_utc": "2022-01-02T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_DET_SEA",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -8.5,
+            "home_margin": 8.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T20:25:00Z",
+            "kickoff_utc": "2022-01-02T21:25:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_HOU_SF",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -13.25,
+        "home_margin": 13.25,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T20:05:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_HOU_SF",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -13.0,
+            "home_margin": 13.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T20:05:00Z",
+            "kickoff_utc": "2022-01-02T21:05:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_HOU_SF",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -13.5,
+            "home_margin": 13.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T20:05:00Z",
+            "kickoff_utc": "2022-01-02T21:05:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_JAX_NE",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -17.25,
+        "home_margin": 17.25,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_JAX_NE",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -17.0,
+            "home_margin": 17.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_JAX_NE",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -17.5,
+            "home_margin": 17.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_KC_CIN",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.5,
+        "home_margin": -3.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_KC_CIN",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_KC_CIN",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_LA_BAL",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 7.0,
+        "home_margin": -7.0,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_LA_BAL",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_LA_BAL",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_LV_IND",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -8.25,
+        "home_margin": 8.25,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_LV_IND",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -8.5,
+            "home_margin": 8.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_LV_IND",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -8.0,
+            "home_margin": 8.0,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_MIA_TEN",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.0,
+        "home_margin": 3.0,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_MIA_TEN",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_MIA_TEN",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.0,
+            "home_margin": 3.0,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_MIN_GB",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -12.5,
+        "home_margin": 12.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-03T00:20:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_MIN_GB",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -12.0,
+            "home_margin": 12.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-03T00:20:00Z",
+            "kickoff_utc": "2022-01-03T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_MIN_GB",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -13.0,
+            "home_margin": 13.0,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-03T00:20:00Z",
+            "kickoff_utc": "2022-01-03T01:20:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_NYG_CHI",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -6.5,
+        "home_margin": 6.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_NYG_CHI",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_NYG_CHI",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.5,
+            "home_margin": 6.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_PHI_WAS",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.5,
+        "home_margin": -6.5,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_PHI_WAS",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_PHI_WAS",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_17_TB_NYJ",
+        "season": 2021,
+        "week": 17,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 14.0,
+        "home_margin": -14.0,
+        "captured_at_latest": "2022-01-02T16:49:54Z",
+        "cutoff_utc": "2022-01-02T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_17_TB_NYJ",
+            "season": 2021,
+            "week": 17,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 14.0,
+            "home_margin": -14.0,
+            "captured_at": "2022-01-02T16:48:48Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_17_TB_NYJ",
+            "season": 2021,
+            "week": 17,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 14.0,
+            "home_margin": -14.0,
+            "captured_at": "2022-01-02T16:49:54Z",
+            "cutoff_utc": "2022-01-02T17:00:00Z",
+            "kickoff_utc": "2022-01-02T18:00:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_CAR_TB",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -8.0,
+        "home_margin": 8.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_CAR_TB",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -8.0,
+            "home_margin": 8.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_CAR_TB",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -8.0,
+            "home_margin": 8.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_CHI_MIN",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -4.0,
+        "home_margin": 4.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_CHI_MIN",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -4.0,
+            "home_margin": 4.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_CHI_MIN",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -4.0,
+            "home_margin": 4.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_CIN_CLE",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -5.75,
+        "home_margin": 5.75,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_CIN_CLE",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -5.5,
+            "home_margin": 5.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_CIN_CLE",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -6.0,
+            "home_margin": 6.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_DAL_PHI",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.5,
+        "home_margin": -3.5,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T00:15:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_DAL_PHI",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T00:15:00Z",
+            "kickoff_utc": "2022-01-09T01:15:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_DAL_PHI",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T00:15:00Z",
+            "kickoff_utc": "2022-01-09T01:15:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_GB_DET",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.0,
+        "home_margin": -3.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_GB_DET",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_GB_DET",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.0,
+            "home_margin": -3.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_IND_JAX",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings"
+        ],
+        "book_count": 1,
+        "spread_home_median": 15.0,
+        "home_margin": -15.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_IND_JAX",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 15.0,
+            "home_margin": -15.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_KC_DEN",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 10.5,
+        "home_margin": -10.5,
+        "captured_at_latest": "2022-01-08T16:48:17Z",
+        "cutoff_utc": "2022-01-08T20:30:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_KC_DEN",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 10.5,
+            "home_margin": -10.5,
+            "captured_at": "2022-01-08T16:48:17Z",
+            "cutoff_utc": "2022-01-08T20:30:00Z",
+            "kickoff_utc": "2022-01-08T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          },
+          {
+            "game_id": "2021_18_KC_DEN",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 10.5,
+            "home_margin": -10.5,
+            "captured_at": "2022-01-08T16:46:46Z",
+            "cutoff_utc": "2022-01-08T20:30:00Z",
+            "kickoff_utc": "2022-01-08T21:30:00Z",
+            "provenance": "clean_jsonl:snapshots-2022-20260806.jsonl",
+            "source": "the-odds-api-historical-enterprise"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_NE_MIA",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 6.25,
+        "home_margin": -6.25,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_NE_MIA",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 6.0,
+            "home_margin": -6.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_NE_MIA",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 6.5,
+            "home_margin": -6.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_NO_ATL",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 3.5,
+        "home_margin": -3.5,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_NO_ATL",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_NO_ATL",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 3.5,
+            "home_margin": -3.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_NYJ_BUF",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -16.5,
+        "home_margin": 16.5,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_NYJ_BUF",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -16.5,
+            "home_margin": 16.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_NYJ_BUF",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -16.5,
+            "home_margin": 16.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_PIT_BAL",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -3.5,
+        "home_margin": 3.5,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_PIT_BAL",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -3.5,
+            "home_margin": 3.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_PIT_BAL",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -3.5,
+            "home_margin": 3.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_SEA_ARI",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": -5.5,
+        "home_margin": 5.5,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_SEA_ARI",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -5.5,
+            "home_margin": 5.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_SEA_ARI",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": -5.5,
+            "home_margin": 5.5,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_SF_LA",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings"
+        ],
+        "book_count": 1,
+        "spread_home_median": -4.0,
+        "home_margin": 4.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T20:25:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_SF_LA",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": -4.0,
+            "home_margin": 4.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T20:25:00Z",
+            "kickoff_utc": "2022-01-09T21:25:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_TEN_HOU",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 10.0,
+        "home_margin": -10.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_TEN_HOU",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 10.0,
+            "home_margin": -10.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_TEN_HOU",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 10.0,
+            "home_margin": -10.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      },
+      {
+        "game_id": "2021_18_WAS_NYG",
+        "season": 2021,
+        "week": 18,
+        "books_used": [
+          "draftkings",
+          "fanduel"
+        ],
+        "book_count": 2,
+        "spread_home_median": 7.0,
+        "home_margin": -7.0,
+        "captured_at_latest": "2022-01-08T21:25:00Z",
+        "cutoff_utc": "2022-01-09T17:00:00Z",
+        "quotes": [
+          {
+            "game_id": "2021_18_WAS_NYG",
+            "season": 2021,
+            "week": 18,
+            "book": "draftkings",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          },
+          {
+            "game_id": "2021_18_WAS_NYG",
+            "season": 2021,
+            "week": 18,
+            "book": "fanduel",
+            "market": "spread",
+            "spread_home": 7.0,
+            "home_margin": -7.0,
+            "captured_at": "2022-01-08T21:25:00Z",
+            "cutoff_utc": "2022-01-09T17:00:00Z",
+            "kickoff_utc": "2022-01-09T18:00:00Z",
+            "provenance": "open_close_csv",
+            "source": "/Volumes/KosEdgeData/clean/odds/americanfootball_nfl/open_close/lines.csv"
+          }
+        ]
+      }
+    ]
+  },
+  "excluded_slots": [],
+  "r2c_hold": {
+    "rule": "R2-C HOLD unchanged",
+    "hold_threshold": 0.3,
+    "threshold_unchanged": true,
+    "declared_universe": "owned PBP REG (INPUT_BINDINGS n_reg_games)",
+    "declared_pbp_reg": {
+      "2020": 256,
+      "2021": 272
+    },
+    "by_season": {
+      "2020": {
+        "declared_n": 256,
+        "excluded_n": 215,
+        "exclusion_rate": 0.83984375,
+        "hold_threshold": 0.3,
+        "hold": true
+      },
+      "2021": {
+        "declared_n": 272,
+        "excluded_n": 217,
+        "exclusion_rate": 0.7977941176470589,
+        "hold_threshold": 0.3,
+        "hold": true
+      }
+    },
+    "any_hold": true,
+    "loosened": false,
+    "eval": null,
+    "scoring": null
+  },
+  "worker_a_forecast_freeze": {
+    "ok": true,
+    "status": "PINNED",
+    "tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+    "stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+    "pr": 702,
+    "branch": "cursor/t5155u-r5-496-freeze-c279",
+    "command": "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+    "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+    "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+    "n_forecasts": 496,
+    "n_if_finite": 496,
+    "n_q2_hold": 496,
+    "n_q2_finite": 0,
+    "n_candidate_finite": 0,
+    "q2": {
+      "status": "HOLD",
+      "leg": "HOLD",
+      "hold_q2": true,
+      "n_hold": 496,
+      "candidate": "HOLD",
+      "invented_q2": false,
+      "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+      "years_unproven": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ],
+      "reg_unproven": true
+    },
+    "common437": {
+      "n_common": 437,
+      "n_replayed": 437,
+      "n_blocker": 0
+    },
+    "phase2_positive_path": {
+      "status": "READINESS_ONLY",
+      "executed": false,
+      "cos_bind": false,
+      "score_flag": false,
+      "target_scoring_loader": false,
+      "one_dev_diagnostic": false,
+      "invoke_outcome_after_gates_available": true,
+      "invoke_outcome_after_gates": false,
+      "requires": [
+        "Alex source/numerical-identity PREFLIGHT GO",
+        "Cos bind / EXEC release for target scoring loader"
+      ]
+    },
+    "scoring_refuse": {
+      "refused": true,
+      "outcome_loader_reads": 0,
+      "target_labels_loaded": 0,
+      "coverage_blocked": true,
+      "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND"
+    },
+    "cos_bind": false,
+    "scoring": null,
+    "eval": null,
+    "bytes_verified": {
+      "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+      "q2_history_freeze": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966",
+      "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+      "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
+      "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+    }
+  },
+  "limitations": {
+    "publication_timestamp_status": "unverified",
+    "observation_timestamp_status": "unverified",
+    "fit_label": "RETRO_FIT",
+    "label": "RECONSTRUCTED",
+    "production_causal_claim": false,
+    "nfl_green": false,
+    "eval": null,
+    "cert_candidate": 0
+  }
+}

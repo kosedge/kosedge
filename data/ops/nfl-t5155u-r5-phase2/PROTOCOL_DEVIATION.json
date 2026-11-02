@@ -1,0 +1,64 @@
+{
+  "schema_version": "nfl-t5160u-protocol-deviation-v1",
+  "ticket": "t5160u",
+  "owner": "t5160u",
+  "superseded_cos_one_dev_order": "5d029306",
+  "owner_t5162u_reconcile_sha8": "3c978ef9",
+  "alex_append_preflight_order": "b8cc05b2",
+  "claim_4fa6d856": "UNSPENT",
+  "one_run_phase2_created": false,
+  "score_cos_bind_ran": false,
+  "reconcile_closed": true,
+  "clean_unseen_first_look": false,
+  "kind": "engineering_path_real_if_only_market_scoring",
+  "offending": {
+    "commit": "255adf7802830bc25814a739d62f65f095216203",
+    "committed_at": "2026-11-01T22:45:05-05:00",
+    "test": "test_phase2_positive_invokes_loader_once_if_only_and_market96",
+    "file": "services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py",
+    "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py -q",
+    "also_via": "verify_integrate.run_focused_tests",
+    "reader": "schedule_outcome_loader(ROOT)",
+    "schedule_path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
+    "schedule_sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+    "write_receipt": false,
+    "inspected": true
+  },
+  "cohorts_arms": [
+    "full496_if_only",
+    "old437_if_only",
+    "new59_if_only",
+    "market96_if_vs_market"
+  ],
+  "q2_at_offense": "HOLD",
+  "candidate_at_offense": "HOLD",
+  "metrics_inspected": [
+    "mae_if",
+    "rmse_if",
+    "bias_if",
+    "market96.bootstrap_game",
+    "market96.reporting_class"
+  ],
+  "later_synthetic_fix_commit": "bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45",
+  "later_synthetic_fix_at": "2026-11-01T22:59:13-05:00",
+  "eventual_dev_result": {
+    "cos_order": "b319c428",
+    "alex_go": "da9668eb",
+    "bind_id": "4eef5d1f843bb17327d0d81d3cdae3a8d7d91917d9763691b55808c365d0caa6",
+    "status": "CONSUMED",
+    "receipt": "data/ops/nfl-t5155u-r5-phase2/RECEIPT.json",
+    "result_md": "ops/CURSOR_ONE_EXEC_RESULT_t5160u.md"
+  },
+  "pins": {
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "q2_completed_sha256": "eeb6fff73383289c1e69a1a1b30f6df5eed38c7201c58ca9de16feaa8f06cc04",
+    "candidate_completed_sha256": "2f9a73e68d66878b984d5ae9e2e6fc01cfe16e45b0da4ad5389f90aabe9a87c7",
+    "identity_freeze_sha256": "561ae3e1f0a0b99201f3b4a0a00d5da13e75ec7924ad9b6b67218c802aef8b3f",
+    "market_bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "market_identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+    "reg496_identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640"
+  },
+  "cert_candidate": 0,
+  "eval": null,
+  "nfl_green": false
+}
