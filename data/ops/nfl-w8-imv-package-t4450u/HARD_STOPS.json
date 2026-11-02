@@ -1,0 +1,21 @@
+{
+  "authority": "Ryan t4450u",
+  "coming_soon": true,
+  "decision_sha8": "20ea635f",
+  "file_count": 25,
+  "hard_stop_proof": {
+    "refuse_odds_fetch": "OddsApiHoldError",
+    "refuse_seal": "PermissionError"
+  },
+  "hard_stops": [
+    "refuse_odds_fetch ALWAYS raises (H-1a/H-1c). No Odds API network. No key use.",
+    "refuse_seal ALWAYS raises (AC-12). Cursor cannot seal-ack.",
+    "Draft only. No merge. No deploy. Coming Soon ON. NFL NO-GO stays.",
+    "Production NFL_ODDS_API_CARRIED_BOOKMAKERS is not edited."
+  ],
+  "nfl_no_go": true,
+  "odds_api_hold": true,
+  "package": "nfl-w8-imv-package-t4450u",
+  "seal_ack": "CURSOR_CANNOT_SEAL_ACK",
+  "tip_sha": ""
+}
