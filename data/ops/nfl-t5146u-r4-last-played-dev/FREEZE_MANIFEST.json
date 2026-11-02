@@ -1,0 +1,34 @@
+{
+  "schema_version": "nfl-t5146u-r4-last-played-t2-v1",
+  "label": "RECONSTRUCTED",
+  "fit_label": "RETRO_FIT",
+  "experiment": "R4-LAST-PLAYED-DEV",
+  "ticket": "t5146u",
+  "cert_candidate": 0,
+  "eval": null,
+  "isolated_dir": "data/ops/nfl-t5146u-r4-last-played-dev",
+  "frozen_before_reconstruction_run": true,
+  "reconstruction_artifact_generated": false,
+  "parent_tip": "61436fdb98fdbd4908a9af52563a2656677e2902",
+  "owner_clear": "t5146u R4-LAST-PLAYED-DEV sha8 fdbd23f9",
+  "cos_order": "Cursor b1153a45",
+  "file_sha256": {
+    "SPEC.json": "ddc71dce256fda5bbbc61a56bca56f7c3282cd1b8eb5d05c2ba76d7923a95258",
+    "SOURCE_PINS.json": "5c8adab753e62f417e6b54f8d1996565f75369a1246ca925de91c93f7a878429",
+    "IDENTITY_MANIFEST.json": "a82c57caf4a474a90ccc5d51414507013fba897ef21c01e92e3c455c3aa42d07",
+    "STOP_AWAITING_ALEX_PREFLIGHT_GO.json": "4f43fdb98aa74ef5a26f05e8355b1fef7ed33f88b7a1388847d7c0e2df0fb461"
+  },
+  "canonical_sha256": {
+    "SPEC.json": "a95344b2c79d3abaf62cc7da3d43c47cc76d008851f2408359be2209abd4e61c",
+    "SOURCE_PINS.json": "2e443944b0bcccc0f7e2291cde5b0b0bf7835605ce3f9ac49a7942dd951c8335",
+    "IDENTITY_MANIFEST.json": "88cfd515c518514a70549d2996219052ce14f03729abdfdca31011c139d3b50d",
+    "STOP_AWAITING_ALEX_PREFLIGHT_GO.json": "2ca124871e6c2f5852e7d3b19c171d9ea1743b0a946da200f6c7b8f875fa6dc7"
+  },
+  "code_sha256": {
+    "last_played_t2.py": "a6b759a52d28db2ff904bbb20d1fd2b27fa7413ec8a50c8eafcf56c403a37ce0",
+    "test_nfl_t5146u_last_played_t2.py": "642f53b650ae40833a6082bdd9e6c3a2b01baf13bde17bdc7d166c9aa7cb2fba",
+    "recon_driver.py_unchanged": "be5aa097f99c47c075d474e199f13fca2980fd282a59a69425549a9ed12e2aa5",
+    "helper_7e77c57f": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64"
+  },
+  "status": "STOP_AWAITING_ALEX_SOURCE_SELECTION_PREFLIGHT_GO"
+}

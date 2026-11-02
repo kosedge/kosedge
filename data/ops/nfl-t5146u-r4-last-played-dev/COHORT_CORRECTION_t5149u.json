@@ -1,0 +1,25 @@
+{
+  "original_n": 502,
+  "excluded_n": 6,
+  "reg_n": 496,
+  "reg_by_season": {
+    "2020": 240,
+    "2021": 256
+  },
+  "2020_no_bye_original": 216,
+  "2020_no_bye_reg_only": 210,
+  "2021_no_bye": 227,
+  "no_bye_reg_pass": {
+    "2020": true,
+    "2021": true
+  },
+  "artifact_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+  "matrix_sha256": "a3b9d8ecb94902078ddcb89206a5a1ff16d5f1a3b4e8080186238d6578c52409",
+  "deviation_sha256": "9195c1f1cf38fc071a24b1d444a13718ebf10b375897e04b0abd350e2538e7ee",
+  "exclusion_sha256": "e32203c2711bbff997857607111777bfdeb53011455d561c4d10ecb0e2644a4f",
+  "membership_sha256": "09f458f4ac587db0284035a9d85c9729cca60ba73cf652ef38e298eb9c21b7ca",
+  "no_bye_reg_sha256": "5c09f0f18f3a01f484ce13f852d662865d719b9e207ab09cf58b1fe81e0fcce2",
+  "original_502_preserved_sha256": "e2f3fab5255430aa31232c7aa3b88e9001461595ef79a00fb3f1e505e51e23b9",
+  "cert_candidate": 0,
+  "stop": "AWAITING_ALEX_SOURCE_NUMERICAL_IDENTITY_RO"
+}

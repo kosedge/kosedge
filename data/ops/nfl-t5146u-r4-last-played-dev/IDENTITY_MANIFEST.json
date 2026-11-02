@@ -1,0 +1,26 @@
+{
+  "schema_version": "nfl-t5146u-r4-last-played-t2-v1",
+  "identity_rules": {
+    "catalog_fields": ["season", "week", "game_id", "home", "away", "kickoff_utc"],
+    "conflicting_duplicate_catalog_row": "refuse",
+    "consumed_game_must_exist_in_catalog": true,
+    "consumed_kickoff_strictly_before_target_ko_minus_60": true,
+    "target_game_id_excluded": true,
+    "future_game_id_excluded": true,
+    "same_season_only": true,
+    "last_five": "T1/T2 played-week source_game_ids for the last five snapshots with week <= selected_rating_week, chronological by week then kickoff",
+    "publication_timestamp": "unverified",
+    "observation_timestamp": "unverified"
+  },
+  "labels": {
+    "reconstructed": "RECONSTRUCTED",
+    "fit": "RETRO_FIT",
+    "not_claimed": [
+      "production-causal source availability",
+      "real-time observation",
+      "verified publication timestamp"
+    ]
+  },
+  "not_a_new_feature": true,
+  "rounding_and_t4": "reuse recon_driver.t4_from_t2_sides and recon_contract._finite / CONTRACT_27; no new tolerances"
+}

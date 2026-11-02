@@ -1,0 +1,26 @@
+{
+  "schema_version": "nfl-t5146u-r4-last-played-exec-v1",
+  "cert_candidate": 0,
+  "alex_preflight_go": "686ce4dc",
+  "helper_sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "n_targets": 502,
+  "n_complete_27": 502,
+  "n_partial": 0,
+  "n_refused": 0,
+  "matrix_sha256": "4dd5e7e5f2791b56dcd9af72be2b1a59c69eb0ffff29c0a69084a868aeff02e8",
+  "identities_sha256": "9522b2778def6b8f6415e71a59057eb493312ebd4c6e4ec38b120115399d3eea",
+  "artifact_file_sha256": "e2f3fab5255430aa31232c7aa3b88e9001461595ef79a00fb3f1e505e51e23b9",
+  "matrix_file_sha256": "4255f847281a73d1d5e719ca4f4354a675c4e8c82161d0192a49cd4510fe34a9",
+  "previous_partial_file_sha256": "07786dddd3943cdb7f4e9859ac75483be4bd74a7b6f41e14184976ef5fc96cfe",
+  "no_bye_compare_file_sha256": "0596f5d81b31412528238f8561edcf49ed7a30701356b8265c28a402ae11f6a2",
+  "n_2021_previous_partial_now_complete": 29,
+  "n_2021_previous_partial_still": 0,
+  "no_bye_compare_pass": {
+    "2020": true,
+    "2021": true
+  },
+  "label": "RECONSTRUCTED",
+  "fit_label": "RETRO_FIT",
+  "eval": null,
+  "stop": "AWAITING_ALEX_PHASE_B_RO"
+}

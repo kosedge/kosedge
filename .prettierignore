@@ -23,3 +23,7 @@ apps/web/src/generated
 **/.venv
 *.min.js
 *.min.css
+
+# t5146u/t5149u hashed last-played artifacts. Original 502 JSON/matrix
+# bytes are frozen history (t5149u must not rewrite them).
+data/ops/nfl-t5146u-r4-last-played-dev/
