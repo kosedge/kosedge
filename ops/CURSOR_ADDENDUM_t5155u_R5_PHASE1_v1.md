@@ -23,6 +23,8 @@ implementation tip **255adf7802830bc25814a739d62f65f095216203**. R2 eng tip
 **bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45**. HISTORY-ID #703 tip
 **f7715dce8ffaaee11fb5236c1d7873aed27cd7c1** merged onto this #701 head.
 t5160u loader-boundary tip **79341557deac522b7b939d4c394590d21b6d8a3a**.
+Append B1/B2 tip **67e43c4c43a64f9d7e4e69dc98d15bac8ccffa71** (Cos
+`b33cf2a0` · Alex `d6adeece` · ACCEPT `3206fd15`).
 Merge conflict: only
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
 **072e99e0** unchanged. One-command:
@@ -158,6 +160,8 @@ unbound `--score` · IF-only live diagnostic · lift Q2 HOLD.
 | R2 eng tip             | `bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45`                                |
 | HISTORY-ID integrate   | `05fbb36e095e18a801a003349b116f45f54fd13c`                                |
 | t5160u loader-boundary | `79341557deac522b7b939d4c394590d21b6d8a3a`                                |
+| t5160u append B1/B2    | `67e43c4c43a64f9d7e4e69dc98d15bac8ccffa71`                                |
+| Cos / Alex / ACCEPT    | `b33cf2a0` / `d6adeece` / `3206fd15`                                      |
 | t5162u reconcile Cos   | `3c978ef9`                                                                |
 | Alex append-preflight  | `b8cc05b2`                                                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |

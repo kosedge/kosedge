@@ -7,6 +7,7 @@ STOP for Alex append-preflight ORDER **b8cc05b2**. Cos binds after
 append-GO. HARD END 02:30 EST / 07:30Z.
 
 Implementation tip **79341557deac522b7b939d4c394590d21b6d8a3a**.
+Append B1/B2 tip **67e43c4c43a64f9d7e4e69dc98d15bac8ccffa71**.
 
 ## Reconcile (actual)
 
