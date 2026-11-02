@@ -1,0 +1,12 @@
+{
+  "order_id": "65b1c0fb",
+  "status": "EMITTED",
+  "label": "RESEARCH_DIAGNOSTIC",
+  "cert_candidate": 0,
+  "warehouse_table": "nfl_dp_team_rolling_features_weekly NOT mounted (DATABASE_URL unset; documented 2023-2026 only)",
+  "backfill_source": "public nflverse PBP parquet (no Odds spend)",
+  "pit_rule": "same_season_weeks_lt_target",
+  "joinable_csv": "data/ops/nfl-epa-wf-feature-emit-65b1c0fb/games_join_2013_2022.csv",
+  "team_week_csv": "data/ops/nfl-epa-wf-feature-emit-65b1c0fb/team_week_rolling_pregame_2013_2022.csv",
+  "manifest_sha256": "fd572ba676ea16a4dbd1807c466492b7d0c7d282eb88638ae9b85b896cf70e98"
+}
