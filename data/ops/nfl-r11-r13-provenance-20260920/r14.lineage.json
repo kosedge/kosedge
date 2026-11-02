@@ -1,0 +1,34 @@
+{
+  "label": "R14",
+  "status": "UNBOUND",
+  "bind_allowed": false,
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": null,
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": {}
+  },
+  "random_seeds": [],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "No candidate R14 source, runner, config, seeds, or metrics are bound in this repo. This lane does not edit or invent R14 behavior."
+  ],
+  "evidence": [
+    "data/ops/nfl-r11-r13-provenance-20260920/search_log.json"
+  ],
+  "notes": "Candidate slot only. Compare against frozen R11 is blocked until both EXACT lineages are filed."
+}

@@ -1,0 +1,39 @@
+{
+  "gate_set_id": "nfl-r11-vs-r14-requested-20260920",
+  "status": "UNBOUND_DIMENSIONS_ONLY",
+  "execute_holdout": false,
+  "dimensions": [
+    {
+      "id": "key_3",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "key_7",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "ot",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "mae",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "total",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    }
+  ],
+  "thresholds_source": null,
+  "notes": "Requested comparison dimensions only. No numeric floors, bands, or pass/fail cuts were found under an R11/R13/R14 label. Enterprise ATS/CLV/MAE floors in docs/NFL_ENTERPRISE_GATES.md are a different product gate set and are not aliased here. Holdout execution is disabled."
+}
