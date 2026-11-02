@@ -27,7 +27,12 @@ import { fetchNbaFairLines } from "@/lib/nba-fair-lines";
 import { keiGamesFromNbaFairLines } from "@/lib/nba-kei-from-fair-lines";
 import { fetchNhlFairLines } from "@/lib/nhl-fair-lines";
 import { keiGamesFromNhlFairLines } from "@/lib/nhl-kei-from-fair-lines";
-import { fetchNflFairLines, type NflFairLineRow } from "@/lib/nfl-fair-lines";
+import {
+  fetchNflFairLines,
+  type FixtureFairLinesBoard,
+  type NflFairLineRow,
+} from "@/lib/nfl-fair-lines";
+import { consumeFixtureEligibility } from "@/lib/nfl-fixture-assembly-contract";
 import { fetchWnbaFairLines } from "@/lib/wnba-fair-lines";
 import { keiGamesFromWnbaFairLines } from "@/lib/wnba-kei-from-fair-lines";
 
@@ -85,6 +90,32 @@ export function keiGamesFromNflFairLines(
   });
 }
 
+/**
+ * Fixture-channel KEI projection of the SAME t5178u contract.
+ * Point-margin spread only. Totals / ML / win-prob channels absent.
+ */
+export function keiGamesFromFixtureFairLines(
+  board: FixtureFairLinesBoard,
+): Array<KeiLineGame & { fixture: true }> {
+  consumeFixtureEligibility(board.eligibility, "fixture");
+  return keiGamesFromNflFairLines(board.lines).map((game) => ({
+    ...game,
+    fixture: true as const,
+    projTotal: null,
+    handicapTotal: null,
+    projHomeMl: undefined,
+    projAwayMl: undefined,
+    homeWinProb: undefined,
+    handicapHomeMl: undefined,
+    handicapAwayMl: undefined,
+    handicapHomeWinProb: undefined,
+    modelTotal: undefined,
+    modelHomeMl: undefined,
+    modelAwayMl: undefined,
+    modelHomeWinProb: undefined,
+  }));
+}
+
 export async function resolveKeiGames(
   sportKey: string,
 ): Promise<KeiLineGame[]> {
@@ -97,6 +128,12 @@ export async function resolveKeiGames(
         daysAhead: 120,
         includePastDays: 7,
       });
+      if ((board as { fixture?: boolean }).fixture === true) {
+        consumeFixtureEligibility(
+          (board as FixtureFairLinesBoard).eligibility,
+          "subscriber",
+        );
+      }
       if (board.lines.length > 0) {
         return keiGamesFromNflFairLines(board.lines);
       }

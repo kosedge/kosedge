@@ -102,6 +102,24 @@ Export policy implemented on `export_kei_lines_nfl.py` + tests. Does **not** wir
 - Fully valid: atomic `os.replace`; leftover tmp cleaned
 - TS stubs: NFL∉HONESTY source-lock; authorized closed GET = 503 unavailable, `fetchNflFairLines` not called; UI `!res.ok` ≠ ready empty
 
+## W-FIX-B (Cos ORDER after M0 `d76c550d` / seal `4de08ebf`)
+
+Attached `#664` validate @ `7abf65a2` (blob `a8cd6054…` match) + A's shared contract
+(`nfl_fixture_assembly/contract.py` + `apps/web/lib/nfl-fixture-assembly-contract.ts`).
+
+Wired the SAME contract into actual consumers:
+
+| Consumer | Function |
+|---|---|
+| API | `projectFixtureFairLinesApiResponse` in `route.ts`; customer GET still `nflFairLinesCustomerUnavailableResponse` (503) + `persistOdds: false` |
+| Board | `projectFixtureFairLinesBoard` in `nfl-fair-lines.ts` |
+| UI | `assertCustomerFairLinesViewModel` + `projectFixtureFairLinesViewModel`; client refuses ALLOW_FIXTURE as subscriber |
+| View-model | `keiGamesFromFixtureFairLines` in `resolve-kei-lines.ts` |
+| Export | `project_fixture_assembly_to_export` / `consume_fixture_eligibility`; customer `assemble_games` refuses fixture payloads |
+| Cache | `pageDataCacheHeadersForFixture` + generation cache; invalidate ⇒ `REFUSE_CACHE` |
+
+ALLOW_FIXTURE is fixture-channel-only. Totals/ML/prob channels absent on point-margin.
+
 ## Holds (this worker)
 
 - No merge / deploy / CERT

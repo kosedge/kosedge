@@ -30,6 +30,26 @@ OUT = WEB / "data" / "processed" / "kei_lines_nfl.json"
 # common-sports honesty sport / honest-empty enums (those exclude NFL).
 NFL_EXPORT_STATUS_CONTRACT = "nfl-export-status-v1"
 
+# Same ONE contract as services/model-service/.../nfl_fixture_assembly/contract.py
+FIXTURE_CONTRACT_ID = "t5178u-nfl-fixture-assembly-v0"
+FIXTURE_CHANNEL = "FIXTURE"
+NON_FIXTURE_CONSUMERS = frozenset(
+    {
+        "subscriber",
+        "betting",
+        "production",
+        "fair_lines_api",
+        "honesty_board",
+        "props_eligibility",
+    }
+)
+OUTPUT_REFUSE = {
+    "TOTAL": "REFUSE_TOTALS",
+    "MONEYLINE": "REFUSE_MONEYLINE",
+    "COVER_PROBABILITY": "REFUSE_COVER_PROBABILITY",
+    "ECONOMIC_ELIGIBILITY": "REFUSE_ECONOMIC_ELIGIBILITY",
+}
+
 
 class NflExportRefuse(Exception):
     """Non-actionable export refusal. Never an exit-0 success."""
@@ -83,6 +103,12 @@ def assemble_games(payload: object) -> list[dict[str, object]]:
     """Build export games or raise NflExportRefuse. No silent skip / partial drop."""
     if not isinstance(payload, dict):
         raise NflExportRefuse("unexpected_empty_payload")
+    eligibility = payload.get("eligibility")
+    if payload.get("fixture") is True or (
+        isinstance(eligibility, dict) and eligibility.get("result") == "ALLOW_FIXTURE"
+    ):
+        # Customer export is fair_lines_api / production — cannot consume ALLOW_FIXTURE.
+        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
     error = payload.get("error")
     if isinstance(error, str) and error.strip():
         # 503-shaped / error-bearing body is unavailable, not empty-success.
@@ -126,6 +152,98 @@ def assemble_games(payload: object) -> list[dict[str, object]]:
     if len(games) != len(lines):
         raise NflExportRefuse("partial_row_drop")
     return games
+
+
+def consume_fixture_eligibility(decision: object, consumer: str) -> dict[str, object]:
+    """Alex X1 — ALLOW_FIXTURE is fixture-channel-only. Same enum as contract.py."""
+    if not isinstance(decision, dict):
+        raise NflExportRefuse("REFUSE_PARTIAL")
+    token = str(consumer or "").strip().lower()
+    if token in NON_FIXTURE_CONSUMERS:
+        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
+    if token != "fixture":
+        raise NflExportRefuse("REFUSE_QUALIFICATION")
+    result = str(decision.get("result") or "")
+    if result != "ALLOW_FIXTURE":
+        raise NflExportRefuse(result or "REFUSE_QUALIFICATION")
+    if (
+        decision.get("subscriber_consumable")
+        or decision.get("betting_consumable")
+        or decision.get("production_consumable")
+        or decision.get("env_bypass_honored")
+        or decision.get("cacheable")
+    ):
+        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
+    return {
+        "result": "ALLOW_FIXTURE",
+        "reason": decision.get("reason") or "",
+        "fixture": True,
+        "channel": FIXTURE_CHANNEL,
+        "subscriber_consumable": False,
+        "betting_consumable": False,
+        "production_consumable": False,
+        "env_bypass_honored": False,
+        "cacheable": False,
+        "contract_id": FIXTURE_CONTRACT_ID,
+        "actionable": False,
+    }
+
+
+def project_fixture_assembly_to_export(
+    assembly: object,
+    *,
+    consumer: str,
+    home_team: str,
+    away_team: str,
+    home_abbr: str = "HOM",
+    away_abbr: str = "AWY",
+    requested_output: str = "POINT_MARGIN_SPREAD",
+) -> dict[str, object]:
+    """Project the SAME t5178u contract into the export game shape. Spread only."""
+    if not isinstance(assembly, dict):
+        raise NflExportRefuse("unexpected_empty_payload")
+    if requested_output != "POINT_MARGIN_SPREAD":
+        raise NflExportRefuse(
+            OUTPUT_REFUSE.get(requested_output, "REFUSE_CAPABILITY")
+        )
+    eligibility = consume_fixture_eligibility(assembly.get("eligibility"), consumer)
+    quote = assembly.get("quote")
+    if not isinstance(quote, dict):
+        raise NflExportRefuse("REFUSE_MISSING")
+    event_id = str(quote.get("event_id") or "").strip()
+    home = home_team.strip()
+    away = away_team.strip()
+    if not event_id or not home or not away:
+        raise NflExportRefuse("blank_required_identity")
+    if str(quote.get("period") or "") != "full_game":
+        raise NflExportRefuse("REFUSE_PERIOD")
+    side = str(quote.get("side") or "")
+    if side not in {"HOME", "AWAY"}:
+        raise NflExportRefuse("REFUSE_SIGN")
+    spread = _finite_or_none(quote.get("line"))
+    if spread is None:
+        raise NflExportRefuse("malformed_numeric")
+    if side == "AWAY":
+        spread = -spread
+    game = {
+        "id": event_id,
+        "homeTeam": home,
+        "awayTeam": away,
+        "homeAbbr": home_abbr,
+        "awayAbbr": away_abbr,
+        "commenceTime": quote.get("time"),
+        "projSpreadHome": round(spread, 2),
+        "projTotal": None,
+        "fixture": True,
+    }
+    return {
+        "sport": "nfl",
+        "keiCode": "KEINFL",
+        "fixture": True,
+        "eligibility": eligibility,
+        "games": [game],
+        "contract_id": FIXTURE_CONTRACT_ID,
+    }
 
 
 def write_atomic(path: Path, doc: object) -> None:
