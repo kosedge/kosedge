@@ -33,6 +33,7 @@ from src.services.nfl_fixture_assembly.contract import (
     SyntheticQuote,
     expected_quote_line,
 )
+from src.services.nfl_fixture_assembly.guard import chain_guard
 from src.services.nfl_fixture_assembly.synth import make_forecast_id
 from src.services.nfl_hhl1_capture.identity import expected_decision_ts, is_sha256_hex
 from src.services.nfl_hhl1_capture.schema import Hhl1Reject, Hhl1RejectCode
@@ -382,6 +383,11 @@ def consume_eligibility(
 
 def assemble_fixture_only(envelope: FixtureEnvelope) -> AssemblyResult:
     """Positive fixture path or typed hard refuse. Never a partial object."""
+    with chain_guard():
+        return _assemble_fixture_only_impl(envelope)
+
+
+def _assemble_fixture_only_impl(envelope: FixtureEnvelope) -> AssemblyResult:
     if not isinstance(envelope, FixtureEnvelope):
         _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "envelope must be FixtureEnvelope")
     _channel_gates(envelope)
@@ -424,19 +430,20 @@ def assemble_fixture_only(envelope: FixtureEnvelope) -> AssemblyResult:
 
 def assemble_fixture_batch(envelopes: Sequence[FixtureEnvelope]) -> List[AssemblyResult]:
     """Atomic batch: any refuse ⇒ no assembled rows returned."""
-    prepared: List[Mapping[str, Any]] = []
-    for envelope in envelopes:
-        if not isinstance(envelope, FixtureEnvelope):
-            _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "batch row is not FixtureEnvelope")
-        _channel_gates(envelope)
-        _capability_gates(envelope)
-        _cross_checks(envelope)
-        prepared.append(envelope.l1_candidate)
-    try:
-        validate_l1_batch(prepared)
-    except Hhl1Reject as exc:
-        raise _map_hhl1(exc) from exc
-    return [assemble_fixture_only(envelope) for envelope in envelopes]
+    with chain_guard():
+        prepared: List[Mapping[str, Any]] = []
+        for envelope in envelopes:
+            if not isinstance(envelope, FixtureEnvelope):
+                _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "batch row is not FixtureEnvelope")
+            _channel_gates(envelope)
+            _capability_gates(envelope)
+            _cross_checks(envelope)
+            prepared.append(envelope.l1_candidate)
+        try:
+            validate_l1_batch(prepared)
+        except Hhl1Reject as exc:
+            raise _map_hhl1(exc) from exc
+        return [_assemble_fixture_only_impl(envelope) for envelope in envelopes]
 
 
 def forbidden_import_names() -> frozenset[str]:
