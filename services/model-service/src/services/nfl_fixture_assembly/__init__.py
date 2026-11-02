@@ -5,13 +5,18 @@ Does not import simulator, produce_mu, outcome loaders, network, DB, or jobs.
 """
 
 from src.services.nfl_fixture_assembly.assemble import (
+    FORBIDDEN_CALL_ATTEMPTS,
     NON_FIXTURE_CONSUMERS,
     assemble_fixture_batch,
     assemble_fixture_only,
     consume_eligibility,
+    consume_fixture_eligibility,
     forbidden_import_names,
 )
+from src.services.nfl_fixture_assembly.chain import chain_digest, serialize_fixture_chain
 from src.services.nfl_fixture_assembly.contract import (
+    CHAIN_CONTRACT_ID,
+    CHAIN_SCHEMA_VERSION,
     CONTRACT_ID,
     CONTRACT_SCHEMA_VERSION,
     FIXTURE_CHANNEL,
@@ -36,11 +41,17 @@ from src.services.nfl_fixture_assembly.contract import (
 )
 
 __all__ = [
+    "FORBIDDEN_CALL_ATTEMPTS",
     "NON_FIXTURE_CONSUMERS",
     "assemble_fixture_batch",
     "assemble_fixture_only",
+    "chain_digest",
     "consume_eligibility",
+    "consume_fixture_eligibility",
     "forbidden_import_names",
+    "serialize_fixture_chain",
+    "CHAIN_CONTRACT_ID",
+    "CHAIN_SCHEMA_VERSION",
     "CONTRACT_ID",
     "CONTRACT_SCHEMA_VERSION",
     "FIXTURE_CHANNEL",

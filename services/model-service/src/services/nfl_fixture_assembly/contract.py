@@ -14,6 +14,35 @@ FIXTURE_CHANNEL: Literal["FIXTURE"] = "FIXTURE"
 CONTRACT_ID = "t5178u-nfl-fixture-assembly-v0"
 CONTRACT_SCHEMA_VERSION = "nfl-fixture-assembly-v0"
 
+# Additive A→B offline chain (t5194u). Does not rewrite v0 evidence.
+CHAIN_CONTRACT_ID = "t5194u-nfl-fixture-chain-v1"
+CHAIN_SCHEMA_VERSION = "nfl-fixture-chain-v1"
+
+# American price: integer, |price| >= 100, never 0 / bool / fraction.
+AMERICAN_PRICE_MIN_ABS = 100
+
+# Eligibility consume: these keys must be PRESENT (no defaults) before normalize.
+ELIGIBILITY_REQUIRED_KEYS: Tuple[str, ...] = (
+    "result",
+    "reason",
+    "contract_id",
+    "schema_version",
+    "channel",
+    "fixture",
+    "subscriber_consumable",
+    "betting_consumable",
+    "production_consumable",
+    "env_bypass_honored",
+    "cacheable",
+)
+ELIGIBILITY_REQUIRED_FALSE_BOOLS: Tuple[str, ...] = (
+    "subscriber_consumable",
+    "betting_consumable",
+    "production_consumable",
+    "env_bypass_honored",
+    "cacheable",
+)
+
 # Synthetic adjusted values prove transport through #664 validation only.
 SYNTHETIC_ADJUSTMENT_POLICY = "TRANSPORT_ONLY_NOT_INJURY_POLICY"
 
@@ -223,6 +252,7 @@ class EligibilityDecision:
             "env_bypass_honored": False,
             "cacheable": False,
             "contract_id": self.contract_id,
+            "schema_version": CONTRACT_SCHEMA_VERSION,
         }
 
 

@@ -8,10 +8,16 @@ No simulator, produce_mu, forecast loader, outcome loader, network, DB, or jobs.
 
 from __future__ import annotations
 
+import math
 import os
-from typing import Any, Iterable, List, Mapping, Sequence
+from typing import Any, Iterable, List, Mapping, Sequence, Union
 
 from src.services.nfl_fixture_assembly.contract import (
+    AMERICAN_PRICE_MIN_ABS,
+    CONTRACT_ID,
+    CONTRACT_SCHEMA_VERSION,
+    ELIGIBILITY_REQUIRED_FALSE_BOOLS,
+    ELIGIBILITY_REQUIRED_KEYS,
     FIXTURE_CHANNEL,
     FIXTURE_ENV_BYPASS_KEYS,
     OUTPUT_REFUSE,
@@ -69,6 +75,9 @@ NON_FIXTURE_CONSUMERS = frozenset(
     }
 )
 
+# Meaningful instrumentation: any forbidden-call attempt is recorded then refused.
+FORBIDDEN_CALL_ATTEMPTS: list[str] = []
+
 
 def _env_truthy(name: str) -> bool:
     return os.getenv(name, "").strip().lower() in _TRUTHY
@@ -83,13 +92,39 @@ def _map_hhl1(exc: Hhl1Reject) -> FixtureHardRefuse:
     return FixtureHardRefuse(mapped, str(exc))
 
 
+def note_forbidden_call(name: str) -> None:
+    FORBIDDEN_CALL_ATTEMPTS.append(name)
+    _refuse(
+        FixtureEligibilityResult.REFUSE_QUALIFICATION,
+        f"forbidden call {name!r} (zero simulator/network/DB/jobs/outcome)",
+    )
+
+
 def _finite_number(value: Any, *, field: str) -> float:
+    """Reject bools, non-numbers, NaN, and ±Infinity. No forecast math."""
     if isinstance(value, bool) or not isinstance(value, (int, float)):
-        _refuse(FixtureEligibilityResult.REFUSE_LINE, f"{field} is not a finite number")
+        _refuse(
+            FixtureEligibilityResult.REFUSE_LINE,
+            f"{field} is not a finite number (got {type(value).__name__})",
+        )
     out = float(value)
-    if out != out:  # NaN
-        _refuse(FixtureEligibilityResult.REFUSE_LINE, f"{field} is NaN")
+    if not math.isfinite(out):
+        _refuse(FixtureEligibilityResult.REFUSE_LINE, f"{field} is not finite")
     return out
+
+
+def _american_price(value: Any) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        _refuse(
+            FixtureEligibilityResult.REFUSE_LINE,
+            "quote.price must be an int American price",
+        )
+    if value == 0 or abs(value) < AMERICAN_PRICE_MIN_ABS:
+        _refuse(
+            FixtureEligibilityResult.REFUSE_LINE,
+            f"quote.price {value} is not a valid American price",
+        )
+    return value
 
 
 def _channel_gates(envelope: FixtureEnvelope) -> None:
@@ -157,6 +192,10 @@ def _cross_checks(envelope: FixtureEnvelope) -> None:
     if not isinstance(l1, Mapping):
         _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "l1_candidate must be an object")
 
+    # Finite / type gates first so a consistent identity is not rewritten into a hash miss.
+    point_margin = _finite_number(forecast.point_margin, field="forecast.point_margin")
+    line = _finite_number(quote.line, field="quote.line")
+
     if forecast.period is not FixturePeriod.FULL_GAME or quote.period is not FixturePeriod.FULL_GAME:
         _refuse(FixtureEligibilityResult.REFUSE_PERIOD, "period must be full_game")
     if quote.period is not forecast.period:
@@ -192,8 +231,6 @@ def _cross_checks(envelope: FixtureEnvelope) -> None:
     if provenance.schema_version != l1_version:
         _refuse(FixtureEligibilityResult.REFUSE_VERSION, "schema_version mismatch vs L1")
 
-    point_margin = _finite_number(forecast.point_margin, field="forecast.point_margin")
-    line = _finite_number(quote.line, field="quote.line")
     expected_line = expected_quote_line(point_margin=point_margin, side=forecast.side)
     if line != expected_line:
         _refuse(
@@ -202,8 +239,7 @@ def _cross_checks(envelope: FixtureEnvelope) -> None:
             else FixtureEligibilityResult.REFUSE_LINE,
             f"quote.line {line} != expected {expected_line} for {forecast.side.value}",
         )
-    if not isinstance(quote.price, int) or isinstance(quote.price, bool):
-        _refuse(FixtureEligibilityResult.REFUSE_LINE, "quote.price must be an int American price")
+    _american_price(quote.price)
     if not str(quote.book or "").strip():
         _refuse(FixtureEligibilityResult.REFUSE_MISSING, "quote.book missing")
 
@@ -220,9 +256,83 @@ def _cross_checks(envelope: FixtureEnvelope) -> None:
         )
 
 
-def consume_eligibility(decision: EligibilityDecision, *, consumer: str) -> EligibilityDecision:
-    """Alex X1: ALLOW_FIXTURE cannot be consumed by subscriber/betting/production."""
-    token = str(consumer or "").strip().lower()
+def consume_fixture_eligibility(
+    raw: Mapping[str, Any],
+    *,
+    consumer: str,
+) -> EligibilityDecision:
+    """Strict consume. Exact contract/version/channel/fixture + explicit false flags.
+
+    No truthiness defaults. Missing / wrong / non-boolean / contradictory → refuse.
+    Does not rewrite fixture=false, PRODUCTION, or a wrong contract_id into an allow.
+    """
+    if not isinstance(raw, Mapping):
+        _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "eligibility must be an object")
+
+    missing = [key for key in ELIGIBILITY_REQUIRED_KEYS if key not in raw]
+    if missing:
+        _refuse(
+            FixtureEligibilityResult.REFUSE_MISSING,
+            f"eligibility missing required fields {missing} (no default / no normalize)",
+        )
+
+    if raw["contract_id"] != CONTRACT_ID:
+        _refuse(
+            FixtureEligibilityResult.REFUSE_VERSION,
+            f"contract_id {raw['contract_id']!r} != {CONTRACT_ID} (not rewritten)",
+        )
+    if raw["schema_version"] != CONTRACT_SCHEMA_VERSION:
+        _refuse(
+            FixtureEligibilityResult.REFUSE_VERSION,
+            f"schema_version {raw['schema_version']!r} != {CONTRACT_SCHEMA_VERSION}",
+        )
+    if raw["channel"] != FIXTURE_CHANNEL:
+        _refuse(
+            FixtureEligibilityResult.REFUSE_PRODUCTION_CHANNEL,
+            f"channel={raw['channel']!r} is not {FIXTURE_CHANNEL} (not rewritten)",
+        )
+    if raw["fixture"] is not True:
+        if raw["fixture"] is False:
+            _refuse(
+                FixtureEligibilityResult.REFUSE_QUALIFICATION,
+                "fixture=false cannot be rewritten into ALLOW_FIXTURE",
+            )
+        _refuse(
+            FixtureEligibilityResult.REFUSE_PARTIAL,
+            f"fixture must be boolean true (got {raw['fixture']!r})",
+        )
+    for key in ELIGIBILITY_REQUIRED_FALSE_BOOLS:
+        value = raw[key]
+        if value is not False:
+            if not isinstance(value, bool):
+                _refuse(
+                    FixtureEligibilityResult.REFUSE_PARTIAL,
+                    f"{key} must be boolean false (got {type(value).__name__})",
+                )
+            _refuse(
+                FixtureEligibilityResult.REFUSE_PRODUCTION_CHANNEL,
+                f"{key}={value!r} must be false (no rewrite)",
+            )
+
+    result_raw = raw["result"]
+    try:
+        result = (
+            result_raw
+            if isinstance(result_raw, FixtureEligibilityResult)
+            else FixtureEligibilityResult(str(result_raw))
+        )
+    except ValueError:
+        _refuse(
+            FixtureEligibilityResult.REFUSE_VALIDATION,
+            f"result {result_raw!r} is not a FixtureEligibilityResult",
+        )
+    if result is not FixtureEligibilityResult.ALLOW_FIXTURE:
+        _refuse(result, "eligibility is not ALLOW_FIXTURE")
+    if not isinstance(raw["reason"], str) or not str(raw["reason"]):
+        _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "reason must be a non-empty string")
+
+    token = consumer if isinstance(consumer, str) else ""
+    token = token.strip().lower()
     if token in NON_FIXTURE_CONSUMERS:
         _refuse(
             FixtureEligibilityResult.REFUSE_PRODUCTION_CHANNEL,
@@ -233,26 +343,41 @@ def consume_eligibility(decision: EligibilityDecision, *, consumer: str) -> Elig
             FixtureEligibilityResult.REFUSE_QUALIFICATION,
             f"unknown consumer {consumer!r}; only consumer='fixture' is qualified",
         )
-    if decision.result is not FixtureEligibilityResult.ALLOW_FIXTURE:
-        _refuse(decision.result, "eligibility is not ALLOW_FIXTURE")
-    if (
-        decision.subscriber_consumable
-        or decision.betting_consumable
-        or decision.production_consumable
-        or decision.env_bypass_honored
-        or decision.cacheable
-    ):
-        _refuse(
-            FixtureEligibilityResult.REFUSE_PRODUCTION_CHANNEL,
-            "ALLOW_FIXTURE payload illegally set a production/cache consumable bit",
-        )
+
     bypass_hit = [name for name in FIXTURE_ENV_BYPASS_KEYS if _env_truthy(name)]
-    if bypass_hit and decision.env_bypass_honored:
+    if bypass_hit and raw["env_bypass_honored"] is not False:
         _refuse(
             FixtureEligibilityResult.REFUSE_ENV_BYPASS,
             f"env {bypass_hit} must not be honored for ALLOW_FIXTURE",
         )
-    return decision
+
+    return EligibilityDecision(
+        result=FixtureEligibilityResult.ALLOW_FIXTURE,
+        reason=str(raw["reason"]),
+        fixture=True,
+        channel=FIXTURE_CHANNEL,
+        subscriber_consumable=False,
+        betting_consumable=False,
+        production_consumable=False,
+        env_bypass_honored=False,
+        cacheable=False,
+        contract_id=CONTRACT_ID,
+    )
+
+
+def consume_eligibility(
+    decision: Union[EligibilityDecision, Mapping[str, Any]],
+    *,
+    consumer: str,
+) -> EligibilityDecision:
+    """Related consume: serialize actual fields, then strict consume_fixture_eligibility."""
+    if isinstance(decision, EligibilityDecision):
+        raw = decision.to_dict()
+    elif isinstance(decision, Mapping):
+        raw = decision
+    else:
+        _refuse(FixtureEligibilityResult.REFUSE_PARTIAL, "eligibility must be an object")
+    return consume_fixture_eligibility(raw, consumer=consumer)
 
 
 def assemble_fixture_only(envelope: FixtureEnvelope) -> AssemblyResult:
