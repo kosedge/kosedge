@@ -1,8 +1,11 @@
-"""t5155u RETURN-FIX — frozen Phase-2 one-exec runner for DEV_R5_496.
+"""t5155u RETURN-FIX R2 — frozen Phase-2 one-exec runner for DEV_R5_496.
 
 Loads committed FORECASTS (sha 96d3aa6f). Never regenerates produce-μ.
-Default command refuses target labels (Alex re-PREFLIGHT). Tests may invoke
-the loader once after gates. Q2/candidate stay HOLD. CERT=0. Not EVAL.
+Default / unbound --score refuse target labels (0 reads). Bound
+``--score --cos-bind`` verifies code/input pins + exclusive claim, then
+the real loader once. FOCUSED_TESTS / verify_integrate use a synthetic
+loader only — real schedule_outcome_loader(ROOT) is blocked there.
+Q2/candidate stay HOLD. CERT=0. Not EVAL. No Cos bind in this change.
 """
 
 from __future__ import annotations
@@ -10,6 +13,7 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
 from collections import Counter
 from pathlib import Path
 from typing import Any, Callable, Mapping, Sequence
@@ -41,6 +45,15 @@ from .market_arm_freeze import (
     INTERSECTION_IDENTITY_SHA256,
     INTERSECTION_N,
 )
+from .one_run import (
+    OneRunRefuse,
+    bind_one_run,
+    claim_one_run,
+    complete_one_run,
+    fail_one_run,
+    load_one_run,
+    verify_one_run,
+)
 from .r5_496_freeze import PATH_ID, R3_STOP
 from .recon_contract import _finite
 from .recon_driver import sha256_file, sha256_text
@@ -49,16 +62,30 @@ TICKET = "t5155u"
 SCHEMA = "nfl-t5155u-r5-phase2-one-exec-v1"
 CERT_CANDIDATE = 0
 OWNER_CLEAR_SHA8 = "659cd7d9"
+OWNER_T5157U_SHA8 = "e6cc6927"
 COS_ORDER_RETURN_FIX_SHA8 = "b51a9a10"
+COS_ORDER_T5157U_SHA8 = "7015d5c8"
 ALEX_RETURN_FIX_SHA8 = "9332de97"
+ALEX_RETURN_T5157U_SHA8 = "42069ef6"
 COS_ACCEPT_RETURN_FIX_SHA8 = "c5574733"
+LINEAGE_TIP_255ADF78 = "255adf7802830bc25814a739d62f65f095216203"
 FORECASTS_PATH = "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json"
 FORECASTS_SHA256 = "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+Q2_HISTORY_SHA256 = "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
+FREEZE_MANIFEST_SHA256 = "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
 SPLIT_PATH = "data/ops/nfl-t5155u-r5-496-freeze/SPLIT_SCAFFOLDING.json"
 MARKET_FREEZE_PATH = "data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json"
 OUT_DIR = Path("data/ops/nfl-t5155u-r5-phase2")
 RECEIPT_NAME = "RECEIPT.json"
 COMMAND = "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py"
+RUNNER_CODE_RELPATHS = (
+    "services/model-service/src/services/nfl_t5107u/r5_phase2_one_exec.py",
+    "scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py",
+    "services/model-service/src/services/nfl_t5107u/one_run.py",
+    "services/model-service/src/services/nfl_t5107u/evaluator.py",
+)
+SKIP_NESTED_TESTS_ENV = "T5151U_SKIP_NESTED_TESTS"
+ALLOW_REAL_LOADER_ENV = "T5157U_ALLOW_REAL_LOADER"
 
 
 class Phase2OneExecRefuse(ValueError):
@@ -69,6 +96,106 @@ def _repo_root(root: Path | None) -> Path:
     if root is not None:
         return Path(root)
     return Path(__file__).resolve().parents[5]
+
+
+def _real_loader_blocked() -> bool:
+    skip = os.environ.get(SKIP_NESTED_TESTS_ENV) == "1"
+    allow = os.environ.get(ALLOW_REAL_LOADER_ENV) == "1"
+    return skip and not allow
+
+
+def runner_code_hashes(root: Path | None = None) -> dict[str, str]:
+    repo = _repo_root(root)
+    return {rel: sha256_file(repo / rel) for rel in RUNNER_CODE_RELPATHS}
+
+
+def runner_code_sha256(root: Path | None = None) -> str:
+    return sha256_text(json.dumps(runner_code_hashes(root), sort_keys=True, separators=(",", ":")))
+
+
+def runner_input_pin_bundle() -> dict[str, str]:
+    return {
+        "forecasts_sha256": FORECASTS_SHA256,
+        "q2_history_sha256": Q2_HISTORY_SHA256,
+        "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
+        "market_bytes_sha256": INTERSECTION_BYTES_SHA256,
+        "market_identity_sha256": INTERSECTION_IDENTITY_SHA256,
+        "schedule_sha256": SCHEDULE_SHA256,
+        "feature_json_sha256": FEATURE_RECON_REG496_ARTIFACT_SHA256,
+        "identity_sha256": REG496_IDENTITY_SHA256,
+    }
+
+
+def runner_input_sha256() -> str:
+    return sha256_text(json.dumps(runner_input_pin_bundle(), sort_keys=True, separators=(",", ":")))
+
+
+def runner_spec_sha256() -> str:
+    return sha256_text(
+        json.dumps(
+            {
+                "schema_version": SCHEMA,
+                "ticket": TICKET,
+                "path_id": PATH_ID,
+                "forecasts_sha256": FORECASTS_SHA256,
+                "q2_history_sha256": Q2_HISTORY_SHA256,
+                "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
+                "market_bytes_sha256": INTERSECTION_BYTES_SHA256,
+                "identity_sha256": REG496_IDENTITY_SHA256,
+                "q2": "HOLD",
+                "candidate": "HOLD",
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )
+
+
+def bind_phase2_one_exec_fixture(
+    *,
+    path: Path,
+    alex_go_id: str = "ALEX_RETURN_42069EF6",
+    root: Path | None = None,
+) -> dict[str, Any]:
+    """Test-only matching bind. Not a live Cos bind."""
+    repo = _repo_root(root)
+    return bind_one_run(
+        effective_spec_sha256=runner_spec_sha256(),
+        code_sha256=runner_code_sha256(repo),
+        input_sha256=runner_input_sha256(),
+        forecast_sha256=FORECASTS_SHA256,
+        cohort_sha256=REG496_IDENTITY_SHA256,
+        alex_go_id=alex_go_id,
+        path=path,
+    )
+
+
+def _verify_and_claim_cos_bind(
+    repo: Path,
+    bind_path: Path,
+    *,
+    code_sha: str,
+    input_sha: str,
+    spec_sha: str,
+) -> dict[str, Any]:
+    record = load_one_run(bind_path)
+    if not record:
+        raise Phase2OneExecRefuse("cos-bind file missing one-run record")
+    try:
+        verified = verify_one_run(
+            record,
+            forecast_sha256=FORECASTS_SHA256,
+            cohort_sha256=REG496_IDENTITY_SHA256,
+            exec_bind=str(record.get("bind_id") or ""),
+            alex_go_id=str(record.get("alex_go_id") or ""),
+            live_effective_spec_sha256=spec_sha,
+            live_code_sha256=code_sha,
+            live_input_sha256=input_sha,
+            path=bind_path,
+        )
+        return claim_one_run(bind_path, verified["bind_id"])
+    except OneRunRefuse as exc:
+        raise Phase2OneExecRefuse(f"cos-bind refused: {exc}") from exc
 
 
 def load_committed_forecasts(root: Path) -> dict[str, Any]:
@@ -104,10 +231,59 @@ def load_market_points(root: Path) -> dict[str, Any]:
     return inter
 
 
-def schedule_outcome_loader(root: Path) -> Callable[[], dict[str, dict[str, Any]]]:
-    """Repo-relative schedule scores for 2020–21 REG496. Not a new source."""
+def synthetic_outcome_loader(
+    forecasts: Mapping[str, Any] | Sequence[Mapping[str, Any]] | None = None,
+    *,
+    root: Path | None = None,
+) -> Callable[[], dict[str, dict[str, Any]]]:
+    """Deterministic fake scores for REG496 IDs. Never opens schedule_results."""
+
+    if forecasts is None:
+        payload = load_committed_forecasts(_repo_root(root))
+        rows: Sequence[Mapping[str, Any]] = payload["forecasts"]
+    elif isinstance(forecasts, Mapping) and "forecasts" in forecasts:
+        rows = forecasts["forecasts"]  # type: ignore[assignment]
+    else:
+        rows = forecasts  # type: ignore[assignment]
 
     def _load() -> dict[str, dict[str, Any]]:
+        out: dict[str, dict[str, Any]] = {}
+        for row in rows:
+            gid = str(row["game_id"])
+            seed = sum(ord(ch) for ch in gid)
+            home_score = float(10 + (seed % 21))
+            away_score = float(10 + ((seed * 7) % 21))
+            out[gid] = {
+                "game_id": gid,
+                "season": int(row["season"]),
+                "week": int(row["week"]),
+                "home": str(row.get("home") or gid.split("_")[3]),
+                "away": str(row.get("away") or gid.split("_")[2]),
+                "home_score": home_score,
+                "away_score": away_score,
+                "source": "synthetic",
+            }
+        return out
+
+    return _load
+
+
+def schedule_outcome_loader(root: Path) -> Callable[[], dict[str, dict[str, Any]]]:
+    """Repo-relative schedule scores for 2020–21 REG496. Bound command only.
+
+    Refuses inside FOCUSED_TESTS / verify_integrate (T5151U_SKIP_NESTED_TESTS=1)
+    unless T5157U_ALLOW_REAL_LOADER=1 after a verified Cos bind.
+    """
+    if _real_loader_blocked():
+        raise Phase2OneExecRefuse(
+            "real schedule_outcome_loader(ROOT) refused inside FOCUSED_TESTS / verify_integrate"
+        )
+
+    def _load() -> dict[str, dict[str, Any]]:
+        if _real_loader_blocked():
+            raise Phase2OneExecRefuse(
+                "real schedule_outcome_loader(ROOT) refused inside FOCUSED_TESTS / verify_integrate"
+            )
         path = Path(root) / SCHEDULE_PATH
         if sha256_file(path) != SCHEDULE_SHA256:
             raise Phase2OneExecRefuse("schedule pin drifted")
@@ -252,9 +428,57 @@ def run_phase2_one_exec(
     invoke_outcome_after_gates: bool = False,
     write: bool = False,
     dest: Path | None = None,
+    cos_bind_path: Path | None = None,
+    score_flag: bool = False,
 ) -> dict[str, Any]:
     """Guarded Phase-2 runner. Default: refuse labels. Never regenerate forecasts."""
     repo = _repo_root(root)
+    code_hashes = runner_code_hashes(repo)
+    code_sha = runner_code_sha256(repo)
+    input_sha = runner_input_sha256()
+    spec_sha = runner_spec_sha256()
+    bind_record: dict[str, Any] | None = None
+    bound = False
+    allow_prior: str | None = None
+    allow_mutated = False
+
+    if score_flag and cos_bind_path is None:
+        raise Phase2OneExecRefuse("unbound --score refused — 0 reads")
+    if cos_bind_path is not None:
+        score_flag = True
+        bind_record = _verify_and_claim_cos_bind(
+            repo,
+            Path(cos_bind_path),
+            code_sha=code_sha,
+            input_sha=input_sha,
+            spec_sha=spec_sha,
+        )
+        bound = True
+        invoke_outcome_after_gates = True
+        if outcome_loader is None:
+            allow_prior = os.environ.get(ALLOW_REAL_LOADER_ENV)
+            os.environ[ALLOW_REAL_LOADER_ENV] = "1"
+            allow_mutated = True
+            try:
+                outcome_loader = OutcomeReadSpy(schedule_outcome_loader(repo))
+            except Exception as exc:
+                if allow_prior is None:
+                    os.environ.pop(ALLOW_REAL_LOADER_ENV, None)
+                else:
+                    os.environ[ALLOW_REAL_LOADER_ENV] = allow_prior
+                fail_one_run(Path(cos_bind_path), bind_record["bind_id"], str(exc))
+                raise
+
+    def _restore_allow() -> None:
+        nonlocal allow_mutated
+        if not allow_mutated:
+            return
+        if allow_prior is None:
+            os.environ.pop(ALLOW_REAL_LOADER_ENV, None)
+        else:
+            os.environ[ALLOW_REAL_LOADER_ENV] = allow_prior
+        allow_mutated = False
+
     forecasts = load_committed_forecasts(repo)
     splits = load_splits(repo)
     market = load_market_points(repo)
@@ -291,11 +515,19 @@ def run_phase2_one_exec(
         if invoke_outcome_after_gates:
             loaded = spy()
     except Phase2OneExecRefuse:
+        _restore_allow()
+        if bound and bind_record is not None:
+            fail_one_run(Path(cos_bind_path), bind_record["bind_id"], "phase2 refuse after claim")
         raise
     except Exception as exc:
+        _restore_allow()
         if getattr(spy, "reads", 0) != 0:
+            if bound and bind_record is not None:
+                fail_one_run(Path(cos_bind_path), bind_record["bind_id"], str(exc))
             raise Phase2OneExecRefuse("target scoring outcomes were read on refusal") from exc
         if invoke_outcome_after_gates:
+            if bound and bind_record is not None:
+                fail_one_run(Path(cos_bind_path), bind_record["bind_id"], str(exc))
             raise
         receipt = _receipt(
             repo,
@@ -305,11 +537,18 @@ def run_phase2_one_exec(
             scored=None,
             spy_reads=0,
             invoked=False,
+            bound=False,
+            score_flag=score_flag,
+            code_hashes=code_hashes,
+            code_sha=code_sha,
+            input_sha=input_sha,
+            spec_sha=spec_sha,
         )
         receipt["scoring_refuse"] = {"refused": True, "reason": str(exc), "outcome_loader_reads": 0}
         if write:
             _write_receipt(repo, receipt, dest=dest)
         return receipt
+    _restore_allow()
     if not invoke_outcome_after_gates:
         if getattr(spy, "reads", 0) != 0:
             raise Phase2OneExecRefuse("target scoring outcomes were read before Cos bind")
@@ -321,60 +560,84 @@ def run_phase2_one_exec(
             scored=None,
             spy_reads=0,
             invoked=False,
+            bound=False,
+            score_flag=score_flag,
+            code_hashes=code_hashes,
+            code_sha=code_sha,
+            input_sha=input_sha,
+            spec_sha=spec_sha,
         )
         if write:
             _write_receipt(repo, receipt, dest=dest)
         return receipt
 
-    if getattr(spy, "reads", 0) != 1:
-        raise Phase2OneExecRefuse("expected one post-gate outcome read")
-    outcomes = dict(loaded)
-    if not outcomes:
-        raise Phase2OneExecRefuse("positive path loaded zero target labels")
-    missing = [gid for gid in forecasts["game_ids"] if gid not in outcomes]
-    if missing:
-        raise Phase2OneExecRefuse(f"outcomes missing {len(missing)} REG496 ids")
-    if_metrics = {
-        "full496": _if_only_for_ids(
-            forecasts["forecasts"], outcomes, splits["full496"]["game_ids"], label="full496"
-        ),
-        "old437": _if_only_for_ids(
-            forecasts["forecasts"], outcomes, splits["old437"]["game_ids"], label="old437"
-        ),
-        "new59": _if_only_for_ids(
-            forecasts["forecasts"], outcomes, splits["new59"]["game_ids"], label="new59"
-        ),
-    }
-    for body in if_metrics.values():
-        _assert_finite_metrics(body)
-    market_metrics = _market_if_paired(forecasts["forecasts"], outcomes, market)
-    scored = {
-        "if_only": if_metrics,
-        "market96": market_metrics,
-        "q2": "HOLD",
-        "candidate": "HOLD",
-        "r3_stop": R3_STOP,
-        "forecasts_sha256": FORECASTS_SHA256,
-        "identity_sha256": REG496_IDENTITY_SHA256,
-        "feature_json_sha256": FEATURE_RECON_REG496_ARTIFACT_SHA256,
-        "regenerated_forecasts": False,
-        "real_eval_executed": False,
-        "nfl_green": False,
-        "cert_candidate": CERT_CANDIDATE,
-        "eval": None,
-    }
-    receipt = _receipt(
-        repo,
-        forecasts=forecasts,
-        market=market,
-        splits=splits,
-        scored=scored,
-        spy_reads=1,
-        invoked=True,
-    )
-    if write:
-        _write_receipt(repo, receipt, dest=dest)
-    return receipt
+    try:
+        if getattr(spy, "reads", 0) != 1:
+            raise Phase2OneExecRefuse("expected one post-gate outcome read")
+        outcomes = dict(loaded)
+        if not outcomes:
+            raise Phase2OneExecRefuse("positive path loaded zero target labels")
+        missing = [gid for gid in forecasts["game_ids"] if gid not in outcomes]
+        if missing:
+            raise Phase2OneExecRefuse(f"outcomes missing {len(missing)} REG496 ids")
+        if_metrics = {
+            "full496": _if_only_for_ids(
+                forecasts["forecasts"], outcomes, splits["full496"]["game_ids"], label="full496"
+            ),
+            "old437": _if_only_for_ids(
+                forecasts["forecasts"], outcomes, splits["old437"]["game_ids"], label="old437"
+            ),
+            "new59": _if_only_for_ids(
+                forecasts["forecasts"], outcomes, splits["new59"]["game_ids"], label="new59"
+            ),
+        }
+        for body in if_metrics.values():
+            _assert_finite_metrics(body)
+        market_metrics = _market_if_paired(forecasts["forecasts"], outcomes, market)
+        scored = {
+            "if_only": if_metrics,
+            "market96": market_metrics,
+            "q2": "HOLD",
+            "candidate": "HOLD",
+            "r3_stop": R3_STOP,
+            "forecasts_sha256": FORECASTS_SHA256,
+            "identity_sha256": REG496_IDENTITY_SHA256,
+            "feature_json_sha256": FEATURE_RECON_REG496_ARTIFACT_SHA256,
+            "regenerated_forecasts": False,
+            "real_eval_executed": False,
+            "nfl_green": False,
+            "cert_candidate": CERT_CANDIDATE,
+            "eval": None,
+        }
+        if bound and bind_record is not None:
+            bind_record = complete_one_run(
+                Path(cos_bind_path),
+                bind_record["bind_id"],
+                result={"n": 496, "market_n": INTERSECTION_N, "q2": "HOLD"},
+            )
+        receipt = _receipt(
+            repo,
+            forecasts=forecasts,
+            market=market,
+            splits=splits,
+            scored=scored,
+            spy_reads=1,
+            invoked=True,
+            bound=bound,
+            score_flag=score_flag,
+            code_hashes=code_hashes,
+            code_sha=code_sha,
+            input_sha=input_sha,
+            spec_sha=spec_sha,
+            bind_record=bind_record,
+        )
+        if write:
+            _write_receipt(repo, receipt, dest=dest)
+        return receipt
+    except Exception as exc:
+        if bound and bind_record is not None:
+            fail_one_run(Path(cos_bind_path), bind_record["bind_id"], str(exc))
+        raise
 
 
 def _receipt(
@@ -386,12 +649,27 @@ def _receipt(
     scored: Mapping[str, Any] | None,
     spy_reads: int,
     invoked: bool,
+    bound: bool = False,
+    score_flag: bool = False,
+    code_hashes: Mapping[str, str] | None = None,
+    code_sha: str | None = None,
+    input_sha: str | None = None,
+    spec_sha: str | None = None,
+    bind_record: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    status = (
-        "PHASE2_ONE_EXEC_TEST_SCORED"
-        if invoked
-        else "CHECKS_PASSED_AWAITING_ALEX_RE_PREFLIGHT"
-    )
+    if bound and invoked:
+        status = "PHASE2_ONE_EXEC_BOUND_SCORED"
+        stop = "STOP_BOUND_ONE_EXEC_NOT_EVAL"
+        scoring = "phase2_one_exec_bound"
+    elif invoked:
+        status = "PHASE2_ONE_EXEC_TEST_SCORED"
+        stop = "STOP_AWAITING_ALEX_RE_PREFLIGHT"
+        scoring = "phase2_one_exec_test"
+    else:
+        status = "CHECKS_PASSED_AWAITING_ALEX_RE_PREFLIGHT"
+        stop = "STOP_AWAITING_ALEX_RE_PREFLIGHT"
+        scoring = None
+    hashes = dict(code_hashes or runner_code_hashes(root))
     receipt = {
         "schema_version": SCHEMA,
         "ticket": TICKET,
@@ -400,19 +678,25 @@ def _receipt(
         "draft": True,
         "verified": False,
         "status": status,
-        "stop": "STOP_AWAITING_ALEX_RE_PREFLIGHT",
+        "stop": stop,
         "self_accept": False,
         "nfl_green": False,
         "real_eval_executed": False,
-        "cos_bind": False,
-        "score_flag": False,
+        "cos_bind": bool(bound),
+        "score_flag": bool(score_flag),
         "owner_clear_sha8": OWNER_CLEAR_SHA8,
+        "owner_t5157u_sha8": OWNER_T5157U_SHA8,
         "cos_order_return_fix_sha8": COS_ORDER_RETURN_FIX_SHA8,
+        "cos_order_t5157u_sha8": COS_ORDER_T5157U_SHA8,
         "alex_return_fix_sha8": ALEX_RETURN_FIX_SHA8,
+        "alex_return_t5157u_sha8": ALEX_RETURN_T5157U_SHA8,
         "cos_accept_return_fix_sha8": COS_ACCEPT_RETURN_FIX_SHA8,
+        "lineage_tip_255adf78": LINEAGE_TIP_255ADF78,
         "command": COMMAND,
         "forecasts_path": FORECASTS_PATH,
         "forecasts_sha256": FORECASTS_SHA256,
+        "q2_history_sha256": Q2_HISTORY_SHA256,
+        "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
         "regenerated_forecasts": False,
         "identity_sha256": REG496_IDENTITY_SHA256,
         "feature_json_sha256": FEATURE_RECON_REG496_ARTIFACT_SHA256,
@@ -432,9 +716,15 @@ def _receipt(
         },
         "outcome_loader_reads": spy_reads,
         "outcome_loader_invoked_after_gates": invoked,
+        "runner_code_hashes": hashes,
+        "runner_code_sha256": code_sha or runner_code_sha256(root),
+        "runner_input_sha256": input_sha or runner_input_sha256(),
+        "runner_spec_sha256": spec_sha or runner_spec_sha256(),
+        "one_run_bind_id": (bind_record or {}).get("bind_id") if bound else None,
+        "one_run_status": (bind_record or {}).get("status") if bound else None,
         "scored": scored,
         "eval": None,
-        "scoring": None if not invoked else "phase2_one_exec_test",
+        "scoring": scoring,
     }
     canonical = {
         k: v
@@ -447,6 +737,10 @@ def _receipt(
         ),
         "forecasts_sha256": FORECASTS_SHA256,
         "market_bytes_sha256": INTERSECTION_BYTES_SHA256,
+        "runner_code_sha256": receipt["runner_code_sha256"],
+        "runner_input_sha256": receipt["runner_input_sha256"],
+        "q2_history_sha256": Q2_HISTORY_SHA256,
+        "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
     }
     receipt["runtime"] = {"interpreter": "python3"}
     receipt["side_metadata"] = {"pytest_elapsed_semantic": False}

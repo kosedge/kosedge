@@ -3,7 +3,8 @@
 Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5155u **659cd7d9** · Cos ORDER **3e14602b**
 RETURN-FIX Cos ORDER **b51a9a10** · Alex RETURN **9332de97** ACCEPTED
-**c5574733**. HARD END 02:30 EST / 07:30Z.
+**c5574733**. t5157u Cos ORDER B **7015d5c8** · OWNER **e6cc6927** ·
+Alex RETURN **42069ef6** ACCEPTED. HARD END 02:30 EST / 07:30Z.
 
 Closed quality (do not re-review): #700 tip **12ccc482** · Cos ACCEPT
 **4b23584a** · Alex **f4147e76**. Preserve RETURN **7057e5a9**.
@@ -12,8 +13,8 @@ Reuse: #699 Package A **42ff285c** / stamp **f7ec09ee** · #700 RETURN-FIX
 Do not open a third PR. A PR **#702** is the source tip only.
 
 No merge. No prod default. No real EVAL. No GREEN. No self-ACCEPT.
-No Cos bind. No live `--score` until Alex re-PREFLIGHT.
-CERT=0. STOP for Alex re-PREFLIGHT.
+No Cos bind. No IF-only live diagnostic. Unbound `--score` / default
+refuse → 0 reads. CERT=0. STOP for Cos — no bind.
 
 Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
 stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Combine implementation
@@ -22,8 +23,9 @@ implementation tip **255adf7802830bc25814a739d62f65f095216203**. Merge conflict:
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
 **072e99e0** unchanged. One-command:
 `CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false` · focused
-tests **87 passed**. Worker A forecast freeze **PINNED**. Q2 **HOLD**.
-Phase 2 **READINESS_ONLY**.
+tests **99 passed**. Worker A forecast freeze **PINNED**. Q2 **HOLD**.
+Phase 2 **READINESS_ONLY**. R2-a/R2-b eng (synthetic loader +
+`--score --cos-bind`) on this tip; no Cos bind.
 
 ## Exact offline commands
 
@@ -106,9 +108,13 @@ Read-only bind. No produce-μ rewrite. Q2/candidate stay **HOLD**.
 | common437 IF replay           | **437 / 437** · **0 BLOCKER**                                      |
 
 Phase 2 one-exec runner is implemented and tested. Default command
-refuses labels (`outcome_loader_reads=0`). Tests may invoke the loader
-once after gates. Live `--score` refused until Cos bind. STOP for Alex
-re-PREFLIGHT.
+refuses labels (`outcome_loader_reads=0`). FOCUSED_TESTS positive path
+uses a synthetic/fixture loader — real `schedule_outcome_loader(ROOT)`
+does not run inside FOCUSED_TESTS / verify_integrate. `--score
+--cos-bind <file>` verifies bound code/input sha pins + atomic one-exec
+claim, then calls the real loader once and records runner code hashes.
+Unbound `--score` still refuses (0 reads). Q2 HOLD not lifted (A
+HISTORY-ID owns that). STOP for Cos — no bind.
 
 R3 env-hash: `Q2_HISTORY_FREEZE` / `FREEZE_MANIFEST` carry sha pins +
 repo-relative/role labels only. No `/tmp` paths, no host `present`.
@@ -118,8 +124,8 @@ Drifted on-box `0dba03ee` / `1f4f0537` replaced by env-stable
 ## Forbidden (honored)
 
 Paid pulls · 2024–26 · 2022–23 scoring · merge/deploy · secrets ·
-invented history · Stage C / R2-C / R3 changes · Cos bind · `--score` ·
-target scoring loader · ONE DEV diagnostic.
+invented history · Stage C / R2-C / R3 scientific changes · Cos bind ·
+unbound `--score` · IF-only live diagnostic · lift Q2 HOLD.
 
 ## Pins
 
@@ -140,4 +146,5 @@ target scoring loader · ONE DEV diagnostic.
 | Combine implementation | `581493080881d6363935f41c70236b5cb070b401`                                |
 | RETURN-FIX tip         | `255adf7802830bc25814a739d62f65f095216203`                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
+| t5157u Cos / OWNER / A | `7015d5c8` / `e6cc6927` / `42069ef6`                                      |
 | R2-C HOLD threshold    | `0.30` unchanged                                                          |
