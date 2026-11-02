@@ -1,0 +1,17 @@
+{
+  "season": 2026,
+  "count": 1,
+  "lines": [
+    {
+      "game_id": "synth-kei-t5178u-001",
+      "home_team": "Kansas City Chiefs",
+      "away_team": "Buffalo Bills",
+      "home_abbr": "KC",
+      "away_abbr": "BUF",
+      "start_time": "2026-09-10T20:20:00-04:00",
+      "game_date": "2026-09-10",
+      "spread_home": -3.264,
+      "total_mean": 47.551
+    }
+  ]
+}

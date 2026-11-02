@@ -9,10 +9,12 @@
 - starting_ref / base SHA: `deploy-vercel` @ **f5e3bb58ccbe5a8892fed2a01f347c2308394a2f**
 - product tree: READABLE (local checkout + `git fetch origin deploy-vercel` confirmed tip)
 - isolated write: this file + DRAFT PR only on the worker branch (not `deploy-vercel`)
-- W-FIX-B implementation: **HELD** — no consumer wiring until Worker A / Cos publishes M0 contract tip
+- W-FIX-B implementation: **HELD** until Cos forwards M0 tip and ORDERS W-FIX-B (do not poll-nag A)
+- Cos ACCEPT of this inventory tip: **585ee38c** / #706 DRAFT
+- mismatch CONFIRMED: `nfl_hhl1_capture` absent on deploy-vercel @ f5e3bb58 — wire only A's published product-lineage contract, never a disconnected demo
 - CERT=0 · IMPLEMENTED≠VERIFIED≠ACCEPTED · no merge/deploy · no access flip
 
-Peer Worker A (M0 + W-FIX-A): `bc-7972bd58-1ea0-596f-8dad-4333dbdbc003` — RUNNING at inventory time; no contract tip yet.
+Peer Worker A (M0 + W-FIX-A): `bc-7972bd58-1ea0-596f-8dad-4333dbdbc003`. B does not poll A.
 
 ## Isolated-write proof
 
@@ -85,6 +87,20 @@ W-FIX-B scope is **fair-lines API / view-model / UI / export / cache**. Sibling 
 | Honest empty | versioned **NFL** status contract (not `FAIR_LINES_HONESTY_SPORTS`) | copy common-sports enum |
 | 503 with empty reasons | unavailable (Alex X2: reason fields non-actionable, never exit-0) | treat as empty-success |
 | Unknown age / history_lagging | UNKNOWN / refused | invent FRESH/AGING/STALE thresholds |
+
+## Increment after Cos ACCEPT (no M0 types)
+
+Export policy implemented on `export_kei_lines_nfl.py` + tests. Does **not** wire M0 / #664 types.
+
+- Transport refusals RETAIN (#697 `0aad8d75` behavior: URLError/Timeout/JSONDecode → exit 1, no OUT write)
+- Empty lines / missing payload / honesty-enum empty → `unexpected_empty_payload` (NFL∉HONESTY)
+- Blank `game_id` / home / away → `blank_required_identity` (no silent skip)
+- Nonfinite / non-numeric spread or total → `malformed_numeric`
+- `count` ≠ `len(lines)` → `inconsistent_counts`
+- Error-bearing / 503-shaped body → `upstream_unavailable` (never exit-0)
+- Refuse: stderr JSON `{ok:false, actionable:false, statusContract:nfl-export-status-v1}`; prior OUT preserved
+- Fully valid: atomic `os.replace`; leftover tmp cleaned
+- TS stubs: NFL∉HONESTY source-lock; authorized closed GET = 503 unavailable, `fetchNflFairLines` not called; UI `!res.ok` ≠ ready empty
 
 ## Holds (this worker)
 
