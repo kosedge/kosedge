@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SEASONS="${SEASONS:-2023,2024,2025,2026}"
 MODEL_SERVICE_URL="${MODEL_SERVICE_URL:-http://127.0.0.1:8000}"
 MODEL_VERSION="${MODEL_VERSION:-nfl-v1.5-matchup-sim}"
+: "${INTERNAL_API_SECRET:?INTERNAL_API_SECRET is required to call /api/jobs}"
 
 echo "[preseason] Running data ownership hardening for seasons=${SEASONS}"
 (
@@ -48,6 +49,7 @@ echo "[preseason] Rematerializing matchup + player projection features"
 echo "[preseason] Kicking off launch hardening cycle for model=${MODEL_VERSION}"
 curl --fail --silent --show-error \
   --request POST \
+  --header "x-kosedge-secret: ${INTERNAL_API_SECRET}" \
   "${MODEL_SERVICE_URL}/api/jobs/run-nfl-launch-hardening?model_version=${MODEL_VERSION}&days_ahead=45&outcomes_lookback_days=180&backtest_lookback_days=365&tuning_lookback_days=365&simulations=7000"
 
 echo "[preseason] Completed bootstrap trigger"

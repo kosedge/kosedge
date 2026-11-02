@@ -6,6 +6,7 @@ SEASONS="${SEASONS:-2026}"
 WEEK="${WEEK:-}"
 MODEL_SERVICE_URL="${MODEL_SERVICE_URL:-http://127.0.0.1:8000}"
 MODEL_VERSION="${MODEL_VERSION:-nfl-v1.5-matchup-sim}"
+: "${INTERNAL_API_SECRET:?INTERNAL_API_SECRET is required to call /api/jobs}"
 
 echo "[weekly] Refreshing owned NFL tables (seasons=${SEASONS} week=${WEEK:-all})"
 (
@@ -27,6 +28,7 @@ echo "[weekly] Refreshing owned NFL tables (seasons=${SEASONS} week=${WEEK:-all}
 echo "[weekly] Running simulation hardening cycle"
 curl --fail --silent --show-error \
   --request POST \
+  --header "x-kosedge-secret: ${INTERNAL_API_SECRET}" \
   "${MODEL_SERVICE_URL}/api/jobs/run-nfl-launch-hardening?model_version=${MODEL_VERSION}&days_ahead=14&outcomes_lookback_days=90&backtest_lookback_days=300&tuning_lookback_days=300&simulations=6000"
 
 echo "[weekly] Trigger complete"
