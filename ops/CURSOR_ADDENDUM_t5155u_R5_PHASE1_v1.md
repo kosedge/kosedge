@@ -151,6 +151,7 @@ unbound `--score` · IF-only live diagnostic · lift Q2 HOLD.
 | Combine implementation | `581493080881d6363935f41c70236b5cb070b401`                                |
 | RETURN-FIX tip         | `255adf7802830bc25814a739d62f65f095216203`                                |
 | R2 eng tip             | `bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45`                                |
+| HISTORY-ID integrate   | `05fbb36e095e18a801a003349b116f45f54fd13c`                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
 | t5157u Cos / OWNER / A | `7015d5c8` / `e6cc6927` / `42069ef6`                                      |
 | HISTORY-ID tip / stamp | `f7715dce8` / `8a7895b99`                                                 |
