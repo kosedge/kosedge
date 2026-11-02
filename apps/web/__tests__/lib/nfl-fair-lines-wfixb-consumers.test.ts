@@ -47,11 +47,11 @@ vi.mock("@/lib/nfl-fair-lines", async (importOriginal) => {
 
 import { getProAccessState } from "@/lib/auth/pro";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import { GET as getNflFair } from "@/app/api/nfl/fair-lines/route";
 import {
-  GET as getNflFair,
   nflFairLinesCustomerUnavailableResponse,
   projectFixtureFairLinesApiResponse,
-} from "@/app/api/nfl/fair-lines/route";
+} from "@/lib/nfl-fair-lines-fixture-api";
 
 const webRoot = path.join(__dirname, "../..");
 const repoRoot = path.join(webRoot, "../..");
@@ -104,8 +104,14 @@ describe("t5178u W-FIX-B same-contract consumer wiring", () => {
   });
 
   it("wires contract consume into API / client / export / cache / view-model files", () => {
-    expect(readWeb("app/api/nfl/fair-lines/route.ts")).toContain(
+    expect(readWeb("lib/nfl-fair-lines-fixture-api.ts")).toContain(
       "projectFixtureFairLinesApiResponse",
+    );
+    expect(readWeb("app/api/nfl/fair-lines/route.ts")).not.toContain(
+      "projectFixtureFairLinesApiResponse",
+    );
+    expect(readWeb("app/api/nfl/fair-lines/route.ts")).toContain(
+      "nflFairLinesCustomerUnavailableResponse",
     );
     expect(readWeb("app/api/nfl/fair-lines/route.ts")).toContain(
       "persistOdds: false",

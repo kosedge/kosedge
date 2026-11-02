@@ -1,47 +1,14 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
-import {
-  fetchNflFairLines,
-  projectFixtureFairLinesBoard,
-  type FixtureFairLinesBoard,
-  type FixtureFairLinesProjectionInput,
-} from "@/lib/nfl-fair-lines";
+import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import { nflFairLinesCustomerUnavailableResponse } from "@/lib/nfl-fair-lines-fixture-api";
 import {
   pageDataCacheHeaders,
-  pageDataCacheHeadersForFixture,
   pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
-import {
-  isNflFairLinesCustomerSurfaceClosed,
-  nflEdgeBoardAssembleUnavailablePayload,
-} from "@/lib/cfb-edge-board-public";
-import { consumeFixtureEligibility } from "@/lib/nfl-fixture-assembly-contract";
-
-/** Closed customer surface — 503 unavailable, never 200 empty-success. */
-export function nflFairLinesCustomerUnavailableResponse(): NextResponse {
-  return NextResponse.json(nflEdgeBoardAssembleUnavailablePayload(), {
-    status: 503,
-    headers: pageDataCacheHeaders({ cacheable: false }),
-  });
-}
-
-/**
- * Fixture-channel API projection of the SAME t5178u contract.
- * Isolated from customer GET. ALLOW_FIXTURE is not subscriber-consumable.
- */
-export function projectFixtureFairLinesApiResponse(
-  input: FixtureFairLinesProjectionInput,
-): { status: number; board: FixtureFairLinesBoard; headers: Record<string, string> } {
-  consumeFixtureEligibility(input.eligibility, input.consumer);
-  const board = projectFixtureFairLinesBoard(input);
-  return {
-    status: 200,
-    board,
-    headers: pageDataCacheHeadersForFixture(board.eligibility),
-  };
-}
+import { isNflFairLinesCustomerSurfaceClosed } from "@/lib/cfb-edge-board-public";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */

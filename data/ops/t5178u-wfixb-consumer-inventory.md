@@ -111,7 +111,7 @@ Wired the SAME contract into actual consumers:
 
 | Consumer | Function |
 |---|---|
-| API | `projectFixtureFairLinesApiResponse` in `route.ts`; customer GET still `nflFairLinesCustomerUnavailableResponse` (503) + `persistOdds: false` |
+| API | `projectFixtureFairLinesApiResponse` + `nflFairLinesCustomerUnavailableResponse` in `lib/nfl-fair-lines-fixture-api.ts`; customer GET still 503 helper + `persistOdds: false` |
 | Board | `projectFixtureFairLinesBoard` in `nfl-fair-lines.ts` |
 | UI | `assertCustomerFairLinesViewModel` + `projectFixtureFairLinesViewModel`; client refuses ALLOW_FIXTURE as subscriber |
 | View-model | `keiGamesFromFixtureFairLines` in `resolve-kei-lines.ts` |

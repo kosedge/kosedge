@@ -56,14 +56,18 @@ describe("t5178u NFL∉HONESTY + 503≠empty-success (no M0 types)", () => {
 
   it("NFL fair-lines route does not import the common-sports honesty helper", () => {
     const api = readWeb("app/api/nfl/fair-lines/route.ts");
+    const fixtureApi = readWeb("lib/nfl-fair-lines-fixture-api.ts");
     expect(api).not.toContain("fair-lines-api-board");
     expect(api).not.toContain("honestEmptyFairLinesBoard");
     expect(api).not.toContain("FAIR_LINES_HONESTY_SPORTS");
     expect(api).not.toContain("FAIR_LINES_HONEST_EMPTY");
     expect(api).toContain("isNflFairLinesCustomerSurfaceClosed");
-    expect(api).toContain("nflEdgeBoardAssembleUnavailablePayload");
+    expect(api).toContain("nflFairLinesCustomerUnavailableResponse");
     expect(api).toContain("persistOdds: false");
-    expect(api).toContain("status: 503");
+    expect(api).not.toContain("export function nflFairLinesCustomerUnavailableResponse");
+    expect(api).not.toContain("export function projectFixtureFairLinesApiResponse");
+    expect(fixtureApi).toContain("nflEdgeBoardAssembleUnavailablePayload");
+    expect(fixtureApi).toContain("status: 503");
   });
 
   it("closed customer surface stays closed", () => {
