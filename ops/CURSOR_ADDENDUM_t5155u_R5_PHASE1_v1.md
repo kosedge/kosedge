@@ -20,7 +20,9 @@ Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
 stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Combine implementation
 tip **581493080881d6363935f41c70236b5cb070b401**. RETURN-FIX
 implementation tip **255adf7802830bc25814a739d62f65f095216203**. R2 eng tip
-**bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45**. Merge conflict: only
+**bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45**. HISTORY-ID #703 tip
+**f7715dce8ffaaee11fb5236c1d7873aed27cd7c1** merged onto this #701 head.
+Merge conflict: only
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
 **072e99e0** unchanged. One-command:
 `CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false` · focused
@@ -104,8 +106,9 @@ Read-only bind. No produce-μ rewrite. Q2/candidate stay **HOLD**.
 | Q2 history freeze (R3)        | `07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966` |
 | Freeze manifest (R3 rewrite)  | `36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38` |
 | IF finite                     | **496**                                                            |
-| Q2 HOLD                       | **496** · 2013–19 REG unproven · do not invent Q2                  |
-| Candidate finite              | **0** (HOLD)                                                       |
+| Q2 HOLD artifact              | **496** on IF496 pin `96d3aa6f` (immutable, not overwritten)       |
+| Q2 completed                  | **496** · `eeb6fff7…` · initial_prior=None · 0.5 carry             |
+| Candidate completed           | **496** · `2f9a73e6…` · `0.5*IF+0.5*Q2`                            |
 | common437 IF replay           | **437 / 437** · **0 BLOCKER**                                      |
 
 Phase 2 one-exec runner is implemented and tested. Default command
@@ -114,8 +117,9 @@ uses a synthetic/fixture loader — real `schedule_outcome_loader(ROOT)`
 does not run inside FOCUSED_TESTS / verify_integrate. `--score
 --cos-bind <file>` verifies bound code/input sha pins + atomic one-exec
 claim, then calls the real loader once and records runner code hashes.
-Unbound `--score` still refuses (0 reads). Q2 HOLD not lifted (A
-HISTORY-ID owns that). STOP for Cos — no bind.
+Unbound `--score` still refuses (0 reads). Output contract is now
+candidate+IF+market (Q2/candidate **COMPLETED**). STOP for Alex
+completed-candidate PREFLIGHT. No Cos bind / no live `--score`.
 
 R3 env-hash: `Q2_HISTORY_FREEZE` / `FREEZE_MANIFEST` carry sha pins +
 repo-relative/role labels only. No `/tmp` paths, no host `present`.
@@ -149,4 +153,9 @@ unbound `--score` · IF-only live diagnostic · lift Q2 HOLD.
 | R2 eng tip             | `bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45`                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
 | t5157u Cos / OWNER / A | `7015d5c8` / `e6cc6927` / `42069ef6`                                      |
+| HISTORY-ID tip / stamp | `f7715dce8` / `8a7895b99`                                                 |
+| IDENTITY_FREEZE        | `561ae3e1f0a0b99201f3b4a0a00d5da13e75ec7924ad9b6b67218c802aef8b3f`        |
+| REG / POST 2013–19     | `9aad6f47…` / `e43390f9…`                                                 |
+| Q2_COMPLETED           | `eeb6fff73383289c1e69a1a1b30f6df5eed38c7201c58ca9de16feaa8f06cc04`        |
+| CANDIDATE_COMPLETED    | `2f9a73e68d66878b984d5ae9e2e6fc01cfe16e45b0da4ad5389f90aabe9a87c7`        |
 | R2-C HOLD threshold    | `0.30` unchanged                                                          |

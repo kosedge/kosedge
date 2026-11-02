@@ -13,13 +13,17 @@ from src.services.nfl_t5107u.evaluator import BOOT_B, BOOT_SEED, MIN_N_REPORT
 from src.services.nfl_t5107u.one_run import STATUS_CONSUMED, bind_one_run, load_one_run
 from src.services.nfl_t5107u.r5_496_freeze import freeze_q2_history_sources
 from src.services.nfl_t5107u.r5_phase2_one_exec import (
+    CANDIDATE_COMPLETED_SHA256,
     FORECASTS_SHA256,
+    IDENTITY_FREEZE_SHA256,
     INTERSECTION_BYTES_SHA256,
+    Q2_COMPLETED_SHA256,
     Q2_HISTORY_SHA256,
     REG496_IDENTITY_SHA256,
     Phase2OneExecRefuse,
     bind_phase2_one_exec_fixture,
     load_committed_forecasts,
+    load_completed_forecasts,
     run_phase2_one_exec,
     runner_code_hashes,
     runner_code_sha256,
@@ -75,6 +79,26 @@ def test_committed_forecasts_never_regenerated():
     assert payload["n_candidate_finite"] == 0
 
 
+def test_completed_q2_candidate_pins_copy_if496():
+    payload = load_completed_forecasts(ROOT)
+    assert payload["if_forecasts_sha256"] == FORECASTS_SHA256
+    assert payload["if_regenerated"] is False
+    assert payload["n_q2_finite"] == 496
+    assert payload["n_q2_hold"] == 0
+    assert payload["n_candidate_finite"] == 496
+    assert payload["initial_prior_2013"] is None
+    assert payload["candidate"] == "0.5*IF+0.5*Q2"
+    assert sha256_file(ROOT / "data/ops/nfl-t5157u-r5-history-id/Q2_COMPLETED_FREEZE.json") == (
+        Q2_COMPLETED_SHA256
+    )
+    assert sha256_file(
+        ROOT / "data/ops/nfl-t5157u-r5-history-id/CANDIDATE_COMPLETED_FREEZE.json"
+    ) == CANDIDATE_COMPLETED_SHA256
+    assert sha256_file(ROOT / "data/ops/nfl-t5157u-r5-history-id/IDENTITY_FREEZE.json") == (
+        IDENTITY_FREEZE_SHA256
+    )
+
+
 def test_phase2_refusal_reads_zero_target_labels():
     spy = OutcomeReadSpy(lambda: {"2020_02_CIN_CLE": {"home_score": 40, "away_score": 0}})
     receipt = run_phase2_one_exec(
@@ -86,11 +110,17 @@ def test_phase2_refusal_reads_zero_target_labels():
     assert spy.reads == 0
     assert receipt["outcome_loader_reads"] == 0
     assert receipt["scored"] is None
-    assert receipt["q2"] == "HOLD"
+    assert receipt["q2"] == "COMPLETED"
+    assert receipt["candidate"] == "COMPLETED"
     assert receipt["forecasts_sha256"] == FORECASTS_SHA256
+    assert receipt["q2_completed_sha256"] == Q2_COMPLETED_SHA256
+    assert receipt["candidate_completed_sha256"] == CANDIDATE_COMPLETED_SHA256
+    assert receipt["identity_freeze_sha256"] == IDENTITY_FREEZE_SHA256
+    assert receipt["n_q2_finite"] == 496
+    assert receipt["n_candidate_finite"] == 496
     assert receipt["cos_bind"] is False
     assert receipt["score_flag"] is False
-    assert receipt["stop"] == "STOP_AWAITING_ALEX_RE_PREFLIGHT"
+    assert receipt["stop"] == "STOP_AWAITING_ALEX_COMPLETED_CANDIDATE_PREFLIGHT"
     assert receipt["q2_history_sha256"].startswith("07bbc340")
     assert receipt["freeze_manifest_sha256"].startswith("36f051c4")
     assert receipt["runner_code_sha256"] == runner_code_sha256(ROOT)
@@ -108,20 +138,26 @@ def test_phase2_positive_invokes_loader_once_if_only_and_market96():
     assert loader.reads == 1
     assert receipt["outcome_loader_reads"] == 1
     scored = receipt["scored"]
-    assert scored["q2"] == "HOLD"
-    assert scored["candidate"] == "HOLD"
+    assert scored["q2"] == "COMPLETED"
+    assert scored["candidate"] == "COMPLETED"
     assert scored["regenerated_forecasts"] is False
     assert scored["forecasts_sha256"] == FORECASTS_SHA256
+    assert scored["q2_completed_sha256"] == Q2_COMPLETED_SHA256
+    assert scored["candidate_completed_sha256"] == CANDIDATE_COMPLETED_SHA256
     for name, n in (("full496", 496), ("old437", 437), ("new59", 59)):
         body = scored["if_only"][name]
         assert body["n"] == n
-        assert body["q2"] == "HOLD"
-        assert body["candidate"] == "HOLD"
-        assert body["mae_q2"] is None
-        assert body["mae_candidate"] is None
+        assert body["q2"] == "COMPLETED"
+        assert body["candidate"] == "COMPLETED"
+        assert body["mae_q2"] == pytest.approx(body["mae_q2"])
+        assert body["mae_candidate"] == pytest.approx(body["mae_candidate"])
+        assert body["rmse_q2"] >= 0
+        assert body["rmse_candidate"] >= 0
         assert body["mae_if"] == pytest.approx(body["mae_if"])
         assert body["rmse_if"] >= 0
         assert isinstance(body["bias_if"], float)
+        assert isinstance(body["bias_q2"], float)
+        assert isinstance(body["bias_candidate"], float)
     market = scored["market96"]
     assert market["n"] == 96
     assert market["bytes_sha256"] == INTERSECTION_BYTES_SHA256
@@ -135,6 +171,10 @@ def test_phase2_positive_invokes_loader_once_if_only_and_market96():
     assert MIN_N_REPORT == 100
     assert market["nfl_green"] is False
     assert "GREEN" in market["n100_guidance"]
+    assert market["q2"] == "COMPLETED"
+    assert market["candidate"] == "COMPLETED"
+    assert isinstance(market["mean_signed_diff_candidate_vs_market"], float)
+    assert market["bootstrap_game_candidate"]["B"] == BOOT_B
     assert sha256_file(ROOT / "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json") == (
         FORECASTS_SHA256
     )
@@ -245,15 +285,15 @@ def test_cos_bind_fixture_claims_once_then_refuses_second(tmp_path):
     assert receipt["outcome_loader_reads"] == 1
     assert receipt["cos_bind"] is True
     assert receipt["score_flag"] is True
-    assert receipt["q2"] == "HOLD"
-    assert receipt["candidate"] == "HOLD"
+    assert receipt["q2"] == "COMPLETED"
+    assert receipt["candidate"] == "COMPLETED"
     assert receipt["one_run_bind_id"] == bind["bind_id"]
     assert receipt["one_run_status"] == STATUS_CONSUMED
     assert receipt["runner_code_sha256"] == runner_code_sha256(ROOT)
     assert receipt["hashes"]["runner_code_sha256"] == receipt["runner_code_sha256"]
     assert receipt["scored"]["if_only"]["full496"]["n"] == 496
     assert receipt["scored"]["market96"]["n"] == 96
-    assert receipt["scored"]["q2"] == "HOLD"
+    assert receipt["scored"]["q2"] == "COMPLETED"
     assert load_one_run(tmp_path / "ONE_RUN.json")["status"] == STATUS_CONSUMED
 
     spy2 = OutcomeReadSpy(synthetic_outcome_loader(root=ROOT))

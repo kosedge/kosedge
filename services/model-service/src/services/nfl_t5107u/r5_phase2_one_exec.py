@@ -73,6 +73,27 @@ FORECASTS_PATH = "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json"
 FORECASTS_SHA256 = "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
 Q2_HISTORY_SHA256 = "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
 FREEZE_MANIFEST_SHA256 = "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+COMPLETED_FORECASTS_PATH = "data/ops/nfl-t5157u-r5-history-id/FORECASTS_DEV_R5_496_Q2_COMPLETED.json"
+COMPLETED_FORECASTS_SHA256 = (
+    "f4b970f0138a5e2c5f1496711220282650ce4d79f9ae62aeecc6473cae535171"
+)
+Q2_COMPLETED_PATH = "data/ops/nfl-t5157u-r5-history-id/Q2_COMPLETED_FREEZE.json"
+Q2_COMPLETED_SHA256 = "eeb6fff73383289c1e69a1a1b30f6df5eed38c7201c58ca9de16feaa8f06cc04"
+CANDIDATE_COMPLETED_PATH = "data/ops/nfl-t5157u-r5-history-id/CANDIDATE_COMPLETED_FREEZE.json"
+CANDIDATE_COMPLETED_SHA256 = (
+    "2f9a73e68d66878b984d5ae9e2e6fc01cfe16e45b0da4ad5389f90aabe9a87c7"
+)
+IDENTITY_FREEZE_PATH = "data/ops/nfl-t5157u-r5-history-id/IDENTITY_FREEZE.json"
+IDENTITY_FREEZE_SHA256 = "561ae3e1f0a0b99201f3b4a0a00d5da13e75ec7924ad9b6b67218c802aef8b3f"
+REG_2013_2019_IDENTITY_SHA256 = (
+    "9aad6f473fe6d32bf33466a47d80968dfdf8c8bd8ab8db0bca35e0972d1043a0"
+)
+POST_2013_2019_IDENTITY_SHA256 = (
+    "e43390f94e5b65204014ea588bbc9b6b4b880b6e28227a58e7cbc30ee765444f"
+)
+HISTORY_CHOICE_SHA256 = "679d24283869ccf6b0a2b434efa200e92fd3e2c12a98c446da7d8f968da913b7"
+WORKER_A_HISTORY_TIP = "f7715dce8ffaaee11fb5236c1d7873aed27cd7c1"
+WORKER_A_HISTORY_STAMP = "8a7895b9982c155e04298a34fe66e4e59da19fad"
 SPLIT_PATH = "data/ops/nfl-t5155u-r5-496-freeze/SPLIT_SCAFFOLDING.json"
 MARKET_FREEZE_PATH = "data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json"
 OUT_DIR = Path("data/ops/nfl-t5155u-r5-phase2")
@@ -118,6 +139,12 @@ def runner_input_pin_bundle() -> dict[str, str]:
         "forecasts_sha256": FORECASTS_SHA256,
         "q2_history_sha256": Q2_HISTORY_SHA256,
         "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
+        "completed_forecasts_sha256": COMPLETED_FORECASTS_SHA256,
+        "q2_completed_sha256": Q2_COMPLETED_SHA256,
+        "candidate_completed_sha256": CANDIDATE_COMPLETED_SHA256,
+        "identity_freeze_sha256": IDENTITY_FREEZE_SHA256,
+        "reg_2013_2019_identity_sha256": REG_2013_2019_IDENTITY_SHA256,
+        "post_2013_2019_identity_sha256": POST_2013_2019_IDENTITY_SHA256,
         "market_bytes_sha256": INTERSECTION_BYTES_SHA256,
         "market_identity_sha256": INTERSECTION_IDENTITY_SHA256,
         "schedule_sha256": SCHEDULE_SHA256,
@@ -140,10 +167,13 @@ def runner_spec_sha256() -> str:
                 "forecasts_sha256": FORECASTS_SHA256,
                 "q2_history_sha256": Q2_HISTORY_SHA256,
                 "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
+                "q2_completed_sha256": Q2_COMPLETED_SHA256,
+                "candidate_completed_sha256": CANDIDATE_COMPLETED_SHA256,
+                "identity_freeze_sha256": IDENTITY_FREEZE_SHA256,
                 "market_bytes_sha256": INTERSECTION_BYTES_SHA256,
                 "identity_sha256": REG496_IDENTITY_SHA256,
-                "q2": "HOLD",
-                "candidate": "HOLD",
+                "q2": "COMPLETED",
+                "candidate": "COMPLETED",
             },
             sort_keys=True,
             separators=(",", ":"),
@@ -212,6 +242,55 @@ def load_committed_forecasts(root: Path) -> dict[str, Any]:
         raise Phase2OneExecRefuse("forecasts Q2 HOLD drifted")
     if int(payload.get("n_candidate_finite") or 0) != 0:
         raise Phase2OneExecRefuse("forecasts invented candidate — refuse")
+    return payload
+
+
+def load_completed_forecasts(root: Path) -> dict[str, Any]:
+    """Completed Q2/candidate overlay. IF bytes copied from pin 96d3aa6f."""
+    path = Path(root) / COMPLETED_FORECASTS_PATH
+    digest = sha256_file(path)
+    if digest != COMPLETED_FORECASTS_SHA256:
+        raise Phase2OneExecRefuse(
+            f"completed FORECASTS sha {digest} != pin f4b970f0 — do not regenerate"
+        )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("if_forecasts_sha256") != FORECASTS_SHA256:
+        raise Phase2OneExecRefuse("completed forecasts drifted from IF496 96d3aa6f")
+    if payload.get("if_regenerated") is True:
+        raise Phase2OneExecRefuse("completed forecasts regenerated IF — refuse")
+    if int(payload.get("n_if_finite") or 0) != 496:
+        raise Phase2OneExecRefuse("completed n_if_finite != 496")
+    if int(payload.get("n_q2_finite") or 0) != 496 or int(payload.get("n_q2_hold") or 0) != 0:
+        raise Phase2OneExecRefuse("completed Q2 not 496 finite / 0 HOLD")
+    if int(payload.get("n_candidate_finite") or 0) != 496:
+        raise Phase2OneExecRefuse("completed candidate n != 496")
+    if payload.get("initial_prior_2013") is not None:
+        raise Phase2OneExecRefuse("completed initial_prior_2013 must be None")
+    if payload.get("candidate") != "0.5*IF+0.5*Q2":
+        raise Phase2OneExecRefuse("completed candidate formula drifted")
+    hold = load_committed_forecasts(root)
+    hold_if = {str(row["game_id"]): row["m_if"] for row in hold["forecasts"]}
+    for row in payload["forecasts"]:
+        gid = str(row["game_id"])
+        if row.get("m_if") != hold_if.get(gid):
+            raise Phase2OneExecRefuse(f"completed IF drifted vs 96d3aa6f for {gid}")
+        if row.get("m_q2") is None or not _finite(row.get("m_q2")):
+            raise Phase2OneExecRefuse(f"completed Q2 missing for {gid}")
+        if row.get("m_candidate") is None or not _finite(row.get("m_candidate")):
+            raise Phase2OneExecRefuse(f"completed candidate missing for {gid}")
+    for rel, expected in (
+        (Q2_COMPLETED_PATH, Q2_COMPLETED_SHA256),
+        (CANDIDATE_COMPLETED_PATH, CANDIDATE_COMPLETED_SHA256),
+        (IDENTITY_FREEZE_PATH, IDENTITY_FREEZE_SHA256),
+    ):
+        digest = sha256_file(Path(root) / rel)
+        if digest != expected:
+            raise Phase2OneExecRefuse(f"{rel} sha {digest} != pin {expected[:8]}")
+    identity = json.loads((Path(root) / IDENTITY_FREEZE_PATH).read_text(encoding="utf-8"))
+    if identity.get("identity_sha256") != REG_2013_2019_IDENTITY_SHA256:
+        raise Phase2OneExecRefuse("REG 2013–19 identity drifted from 9aad6f47")
+    if identity.get("post_identity_sha256") != POST_2013_2019_IDENTITY_SHA256:
+        raise Phase2OneExecRefuse("POST 2013–19 identity drifted from e43390f9")
     return payload
 
 
@@ -313,7 +392,7 @@ def schedule_outcome_loader(root: Path) -> Callable[[], dict[str, dict[str, Any]
     return _load
 
 
-def _if_only_for_ids(
+def _arm_metrics_for_ids(
     forecasts: Sequence[Mapping[str, Any]],
     outcomes: Mapping[str, Mapping[str, Any]],
     ids: Sequence[str],
@@ -321,42 +400,48 @@ def _if_only_for_ids(
     label: str,
 ) -> dict[str, Any]:
     by = {str(row["game_id"]): row for row in forecasts}
-    errors: list[float] = []
+    err_if: list[float] = []
+    err_q2: list[float] = []
+    err_c: list[float] = []
     n_by: Counter[str] = Counter()
     for gid in ids:
         row = by.get(gid)
         out = outcomes.get(gid)
         if row is None or out is None:
             raise Phase2OneExecRefuse(f"{label} missing forecast or outcome for {gid}")
-        if row.get("q2_status") != "HOLD" or row.get("m_q2") is not None:
-            raise Phase2OneExecRefuse(f"{label} invented Q2 for {gid}")
-        if row.get("m_candidate") is not None:
-            raise Phase2OneExecRefuse(f"{label} invented candidate for {gid}")
-        m_if = row.get("m_if")
+        if row.get("q2_status") == "HOLD" or row.get("m_q2") is None:
+            raise Phase2OneExecRefuse(f"{label} Q2 not completed for {gid}")
+        if row.get("m_candidate") is None:
+            raise Phase2OneExecRefuse(f"{label} candidate not completed for {gid}")
+        m_if, m_q2, m_c = row.get("m_if"), row.get("m_q2"), row.get("m_candidate")
         if m_if is None or not _finite(m_if):
             raise Phase2OneExecRefuse(f"{label} IF not finite for {gid}")
+        if not _finite(m_q2) or not _finite(m_c):
+            raise Phase2OneExecRefuse(f"{label} Q2/candidate not finite for {gid}")
         actual = float(out["home_score"]) - float(out["away_score"])
         if not math.isfinite(actual):
             raise Phase2OneExecRefuse(f"{label} actual not finite for {gid}")
-        errors.append(float(m_if) - actual)
+        err_if.append(float(m_if) - actual)
+        err_q2.append(float(m_q2) - actual)
+        err_c.append(float(m_c) - actual)
         n_by[str(row["season"])] += 1
-    if len(errors) != len(ids):
-        raise Phase2OneExecRefuse(f"{label} n={len(errors)} != {len(ids)}")
+    if len(err_if) != len(ids):
+        raise Phase2OneExecRefuse(f"{label} n={len(err_if)} != {len(ids)}")
     return {
         "label": label,
-        "n": len(errors),
+        "n": len(err_if),
         "n_by_season": dict(sorted(n_by.items())),
-        "mae_if": paired_mae(errors),
-        "rmse_if": paired_rmse(errors),
-        "bias_if": paired_bias(errors),
-        "q2": "HOLD",
-        "candidate": "HOLD",
-        "mae_q2": None,
-        "rmse_q2": None,
-        "bias_q2": None,
-        "mae_candidate": None,
-        "rmse_candidate": None,
-        "bias_candidate": None,
+        "mae_if": paired_mae(err_if),
+        "rmse_if": paired_rmse(err_if),
+        "bias_if": paired_bias(err_if),
+        "mae_q2": paired_mae(err_q2),
+        "rmse_q2": paired_rmse(err_q2),
+        "bias_q2": paired_bias(err_q2),
+        "mae_candidate": paired_mae(err_c),
+        "rmse_candidate": paired_rmse(err_c),
+        "bias_candidate": paired_bias(err_c),
+        "q2": "COMPLETED",
+        "candidate": "COMPLETED",
         "invented_q2": False,
     }
 
@@ -369,6 +454,7 @@ def _market_if_paired(
     by = {str(row["game_id"]): row for row in forecasts}
     points = {str(row["game_id"]): row for row in market["games"]}
     diffs: list[float] = []
+    diffs_c: list[float] = []
     clusters: list[str] = []
     ids = list(market["game_ids"])
     if len(ids) != INTERSECTION_N:
@@ -379,11 +465,15 @@ def _market_if_paired(
         point = points[gid]
         actual = float(out["home_score"]) - float(out["away_score"])
         m_if = float(row["m_if"])
+        m_c = float(row["m_candidate"])
         m_mkt = float(point["home_margin"])
         diffs.append(signed_abs_loss(m_if, actual) - signed_abs_loss(m_mkt, actual))
+        diffs_c.append(signed_abs_loss(m_c, actual) - signed_abs_loss(m_mkt, actual))
         clusters.append(f"{int(row['season'])}-{int(row['week']):02d}")
     game = bootstrap_ci(diffs, stat=mean_stat)
     week = bootstrap_ci(diffs, stat=mean_stat, clusters=clusters)
+    game_c = bootstrap_ci(diffs_c, stat=mean_stat)
+    week_c = bootstrap_ci(diffs_c, stat=mean_stat, clusters=clusters)
     n_clusters = len(set(clusters))
     klass = reporting_class(len(diffs))
     return {
@@ -392,8 +482,11 @@ def _market_if_paired(
         "bytes_sha256": INTERSECTION_BYTES_SHA256,
         "identity_sha256": INTERSECTION_IDENTITY_SHA256,
         "mean_signed_diff_if_vs_market": mean_stat(diffs),
+        "mean_signed_diff_candidate_vs_market": mean_stat(diffs_c),
         "bootstrap_game": game,
         "bootstrap_season_week": week,
+        "bootstrap_game_candidate": game_c,
+        "bootstrap_season_week_candidate": week_c,
         "method": "MEAN signed paired absolute-loss difference L_if−L_market",
         "B": BOOT_B,
         "seed": BOOT_SEED,
@@ -409,14 +502,24 @@ def _market_if_paired(
         "reporting_class": klass,
         "n100_guidance": "n<100 DESCRIPTIVE_ONLY — not GREEN",
         "nfl_green": False,
-        "q2": "HOLD",
-        "candidate": "HOLD",
+        "q2": "COMPLETED",
+        "candidate": "COMPLETED",
         "eval": None,
     }
 
 
 def _assert_finite_metrics(body: Mapping[str, Any]) -> None:
-    for key in ("mae_if", "rmse_if", "bias_if"):
+    for key in (
+        "mae_if",
+        "rmse_if",
+        "bias_if",
+        "mae_q2",
+        "rmse_q2",
+        "bias_q2",
+        "mae_candidate",
+        "rmse_candidate",
+        "bias_candidate",
+    ):
         if not _finite(body[key]):
             raise Phase2OneExecRefuse(f"{body.get('label')} {key} not finite")
 
@@ -480,6 +583,7 @@ def run_phase2_one_exec(
         allow_mutated = False
 
     forecasts = load_committed_forecasts(repo)
+    completed = load_completed_forecasts(repo)
     splits = load_splits(repo)
     market = load_market_points(repo)
     ids = expected_profile_ids(PROFILE_FEATURE_RECON_REG496, repo)
@@ -532,6 +636,7 @@ def run_phase2_one_exec(
         receipt = _receipt(
             repo,
             forecasts=forecasts,
+            completed=completed,
             market=market,
             splits=splits,
             scored=None,
@@ -555,6 +660,7 @@ def run_phase2_one_exec(
         receipt = _receipt(
             repo,
             forecasts=forecasts,
+            completed=completed,
             market=market,
             splits=splits,
             scored=None,
@@ -581,26 +687,31 @@ def run_phase2_one_exec(
         if missing:
             raise Phase2OneExecRefuse(f"outcomes missing {len(missing)} REG496 ids")
         if_metrics = {
-            "full496": _if_only_for_ids(
-                forecasts["forecasts"], outcomes, splits["full496"]["game_ids"], label="full496"
+            "full496": _arm_metrics_for_ids(
+                completed["forecasts"], outcomes, splits["full496"]["game_ids"], label="full496"
             ),
-            "old437": _if_only_for_ids(
-                forecasts["forecasts"], outcomes, splits["old437"]["game_ids"], label="old437"
+            "old437": _arm_metrics_for_ids(
+                completed["forecasts"], outcomes, splits["old437"]["game_ids"], label="old437"
             ),
-            "new59": _if_only_for_ids(
-                forecasts["forecasts"], outcomes, splits["new59"]["game_ids"], label="new59"
+            "new59": _arm_metrics_for_ids(
+                completed["forecasts"], outcomes, splits["new59"]["game_ids"], label="new59"
             ),
         }
         for body in if_metrics.values():
             _assert_finite_metrics(body)
-        market_metrics = _market_if_paired(forecasts["forecasts"], outcomes, market)
+        market_metrics = _market_if_paired(completed["forecasts"], outcomes, market)
         scored = {
+            "if_q2_candidate": if_metrics,
             "if_only": if_metrics,
             "market96": market_metrics,
-            "q2": "HOLD",
-            "candidate": "HOLD",
+            "q2": "COMPLETED",
+            "candidate": "COMPLETED",
             "r3_stop": R3_STOP,
             "forecasts_sha256": FORECASTS_SHA256,
+            "completed_forecasts_sha256": COMPLETED_FORECASTS_SHA256,
+            "q2_completed_sha256": Q2_COMPLETED_SHA256,
+            "candidate_completed_sha256": CANDIDATE_COMPLETED_SHA256,
+            "identity_freeze_sha256": IDENTITY_FREEZE_SHA256,
             "identity_sha256": REG496_IDENTITY_SHA256,
             "feature_json_sha256": FEATURE_RECON_REG496_ARTIFACT_SHA256,
             "regenerated_forecasts": False,
@@ -618,6 +729,7 @@ def run_phase2_one_exec(
         receipt = _receipt(
             repo,
             forecasts=forecasts,
+            completed=completed,
             market=market,
             splits=splits,
             scored=scored,
@@ -644,6 +756,7 @@ def _receipt(
     root: Path,
     *,
     forecasts: Mapping[str, Any],
+    completed: Mapping[str, Any] | None = None,
     market: Mapping[str, Any],
     splits: Mapping[str, Any],
     scored: Mapping[str, Any] | None,
@@ -663,11 +776,11 @@ def _receipt(
         scoring = "phase2_one_exec_bound"
     elif invoked:
         status = "PHASE2_ONE_EXEC_TEST_SCORED"
-        stop = "STOP_AWAITING_ALEX_RE_PREFLIGHT"
+        stop = "STOP_AWAITING_ALEX_COMPLETED_CANDIDATE_PREFLIGHT"
         scoring = "phase2_one_exec_test"
     else:
-        status = "CHECKS_PASSED_AWAITING_ALEX_RE_PREFLIGHT"
-        stop = "STOP_AWAITING_ALEX_RE_PREFLIGHT"
+        status = "CHECKS_PASSED_AWAITING_ALEX_COMPLETED_CANDIDATE_PREFLIGHT"
+        stop = "STOP_AWAITING_ALEX_COMPLETED_CANDIDATE_PREFLIGHT"
         scoring = None
     hashes = dict(code_hashes or runner_code_hashes(root))
     receipt = {
@@ -695,16 +808,29 @@ def _receipt(
         "command": COMMAND,
         "forecasts_path": FORECASTS_PATH,
         "forecasts_sha256": FORECASTS_SHA256,
+        "completed_forecasts_path": COMPLETED_FORECASTS_PATH,
+        "completed_forecasts_sha256": COMPLETED_FORECASTS_SHA256,
         "q2_history_sha256": Q2_HISTORY_SHA256,
         "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
+        "q2_completed_sha256": Q2_COMPLETED_SHA256,
+        "candidate_completed_sha256": CANDIDATE_COMPLETED_SHA256,
+        "identity_freeze_sha256": IDENTITY_FREEZE_SHA256,
+        "reg_2013_2019_identity_sha256": REG_2013_2019_IDENTITY_SHA256,
+        "post_2013_2019_identity_sha256": POST_2013_2019_IDENTITY_SHA256,
+        "history_choice_sha256": HISTORY_CHOICE_SHA256,
+        "worker_a_history_tip": WORKER_A_HISTORY_TIP,
+        "worker_a_history_stamp": WORKER_A_HISTORY_STAMP,
         "regenerated_forecasts": False,
         "identity_sha256": REG496_IDENTITY_SHA256,
         "feature_json_sha256": FEATURE_RECON_REG496_ARTIFACT_SHA256,
         "n_if_finite": forecasts["n_if_finite"],
-        "n_q2_hold": forecasts["n_q2_hold"],
-        "n_candidate_finite": 0,
-        "q2": "HOLD",
-        "candidate": "HOLD",
+        "n_q2_hold": 0 if completed else forecasts["n_q2_hold"],
+        "n_q2_finite": (completed or {}).get("n_q2_finite") or 0,
+        "n_candidate_finite": (completed or {}).get("n_candidate_finite") or 0,
+        "q2": "COMPLETED",
+        "candidate": "COMPLETED",
+        "initial_prior_2013": None,
+        "end_season_carry": 0.5,
         "r3_stop": R3_STOP,
         "market_n": market["n"],
         "market_bytes_sha256": market["bytes_sha256"],
@@ -741,6 +867,9 @@ def _receipt(
         "runner_input_sha256": receipt["runner_input_sha256"],
         "q2_history_sha256": Q2_HISTORY_SHA256,
         "freeze_manifest_sha256": FREEZE_MANIFEST_SHA256,
+        "q2_completed_sha256": Q2_COMPLETED_SHA256,
+        "candidate_completed_sha256": CANDIDATE_COMPLETED_SHA256,
+        "identity_freeze_sha256": IDENTITY_FREEZE_SHA256,
     }
     receipt["runtime"] = {"interpreter": "python3"}
     receipt["side_metadata"] = {"pytest_elapsed_semantic": False}
