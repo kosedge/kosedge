@@ -49,3 +49,6 @@ data/ops/nfl-t5151u-verify-integrate/
 
 # t5157u R5-HISTORY-ID freeze. Prettier must not rewrite IDs / mus / history lists.
 data/ops/nfl-t5157u-r5-history-id/
+
+# t5165u reporting-arithmetic addendum. Hashed joined rows + report.
+data/ops/nfl-t5165u-r5-reporting/
