@@ -18,8 +18,11 @@ def _env_float(name: str, default: float) -> float:
         return float(default)
     try:
         return float(raw)
-    except ValueError:
-        return float(default)
+    except ValueError as exc:
+        raise RuntimeError(
+            f"F-4: {name}={raw!r} is not a float; fail closed "
+            "(must not revert to default)"
+        ) from exc
 
 
 def _clamp(value: float, lo: float, hi: float) -> float:
@@ -40,7 +43,15 @@ def _to_bool(value: Any, default: bool = False) -> bool:
         return bool(default)
     if isinstance(value, bool):
         return value
-    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+    token = str(value).strip().lower()
+    if token in {"1", "true", "yes", "on"}:
+        return True
+    if token in {"0", "false", "no", "off", ""}:
+        return False
+    raise RuntimeError(
+        f"F-4: boolean override {value!r} is not valid; fail closed "
+        "(must not revert to default)"
+    )
 
 
 def _safe_component_points(components: Dict[str, Any], key: str) -> float:

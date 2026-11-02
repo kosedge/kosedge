@@ -275,3 +275,27 @@ def test_packages_from_rows_opponent_centers() -> None:
     ranked = rank_packages(pkgs)
     assert ranked[0][0] == "SEA"
     assert ranked[-1][0] == "ARI"
+
+
+def test_continuity_boost_import_fails_closed(monkeypatch) -> None:
+    import builtins
+
+    from src.services.nfl_season_engine.efficiency_backbone import league_anchor_package
+
+    real_import = builtins.__import__
+
+    def blocked(name, *args, **kwargs):
+        if name == "src.services.nfl_season_engine.continuity_score":
+            raise ImportError("simulated missing continuity_score")
+        return real_import(name, *args, **kwargs)
+
+    prior = league_anchor_package()
+    current = league_anchor_package()
+    current = TeamEfficiencyPackage(**{**current.__dict__, "games_played": 2, "team": "SEA"})
+    monkeypatch.setattr(builtins, "__import__", blocked)
+    try:
+        blend_packages(prior, current, current_games=2, prior_travel_weight=0.7, continuity_score=0.4)
+        raise AssertionError("expected fail-closed RuntimeError")
+    except RuntimeError as exc:
+        assert "fail closed" in str(exc)
+        assert "0.0" in str(exc)
