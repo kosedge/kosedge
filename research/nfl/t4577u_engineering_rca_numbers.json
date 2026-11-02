@@ -1,0 +1,218 @@
+{
+  "cert_candidate": 0,
+  "database_url": "UNSET",
+  "emit_analysis": {
+    "apply_market_blend": {
+      "false": 2992
+    },
+    "bias_pred_minus_actual": {
+      "epa": -0.9485962566844917,
+      "market": 0.02657085561497352,
+      "record": -1.0026637700534757
+    },
+    "epa_status": {
+      "ok_nflverse_pbp_strict_asof": 2992
+    },
+    "mae_vs_actual": {
+      "epa": 10.686811497326202,
+      "market": 9.962065508021391,
+      "record": 10.801707887700534
+    },
+    "means": {
+      "actual_margin": 2.00701871657754,
+      "epa_pred_margin": 1.0584224598930483,
+      "epa_total": 44.999829545454546,
+      "market_margin": 2.0335895721925135,
+      "market_total": 45.47075534759358,
+      "record_pred_margin": 1.0043549465240642,
+      "record_total": 45.22669117647059
+    },
+    "n_emit": 2992,
+    "n_joined_oos_actuals": 2992,
+    "n_postseason_week_gt_18": 95,
+    "n_scored": 2992,
+    "n_unjoined_oos": 0,
+    "n_week22": 3,
+    "n_with_actuals": 2992,
+    "nflverse_location_top": [
+      [
+        "home",
+        2937
+      ],
+      [
+        "neutral",
+        55
+      ]
+    ],
+    "record_cap_and_hfa": {
+      "decomp_exactly_hfa_1_05": 637,
+      "decomp_near_pm_7_55_cap": 59,
+      "week1_all_decomp_are_hfa": true,
+      "week1_decomp_unique": [
+        1.05
+      ],
+      "week1_mc_mean": 1.0674857142857144,
+      "week1_n": 175
+    },
+    "record_mc_vs_decomp": {
+      "max_abs_diff": 0.8,
+      "mean_abs_diff": 0.17563913770053474,
+      "mean_mc_minus_decomp": -0.010643148395721924,
+      "n": 2992
+    },
+    "sd": {
+      "actual_margin": 14.273011870306739,
+      "epa_pred_margin": 2.648697765117682,
+      "epa_total": 2.510550625434664,
+      "market_margin": 5.9926808703089804,
+      "market_total": 4.354591094531496,
+      "record_pred_margin": 2.268465755388706,
+      "record_total": 0.26952029742541533
+    },
+    "sd_ratio_model_over_market": {
+      "epa": 0.44198878973195116,
+      "epa_total": 0.5765295916274248,
+      "record": 0.3785393890450477,
+      "record_total": 0.06189336531824526
+    },
+    "sign_identity_record": {
+      "max_abs_pred_plus_spread": 0.0
+    },
+    "simulations": {
+      "4000": 2992
+    },
+    "slope_actual_on_model": {
+      "epa": 1.5838396582268013,
+      "market": 1.0090546862445544,
+      "record": 1.6064630645164697
+    },
+    "slope_model_on_market": {
+      "epa": 0.3043963147453245,
+      "record": 0.23049042864329705
+    },
+    "spread_range": {
+      "epa_abs_max": 7.89,
+      "epa_abs_p95": 5.5,
+      "market_abs_max": 27.0,
+      "market_abs_p95": 13.0,
+      "record_abs_max": 7.91,
+      "record_abs_p95": 5.19
+    },
+    "week22_super_bowl_hfa_always_on": [
+      {
+        "away": "LAR",
+        "epa_trailing_spread_home": "1.0",
+        "home": "CIN",
+        "location": "Neutral",
+        "market_spread_home": "4.5000",
+        "record_decomp_pred_margin_home": "0.4177",
+        "season": "2021"
+      },
+      {
+        "away": "KC",
+        "epa_trailing_spread_home": "-1.33",
+        "home": "PHI",
+        "location": "Neutral",
+        "market_spread_home": "-1.0000",
+        "record_decomp_pred_margin_home": "1.0500",
+        "season": "2022"
+      },
+      {
+        "away": "SF",
+        "epa_trailing_spread_home": "-1.99",
+        "home": "KC",
+        "location": "Neutral",
+        "market_spread_home": "1.5000",
+        "record_decomp_pred_margin_home": "0.8178",
+        "season": "2023"
+      }
+    ]
+  },
+  "emit_csv": "git show origin/cursor/epa-wf-feature-emit-5bcd:data/ops/nfl-t4564u-epa-wf-feature-emit/nfl-epa-wf-pbp-2013-2023-t4564u-20261027T213659Z/epa_wf_features_2013_2023.csv",
+  "emit_sha256": "02f6b2e2baa425cab7703dd1d3d5064fc0dabfc69e330a846e54d736c49430a2",
+  "emit_sha256_matches_pinned_02f6b2e2": true,
+  "label": "RESEARCH_DIAGNOSTIC",
+  "note": "Numbers computed locally from pinned PR #646 CSV (sha256 02f6b2e2) joined to in-repo historical_oos_games.csv (sha256 1ee90fac). DATABASE_URL unset. No Odds. No 2024+.",
+  "oos_csv": "data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv",
+  "oos_sha256": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+  "theoretical_bounds": {
+    "epa_elite_plus25_vs_minus15": {
+      "capped_margin": 6.5,
+      "capped_total_delta": 0.3353524229074887,
+      "margin_capped": true,
+      "off_def_away": -0.2180616740088106,
+      "off_def_clamped": true,
+      "off_def_home": 0.25,
+      "pred_margin": 7.55,
+      "pred_total": 45.63535242290749,
+      "raw_margin": 7.48898678414097,
+      "raw_total_delta": 0.3353524229074887
+    },
+    "epa_typical_plus08_vs_minus04": {
+      "capped_margin": 3.2951670882705404,
+      "capped_total_delta": 0.8246155638397024,
+      "margin_capped": false,
+      "off_def_away": -0.0637065637065638,
+      "off_def_clamped": false,
+      "off_def_home": 0.14224137931034497,
+      "pred_margin": 4.34516708827054,
+      "pred_total": 46.1246155638397,
+      "raw_margin": 3.2951670882705404,
+      "raw_total_delta": 0.8246155638397024
+    },
+    "locked_knobs": {
+      "hfa_points": 1.05,
+      "margin_weight": 16.0,
+      "max_margin_points": 6.5,
+      "off_def_clamp": 0.25,
+      "theoretical_max_abs_margin_efficiency_plus_hfa": 7.55
+    },
+    "record_0_0_vs_0_0": {
+      "capped_margin": 0.0,
+      "capped_total_delta": -0.4565217391304345,
+      "margin_capped": false,
+      "off_def_away": -0.021739130434782594,
+      "off_def_clamped": false,
+      "off_def_home": -0.021739130434782594,
+      "pred_margin": 1.05,
+      "pred_total": 44.84347826086956,
+      "raw_margin": 0.0,
+      "raw_total_delta": -0.4565217391304345
+    },
+    "record_10_3_vs_3_10": {
+      "capped_margin": 3.540817257678899,
+      "capped_total_delta": -0.0832154654791678,
+      "margin_capped": false,
+      "off_def_away": -0.1146131805157593,
+      "off_def_clamped": false,
+      "off_def_home": 0.1066878980891719,
+      "pred_margin": 4.590817257678899,
+      "pred_total": 45.216784534520826,
+      "raw_margin": 3.540817257678899,
+      "raw_total_delta": -0.0832154654791678
+    },
+    "record_16_0_vs_0_16": {
+      "capped_margin": 6.5,
+      "capped_total_delta": 0.2201086956521739,
+      "margin_capped": true,
+      "off_def_away": -0.1964285714285715,
+      "off_def_clamped": false,
+      "off_def_home": 0.21739130434782616,
+      "pred_margin": 7.55,
+      "pred_total": 45.52010869565217,
+      "raw_margin": 6.621118012422363,
+      "raw_total_delta": 0.2201086956521739
+    },
+    "record_totals_near_cancel": {
+      "16_0_vs_0_16_total_delta": 0.2201086956521739,
+      "reason": "O and D both come from the same win_pct, so off_def_h + off_def_a \u2248 0."
+    },
+    "week1_record_all_identical": {
+      "defense_index": 0.92,
+      "note": "All teams 0-0 map to the same 0.90/0.92 book; only HFA remains.",
+      "offense_index": 0.9,
+      "pred_margin": 1.05
+    }
+  },
+  "ticket": "t4577u"
+}
