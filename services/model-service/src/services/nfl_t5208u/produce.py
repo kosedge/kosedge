@@ -14,13 +14,19 @@ from src.services.nfl_t5208u.if_tree import in_repo_if_tree, preflight_if_tree
 from src.services.nfl_t5208u.packets import build_synthetic_demo
 from src.services.nfl_t5208u.pins import (
     ALLOWED_ALGO_MODULES,
+    BOUNDARY_CONTRACT,
     CANDIDATE_WEIGHT,
     CONTRACT_27,
     C_FORMULA,
     FW_SHA256,
     IF_TIP,
     OWNER_CLEAR_SHA8,
+    PRESERVE_PACKAGE,
     PURE_SOURCE_TIP,
+    RETURN_A_ORDER_SHA8,
+    RETURN_COS_SHA8,
+    RETURN_OWNER_SHA8,
+    RETURN_PACKAGE,
     SCHEMA_ID,
     SIM_SHA256,
 )
@@ -28,6 +34,7 @@ from src.services.nfl_t5208u.schema import schema_document, schema_hash
 
 REPO_ROOT = Path(__file__).resolve().parents[5]
 OPS_DIR = REPO_ROOT / "data" / "ops" / "t5208u-r6-caller-v1"
+RETURN_OPS_DIR = REPO_ROOT / "data" / "ops" / "t5213u-r6-pure-function"
 ALGO_DIR = Path(__file__).resolve().parents[1] / "nfl_t5107u"
 
 
@@ -108,7 +115,19 @@ def produce_demo() -> dict[str, Any]:
             "simulations": result["simulations"],
             "market_blend": result["market_blend"],
             "replay_ok": replay["replay_ok"],
+            "packet_hash": result["packet_hash"],
+            "history_hash": result["history_hash"],
+            "config_hash": result["config_hash"],
+            "code_hash": result["code_hash"],
+            "cutoff_utc": result["cutoff_utc"],
+            "seal_utc": result["seal_utc"],
         },
+        "return_package": RETURN_PACKAGE,
+        "return_owner_sha8": RETURN_OWNER_SHA8,
+        "return_cos_sha8": RETURN_COS_SHA8,
+        "return_a_order_sha8": RETURN_A_ORDER_SHA8,
+        "preserve_package": PRESERVE_PACKAGE,
+        "boundary_contract": BOUNDARY_CONTRACT,
         "c_formula_controls": controls,
         "output_kind": "POINT_MARGIN",
         "boundaries": [
@@ -139,6 +158,11 @@ def produce_demo() -> dict[str, Any]:
     write_json(OPS_DIR / "demo_result.json", result)
     write_json(OPS_DIR / "receipt.json", receipt)
     (OPS_DIR / "RECEIPT.md").write_text(_receipt_md(receipt), encoding="utf-8")
+    write_json(RETURN_OPS_DIR / "schema.json", schema)
+    write_json(RETURN_OPS_DIR / "synthetic_demo.json", demo)
+    write_json(RETURN_OPS_DIR / "demo_result.json", result)
+    write_json(RETURN_OPS_DIR / "receipt.json", receipt)
+    (RETURN_OPS_DIR / "RECEIPT.md").write_text(_receipt_md(receipt), encoding="utf-8")
     return receipt
 
 
@@ -160,10 +184,18 @@ def _receipt_md(receipt: dict[str, Any]) -> str:
         f"- IF: `{demo['if_margin']}`  Q2: `{demo['q2_margin']}`  C: `{demo['c_margin']}`\n"
         f"- seed: `{demo['seed']}` simulations={demo['simulations']} "
         f"replay_ok={demo['replay_ok']}\n"
-        f"- formula: `{receipt['c_formula']}`\n\n"
-        "B: use `synthetic_demo.json` + `demo_result.json`; "
+        f"- formula: `{receipt['c_formula']}`\n"
+        f"- packet_hash: `{demo.get('packet_hash')}`\n"
+        f"- history_hash: `{demo.get('history_hash')}`\n"
+        f"- config_hash: `{demo.get('config_hash')}`\n"
+        f"- code_hash: `{demo.get('code_hash')}`\n"
+        f"- cutoff/seal: `{demo.get('cutoff_utc')}` / `{demo.get('seal_utc')}`\n"
+        f"- t5213u 79264: cells+metadata+identity validated BEFORE IF; "
+        f"binds are actual hashes (not schema_hash).\n\n"
+        "B: use `data/ops/t5213u-r6-pure-function/` actual binds + cutoff; "
         "import `call_r6_point_margin`; do not fabricate IF means; "
-        "real-mode refuse; CERT=0 DRAFT only.\n"
+        "real-mode refuse; CERT=0 DRAFT only. No operational acceptance "
+        "from prior t5208 counts.\n"
     )
 
 
@@ -173,6 +205,10 @@ def main() -> None:
         {
             "ok": True,
             "schema_hash": receipt["schema_hash"],
+            "packet_hash": receipt["demo_point_margin"].get("packet_hash"),
+            "history_hash": receipt["demo_point_margin"].get("history_hash"),
+            "config_hash": receipt["demo_point_margin"].get("config_hash"),
+            "code_hash": receipt["demo_point_margin"].get("code_hash"),
             "if_tree": receipt["if_preflight"]["tree_path"],
             "if_status": receipt["if_preflight"]["status"],
             "if_margin": receipt["demo_point_margin"]["if_margin"],

@@ -34,6 +34,21 @@ from src.services.nfl_t5208u.pins import (
     SIMULATIONS,
 )
 from src.services.nfl_t5208u.schema import schema_document, schema_hash
+from src.services.nfl_t5208u.validate import validate_before_model
+
+_MODEL_SPY = {
+    "produce_if_mu": 0,
+    "asof_for_targets": 0,
+}
+
+
+def reset_model_spy() -> None:
+    for key in _MODEL_SPY:
+        _MODEL_SPY[key] = 0
+
+
+def model_spy_counts() -> dict[str, int]:
+    return dict(_MODEL_SPY)
 
 
 class CallerRefuse(ValueError):
@@ -63,6 +78,7 @@ def produce_q2_margin(
 ) -> dict[str, Any]:
     transfer = verify_q2_transfer_policy(proposed_refit=False)
     target, hist = history_games_for_q2(packet, history)
+    _MODEL_SPY["asof_for_targets"] += 1
     feats = asof_for_targets(hist, [target])
     assert_asof_no_self_target(hist, feats)
     if len(feats) != 1:
@@ -87,6 +103,7 @@ def call_r6_point_margin(
     tree: Path | None = None,
 ) -> dict[str, Any]:
     refuse_real_mode(mode, packet)
+    binds = validate_before_model(packet, history)
     preflight = preflight_if_tree()
     if_tree = Path(tree) if tree is not None else Path(preflight["tree_path"])
     if str(if_tree) != str(preflight["tree_path"]) and tree is not None:
@@ -95,6 +112,7 @@ def call_r6_point_margin(
             raise CallerRefuse("explicit tree is not the preflighted in-repo IF tree")
 
     if_packet = contract_packet_for_if(packet)
+    _MODEL_SPY["produce_if_mu"] += 1
     produced = produce_if_mu(if_packet, tree=if_tree)
     if_margin = _finite_number(produced.get("if_margin_mu"), name="if_margin")
     if int(produced.get("market_blend", -1)) != MARKET_BLEND:
@@ -116,9 +134,21 @@ def call_r6_point_margin(
     if abs(c_margin - expected_c) > 1e-12:
         raise CallerRefuse(f"C formula failed: {c_margin} != 0.5*{if_margin}+0.5*{q2_margin}")
 
+    schema_id_hash = schema_hash(schema_document())
+    for key in ("packet_hash", "history_hash", "config_hash", "code_hash"):
+        digest = binds[key]
+        if not digest or digest == schema_id_hash or digest == "0" * 64:
+            raise CallerRefuse(f"{key} must be an actual bind, not schema_hash/empty")
+
     out = {
         "schema_id": SCHEMA_ID,
-        "schema_hash": schema_hash(schema_document()),
+        "schema_hash": schema_id_hash,
+        "packet_hash": binds["packet_hash"],
+        "history_hash": binds["history_hash"],
+        "config_hash": binds["config_hash"],
+        "code_hash": binds["code_hash"],
+        "cutoff_utc": binds["cutoff_utc"],
+        "seal_utc": binds["seal_utc"],
         "output_kind": OUTPUT_KIND,
         "channel": CHANNEL_SYNTHETIC,
         "cert": 0,
@@ -144,6 +174,13 @@ def call_r6_point_margin(
             "refit_performed": q2_out["transfer"]["refit_performed"],
         },
         "envelope": dict(packet.get("envelope") or {}),
+        "binds": {
+            "packet_hash": binds["packet_hash"],
+            "history_hash": binds["history_hash"],
+            "config_hash": binds["config_hash"],
+            "code_hash": binds["code_hash"],
+            "schema_hash_is_not_an_input_bind": True,
+        },
     }
     _strip_forbidden(out)
     return out
@@ -157,7 +194,7 @@ def replay_call(
 ) -> dict[str, Any]:
     first = call_r6_point_margin(packet, history, mode=mode)
     second = call_r6_point_margin(packet, history, mode=mode)
-    for key in ("if_margin", "q2_margin", "c_margin", "seed"):
+    for key in ("if_margin", "q2_margin", "c_margin", "seed", "packet_hash", "history_hash"):
         if first[key] != second[key]:
             raise CallerRefuse(f"replay mismatch on {key}: {first[key]} vs {second[key]}")
     return {"first": first, "second": second, "replay_ok": True}

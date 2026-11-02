@@ -6,6 +6,7 @@
     "No SEALED_SEASONS / T5108U_IF_TREE / ensure_if_tree.",
     "CERT=0. IMPLEMENTED\u2260VERIFIED\u2260ACCEPTED. No merge."
   ],
+  "boundary_contract": "79264",
   "c_formula": "C=0.5*IF+0.5*Q2",
   "c_formula_controls": [
     {
@@ -35,12 +36,14 @@
     "if/nfl_handicapping_framework.py": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
     "if/nfl_simulator.py": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
     "r6/__init__.py": "c3ccc152a72dbe619dbc9e53b9de921f320673e12aec05c4e1520a98d9e40852",
-    "r6/caller.py": "7e1bb7f0682cffca9cb886bd3d064e48a1183a36bded0684d0bd599ca539ab63",
+    "r6/caller.py": "0bdb98adac228c8d7c4e54fba4caecfc363b0b9621020f06ae685931eafff24e",
+    "r6/hashing.py": "26d0dc658d4e6a19760839769496ccc2626f84cb0444c05ecca59e5b699ffb93",
     "r6/if_tree.py": "264cbfa831983f39c8f82d1dfc5e2f256785efcf866d13779a774913faedb657",
-    "r6/packets.py": "7a5a054cdb17311c0ac05540e11d66dc86bb20346357ca31c32a4bf9be7c6218",
-    "r6/pins.py": "bf8ee059fecf91d61cb04bd7c0c78220b8910f48575cb54f2f38b9f39aa2590e",
-    "r6/produce.py": "07cc08b5315bf079938b47b06caf02695bb2e6982ef701587469fb6b0737aa93",
-    "r6/schema.py": "4a50e38dba6b77dd08fe87035a71b10e8b34bd117f3da318faf1bc2443378fa1"
+    "r6/packets.py": "185d39d74b6a1e46ffdfc1ae80ae0ff8f97fcfcddb281585d10f4b783cd179e5",
+    "r6/pins.py": "b043ce5463eafe9039f9a2d7d27ea735ab3c447cab1db041ce7ffa9a92540a78",
+    "r6/produce.py": "0468e3a97a51d93c1d818d04b07809bb44818e3381f1739b910578c367d540a6",
+    "r6/schema.py": "4a50e38dba6b77dd08fe87035a71b10e8b34bd117f3da318faf1bc2443378fa1",
+    "r6/validate.py": "3deb2a34511a2b492ac61f6b024cded3b7bafe3095eea15c2bbe351c33a0d912"
   },
   "contract_27": [
     "game_id",
@@ -74,10 +77,16 @@
   "contract_27_n": 27,
   "demo_point_margin": {
     "c_margin": 1.057434322158721,
+    "code_hash": "9abbe1b74c31aca66be69dffb0782867600476e5229b4b5e3008e1c1548745fd",
+    "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
+    "cutoff_utc": "2018-10-14T16:00:00Z",
+    "history_hash": "d194de4508a30a2baa09c2c7d96f8ee26d74bd0b22587430d4d936de4fd897e8",
     "if_margin": 0.8675824382397918,
     "market_blend": 0,
+    "packet_hash": "ee71ffc65200e8ebbd59d9447bbede20b9cbab015af7deb5748bfc35b62efee8",
     "q2_margin": 1.2472862060776504,
     "replay_ok": true,
+    "seal_utc": "2018-10-14T17:00:00Z",
     "seed": 282632,
     "simulations": 4000
   },
@@ -128,7 +137,12 @@
   "output_kind": "POINT_MARGIN",
   "owner_clear_sha8": "84308754",
   "package": "t5208u",
+  "preserve_package": "fb792390",
   "pure_source_tip": "455a8e43eccc1ed2c39e91821790cce968ffdadb",
+  "return_a_order_sha8": "3bc1b798",
+  "return_cos_sha8": "870ac029",
+  "return_owner_sha8": "8926fa72",
+  "return_package": "t5213u",
   "role": "A_PURE_CALLER",
   "schema": {
     "c_formula": "C=0.5*IF+0.5*Q2",
