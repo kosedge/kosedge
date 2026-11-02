@@ -1,0 +1,140 @@
+{
+  "schema_version": "nfl-t5155u-r5-496-freeze-v1",
+  "path_id": "DEV_R5_496",
+  "history_rule": {
+    "name": "R5_REG_SCORE_HISTORY_V1",
+    "disclose_not_old_kickoff_only_asof": true,
+    "old_asof": "cf514078 kickoff strictly before target (same-week earlier games allowed)",
+    "r5": "approved 2013\u20132021 REG only; for target season/week only earlier seasons + strictly earlier NFL weeks with kickoff < KO-60; no same-week / own-target / later rows; no week<=18 REG proxy",
+    "ko_minus_minutes": 60
+  },
+  "transfer": {
+    "fit_policy": "TRANSFER_FROZEN_DEV_2013_2016",
+    "parameter_label": "FROZEN_Q2PB_DEV_2013_2016_TRANSFER",
+    "parameter_status": "original_frozen",
+    "training_seasons": [
+      2013,
+      2014,
+      2015,
+      2016
+    ],
+    "training_end_season": 2016,
+    "transfer_max_training_season": 2021,
+    "transfer_verified": true,
+    "refit_authorized": false,
+    "refit_performed": false,
+    "a_q2": 2.5637441292077354,
+    "b_q2": 1.660624056183471,
+    "lam": 20.0,
+    "regress_frac": 0.5,
+    "fit_object_sha256": "70db070dad3fcdb4d4ff165ba09b7840c173c232a71c8fcd670ba9c3c0bc5571",
+    "config_sha256": "aa2b47b3f0b504f39b785d0cb6fc2918bb7a36fb5a22242e80fb37707b790d49",
+    "proof": "Q2 DEV OLS trained on REG (2013, 2014, 2015, 2016) only (end 2016 \u2264 2021); coeffs transfer; no 2020\u201321 intercept/slope refit."
+  },
+  "a_q2": 2.5637441292077354,
+  "b_q2": 1.660624056183471,
+  "ridge": 20.0,
+  "prior_reg": 0.5,
+  "refit": false,
+  "search": false,
+  "parameter_label": "FROZEN_Q2PB_DEV_2013_2016_TRANSFER",
+  "fit_policy": "TRANSFER_FROZEN_DEV_2013_2016",
+  "training_seasons": [
+    2013,
+    2014,
+    2015,
+    2016
+  ],
+  "score_sources": {
+    "games_csv": {
+      "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+      "path": "/tmp/t5111u-recon-43b5a622/pins/games_4fe1cdd7.csv",
+      "present": true,
+      "season_type_column": false,
+      "role": "kickoff identity only \u2014 not REG membership"
+    },
+    "outcomes_50bda875": {
+      "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+      "path": "/tmp/t5111u-recon-43b5a622/pins/outcomes_2013_2022_score_only.csv",
+      "present": true,
+      "season_type_column": false,
+      "role": "score-only 2013\u20132022 \u2014 REG membership not proven by this file"
+    },
+    "schedule_results_2020_2023": {
+      "sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+      "path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
+      "present": true,
+      "season_type_column": true,
+      "proven_reg_years": [
+        2020,
+        2021
+      ],
+      "role": "authoritative REG membership 2020\u201321 (and 2022\u201323 unused here)"
+    }
+  },
+  "reg_membership": {
+    "2020": {
+      "status": "PROVEN",
+      "n_reg_ids": 256,
+      "source": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv"
+    },
+    "2021": {
+      "status": "PROVEN",
+      "n_reg_ids": 272,
+      "source": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv"
+    },
+    "2013": {
+      "season": 2013,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2013 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2013 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    },
+    "2014": {
+      "season": 2014,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2014 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2014 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    },
+    "2015": {
+      "season": 2015,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2015 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2015 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    },
+    "2016": {
+      "season": 2016,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2016 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2016 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    },
+    "2017": {
+      "season": 2017,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2017 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2017 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    },
+    "2018": {
+      "season": 2018,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2018 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2018 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    },
+    "2019": {
+      "season": 2019,
+      "reg_membership": "UNPROVEN",
+      "prior": "UNPROVEN",
+      "missing_proof": "2019 has no approved season_type=REG schedule extract. games.csv 4fe1cdd7 has kickoff_utc but no season_type (week 18 n>0 for 2019 \u2014 POST/WC cannot be filtered without week<=18 REG proxy, which is refused). outcomes 50bda875 is score-only and also lacks season_type."
+    }
+  },
+  "q2_leg": "HOLD",
+  "hold_q2": true,
+  "hold_reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+  "invented_history": false,
+  "week_le_18_proxy": false,
+  "r3_weight_stopped": 0.75,
+  "r3_stop": "81b6c0fc",
+  "candidate_weight": 0.5,
+  "cert_candidate": 0,
+  "eval": null,
+  "scoring": null
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "nfl-odds-comparison-forecast-v1",
+  "label": "SYNTHETIC",
+  "cert_candidate": 0,
+  "purpose": "synthetic_comparison_only",
+  "sport": "nfl",
+  "forecast_cutoff": "2020-09-10T20:00:00Z",
+  "provenance": "synthetic_forecast",
+  "forecasts": [
+    {
+      "game_id": "2020_01_HOU_KC",
+      "event_id": "evt-kc-hou",
+      "season": 2020,
+      "game_date": "2020-09-10",
+      "home_team": "KC",
+      "away_team": "HOU",
+      "forecast_cutoff": "2020-09-10T20:00:00Z",
+      "provenance": "synthetic_forecast",
+      "markets": {
+        "spread": {
+          "prediction": -9.0,
+          "p_home_cover": 0.58
+        },
+        "total": {
+          "prediction": 53.5,
+          "p_over": 0.51
+        },
+        "moneyline": {
+          "p_home": 0.72
+        }
+      }
+    },
+    {
+      "game_id": "2020_01_NYJ_BUF",
+      "event_id": "evt-buf-nyj",
+      "season": 2020,
+      "game_date": "2020-09-13",
+      "home_team": "BUF",
+      "away_team": "NYJ",
+      "forecast_cutoff": "2020-09-13T17:00:00Z",
+      "provenance": "synthetic_forecast",
+      "markets": {
+        "spread": {
+          "prediction": 2.5,
+          "p_home_cover": 0.47
+        }
+      }
+    }
+  ],
+  "synthetic_outcomes": [
+    {
+      "game_id": "2020_01_HOU_KC",
+      "home_score": 34,
+      "away_score": 20,
+      "source": "synthetic"
+    },
+    {
+      "game_id": "2020_01_NYJ_BUF",
+      "home_score": 17,
+      "away_score": 17,
+      "source": "synthetic"
+    }
+  ]
+}
