@@ -1,0 +1,17 @@
+{
+  "id": "C2_sealed_restore_oracle",
+  "criterion": "C2",
+  "families": ["injury_paths_current", "depth_sot_week", "week_schedule_kickoffs"],
+  "imv": ["G3", "G2"],
+  "restore_run": "data/ops/nfl-model-forecast-emit-t4559u/research_runs/nfl-w8-2026-t4605u-restore-20261028T134541Z/forecasts",
+  "n_games": 14,
+  "required_missing_inputs": [
+    "w8_official_injury_report",
+    "injury_as_of_week8"
+  ],
+  "required_depth_role": "provenance_only",
+  "required_injury_overlay": "week7_or_latest_official_designations_only",
+  "required_odds_api": false,
+  "required_cert_candidate": 0,
+  "forbidden": ["invent_w8_official", "depth_role=CONSUMED", "odds_api=true"]
+}

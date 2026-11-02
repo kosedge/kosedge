@@ -1,0 +1,18 @@
+{
+  "id": "C1_epa_home_boost",
+  "seed": 4643,
+  "simulations": 1200,
+  "inputs": {
+    "game_id": "2026-W08-CONTRACT",
+    "home_team": "GB",
+    "away_team": "CAR",
+    "offense_index_home": 1.12,
+    "offense_index_away": 1.0,
+    "defense_index_home": 1.0,
+    "defense_index_away": 1.0,
+    "rest_days_home": 7.0,
+    "rest_days_away": 7.0
+  },
+  "declared_component": "base_efficiency.margin_points",
+  "must_not_move": ["rest_days_home", "rest_days_away", "injuries_depth.margin_points"]
+}

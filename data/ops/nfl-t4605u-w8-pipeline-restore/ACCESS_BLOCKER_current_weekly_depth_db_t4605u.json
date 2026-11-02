@@ -1,0 +1,37 @@
+{
+  "blocker_md": "data/ops/nfl-t4605u-w8-pipeline-restore/ACCESS_BLOCKER_current_weekly_depth_db_t4605u.md",
+  "blocker_sha256": "125b264a2456d2701924f01e44c8ea18c892775bd2e10eeadd93bbca979a6065",
+  "blocker_sha8": "125b264a",
+  "cert_candidate": 0,
+  "classification": "ACCESS_BLOCKED",
+  "closed": [
+    "depth_sot_week",
+    "injury_paths_current",
+    "inseason_efficiency_current",
+    "week_schedule_kickoffs"
+  ],
+  "cloud_vm_unblock_a": {
+    "DATABASE_PUBLIC_URL": "UNSET",
+    "DATABASE_URL": "UNSET",
+    "dns_maglev_proxy_rlwy_net": "66.33.22.251",
+    "invented": false,
+    "not_198_18": true,
+    "railway_run": "Unauthorized",
+    "tcp_10880": "OPEN",
+    "tcp_15432": "OPEN",
+    "tcp_24747": "OPEN",
+    "tcp_5432": "TimeoutError",
+    "warehouse_rows_read": 0
+  },
+  "component": "current_weekly_depth_db",
+  "escalation": "authorized railway run token or Option B Needs Ryan",
+  "filed_at_utc": "2026-10-28T13:47:00Z",
+  "remaining": [
+    "current_weekly_depth_db"
+  ],
+  "shared_box": "ACCESS_BLOCKED_do_not_retry",
+  "shared_box_pr_sha256": "3bf02785b08e90565ccedddfdcd4ffde57ab840cd67df93fb072817834183f63",
+  "ticket": "t4605u",
+  "w8_completeness_sha256": "fd2fa3d91dba09057be7a949e0a665e496cbda1e1a045b4e8e9517de7a3c1bf7",
+  "w8_completeness_sha8": "fd2fa3d9"
+}

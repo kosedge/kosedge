@@ -1,0 +1,100 @@
+{
+  "ticket": "t4621u",
+  "decision_sha8": "095d17df",
+  "completeness_sha256": "675e1cf74341c53fb218d87715cb3441eff8196935531c713b1508ef9e8c8088",
+  "completeness_sha8": "675e1cf7",
+  "close_tip": "2f24c895",
+  "paper_parent_tip": "f03581fa",
+  "cert_candidate": 0,
+  "forecast_path": "scripts/nfl/run_w8_research_forecast_t4564u.py",
+  "landed_slate": "data/ops/nfl-model-forecast-emit-t4559u/research_runs/nfl-w8-2026-t4605u-restore-20261028T134541Z",
+  "exp_dr_648": "untouched",
+  "invented": false,
+  "odds": false,
+  "checks": [
+    {
+      "name": "depth_sot_week",
+      "completeness": "CLOSED",
+      "consume": "READ_GATE_GAP_SIM_VOLUME",
+      "sot": "nflverse depth_charts_2026.parquet → nfl_depth_chart_2026_w8.json",
+      "evidence": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:67-70,375-388,791-798,809-811,411-439,579"
+      ],
+      "exact_miss": "NflGameInputs has no depth/roster fields; used_for=provenance_only_not_player_box_volume"
+    },
+    {
+      "name": "injury_paths_current",
+      "completeness": "CLOSED",
+      "consume": "CONSUMED",
+      "sot": "nflverse injuries_2026.parquet → nfl_injuries_2026_w7_designated.json",
+      "designated_week": 7,
+      "designated_count": 153,
+      "w8_official_report": "MISSING",
+      "evidence": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:313-372,426-432,799,803",
+        "services/model-service/src/services/nfl_simulator.py:357-358,439"
+      ]
+    },
+    {
+      "name": "current_weekly_depth_db",
+      "completeness": "CLOSED",
+      "consume": "GAP",
+      "sot": "warehouse nfl_dp_depth_chart_weekly (RO probe f50ba2f0) — not read by forecast",
+      "exact_miss": "run_w8_research_forecast_t4564u.py:1078 Does not read DATABASE_URL; no nfl_dp_* SELECT",
+      "evidence": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:848-855,461-463,1078"
+      ]
+    },
+    {
+      "name": "week_schedule_kickoffs",
+      "completeness": "CLOSED",
+      "consume": "CONSUMED",
+      "sot": "nfl-canonical-schedule-2026.json",
+      "evidence": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:82-85,179-204,207-225,804-806,864-865"
+      ]
+    },
+    {
+      "name": "inseason_efficiency_current",
+      "completeness": "CLOSED",
+      "consume": "CONSUMED",
+      "sot": "nflverse stats_team_week_2026 W1-W7 → epa_to_strength_indices",
+      "evidence": [
+        "scripts/nfl/run_w8_research_forecast_t4564u.py:249-310,415-418,433-436,800,814-817"
+      ]
+    }
+  ],
+  "injury_coverage": {
+    "designated_week": 7,
+    "designated_count": 153,
+    "w8_official_report": "MISSING",
+    "parquet_max_week": 8,
+    "w8_rows_are_undesignated_stub": true,
+    "slate_team_sides": {
+      "week_7": 23,
+      "week_6": ["BUF", "JAX", "LAC", "WAS"],
+      "week_5": ["CIN"]
+    },
+    "impact": "all 14 games missing w8_official_injury_report and injury_as_of_week8; overlay is W7-or-earlier designations, not invented W8"
+  },
+  "policy_conflict": [
+    {
+      "surface": "season_engine_depth",
+      "sot": "nfl_depth_chart_2026_w1.json exclusive when present",
+      "vintage": "week=1 as_of=2026-08-13",
+      "flag": "STALE_vs_W8_pack_and_warehouse"
+    },
+    {
+      "surface": "season_engine_strength",
+      "sot": "nfl_dp_team_rolling_features_weekly or packaged backbone 2025 prior",
+      "vintage": "packaged as_of=2026-08-08 prior_season=2025",
+      "flag": "STALE_vs_inseason_W7"
+    },
+    {
+      "surface": "warehouse_injuries",
+      "sot": "nfl_dp_injuries",
+      "vintage": "max_week=3",
+      "flag": "STALE_vs_W7_designated_pack"
+    }
+  ]
+}

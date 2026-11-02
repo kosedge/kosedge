@@ -1,0 +1,580 @@
+{
+  "as_of": "2026-10-28T06:01:45Z",
+  "conversion": "efficiency_backbone.epa_to_strength_indices",
+  "method": "play_weighted_w1_w7_passing_plus_rushing_epa",
+  "notes": "Current-season 2026 W1\u2013W7. Not packaged 2025 prior as_of 2026-08-08.",
+  "parquet_sha256": "d1dc831e378898eb67de17bef637ee7ad42fb64a59eaa664c509783f3f14166d",
+  "prior_season": null,
+  "season": 2026,
+  "source": "nflverse_stats_team_week_2026",
+  "team_count": 32,
+  "teams": {
+    "ARI": {
+      "def_epa_allowed_per_play": 0.101605,
+      "def_plays": 406,
+      "defense_index": 0.908556,
+      "games": 7,
+      "off_epa_per_play": -0.039029,
+      "off_plays": 479,
+      "offense_index": 0.970728,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "ATL": {
+      "def_epa_allowed_per_play": -0.00392,
+      "def_plays": 465,
+      "defense_index": 1.003528,
+      "games": 7,
+      "off_epa_per_play": -0.04134,
+      "off_plays": 423,
+      "offense_index": 0.968995,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "BAL": {
+      "def_epa_allowed_per_play": 0.043762,
+      "def_plays": 421,
+      "defense_index": 0.960614,
+      "games": 7,
+      "off_epa_per_play": 0.088027,
+      "off_plays": 432,
+      "offense_index": 1.06602,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "BUF": {
+      "def_epa_allowed_per_play": 0.128103,
+      "def_plays": 411,
+      "defense_index": 0.884708,
+      "games": 6,
+      "off_epa_per_play": 0.204243,
+      "off_plays": 359,
+      "offense_index": 1.153182,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "CAR": {
+      "def_epa_allowed_per_play": 0.036078,
+      "def_plays": 389,
+      "defense_index": 0.96753,
+      "games": 6,
+      "off_epa_per_play": 0.047593,
+      "off_plays": 396,
+      "offense_index": 1.035694,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ]
+    },
+    "CHI": {
+      "def_epa_allowed_per_play": 0.010953,
+      "def_plays": 351,
+      "defense_index": 0.990143,
+      "games": 7,
+      "off_epa_per_play": 0.037388,
+      "off_plays": 505,
+      "offense_index": 1.028041,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "CIN": {
+      "def_epa_allowed_per_play": -0.040338,
+      "def_plays": 372,
+      "defense_index": 1.036305,
+      "games": 6,
+      "off_epa_per_play": 0.110033,
+      "off_plays": 363,
+      "offense_index": 1.082525,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ]
+    },
+    "CLE": {
+      "def_epa_allowed_per_play": -0.025994,
+      "def_plays": 441,
+      "defense_index": 1.023395,
+      "games": 7,
+      "off_epa_per_play": -0.033246,
+      "off_plays": 420,
+      "offense_index": 0.975066,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "DAL": {
+      "def_epa_allowed_per_play": 0.140379,
+      "def_plays": 442,
+      "defense_index": 0.873659,
+      "games": 7,
+      "off_epa_per_play": 0.126172,
+      "off_plays": 440,
+      "offense_index": 1.094629,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "DEN": {
+      "def_epa_allowed_per_play": -0.044102,
+      "def_plays": 489,
+      "defense_index": 1.039692,
+      "games": 7,
+      "off_epa_per_play": -0.048697,
+      "off_plays": 400,
+      "offense_index": 0.963478,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "DET": {
+      "def_epa_allowed_per_play": 0.116217,
+      "def_plays": 424,
+      "defense_index": 0.895405,
+      "games": 6,
+      "off_epa_per_play": 0.142445,
+      "off_plays": 398,
+      "offense_index": 1.106834,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ]
+    },
+    "GB": {
+      "def_epa_allowed_per_play": -0.049182,
+      "def_plays": 464,
+      "defense_index": 1.044263,
+      "games": 7,
+      "off_epa_per_play": -0.009553,
+      "off_plays": 429,
+      "offense_index": 0.992835,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "HOU": {
+      "def_epa_allowed_per_play": 0.031323,
+      "def_plays": 446,
+      "defense_index": 0.97181,
+      "games": 7,
+      "off_epa_per_play": 0.020464,
+      "off_plays": 430,
+      "offense_index": 1.015348,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "IND": {
+      "def_epa_allowed_per_play": 0.03134,
+      "def_plays": 409,
+      "defense_index": 0.971794,
+      "games": 7,
+      "off_epa_per_play": -0.055795,
+      "off_plays": 459,
+      "offense_index": 0.958154,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "JAX": {
+      "def_epa_allowed_per_play": -0.032886,
+      "def_plays": 357,
+      "defense_index": 1.029597,
+      "games": 6,
+      "off_epa_per_play": 0.152461,
+      "off_plays": 361,
+      "offense_index": 1.114346,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "KC": {
+      "def_epa_allowed_per_play": -0.048163,
+      "def_plays": 387,
+      "defense_index": 1.043346,
+      "games": 6,
+      "off_epa_per_play": 0.104854,
+      "off_plays": 359,
+      "offense_index": 1.07864,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ]
+    },
+    "LA": {
+      "def_epa_allowed_per_play": -0.057285,
+      "def_plays": 428,
+      "defense_index": 1.051556,
+      "games": 7,
+      "off_epa_per_play": 0.057925,
+      "off_plays": 478,
+      "offense_index": 1.043444,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "LAC": {
+      "def_epa_allowed_per_play": -0.046793,
+      "def_plays": 367,
+      "defense_index": 1.042114,
+      "games": 6,
+      "off_epa_per_play": -0.201602,
+      "off_plays": 371,
+      "offense_index": 0.848799,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "LV": {
+      "def_epa_allowed_per_play": 0.061503,
+      "def_plays": 440,
+      "defense_index": 0.944647,
+      "games": 7,
+      "off_epa_per_play": -0.010447,
+      "off_plays": 450,
+      "offense_index": 0.992164,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "MIA": {
+      "def_epa_allowed_per_play": 0.118794,
+      "def_plays": 353,
+      "defense_index": 0.893086,
+      "games": 6,
+      "off_epa_per_play": -0.035409,
+      "off_plays": 338,
+      "offense_index": 0.973443,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ]
+    },
+    "MIN": {
+      "def_epa_allowed_per_play": -0.192767,
+      "def_plays": 340,
+      "defense_index": 1.17349,
+      "games": 6,
+      "off_epa_per_play": -0.093494,
+      "off_plays": 363,
+      "offense_index": 0.92988,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ]
+    },
+    "NE": {
+      "def_epa_allowed_per_play": 0.033939,
+      "def_plays": 412,
+      "defense_index": 0.969455,
+      "games": 7,
+      "off_epa_per_play": 0.072558,
+      "off_plays": 437,
+      "offense_index": 1.054419,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "NO": {
+      "def_epa_allowed_per_play": 0.083973,
+      "def_plays": 451,
+      "defense_index": 0.924424,
+      "games": 7,
+      "off_epa_per_play": -0.028958,
+      "off_plays": 459,
+      "offense_index": 0.978282,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "NYG": {
+      "def_epa_allowed_per_play": 0.000572,
+      "def_plays": 414,
+      "defense_index": 0.999485,
+      "games": 7,
+      "off_epa_per_play": 0.003172,
+      "off_plays": 463,
+      "offense_index": 1.002379,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "NYJ": {
+      "def_epa_allowed_per_play": -0.006172,
+      "def_plays": 449,
+      "defense_index": 1.005554,
+      "games": 7,
+      "off_epa_per_play": 0.004542,
+      "off_plays": 407,
+      "offense_index": 1.003407,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "PHI": {
+      "def_epa_allowed_per_play": 0.085466,
+      "def_plays": 471,
+      "defense_index": 0.923081,
+      "games": 7,
+      "off_epa_per_play": -0.107126,
+      "off_plays": 412,
+      "offense_index": 0.919655,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "PIT": {
+      "def_epa_allowed_per_play": -0.034288,
+      "def_plays": 427,
+      "defense_index": 1.030859,
+      "games": 7,
+      "off_epa_per_play": -0.056072,
+      "off_plays": 447,
+      "offense_index": 0.957946,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "SEA": {
+      "def_epa_allowed_per_play": -0.133774,
+      "def_plays": 410,
+      "defense_index": 1.120396,
+      "games": 7,
+      "off_epa_per_play": -0.048075,
+      "off_plays": 448,
+      "offense_index": 0.963944,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "SF": {
+      "def_epa_allowed_per_play": -0.032354,
+      "def_plays": 442,
+      "defense_index": 1.029119,
+      "games": 7,
+      "off_epa_per_play": 0.193859,
+      "off_plays": 409,
+      "offense_index": 1.145394,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "TB": {
+      "def_epa_allowed_per_play": -0.115566,
+      "def_plays": 413,
+      "defense_index": 1.10401,
+      "games": 7,
+      "off_epa_per_play": -0.077267,
+      "off_plays": 437,
+      "offense_index": 0.94205,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "TEN": {
+      "def_epa_allowed_per_play": 0.047115,
+      "def_plays": 461,
+      "defense_index": 0.957597,
+      "games": 7,
+      "off_epa_per_play": -0.111576,
+      "off_plays": 380,
+      "offense_index": 0.916318,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "WAS": {
+      "def_epa_allowed_per_play": 0.07999,
+      "def_plays": 381,
+      "defense_index": 0.928009,
+      "games": 6,
+      "off_epa_per_play": -0.006585,
+      "off_plays": 381,
+      "offense_index": 0.995061,
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  },
+  "week_through": 7
+}

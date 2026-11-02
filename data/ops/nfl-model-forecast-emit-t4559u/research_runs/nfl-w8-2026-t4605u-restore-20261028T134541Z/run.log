@@ -1,0 +1,32 @@
+run_id=nfl-w8-2026-t4605u-restore-20261028T134541Z
+forecast_ts_utc=2026-10-28T13:45:41Z
+forecast_ts_et=2026-10-28T09:45:41-04:00
+cert_candidate=0
+label=RESEARCH
+odds_api=false
+pr641_frozen=385767a2
+emit_tip_642_fail_closed=f50f15a8
+code_tip_sha=8e49bfe77b5c44ed9181d06ad9cb3685bc4effad
+downloaded depth_charts_2026.parquet bytes=3177180 sha256=c3e8213bc7023d186de0c3bbe81aa88372c81330c7b40c299eca5b0ea42edac0
+downloaded injuries_2026.parquet bytes=51877 sha256=7b96ebbcd21d11dd70caf90149e3258c0134a65042f3f7df7526dbc713b46397
+downloaded stats_team_week_2026.parquet bytes=85989 sha256=d1dc831e378898eb67de17bef637ee7ad42fb64a59eaa664c509783f3f14166d
+latest_input_as_of=2026-10-28T06:01:45Z
+depth_as_of=2026-10-28T06:01:45Z teams=32
+strength_teams=32
+injury_teams=32
+t08_returncode=2 blocks_slate=False
+2026-W08-CAR@GB spread=-1.92 total=45.16 home_wp=0.5425 det=True
+2026-W08-ARI@DAL spread=-1.81 total=49.54 home_wp=0.554 det=True
+2026-W08-ATL@TB spread=-2.4 total=42.07 home_wp=0.5683 det=True
+2026-W08-BAL@BUF spread=-2.04 total=49.69 home_wp=0.5587 det=True
+2026-W08-CLE@PIT spread=-0.88 total=43.31 home_wp=0.5347 det=True
+2026-W08-IND@JAX spread=-5.69 total=45.56 home_wp=0.6565 det=True
+2026-W08-LV@NYJ spread=-2.21 total=46.13 home_wp=0.564 det=True
+2026-W08-MIN@DET spread=0.49 total=44.47 home_wp=0.4843 det=True
+2026-W08-TEN@CIN spread=-4.48 total=44.94 home_wp=0.6325 det=True
+2026-W08-LAC@LAR spread=-2.73 total=41.39 home_wp=0.579 det=True
+2026-W08-KC@DEN spread=0.62 total=44.69 home_wp=0.4888 det=True
+2026-W08-NE@MIA spread=2.66 total=47.58 home_wp=0.425 det=True
+2026-W08-PHI@WAS spread=-3.24 total=45.16 home_wp=0.587 det=True
+2026-W08-CHI@SEA spread=-1.56 total=43.2 home_wp=0.5417 det=True
+completeness_sha256=fd2fa3d91dba09057be7a949e0a665e496cbda1e1a045b4e8e9517de7a3c1bf7 ok=False passed=['depth_sot_week', 'injury_paths_current', 'week_schedule_kickoffs', 'inseason_efficiency_current'] failing=['current_weekly_depth_db']

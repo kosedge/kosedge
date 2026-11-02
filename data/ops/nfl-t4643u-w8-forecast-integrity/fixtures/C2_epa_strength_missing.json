@@ -1,0 +1,17 @@
+{
+  "id": "C2_epa_strength_missing",
+  "criterion": "C2",
+  "family": "inseason_efficiency_current",
+  "seed": 4643,
+  "game": {
+    "game_id": "2026-W08-CONTRACT",
+    "home_team": "GB",
+    "away_team": "CAR"
+  },
+  "strength": {},
+  "injuries": {},
+  "rest": [7.0, "schedule_kickoff_delta", 7.0, "schedule_kickoff_delta"],
+  "fallback": "refuse-to-sim SystemExit MISSING current strength",
+  "expected_exit_substr": "MISSING current strength",
+  "forbidden": ["silent_2025_prior_pack"]
+}

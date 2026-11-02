@@ -1,0 +1,161 @@
+{
+  "audited_at_utc": "2026-10-28T14:45:13Z",
+  "authority": {
+    "decision_sha256": "5357266707b5555e96b746dce91435f862884db92b2124215f0d65d9ac435904",
+    "parent_decision_sha256": "e65b9c7781a2f120dc6b6c0c1d171cce3b5daae31577edfcbc4a99eccff3d69a",
+    "prior_access_blocker_sha256": "a79f58f822434acfc450c3ea9927029eb3f6da0c1f85096c0ddbdeec8491a294",
+    "prior_completeness_sha256": "02ba06ac819486d478acfdcd30fb2b0015d6101b9ddccf32153a462cde937c70",
+    "prior_tip": "d8356dcb"
+  },
+  "cert_candidate": 0,
+  "checks": [
+    {
+      "blocker": "",
+      "evidence": {
+        "as_of": "2026-10-28",
+        "as_of_timestamp": "2026-10-28T06:01:45Z",
+        "packaged_w1_used": false,
+        "path": "/workspace/data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs/nfl_depth_chart_2026_w8.json",
+        "requested_week": 8,
+        "row_count": 809,
+        "snapshot_id": "nfl-depth-2026-w8-20261028T060145Z",
+        "team_count": 32,
+        "week": 8
+      },
+      "name": "depth_sot_week",
+      "ok": true
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "as_of": "2026-10-28T06:01:45Z",
+        "designated_count": 153,
+        "injury_path_count": 1,
+        "latest_official_week": 7,
+        "paths": [
+          "/workspace/data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs/nfl_injuries_2026_w7_designated.json"
+        ],
+        "w8_official_report": "MISSING"
+      },
+      "name": "injury_paths_current",
+      "ok": true
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "DATABASE_PUBLIC_URL_present": false,
+        "DATABASE_URL_present": false,
+        "LAUNCH_RESEARCH_DATABASE_URL_present": false,
+        "classification": "OK",
+        "local_5432_accepting": false,
+        "local_5432_error": "ConnectionRefusedError: [Errno 111] Connection refused",
+        "railway": {
+          "RAILWAY_TOKEN_length": 36,
+          "RAILWAY_TOKEN_present": true,
+          "railway_cli": "/home/ubuntu/.railway/bin/railway",
+          "run_postgres": "exit=0 url_present True",
+          "status": "exit=0 Workspace:       kosedge's Projects",
+          "whoami": "exit=1 Unauthorized. Please check that your RAILWAY_TOKEN is valid and has access to the resource you're trying to use."
+        },
+        "railway_mcp_values_readable": false,
+        "repro": [
+          "python3 -c \"import os; t=os.environ.get('RAILWAY_TOKEN'); print('RAILWAY_TOKEN', 'SET' if t else 'UNSET', 'length', len(t or ''))\"",
+          "railway whoami",
+          "railway status --project da3d68f8-d925-462f-b262-c4ef3e488245 --environment production",
+          "railway run --project da3d68f8-d925-462f-b262-c4ef3e488245 --environment production --service Postgres -- python3 -c \"import os; print('url_present', bool(os.environ.get('DATABASE_PUBLIC_URL') or os.environ.get('DATABASE_URL')))\""
+        ],
+        "ro_probe": {
+          "connect_ok": true,
+          "depth_max_week": 8,
+          "depth_n": 23256,
+          "depth_teams": 32,
+          "dml_ddl": false,
+          "host_kind": "proxy",
+          "injuries_max_week": 3,
+          "injuries_n": 734,
+          "invented": false,
+          "missing_tables": [],
+          "official_n": 3171,
+          "ok": true,
+          "read_only": true,
+          "transaction_read_only": true,
+          "url_source_key": "DATABASE_PUBLIC_URL",
+          "warehouse_rows_read": 27161
+        }
+      },
+      "name": "current_weekly_depth_db",
+      "ok": true
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "canonical_week_games": 14,
+        "game_ids": [
+          "2026-W08-CAR@GB",
+          "2026-W08-ARI@DAL",
+          "2026-W08-ATL@TB",
+          "2026-W08-BAL@BUF",
+          "2026-W08-CLE@PIT",
+          "2026-W08-IND@JAX",
+          "2026-W08-LV@NYJ",
+          "2026-W08-MIN@DET",
+          "2026-W08-TEN@CIN",
+          "2026-W08-LAC@LAR",
+          "2026-W08-KC@DEN",
+          "2026-W08-NE@MIA",
+          "2026-W08-PHI@WAS",
+          "2026-W08-CHI@SEA"
+        ]
+      },
+      "name": "week_schedule_kickoffs",
+      "ok": true
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "as_of": "2026-10-28T06:01:45Z",
+        "conversion": "efficiency_backbone.epa_to_strength_indices",
+        "path": "/workspace/data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs/nfl_team_efficiency_backbone_2026_inseason_w7.json",
+        "prior_season": null,
+        "source": "nflverse_stats_team_week_2026",
+        "team_count": 32,
+        "week_through": 7
+      },
+      "name": "inseason_efficiency_current",
+      "ok": true
+    }
+  ],
+  "failing_components": [],
+  "input_completeness_sha256": "675e1cf74341c53fb218d87715cb3441eff8196935531c713b1508ef9e8c8088",
+  "label": "RESEARCH_ENG",
+  "note": "t4615u fresh VM Unblock A: railway status/run authorized; SET TRANSACTION READ ONLY SELECT on nfl_dp_depth_chart_weekly / nfl_dp_official_depth_charts / nfl_dp_injuries. No invented nfl_dp_* rows. Warehouse injuries max_week=3 (packaged injury_paths_current still W7 designated). CERT=0. Option B not attempted.",
+  "ok": true,
+  "passed": [
+    "depth_sot_week",
+    "injury_paths_current",
+    "current_weekly_depth_db",
+    "week_schedule_kickoffs",
+    "inseason_efficiency_current"
+  ],
+  "purpose": "research_eng_only",
+  "schema_version": "nfl-week-input-completeness-v1",
+  "season": 2026,
+  "slate_game_ids": [
+    "2026-W08-CAR@GB",
+    "2026-W08-ARI@DAL",
+    "2026-W08-ATL@TB",
+    "2026-W08-BAL@BUF",
+    "2026-W08-CLE@PIT",
+    "2026-W08-IND@JAX",
+    "2026-W08-LV@NYJ",
+    "2026-W08-MIN@DET",
+    "2026-W08-TEN@CIN",
+    "2026-W08-LAC@LAR",
+    "2026-W08-KC@DEN",
+    "2026-W08-NE@MIA",
+    "2026-W08-PHI@WAS",
+    "2026-W08-CHI@SEA"
+  ],
+  "ticket": "t4615u",
+  "week": 8
+}

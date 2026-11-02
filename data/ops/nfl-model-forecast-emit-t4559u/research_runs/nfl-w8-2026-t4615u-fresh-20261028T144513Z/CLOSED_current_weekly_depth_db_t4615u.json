@@ -1,0 +1,31 @@
+{
+  "RAILWAY_TOKEN": "SET",
+  "RAILWAY_TOKEN_length": 36,
+  "cert_candidate": 0,
+  "classification": "CLOSED",
+  "closed": [
+    "depth_sot_week",
+    "injury_paths_current",
+    "current_weekly_depth_db",
+    "week_schedule_kickoffs",
+    "inseason_efficiency_current"
+  ],
+  "completeness_sha256": "675e1cf74341c53fb218d87715cb3441eff8196935531c713b1508ef9e8c8088",
+  "completeness_sha8": "675e1cf7",
+  "component": "current_weekly_depth_db",
+  "decision_sha8": "53572667",
+  "filed_at_utc": "2026-10-28T14:45:13Z",
+  "invented": false,
+  "option_b_attempted": false,
+  "prior_access_blocker_sha8": "a79f58f8",
+  "prior_tip": "d8356dcb",
+  "probe_sha256": "f50ba2f07df9f92cba0ddf31fd5003f549d5e114eb3eddff0e245ef8f68c18ff",
+  "probe_sha8": "f50ba2f0",
+  "railway_run": "exit=0",
+  "railway_status": "exit=0",
+  "railway_whoami": "Unauthorized",
+  "remaining": [],
+  "ticket": "t4615u",
+  "transaction_read_only": true,
+  "warehouse_rows_read": 27161
+}

@@ -1,0 +1,35 @@
+{
+  "RAILWAY_TOKEN": "SET",
+  "RAILWAY_TOKEN_length": 36,
+  "RAILWAY_TOKEN_shape": "uuid_like",
+  "blocker_sha256": "a79f58f822434acfc450c3ea9927029eb3f6da0c1f85096c0ddbdeec8491a294",
+  "blocker_sha8": "a79f58f8",
+  "cert_candidate": 0,
+  "classification": "ACCESS_BLOCKED",
+  "closed": [
+    "depth_sot_week",
+    "injury_paths_current",
+    "inseason_efficiency_current",
+    "week_schedule_kickoffs"
+  ],
+  "completeness_sha256": "02ba06ac819486d478acfdcd30fb2b0015d6101b9ddccf32153a462cde937c70",
+  "completeness_sha8": "02ba06ac",
+  "component": "current_weekly_depth_db",
+  "cos_order_sha8": "5b804203",
+  "decision_sha8": "53572667",
+  "filed_at_utc": "2026-10-28T14:40:18Z",
+  "invented": false,
+  "not": "RUNTIME_SECRET_MISSING",
+  "note": "same length/shape as prior wrong secret; this VM may not have received replacement Runtime Secret",
+  "option_b_attempted": false,
+  "prior_still_blocked_sha8": "fc9c97a8",
+  "prior_tip": "6bc1cf3f",
+  "railway_run": "Unauthorized",
+  "railway_status": "Unauthorized",
+  "railway_whoami": "Unauthorized",
+  "remaining": [
+    "current_weekly_depth_db"
+  ],
+  "ticket": "t4615u",
+  "warehouse_rows_read": 0
+}

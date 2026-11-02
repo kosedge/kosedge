@@ -1,0 +1,31 @@
+{
+  "database_url_present": false,
+  "depth": {
+    "as_of": "2026-10-28T06:01:45Z",
+    "not_used": "packaged nfl_depth_chart_2026_w1.json",
+    "snapshot_rows": 2330,
+    "source": "nflverse_depth_charts_2026",
+    "teams": 32,
+    "used_for": "provenance_only_not_player_box_volume"
+  },
+  "efficiency": {
+    "conversion": "epa_to_strength_indices on play-weighted W1\u2013W7",
+    "max_week": 7,
+    "source": "nflverse_stats_team_week_2026",
+    "teams": 32,
+    "warehouse_rolling": "MISSING"
+  },
+  "injuries": {
+    "max_week": 8,
+    "source": "nflverse_injuries_2026",
+    "w8_official_report": "MISSING",
+    "week7_rows": 350
+  },
+  "model_service_nfl_routes": 0,
+  "packaged_w1_depth_used": false,
+  "schedule": {
+    "source": "services/model-service/src/services/nfl_season_engine/data/nfl-canonical-schedule-2026.json",
+    "week8_games": 14
+  },
+  "silent_healthy": false
+}

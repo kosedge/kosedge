@@ -1,0 +1,9 @@
+{
+  "blocks_slate": false,
+  "cmd": "/usr/bin/python3 -m pytest -q tests/test_nfl_week_cap_bind.py -k not untyped_null_week_bind",
+  "note": "T-08 unit predicates (3 tests) do not need live Postgres. test_untyped_null_week_bind_raises_ambiguous_parameter skipped here (no local Postgres). #643 tip 4aaec8af: slate NOT blocked by T-08.",
+  "returncode": 2,
+  "stderr": "",
+  "stdout": "\n==================================== ERRORS ====================================\n_______________ ERROR collecting tests/test_nfl_week_cap_bind.py _______________\nImportError while importing test module '/workspace/services/model-service/tests/test_nfl_week_cap_bind.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/test_nfl_week_cap_bind.py:20: in <module>\n    from src.tasks import (\nsrc/tasks.py:15: in <module>\n    import requests\nE   ModuleNotFoundError: No module named 'requests'\n=============================== warnings summary ===============================\nsrc/tasks.py:5678\n  /workspace/services/model-service/src/tasks.py:5678: SyntaxWarning: invalid escape sequence '\\:'\n    \"\"\"\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nERROR tests/test_nfl_week_cap_bind.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 warning, 1 error in 0.50s\n",
+  "t08_tip": "4aaec8af"
+}

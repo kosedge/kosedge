@@ -1,0 +1,131 @@
+{
+  "audited_at_utc": "2026-10-28T13:45:41Z",
+  "authority": {
+    "cos_order_sha256": "43d1702a1d26a649f2707dd3fcafe8174bd547bf617970decff8dfbfff267bc6",
+    "decision_sha256": "e65b9c7781a2f120dc6b6c0c1d171cce3b5daae31577edfcbc4a99eccff3d69a",
+    "prior_completeness_sha256": "21b96525d4b59eb810801495723ad5c4cc84b7a64e4fc422bbeab8e8a85ace71",
+    "prior_fail_closed_tip": "f50f15a8"
+  },
+  "cert_candidate": 0,
+  "checks": [
+    {
+      "blocker": "",
+      "evidence": {
+        "as_of": "2026-10-28",
+        "as_of_timestamp": "2026-10-28T06:01:45Z",
+        "packaged_w1_used": false,
+        "path": "/workspace/data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs/nfl_depth_chart_2026_w8.json",
+        "requested_week": 8,
+        "row_count": 809,
+        "snapshot_id": "nfl-depth-2026-w8-20261028T060145Z",
+        "team_count": 32,
+        "week": 8
+      },
+      "name": "depth_sot_week",
+      "ok": true
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "as_of": "2026-10-28T06:01:45Z",
+        "designated_count": 153,
+        "injury_path_count": 1,
+        "latest_official_week": 7,
+        "paths": [
+          "/workspace/data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs/nfl_injuries_2026_w7_designated.json"
+        ],
+        "w8_official_report": "MISSING"
+      },
+      "name": "injury_paths_current",
+      "ok": true
+    },
+    {
+      "blocker": "DATABASE_URL unset on this VM; 127.0.0.1:5432 not accepting; Railway MCP returns DATABASE_URL name only (values hidden). Cannot load nfl_dp_depth_chart_weekly / injury nowcast. Will not invent a current book from W1 pack.",
+      "evidence": {
+        "DATABASE_URL_present": false,
+        "LAUNCH_RESEARCH_DATABASE_URL_present": false,
+        "local_5432_accepting": false,
+        "local_5432_error": "ConnectionRefusedError: [Errno 111] Connection refused",
+        "railway_mcp_values_readable": false,
+        "repro": [
+          "echo DATABASE_URL=${DATABASE_URL:-UNSET}",
+          "python3 -c \"import socket; socket.create_connection(('127.0.0.1',5432),0.4)\""
+        ]
+      },
+      "name": "current_weekly_depth_db",
+      "ok": false
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "canonical_week_games": 14,
+        "game_ids": [
+          "2026-W08-CAR@GB",
+          "2026-W08-ARI@DAL",
+          "2026-W08-ATL@TB",
+          "2026-W08-BAL@BUF",
+          "2026-W08-CLE@PIT",
+          "2026-W08-IND@JAX",
+          "2026-W08-LV@NYJ",
+          "2026-W08-MIN@DET",
+          "2026-W08-TEN@CIN",
+          "2026-W08-LAC@LAR",
+          "2026-W08-KC@DEN",
+          "2026-W08-NE@MIA",
+          "2026-W08-PHI@WAS",
+          "2026-W08-CHI@SEA"
+        ]
+      },
+      "name": "week_schedule_kickoffs",
+      "ok": true
+    },
+    {
+      "blocker": "",
+      "evidence": {
+        "as_of": "2026-10-28T06:01:45Z",
+        "conversion": "efficiency_backbone.epa_to_strength_indices",
+        "path": "/workspace/data/ops/nfl-t4605u-w8-pipeline-restore/current_inputs/nfl_team_efficiency_backbone_2026_inseason_w7.json",
+        "prior_season": null,
+        "source": "nflverse_stats_team_week_2026",
+        "team_count": 32,
+        "week_through": 7
+      },
+      "name": "inseason_efficiency_current",
+      "ok": true
+    }
+  ],
+  "failing_components": [
+    "current_weekly_depth_db"
+  ],
+  "input_completeness_sha256": "fd2fa3d91dba09057be7a949e0a665e496cbda1e1a045b4e8e9517de7a3c1bf7",
+  "label": "RESEARCH_ENG",
+  "note": "t4605u: current nflverse packs may close depth/injury/EPA. DATABASE_URL warehouse remains an access wall if unset. No invented numbers, no silent zero injury, no W1-as-W8 depth.",
+  "ok": false,
+  "passed": [
+    "depth_sot_week",
+    "injury_paths_current",
+    "week_schedule_kickoffs",
+    "inseason_efficiency_current"
+  ],
+  "purpose": "research_eng_only",
+  "schema_version": "nfl-week-input-completeness-v1",
+  "season": 2026,
+  "slate_game_ids": [
+    "2026-W08-CAR@GB",
+    "2026-W08-ARI@DAL",
+    "2026-W08-ATL@TB",
+    "2026-W08-BAL@BUF",
+    "2026-W08-CLE@PIT",
+    "2026-W08-IND@JAX",
+    "2026-W08-LV@NYJ",
+    "2026-W08-MIN@DET",
+    "2026-W08-TEN@CIN",
+    "2026-W08-LAC@LAR",
+    "2026-W08-KC@DEN",
+    "2026-W08-NE@MIA",
+    "2026-W08-PHI@WAS",
+    "2026-W08-CHI@SEA"
+  ],
+  "ticket": "t4605u",
+  "week": 8
+}

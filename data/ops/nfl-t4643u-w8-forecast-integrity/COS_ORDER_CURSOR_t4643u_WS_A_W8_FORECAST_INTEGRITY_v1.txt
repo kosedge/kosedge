@@ -1,0 +1,14 @@
+ORDER t4643u WS-A P0 — WEEK 8 FORECAST INTEGRITY (Ryan DECISION POST-G34 sha8 098da1dd).
+
+Continue on this agent / #645 DRAFT only (not #648). Nested G34 CLOSED — no G34/exp work.
+
+Goal: make the forecasting pipeline trustworthy. Having current data available does NOT prove the engine uses it (already proven in sealed CONSUME_PROOF 7c2d9625 / 0be23ede tip 70303058 — do not redo as discovery).
+
+Deliverables (DRAFT branch only):
+1) Exact code-path map
+2) Input-consumption test matrix
+3) Bounded repair plan + draft test contracts for known GAPs
+CRITICAL: Do NOT simply wire the warehouse into production because it is available.
+
+Hard stops: no merge · no deploy · no Odds API spend · no F2 · no CERT · no holdouts · NFL NO-GO · Coming Soon ON.
+Stop for CoS ACCEPT → IMV + Codex review.
