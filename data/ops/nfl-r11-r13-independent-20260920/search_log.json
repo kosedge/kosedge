@@ -1,0 +1,147 @@
+{
+  "as_of": "2026-09-20T14:45:00Z",
+  "agent": "cursor-cloud NFL R11/R13 provenance + cert runner",
+  "repo": "kosedge/kosedge",
+  "checkout": {
+    "branch": "deploy-vercel",
+    "commit": "4aeab78f2011ac593c708f24acc01bf5117f9728",
+    "working_tree": "clean_at_search"
+  },
+  "label_query": ["R11", "R13", "R14"],
+  "metric_query": ["key-3", "key-7", "key_3", "key_7", "OT", "MAE", "total"],
+  "searches": [
+    {
+      "surface": "repo_filenames",
+      "query": "*r11* *r13* *r14* *R11* *R13* *R14* *provenance* *cert* *simulat*",
+      "result": "zero experiment-label filenames. Existing hits are unrelated cert/sim/provenance files."
+    },
+    {
+      "surface": "repo_content",
+      "query": "R11|R13|R14|frozen R11|R13 experiment|R14 candidate|key-3|key-7|key_3|key_7",
+      "result": "no experiment-round hits. Unrelated: market-risk register R1–R11; WR11/WR13/WR14 ranks; personnel grouping rates r11/r13 in personnel_efficiency.py."
+    },
+    {
+      "surface": "git_log_all",
+      "query": "R11|R13|R14|key-3|key-7|ot_mae|frozen gate",
+      "result": "no matching commit subjects on local refs"
+    },
+    {
+      "surface": "git_tags",
+      "query": "all tags",
+      "result": "cfb-week0-close-2026-08-31; nfl-2026-preseason-baseline-v1.24 — neither is R11/R13/R14"
+    },
+    {
+      "surface": "git_worktrees",
+      "query": "git worktree list",
+      "result": "only /workspace on deploy-vercel @ 4aeab78f"
+    },
+    {
+      "surface": "git_branches",
+      "query": "r11|r13|r14|lineage|prov|drive.poss|warroom|experiment",
+      "result": "concurrent sibling cursor/nfl-r11-r13-lineage-7c4b (PR 576, not authority); feat/nfl-lineage-badge-ui (UI badge, not this experiment)"
+    },
+    {
+      "surface": "github_issues_prs",
+      "query": "R11 OR R13 OR R14 OR key-3 OR provenance NFL",
+      "result": "no historical issue. Only concurrent draft PR 576 created during this window."
+    },
+    {
+      "surface": "linear",
+      "query": "R11 R13 R14 NFL provenance; key-3 key-7 frozen source simulator experiment",
+      "result": "no issue titled or described as R11/R13/R14 experiment rounds. Adjacent only: KOS-29 launch cert, KOS-30 carryover, KOS-5 spread protocol, KOS-25 provenance+freshness HOLD."
+    },
+    {
+      "surface": "notion",
+      "query": "R11 R13 R14 NFL frozen provenance",
+      "result": "no matching experiment page. HQ / Lab / market-risk / props pages only."
+    },
+    {
+      "surface": "gmail",
+      "query": "R11 OR R13 OR R14 OR key-3 OR frozen R11 NFL simulator",
+      "result": "only GitHub notifications for concurrent PR 576. No prior experiment mail."
+    },
+    {
+      "surface": "google_drive",
+      "query": "title/fullText R11|R13|R14|key-3",
+      "result": "zero files"
+    },
+    {
+      "surface": "google_calendar",
+      "query": "search_events",
+      "result": "tool returned Internal error. No calendar lineage recovered."
+    },
+    {
+      "surface": "x_posts",
+      "query": "KosEdge R11 OR R13 OR R14",
+      "result": "unrelated public posts (discount codes, ratings, tickets). No KosEdge experiment labels."
+    },
+    {
+      "surface": "self_hosted_workers",
+      "query": "list-self-hosted-workers",
+      "result": "none connected"
+    },
+    {
+      "surface": "cloud_agents",
+      "query": "names containing R11/R13/R14/provenance/lineage/drive/poss/experiment",
+      "result": "this run plus concurrent Reproducible experiment lineage (PR 576). No earlier named R11/R13/R14 experiment run in the scanned page."
+    },
+    {
+      "surface": "local_volumes",
+      "query": "/Volumes/KosEdgeData",
+      "result": "/Volumes not mounted in this environment"
+    },
+    {
+      "surface": "alex_external_bind_followup",
+      "as_of": "2026-09-20T14:50:00Z",
+      "query": "permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.{md,json}; pe_clock_play_v3.3/v3.5; CLOCK_PLAY_R11|R13",
+      "result": "Academy paths absent from this checkout, Drive titles, and Gmail. Hash prefixes recorded from the bind note only. Full sha256 not invented. CLOCK_PLAY_R11/R13 dirs not found."
+    }
+  ],
+  "near_misses_not_aliased": [
+    {
+      "id": "pe_drive_poss_v1",
+      "sha256": "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+      "where": "docs/ops/NFL_FAIR_LINES_PRODUCTION_CERT_PRODUCT_2026-09-17.md; data/ops/nfl-fair-lines-production-cert-product-20260917/packet.json",
+      "status": "REJECTED_PRACTICE_SHA",
+      "why_not_r11": "Artifact id is pe_drive_poss_v1, not R11. Alex NO CLEAR; all five gates FAIL. The five gates are not mapped to key-3/key-7/OT/MAE/total. Missing simulator git SHA, runner, config, data hashes, seeds, command, and numeric metrics."
+    },
+    {
+      "id": "pe_drive_poss_v2",
+      "where": "same Fair Lines PRODUCTION-CERT packet",
+      "status": "DIAGNOSTIC_STOP",
+      "why_not_r13_or_r14": "Labeled v2 diagnostic STOP, not R13/R14. No source/runner/metrics filed."
+    },
+    {
+      "id": "live_model_sha_153b6a884a8e",
+      "where": "data/ops/nfl-reopening-packet-20260916/historical-oos/HISTORICAL_OOS_DIAGNOSTIC.md",
+      "status": "MODEL_SIGNAL_WEAK research OOS",
+      "why_not_r11": "Packaged-EPA historical OOS, not an R11 label. Multi-season July-31 freeze marked UNREPRODUCIBLE in that packet."
+    },
+    {
+      "id": "market_risk_R11",
+      "where": "docs/MARKET_ODDS_INFRASTRUCTURE_AUDIT_v1.md",
+      "status": "odds-infra risk register item",
+      "why_not_r11": "book_ledger ≠ market ledger — not a simulator experiment."
+    },
+    {
+      "id": "personnel_r11_r13_rates",
+      "where": "services/model-service/data_platform_nfl/personnel_efficiency.py",
+      "why_not": "11-personnel / 13-personnel grouping rates, not experiment rounds."
+    },
+    {
+      "id": "WR11_WR13_WR14",
+      "where": "data/ops/nfl-*-20260813.md fantasy depth notes",
+      "why_not": "receiver rank labels, not experiment rounds."
+    },
+    {
+      "id": "nfl_simulator_v1_5",
+      "where": "services/model-service/src/services/nfl_simulator.py DEFAULT_NFL_MODEL_VERSION=nfl-v1.5-matchup-sim",
+      "why_not": "Current checked-in simulator. Not labeled R11/R13/R14. Binding it would invent a lineage."
+    },
+    {
+      "id": "nfl_enterprise_gates",
+      "where": "docs/NFL_ENTERPRISE_GATES.md",
+      "why_not": "Product ATS/CLV/MAE floors, not an R11 frozen gate set with key-3/key-7/OT."
+    }
+  ]
+}

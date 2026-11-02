@@ -1,0 +1,51 @@
+{
+  "label": "R11",
+  "role": "frozen_source",
+  "status": "PARTIAL_EXTERNAL",
+  "bind_allowed": false,
+  "exact_reproduction_established": false,
+  "external_artifact_id": "pe_clock_play_v3.3",
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": {
+    "path": null,
+    "hash_prefix": "5abf5e69",
+    "hash_full": null
+  },
+  "engine": {
+    "id": "V33",
+    "hash_prefix": "6f98bb19",
+    "hash_full": null
+  },
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": [],
+    "named_but_unhashed": ["pbp_clock"]
+  },
+  "random_seeds": [20260917],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "calibration_labels_unverified": ["packets", "pbp_clock", "calib"],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "Alex Academy/research store files are not in this git checkout: permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.md (sha256 prefix bb6ebda9) and .json (sha256 prefix d1dfc752).",
+    "Full sha256, git SHAs, Mac/Drive absolute paths, CLOCK_PLAY_R11 freeze dir, and original argv remain unrecovered.",
+    "Do not invent truncated hashes."
+  ],
+  "evidence": [
+    "Alex external provenance bind filed 2026-09-20 (documentation only). R11 labeled pe_clock_play_v3.3 / V33 prefix 6f98bb19 / runner prefix 5abf5e69 / seed 20260917.",
+    "Academy files not present under /workspace/permanent-engine or Drive. Prefixes recorded; full hashes not invented."
+  ],
+  "notes": "Do not alias pe_drive_poss_v1, pe_drive_poss_v2, live SHA 153b6a884a8e, market-risk R11, personnel r11 rates, WR11 ranks, or services/model-service/src/services/nfl_simulator.py as frozen R11."
+}
