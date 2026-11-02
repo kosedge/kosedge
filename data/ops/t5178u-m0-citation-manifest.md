@@ -60,3 +60,12 @@ Research-branch absence ≠ missing product code. `deploy-vercel` has `nfl_simul
 4. **`#701` / R5 is reference only.** No scoring, no reopen.
 
 Independent W-FIX-A continues on the bound contract + `#664` validate attachment.
+
+## How B wires validate on `deploy-vercel` @ `f5e3bb58`
+
+See `data/ops/t5178u-m0-attach-path-for-b.md`.
+
+- `7abf65a2` = **Git commit** `7abf65a2c85708cc6d4a1cd2b4d9643a4612084a` (OPEN DRAFT `#664`).
+- Attach is a **path-checkout of that Git commit** onto the product-lineage branch — same six `nfl_hhl1_capture/*` blobs + synthetic plumbing test. Verified byte-identical on this branch.
+- B repeats the same `git checkout 7abf65a2 -- services/model-service/src/services/nfl_hhl1_capture …` on `cursor/t5178u-wfixb-consumer-a875`, **or** path-checkouts those files from this M0 tip.
+- Import `src.services.nfl_hhl1_capture.validate` (`validate_l1_candidate` / `validate_l1_batch` / `reject_market_fields`). Do **not** write a disconnected demo helper. Do **not** pull a sparse research tree. Do **not** merge the rest of `#664`.
