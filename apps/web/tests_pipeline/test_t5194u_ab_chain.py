@@ -54,7 +54,9 @@ def test_command_and_pinned_digest() -> None:
     assert f"digest {EXPECTED}" in proc.stdout
     assert "OK" in proc.stdout
     assert "guard_active true" in proc.stdout
+    assert "ts_forbidden_call_attempts 0" in proc.stdout
     assert "forbidden_call_attempts 0" in proc.stdout
+    assert "PRODUCED_DIGEST_MISMATCH" not in proc.stderr
 
 
 def test_command_forbidden_import_and_connect_increments_and_refuses() -> None:
@@ -65,6 +67,21 @@ def test_command_forbidden_import_and_connect_increments_and_refuses() -> None:
     assert "OK" not in proc.stdout
     attempts_line = [
         line for line in proc.stdout.splitlines() if line.startswith("forbidden_call_attempts ")
+    ]
+    assert attempts_line, proc.stdout
+    assert int(attempts_line[-1].split()[-1]) >= 2
+
+
+def test_command_ts_forbidden_probe_increments_and_refuses() -> None:
+    proc = _run_chain("--probe-ts-forbidden")
+    assert proc.returncode != 0, proc.stdout + proc.stderr
+    assert "guard_active true" in proc.stdout
+    assert "TS_PROBE_REFUSED" in proc.stdout
+    assert "OK" not in proc.stdout
+    attempts_line = [
+        line
+        for line in proc.stdout.splitlines()
+        if line.startswith("ts_forbidden_call_attempts ")
     ]
     assert attempts_line, proc.stdout
     assert int(attempts_line[-1].split()[-1]) >= 2

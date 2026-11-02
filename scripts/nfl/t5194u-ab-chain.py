@@ -11,6 +11,7 @@ claiming 0 forbidden-call attempts.
 From repo root:
   PYTHONPATH=services/model-service python3 scripts/nfl/t5194u-ab-chain.py
   PYTHONPATH=services/model-service python3 scripts/nfl/t5194u-ab-chain.py --probe-forbidden
+  PYTHONPATH=services/model-service python3 scripts/nfl/t5194u-ab-chain.py --probe-ts-forbidden
 """
 
 from __future__ import annotations
@@ -63,6 +64,7 @@ EXPORT = ROOT / "apps" / "web" / "scripts" / "export_kei_lines_nfl.py"
 WEB = ROOT / "apps" / "web"
 EXPECTED_DIGEST = "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124"
 OUT = Path("/tmp/t5194u-ab-chain-out.json")
+_LAST_TS_ATTEMPTS = 0
 
 
 def _load_export():
@@ -94,12 +96,29 @@ def _print_report(*, extra: dict[str, Any] | None = None) -> dict[str, Any]:
     return report
 
 
-def _run_ts_consumers(chain_json: Path) -> None:
+def _parse_ts_attempts(text: str) -> int | None:
+    matches = [
+        line
+        for line in text.splitlines()
+        if line.startswith("ts_forbidden_call_attempts ")
+    ]
+    if not matches:
+        return None
+    try:
+        return int(matches[-1].split()[-1])
+    except (TypeError, ValueError):
+        return None
+
+
+def _run_ts_consumers(chain_json: Path, *, probe: bool = False) -> int:
+    global _LAST_TS_ATTEMPTS
     env = {
         **os.environ,
         "T5201U_CHAIN_JSON": str(chain_json),
         "PYTHONPATH": str(MS),
     }
+    if probe:
+        env["T5201U_TS_PROBE_FORBIDDEN"] = "1"
     cmd = [
         "pnpm",
         "exec",
@@ -115,11 +134,32 @@ def _run_ts_consumers(chain_json: Path) -> None:
         text=True,
         check=False,
     )
+    combined = f"{proc.stdout or ''}\n{proc.stderr or ''}"
+    ts_n = _parse_ts_attempts(combined)
+    _LAST_TS_ATTEMPTS = int(ts_n) if ts_n is not None else 0
+    if ts_n is None:
+        raise FixtureHardRefuse(
+            FixtureEligibilityResult.REFUSE_VALIDATION,
+            f"TS_GUARD_LINE_MISSING rc={proc.returncode}\n{combined}",
+        )
+    if probe:
+        if ts_n < 2 or proc.returncode == 0:
+            raise FixtureHardRefuse(
+                FixtureEligibilityResult.REFUSE_VALIDATION,
+                f"TS_PROBE_DID_NOT_REFUSE n={ts_n} rc={proc.returncode}\n{combined}",
+            )
+        return ts_n
     if proc.returncode != 0:
         raise FixtureHardRefuse(
             FixtureEligibilityResult.REFUSE_VALIDATION,
-            f"TS consumers failed rc={proc.returncode}\n{proc.stdout}\n{proc.stderr}",
+            f"TS consumers failed rc={proc.returncode} ts_n={ts_n}\n{combined}",
         )
+    if ts_n != 0:
+        raise FixtureHardRefuse(
+            FixtureEligibilityResult.REFUSE_VALIDATION,
+            f"TS_FORBIDDEN {ts_n}",
+        )
+    return ts_n
 
 
 def _probe_forbidden() -> None:
@@ -152,6 +192,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="negative: real forbidden import+connect; refuse usable output",
     )
+    parser.add_argument(
+        "--probe-ts-forbidden",
+        action="store_true",
+        help="negative: Node fetch/net/dns/http/db; refuse usable output",
+    )
     args = parser.parse_args(argv)
 
     pinned_bytes = PINNED.read_bytes()
@@ -163,11 +208,21 @@ def main(argv: list[str] | None = None) -> int:
 
     tmpdir = Path(tempfile.mkdtemp(prefix="t5201u-chain-"))
     dest = tmpdir / "produced-chain.json"
-    produced = produce_fixture_chain(dest=dest)
+    try:
+        produced = produce_fixture_chain(dest=dest)
+    except FixtureHardRefuse as exc:
+        print(f"PRODUCE_REFUSE {exc.result.value}: {exc.reason}", file=sys.stderr)
+        return 2
     payload = produced
     digest = chain_digest(payload)
     if dest.read_text(encoding="utf-8") == "":
         print("PRODUCE_EMPTY", file=sys.stderr)
+        return 2
+    if digest != EXPECTED_DIGEST or digest != pinned:
+        print(
+            f"PRODUCED_DIGEST_MISMATCH got={digest} pinned={pinned} expected={EXPECTED_DIGEST}",
+            file=sys.stderr,
+        )
         return 2
     if PINNED.read_bytes() != pinned_bytes or PINNED_SHA.read_bytes() != pinned_sha_bytes:
         print("PINNED_MUTATED", file=sys.stderr)
@@ -210,6 +265,49 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         _print_report()
         print("PROBE_REFUSED")
+        return 2
+
+    if args.probe_ts_forbidden:
+        usable = None
+        try:
+            def _run_ts_probe() -> None:
+                if not guard_active():
+                    raise FixtureHardRefuse(
+                        FixtureEligibilityResult.REFUSE_QUALIFICATION,
+                        "ab-chain guard_active is not true",
+                    )
+                n = _run_ts_consumers(dest, probe=True)
+                raise FixtureHardRefuse(
+                    FixtureEligibilityResult.REFUSE_QUALIFICATION,
+                    f"ts chain path observed forbidden fetch/net/db n={n}",
+                )
+
+            run_under_chain_guard(_run_ts_probe)
+        except FixtureHardRefuse as exc:
+            usable = None
+            if "TS_PROBE_DID_NOT_REFUSE" in exc.reason or "TS_GUARD_LINE_MISSING" in exc.reason:
+                print(f"REFUSE {exc.result.value}: {exc.reason}", file=sys.stderr)
+                return 2
+        except Exception:
+            usable = None
+        report = last_guard_report()
+        ts_n = _LAST_TS_ATTEMPTS
+        if not report["guard_active"]:
+            print("guard_active false", file=sys.stderr)
+            return 3
+        if ts_n < 2:
+            print(f"TS_PROBE_DID_NOT_INCREMENT {ts_n}", file=sys.stderr)
+            return 2
+        if usable is not None:
+            print("PROBE_LEAKED_USABLE_OUTPUT", file=sys.stderr)
+            return 2
+        if OUT.read_bytes() != prior:
+            print("OUT_MUTATED_ON_REFUSE", file=sys.stderr)
+            return 2
+        print(f"ts_forbidden_call_attempts {ts_n}")
+        print(f"forbidden_call_attempts {report['forbidden_call_attempts'] + ts_n}")
+        print(f"guard_active {str(bool(report['guard_active'])).lower()}")
+        print("TS_PROBE_REFUSED")
         return 2
 
     if payload.get("chain_contract_id") != CHAIN_CONTRACT_ID:
@@ -301,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
                         f"OUT_MUTATED_ON_REFUSE {name}",
                     )
         doc["refused"] = refused
-        _run_ts_consumers(dest)
+        doc["ts_forbidden_call_attempts"] = _run_ts_consumers(dest)
         if PINNED.read_bytes() != pinned_bytes or PINNED_SHA.read_bytes() != pinned_sha_bytes:
             raise FixtureHardRefuse(
                 FixtureEligibilityResult.REFUSE_VALIDATION,
@@ -328,8 +426,10 @@ def main(argv: list[str] | None = None) -> int:
     if not report["guard_active"]:
         print("guard_active false", file=sys.stderr)
         return 3
-    if report["forbidden_call_attempts"]:
-        print(f"FORBIDDEN {report['attempts']}", file=sys.stderr)
+    ts_n = int(doc.get("ts_forbidden_call_attempts") or 0)
+    total = int(report["forbidden_call_attempts"]) + ts_n
+    if total:
+        print(f"FORBIDDEN py={report['forbidden_call_attempts']} ts={ts_n}", file=sys.stderr)
         return 2
 
     print(f"produced {dest}")
@@ -341,7 +441,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"refused {','.join(doc['refused'])}")
     print(f"out_preserved {OUT.read_bytes() == prior}")
     print("guard_active true")
-    print(f"forbidden_call_attempts {report['forbidden_call_attempts']}")
+    print(f"ts_forbidden_call_attempts {ts_n}")
+    print(f"forbidden_call_attempts {total}")
     print("OK")
     return 0
 

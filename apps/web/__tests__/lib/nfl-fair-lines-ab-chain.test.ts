@@ -4,7 +4,12 @@
  */
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
+import {
+  installTsChainGuard,
+  printTsForbiddenReport,
+  probeTsForbidden,
+} from "@/lib/nfl-fixture-chain-ts-guard";
 import {
   assertFixtureChainRecord,
   projectFixtureAbChain,
@@ -39,6 +44,19 @@ const PINNED_SHA = path.join(
 );
 const EXPECTED_DIGEST =
   "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124";
+
+const TS_CHAIN_LEG = Boolean(process.env.T5201U_CHAIN_JSON);
+const TS_PROBE = process.env.T5201U_TS_PROBE_FORBIDDEN === "1";
+
+if (TS_CHAIN_LEG) {
+  installTsChainGuard();
+}
+
+afterAll(() => {
+  if (TS_CHAIN_LEG) {
+    printTsForbiddenReport();
+  }
+});
 
 function loadPinned(): Record<string, unknown> {
   return JSON.parse(readFileSync(PINNED, "utf8")) as Record<string, unknown>;
@@ -334,4 +352,15 @@ describe("t5194u A→B chain consume of pinned A artifact", () => {
       expectDirectConsumersRefuse(bad);
     },
   );
+});
+
+describe.skipIf(!TS_PROBE)("t5201u TS forbidden probe", () => {
+  it("counts and refuses fetch / net / dns / http / db", () => {
+    const n = probeTsForbidden();
+    expect(n).toBeGreaterThanOrEqual(2);
+    throw new FixtureHardRefuse(
+      "REFUSE_QUALIFICATION",
+      "ts chain path observed forbidden fetch/net/db",
+    );
+  });
 });
