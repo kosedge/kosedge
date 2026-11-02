@@ -44,12 +44,12 @@ finite numerics, source sha + lineage, labels **RECONSTRUCTED** / **RETRO_FIT**.
 
 ## Fixed arms
 
-| Arm       | Pin                                                                                          |
-| --------- | -------------------------------------------------------------------------------------------- |
-| IF        | produce_μ @ `6ca03716` · sim `52d9e909` · fw `a0051cc4` · N=4000 · existing per-game seed     |
+| Arm       | Pin                                                                                                      |
+| --------- | -------------------------------------------------------------------------------------------------------- |
+| IF        | produce_μ @ `6ca03716` · sim `52d9e909` · fw `a0051cc4` · N=4000 · existing per-game seed                |
 | Q2 coeffs | A=`2.5637441292077354` B=`1.660624056183471` ridge=20 prior_reg=0.5 · 2013–16 transfer · no refit/search |
-| Candidate | `0.5*IF+0.5*Q2` exactly                                                                      |
-| R3        | w=0.75 **STOP** `81b6c0fc` stands                                                            |
+| Candidate | `0.5*IF+0.5*Q2` exactly                                                                                  |
+| R3        | w=0.75 **STOP** `81b6c0fc` stands                                                                        |
 
 ## R5 history rule (disclose ≠ old kickoff-only as-of)
 
@@ -59,25 +59,25 @@ Q2 state = canonically identified REG score history from approved 2013–2021
 sources only. For a target: earlier seasons + strictly earlier NFL weeks with
 kickoff < KO−60. No same-week / own-target / later rows. No week≤18 REG proxy.
 
-| Source                         | sha256 / status                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------- |
-| games.csv kickoff              | `4fe1cdd7…` present · **no season_type**                                        |
-| outcomes 50bda875              | `50bda875…` present · score-only · **no season_type**                           |
-| schedule 2020–23               | `08533423…` · `season_type=REG` proves 2020 (256) and 2021 (272)                |
-| 2013–2019 REG identity / prior | **UNPROVEN** — no approved season_type=REG extract; week≤18 proxy refused       |
+| Source                         | sha256 / status                                                           |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| games.csv kickoff              | `4fe1cdd7…` present · **no season_type**                                  |
+| outcomes 50bda875              | `50bda875…` present · score-only · **no season_type**                     |
+| schedule 2020–23               | `08533423…` · `season_type=REG` proves 2020 (256) and 2021 (272)          |
+| 2013–2019 REG identity / prior | **UNPROVEN** — no approved season_type=REG extract; week≤18 proxy refused |
 
 **HOLD Q2** for all 496 with that missing proof. IF pipeline finished. No
 invented history. Candidate withheld while Q2 is HOLD.
 
 ## Forecasts (Phase 1)
 
-| Result              | Value        |
-| ------------------- | ------------ |
-| n_forecasts         | **496**      |
-| n_if_finite         | **496**      |
-| n_q2_hold           | **496**      |
-| n_candidate_finite  | **0**        |
-| target labels loaded| **0**        |
+| Result               | Value   |
+| -------------------- | ------- |
+| n_forecasts          | **496** |
+| n_if_finite          | **496** |
+| n_q2_hold            | **496** |
+| n_candidate_finite   | **0**   |
+| target labels loaded | **0**   |
 
 Seeds / IF tip / simulator / framework / source / history hashes / warnings
 are in `FORECASTS_DEV_R5_496.json`. No home/away scores, no actual margin.
@@ -86,11 +86,11 @@ are in `FORECASTS_DEV_R5_496.json`. No home/away scores, no actual margin.
 
 Old freeze `FORECAST_FREEZE_t5112u.json` sha `9e704b98…` (immutable).
 
-| Check                                      | Result                          |
-| ------------------------------------------ | ------------------------------- |
-| 27-input last-played vs exact-week         | **437 / 437 identical**         |
-| IF replay `1e-9*max(1,\|old\|)` same pin/seed | **437 / 437** · **0 BLOCKER** |
-| Example `2020_02_CIN_CLE`                  | `m_if=0.07714026611934685` seed 672662 exact match |
+| Check                                         | Result                                             |
+| --------------------------------------------- | -------------------------------------------------- |
+| 27-input last-played vs exact-week            | **437 / 437 identical**                            |
+| IF replay `1e-9*max(1,\|old\|)` same pin/seed | **437 / 437** · **0 BLOCKER**                      |
+| Example `2020_02_CIN_CLE`                     | `m_if=0.07714026611934685` seed 672662 exact match |
 
 No input discrepancy to explain on the 437. new59 = 30 (2020) + 29 (2021)
 from frozen identities (not outcomes).
@@ -99,20 +99,20 @@ from frozen identities (not outcomes).
 
 `data/ops/nfl-t5155u-r5-496-freeze/`
 
-| File                                         | sha256                                                             |
-| -------------------------------------------- | ------------------------------------------------------------------ |
-| `SPEC.json`                                  | `4cd87c0f8f898e63926903e8b3a6c9ab6e6c74edba21fb60a65272dc10b9f1e5` |
-| `IDENTITY_MANIFEST.json`                     | `c94200d4f344207bf06a24185d7a424bb736229588dd53eb4ce7ee35ea466fd0` |
-| `FEATURE_VALIDATION.json`                    | `3e0d40b936e5bc2dcdd08e4e1f28f07ffbd77f7d81d37a5023984937574b7690` |
-| `Q2_HISTORY_FREEZE.json`                     | `5c34107e1ee7a15e2d910658b39e4224b305eebc9719416c4bb6ef061f916c9d` |
-| `SPLIT_SCAFFOLDING.json`                     | `0b7a7d1ea26d6563a16cb79dd3417c57346164516b9816a7314a1b565f8cc20c` |
-| `FORECASTS_DEV_R5_496.json`                  | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
-| `COMPARE_437.json`                           | `a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384` |
+| File                                             | sha256                                                             |
+| ------------------------------------------------ | ------------------------------------------------------------------ |
+| `SPEC.json`                                      | `4cd87c0f8f898e63926903e8b3a6c9ab6e6c74edba21fb60a65272dc10b9f1e5` |
+| `IDENTITY_MANIFEST.json`                         | `c94200d4f344207bf06a24185d7a424bb736229588dd53eb4ce7ee35ea466fd0` |
+| `FEATURE_VALIDATION.json`                        | `3e0d40b936e5bc2dcdd08e4e1f28f07ffbd77f7d81d37a5023984937574b7690` |
+| `Q2_HISTORY_FREEZE.json`                         | `5c34107e1ee7a15e2d910658b39e4224b305eebc9719416c4bb6ef061f916c9d` |
+| `SPLIT_SCAFFOLDING.json`                         | `0b7a7d1ea26d6563a16cb79dd3417c57346164516b9816a7314a1b565f8cc20c` |
+| `FORECASTS_DEV_R5_496.json`                      | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
+| `COMPARE_437.json`                               | `a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384` |
 | `STOP_AWAITING_ALEX_PREFLIGHT_AND_COS_BIND.json` | `ebd995d55e32652901ea5687f7debdf8a48152a7323cc320ee8a358cb7c6da7b` |
-| `PHASE2_POSITIVE_PATH.json`                  | `bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086` |
-| `SCORING_REFUSE.json`                        | `83f1e775d34742eb36c969baeb4fe218908f526f992ae1037a7dcb37c07288ad` |
-| `SOURCE_PINS.json`                           | `43a21807286da1b5594fe07d913459b3b30ba19eee08ec7fb2e4d1b71e85c144` |
-| `FREEZE_MANIFEST.json`                       | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
+| `PHASE2_POSITIVE_PATH.json`                      | `bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086` |
+| `SCORING_REFUSE.json`                            | `83f1e775d34742eb36c969baeb4fe218908f526f992ae1037a7dcb37c07288ad` |
+| `SOURCE_PINS.json`                               | `43a21807286da1b5594fe07d913459b3b30ba19eee08ec7fb2e4d1b71e85c144` |
+| `FREEZE_MANIFEST.json`                           | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
 
 Code sha `r5_496_freeze.py` =
 `24d118bb2453107002779937613de83ac27160ac4c9ca3d2cf7adb0298bf09ea`.
@@ -163,11 +163,11 @@ CERT=0.
 
 ## Pins
 
-| Item               | Value                                                              |
-| ------------------ | ------------------------------------------------------------------ |
-| Implementation tip | `661df712a804bc1d9662f77008af28f8418cd0a1`                         |
-| Parent tip         | `f7ec09ee2ffcce7b130c9b858304bbe8006a4428`                         |
+| Item                          | Value                                                              |
+| ----------------------------- | ------------------------------------------------------------------ |
+| Implementation tip            | `661df712a804bc1d9662f77008af28f8418cd0a1`                         |
+| Parent tip                    | `f7ec09ee2ffcce7b130c9b858304bbe8006a4428`                         |
 | FEATURE_RECON_REG496 identity | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640` |
-| Feature JSON       | `282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c` |
-| Forecasts          | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
-| Freeze manifest    | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
+| Feature JSON                  | `282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c` |
+| Forecasts                     | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
+| Freeze manifest               | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |

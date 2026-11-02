@@ -1,4 +1,4 @@
-# CURSOR ADDENDUM t5155u — R5 Phase 1 (Worker B)
+# CURSOR ADDENDUM t5155u — R5 Phase 1 (Worker B + A combine)
 
 Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5155u **659cd7d9** · Cos ORDER **3e14602b**
@@ -7,25 +7,29 @@ HARD END 02:30 EST / 07:30Z.
 Closed quality (do not re-review): #700 tip **12ccc482** · Cos ACCEPT
 **4b23584a** · Alex **f4147e76**. Preserve RETURN **7057e5a9**.
 Reuse: #699 Package A **42ff285c** / stamp **f7ec09ee** · #700 RETURN-FIX
-**12ccc482**. Worker A owns forecast/identity freeze — not raced here.
+**12ccc482**. Worker A freeze combined here — same draft PR **#701**.
+Do not open a third PR. A PR **#702** is the source tip only.
 
 No merge. No prod default. No real EVAL. No GREEN. No self-ACCEPT.
-No target scoring loader / ONE DEV diagnostic. CERT=0.
+No Cos bind. No `--score` / target scoring loader / ONE DEV diagnostic.
+CERT=0. Alex PREFLIGHT in flight.
 
-Implementation tip **34be2d06c456b2399e3541fc691f53aa520d0a89** (N1 + market freeze).
-One-command result: `CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false`
-· `output_sha256` **b7487bbc** · focused tests **71 passed**. Worker A forecast
-freeze still **PENDING**.
+Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
+stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Merge conflict: only
+`.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
+**072e99e0** unchanged.
 
 ## Exact offline commands
 
 ```
 python3 scripts/nfl/freeze_nfl_t5155u_market_arm.py
+PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py
 python3 scripts/nfl/run_nfl_t5151u_verify_integrate.py
 ```
 
-Receipt: `data/ops/nfl-t5151u-verify-integrate/RECEIPT.json` (copy under
-`data/ops/nfl-t5155u-r5-phase1/RECEIPT.json`).
+A command is read-only pin after tip — do not re-run produce-μ to rewrite
+frozen A bytes. Receipt: `data/ops/nfl-t5151u-verify-integrate/RECEIPT.json`
+(copy under `data/ops/nfl-t5155u-r5-phase1/RECEIPT.json`).
 Freeze: `data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json`.
 
 ## N1 — required successor (not a #700 review loop)
@@ -61,42 +65,63 @@ boundary. Refusal paths read **zero** target scoring labels. A valid
 positive `invoke_outcome_after_gates` invokes the loader once (Phase 2
 readiness only). Normal command leaves that flag false.
 
-Worker A forecast freeze slot: **PENDING** — combine after A tips.
-
 ### Intersection result (B1 ∩ REG496)
 
-| | |
-|---|---|
-| n | **96** (41 / 55) |
-| missing vs REG496 | **400** (199 / 201) |
-| one-book / two-book | **5 / 91** |
-| vs B1 DEV437 matched 94 | +2 REG496-only: `2020_05_BUF_TEN`, `2021_15_WAS_PHI` |
-| intersection bytes | `072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df` |
-| intersection identity | `558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e` |
-| R2-C HOLD 2020 | 215/256 = 83.98% · HOLD · threshold 0.30 unchanged |
-| R2-C HOLD 2021 | 217/272 = 79.78% · HOLD · threshold 0.30 unchanged |
+|                         |                                                                    |
+| ----------------------- | ------------------------------------------------------------------ |
+| n                       | **96** (41 / 55)                                                   |
+| missing vs REG496       | **400** (199 / 201)                                                |
+| one-book / two-book     | **5 / 91**                                                         |
+| vs B1 DEV437 matched 94 | +2 REG496-only: `2020_05_BUF_TEN`, `2021_15_WAS_PHI`               |
+| intersection bytes      | `072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df` |
+| intersection identity   | `558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e` |
+| R2-C HOLD 2020          | 215/256 = 83.98% · HOLD · threshold 0.30 unchanged                 |
+| R2-C HOLD 2021          | 217/272 = 79.78% · HOLD · threshold 0.30 unchanged                 |
 
 Not a 94 substitution. Not EVAL. Not scoring.
+
+## Worker A forecast freeze (PINNED)
+
+Read-only bind. No produce-μ rewrite. Q2/candidate stay **HOLD**.
+
+| Item                          | Value                                                              |
+| ----------------------------- | ------------------------------------------------------------------ |
+| A tip                         | `661df712a804bc1d9662f77008af28f8418cd0a1`                         |
+| A stamp                       | `3fbf5999360433ca46cbe77688daedaedd6a9c9b`                         |
+| FEATURE_RECON_REG496 identity | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640` |
+| Feature JSON                  | `282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c` |
+| Forecasts                     | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
+| Freeze manifest               | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
+| IF finite                     | **496**                                                            |
+| Q2 HOLD                       | **496** · 2013–19 REG unproven · do not invent Q2                  |
+| Candidate finite              | **0** (HOLD)                                                       |
+| common437 IF replay           | **437 / 437** · **0 BLOCKER**                                      |
+
+Phase 2 positive path: **READINESS ONLY**. `executed: false`. Cos bind
+false. `--score` / target scoring loader / ONE DEV diagnostic not wired
+on the normal command. `invoke_outcome_after_gates` remains available
+for tests; one-command leaves it false.
 
 ## Forbidden (honored)
 
 Paid pulls · 2024–26 · 2022–23 scoring · merge/deploy · secrets ·
-invented history · Stage C / R2-C / R3 changes.
+invented history · Stage C / R2-C / R3 changes · Cos bind · `--score` ·
+target scoring loader · ONE DEV diagnostic.
 
 ## Pins
 
-| Item                    | Value                                                              |
-| ----------------------- | ------------------------------------------------------------------ |
-| Implementation tip      | `34be2d06c456b2399e3541fc691f53aa520d0a89`                         |
-| OWNER CLEAR t5155u      | `659cd7d9`                                                         |
-| Cos ORDER               | `3e14602b`                                                         |
-| #700 tip                | `12ccc482db54dd53bc6d79cea5f4af01c5540950`                         |
-| Cos ACCEPT #700         | `4b23584a`                                                         |
-| Alex #700               | `f4147e76`                                                         |
-| RETURN                  | `7057e5a9`                                                         |
-| B1 universe             | `b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6` |
-| Intersection n / bytes  | `96` / `072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df` |
-| Intersection identity   | `558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e` |
-| REG496 identity         | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640` |
-| Package A tip           | `42ff285cc1be2459512af4761651ba6dfe17dc75`                         |
-| R2-C HOLD threshold     | `0.30` unchanged                                                   |
+| Item                   | Value                                                                     |
+| ---------------------- | ------------------------------------------------------------------------- |
+| OWNER CLEAR t5155u     | `659cd7d9`                                                                |
+| Cos ORDER              | `3e14602b`                                                                |
+| #700 tip               | `12ccc482db54dd53bc6d79cea5f4af01c5540950`                                |
+| Cos ACCEPT #700        | `4b23584a`                                                                |
+| Alex #700              | `f4147e76`                                                                |
+| RETURN                 | `7057e5a9`                                                                |
+| B1 universe            | `b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6`        |
+| Intersection n / bytes | `96` / `072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df` |
+| Intersection identity  | `558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e`        |
+| REG496 identity        | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640`        |
+| Package A tip          | `42ff285cc1be2459512af4761651ba6dfe17dc75`                                |
+| Worker A tip / stamp   | `661df712a` / `3fbf59993`                                                 |
+| R2-C HOLD threshold    | `0.30` unchanged                                                          |

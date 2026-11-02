@@ -4742,8 +4742,78 @@
     "scoring": null
   },
   "worker_a_forecast_freeze": {
-    "status": "PENDING",
-    "note": "combine after A tips \u2014 do not race forecast/identity core"
+    "ok": true,
+    "status": "PINNED",
+    "tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+    "stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+    "pr": 702,
+    "branch": "cursor/t5155u-r5-496-freeze-c279",
+    "command": "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+    "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+    "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+    "n_forecasts": 496,
+    "n_if_finite": 496,
+    "n_q2_hold": 496,
+    "n_q2_finite": 0,
+    "n_candidate_finite": 0,
+    "q2": {
+      "status": "HOLD",
+      "leg": "HOLD",
+      "hold_q2": true,
+      "n_hold": 496,
+      "candidate": "HOLD",
+      "invented_q2": false,
+      "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+      "years_unproven": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ],
+      "reg_unproven": true
+    },
+    "common437": {
+      "n_common": 437,
+      "n_replayed": 437,
+      "n_blocker": 0
+    },
+    "phase2_positive_path": {
+      "status": "READINESS_ONLY",
+      "executed": false,
+      "cos_bind": false,
+      "score_flag": false,
+      "target_scoring_loader": false,
+      "one_dev_diagnostic": false,
+      "invoke_outcome_after_gates_available": true,
+      "invoke_outcome_after_gates": false,
+      "requires": [
+        "Alex source/numerical-identity PREFLIGHT GO",
+        "Cos bind / EXEC release for target scoring loader"
+      ]
+    },
+    "scoring_refuse": {
+      "refused": true,
+      "outcome_loader_reads": 0,
+      "target_labels_loaded": 0,
+      "coverage_blocked": true,
+      "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND"
+    },
+    "cos_bind": false,
+    "scoring": null,
+    "eval": null,
+    "bytes_verified": {
+      "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+      "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
+      "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+    }
   },
   "limitations": {
     "publication_timestamp_status": "unverified",

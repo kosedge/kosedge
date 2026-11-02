@@ -340,6 +340,7 @@ def build_market_arm_freeze(
     root: Path,
     quotes: Sequence[Mapping[str, Any]] | None = None,
     reg496_ids: Sequence[str] | None = None,
+    worker_a: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     repo = Path(root)
     b1_sha = assert_b1_universe_bytes(repo)
@@ -433,7 +434,9 @@ def build_market_arm_freeze(
         },
         "excluded_slots": excluded,
         "r2c_hold": r2c_hold_disclosure(matched),
-        "worker_a_forecast_freeze": {
+        "worker_a_forecast_freeze": dict(worker_a)
+        if worker_a
+        else {
             "status": "PENDING",
             "note": "combine after A tips — do not race forecast/identity core",
         },
@@ -486,6 +489,7 @@ def run_market_arm_freeze(
     finalize: bool = True,
     dest: Path | None = None,
     quotes: Sequence[Mapping[str, Any]] | None = None,
+    worker_a: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Guarded freeze: A feature + outcome gates, then metadata write.
 
@@ -516,7 +520,9 @@ def run_market_arm_freeze(
         )
         if getattr(spy, "reads", 0) != 0:
             raise MarketArmFreezeRefuse("cohort gate invoked target-outcome loader")
-        payload = build_market_arm_freeze(root=repo, quotes=quotes, reg496_ids=reg_ids)
+        payload = build_market_arm_freeze(
+            root=repo, quotes=quotes, reg496_ids=reg_ids, worker_a=worker_a
+        )
         if invoke_outcome_after_gates:
             spy()
     except Exception:

@@ -22,6 +22,115 @@
   "cos_accept_700_sha8": "4b23584a",
   "alex_700_sha8": "f4147e76",
   "closed_700_tip": "12ccc482db54dd53bc6d79cea5f4af01c5540950",
+  "worker_a_tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+  "worker_a_stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+  "worker_a_forecast_freeze": {
+    "ok": true,
+    "status": "PINNED",
+    "tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+    "stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+    "pr": 702,
+    "branch": "cursor/t5155u-r5-496-freeze-c279",
+    "command": "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+    "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+    "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+    "n_forecasts": 496,
+    "n_if_finite": 496,
+    "n_q2_hold": 496,
+    "n_q2_finite": 0,
+    "n_candidate_finite": 0,
+    "q2": {
+      "status": "HOLD",
+      "leg": "HOLD",
+      "hold_q2": true,
+      "n_hold": 496,
+      "candidate": "HOLD",
+      "invented_q2": false,
+      "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+      "years_unproven": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ],
+      "reg_unproven": true
+    },
+    "common437": {
+      "n_common": 437,
+      "n_replayed": 437,
+      "n_blocker": 0
+    },
+    "phase2_positive_path": {
+      "status": "READINESS_ONLY",
+      "executed": false,
+      "cos_bind": false,
+      "score_flag": false,
+      "target_scoring_loader": false,
+      "one_dev_diagnostic": false,
+      "invoke_outcome_after_gates_available": true,
+      "invoke_outcome_after_gates": false,
+      "requires": [
+        "Alex source/numerical-identity PREFLIGHT GO",
+        "Cos bind / EXEC release for target scoring loader"
+      ]
+    },
+    "scoring_refuse": {
+      "refused": true,
+      "outcome_loader_reads": 0,
+      "target_labels_loaded": 0,
+      "coverage_blocked": true,
+      "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND"
+    },
+    "cos_bind": false,
+    "scoring": null,
+    "eval": null,
+    "bytes_verified": {
+      "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+      "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
+      "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+    }
+  },
+  "q2_hold": {
+    "status": "HOLD",
+    "leg": "HOLD",
+    "hold_q2": true,
+    "n_hold": 496,
+    "candidate": "HOLD",
+    "invented_q2": false,
+    "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+    "years_unproven": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "reg_unproven": true
+  },
+  "phase2_positive_path": {
+    "status": "READINESS_ONLY",
+    "executed": false,
+    "cos_bind": false,
+    "score_flag": false,
+    "target_scoring_loader": false,
+    "one_dev_diagnostic": false,
+    "invoke_outcome_after_gates_available": true,
+    "invoke_outcome_after_gates": false,
+    "requires": [
+      "Alex source/numerical-identity PREFLIGHT GO",
+      "Cos bind / EXEC release for target scoring loader"
+    ]
+  },
   "package_a_tip": "42ff285cc1be2459512af4761651ba6dfe17dc75",
   "package_a_stamp": "f7ec09ee2ffcce7b130c9b858304bbe8006a4428",
   "partial_plumbing_tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
@@ -39,11 +148,15 @@
   },
   "hashes": {
     "code": {
-      "sha256": "32c813a23f93975c44a03caaed81474ec5a1e1d8983620c570ff9aae96e35fb6",
+      "sha256": "b7a7e17c7728b4c8252ad07a97a2e4a1550a5d6c1fa2ca12c6adc1f320cc3768",
       "files": [
         {
           "path": "scripts/nfl/freeze_nfl_t5155u_market_arm.py",
           "sha256": "d7c9519919a3001c9397d1fd21ebfe41f843d110b71107e4f1dc1295be891d4a"
+        },
+        {
+          "path": "scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+          "sha256": "fd9a2437c9857d50897f4b0319784f3726f8d9003a374dc4041779bd3ab409b8"
         },
         {
           "path": "scripts/nfl/run_nfl_t5151u_verify_integrate.py",
@@ -59,29 +172,37 @@
         },
         {
           "path": "services/model-service/src/services/nfl_t5107u/market_arm_freeze.py",
-          "sha256": "55a14a73988ad6288899c7fc7a860a5833ea52dd113216e948aa59f75d757def"
+          "sha256": "c965739bf3812495edec0c42f53a13762054f6a0bc81837f2bb394c2dfef5f0b"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/r5_496_freeze.py",
+          "sha256": "24d118bb2453107002779937613de83ac27160ac4c9ca3d2cf7adb0298bf09ea"
         },
         {
           "path": "services/model-service/src/services/nfl_t5107u/verify_integrate.py",
-          "sha256": "1259e50773ab7a2d67829a78cc662020d58374d21b71dcd386b647220a556597"
+          "sha256": "a1798c77bb269be95f8c59db798ed561220f197ad1736418dcd7909c06ff275d"
         }
       ]
     },
     "spec": {
-      "sha256": "c51771aab652c0fe09499de1060f19a5d647a55a586baa9774ab832b758eec5d",
+      "sha256": "450c5165899711efc15bb3d5356ed39e30721e8d8577dd5730f7bba021649538",
       "files": [
         {
           "path": "ops/CURSOR_ADDENDUM_t5151u_NUMERICAL_INTEGRATION_v1.md",
           "sha256": "14c9d09190c5bcc3b777d5c6e2c571322c10800024a909d4b18a7c0445b5c019"
         },
         {
+          "path": "ops/CURSOR_ADDENDUM_t5155u_R5_496_FREEZE_v1.md",
+          "sha256": "e06e847b8807e20b73b3a06199032265112113386f4e4926dd722236ffce2e55"
+        },
+        {
           "path": "ops/CURSOR_ADDENDUM_t5155u_R5_PHASE1_v1.md",
-          "sha256": "7cfa247aa5af5c465d171b5f1947b1e269314ce2dff5e72069a2749c3e18db67"
+          "sha256": "bf7b6490a082340494cb77c612a81af00f0fa99f9d6495879f60e6774392a329"
         }
       ]
     },
     "input": {
-      "sha256": "9b79709cc3ba4dc5bab7936f7f2059c64c73d595294d6826181b13a36197cfaf",
+      "sha256": "1b1df5e811c5c4a566bde2b248780faf3bcef8277dbdfd12a301e97a1b18be7c",
       "files": [
         {
           "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
@@ -110,6 +231,22 @@
         {
           "path": "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json",
           "sha256": "c61ca6948ecfd1ea79f785e63117cc3399725fc893be2ea398b4b91ece42bb14"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+          "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+          "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+          "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+          "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
         }
       ]
     },
@@ -143,6 +280,30 @@
         "ok": true,
         "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
         "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+      },
+      {
+        "name": "WORKER_A_FORECASTS_DEV_R5_496",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+        "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+      },
+      {
+        "name": "WORKER_A_FREEZE_MANIFEST",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+        "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+      },
+      {
+        "name": "WORKER_A_COMPARE_437",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+        "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+      },
+      {
+        "name": "WORKER_A_PHASE2_POSITIVE_PATH",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+        "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
       },
       {
         "name": "TASK_MANIFEST",
@@ -180,7 +341,19 @@
       "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
       "b1_universe_sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
     },
-    "output_sha256": "b7487bbca33f1b5625e50d8033fcd25e582dfa4ad44ac0426c946e383f2b6546"
+    "worker_a_forecast_freeze": {
+      "status": "PINNED",
+      "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+      "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+      "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "n_if_finite": 496,
+      "q2_hold": 496,
+      "n_candidate_finite": 0,
+      "common437_replay": "437/437",
+      "n_blocker": 0
+    },
+    "output_sha256": "c764ab32660c43775ac43edf0bb6652069c9f2193d9e2fd6b3e41d66c5205030"
   },
   "pinned_artifacts": {
     "ok": true,
@@ -214,6 +387,30 @@
         "ok": true,
         "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
         "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+      },
+      {
+        "name": "WORKER_A_FORECASTS_DEV_R5_496",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+        "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+      },
+      {
+        "name": "WORKER_A_FREEZE_MANIFEST",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+        "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+      },
+      {
+        "name": "WORKER_A_COMPARE_437",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+        "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+      },
+      {
+        "name": "WORKER_A_PHASE2_POSITIVE_PATH",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+        "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
       },
       {
         "name": "TASK_MANIFEST",
@@ -520,6 +717,30 @@
       "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
     },
     {
+      "name": "WORKER_A_FORECASTS_DEV_R5_496",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+      "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+    },
+    {
+      "name": "WORKER_A_FREEZE_MANIFEST",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+      "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+    },
+    {
+      "name": "WORKER_A_COMPARE_437",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+      "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+    },
+    {
+      "name": "WORKER_A_PHASE2_POSITIVE_PATH",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+      "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+    },
+    {
       "name": "TASK_MANIFEST",
       "ok": true,
       "path": "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json",
@@ -572,6 +793,20 @@
         "stderr_tail": ""
       },
       {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": ".............                                                            [100%]\n13 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_combine.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "...                                                                      [100%]\n3 passed",
+        "stderr_tail": ""
+      },
+      {
         "command": "python -m pytest services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py -q --tb=line",
         "ok": true,
         "returncode": 0,
@@ -585,6 +820,8 @@
       "services/model-service/tests/test_nfl_t5149u_last_played_reg_cohort.py",
       "services/model-service/tests/test_nfl_t5155u_n1_output_hash.py",
       "services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py",
+      "services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py",
+      "services/model-service/tests/test_nfl_t5155u_r5_combine.py",
       "services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py"
     ],
     "interpreter_excluded_from_output_hash": true,
@@ -605,7 +842,80 @@
     "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
     "b1_universe_sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6",
     "r2c_hold_unchanged": true,
-    "worker_a_forecast_freeze": "PENDING",
+    "worker_a_forecast_freeze": {
+      "ok": true,
+      "status": "PINNED",
+      "tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+      "stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+      "pr": 702,
+      "branch": "cursor/t5155u-r5-496-freeze-c279",
+      "command": "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+      "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+      "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+      "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+      "n_forecasts": 496,
+      "n_if_finite": 496,
+      "n_q2_hold": 496,
+      "n_q2_finite": 0,
+      "n_candidate_finite": 0,
+      "q2": {
+        "status": "HOLD",
+        "leg": "HOLD",
+        "hold_q2": true,
+        "n_hold": 496,
+        "candidate": "HOLD",
+        "invented_q2": false,
+        "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+        "years_unproven": [
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "reg_unproven": true
+      },
+      "common437": {
+        "n_common": 437,
+        "n_replayed": 437,
+        "n_blocker": 0
+      },
+      "phase2_positive_path": {
+        "status": "READINESS_ONLY",
+        "executed": false,
+        "cos_bind": false,
+        "score_flag": false,
+        "target_scoring_loader": false,
+        "one_dev_diagnostic": false,
+        "invoke_outcome_after_gates_available": true,
+        "invoke_outcome_after_gates": false,
+        "requires": [
+          "Alex source/numerical-identity PREFLIGHT GO",
+          "Cos bind / EXEC release for target scoring loader"
+        ]
+      },
+      "scoring_refuse": {
+        "refused": true,
+        "outcome_loader_reads": 0,
+        "target_labels_loaded": 0,
+        "coverage_blocked": true,
+        "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND"
+      },
+      "cos_bind": false,
+      "scoring": null,
+      "eval": null,
+      "bytes_verified": {
+        "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+        "freeze_manifest": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+        "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+        "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
+        "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+      }
+    },
     "scoring": null,
     "eval": null
   },
@@ -652,27 +962,31 @@
   },
   "runtime": {
     "interpreter": "python3",
-    "tip_sha": "34be2d06c456b2399e3541fc691f53aa520d0a89",
+    "tip_sha": "8a4a2c76a201d4aba8cffee57e311580dcd52662",
     "pytest_elapsed": [
-      "0.43",
-      "0.80",
-      "1.79",
-      "0.33",
-      "0.42",
-      "0.28"
+      "0.63",
+      "1.06",
+      "1.98",
+      "0.40",
+      "0.59",
+      "2.16",
+      "0.17",
+      "0.48"
     ]
   },
   "side_metadata": {
     "pytest_elapsed": [
-      "0.43",
-      "0.80",
-      "1.79",
-      "0.33",
-      "0.42",
-      "0.28"
+      "0.63",
+      "1.06",
+      "1.98",
+      "0.40",
+      "0.59",
+      "2.16",
+      "0.17",
+      "0.48"
     ],
     "pytest_elapsed_semantic": false
   },
-  "tip_sha": "34be2d06c456b2399e3541fc691f53aa520d0a89",
+  "tip_sha": "8a4a2c76a201d4aba8cffee57e311580dcd52662",
   "interpreter": "python3"
 }

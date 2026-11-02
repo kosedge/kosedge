@@ -80,6 +80,33 @@ REG496_PATH = "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020
 REG496_SHA256 = "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
 FEATURE_RECON_REG496_ARTIFACT_PATH = REG496_PATH
 FEATURE_RECON_REG496_ARTIFACT_SHA256 = REG496_SHA256
+REG496_IDENTITY_SHA256 = (
+    "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640"
+)
+WORKER_A_TIP = "661df712a804bc1d9662f77008af28f8418cd0a1"
+WORKER_A_STAMP = "3fbf5999360433ca46cbe77688daedaedd6a9c9b"
+WORKER_A_PR = 702
+WORKER_A_BRANCH = "cursor/t5155u-r5-496-freeze-c279"
+WORKER_A_COMMAND = (
+    "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py"
+)
+A_FORECASTS_PATH = "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json"
+A_FORECASTS_SHA256 = (
+    "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+)
+A_MANIFEST_PATH = "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json"
+A_MANIFEST_SHA256 = (
+    "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+)
+A_COMPARE_PATH = "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json"
+A_COMPARE_SHA256 = (
+    "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+)
+A_PHASE2_PATH = "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json"
+A_PHASE2_SHA256 = (
+    "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+)
+A_Q2_PATH = "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json"
 TASK_MANIFEST_REL = "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json"
 
 PROTECTED_ORIGINALS = frozenset(
@@ -91,6 +118,11 @@ PROTECTED_ORIGINALS = frozenset(
         TASK_MANIFEST_REL,
         "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
         B1_UNIVERSE_PATH,
+        A_FORECASTS_PATH,
+        A_MANIFEST_PATH,
+        A_COMPARE_PATH,
+        A_PHASE2_PATH,
+        A_Q2_PATH,
     }
 )
 
@@ -100,6 +132,8 @@ FOCUSED_TESTS = (
     "services/model-service/tests/test_nfl_t5149u_last_played_reg_cohort.py",
     "services/model-service/tests/test_nfl_t5155u_n1_output_hash.py",
     "services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py",
+    "services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py",
+    "services/model-service/tests/test_nfl_t5155u_r5_combine.py",
 )
 COHORT_TEST = "services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py"
 
@@ -512,6 +546,10 @@ def verify_pinned_artifacts(root: Path) -> dict[str, Any]:
     pin("DEV437_RESULT_66c3bde1", root / DEV437_RESULT_PATH, DEV437_RESULT_SHA256)
     pin("MATCHED72_RESULT_316345fa", root / MARKET72_RESULT_PATH, MARKET72_RESULT_SHA256)
     pin("B1_UNIVERSE_ADMISSIBLE_QUOTES", root / B1_UNIVERSE_PATH, B1_UNIVERSE_SHA256)
+    pin("WORKER_A_FORECASTS_DEV_R5_496", root / A_FORECASTS_PATH, A_FORECASTS_SHA256)
+    pin("WORKER_A_FREEZE_MANIFEST", root / A_MANIFEST_PATH, A_MANIFEST_SHA256)
+    pin("WORKER_A_COMPARE_437", root / A_COMPARE_PATH, A_COMPARE_SHA256)
+    pin("WORKER_A_PHASE2_POSITIVE_PATH", root / A_PHASE2_PATH, A_PHASE2_SHA256)
     ce = try_load_cohort_module()
     if ce is not None:
         pin("TASK_MANIFEST", root / ce.TASK_MANIFEST_REL, ce.TASK_MANIFEST_SHA256)
@@ -521,6 +559,140 @@ def verify_pinned_artifacts(root: Path) -> dict[str, Any]:
             ce.DEV_MARKET72_FILE_SHA256,
         )
     return {"ok": not errors, "checks": checks, "errors": errors, "cohort_module": ce is not None}
+
+
+def bind_worker_a_forecast_freeze(
+    root: Path,
+    *,
+    outcome_loader: OutcomeReadSpy | None = None,
+) -> dict[str, Any]:
+    """Read-only pin of Worker A freeze. No produce-μ rewrite. No Cos bind."""
+    repo = _repo_root(root)
+    pins = (
+        (A_FORECASTS_PATH, A_FORECASTS_SHA256, "forecasts"),
+        (A_MANIFEST_PATH, A_MANIFEST_SHA256, "freeze_manifest"),
+        (A_COMPARE_PATH, A_COMPARE_SHA256, "compare_437"),
+        (A_PHASE2_PATH, A_PHASE2_SHA256, "phase2_positive_path"),
+        (REG496_PATH, REG496_SHA256, "feature_json"),
+    )
+    verified: dict[str, str] = {}
+    for rel, expected, name in pins:
+        path = repo / rel
+        if not path.is_file():
+            raise VerifyIntegrateRefuse(f"Worker A {name} missing: {rel}")
+        digest = sha256_file(path)
+        if digest != expected:
+            raise VerifyIntegrateRefuse(f"Worker A {name} sha {digest} != pin {expected}")
+        verified[name] = digest
+
+    forecasts = load_json(repo / A_FORECASTS_PATH)
+    manifest = load_json(repo / A_MANIFEST_PATH)
+    compare = load_json(repo / A_COMPARE_PATH)
+    documented_phase2 = load_json(repo / A_PHASE2_PATH)
+    q2_history = load_json(repo / A_Q2_PATH) if (repo / A_Q2_PATH).is_file() else {}
+
+    if int(forecasts.get("n_forecasts") or 0) != 496:
+        raise VerifyIntegrateRefuse(f"Worker A n_forecasts={forecasts.get('n_forecasts')} != 496")
+    if int(forecasts.get("n_if_finite") or 0) != 496:
+        raise VerifyIntegrateRefuse(f"Worker A n_if_finite={forecasts.get('n_if_finite')} != 496")
+    if int(forecasts.get("n_q2_hold") or 0) != 496:
+        raise VerifyIntegrateRefuse(f"Worker A n_q2_hold={forecasts.get('n_q2_hold')} != 496")
+    if int(forecasts.get("n_candidate_finite") or 0) != 0:
+        raise VerifyIntegrateRefuse("Worker A invented Q2/candidate — refuse")
+    if forecasts.get("q2_hold") is not True:
+        raise VerifyIntegrateRefuse("Worker A q2_hold must stay explicit HOLD")
+    if int(compare.get("n_replayed_within_tol") or 0) != 437:
+        raise VerifyIntegrateRefuse("Worker A common437 replay != 437/437")
+    if int(compare.get("n_blocker") or 0) != 0:
+        raise VerifyIntegrateRefuse("Worker A common437 IF replay BLOCKER")
+    if documented_phase2.get("executed") is not False:
+        raise VerifyIntegrateRefuse("Worker A Phase 2 must stay documented, not executed")
+    if manifest.get("identity_sha256") != REG496_IDENTITY_SHA256:
+        raise VerifyIntegrateRefuse(
+            f"Worker A manifest identity {manifest.get('identity_sha256')} != 6429f859"
+        )
+
+    from .r5_496_freeze import phase2_positive_path, refuse_target_scoring
+
+    spy = outcome_loader if outcome_loader is not None else OutcomeReadSpy(
+        lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}}
+    )
+    scoring_refuse = refuse_target_scoring(
+        candidate_ids=[
+            str(row.get("game_id")) for row in (forecasts.get("forecasts") or []) if row.get("game_id")
+        ],
+        root=repo,
+        outcome_loader=spy,
+        coverage_blocked=True,
+    )
+    if getattr(spy, "reads", 0) != 0:
+        raise VerifyIntegrateRefuse("Worker A bind read target scoring outcomes")
+    live_phase2 = phase2_positive_path()
+    if live_phase2.get("executed") is not False:
+        raise VerifyIntegrateRefuse("Phase 2 positive path executed during bind — refuse")
+
+    hold_reason = (
+        forecasts.get("q2_hold_reason")
+        or q2_history.get("hold_reason")
+        or "2013–19 REG unproven — do not invent Q2"
+    )
+    return {
+        "ok": True,
+        "status": "PINNED",
+        "tip": WORKER_A_TIP,
+        "stamp": WORKER_A_STAMP,
+        "pr": WORKER_A_PR,
+        "branch": WORKER_A_BRANCH,
+        "command": WORKER_A_COMMAND,
+        "identity_sha256": REG496_IDENTITY_SHA256,
+        "feature_json_sha256": REG496_SHA256,
+        "forecasts_sha256": verified["forecasts"],
+        "freeze_manifest_sha256": verified["freeze_manifest"],
+        "compare_437_sha256": verified["compare_437"],
+        "n_forecasts": 496,
+        "n_if_finite": 496,
+        "n_q2_hold": 496,
+        "n_q2_finite": int(forecasts.get("n_q2_finite") or 0),
+        "n_candidate_finite": 0,
+        "q2": {
+            "status": "HOLD",
+            "leg": "HOLD",
+            "hold_q2": True,
+            "n_hold": 496,
+            "candidate": "HOLD",
+            "invented_q2": False,
+            "reason": hold_reason,
+            "years_unproven": [2013, 2014, 2015, 2016, 2017, 2018, 2019],
+            "reg_unproven": True,
+        },
+        "common437": {
+            "n_common": int(compare.get("n_common") or 437),
+            "n_replayed": 437,
+            "n_blocker": 0,
+        },
+        "phase2_positive_path": {
+            "status": "READINESS_ONLY",
+            "executed": False,
+            "cos_bind": False,
+            "score_flag": False,
+            "target_scoring_loader": False,
+            "one_dev_diagnostic": False,
+            "invoke_outcome_after_gates_available": True,
+            "invoke_outcome_after_gates": False,
+            "requires": list(live_phase2.get("requires") or documented_phase2.get("requires") or []),
+        },
+        "scoring_refuse": {
+            "refused": True,
+            "outcome_loader_reads": int(scoring_refuse.get("outcome_loader_reads") or 0),
+            "target_labels_loaded": int(scoring_refuse.get("target_labels_loaded") or 0),
+            "coverage_blocked": True,
+            "stop": scoring_refuse.get("stop"),
+        },
+        "cos_bind": False,
+        "scoring": None,
+        "eval": None,
+        "bytes_verified": verified,
+    }
 
 
 def _python_with_pytest(root: Path) -> str:
@@ -603,13 +775,16 @@ def build_receipt(
     errors: Sequence[str],
     interpreter: str | None = None,
     market_arm: Mapping[str, Any] | None = None,
+    worker_a: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     code_files = [
         root / "services/model-service/src/services/nfl_t5107u/eval_result_contract.py",
         root / "services/model-service/src/services/nfl_t5107u/verify_integrate.py",
         root / "services/model-service/src/services/nfl_t5107u/market_arm_freeze.py",
+        root / "services/model-service/src/services/nfl_t5107u/r5_496_freeze.py",
         root / "scripts/nfl/run_nfl_t5151u_verify_integrate.py",
         root / "scripts/nfl/freeze_nfl_t5155u_market_arm.py",
+        root / "scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
     ]
     ce_path = root / "services/model-service/src/services/nfl_t5107u/cohort_enforcement.py"
     if ce_path.is_file():
@@ -619,6 +794,7 @@ def build_receipt(
         for p in [
             root / "ops/CURSOR_ADDENDUM_t5151u_NUMERICAL_INTEGRATION_v1.md",
             root / "ops/CURSOR_ADDENDUM_t5155u_R5_PHASE1_v1.md",
+            root / "ops/CURSOR_ADDENDUM_t5155u_R5_496_FREEZE_v1.md",
         ]
         if p.is_file()
     ]
@@ -630,6 +806,10 @@ def build_receipt(
         root / TASK_MANIFEST_REL,
         root / "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
         root / B1_UNIVERSE_PATH,
+        root / A_FORECASTS_PATH,
+        root / A_MANIFEST_PATH,
+        root / A_COMPARE_PATH,
+        root / A_PHASE2_PATH,
     ]
     code = hash_file_list(root, code_files)
     spec = hash_file_list(root, spec_files)
@@ -642,6 +822,8 @@ def build_receipt(
             failed = True
     if market_arm is not None and not market_arm.get("ok", True):
         failed = True
+    if worker_a is not None and not worker_a.get("ok", True):
+        failed = True
     status = "FAILED" if failed else "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT"
     elapsed = list((tests or {}).get("_elapsed_for_runtime") or collect_pytest_elapsed(tests))
     semantic_tests = semantic_tests_payload(tests)
@@ -650,9 +832,14 @@ def build_receipt(
         "tip_sha": git_tip(root),
         "pytest_elapsed": elapsed,
     }
+    worker_a_summary: Any = worker_a if worker_a else "PENDING"
+    if worker_a_summary == "PENDING" and market_arm:
+        payload_wa = (market_arm.get("payload") or {}).get("worker_a_forecast_freeze")
+        if payload_wa:
+            worker_a_summary = payload_wa
     market_summary = {
         "status": "NOT_RUN",
-        "worker_a_forecast_freeze": "PENDING",
+        "worker_a_forecast_freeze": worker_a_summary,
         "scoring": None,
         "eval": None,
     }
@@ -677,7 +864,7 @@ def build_receipt(
             "identity_sha256": market_arm.get("identity_sha256"),
             "b1_universe_sha256": B1_UNIVERSE_SHA256,
             "r2c_hold_unchanged": True,
-            "worker_a_forecast_freeze": "PENDING",
+            "worker_a_forecast_freeze": worker_a_summary,
             "scoring": None,
             "eval": None,
         }
@@ -705,6 +892,22 @@ def build_receipt(
         "cos_accept_700_sha8": COS_ACCEPT_700_SHA8,
         "alex_700_sha8": ALEX_700_SHA8,
         "closed_700_tip": TIP_700,
+        "worker_a_tip": WORKER_A_TIP,
+        "worker_a_stamp": WORKER_A_STAMP,
+        "worker_a_forecast_freeze": worker_a_summary,
+        "q2_hold": (worker_a or {}).get("q2")
+        if isinstance(worker_a, Mapping)
+        else {
+            "status": "HOLD",
+            "reason": "2013–19 REG unproven — do not invent Q2",
+        },
+        "phase2_positive_path": (worker_a or {}).get("phase2_positive_path")
+        if isinstance(worker_a, Mapping)
+        else {
+            "status": "READINESS_ONLY",
+            "executed": False,
+            "cos_bind": False,
+        },
         "package_a_tip": PACKAGE_A_TIP,
         "package_a_stamp": PACKAGE_A_STAMP,
         "partial_plumbing_tip": PARTIAL_PLUMBING_TIP,
@@ -749,6 +952,18 @@ def build_receipt(
         "bytes_sha256": market_summary.get("bytes_sha256"),
         "identity_sha256": market_summary.get("identity_sha256"),
         "b1_universe_sha256": market_summary.get("b1_universe_sha256"),
+    }
+    receipt["hashes"]["worker_a_forecast_freeze"] = {
+        "status": (worker_a or {}).get("status") if isinstance(worker_a, Mapping) else "PENDING",
+        "identity_sha256": REG496_IDENTITY_SHA256,
+        "feature_json_sha256": REG496_SHA256,
+        "forecasts_sha256": A_FORECASTS_SHA256,
+        "freeze_manifest_sha256": A_MANIFEST_SHA256,
+        "n_if_finite": 496 if isinstance(worker_a, Mapping) else None,
+        "q2_hold": 496 if isinstance(worker_a, Mapping) else None,
+        "n_candidate_finite": 0,
+        "common437_replay": "437/437",
+        "n_blocker": 0,
     }
     canonical = {
         k: v
@@ -904,12 +1119,27 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
             errors.append(f"missing profile result {name} — no partial-result fallback")
             profiles[name] = {"ok": False, "error": "missing"}
 
+    worker_a: dict[str, Any] | None = None
+    try:
+        spy_a = OutcomeReadSpy(lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}})
+        worker_a = bind_worker_a_forecast_freeze(repo, outcome_loader=spy_a)
+        if spy_a.reads != 0:
+            raise VerifyIntegrateRefuse("Worker A bind read target scoring outcomes")
+    except Exception as exc:
+        errors.append(f"WORKER_A_FORECAST_FREEZE: {exc}")
+        worker_a = {"ok": False, "status": "FAILED", "error": str(exc)}
+
     market_arm: dict[str, Any] | None = None
     try:
         from .market_arm_freeze import run_market_arm_freeze
 
         spy = OutcomeReadSpy(lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}})
-        market_arm = run_market_arm_freeze(root=repo, outcome_loader=spy, finalize=True)
+        market_arm = run_market_arm_freeze(
+            root=repo,
+            outcome_loader=spy,
+            finalize=True,
+            worker_a=worker_a if worker_a and worker_a.get("ok") else None,
+        )
         if spy.reads != 0:
             raise VerifyIntegrateRefuse("market-arm freeze read target scoring outcomes")
     except Exception as exc:
@@ -932,6 +1162,7 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
         errors=errors,
         interpreter="python3",
         market_arm=market_arm,
+        worker_a=worker_a,
     )
     write_receipt(receipt, repo)
     if receipt["status"] != "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT":
