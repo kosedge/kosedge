@@ -19,7 +19,8 @@ refuse → 0 reads. CERT=0. STOP for Cos — no bind.
 Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
 stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Combine implementation
 tip **581493080881d6363935f41c70236b5cb070b401**. RETURN-FIX
-implementation tip **255adf7802830bc25814a739d62f65f095216203**. Merge conflict: only
+implementation tip **255adf7802830bc25814a739d62f65f095216203**. R2 eng tip
+**bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45**. Merge conflict: only
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
 **072e99e0** unchanged. One-command:
 `CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false` · focused
@@ -145,6 +146,7 @@ unbound `--score` · IF-only live diagnostic · lift Q2 HOLD.
 | Worker A tip / stamp   | `661df712a` / `3fbf59993`                                                 |
 | Combine implementation | `581493080881d6363935f41c70236b5cb070b401`                                |
 | RETURN-FIX tip         | `255adf7802830bc25814a739d62f65f095216203`                                |
+| R2 eng tip             | `bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45`                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
 | t5157u Cos / OWNER / A | `7015d5c8` / `e6cc6927` / `42069ef6`                                      |
 | R2-C HOLD threshold    | `0.30` unchanged                                                          |
