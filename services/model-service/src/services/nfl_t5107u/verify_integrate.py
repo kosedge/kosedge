@@ -179,8 +179,11 @@ def semantic_tests_payload(tests: Mapping[str, Any] | None) -> dict[str, Any]:
             command["stdout_tail"] = strip_pytest_elapsed(command.get("stdout_tail") or "")
         if "stderr_tail" in command:
             command["stderr_tail"] = strip_pytest_elapsed(command.get("stderr_tail") or "")
+        command.pop("elapsed", None)
     body.pop("elapsed", None)
     body.pop("durations", None)
+    body.pop("elapsed_side_metadata", None)
+    body.pop("_elapsed_for_runtime", None)
     body["timing_excluded_from_output_hash"] = True
     return body
 
@@ -190,8 +193,15 @@ def collect_pytest_elapsed(tests: Mapping[str, Any] | None) -> list[str]:
     for command in (tests or {}).get("commands") or []:
         if not isinstance(command, Mapping):
             continue
+        extra = command.get("elapsed")
+        if isinstance(extra, list):
+            elapsed.extend(str(item) for item in extra)
         elapsed.extend(extract_pytest_elapsed(command.get("stdout_tail") or ""))
         elapsed.extend(extract_pytest_elapsed(command.get("stderr_tail") or ""))
+    elapsed.extend(str(item) for item in (tests or {}).get("elapsed_side_metadata") or [] if not isinstance(item, list))
+    for group in (tests or {}).get("elapsed_side_metadata") or []:
+        if isinstance(group, list):
+            elapsed.extend(str(item) for item in group)
     return elapsed
 
 
@@ -557,14 +567,15 @@ def run_focused_tests(root: Path) -> dict[str, Any]:
                 "elapsed": extract_pytest_elapsed(raw_stdout) + extract_pytest_elapsed(raw_stderr),
             }
         )
-    semantic = semantic_tests_payload(
-        {
-            "ok": all_ok,
-            "commands": [{k: v for k, v in row.items() if k != "elapsed"} for row in commands],
-            "tests": tests,
-            "interpreter_excluded_from_output_hash": True,
-        }
-    )
+    raw_tests = {
+        "ok": all_ok,
+        "commands": commands,
+        "tests": tests,
+        "interpreter_excluded_from_output_hash": True,
+        "elapsed_side_metadata": [row.get("elapsed") or [] for row in commands],
+    }
+    semantic = semantic_tests_payload(raw_tests)
+    semantic["_elapsed_for_runtime"] = collect_pytest_elapsed(raw_tests)
     return semantic
 
 
@@ -630,7 +641,7 @@ def build_receipt(
     if market_arm is not None and not market_arm.get("ok", True):
         failed = True
     status = "FAILED" if failed else "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT"
-    elapsed = collect_pytest_elapsed(tests)
+    elapsed = list((tests or {}).get("_elapsed_for_runtime") or collect_pytest_elapsed(tests))
     semantic_tests = semantic_tests_payload(tests)
     runtime = {
         "interpreter": interpreter or "python3",
