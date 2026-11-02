@@ -3,6 +3,7 @@
 Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5146u **fdbd23f9** · Cos ORDER Cursor **b1153a45**
 Parent tip **61436fdb** (t5116u stamp). Implementation tip **a7f53657**.
+EXEC tip **6aed4d10**.
 Isolated opt-in path. Alex PREFLIGHT GO **686ce4dc** accepted.
 Cos EXEC RELEASE honored — **one** NEW DEV 2020–21 last-played reconstruction.
 **STOP — awaiting Alex Phase B RO.** CERT=0. No EVAL.
@@ -43,6 +44,7 @@ real-time source-availability claim.
 | Artifact | sha256 |
 | -------- | ------ |
 | Implementation tip | `a7f53657e1c4ec34c63a4ad91712d0cd007d8b57` |
+| EXEC tip | `6aed4d100d785388b70e8022dc7b69fea17c392a` |
 | Helper `build_recon_t4893u.py` | `7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64` |
 | `recon_driver.py` exact-week path | `be5aa097f99c47c075d474e199f13fca2980fd282a59a69425549a9ed12e2aa5` |
 | `recon_contract.py` | `a04295023db74dbd8d582ea2734e3205476f4c2b610d0223fef4a6f06ebed775` |
