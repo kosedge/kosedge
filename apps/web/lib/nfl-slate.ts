@@ -318,6 +318,7 @@ export async function buildNflWeeklySlate(
       includePastDays: fairWindow.includePastDays,
       // Warehouse paints Current. SSR must not wait on Odds API HTTP.
       oddsMode: "skip",
+      persistOdds: false,
     }),
     loadPreseason
       ? fetchEspnPreseasonSlate({ year: season, weeks: [1, 2, 3, 4] })

@@ -39,7 +39,10 @@ import {
 } from "@/lib/nfl-edge-board-week";
 import { nflAssembleWindowForSlate } from "@/lib/nfl-edge-board-assemble-window";
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
-import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import {
+  fetchNflFairLines,
+  ownedNflFairLinesFixtureRows,
+} from "@/lib/nfl-fair-lines";
 import { applyCfbTrustedMarketToRows } from "@/lib/cfb-trusted-market";
 import { loadCfbCurrentMarketRows } from "@/lib/cfb-edge-board-odds";
 import {
@@ -174,6 +177,7 @@ async function assembleNflEdgeBoardRows(
   const odds =
     countPriced(pulledOdds) >= countPriced(oddsRows) ? pulledOdds : oddsRows;
   // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
+  const ownedReuse = ownedNflFairLinesFixtureRows(odds);
   const fair = await fetchNflFairLines({
     season: NFL_EDGE_BOARD_SEASON,
     daysAhead: window.daysAhead,
@@ -181,9 +185,11 @@ async function assembleNflEdgeBoardRows(
     bookmakers: ALLOWED_BOOKS.join(","),
     timeoutMs: options?.timeoutMs,
     throwOnTransportError: options?.throwOnTransportError,
-    // reuse + oddsPayload → model skips fetch_odds; empty Odds → skip (still ≤1).
-    ...(odds.length > 0
-      ? { oddsMode: "reuse" as const, oddsPayload: odds }
+    persistOdds: false,
+    // Owned reuse only: validated nonempty fixture → POST reuse persist0.
+    // Empty / malformed → skip (never live fallthrough).
+    ...(ownedReuse
+      ? { oddsMode: "reuse" as const, oddsPayload: ownedReuse }
       : { oddsMode: "skip" as const }),
   });
 

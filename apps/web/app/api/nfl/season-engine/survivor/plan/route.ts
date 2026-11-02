@@ -31,6 +31,8 @@ async function withKeiOverlay(
       season,
       daysAhead: 120,
       includePastDays: 2,
+      oddsMode: "skip",
+      persistOdds: false,
     });
     if (board.error || !board.lines.length) return payload;
     return overlaySurvivorPlanWithKei(payload, board.lines);

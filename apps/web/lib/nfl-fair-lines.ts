@@ -629,25 +629,25 @@ export async function fetchNflFairLines(params: {
    */
   throwOnTransportError?: boolean;
   /**
-   * When false (default), send persist=0 so model-service skips odds_snapshots
-   * writes on this subscriber/page-data read. Beat/worker scheduled persist stays.
-   * Pass true only for rare ops paths that intentionally land training snaps.
+   * WEB_OWNED_ONLY_R1: persist=1 is refused on this helper. The param is accepted
+   * only so explicit true can fail closed before upstreamFetch. No ENV / flag
+   * can grant odds_snapshots writes on this web read path.
    */
   persistOdds?: boolean;
   /**
-   * WS-02 DUP-C / S1: Odds acquire mode for model-service fair-lines.
-   * - live (default): model may HTTP The Odds API once
-   * - skip: model never calls fetch_odds
-   * - reuse: assemble already pulled Odds; POST payload so model skips fetch_odds
+   * WEB_OWNED_ONLY_R1: subscriber default is skip (never omit — backend GET
+   * defaults to live). live is refused before upstreamFetch. reuse requires a
+   * validated nonempty owned fixture payload (POST persist=0).
    */
   oddsMode?: "live" | "reuse" | "skip";
   /**
-   * Odds-API-shaped events for fair-lines market join on reuse (preferred).
+   * Odds-API-shaped owned fixtures for fair-lines market join on reuse.
+   * Empty / non-object rows refuse before upstream (no live fallthrough).
    */
   oddsEvents?: Array<Record<string, unknown>>;
   /**
-   * Assemble overlay rows (pullOddsRows) as reuse signal when raw events unavailable.
-   * Non-empty → model odds_mode=reuse skips fetch_odds (D1).
+   * Already-owned assemble overlay rows for reuse. Empty / malformed refuse
+   * before upstream. This helper never live-pulls a payload.
    */
   oddsPayload?: unknown[];
 }): Promise<NflFairLinesResponse> {
@@ -676,19 +676,36 @@ export async function fetchNflFairLines(params: {
     error,
   });
 
+  const refuseBeforeUpstream = (
+    error: NflFairLinesUnavailableError,
+  ): NflFairLinesResponse => {
+    if (params.throwOnTransportError) throw error;
+    return softEmpty(error.message);
+  };
+
+  // Paid acquisition is hard-closed on this helper. No ENV read, no caller
+  // flag, no persistOdds=true can grant live Odds HTTP or snapshot writes.
+  if (params.persistOdds === true || params.oddsMode === "live") {
+    return refuseBeforeUpstream(
+      new NflFairLinesUnavailableError(NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED),
+    );
+  }
+
+  const oddsMode = params.oddsMode ?? "skip";
+  const ownedEvents = ownedNflFairLinesFixtureRows(params.oddsEvents);
+  const ownedPayload = ownedNflFairLinesFixtureRows(params.oddsPayload);
+  const useReusePost = oddsMode === "reuse" && Boolean(ownedEvents || ownedPayload);
+  if (oddsMode === "reuse" && !useReusePost) {
+    return refuseBeforeUpstream(
+      new NflFairLinesUnavailableError(NFL_FAIR_LINES_REUSE_UNAVAILABLE),
+    );
+  }
+
   if (!base) {
     const error = "MODEL_SERVICE_URL is not configured.";
     if (params.throwOnTransportError) throw new Error(error);
     return softEmpty(error);
   }
-
-  const oddsMode = params.oddsMode ?? "live";
-  const oddsEvents = Array.isArray(params.oddsEvents) ? params.oddsEvents : [];
-  const oddsPayload = Array.isArray(params.oddsPayload)
-    ? params.oddsPayload
-    : [];
-  const useReusePost =
-    oddsMode === "reuse" && (oddsEvents.length > 0 || oddsPayload.length > 0);
 
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/fair-lines`);
   url.searchParams.set("season", String(params.season));
@@ -703,12 +720,9 @@ export async function fetchNflFairLines(params: {
   if (params.bookmakers) {
     url.searchParams.set("bookmakers", params.bookmakers);
   }
-  // Default read-only: page-data / SSR must not write odds_snapshots on GET.
-  const persistOdds = params.persistOdds === true;
-  url.searchParams.set("persist", persistOdds ? "1" : "0");
-  if (!useReusePost && oddsMode !== "live") {
-    url.searchParams.set("odds_mode", oddsMode);
-  }
+  // Always explicit: omit → backend GET defaults to live. persist=1 is dead.
+  url.searchParams.set("persist", "0");
+  url.searchParams.set("odds_mode", useReusePost ? "reuse" : "skip");
 
   try {
     const response = await upstreamFetch(url.toString(), {
@@ -727,8 +741,9 @@ export async function fetchNflFairLines(params: {
         ? {
             body: JSON.stringify({
               odds_mode: "reuse",
-              odds_events: oddsEvents,
-              odds_payload: oddsPayload,
+              persist: 0,
+              odds_events: ownedEvents ?? [],
+              odds_payload: ownedPayload ?? [],
             }),
           }
         : {}),
@@ -905,6 +920,68 @@ export function formatKickoff(value: string | null): string {
     timeZone: "America/New_York",
     timeZoneName: "short",
   });
+}
+
+export const NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED =
+  "NFL fair-lines paid acquisition unavailable: web read helper refuses live/persist.";
+
+export const NFL_FAIR_LINES_REUSE_UNAVAILABLE =
+  "NFL fair-lines reuse unavailable: owned fixture payload empty or malformed.";
+
+export class NflFairLinesUnavailableError extends Error {
+  readonly code = "NFL_FAIR_LINES_UNAVAILABLE" as const;
+  constructor(message: string) {
+    super(message);
+    this.name = "NflFairLinesUnavailableError";
+  }
+}
+
+const OWNED_FIXTURE_ID_KEYS = [
+  "id",
+  "event_id",
+  "game_id",
+  "gameId",
+  "game",
+  "home_team",
+  "away_team",
+  "homeTeam",
+  "awayTeam",
+  "home",
+  "away",
+  "commence_time",
+  "start_time",
+  "startTime",
+  "market",
+] as const;
+
+function ownedFixtureFieldPresent(value: unknown): boolean {
+  if (typeof value === "string") return value.trim().length > 0;
+  if (typeof value === "number") return Number.isFinite(value);
+  if (Array.isArray(value)) return value.length > 0;
+  return value != null && typeof value === "object";
+}
+
+/**
+ * Owned reuse only: nonempty array of object rows with an identity field.
+ * Empty, primitive, or unidentified rows are malformed (no live fallthrough).
+ */
+export function ownedNflFairLinesFixtureRows(
+  raw: unknown,
+): Record<string, unknown>[] | null {
+  if (!Array.isArray(raw) || raw.length === 0) return null;
+  const rows: Record<string, unknown>[] = [];
+  for (const item of raw) {
+    if (item == null || typeof item !== "object" || Array.isArray(item)) {
+      return null;
+    }
+    const o = item as Record<string, unknown>;
+    const identified = OWNED_FIXTURE_ID_KEYS.some((key) =>
+      ownedFixtureFieldPresent(o[key]),
+    );
+    if (!identified) return null;
+    rows.push(o);
+  }
+  return rows;
 }
 
 export function edgeToneClass(value: number | null): string {

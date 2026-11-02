@@ -51,6 +51,8 @@ export default async function PredictionMarketPage({
     season: 2026,
     daysAhead: 120,
     includePastDays: 0,
+    oddsMode: "skip",
+    persistOdds: false,
   });
   const week =
     Number.isFinite(weekRaw) && weekRaw >= 1

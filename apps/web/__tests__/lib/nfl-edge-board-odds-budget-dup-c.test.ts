@@ -17,8 +17,10 @@ describe("WS-02 DUP-C NFL Week1 Odds budget (S1+S2)", () => {
   it("assemble breaks live∥live Promise.all and uses fair-lines reuse/skip", () => {
     const src = readApp("lib/build-edge-board-rows.ts");
     expect(src).toContain('oddsMode: "reuse"');
-    expect(src).toContain("oddsPayload: odds");
+    expect(src).toContain("oddsPayload: ownedReuse");
+    expect(src).toContain("ownedNflFairLinesFixtureRows");
     expect(src).toContain('oddsMode: "skip"');
+    expect(src).toContain("persistOdds: false");
     // Must not parallelize live Odds pull with live fair-lines.
     expect(src).not.toMatch(
       /Promise\.all\(\[\s*pullOddsRows\("nfl"\)\s*,\s*fetchNflFairLines/,

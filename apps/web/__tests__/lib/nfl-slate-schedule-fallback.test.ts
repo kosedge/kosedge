@@ -72,6 +72,7 @@ describe("NFL Weekly Slate schedule vs model outage", () => {
       expect.objectContaining({
         season: 2026,
         oddsMode: "skip",
+        persistOdds: false,
         daysAhead: expect.any(Number),
         includePastDays: expect.any(Number),
       }),
