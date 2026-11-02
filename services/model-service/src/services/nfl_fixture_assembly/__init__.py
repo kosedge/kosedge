@@ -14,6 +14,7 @@ from src.services.nfl_fixture_assembly.assemble import (
     forbidden_import_names,
 )
 from src.services.nfl_fixture_assembly.chain import chain_digest, serialize_fixture_chain
+from src.services.nfl_fixture_assembly.consume_chain import consume_fixture_chain
 from src.services.nfl_fixture_assembly.guard import (
     chain_guard,
     guard_active,
@@ -53,6 +54,7 @@ __all__ = [
     "chain_digest",
     "chain_guard",
     "consume_eligibility",
+    "consume_fixture_chain",
     "guard_active",
     "last_guard_report",
     "consume_fixture_eligibility",

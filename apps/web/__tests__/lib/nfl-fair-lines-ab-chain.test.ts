@@ -22,9 +22,11 @@ import {
   invalidateFixtureProjectionCache,
   readFixtureProjectionCache,
 } from "@/lib/page-data-cache";
+import { projectFixtureFairLinesBoard } from "@/lib/nfl-fair-lines";
 import { projectFixtureFairLinesApiResponse } from "@/lib/nfl-fair-lines-fixture-api";
 import { projectFixtureFairLinesViewModel } from "@/lib/nfl-fair-lines-view-types";
 import { keiGamesFromFixtureFairLines } from "@/lib/resolve-kei-lines";
+import { makeForecastId } from "@/lib/nfl-fixture-chain-consume";
 
 const repoRoot = path.join(__dirname, "../../../..");
 const PINNED = path.join(
@@ -42,13 +44,60 @@ function loadPinned(): Record<string, unknown> {
   return JSON.parse(readFileSync(PINNED, "utf8")) as Record<string, unknown>;
 }
 
+/** Opt-in workflow binds the live A producer dest; otherwise the pinned artifact. */
+function loadChain(): Record<string, unknown> {
+  const override = process.env.T5201U_CHAIN_JSON;
+  if (override) {
+    return JSON.parse(readFileSync(override, "utf8")) as Record<string, unknown>;
+  }
+  return loadPinned();
+}
+
+function fixtureInput(chain: Record<string, unknown>) {
+  return {
+    eligibility: chain.eligibility as never,
+    consumer: "fixture" as const,
+    quote: chain.quote as never,
+    chain,
+  };
+}
+
+function expectDirectConsumersRefuse(bad: Record<string, unknown>): void {
+  expect(() => projectFixtureFairLinesApiResponse(fixtureInput(bad))).toThrow(
+    FixtureHardRefuse,
+  );
+  expect(() => projectFixtureFairLinesBoard(fixtureInput(bad))).toThrow(
+    FixtureHardRefuse,
+  );
+  expect(() =>
+    projectFixtureFairLinesViewModel({
+      eligibility: (bad.eligibility ?? {}) as never,
+      lines: [],
+      fixture: true,
+      chain: bad,
+    }),
+  ).toThrow(FixtureHardRefuse);
+  expect(() =>
+    keiGamesFromFixtureFairLines({
+      eligibility: (bad.eligibility ?? {}) as never,
+      lines: [],
+      fixture: true,
+      persistOdds: false,
+      chain: bad,
+    } as never),
+  ).toThrow(FixtureHardRefuse);
+  expect(() => writeThenReadFixtureChainCache("t5201u-fault", bad, 1, bad)).toThrow(
+    FixtureHardRefuse,
+  );
+}
+
 function clone(base: Record<string, unknown>): Record<string, unknown> {
   return JSON.parse(JSON.stringify(base)) as Record<string, unknown>;
 }
 
 describe("t5194u consumeFixtureEligibility (A exact-field gate)", () => {
   it("accepts A's serialized eligibility and refuses bare / rewritten allows", () => {
-    const chain = loadPinned();
+    const chain = loadChain();
     const eligibility = chain.eligibility as Record<string, unknown>;
     const ok = consumeFixtureEligibility(eligibility, "fixture");
     expect(ok.result).toBe("ALLOW_FIXTURE");
@@ -94,7 +143,7 @@ describe("t5194u consumeFixtureEligibility (A exact-field gate)", () => {
 
 describe("t5194u A→B chain consume of pinned A artifact", () => {
   it("pins digest and carries one I/O context through API / VM / export-shape / cache", () => {
-    const payload = loadPinned();
+    const payload = loadChain();
     expect(readFileSync(PINNED_SHA, "utf8").trim()).toBe(EXPECTED_DIGEST);
     expect(payload.chain_contract_id).toBe(CHAIN_CONTRACT_ID);
     expect(payload.chain_schema_version).toBe(CHAIN_SCHEMA_VERSION);
@@ -104,6 +153,14 @@ describe("t5194u A→B chain consume of pinned A artifact", () => {
     expect(chain.l1_candidate.capture_id).toBe(chain.admitted_capture_id);
     expect(chain.cutoff.decision_ts).toBe(chain.provenance.decision_ts);
     expect(chain.capability.bits).toContain("POINT_MARGIN");
+    expect(
+      makeForecastId({
+        game_id: chain.forecast.game_id,
+        period: chain.forecast.period,
+        side: chain.forecast.side,
+        point_margin: chain.forecast.point_margin,
+      }),
+    ).toBe(chain.forecast.forecast_id);
 
     const projected = projectFixtureAbChain(payload);
     expect(projected.api.status).toBe(200);
@@ -118,7 +175,12 @@ describe("t5194u A→B chain consume of pinned A artifact", () => {
     expect(projected.kei[0].projTotal).toBeNull();
     expect(projected.headers["Cache-Control"]).toBe("private, no-store");
 
-    const cached = writeThenReadFixtureChainCache("t5194u-ab", projected.api.board, 1);
+    const cached = writeThenReadFixtureChainCache(
+      "t5194u-ab",
+      projected.api.board,
+      1,
+      payload,
+    );
     expect(cached.ok).toBe(true);
     invalidateFixtureProjectionCache("t5194u-ab");
     expect(readFixtureProjectionCache("t5194u-ab", 1)).toEqual({
@@ -215,38 +277,61 @@ describe("t5194u A→B chain consume of pinned A artifact", () => {
   ] as const)(
     "fault %s refuses on API / view-model / kei / cache before usable output",
     (_name, mutator) => {
-      const bad = clone(loadPinned());
+      const bad = clone(loadChain());
       mutator(bad);
       expect(() => projectFixtureAbChain(bad)).toThrow(FixtureHardRefuse);
       expect(() => assertFixtureChainRecord(bad)).toThrow(FixtureHardRefuse);
-      try {
-        projectFixtureFairLinesApiResponse({
-          eligibility: (bad.eligibility ?? {}) as never,
-          consumer: "fixture",
-          quote: (bad.quote ?? {}) as never,
-        });
-      } catch (err) {
-        expect(err).toBeInstanceOf(FixtureHardRefuse);
-        expect((err as FixtureHardRefuse).partial).toBe(false);
-        expect((err as FixtureHardRefuse).toDict()).not.toHaveProperty("lines");
-      }
-      try {
-        const chain = assertFixtureChainRecord(bad);
-        projectFixtureFairLinesViewModel({
-          eligibility: chain.eligibility,
-          lines: [],
-          fixture: true,
-        });
-        keiGamesFromFixtureFairLines({
-          eligibility: chain.eligibility,
-          lines: [],
-          fixture: true,
-          persistOdds: false,
-        } as never);
-        expect.unreachable("view/kei accepted mutated chain");
-      } catch (err) {
-        expect(err).toBeInstanceOf(FixtureHardRefuse);
-      }
+      expectDirectConsumersRefuse(bad);
+    },
+  );
+
+  it.each([
+    [
+      "hash_valid_format",
+      (p: Record<string, unknown>) => {
+        (p.forecast as Record<string, unknown>).forecast_id = "0".repeat(64);
+      },
+    ],
+    [
+      "joint_not_a_time",
+      (p: Record<string, unknown>) => {
+        (p.cutoff as Record<string, unknown>).decision_ts = "not-a-time";
+        (p.provenance as Record<string, unknown>).decision_ts = "not-a-time";
+      },
+    ],
+    [
+      "missing_decision_ts",
+      (p: Record<string, unknown>) => {
+        delete (p.cutoff as Record<string, unknown>).decision_ts;
+        delete (p.provenance as Record<string, unknown>).decision_ts;
+      },
+    ],
+    [
+      "price_zero",
+      (p: Record<string, unknown>) => {
+        (p.quote as Record<string, unknown>).price = 0;
+      },
+    ],
+    [
+      "invalid_side",
+      (p: Record<string, unknown>) => {
+        (p.quote as Record<string, unknown>).side = "PUSH";
+        (p.forecast as Record<string, unknown>).side = "PUSH";
+      },
+    ],
+    [
+      "price_fraction",
+      (p: Record<string, unknown>) => {
+        (p.quote as Record<string, unknown>).price = -110.5;
+      },
+    ],
+  ] as const)(
+    "codex/boundary fault %s refuses on each direct consumer",
+    (_name, mutator) => {
+      const bad = clone(loadChain());
+      mutator(bad);
+      expect(() => assertFixtureChainRecord(bad)).toThrow(FixtureHardRefuse);
+      expectDirectConsumersRefuse(bad);
     },
   );
 });

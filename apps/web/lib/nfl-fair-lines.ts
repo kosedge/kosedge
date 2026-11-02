@@ -26,6 +26,7 @@ import {
   type RequestedOutput,
   type SyntheticQuote,
 } from "@/lib/nfl-fixture-assembly-contract";
+import { assertFixtureChainRecord } from "@/lib/nfl-fixture-chain-consume";
 
 export { keiRepriceDriverLine };
 
@@ -941,6 +942,8 @@ export type FixtureFairLinesProjectionInput = {
   awayTeam?: string;
   homeAbbr?: string;
   awayAbbr?: string;
+  /** Serialized A chain — validated at this entrypoint when present. */
+  chain?: unknown;
 };
 
 function fixtureSpreadHome(quote: SyntheticQuote): number {
@@ -1057,6 +1060,9 @@ function fixtureFairLineRow(
 export function projectFixtureFairLinesBoard(
   input: FixtureFairLinesProjectionInput,
 ): FixtureFairLinesBoard {
+  if (input.chain !== undefined) {
+    assertFixtureChainRecord(input.chain);
+  }
   const requested = input.requestedOutput ?? "POINT_MARGIN_SPREAD";
   if (requested !== "POINT_MARGIN_SPREAD") {
     const mapped = OUTPUT_REFUSE[requested as keyof typeof OUTPUT_REFUSE];

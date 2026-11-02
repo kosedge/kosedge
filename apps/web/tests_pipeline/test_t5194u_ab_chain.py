@@ -111,6 +111,30 @@ def test_export_refuses_bare_allow() -> None:
         (lambda p: p["cutoff"].__setitem__("as_of_ts", "2026-11-08T19:00:00Z"), "REFUSE_STALE"),
         (lambda p: p.pop("forecast", None), "REFUSE_PARTIAL"),
         (lambda p: p.__setitem__("cacheable", True), "REFUSE_CACHE"),
+        (lambda p: p["forecast"].__setitem__("forecast_id", "0" * 64), "REFUSE_HASH"),
+        (
+            lambda p: (
+                p["cutoff"].__setitem__("decision_ts", "not-a-time"),
+                p["provenance"].__setitem__("decision_ts", "not-a-time"),
+            ),
+            "REFUSE_CUTOFF",
+        ),
+        (
+            lambda p: (
+                p["cutoff"].pop("decision_ts", None),
+                p["provenance"].pop("decision_ts", None),
+            ),
+            "REFUSE_CUTOFF",
+        ),
+        (lambda p: p["quote"].__setitem__("price", 0), "REFUSE_LINE"),
+        (
+            lambda p: (
+                p["quote"].__setitem__("side", "PUSH"),
+                p["forecast"].__setitem__("side", "PUSH"),
+            ),
+            "REFUSE_SIGN",
+        ),
+        (lambda p: p["quote"].__setitem__("price", -110.5), "REFUSE_LINE"),
     ],
 )
 def test_export_refuses_mutated_chain(mutator, reason: str) -> None:

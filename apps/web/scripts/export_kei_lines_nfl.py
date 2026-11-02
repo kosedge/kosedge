@@ -227,89 +227,28 @@ def consume_fixture_eligibility(decision: object, consumer: str) -> dict[str, ob
     }
 
 
+def _load_consume_chain():
+    """A's consume_chain SoT. Lazy so production KEI export stays isolated."""
+    ms = Path(__file__).resolve().parents[3] / "services" / "model-service"
+    if str(ms) not in sys.path:
+        sys.path.insert(0, str(ms))
+    from src.services.nfl_fixture_assembly.consume_chain import (  # type: ignore[import-not-found]
+        consume_fixture_chain,
+    )
+    from src.services.nfl_fixture_assembly.contract import (  # type: ignore[import-not-found]
+        FixtureHardRefuse,
+    )
+
+    return consume_fixture_chain, FixtureHardRefuse
+
+
 def assert_fixture_chain_record(payload: object) -> dict[str, object]:
-    """Refuse mutated/missing A→B handoff before any export projection."""
-    if not isinstance(payload, dict):
-        raise NflExportRefuse("REFUSE_PARTIAL")
-    if payload.get("chain_contract_id") != CHAIN_CONTRACT_ID:
-        raise NflExportRefuse("REFUSE_VERSION")
-    if payload.get("chain_schema_version") != CHAIN_SCHEMA_VERSION:
-        raise NflExportRefuse("REFUSE_VERSION")
-    if payload.get("channel") != FIXTURE_CHANNEL:
-        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
-    if payload.get("fixture") is not True:
-        raise NflExportRefuse("REFUSE_QUALIFICATION")
-    if payload.get("production_mode") is not False:
-        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
-    if payload.get("cacheable") is not False:
-        raise NflExportRefuse("REFUSE_CACHE")
-    if payload.get("honor_env_bypass") is not False:
-        raise NflExportRefuse("REFUSE_ENV_BYPASS")
-    for key in (
-        "eligibility",
-        "quote",
-        "forecast",
-        "provenance",
-        "cutoff",
-        "capability",
-        "l1_candidate",
-        "game_id",
-        "admitted_capture_id",
-    ):
-        if key not in payload:
-            raise NflExportRefuse("REFUSE_PARTIAL")
-    forecast = payload["forecast"]
-    quote = payload["quote"]
-    cutoff = payload["cutoff"]
-    provenance = payload["provenance"]
-    capability = payload["capability"]
-    candidate = payload["l1_candidate"]
-    if not all(isinstance(x, dict) for x in (forecast, quote, cutoff, provenance, capability, candidate)):
-        raise NflExportRefuse("REFUSE_PARTIAL")
-    game_id = payload.get("game_id")
-    if (
-        not isinstance(game_id, str)
-        or not game_id
-        or game_id != forecast.get("game_id")
-        or game_id != quote.get("event_id")
-        or game_id != candidate.get("game_id")
-    ):
-        raise NflExportRefuse("REFUSE_GAME")
-    if payload.get("admitted_capture_id") != candidate.get("capture_id"):
-        raise NflExportRefuse("REFUSE_IDENTITY")
-    fid = forecast.get("forecast_id")
-    if not isinstance(fid, str) or len(fid) != 64:
-        raise NflExportRefuse("REFUSE_HASH")
-    if quote.get("period") != "full_game" or forecast.get("period") != "full_game":
-        raise NflExportRefuse("REFUSE_PERIOD")
-    if quote.get("side") != forecast.get("side"):
-        raise NflExportRefuse("REFUSE_SIGN")
+    """Refuse mutated/missing A→B handoff via A's consume_chain (not shape-only)."""
+    consume_fixture_chain, fixture_hard_refuse = _load_consume_chain()
     try:
-        point_margin = float(forecast.get("point_margin"))  # type: ignore[arg-type]
-        line = float(quote.get("line"))  # type: ignore[arg-type]
-    except (TypeError, ValueError):
-        raise NflExportRefuse("REFUSE_LINE") from None
-    if not math.isfinite(point_margin) or not math.isfinite(line):
-        raise NflExportRefuse("REFUSE_LINE")
-    expected = -point_margin if quote.get("side") == "HOME" else point_margin
-    if line != expected:
-        raise NflExportRefuse("REFUSE_SIGN" if line == -expected else "REFUSE_LINE")
-    if quote.get("time") != cutoff.get("captured_at") or quote.get("time") != provenance.get(
-        "captured_at"
-    ):
-        raise NflExportRefuse("REFUSE_TIME")
-    if cutoff.get("decision_ts") != provenance.get("decision_ts") or cutoff.get(
-        "kickoff_ts"
-    ) != provenance.get("kickoff_ts"):
-        raise NflExportRefuse("REFUSE_CUTOFF")
-    as_of = cutoff.get("as_of_ts")
-    kickoff = cutoff.get("kickoff_ts")
-    if isinstance(as_of, str) and isinstance(kickoff, str) and as_of > kickoff:
-        raise NflExportRefuse("REFUSE_STALE")
-    bits = capability.get("bits")
-    if not isinstance(bits, list) or "POINT_MARGIN" not in bits:
-        raise NflExportRefuse("REFUSE_CAPABILITY")
-    return payload
+        return consume_fixture_chain(payload, consumer="fixture")
+    except fixture_hard_refuse as exc:
+        raise NflExportRefuse(exc.result.value) from exc
 
 
 def project_fixture_assembly_to_export(

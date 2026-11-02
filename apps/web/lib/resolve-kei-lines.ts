@@ -33,6 +33,7 @@ import {
   type NflFairLineRow,
 } from "@/lib/nfl-fair-lines";
 import { consumeFixtureEligibility } from "@/lib/nfl-fixture-assembly-contract";
+import { assertFixtureChainRecord } from "@/lib/nfl-fixture-chain-consume";
 import { fetchWnbaFairLines } from "@/lib/wnba-fair-lines";
 import { keiGamesFromWnbaFairLines } from "@/lib/wnba-kei-from-fair-lines";
 
@@ -95,8 +96,11 @@ export function keiGamesFromNflFairLines(
  * Point-margin spread only. Totals / ML / win-prob channels absent.
  */
 export function keiGamesFromFixtureFairLines(
-  board: FixtureFairLinesBoard,
+  board: FixtureFairLinesBoard & { chain?: unknown },
 ): Array<KeiLineGame & { fixture: true }> {
+  if (board.chain !== undefined) {
+    assertFixtureChainRecord(board.chain);
+  }
   consumeFixtureEligibility(board.eligibility, "fixture");
   return keiGamesFromNflFairLines(board.lines).map((game) => ({
     ...game,

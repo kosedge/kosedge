@@ -6,6 +6,7 @@ import {
   type EligibilityDecision,
   type EligibilityDecisionInput,
 } from "@/lib/nfl-fixture-assembly-contract";
+import { assertFixtureChainRecord } from "@/lib/nfl-fixture-chain-consume";
 
 export type NflKeiRepriceFactor = {
   factor: string;
@@ -116,6 +117,7 @@ export function projectFixtureFairLinesViewModel(board: {
   eligibility: EligibilityDecision | EligibilityDecisionInput;
   lines: NflFairLineRow[];
   fixture?: boolean;
+  chain?: unknown;
 }): {
   fixture: true;
   subscriber_consumable: false;
@@ -134,6 +136,9 @@ export function projectFixtureFairLinesViewModel(board: {
     }
   >;
 } {
+  if (board.chain !== undefined) {
+    assertFixtureChainRecord(board.chain);
+  }
   consumeFixtureEligibility(board.eligibility, "fixture");
   return {
     fixture: true,

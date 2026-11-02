@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""ONE opt-in offline A→B chain command (t5194u).
+"""ONE opt-in offline A→B chain command (t5194u / t5201u).
 
-Loads A's serialized FixtureChainRecord (do not invent allow tokens),
-verifies the pinned digest, then runs real B export consume/project.
-Activates A's shared guard; last_guard_report()['guard_active'] must be
-true before claiming 0 attempts. Refuse preserves prior OUT.
+1. Invoke the real A producer to a TEMP destination.
+2. Bind its actual common digest.
+3. Run Python export + TS API / view-model / cache consumers + faults.
+
+Pinned originals/OUT are never rewritten. Guard must be active before
+claiming 0 forbidden-call attempts.
 
 From repo root:
   PYTHONPATH=services/model-service python3 scripts/nfl/t5194u-ab-chain.py
@@ -18,8 +20,11 @@ import copy
 import importlib
 import importlib.util
 import json
+import os
 import socket
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Callable
 
@@ -33,11 +38,17 @@ from src.services.nfl_fixture_assembly.assemble import (  # noqa: E402
     consume_fixture_eligibility,
 )
 from src.services.nfl_fixture_assembly.chain import chain_digest  # noqa: E402
+from src.services.nfl_fixture_assembly.consume_chain import (  # noqa: E402
+    consume_fixture_chain,
+)
 from src.services.nfl_fixture_assembly.contract import (  # noqa: E402
     CHAIN_CONTRACT_ID,
     CHAIN_SCHEMA_VERSION,
     FixtureEligibilityResult,
     FixtureHardRefuse,
+)
+from src.services.nfl_fixture_assembly.produce_chain import (  # noqa: E402
+    produce_fixture_chain,
 )
 from src.services.nfl_fixture_assembly.guard import (  # noqa: E402
     chain_guard,
@@ -49,6 +60,7 @@ from src.services.nfl_fixture_assembly.guard import (  # noqa: E402
 PINNED = ROOT / "data" / "ops" / "t5194u-wfix-a-chain" / "positive-output.json"
 PINNED_SHA = ROOT / "data" / "ops" / "t5194u-wfix-a-chain" / "positive-output.sha256"
 EXPORT = ROOT / "apps" / "web" / "scripts" / "export_kei_lines_nfl.py"
+WEB = ROOT / "apps" / "web"
 EXPECTED_DIGEST = "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124"
 OUT = Path("/tmp/t5194u-ab-chain-out.json")
 
@@ -80,6 +92,34 @@ def _print_report(*, extra: dict[str, Any] | None = None) -> dict[str, Any]:
         for key, value in extra.items():
             print(f"{key} {value}")
     return report
+
+
+def _run_ts_consumers(chain_json: Path) -> None:
+    env = {
+        **os.environ,
+        "T5201U_CHAIN_JSON": str(chain_json),
+        "PYTHONPATH": str(MS),
+    }
+    cmd = [
+        "pnpm",
+        "exec",
+        "vitest",
+        "run",
+        "__tests__/lib/nfl-fair-lines-ab-chain.test.ts",
+    ]
+    proc = subprocess.run(
+        cmd,
+        cwd=str(WEB),
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise FixtureHardRefuse(
+            FixtureEligibilityResult.REFUSE_VALIDATION,
+            f"TS consumers failed rc={proc.returncode}\n{proc.stdout}\n{proc.stderr}",
+        )
 
 
 def _probe_forbidden() -> None:
@@ -114,11 +154,23 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    payload = json.loads(PINNED.read_text(encoding="utf-8"))
-    digest = chain_digest(payload)
+    pinned_bytes = PINNED.read_bytes()
+    pinned_sha_bytes = PINNED_SHA.read_bytes()
     pinned = PINNED_SHA.read_text(encoding="utf-8").strip()
-    if digest != pinned or digest != EXPECTED_DIGEST:
-        print(f"DIGEST_MISMATCH got={digest} pinned={pinned}", file=sys.stderr)
+    if pinned != EXPECTED_DIGEST:
+        print(f"PINNED_DIGEST_MISMATCH pinned={pinned}", file=sys.stderr)
+        return 2
+
+    tmpdir = Path(tempfile.mkdtemp(prefix="t5201u-chain-"))
+    dest = tmpdir / "produced-chain.json"
+    produced = produce_fixture_chain(dest=dest)
+    payload = produced
+    digest = chain_digest(payload)
+    if dest.read_text(encoding="utf-8") == "":
+        print("PRODUCE_EMPTY", file=sys.stderr)
+        return 2
+    if PINNED.read_bytes() != pinned_bytes or PINNED_SHA.read_bytes() != pinned_sha_bytes:
+        print("PINNED_MUTATED", file=sys.stderr)
         return 2
 
     OUT.write_text("ORIGINAL_SENTINEL\n", encoding="utf-8")
@@ -176,6 +228,7 @@ def main(argv: list[str] | None = None) -> int:
                 "ab-chain guard_active is not true",
             )
         consume_fixture_eligibility(payload["eligibility"], consumer="fixture")
+        consume_fixture_chain(payload, consumer="fixture")
         export.consume_fixture_eligibility(payload["eligibility"], "fixture")
         export.assert_fixture_chain_record(payload)
         doc = _project_export(export, payload)
@@ -205,6 +258,30 @@ def main(argv: list[str] | None = None) -> int:
             ("stale", lambda p: p["cutoff"].__setitem__("as_of_ts", "2026-11-08T19:00:00Z")),
             ("partial", lambda p: p.pop("forecast", None)),
             ("cache", lambda p: p.__setitem__("cacheable", True)),
+            ("hash_valid_format", lambda p: p["forecast"].__setitem__("forecast_id", "0" * 64)),
+            (
+                "joint_not_a_time",
+                lambda p: (
+                    p["cutoff"].__setitem__("decision_ts", "not-a-time"),
+                    p["provenance"].__setitem__("decision_ts", "not-a-time"),
+                ),
+            ),
+            (
+                "missing_decision",
+                lambda p: (
+                    p["cutoff"].pop("decision_ts", None),
+                    p["provenance"].pop("decision_ts", None),
+                ),
+            ),
+            ("price_zero", lambda p: p["quote"].__setitem__("price", 0)),
+            (
+                "invalid_side",
+                lambda p: (
+                    p["quote"].__setitem__("side", "PUSH"),
+                    p["forecast"].__setitem__("side", "PUSH"),
+                ),
+            ),
+            ("price_fraction", lambda p: p["quote"].__setitem__("price", -110.5)),
         ]
         refused: list[str] = []
         for name, mutator in faults:
@@ -224,6 +301,12 @@ def main(argv: list[str] | None = None) -> int:
                         f"OUT_MUTATED_ON_REFUSE {name}",
                     )
         doc["refused"] = refused
+        _run_ts_consumers(dest)
+        if PINNED.read_bytes() != pinned_bytes or PINNED_SHA.read_bytes() != pinned_sha_bytes:
+            raise FixtureHardRefuse(
+                FixtureEligibilityResult.REFUSE_VALIDATION,
+                "PINNED_MUTATED_AFTER_TS",
+            )
         return doc
 
     try:
@@ -249,7 +332,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FORBIDDEN {report['attempts']}", file=sys.stderr)
         return 2
 
+    print(f"produced {dest}")
     print(f"digest {digest}")
+    print(f"pinned_digest {pinned}")
+    print(f"pinned_preserved {PINNED.read_bytes() == pinned_bytes}")
     print(f"chain_contract_id {CHAIN_CONTRACT_ID}")
     print(f"positive_export_spread {doc['games'][0]['projSpreadHome']}")
     print(f"refused {','.join(doc['refused'])}")
