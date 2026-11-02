@@ -12,6 +12,8 @@ Does not run real EVAL. CERT=0. DRAFT≠merge.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
 from collections import Counter
 from typing import Any, Mapping, Sequence
@@ -29,10 +31,35 @@ CERT_CANDIDATE = 0
 OWNER_CLEAR_SHA8 = "d6aa1ef5"
 COS_ORDER_B_SHA8 = "d821fe61"
 COS_ACCEPT_SCOPED_SHA8 = "96908853"
+OWNER_AMEND_SHA8 = "cd253f7a"
+COS_ORDER_RETURN_SHA8 = "42b6e832"
+ALEX_RETURN_SHA8 = "7057e5a9"
+ALEX_RETURN_ACCEPTED_SHA8 = "ee23cc57"
 PACKAGE_A_TIP = "42ff285cc1be2459512af4761651ba6dfe17dc75"
 PACKAGE_A_STAMP = "f7ec09ee2ffcce7b130c9b858304bbe8006a4428"
 R4_496_ACCEPTED_TIP = "bc1b62fc13a1c16ba1e39ccce39fb60180dc565e"
 ALEX_PASS_RO = "274cf246"
+PARTIAL_PLUMBING_TIP = "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc"
+PARTIAL_PLUMBING_STAMP = "bad2049446168f009b54b89f45d522fc803a4d7f"
+DEV437_RESULT_PATH = (
+    "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json"
+)
+DEV437_RESULT_SHA256 = (
+    "66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50"
+)
+DEV437_RECORD_SHA256 = (
+    "0550ef9b498a2240919d8cf570ccb7c94b67f6815ba3625789901f8390143637"
+)
+MARKET72_RESULT_PATH = (
+    "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json"
+)
+MARKET72_RESULT_SHA256 = (
+    "88d63eb7f6b09e967fcf60122f525c2873072aaada93bb0dab3d8c3ff17fd9ea"
+)
+MARKET72_RECORD_SHA256 = (
+    "72a1f1f9ad1befa95b0cdb10588935da1e39fb857b06ee4f9a5778b1af1c3437"
+)
+MARKET72_SOURCE_TIP = "316345fae6631fe2d357e34de0417f7a57916e3f"
 
 PROFILE_FEATURE_RECON_REG496 = "FEATURE_RECON_REG496"
 PROFILE_DEV_IF437 = "DEV_IF437"
@@ -544,6 +571,25 @@ def _per_season_tables(
             require_finite(table.get(key), f"per_season[{season}].{key}")
 
 
+def market_is_unavailable(payload: Mapping[str, Any]) -> bool:
+    if payload.get("market_unavailable") is True:
+        return True
+    market = payload.get("market")
+    if isinstance(market, Mapping):
+        status = str(market.get("status") or "").upper()
+        if status in MARKET_UNAVAILABLE_STATUSES:
+            return True
+    status = str(payload.get("market_status") or "").upper()
+    return status in MARKET_UNAVAILABLE_STATUSES
+
+
+def refuse_synthetic_flag(payload: Mapping[str, Any], *, label: str) -> None:
+    if payload.get("synthetic") is True:
+        raise EvalResultContractRefuse(
+            f"{label}: synthetic=true refused — fixtures are test-helper only"
+        )
+
+
 def validate_eval_result_contract(scored: Mapping[str, Any]) -> None:
     """Require vs-IF **and** vs-market. DEV437 / IF-only does not pass.
 
@@ -551,7 +597,7 @@ def validate_eval_result_contract(scored: Mapping[str, Any]) -> None:
     """
     if not isinstance(scored, Mapping):
         raise EvalResultContractRefuse("EVAL result is not a mapping")
-    if scored.get("market_unavailable") is True:
+    if market_is_unavailable(scored) or scored.get("mae_market") is None:
         raise EvalResultContractRefuse(
             "IF-only / market unavailable cannot satisfy the EVAL market contract"
         )
@@ -604,7 +650,8 @@ def validate_eval_result_contract(scored: Mapping[str, Any]) -> None:
     for name in BOOTSTRAP_KEYS:
         _check_bootstrap_metadata(name, scored.get(name), expected_point=None, expected_n=None)
     if scored.get("games"):
-        validate_market72_consistency(scored)
+        ids = _as_ids(scored.get("game_ids") or [r.get("game_id") for r in scored.get("games") or []])
+        validate_market72_consistency(scored, expected_ids=ids)
 
 
 def apply_eval_result_contract(scored: dict[str, Any]) -> dict[str, Any]:
@@ -639,19 +686,93 @@ def refuse_incomplete_market_before_claim(
         )
 
 
+def joined_row_sha256(rows: Sequence[Mapping[str, Any]]) -> str:
+    body = []
+    for row in rows:
+        body.append(
+            {
+                "game_id": str(row["game_id"]),
+                "season": int(row["season"]),
+                "week": int(row["week"]),
+                "actual_margin": row.get("actual_margin"),
+                "m_challenger": row.get("m_challenger"),
+                "m_if": row.get("m_if"),
+                "m_market": row.get("m_market"),
+            }
+        )
+    return hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")
+    ).hexdigest()
+
+
+def join_market72_from_if437(
+    if437: Mapping[str, Any],
+    market72: Mapping[str, Any],
+    *,
+    expected_ids: Sequence[str],
+) -> dict[str, Any]:
+    """Join published 437 per-game rows to published 72 market points. No new scoring."""
+    refuse_synthetic_flag(if437, label="DEV_IF437")
+    refuse_synthetic_flag(market72, label="DEV_MARKET72")
+    want = _as_ids(expected_ids)
+    if len(want) != DEV_MARKET72_N or _n_by_season_from_ids(want) != DEV_MARKET72_BY_SEASON:
+        raise EvalResultContractRefuse("DEV_MARKET72 expected IDs are not 35+37")
+    published_ids = _as_ids(market72.get("game_ids"))
+    if set(published_ids) != set(want) or len(published_ids) != DEV_MARKET72_N:
+        raise EvalResultContractRefuse("matched72 game_ids disagree with profile identity")
+    points = {
+        str(p.get("game_id")): p
+        for p in (market72.get("market_points") or [])
+        if isinstance(p, Mapping)
+    }
+    if set(points) != set(want) or len(points) != DEV_MARKET72_N:
+        raise EvalResultContractRefuse("matched72 market_points disagree with profile identity")
+    by437 = {str(r.get("game_id")): r for r in (if437.get("games") or []) if isinstance(r, Mapping)}
+    missing = [gid for gid in want if gid not in by437]
+    if missing:
+        raise EvalResultContractRefuse(f"matched72 IDs missing from saved 437 rows: {missing[:8]}")
+    joined: list[dict[str, Any]] = []
+    for gid in published_ids:
+        src = by437[gid]
+        point = points[gid]
+        actual = src.get("actual_margin")
+        require_finite(actual, f"{gid}.actual_margin")
+        if int(src.get("season") or 0) != int(point.get("season") or -1):
+            raise EvalResultContractRefuse(f"{gid} season identity mismatch 437 vs market point")
+        if int(src.get("week") or 0) != int(point.get("week") or -1):
+            raise EvalResultContractRefuse(f"{gid} week identity mismatch 437 vs market point")
+        m_mkt = point.get("market_margin")
+        require_finite(m_mkt, f"{gid}.market_margin")
+        row = dict(src)
+        row["m_market"] = float(m_mkt)
+        row["err_market"] = float(m_mkt) - float(actual)
+        row["L_market"] = abs(row["err_market"])
+        row["signed_diff_vs_market"] = _row_abs_loss(row, "challenger") - row["L_market"]
+        joined.append(row)
+    out = dict(market72)
+    out["games"] = joined
+    out["game_ids"] = published_ids
+    out["n"] = DEV_MARKET72_N
+    out["joined_from_437"] = True
+    out["synthetic"] = False
+    return out
+
+
 def validate_market72_consistency(
     payload: Mapping[str, Any],
     *,
     expected_ids: Sequence[str] | None = None,
-    enforce_profile_n: bool = False,
 ) -> dict[str, Any]:
+    refuse_synthetic_flag(payload, label="DEV_MARKET72")
+    if expected_ids is None:
+        raise EvalResultContractRefuse("DEV_MARKET72 requires declared profile IDs")
     rows = saved_game_rows(payload)
     achieved = recompute_from_saved_rows(rows, require_market=True)
     _check_count_agreement(
         payload,
         achieved,
-        expected_n=DEV_MARKET72_N if enforce_profile_n else None,
-        expected_by_season=DEV_MARKET72_BY_SEASON if enforce_profile_n else None,
+        expected_n=DEV_MARKET72_N,
+        expected_by_season=DEV_MARKET72_BY_SEASON,
         expected_ids=expected_ids,
     )
     _check_recorded_vs_achieved(
@@ -677,7 +798,7 @@ def validate_market72_consistency(
         payload,
         rows,
         require_market=True,
-        expected_by_season=DEV_MARKET72_BY_SEASON if enforce_profile_n else None,
+        expected_by_season=DEV_MARKET72_BY_SEASON,
     )
     _check_bootstrap_metadata(
         "bootstrap_game",
@@ -703,32 +824,47 @@ def validate_market72_consistency(
         expected_point=float(achieved["mean_signed_diff_vs_market"]),
         expected_n=int(achieved["n"]),
     )
-    return {"ok": True, "profile": PROFILE_DEV_MARKET72, "n": achieved["n"]}
+    return {
+        "ok": True,
+        "profile": PROFILE_DEV_MARKET72,
+        "n": achieved["n"],
+        "n_by_season": dict(achieved["n_by_season"]),
+        "joined_row_sha256": joined_row_sha256(rows),
+    }
 
 
 def validate_dev_if437(
     payload: Mapping[str, Any],
     *,
     expected_ids: Sequence[str] | None = None,
-    enforce_profile_n: bool = False,
 ) -> dict[str, Any]:
     """IF-only DEV: market must be explicitly unavailable; cannot satisfy market."""
     if not isinstance(payload, Mapping):
         raise EvalResultContractRefuse("DEV_IF437 payload is not a mapping")
-    if payload.get("market_unavailable") is not True:
+    refuse_synthetic_flag(payload, label="DEV_IF437")
+    if expected_ids is None:
+        raise EvalResultContractRefuse("DEV_IF437 requires declared profile IDs")
+    if not market_is_unavailable(payload):
         raise EvalResultContractRefuse("DEV_IF437 must explicitly mark market unavailable")
     status = str(payload.get("market_status") or "")
-    if status not in MARKET_UNAVAILABLE_STATUSES:
+    nested = payload.get("market") if isinstance(payload.get("market"), Mapping) else {}
+    nested_status = str((nested or {}).get("status") or "")
+    declared = status.upper() if status else nested_status.upper()
+    if declared not in MARKET_UNAVAILABLE_STATUSES:
         raise EvalResultContractRefuse(
-            f"DEV_IF437 market_status={status!r} must be one of {sorted(MARKET_UNAVAILABLE_STATUSES)}"
+            f"DEV_IF437 market_status={declared!r} must be one of {sorted(MARKET_UNAVAILABLE_STATUSES)}"
         )
     cannot = payload.get("cannot_satisfy_profiles") or payload.get("cannot_satisfy_profile")
     cannot_list = [cannot] if isinstance(cannot, str) else list(cannot or [])
-    if PROFILE_DEV_MARKET72 not in cannot_list:
+    if PROFILE_DEV_MARKET72 not in cannot_list and declared not in MARKET_UNAVAILABLE_STATUSES:
         raise EvalResultContractRefuse(
             "DEV_IF437 must declare it cannot satisfy DEV_MARKET72"
         )
-    missing = [k for k in IF_ONLY_REQUIRED if k not in payload]
+    missing = [
+        k
+        for k in IF_ONLY_REQUIRED
+        if k not in payload and k not in {"market_unavailable", "market_status"}
+    ]
     if missing:
         raise EvalResultContractRefuse(f"DEV_IF437 missing IF-only fields: {missing}")
     for key in (
@@ -772,8 +908,8 @@ def validate_dev_if437(
     _check_count_agreement(
         payload,
         achieved,
-        expected_n=DEV_IF437_N if enforce_profile_n else None,
-        expected_by_season=DEV_IF437_BY_SEASON if enforce_profile_n else None,
+        expected_n=DEV_IF437_N,
+        expected_by_season=DEV_IF437_BY_SEASON,
         expected_ids=expected_ids,
     )
     _check_recorded_vs_achieved(
@@ -794,7 +930,7 @@ def validate_dev_if437(
         payload,
         rows,
         require_market=False,
-        expected_by_season=DEV_IF437_BY_SEASON if enforce_profile_n else None,
+        expected_by_season=DEV_IF437_BY_SEASON,
     )
     _check_bootstrap_metadata(
         "bootstrap_game",
@@ -812,6 +948,8 @@ def validate_dev_if437(
         "ok": True,
         "profile": PROFILE_DEV_IF437,
         "n": achieved["n"],
+        "n_by_season": dict(achieved["n_by_season"]),
+        "joined_row_sha256": joined_row_sha256(rows),
         "market_unavailable": True,
         "cannot_satisfy_profile": PROFILE_DEV_MARKET72,
     }
@@ -841,6 +979,7 @@ def validate_feature_recon_reg496(
     """Reconstruction: lineage + completeness. No invented metrics."""
     if not isinstance(payload, Mapping):
         raise EvalResultContractRefuse("FEATURE_RECON_REG496 payload is not a mapping")
+    refuse_synthetic_flag(payload, label=PROFILE_FEATURE_RECON_REG496)
     invented = _walk_forbidden_metrics(
         {k: v for k, v in payload.items() if k not in {"matrix"}}
     )
@@ -934,6 +1073,16 @@ def validate_feature_recon_reg496(
         "n_by_season": dict(REG496_BY_SEASON),
         "invented_metrics": False,
         "w18_2021_retained": REG_W18_2021_N,
+        "joined_row_sha256": joined_row_sha256(
+            [
+                {
+                    "game_id": gid,
+                    "season": int(str(gid).split("_")[0]),
+                    "week": int(str(gid).split("_")[1]),
+                }
+                for gid in ids
+            ]
+        ),
     }
 
 
@@ -942,19 +1091,17 @@ def validate_profile_output(
     payload: Mapping[str, Any],
     *,
     expected_ids: Sequence[str] | None = None,
-    enforce_profile_n: bool = False,
 ) -> dict[str, Any]:
+    refuse_synthetic_flag(payload, label=profile)
+    if expected_ids is None:
+        raise EvalResultContractRefuse(f"{profile} requires declared profile IDs")
     if profile == PROFILE_FEATURE_RECON_REG496:
         return validate_feature_recon_reg496(payload, expected_ids=expected_ids)
     if profile == PROFILE_DEV_IF437:
-        return validate_dev_if437(
-            payload, expected_ids=expected_ids, enforce_profile_n=enforce_profile_n
-        )
+        return validate_dev_if437(payload, expected_ids=expected_ids)
     if profile == PROFILE_DEV_MARKET72:
-        if payload.get("market_unavailable") is True:
+        if market_is_unavailable(payload):
             raise EvalResultContractRefuse("DEV_MARKET72 cannot use an IF-only / market-unavailable result")
         validate_eval_result_contract(payload)
-        return validate_market72_consistency(
-            payload, expected_ids=expected_ids, enforce_profile_n=enforce_profile_n
-        )
+        return validate_market72_consistency(payload, expected_ids=expected_ids)
     raise EvalResultContractRefuse(f"unknown profile {profile}")

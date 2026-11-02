@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""t5151u ONE offline verification/integration command.
+"""t5153u ONE offline verification/integration command.
 
-Verifies pinned accepted artifacts, runs focused tests, executes the
-scoped research caller (A cohort gates + B numerical checks), and writes
-one machine-readable receipt. Nonzero failure prevents VERIFIED/final
-output. Synthetic EVAL paths only. CERT=0. DRAFT≠merge.
+Loads/hashes/verifies the immutable published DEV437 result (66c3bde1)
+and matched72 result (#693 tip 316345fa), plus accepted REG496 / 502 /
+Package A pins. A cohort gates then B numerical checks. Writes one
+machine-readable receipt. Fixtures stay in test helpers only.
+Nonzero failure prevents VERIFIED/final output. No real EVAL.
+CERT=0. DRAFT≠merge.
 
 Exact command:
   python3 scripts/nfl/run_nfl_t5151u_verify_integrate.py
