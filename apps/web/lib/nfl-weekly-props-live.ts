@@ -1,11 +1,16 @@
 /**
  * Weekly `/props/board` shares the player-production spine with fantasy.
  * LIVE = research→fire for means/bands + optional edge vs market.
- * Not a stake-tag / CLV-proven props book. Rollback: set false.
+ * Not a stake-tag / CLV-proven props book.
+ *
+ * Product 2026-10-26 — Coming Soon / NFL NO-GO: LIVE is false.
+ * Fetch + page also fail-close on isFootballPublicNumbersDisabled so
+ * flipping LIVE alone cannot paint subscriber fair/edge while public
+ * rails are dark. Do not flip NFL_EDGE_BOARD_PUBLIC_ENABLED here.
  *
  * 2025 = calibrated 3C control. 2026 = preseason grain (elevated rec gap).
  */
-export const NFL_WEEKLY_PROPS_LIVE = true;
+export const NFL_WEEKLY_PROPS_LIVE = false;
 
 export const NFL_WEEKLY_PROPS_PATH_COHERENT: "yes" | "gated" =
   NFL_WEEKLY_PROPS_LIVE ? "yes" : "gated";

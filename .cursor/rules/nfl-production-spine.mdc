@@ -15,7 +15,7 @@ Fantasy, weekly props, and player futures are **one** production model.
 - Any cal fix applies to the shared means; all surfaces inherit
 - Promote **player production vN** (close + actual + pool shape), not “props page” vs “fantasy page”
 
-**LIVE (2026-08-20):** `NFL_WEEKLY_PROPS_LIVE = true` — research→fire for weekly means/bands + edge vs market when a book is joined. **No prop PLAY / LEAN stake tags.** Spine `player-production-v3-phase3c`. Season = SUM weekly cap 17. **2026 caveat:** receiving totals elevated vs pass (roster-width grain, gap ~0.42); 2025 control remains ~3C (max 4590 / n=4 / gap ~0.10). Rollback: set the flag false. See `data/ops/nfl-weekly-props-live-on-20260820.md`.
+**LIVE (2026-10-26 Coming Soon / NO-GO):** `NFL_WEEKLY_PROPS_LIVE = false`. Fetch + `/pro/nfl/props` also fail-close on `isFootballPublicNumbersDisabled`. Do **not** flip `NFL_EDGE_BOARD_PUBLIC_ENABLED`. **No prop PLAY / LEAN stake tags.** Spine `player-production-v3-phase3c`. Season = SUM weekly cap 17. **2026 caveat:** receiving totals elevated vs pass (roster-width grain, gap ~0.42); 2025 control remains ~3C (max 4590 / n=4 / gap ~0.10). See `data/ops/nfl-weekly-props-live-on-20260820.md` (historical on-flip).
 
 Until a stake policy is separately approved: numbers only, no “play this” chrome. Do not ungate stake tags on close-MAE alone. Rush must not regress vs actual.
 

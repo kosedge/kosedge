@@ -98,6 +98,7 @@ describe("football public numbers kill switch", () => {
     const surfaces = [
       "app/edge-board/[sport]/page.tsx",
       "app/(pro)/pro/nfl/edges/page.tsx",
+      "app/(pro)/pro/nfl/props/page.tsx",
       "app/(pro)/pro/nfl/fair-lines/page.tsx",
       "app/(pro)/pro/power-ratings/[sport]/page.tsx",
       "app/(pro)/pro/nfl/slate/[date]/page.tsx",
