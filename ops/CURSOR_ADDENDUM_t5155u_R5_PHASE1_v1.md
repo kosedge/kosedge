@@ -22,6 +22,7 @@ tip **581493080881d6363935f41c70236b5cb070b401**. RETURN-FIX
 implementation tip **255adf7802830bc25814a739d62f65f095216203**. R2 eng tip
 **bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45**. HISTORY-ID #703 tip
 **f7715dce8ffaaee11fb5236c1d7873aed27cd7c1** merged onto this #701 head.
+t5160u loader-boundary tip **79341557deac522b7b939d4c394590d21b6d8a3a**.
 Merge conflict: only
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
 **072e99e0** unchanged. One-command:
@@ -119,7 +120,11 @@ does not run inside FOCUSED_TESTS / verify_integrate. `--score
 claim, then calls the real loader once and records runner code hashes.
 Unbound `--score` still refuses (0 reads). Output contract is now
 candidate+IF+market (Q2/candidate **COMPLETED**). STOP for Alex
-completed-candidate PREFLIGHT. No Cos bind / no live `--score`.
+completed-candidate PREFLIGHT. t5160u: real labels only after verified
+claimed hash-matching bind; env flags cannot authorize; FOCUSED_TESTS
+positive path remains synthetic. Protocol deviation sealed for
+`255adf78` real-label FOCUSED_TESTS path. No Cos bind / no live
+`--score`. STOP for Alex append-preflight ORDER **b8cc05b2**.
 
 R3 env-hash: `Q2_HISTORY_FREEZE` / `FREEZE_MANIFEST` carry sha pins +
 repo-relative/role labels only. No `/tmp` paths, no host `present`.
@@ -152,6 +157,9 @@ unbound `--score` · IF-only live diagnostic · lift Q2 HOLD.
 | RETURN-FIX tip         | `255adf7802830bc25814a739d62f65f095216203`                                |
 | R2 eng tip             | `bfd3cbdc0d14c81e79bd2a9e0ac88293f2036a45`                                |
 | HISTORY-ID integrate   | `05fbb36e095e18a801a003349b116f45f54fd13c`                                |
+| t5160u loader-boundary | `79341557deac522b7b939d4c394590d21b6d8a3a`                                |
+| t5162u reconcile Cos   | `3c978ef9`                                                                |
+| Alex append-preflight  | `b8cc05b2`                                                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
 | t5157u Cos / OWNER / A | `7015d5c8` / `e6cc6927` / `42069ef6`                                      |
 | HISTORY-ID tip / stamp | `f7715dce8` / `8a7895b99`                                                 |

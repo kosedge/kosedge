@@ -6,6 +6,8 @@ OWNER t5162u RECONCILE CLOSED Cos **3c978ef9**. Same draft **#701**.
 STOP for Alex append-preflight ORDER **b8cc05b2**. Cos binds after
 append-GO. HARD END 02:30 EST / 07:30Z.
 
+Implementation tip **79341557deac522b7b939d4c394590d21b6d8a3a**.
+
 ## Reconcile (actual)
 
 | Item | State |
