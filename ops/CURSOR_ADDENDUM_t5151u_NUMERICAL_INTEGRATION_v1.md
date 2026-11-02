@@ -10,9 +10,7 @@ Package A tip **42ff285c** · stamp **f7ec09ee** · manifest **c61ca694** · PR 
 (not rewritten).
 
 PARTIAL plumbing only (not integrated VERIFIED): tip **ac35ed55** · stamp
-**bad20494**. This addendum is the t5153u RETURN-FIX evidence. Implementation
-tip / receipt stamp are filled on the stamp commit after the command is re-run
-at the new tip.
+**bad20494**. RETURN-FIX implementation tip **12ccc482db54dd53bc6d79cea5f4af01c5540950**.
 
 Starting points: #693 `eval_result_contract.py` + `metric_cohorts.py`; #698
 `last_played_cohort.py`; A hooks in `cohort_enforcement.py`.
@@ -101,29 +99,32 @@ Receipt binds every consumed real artifact’s bytes (repo-relative POSIX path
 
 ## Required proofs
 
-Stamped after the new implementation tip. Do **not** treat `ac35ed55` /
-`bad20494` as integrated VERIFIED.
+Complete command re-ran at tip `12ccc482db54`. Result:
+`CHECKS_PASSED_AWAITING_ALEX_RO` · `verified: false` · focused tests **58
+passed** (12 A + 20 numerical + 18 verify-integrate + 8 t5149u). Do **not**
+treat `ac35ed55` / `bad20494` as integrated VERIFIED.
 
-| Proof                                                      | Expected |
-| ---------------------------------------------------------- | -------- |
-| valid original 496 / 437 / 72 artifacts                    | GREEN    |
-| old 502 fails REG                                          | GREEN    |
-| corrected 496 passes REG                                   | GREEN    |
-| 2021 REG week 18 retained                                  | GREEN    |
-| full cohorts + two numerical rows → fail                   | GREEN    |
-| forged synthetic flag → fail                               | GREEN    |
-| mutated real metric / missing interval field → fail        | GREEN    |
-| feature finalization actually guarded; originals preserved | GREEN    |
-| spy after gates = 1; negatives = 0                         | GREEN    |
-| repo-relative POSIX hashes; cross-root identical digest    | GREEN    |
-| output hash excludes interpreter / HEAD                    | GREEN    |
-| A 12/12 cohort proofs                                      | GREEN    |
-| t5149u 8 last-played REG proofs                            | GREEN    |
+| Proof                                                      | Result |
+| ---------------------------------------------------------- | ------ |
+| valid original 496 / 437 / 72 artifacts                    | GREEN  |
+| old 502 fails REG                                          | GREEN  |
+| corrected 496 passes REG                                   | GREEN  |
+| 2021 REG week 18 retained                                  | GREEN  |
+| full cohorts + two numerical rows → fail                   | GREEN  |
+| forged synthetic flag → fail                               | GREEN  |
+| mutated real metric / missing interval field → fail        | GREEN  |
+| feature finalization actually guarded; originals preserved | GREEN  |
+| spy after gates = 1; negatives = 0                         | GREEN  |
+| repo-relative POSIX hashes; cross-root identical digest    | GREEN  |
+| output hash excludes interpreter / HEAD                    | GREEN  |
+| A 12/12 cohort proofs                                      | GREEN  |
+| t5149u 8 last-played REG proofs                            | GREEN  |
 
 ## Preserve
 
 | Pin                                 | sha8 / tip                                                         |
 | ----------------------------------- | ------------------------------------------------------------------ |
+| RETURN-FIX implementation tip       | `12ccc482db54dd53bc6d79cea5f4af01c5540950`                         |
 | PARTIAL plumbing tip (not VERIFIED) | `ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc`                         |
 | PARTIAL plumbing stamp              | `bad2049446168f009b54b89f45d522fc803a4d7f`                         |
 | Package A tip                       | `42ff285cc1be2459512af4761651ba6dfe17dc75`                         |
