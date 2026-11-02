@@ -80,6 +80,12 @@ export function fairLinesNoOddsYetMessage(sportLabel: string): string {
   return `${sportLabel}: no odds or projections for this window yet. ${FAIR_LINES_DO_NOT_INVENT}`;
 }
 
+export function fairLinesUpstreamUnavailableMessage(
+  sportLabel: string,
+): string {
+  return `${sportLabel} fair-lines upstream unavailable. ${FAIR_LINES_DO_NOT_INVENT}`;
+}
+
 export function emptyFairLinesDiagnostics(
   oddsFeedStatus = "not_connected",
 ): FairLinesApiDiagnostics {
@@ -154,14 +160,26 @@ export function toFairLinesApiBoard<TLine>(opts: {
     (opts.slateStatus?.trim() && opts.slateStatus) ||
     (opts.error ? "upstream_error" : count === 0 ? "no_slate" : "ok");
   const sportLabel = opts.sportLabel ?? opts.sport.toUpperCase();
+  const isUpstreamFailure =
+    Boolean(opts.error?.trim()) ||
+    slateStatus === "upstream_error" ||
+    slateStatus === "upstream_unreachable" ||
+    slateStatus === "misconfigured";
+  // Prefer outage copy over "no odds yet" when transport/config failed (Bugbot).
   const message =
     opts.message?.trim() ||
-    (count === 0
-      ? fairLinesNoOddsYetMessage(sportLabel)
-      : `${sportLabel} fair-lines board.`);
+    (isUpstreamFailure
+      ? fairLinesUpstreamUnavailableMessage(sportLabel)
+      : count === 0
+        ? fairLinesNoOddsYetMessage(sportLabel)
+        : `${sportLabel} fair-lines board.`);
 
   const baseDiag = emptyFairLinesDiagnostics(
-    opts.error ? "upstream_error" : count === 0 ? "no_odds_yet" : "unknown",
+    isUpstreamFailure
+      ? "upstream_error"
+      : count === 0
+        ? "no_odds_yet"
+        : "unknown",
   );
   const diagnostics: FairLinesApiDiagnostics = {
     ...baseDiag,
