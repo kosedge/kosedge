@@ -5,6 +5,7 @@ Authority: OWNER CLEAR t5157u · R5-HISTORY-ID **e6cc6927** · Cos ORDER A **1e3
 HARD END 02:30 EST / 07:30Z.
 
 Parent: PR **#701** tip **255adf7802830bc25814a739d62f65f095216203** · stamp **df074369**.
+Implementation tip **f7715dce8ffaaee11fb5236c1d7873aed27cd7c1**.
 New isolated branch + **NEW DRAFT PR**. Does not rewrite #701 HOLD artifacts.
 
 IF496 bytes **96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407**
@@ -156,3 +157,19 @@ No 2024–26. No Q2/2017 reopen. No merge / deploy / secrets / paid pulls.
 No Phase2 `--score`. CERT=0. Not EVAL / GREEN / #6.
 
 **STOP for Cos/B.**
+
+## Pins
+
+| Item | Value |
+| --- | --- |
+| Implementation tip | `f7715dce8ffaaee11fb5236c1d7873aed27cd7c1` |
+| Parent tip | `255adf7802830bc25814a739d62f65f095216203` |
+| Parent stamp | `df074369` |
+| R5-HISTORY-ID | `e6cc6927` |
+| Cos ORDER A | `1e3c47b8` |
+| 2013–2019 REG identity | `9aad6f473fe6d32bf33466a47d80968dfdf8c8bd8ab8db0bca35e0972d1043a0` |
+| history choice | `679d24283869ccf6b0a2b434efa200e92fd3e2c12a98c446da7d8f968da913b7` |
+| Q2 completed | `eeb6fff73383289c1e69a1a1b30f6df5eed38c7201c58ca9de16feaa8f06cc04` |
+| candidate completed | `2f9a73e68d66878b984d5ae9e2e6fc01cfe16e45b0da4ad5389f90aabe9a87c7` |
+| IF496 (untouched) | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
+| Freeze manifest | `6abba598d3c7dd8ed797cf26b308962b3e7b4d57524087c7356bd267b30c8bc0` |
