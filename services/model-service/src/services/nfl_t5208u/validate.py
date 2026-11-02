@@ -184,8 +184,8 @@ def validate_before_model(
         raise PacketRefuse(f"envelope missing {missing_env}")
 
     kickoff = parse_utc(env.get("kickoff_utc"), name="envelope.kickoff_utc")
-    seal = kickoff
-    cutoff = seal - timedelta(minutes=KO_MINUS_MINUTES)
+    cutoff = kickoff - timedelta(minutes=KO_MINUS_MINUTES)
+    seal = cutoff
     season = _require_int(env.get("season"), name="envelope.season")
     week = _require_int(env.get("week"), name="envelope.week")
     if season in SEALED_SEASONS:
@@ -221,11 +221,15 @@ def validate_before_model(
         observed = parse_utc(cell.get("observed_at"), name=f"{name}.observed_at")
         if available > observed:
             raise PacketRefuse(f"{name} available_at after observed_at")
-        if available == seal or observed == seal:
-            raise PacketRefuse(f"{name} equal-to-seal time {fmt_utc(seal)}")
-        if available > cutoff or observed > cutoff:
+        if available >= cutoff or observed >= cutoff:
+            kind = (
+                "equal-to-seal"
+                if available == seal or observed == seal
+                else "late vs KO"
+            )
             raise PacketRefuse(
-                f"{name} late vs KO−{KO_MINUS_MINUTES} cutoff {fmt_utc(cutoff)}"
+                f"{name} {kind}: must strictly precede seal/cutoff "
+                f"{fmt_utc(cutoff)} (seal_utc=cutoff_utc=KO−{KO_MINUS_MINUTES})"
             )
         claimed = cell.get("source_byte_hash")
         try:
@@ -288,7 +292,10 @@ def validate_before_model(
         _require_nonempty_str(row.get("away_team"), name=f"history[{index}].away_team")
         row_ko = parse_utc(row.get("kickoff_utc"), name=f"history[{index}].kickoff_utc")
         if row_ko >= cutoff:
-            raise PacketRefuse(f"history[{index}] kickoff not < KO−{KO_MINUS_MINUTES}")
+            raise PacketRefuse(
+                f"history[{index}] kickoff not strictly < cutoff/seal "
+                f"{fmt_utc(cutoff)}"
+            )
         if row_season > season or (row_season == season and row_week >= week):
             raise PacketRefuse(f"history[{index}] same-week/future vs target")
         _require_finite_number(row.get("home_score"), name=f"history[{index}].home_score")
@@ -324,6 +331,7 @@ def validate_before_model(
         "code_hash": code_hash,
         "cutoff_utc": fmt_utc(cutoff),
         "seal_utc": fmt_utc(seal),
+        "kickoff_utc": fmt_utc(kickoff),
         "ko_minus_minutes": KO_MINUS_MINUTES,
         "n_contract_27": len(CONTRACT_27),
         "validated": True,

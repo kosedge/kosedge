@@ -135,6 +135,8 @@ def call_r6_point_margin(
         raise CallerRefuse(f"C formula failed: {c_margin} != 0.5*{if_margin}+0.5*{q2_margin}")
 
     schema_id_hash = schema_hash(schema_document())
+    if binds["seal_utc"] != binds["cutoff_utc"]:
+        raise CallerRefuse("seal_utc must equal cutoff_utc (KO−60)")
     for key in ("packet_hash", "history_hash", "config_hash", "code_hash"):
         digest = binds[key]
         if not digest or digest == schema_id_hash or digest == "0" * 64:
@@ -149,6 +151,7 @@ def call_r6_point_margin(
         "code_hash": binds["code_hash"],
         "cutoff_utc": binds["cutoff_utc"],
         "seal_utc": binds["seal_utc"],
+        "kickoff_utc": binds["kickoff_utc"],
         "output_kind": OUTPUT_KIND,
         "channel": CHANNEL_SYNTHETIC,
         "cert": 0,

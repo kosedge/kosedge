@@ -63,7 +63,8 @@ def test_positive_finite_if_q2_c_with_actual_hash_binds() -> None:
     assert abs(out["c_margin"] - (0.5 * out["if_margin"] + 0.5 * out["q2_margin"])) <= 1e-12
     assert out["seed"] == seed_for(out["game_id"])
     assert out["cutoff_utc"] == "2018-10-14T16:00:00Z"
-    assert out["seal_utc"] == "2018-10-14T17:00:00Z"
+    assert out["seal_utc"] == out["cutoff_utc"]
+    assert out["kickoff_utc"] == "2018-10-14T17:00:00Z"
     assert out["packet_hash"] == packet_content_hash(packet)
     assert out["history_hash"] == history_content_hash(history)
     assert out["config_hash"] == config_content_hash()
@@ -133,7 +134,7 @@ def test_real_mode_refuse_zero_model_calls(monkeypatch: pytest.MonkeyPatch) -> N
         (
             lambda p, _h: (
                 p["contract_27"]["home_off_epa_5g"].__setitem__("available_at", "2018-10-14T15:00:00Z"),
-                p["contract_27"]["home_off_epa_5g"].__setitem__("observed_at", "2018-10-14T17:00:00Z"),
+                p["contract_27"]["home_off_epa_5g"].__setitem__("observed_at", "2018-10-14T16:00:00Z"),
                 _rehash_all(p),
             ),
             "equal-to-seal",
