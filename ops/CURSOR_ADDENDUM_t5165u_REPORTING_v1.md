@@ -4,6 +4,8 @@ Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR **0ac66543** · Cos ORDER **9ad857bb** · tracker **46283**.
 Same draft **#701**. HARD END 02:30 EST / 07:30Z.
 
+Reporting tip **fa60e4b6f58669f9c8b914d9945c53e0c9d5bb2c**.
+
 **No new scientific look.** Reporting-arithmetic completion on already-consumed
 frozen rows. Does not invoke the one-exec runner, `--score`, or `--cos-bind`.
 Does not reset / rebind / delete the claim. Does not regenerate forecasts or
