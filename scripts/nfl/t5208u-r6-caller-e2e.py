@@ -88,6 +88,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"SCHEMA_AS_HASH_REFUSED {ryan['schema_as_hash']}")
     print(f"EMPTY_STATE_HASH_REFUSED {ryan['empty_state_hash']}")
     print(f"BAD_KICKOFF_REFUSED {ryan['bad_kickoff']}")
+    print(f"KICKOFF_AS_SEAL_REFUSED {ryan['kickoff_as_seal']}")
     print(f"TAMPER_READ_REFUSED {ryan['tamper_read']}")
     print(f"TAMPER_SEAL_REFUSED {ryan['tamper_seal']}")
     expected_ryan = {
@@ -96,6 +97,7 @@ def main(argv: list[str] | None = None) -> int:
         "schema_as_hash": R6RefuseCode.REFUSE_HASH,
         "empty_state_hash": R6RefuseCode.REFUSE_HASH,
         "bad_kickoff": R6RefuseCode.REFUSE_CUTOFF,
+        "kickoff_as_seal": R6RefuseCode.REFUSE_CUTOFF,
         "tamper_read": R6RefuseCode.REFUSE_TAMPER,
         "tamper_seal": R6RefuseCode.REFUSE_TAMPER,
     }
@@ -135,6 +137,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"code_hash {result.get('code_hash')}")
     cutoff = result.get("cutoff") or {}
     print(f"cutoff_utc {cutoff.get('cutoff_utc')}")
+    print(f"seal_utc {cutoff.get('seal_utc')}")
     print(f"sealed_n {len(result['sealed'])}")
     if int(result.get("a_calls") or 0) < 1 or int(result.get("model_calls") or 0) < 1:
         print("SPY_NEGATIVE live A call missing", file=sys.stderr)
@@ -145,6 +148,12 @@ def main(argv: list[str] | None = None) -> int:
             return 3
     if cutoff.get("cutoff_utc") != A_EXPECTED_BINDS["cutoff_utc"]:
         print("BIND_MISMATCH cutoff_utc", file=sys.stderr)
+        return 3
+    if cutoff.get("seal_utc") != A_EXPECTED_BINDS["seal_utc"]:
+        print("BIND_MISMATCH seal_utc", file=sys.stderr)
+        return 3
+    if cutoff.get("seal_utc") != cutoff.get("cutoff_utc"):
+        print("SEAL_NE_CUTOFF", file=sys.stderr)
         return 3
     for proj, row in zip(result.get("projected") or [], result["sealed"]):
         if_mean = row["arms"]["IF"]["mean"]

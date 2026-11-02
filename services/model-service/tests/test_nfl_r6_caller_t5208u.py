@@ -147,6 +147,27 @@ def test_unparseable_kickoff_refuses() -> None:
     assert caught.value.code == R6RefuseCode.REFUSE_CUTOFF
 
 
+def test_kickoff_as_seal_refuses() -> None:
+    parsed = cutoff_from_kickoff("2018-10-14T17:00:00Z")
+    assert parsed["seal_utc"] == parsed["cutoff_utc"] == "2018-10-14T16:00:00Z"
+    assert parsed["seal_utc"] != parsed["kickoff_utc"]
+    with pytest.raises(R6Refuse) as caught:
+        consume_a_packet(
+            _packet(
+                games=[
+                    _game(
+                        cutoff={
+                            "kickoff_utc": "2018-10-14T17:00:00Z",
+                            "cutoff_utc": "2018-10-14T16:00:00Z",
+                            "seal_utc": "2018-10-14T17:00:00Z",
+                        }
+                    )
+                ]
+            )
+        )
+    assert caught.value.code == R6RefuseCode.REFUSE_CUTOFF
+
+
 def test_tampered_seal_rejected_on_read_and_seal_without_overwrite(tmp_path: Path) -> None:
     proofs = prove_ryan_cases(tmp_path)
     assert proofs["tamper_read"] == R6RefuseCode.REFUSE_TAMPER

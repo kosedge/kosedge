@@ -35,6 +35,7 @@ from src.services.nfl_t5208u.schema import schema_document, schema_hash
 REPO_ROOT = Path(__file__).resolve().parents[5]
 OPS_DIR = REPO_ROOT / "data" / "ops" / "t5208u-r6-caller-v1"
 RETURN_OPS_DIR = REPO_ROOT / "data" / "ops" / "t5213u-r6-pure-function"
+TIMING_OPS_DIR = REPO_ROOT / "data" / "ops" / "t5218u-r6-timing-delta"
 ALGO_DIR = Path(__file__).resolve().parents[1] / "nfl_t5107u"
 
 
@@ -121,6 +122,7 @@ def produce_demo() -> dict[str, Any]:
             "code_hash": result["code_hash"],
             "cutoff_utc": result["cutoff_utc"],
             "seal_utc": result["seal_utc"],
+            "kickoff_utc": result["kickoff_utc"],
         },
         "return_package": RETURN_PACKAGE,
         "return_owner_sha8": RETURN_OWNER_SHA8,
@@ -163,6 +165,11 @@ def produce_demo() -> dict[str, Any]:
     write_json(RETURN_OPS_DIR / "demo_result.json", result)
     write_json(RETURN_OPS_DIR / "receipt.json", receipt)
     (RETURN_OPS_DIR / "RECEIPT.md").write_text(_receipt_md(receipt), encoding="utf-8")
+    write_json(TIMING_OPS_DIR / "schema.json", schema)
+    write_json(TIMING_OPS_DIR / "synthetic_demo.json", demo)
+    write_json(TIMING_OPS_DIR / "demo_result.json", result)
+    write_json(TIMING_OPS_DIR / "receipt.json", receipt)
+    (TIMING_OPS_DIR / "RECEIPT.md").write_text(_receipt_md(receipt), encoding="utf-8")
     return receipt
 
 
@@ -189,7 +196,9 @@ def _receipt_md(receipt: dict[str, Any]) -> str:
         f"- history_hash: `{demo.get('history_hash')}`\n"
         f"- config_hash: `{demo.get('config_hash')}`\n"
         f"- code_hash: `{demo.get('code_hash')}`\n"
-        f"- cutoff/seal: `{demo.get('cutoff_utc')}` / `{demo.get('seal_utc')}`\n"
+        f"- cutoff/seal: `{demo.get('cutoff_utc')}` / `{demo.get('seal_utc')}` "
+        f"(must be equal; KO−60; kickoff `{demo.get('kickoff_utc')}`)\n"
+        f"- t5218u: available/observed and history KO strictly < seal=cutoff=KO−60\n"
         f"- t5213u 79264: cells+metadata+identity validated BEFORE IF; "
         f"binds are actual hashes (not schema_hash).\n\n"
         "B: use `data/ops/t5213u-r6-pure-function/` actual binds + cutoff; "

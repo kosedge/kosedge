@@ -44,23 +44,24 @@ from src.services.nfl_r6_caller.ledger import (
 )
 
 _REPO_ROOT = Path(__file__).resolve().parents[5]
-A_DEMO_RESULT = _REPO_ROOT / "data/ops/t5213u-r6-pure-function/demo_result.json"
-A_DEMO_PACKET = _REPO_ROOT / "data/ops/t5213u-r6-pure-function/synthetic_demo.json"
+A_DEMO_RESULT = _REPO_ROOT / "data/ops/t5218u-r6-timing-delta/demo_result.json"
+A_DEMO_PACKET = _REPO_ROOT / "data/ops/t5218u-r6-timing-delta/synthetic_demo.json"
 A_SEARCH_PATHS = (
     A_DEMO_PACKET,
     A_DEMO_RESULT,
-    _REPO_ROOT / "data/ops/t5208u-r6-caller-v1/synthetic_demo.json",
-    _REPO_ROOT / "data/ops/t5208u-r6-caller-v1/demo_result.json",
+    _REPO_ROOT / "data/ops/t5213u-r6-pure-function/synthetic_demo.json",
+    _REPO_ROOT / "data/ops/t5213u-r6-pure-function/demo_result.json",
 )
-A_TIP = "39f5b39a2932678635b968177b046647423a57c0"
+A_TIP = "54b08a301cf824c79ee3203180a51e2d832bb6f9"
 PAPER_KICKOFF = "2018-10-14T17:00:00Z"
 # Hash/cutoff binds from accepted A tip — not IF/Q2/C means, not schema_hash.
 A_EXPECTED_BINDS = {
     "packet_hash": "ee71ffc65200e8ebbd59d9447bbede20b9cbab015af7deb5748bfc35b62efee8",
     "history_hash": "d194de4508a30a2baa09c2c7d96f8ee26d74bd0b22587430d4d936de4fd897e8",
     "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
-    "code_hash": "9abbe1b74c31aca66be69dffb0782867600476e5229b4b5e3008e1c1548745fd",
+    "code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
     "cutoff_utc": "2018-10-14T16:00:00Z",
+    "seal_utc": "2018-10-14T16:00:00Z",
     "schema_hash": "ce3747cc7d5368dfbb60ebfa4fff87ae52890afd60ba3b596bc5baa5849e50d8",
 }
 
@@ -233,6 +234,12 @@ def bind_live_context(
             R6RefuseCode.REFUSE_CUTOFF,
             f"A cutoff_utc {a_cutoff!r} != parsed KO−60 {cutoff['cutoff_utc']}",
         )
+    a_seal = a_result.get("seal_utc")
+    if a_seal not in (None, "") and str(a_seal) != cutoff["seal_utc"]:
+        raise R6Refuse(
+            R6RefuseCode.REFUSE_CUTOFF,
+            f"kickoff-as-seal refused: A seal_utc {a_seal!r} != KO−60 {cutoff['seal_utc']}",
+        )
     game_id = str(a_result.get("game_id") or env.get("game_id") or "")
     if game_id == "SYNTHETIC_2018_W05_KC_NE":
         for key, expected in A_EXPECTED_BINDS.items():
@@ -240,9 +247,9 @@ def bind_live_context(
                 if schema_hash != expected:
                     raise R6Refuse(R6RefuseCode.REFUSE_HASH, "schema_hash identity drift")
                 continue
-            if key == "cutoff_utc":
-                if cutoff["cutoff_utc"] != expected:
-                    raise R6Refuse(R6RefuseCode.REFUSE_CUTOFF, "cutoff bind drift")
+            if key in ("cutoff_utc", "seal_utc"):
+                if cutoff[key] != expected:
+                    raise R6Refuse(R6RefuseCode.REFUSE_CUTOFF, f"{key} bind drift")
                 continue
             got = {
                 "packet_hash": packet_hash,
@@ -588,6 +595,21 @@ def prove_ryan_cases(ledger_root: Path) -> Dict[str, str]:
             _base_packet(games=[_base_game(cutoff={"kickoff_utc": "not-a-time"})])
         )
     )
+    kickoff_as_seal = _refuse_code(
+        lambda: consume_a_packet(
+            _base_packet(
+                games=[
+                    _base_game(
+                        cutoff={
+                            "kickoff_utc": PAPER_KICKOFF,
+                            "cutoff_utc": "2018-10-14T16:00:00Z",
+                            "seal_utc": PAPER_KICKOFF,
+                        }
+                    )
+                ]
+            )
+        )
+    )
 
     ledger = PairedArmLedger(ledger_root)
     ok = consume_a_packet(_base_packet())
@@ -615,6 +637,7 @@ def prove_ryan_cases(ledger_root: Path) -> Dict[str, str]:
         "schema_as_hash": schema_as_hash,
         "empty_state_hash": empty_state,
         "bad_kickoff": bad_time,
+        "kickoff_as_seal": kickoff_as_seal,
         "tamper_read": read_code,
         "tamper_seal": seal_again,
         "first_seal_id": first["seal_id"],

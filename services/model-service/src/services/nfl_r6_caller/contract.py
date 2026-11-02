@@ -134,11 +134,14 @@ def iso_z(dt: datetime) -> str:
 
 
 def cutoff_from_kickoff(kickoff_utc: Any) -> Dict[str, Any]:
+    """Decision seal = cutoff = kickoff − 60. Kickoff is not the seal."""
     kickoff = parse_utc(kickoff_utc)
     cut = kickoff - timedelta(minutes=PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES)
+    cut_text = iso_z(cut)
     return {
         "kickoff_utc": iso_z(kickoff),
-        "cutoff_utc": iso_z(cut),
+        "cutoff_utc": cut_text,
+        "seal_utc": cut_text,
         "decision_offset_minutes": PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES,
     }
 
@@ -154,6 +157,13 @@ def require_parsed_cutoff(cutoff: Any) -> Dict[str, Any]:
             raise R6Refuse(
                 R6RefuseCode.REFUSE_CUTOFF,
                 f"cutoff_utc {given!r} != KO−{PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES} ({parsed['cutoff_utc']})",
+            )
+    given_seal = cutoff.get("seal_utc")
+    if given_seal not in (None, ""):
+        if parse_utc(given_seal) != parse_utc(parsed["cutoff_utc"]):
+            raise R6Refuse(
+                R6RefuseCode.REFUSE_CUTOFF,
+                f"kickoff-as-seal refused: seal_utc {given_seal!r} != cutoff {parsed['cutoff_utc']}",
             )
     offset = cutoff.get("decision_offset_minutes")
     if offset not in (None, "") and int(offset) != PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES:
