@@ -416,6 +416,8 @@ export async function fetchNflEdgesDesk(params: {
       daysAhead,
       timeoutMs: params.timeoutMs,
       throwOnTransportError: params.throwOnTransportError,
+      oddsMode: "skip",
+      persistOdds: false,
     }),
     fetchNflEdgesToday({
       minMlEdgeProb: minProbEdge,

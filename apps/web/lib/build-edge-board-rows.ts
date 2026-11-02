@@ -168,12 +168,12 @@ async function assembleNflEdgeBoardRows(
   // Week 1 / live uses narrow customer window.
   const window = nflAssembleWindowForSlate("week1");
 
-  // WS-02 DUP-C / S2: single Odds acquire then fair-lines reuse — never live∥live.
-  // D1: pullOddsRows once; fair-lines oddsMode=reuse skips model fetch_odds.
+  // WS-02 DUP-C / S2: pullOddsRows stays for local overlay only.
+  // EdgeBoard overlay rows cannot establish fair-lines market-join
+  // (backend joins odds_events via _extract_book_market_prices). Skip.
   const pulledOdds = await pullOddsRows("nfl");
   const odds =
     countPriced(pulledOdds) >= countPriced(oddsRows) ? pulledOdds : oddsRows;
-  // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
   const fair = await fetchNflFairLines({
     season: NFL_EDGE_BOARD_SEASON,
     daysAhead: window.daysAhead,
@@ -181,10 +181,8 @@ async function assembleNflEdgeBoardRows(
     bookmakers: ALLOWED_BOOKS.join(","),
     timeoutMs: options?.timeoutMs,
     throwOnTransportError: options?.throwOnTransportError,
-    // reuse + oddsPayload → model skips fetch_odds; empty Odds → skip (still ≤1).
-    ...(odds.length > 0
-      ? { oddsMode: "reuse" as const, oddsPayload: odds }
-      : { oddsMode: "skip" as const }),
+    persistOdds: false,
+    oddsMode: "skip",
   });
 
   let keiGames: KeiLineGame[] = [];

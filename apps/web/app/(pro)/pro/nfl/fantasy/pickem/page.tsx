@@ -102,6 +102,8 @@ export default async function NflFantasyPickemPage({
       season: DEFAULT_SEASON,
       daysAhead: 120,
       includePastDays: 2,
+      oddsMode: "skip",
+      persistOdds: false,
     }),
     fetchNflProductionReadiness(),
   ]);

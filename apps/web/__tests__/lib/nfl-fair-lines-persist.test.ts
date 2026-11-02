@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import {
+  fetchNflFairLines,
+  NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
+  NflFairLinesUnavailableError,
+} from "@/lib/nfl-fair-lines";
 
 const root = process.cwd();
 
@@ -17,15 +21,18 @@ describe("fetchNflFairLines persist=0 (read-only page-data)", () => {
   it("page-data fair-lines route opts out of odds_snapshots persist", () => {
     const fair = readApp("app/api/nfl/fair-lines/route.ts");
     expect(fair).toContain("persistOdds: false");
+    expect(fair).toContain('oddsMode: "skip"');
     expect(fair).toContain("pageDataPrivateJsonResponse");
   });
 
-  it("sends persist=0 on the model-service URL by default", async () => {
+  it("sends persist=0 and odds_mode=skip on the model-service URL by default", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       const href = String(input);
       expect(href).toContain("/nfl/fair-lines");
       expect(href).toContain("persist=0");
+      expect(href).toContain("odds_mode=skip");
       expect(href).not.toMatch(/persist=1/);
+      expect(href).not.toMatch(/odds_mode=live/);
       return new Response(
         JSON.stringify({
           season: 2026,
@@ -81,26 +88,32 @@ describe("fetchNflFairLines persist=0 (read-only page-data)", () => {
     });
   });
 
-  it("sends persist=1 only when persistOdds is explicitly true", async () => {
-    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
-      const href = String(input);
-      expect(href).toContain("persist=1");
-      return new Response(
-        JSON.stringify({
-          season: 2026,
-          count: 0,
-          lines: [],
-          diagnostics: {},
-        }),
-        { status: 200, headers: { "content-type": "application/json" } },
-      );
-    });
+  it("refuses persistOdds=true before upstreamFetch (no persist=1 grant)", async () => {
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
-    await fetchNflFairLines({
+    const board = await fetchNflFairLines({
       season: 2026,
       persistOdds: true,
     });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(board.error).toBe(NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED);
+    expect(board.count).toBe(0);
+    expect(board.lines).toEqual([]);
+    expect(board.oddsAsOf).toBeNull();
+  });
+
+  it("throws typed unavailable when persistOdds=true and throwOnTransportError", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      fetchNflFairLines({
+        season: 2026,
+        persistOdds: true,
+        throwOnTransportError: true,
+      }),
+    ).rejects.toBeInstanceOf(NflFairLinesUnavailableError);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

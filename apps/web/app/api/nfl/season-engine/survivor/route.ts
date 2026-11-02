@@ -79,6 +79,8 @@ export async function POST(req: Request) {
       season,
       daysAhead: 120,
       includePastDays: 2,
+      oddsMode: "skip",
+      persistOdds: false,
     });
     if (
       !board.error &&
