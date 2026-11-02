@@ -10,7 +10,12 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PAGE_DATA_NO_STORE } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
-import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import {
+  fetchNflFairLines,
+  NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
+  NFL_FAIR_LINES_REUSE_UNAVAILABLE,
+  NflFairLinesUnavailableError,
+} from "@/lib/nfl-fair-lines";
 import {
   NFL_EDGE_BOARD_PUBLIC_ENABLED,
   isNflFairLinesCustomerSurfaceClosed,
@@ -128,15 +133,18 @@ function expectSkipGet(href: string, init?: RequestInit) {
 function expectReusePost(href: string, init?: RequestInit) {
   expect(href).toContain("/nfl/fair-lines");
   expect(href).toContain("persist=0");
+  expect(href).toContain("odds_mode=reuse");
   expect(href).not.toMatch(/persist=1/);
   expect(href).not.toMatch(/odds_mode=live/);
   expect(String(init?.method || "GET").toUpperCase()).toBe("POST");
   const body = JSON.parse(String(init?.body || "{}")) as {
     odds_mode?: string;
+    persist?: unknown;
     odds_events?: unknown;
     odds_payload?: unknown;
   };
   expect(body.odds_mode).toBe("reuse");
+  expect(body.persist).toBe(0);
   expect(body.odds_mode).not.toBe("live");
   return body;
 }
@@ -144,7 +152,7 @@ function expectReusePost(href: string, init?: RequestInit) {
 async function expectOwnedRefusal(
   run: () => Promise<unknown>,
   fetchMock: ReturnType<typeof vi.fn>,
-  hint: RegExp,
+  message: string,
 ) {
   const before = fetchMock.mock.calls.length;
   let thrown: unknown;
@@ -159,17 +167,20 @@ async function expectOwnedRefusal(
     "ZERO upstream on owned-only refuse",
   ).toBe(before);
   if (thrown) {
-    expect(String(thrown)).toMatch(hint);
+    expect(thrown).toBeInstanceOf(NflFairLinesUnavailableError);
+    expect((thrown as Error).message).toBe(message);
     return;
   }
   const board = result as {
     count?: number;
     lines?: unknown[];
     error?: string;
+    oddsAsOf?: string | null;
   };
   expect(board.count).toBe(0);
   expect(board.lines).toEqual([]);
-  expect(String(board.error ?? "")).toMatch(hint);
+  expect(board.oddsAsOf ?? null).toBeNull();
+  expect(board.error).toBe(message);
 }
 
 function asFairParams(params: Record<string, unknown>): FairParams {
@@ -206,9 +217,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
   });
 
   it("1) default → skip URL + persist=0 (no live inherit)", async () => {
-    const fetchMock = installFetchMock(() =>
-      jsonResponse(okBoard({ diagnostics: { odds_mode: "skip" } })),
-    );
+    const fetchMock = installFetchMock(() => jsonResponse(okBoard()));
 
     const board = await fetchNflFairLines({ season: 2026 });
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -227,7 +236,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
     await expectOwnedRefusal(
       () => fetchNflFairLines(asFairParams({ season: 2026, oddsMode: "live" })),
       fetchMock,
-      /live|owned|refus|forbidden|not allowed|unsupported/i,
+      NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
     );
   });
 
@@ -236,7 +245,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
     await expectOwnedRefusal(
       () => fetchNflFairLines({ season: 2026, persistOdds: true }),
       fetchMock,
-      /persist|owned|refus|forbidden|not allowed|unsupported/i,
+      NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
     );
   });
 
@@ -253,7 +262,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
           }),
         ),
       fetchMock,
-      /live|persist|owned|refus|forbidden|not allowed|unsupported/i,
+      NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
     );
   });
 
@@ -312,7 +321,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
           oddsPayload: [],
         }),
       fetchMock,
-      /reuse|empty|malformed|owned|refus|payload|events/i,
+      NFL_FAIR_LINES_REUSE_UNAVAILABLE,
     );
   });
 
@@ -321,7 +330,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
     await expectOwnedRefusal(
       () => fetchNflFairLines({ season: 2026, oddsMode: "reuse" }),
       fetchMock,
-      /reuse|empty|malformed|owned|refus|payload|events/i,
+      NFL_FAIR_LINES_REUSE_UNAVAILABLE,
     );
   });
 
@@ -339,7 +348,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
             asFairParams({ season: 2026, oddsMode: "reuse", ...bad }),
           ),
         fetchMock,
-        /reuse|empty|malformed|owned|refus|payload|events/i,
+        NFL_FAIR_LINES_REUSE_UNAVAILABLE,
       );
     }
   });
