@@ -1,6 +1,7 @@
 /**
  * WEB_OWNED_ONLY_R1 — B independent helper/route + integration (CERT=0).
- * OWNER CLEAR 85a714cd · Cos LAUNCH 032a4de7 · B ORDER 1f9256c7.
+ * OWNER b2159329 · Cos LAUNCH fa4d187b · B ORDER dce6dd05.
+ * CONSUME A tip a44707dd (#710). Same DRAFT #711. Defect 58243.
  *
  * Mocked / synthetic only. No live Odds API, network, DB, job, simulator,
  * or outcome calls. No access flip. No collector/scheduler edits.
@@ -12,7 +13,11 @@ import { PAGE_DATA_NO_STORE } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import {
   fetchNflFairLines,
+  inspectOwnedNflFairLinesOddsEvents,
+  inspectOwnedNflFairLinesOddsPayload,
   NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
+  NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+  NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
   NFL_FAIR_LINES_REUSE_UNAVAILABLE,
   NflFairLinesUnavailableError,
 } from "@/lib/nfl-fair-lines";
@@ -198,6 +203,66 @@ function expectNoStore(res: Response) {
   expect(res.headers.get("Cache-Control")).not.toContain("s-maxage");
 }
 
+/** Real Odds-API event schema: string id + commence_time + quoted book. */
+const ADMISSIBLE_ODDS_EVENT = {
+  id: "syn-evt-sea-ne-20260910",
+  sport_key: "americanfootball_nfl",
+  commence_time: "2026-09-10T20:15:00Z",
+  home_team: "Seattle Seahawks",
+  away_team: "New England Patriots",
+  bookmakers: [
+    {
+      key: "draftkings",
+      title: "DraftKings",
+      last_update: "2026-09-03T14:00:00Z",
+      markets: [
+        {
+          key: "spreads",
+          last_update: "2026-09-03T14:00:00Z",
+          outcomes: [
+            { name: "Seattle Seahawks", point: -3, price: -110 },
+            { name: "New England Patriots", point: 3, price: -110 },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+/** Assemble overlay row with identity + posted quote + observation time. */
+const ADMISSIBLE_ODDS_PAYLOAD = {
+  game: "NE @ SEA",
+  market: "Spread",
+  line: -3,
+  price: -110,
+  book: "draftkings",
+  commenceTime: "2026-09-10T20:15:00Z",
+  last_update: "2026-09-03T14:00:00Z",
+};
+
+const MALFORMED_IDENTITY_ROWS: Array<Record<string, unknown>> = [
+  { id: { nested: true }, home_team: "Seattle Seahawks" },
+  { id: ["syn-evt-1"], home_team: "Seattle Seahawks" },
+  { id: 58243, home_team: "Seattle Seahawks" },
+  { gameId: { x: 1 }, market: "Spread" },
+  { game: ["NE @ SEA"], market: "Spread" },
+  { event_id: 99, commence_time: "2026-09-10T20:15:00Z" },
+  { id: "syn-evt-1" },
+  {
+    id: "syn-evt-1",
+    home_team: "Seattle Seahawks",
+    away_team: "New England Patriots",
+  },
+  { id: "syn-evt-1", commence_time: "2026-09-10T20:15:00Z" },
+  { id: "syn-evt-1", bookmakers: [] },
+  {
+    id: "syn-evt-1",
+    home_team: "Seattle Seahawks",
+    away_team: "New England Patriots",
+    bookmakers: [{ key: "draftkings", title: "DraftKings", markets: [] }],
+  },
+];
+
 describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
   beforeEach(() => {
     vi.mocked(getProAccessState).mockResolvedValue("authorized");
@@ -269,10 +334,8 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
   it("3) valid owned reuse POST → no live fallback", async () => {
     const fetchMock = installFetchMock((href, init) => {
       const body = expectReusePost(href, init);
-      expect(Array.isArray(body.odds_events)).toBe(true);
-      expect((body.odds_events as unknown[]).length).toBeGreaterThan(0);
-      expect(Array.isArray(body.odds_payload)).toBe(true);
-      expect((body.odds_payload as unknown[]).length).toBeGreaterThan(0);
+      expect(body.odds_events).toEqual([ADMISSIBLE_ODDS_EVENT]);
+      expect(body.odds_payload).toEqual([]);
       return jsonResponse(
         okBoard({
           diagnostics: {
@@ -291,15 +354,7 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
     await fetchNflFairLines({
       season: 2026,
       oddsMode: "reuse",
-      oddsEvents: [
-        {
-          id: "syn-evt-1",
-          home_team: "Seattle Seahawks",
-          away_team: "New England Patriots",
-          bookmakers: [],
-        },
-      ],
-      oddsPayload: [{ game: "NE @ SEA", market: "Spread", line: -3 }],
+      oddsEvents: [ADMISSIBLE_ODDS_EVENT],
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -336,10 +391,18 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
 
   it("4c) malformed reuse (non-array / null) → refuse before upstream", async () => {
     const fetchMock = installFetchMock();
+    for (const bad of [{ oddsEvents: "not-an-array" }, { oddsEvents: null }]) {
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines(
+            asFairParams({ season: 2026, oddsMode: "reuse", ...bad }),
+          ),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      );
+    }
     for (const bad of [
-      { oddsEvents: "not-an-array" },
       { oddsPayload: { game: "NE @ SEA" } },
-      { oddsEvents: null },
       { oddsPayload: 12 },
     ]) {
       await expectOwnedRefusal(
@@ -348,9 +411,190 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
             asFairParams({ season: 2026, oddsMode: "reuse", ...bad }),
           ),
         fetchMock,
-        NFL_FAIR_LINES_REUSE_UNAVAILABLE,
+        NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
       );
     }
+  });
+
+  it("58243-1) malformed identity (object/array/number id; no usable quote/time) → refuse + ZERO upstream", async () => {
+    const fetchMock = installFetchMock();
+    for (const row of MALFORMED_IDENTITY_ROWS) {
+      const eventsInspect = inspectOwnedNflFairLinesOddsEvents([row]);
+      expect(
+        eventsInspect.status,
+        `events inspector must reject ${JSON.stringify(row)}`,
+      ).toBe("malformed");
+      if (eventsInspect.status === "malformed") {
+        expect(eventsInspect.reason).toBe(
+          NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+        );
+      }
+      const payloadInspect = inspectOwnedNflFairLinesOddsPayload([row]);
+      expect(payloadInspect.status).toBe("malformed");
+      if (payloadInspect.status === "malformed") {
+        expect(payloadInspect.reason).toBe(
+          NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
+        );
+      }
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines({
+            season: 2026,
+            oddsMode: "reuse",
+            oddsEvents: [row],
+          }),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      );
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines({
+            season: 2026,
+            oddsMode: "reuse",
+            oddsPayload: [row],
+          }),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
+      );
+    }
+  });
+
+  it("58243-2) one channel malformed + other valid → refuse (no silent discard)", async () => {
+    const fetchMock = installFetchMock();
+    const malformed = { id: 58243, home_team: "Seattle Seahawks" };
+    const emptyBooks = {
+      id: "syn-evt-1",
+      sport_key: "americanfootball_nfl",
+      commence_time: "2026-09-10T20:15:00Z",
+      home_team: "Seattle Seahawks",
+      away_team: "New England Patriots",
+      bookmakers: [],
+    };
+
+    expect(inspectOwnedNflFairLinesOddsEvents([malformed]).status).toBe(
+      "malformed",
+    );
+    expect(
+      inspectOwnedNflFairLinesOddsEvents([ADMISSIBLE_ODDS_EVENT]).status,
+    ).toBe("ok");
+    expect(
+      inspectOwnedNflFairLinesOddsPayload([ADMISSIBLE_ODDS_PAYLOAD]).status,
+    ).toBe("malformed");
+
+    // Malformed events + nonempty overlay: do not drop the bad events channel.
+    await expectOwnedRefusal(
+      () =>
+        fetchNflFairLines({
+          season: 2026,
+          oddsMode: "reuse",
+          oddsEvents: [malformed],
+          oddsPayload: [ADMISSIBLE_ODDS_PAYLOAD],
+        }),
+      fetchMock,
+      NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+    );
+    // Valid events + nonempty overlay: do not drop the malformed payload.
+    await expectOwnedRefusal(
+      () =>
+        fetchNflFairLines({
+          season: 2026,
+          oddsMode: "reuse",
+          oddsEvents: [ADMISSIBLE_ODDS_EVENT],
+          oddsPayload: [{ id: { nested: true }, game: "NE @ SEA" }],
+        }),
+      fetchMock,
+      NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
+    );
+    // One bad row in an otherwise admissible events array fails the channel.
+    await expectOwnedRefusal(
+      () =>
+        fetchNflFairLines({
+          season: 2026,
+          oddsMode: "reuse",
+          oddsEvents: [ADMISSIBLE_ODDS_EVENT, emptyBooks],
+        }),
+      fetchMock,
+      NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+    );
+    await expectOwnedRefusal(
+      () =>
+        fetchNflFairLines({
+          season: 2026,
+          oddsMode: "reuse",
+          oddsEvents: [emptyBooks],
+        }),
+      fetchMock,
+      NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+    );
+  });
+
+  it("58243-3) absence of a channel (≠ malformed) still allowed", async () => {
+    expect(inspectOwnedNflFairLinesOddsEvents(undefined).status).toBe("absent");
+    expect(inspectOwnedNflFairLinesOddsEvents([]).status).toBe("absent");
+    expect(inspectOwnedNflFairLinesOddsPayload(undefined).status).toBe(
+      "absent",
+    );
+    expect(inspectOwnedNflFairLinesOddsPayload([]).status).toBe("absent");
+
+    const fetchMock = installFetchMock((href, init) => {
+      const body = expectReusePost(href, init);
+      expect(body.odds_events).toEqual([ADMISSIBLE_ODDS_EVENT]);
+      expect(body.odds_payload).toEqual([]);
+      return jsonResponse(okBoard());
+    });
+    await fetchNflFairLines({
+      season: 2026,
+      oddsMode: "reuse",
+      oddsEvents: [ADMISSIBLE_ODDS_EVENT],
+    });
+    await fetchNflFairLines({
+      season: 2026,
+      oddsMode: "reuse",
+      oddsEvents: [ADMISSIBLE_ODDS_EVENT],
+      oddsPayload: [],
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("58243-4) complete Odds-API fixture → reuse POST odds_mode=reuse persist=0", async () => {
+    expect(
+      inspectOwnedNflFairLinesOddsEvents([ADMISSIBLE_ODDS_EVENT]).status,
+    ).toBe("ok");
+    expect(
+      inspectOwnedNflFairLinesOddsPayload([ADMISSIBLE_ODDS_PAYLOAD]).status,
+    ).toBe("malformed");
+
+    const fetchMock = installFetchMock((href, init) => {
+      const body = expectReusePost(href, init);
+      expect(body.odds_events).toEqual([ADMISSIBLE_ODDS_EVENT]);
+      expect(body.odds_payload).toEqual([]);
+      const events = body.odds_events as Array<Record<string, unknown>>;
+      expect(events).toHaveLength(1);
+      expect(events[0]?.id).toBe(ADMISSIBLE_ODDS_EVENT.id);
+      expect(typeof events[0]?.id).toBe("string");
+      expect(events[0]?.sport_key).toBe("americanfootball_nfl");
+      expect(events[0]?.commence_time).toBe(
+        ADMISSIBLE_ODDS_EVENT.commence_time,
+      );
+      const books = events[0]?.bookmakers as Array<Record<string, unknown>>;
+      expect(Array.isArray(books)).toBe(true);
+      expect(books.length).toBeGreaterThan(0);
+      expect(books[0]?.last_update).toBe("2026-09-03T14:00:00Z");
+      const markets = books[0]?.markets as Array<Record<string, unknown>>;
+      const outcomes = markets[0]?.outcomes as Array<Record<string, unknown>>;
+      expect(typeof outcomes[0]?.price).toBe("number");
+      expect(Number.isFinite(outcomes[0]?.price as number)).toBe(true);
+      expect(outcomes[0]?.price).not.toBeUndefined();
+      return jsonResponse(okBoard());
+    });
+
+    const board = await fetchNflFairLines({
+      season: 2026,
+      oddsMode: "reuse",
+      oddsEvents: [ADMISSIBLE_ODDS_EVENT],
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(board.error).toBeUndefined();
   });
 
   it("5) authorized closed route → 503 + zero upstream", async () => {
