@@ -127,7 +127,10 @@ def test_simulator_baseline_unchanged_without_matchup_features() -> None:
     assert matchup_diag["home_points"] == 0.0
     assert matchup_diag["away_points"] == 0.0
     framework = out["diagnostics"]["framework"]
-    assert framework["framework_version"] == "nfl-handicap-core-v1"
+    # Pins LOCKED_SCORING / NFL_HANDICAPPING_FRAMEWORK_VERSION (v3.1).
+    # The old v1 pin was stale vs the locked production identity — not a
+    # scoring, holdout, or factor change.
+    assert framework["framework_version"] == "nfl-handicap-core-v3.1"
     assert framework["factor_contributions"]["weather_environment"]["available"] is False
     assert out["diagnostics"]["mean_home_points"] == round(float(out["decomposition"]["expected_home_points"]), 3)
     assert out["diagnostics"]["mean_away_points"] == round(float(out["decomposition"]["expected_away_points"]), 3)
@@ -383,8 +386,10 @@ def test_week1_pack_aligned_indices_stay_dog_side_of_market() -> None:
     """Integration guard for the DAL@NYG class of failure: week-1 pack EPA
     that favors the away club + market home dog must not publish a home
     favorite near -3 after early-season market blend."""
-    from src.services.nfl_matchup_features import matchup_pack_to_sim_input_kwargs
-    from src.tasks import _priors_from_matchup_pack
+    from src.services.nfl_matchup_features import (
+        matchup_pack_to_sim_input_kwargs,
+        priors_from_matchup_pack,
+    )
 
     pack = {
         "season": 2026,
@@ -414,7 +419,7 @@ def test_week1_pack_aligned_indices_stay_dog_side_of_market() -> None:
         "diff_pressure_allowed_5g": -0.0675,
         "diff_red_zone_td_rate_5g": -0.0391,
     }
-    home_prior, away_prior = _priors_from_matchup_pack(pack)
+    home_prior, away_prior = priors_from_matchup_pack(pack)
     mk = matchup_pack_to_sim_input_kwargs(pack)
     inputs = NflGameInputs(
         game_id="g-early-pack",

@@ -1,0 +1,45 @@
+NFL Fair Lines PRODUCTION-CERT Product smoke (source-lock, public stays dark)
+PASS  NFL public flag false
+PASS  CFB public flag false
+PASS  spread gate false
+PASS  ml gate false
+PASS  total gate false
+PASS  PLAY suppressed
+PASS  Kelly suppressed
+PASS  certified run_id unbound
+PASS  certified sha256 unbound
+PASS  cert bind helper present
+PASS  war-room v1 artifact id recorded
+PASS  war-room v1 sha recorded
+PASS  v1 rejected practice SHA
+PASS  v2 diagnostic id recorded
+PASS  v2 diagnostic STOP
+PASS  production bind unbound pending clock/play
+PASS  production artifact id is not v2
+PASS  bind fail-closes rejected practice SHA
+PASS  bind fail-closes v2 diagnostic STOP
+PASS  production cert not bound to v1
+PASS  NFL public not flipped
+PASS  CFB public not flipped
+PASS  PLAY not flipped
+PASS  Kelly not flipped
+PASS  API uses cert-closed helper
+PASS  API fail-closes empty
+PASS  page uses cert-closed helper
+PASS  page keeps Coming soon chrome
+PASS  page Coming soon copy
+PASS  Product packet NO CLEAR
+PASS  Product packet rollback
+PASS  packet marks v1 rejected
+PASS  packet fills v1 checksum
+PASS  packet records v2
+PASS  packet v2 diagnostic STOP
+PASS  ops receipt Coming soon
+PASS  receipt notes Alex NO CLEAR
+PASS  machine packet NO_CLEAR
+PASS  machine v1 rejected
+PASS  machine v2 diagnostic STOP
+PASS  machine production bind unbound
+PASS  CoS approver empty
+PASS  Ryan approver empty
+All 43 PRODUCTION-CERT Product smoke checks passed. Public still false.

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 from sqlalchemy import text
 
@@ -137,6 +137,51 @@ def fetch_latest_matchup_feature_pack(
     if row is None:
         return None
     return dict(row._mapping)
+
+
+def priors_from_matchup_pack(
+    matchup_pack: Optional[Dict[str, Any]],
+) -> Optional[Tuple[Dict[str, float], Dict[str, float]]]:
+    """Build home/away strength priors from the week-aligned matchup pack.
+
+    Season-max-week rolling priors can be OOD on a not-yet-played season
+    (hydrated week-18 shape). The matchup pack is already keyed to the game
+    week, so its EPA is the correct prior source when present.
+
+    Lives here (not ``src.tasks``) so week-1 pack / simulator guards can run
+    without importing the Celery + sklearn task graph.
+    """
+    if not isinstance(matchup_pack, dict):
+        return None
+    home_off = _to_float(matchup_pack.get("home_off_epa_5g"))
+    away_off = _to_float(matchup_pack.get("away_off_epa_5g"))
+    home_def = _to_float(matchup_pack.get("home_def_epa_allowed_5g"))
+    away_def = _to_float(matchup_pack.get("away_def_epa_allowed_5g"))
+    if home_off is None or away_off is None or home_def is None or away_def is None:
+        return None
+    season = _to_float(matchup_pack.get("season")) or 0.0
+    week = _to_float(matchup_pack.get("week")) or 0.0
+    from src.services.nfl_season_engine.efficiency_backbone import (
+        epa_to_strength_indices,
+    )
+
+    home = epa_to_strength_indices(
+        off_epa=float(home_off),
+        def_epa_allowed=float(home_def),
+        pressure_generated=_to_float(matchup_pack.get("home_pressure_generated_5g")) or 0.0,
+        pressure_allowed=_to_float(matchup_pack.get("home_pressure_allowed_5g")) or 0.0,
+    )
+    away = epa_to_strength_indices(
+        off_epa=float(away_off),
+        def_epa_allowed=float(away_def),
+        pressure_generated=_to_float(matchup_pack.get("away_pressure_generated_5g")) or 0.0,
+        pressure_allowed=_to_float(matchup_pack.get("away_pressure_allowed_5g")) or 0.0,
+    )
+    home["_season"] = float(season)
+    away["_season"] = float(season)
+    home["_week"] = float(week)
+    away["_week"] = float(week)
+    return home, away
 
 
 def matchup_pack_to_sim_input_kwargs(
