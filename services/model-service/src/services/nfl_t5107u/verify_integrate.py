@@ -1308,14 +1308,12 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
     try:
         from .r5_phase2_one_exec import run_phase2_one_exec
 
-        spy_p2 = OutcomeReadSpy(lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}})
         phase2_exec = run_phase2_one_exec(
             root=repo,
-            outcome_loader=spy_p2,
             invoke_outcome_after_gates=False,
             write=True,
         )
-        if spy_p2.reads != 0:
+        if int(phase2_exec.get("outcome_loader_reads") or 0) != 0:
             raise VerifyIntegrateRefuse("Phase-2 default command read target scoring outcomes")
     except Exception as exc:
         errors.append(f"PHASE2_ONE_EXEC: {exc}")

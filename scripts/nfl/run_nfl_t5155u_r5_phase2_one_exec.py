@@ -20,7 +20,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "services" / "model-service"))
 
-from src.services.nfl_t5107u.cohort_enforcement import OutcomeReadSpy  # noqa: E402
 from src.services.nfl_t5107u.r5_phase2_one_exec import (  # noqa: E402
     ALEX_RETURN_T5157U_SHA8,
     COS_ACCEPT_RETURN_FIX_SHA8,
@@ -103,18 +102,16 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
         return 0
-    spy = OutcomeReadSpy(lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}})
     try:
         receipt = run_phase2_one_exec(
             root=ROOT,
-            outcome_loader=spy,
             invoke_outcome_after_gates=False,
             write=True,
         )
     except Phase2OneExecRefuse as exc:
         print(json.dumps({"ok": False, "error": str(exc), "verified": False}, indent=2))
         return 1
-    if spy.reads != 0:
+    if int(receipt.get("outcome_loader_reads") or 0) != 0:
         print(json.dumps({"ok": False, "error": "default command read targets", "verified": False}, indent=2))
         return 1
     print(

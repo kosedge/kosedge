@@ -26,6 +26,7 @@ from src.services.nfl_t5107u.r5_phase2_one_exec import (
     SUPERSEDED_COS_ONE_DEV_ORDER,
     Phase2OneExecRefuse,
     bind_phase2_one_exec_fixture,
+    mark_test_synthetic,
     load_committed_forecasts,
     load_completed_forecasts,
     run_phase2_one_exec,
@@ -103,15 +104,48 @@ def test_completed_q2_candidate_pins_copy_if496():
     )
 
 
-def test_phase2_refusal_reads_zero_target_labels():
+@pytest.mark.parametrize("invoke", [False, True])
+def test_unbound_spy_refuses_zero_reads(invoke):
     spy = OutcomeReadSpy(lambda: {"2020_02_CIN_CLE": {"home_score": 40, "away_score": 0}})
-    receipt = run_phase2_one_exec(
-        root=ROOT,
-        outcome_loader=spy,
-        invoke_outcome_after_gates=False,
-        write=False,
-    )
+    with pytest.raises(Phase2OneExecRefuse, match="unbound outcome_loader / invoke"):
+        run_phase2_one_exec(
+            root=ROOT,
+            outcome_loader=spy,
+            invoke_outcome_after_gates=invoke,
+            write=False,
+        )
     assert spy.reads == 0
+
+
+@pytest.mark.parametrize("invoke", [False, True])
+def test_unbound_bare_callable_refuses_zero_reads(invoke):
+    reads = {"n": 0}
+
+    def bare():
+        reads["n"] += 1
+        return {"2020_02_CIN_CLE": {"home_score": 40, "away_score": 0}}
+
+    with pytest.raises(Phase2OneExecRefuse, match="unbound outcome_loader / invoke"):
+        run_phase2_one_exec(
+            root=ROOT,
+            outcome_loader=bare,
+            invoke_outcome_after_gates=invoke,
+            write=False,
+        )
+    assert reads["n"] == 0
+
+
+def test_unbound_invoke_without_loader_refuses():
+    with pytest.raises(Phase2OneExecRefuse, match="unbound outcome_loader / invoke"):
+        run_phase2_one_exec(
+            root=ROOT,
+            invoke_outcome_after_gates=True,
+            write=False,
+        )
+
+
+def test_phase2_refusal_reads_zero_target_labels():
+    receipt = run_phase2_one_exec(root=ROOT, write=False)
     assert receipt["outcome_loader_reads"] == 0
     assert receipt["scored"] is None
     assert receipt["q2"] == "COMPLETED"
@@ -136,12 +170,14 @@ def test_phase2_refusal_reads_zero_target_labels():
     assert receipt["one_run_status"] is None
 
 
-def test_phase2_positive_invokes_loader_once_if_only_and_market96():
+def test_phase2_positive_invokes_loader_once_if_only_and_market96(tmp_path):
+    bind_phase2_one_exec_fixture(path=tmp_path / "ONE_RUN.json", root=ROOT)
     loader = OutcomeReadSpy(synthetic_outcome_loader(root=ROOT))
     receipt = run_phase2_one_exec(
         root=ROOT,
         outcome_loader=loader,
-        invoke_outcome_after_gates=True,
+        cos_bind_path=tmp_path / "ONE_RUN.json",
+        score_flag=True,
         write=False,
     )
     assert loader.reads == 1
@@ -187,7 +223,7 @@ def test_phase2_positive_invokes_loader_once_if_only_and_market96():
     assert sha256_file(ROOT / "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json") == (
         FORECASTS_SHA256
     )
-    assert receipt["cos_bind"] is False
+    assert receipt["cos_bind"] is True
     assert receipt["runner_code_sha256"] == runner_code_sha256(ROOT)
     assert receipt["owner_t5160u"] == OWNER_T5160U
     assert receipt["superseded_cos_one_dev_order"] == SUPERSEDED_COS_ONE_DEV_ORDER
@@ -289,7 +325,7 @@ def test_unbound_default_api_zero_real_schedule_reads(monkeypatch):
     assert calls == []
 
 
-def test_positive_synthetic_does_not_call_real_schedule_loader(monkeypatch):
+def test_positive_synthetic_does_not_call_real_schedule_loader(tmp_path, monkeypatch):
     calls: list[object] = []
 
     def boom(*_a, **_k):
@@ -300,11 +336,13 @@ def test_positive_synthetic_does_not_call_real_schedule_loader(monkeypatch):
         "src.services.nfl_t5107u.r5_phase2_one_exec.schedule_outcome_loader",
         boom,
     )
+    bind_phase2_one_exec_fixture(path=tmp_path / "ONE_RUN.json", root=ROOT)
     loader = OutcomeReadSpy(synthetic_outcome_loader(root=ROOT))
     receipt = run_phase2_one_exec(
         root=ROOT,
         outcome_loader=loader,
-        invoke_outcome_after_gates=True,
+        cos_bind_path=tmp_path / "ONE_RUN.json",
+        score_flag=True,
         write=False,
     )
     assert loader.reads == 1
@@ -313,16 +351,33 @@ def test_positive_synthetic_does_not_call_real_schedule_loader(monkeypatch):
     assert calls == []
 
 
-def test_positive_without_labels_refuses():
-    spy = OutcomeReadSpy(lambda: {})
+def test_positive_without_labels_refuses(tmp_path):
+    bind_phase2_one_exec_fixture(path=tmp_path / "ONE_RUN.json", root=ROOT)
+    spy = mark_test_synthetic(OutcomeReadSpy(lambda: {}))
     with pytest.raises(Phase2OneExecRefuse, match="zero target labels"):
         run_phase2_one_exec(
             root=ROOT,
             outcome_loader=spy,
-            invoke_outcome_after_gates=True,
+            cos_bind_path=tmp_path / "ONE_RUN.json",
+            score_flag=True,
             write=False,
         )
     assert spy.reads == 1
+
+
+def test_bound_unmarked_caller_loader_refuses_zero_reads(tmp_path):
+    bind = bind_phase2_one_exec_fixture(path=tmp_path / "ONE_RUN.json", root=ROOT)
+    spy = OutcomeReadSpy(lambda: {"2020_02_CIN_CLE": {"home_score": 40, "away_score": 0}})
+    with pytest.raises(Phase2OneExecRefuse, match="test-only synthetic marker"):
+        run_phase2_one_exec(
+            root=ROOT,
+            outcome_loader=spy,
+            cos_bind_path=tmp_path / "ONE_RUN.json",
+            score_flag=True,
+            write=False,
+        )
+    assert spy.reads == 0
+    assert load_one_run(tmp_path / "ONE_RUN.json")["status"] == bind["status"] == STATUS_BOUND
 
 
 def test_unbound_score_refuses_zero_reads():
@@ -357,16 +412,14 @@ def test_cos_bind_pin_mismatch_refuses_zero_reads(tmp_path):
         alex_go_id="ALEX_RETURN_42069EF6",
         path=tmp_path / "ONE_RUN.json",
     )
-    spy = OutcomeReadSpy(synthetic_outcome_loader(root=ROOT))
     with pytest.raises(Phase2OneExecRefuse, match="cos-bind refused"):
         run_phase2_one_exec(
             root=ROOT,
-            outcome_loader=spy,
             cos_bind_path=tmp_path / "ONE_RUN.json",
             score_flag=True,
             write=False,
         )
-    assert spy.reads == 0
+    assert load_one_run(tmp_path / "ONE_RUN.json")["status"] == STATUS_BOUND
 
 
 def test_cos_bind_fixture_claims_once_then_refuses_second(tmp_path):

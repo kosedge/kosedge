@@ -1,10 +1,11 @@
 """t5155u / t5160u Phase-2 one-exec runner for DEV_R5_496.
 
 Loads committed FORECASTS (sha 96d3aa6f). Never regenerates produce-μ.
-Default / unbound --score refuse target labels (0 reads). Real schedule
-labels require a verified + atomically claimed hash-matching bind.
-Env flags cannot authorize real loading. FOCUSED_TESTS / API positive
-hooks use synthetic fixtures only. CERT=0. Not EVAL.
+Unbound outcome_loader / invoke_outcome_after_gates refuse before any
+loader call (0 reads). Real schedule labels require a verified +
+atomically claimed hash-matching bind. Bound caller-supplied loaders
+require an explicit test-only synthetic marker. Env flags cannot
+authorize. CERT=0. Not EVAL.
 """
 
 from __future__ import annotations
@@ -109,8 +110,13 @@ OWNER_T5160U = "t5160u"
 SUPERSEDED_COS_ONE_DEV_ORDER = "5d029306"
 OWNER_T5162U_RECONCILE_SHA8 = "3c978ef9"
 ALEX_APPEND_PREFLIGHT_ORDER = "b8cc05b2"
+COS_ORDER_T5160U_APPEND_SHA8 = "b33cf2a0"
+ALEX_APPEND_RETURN_SHA8 = "d6adeece"
+COS_ACCEPT_T5160U_APPEND_SHA8 = "3206fd15"
 PROTOCOL_DEVIATION_PATH = "ops/CURSOR_PROTOCOL_DEVIATION_t5160u_REAL_LABEL_EXPOSURE_v1.md"
 PROTOCOL_DEVIATION_SEAL_PATH = "data/ops/nfl-t5155u-r5-phase2/PROTOCOL_DEVIATION.json"
+TEST_SYNTHETIC_MARKER = "t5160u_test_synthetic_only"
+TEST_SYNTHETIC_ATTR = "_t5160u_test_synthetic"
 
 
 class Phase2OneExecRefuse(ValueError):
@@ -342,7 +348,26 @@ def synthetic_outcome_loader(
             }
         return out
 
+    setattr(_load, TEST_SYNTHETIC_ATTR, TEST_SYNTHETIC_MARKER)
     return _load
+
+
+def mark_test_synthetic(loader: Any) -> Any:
+    """Explicit test-only marker. Env flags never authorize."""
+    setattr(loader, TEST_SYNTHETIC_ATTR, TEST_SYNTHETIC_MARKER)
+    inner = getattr(loader, "_fn", None)
+    if inner is not None:
+        setattr(inner, TEST_SYNTHETIC_ATTR, TEST_SYNTHETIC_MARKER)
+    return loader
+
+
+def _is_marked_test_synthetic(loader: Any) -> bool:
+    if loader is None:
+        return False
+    if getattr(loader, TEST_SYNTHETIC_ATTR, None) == TEST_SYNTHETIC_MARKER:
+        return True
+    inner = getattr(loader, "_fn", None)
+    return inner is not None and getattr(inner, TEST_SYNTHETIC_ATTR, None) == TEST_SYNTHETIC_MARKER
 
 
 def assert_claimed_hash_matching_context(
@@ -581,6 +606,16 @@ def run_phase2_one_exec(
 
     if score_flag and cos_bind_path is None:
         raise Phase2OneExecRefuse("unbound --score refused — 0 reads")
+    if cos_bind_path is None and (outcome_loader is not None or invoke_outcome_after_gates):
+        raise Phase2OneExecRefuse("unbound outcome_loader / invoke refused — 0 reads")
+    if (
+        cos_bind_path is not None
+        and outcome_loader is not None
+        and not _is_marked_test_synthetic(outcome_loader)
+    ):
+        raise Phase2OneExecRefuse(
+            "bound caller-supplied outcome_loader refused — test-only synthetic marker required"
+        )
     if cos_bind_path is not None:
         score_flag = True
         bind_record = _verify_and_claim_cos_bind(
@@ -823,6 +858,9 @@ def _receipt(
         "superseded_cos_one_dev_order": SUPERSEDED_COS_ONE_DEV_ORDER,
         "owner_t5162u_reconcile_sha8": OWNER_T5162U_RECONCILE_SHA8,
         "alex_append_preflight_order": ALEX_APPEND_PREFLIGHT_ORDER,
+        "cos_order_t5160u_append_sha8": COS_ORDER_T5160U_APPEND_SHA8,
+        "alex_append_return_sha8": ALEX_APPEND_RETURN_SHA8,
+        "cos_accept_t5160u_append_sha8": COS_ACCEPT_T5160U_APPEND_SHA8,
         "protocol_deviation_path": PROTOCOL_DEVIATION_PATH,
         "protocol_deviation_seal_path": PROTOCOL_DEVIATION_SEAL_PATH,
         "cos_order_return_fix_sha8": COS_ORDER_RETURN_FIX_SHA8,

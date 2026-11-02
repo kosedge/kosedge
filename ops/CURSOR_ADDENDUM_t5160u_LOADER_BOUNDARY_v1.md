@@ -44,6 +44,17 @@ opens.
 
 Bound positive proof in FOCUSED_TESTS = **synthetic fixture only**.
 
+## Append B1 / B2 (Cos `b33cf2a0` · Alex `d6adeece` · ACCEPT `3206fd15`)
+
+B1: if `outcome_loader is not None` OR `invoke_outcome_after_gates=True`
+and `cos_bind_path is None` → refuse **before** any loader call (0
+reads). OutcomeReadSpy and bare callable both refuse.
+
+B2: bound caller-supplied `outcome_loader` refused unless explicit
+test-only synthetic marker (`synthetic_outcome_loader` /
+`mark_test_synthetic`). Real labels only via `schedule_outcome_loader`
+after verified claimed hash-matching bind. Env flags never authorize.
+
 ## Frozen bytes (unchanged)
 
 IF `96d3aa6f` · Q2 `eeb6fff7` · CANDIDATE `2f9a73e6` · IDENTITY
