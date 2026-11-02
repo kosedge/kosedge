@@ -9,7 +9,8 @@ not readable on this box — recreated from live pins. Cos claim token
 Same authorized look. Not a second look. No auto-rerun.
 
 Base tip **67e43c4c43a64f9d7e4e69dc98d15bac8ccffa71** · stamp/PR head
-**d6088d21654ef5eb3f7481f4f0b507bbecd9c1e0**. Live runner hashes MATCH
+**d6088d21654ef5eb3f7481f4f0b507bbecd9c1e0**. Result tip
+**093a51dc9d6ef4c18fb16101a02c7395ce074096**. Live runner hashes MATCH
 Cos pins. PROTOCOL DEVIATION disclosed (255adf78 engineering-path
 exposure). Bound EXEC used `schedule_outcome_loader` after verified
 claimed hash-matching bind. `outcome_loader=None` — CLI only.
