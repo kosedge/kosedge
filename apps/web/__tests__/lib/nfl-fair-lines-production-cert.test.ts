@@ -249,10 +249,12 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
 
   it("wires cert-binding into Fair Lines API + page and keeps Coming soon chrome", () => {
     const api = readWeb("app/api/nfl/fair-lines/route.ts");
+    const fixtureApi = readWeb("lib/nfl-fair-lines-fixture-api.ts");
     const page = readWeb("app/(pro)/pro/nfl/fair-lines/page.tsx");
     expect(api).toContain("isNflFairLinesCustomerSurfaceClosed");
-    expect(api).toContain("nflEdgeBoardAssembleUnavailablePayload");
-    expect(api).toContain("status: 503");
+    expect(api).toContain("nflFairLinesCustomerUnavailableResponse");
+    expect(fixtureApi).toContain("nflEdgeBoardAssembleUnavailablePayload");
+    expect(fixtureApi).toContain("status: 503");
     expect(api).not.toContain("isFootballPublicNumbersDisabled");
     expect(page).toContain("isNflFairLinesCustomerSurfaceClosed");
     expect(page).toContain("FootballNumbersUnavailable");

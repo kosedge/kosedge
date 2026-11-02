@@ -14,6 +14,7 @@ import type {
   NflFairLineRow,
   NflFairLinesResponse,
 } from "@/lib/nfl-fair-lines-view-types";
+import { assertCustomerFairLinesViewModel } from "@/lib/nfl-fair-lines-view-types";
 import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 import {
   honestEmptySlateCopy,
@@ -105,6 +106,7 @@ export default function NflFairLinesClient({
         });
         if (!res.ok) throw new Error(`fair-lines ${res.status}`);
         const board = (await res.json()) as NflFairLinesResponse;
+        assertCustomerFairLinesViewModel(board);
         if (cancelled) return;
         setState({ status: "ready", board });
       } catch {

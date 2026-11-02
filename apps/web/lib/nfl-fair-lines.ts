@@ -16,6 +16,17 @@ import type {
   DecisionResult,
   WeekRegime,
 } from "@/lib/nfl-decision-engine";
+import {
+  FIXTURE_CONTRACT_SCHEMA_VERSION,
+  FixtureHardRefuse,
+  OUTPUT_REFUSE,
+  consumeFixtureEligibility,
+  type EligibilityDecision,
+  type EligibilityDecisionInput,
+  type RequestedOutput,
+  type SyntheticQuote,
+} from "@/lib/nfl-fixture-assembly-contract";
+import { assertFixtureChainRecord } from "@/lib/nfl-fixture-chain-consume";
 
 export { keiRepriceDriverLine };
 
@@ -912,4 +923,182 @@ export function edgeToneClass(value: number | null): string {
   if (value >= 0.02) return "text-edge-green";
   if (value <= -0.02) return "text-rose-300";
   return "text-kos-text/70";
+}
+
+export type FixtureFairLinesBoard = NflFairLinesResponse & {
+  fixture: true;
+  persistOdds: false;
+  eligibility: EligibilityDecision;
+  requestedOutput: "POINT_MARGIN_SPREAD";
+};
+
+export type FixtureFairLinesProjectionInput = {
+  eligibility: EligibilityDecision | EligibilityDecisionInput;
+  consumer: string;
+  quote: SyntheticQuote;
+  requestedOutput?: RequestedOutput;
+  season?: number;
+  homeTeam?: string;
+  awayTeam?: string;
+  homeAbbr?: string;
+  awayAbbr?: string;
+  /** Serialized A chain — validated at this entrypoint when present. */
+  chain?: unknown;
+};
+
+function fixtureSpreadHome(quote: SyntheticQuote): number {
+  if (quote.period !== "full_game") {
+    throw new FixtureHardRefuse("REFUSE_PERIOD", "period must be full_game");
+  }
+  if (!String(quote.event_id ?? "").trim()) {
+    throw new FixtureHardRefuse("REFUSE_GAME", "quote.event_id missing");
+  }
+  if (!Number.isFinite(quote.line)) {
+    throw new FixtureHardRefuse("REFUSE_LINE", "quote.line is not finite");
+  }
+  if (quote.side !== "HOME" && quote.side !== "AWAY") {
+    throw new FixtureHardRefuse("REFUSE_SIGN", "quote.side must be HOME or AWAY");
+  }
+  if (!String(quote.time ?? "").trim()) {
+    throw new FixtureHardRefuse("REFUSE_TIME", "quote.time missing");
+  }
+  if (!quote.fixture || !quote.transport_only || quote.injury_policy_approved) {
+    throw new FixtureHardRefuse(
+      "REFUSE_QUALIFICATION",
+      "quote must be fixture/transport_only and not an injury policy",
+    );
+  }
+  return quote.side === "HOME" ? quote.line : -quote.line;
+}
+
+function fixtureFairLineRow(
+  quote: SyntheticQuote,
+  spreadHome: number,
+  names: {
+    homeTeam: string;
+    awayTeam: string;
+    homeAbbr: string;
+    awayAbbr: string;
+  },
+): NflFairLineRow {
+  return {
+    gameId: quote.event_id,
+    season: 2026,
+    week: null,
+    seasonType: null,
+    startTime: quote.time,
+    gameDate: null,
+    homeTeam: names.homeTeam,
+    awayTeam: names.awayTeam,
+    homeAbbr: names.homeAbbr,
+    awayAbbr: names.awayAbbr,
+    homeWinProb: null,
+    awayWinProb: null,
+    spreadHome,
+    totalMean: null,
+    fairHomeMl: null,
+    fairAwayMl: null,
+    handicapSpreadHome: spreadHome,
+    handicapTotal: null,
+    handicapHomeWinProb: null,
+    handicapAwayWinProb: null,
+    handicapHomeMl: null,
+    handicapAwayMl: null,
+    modelSpreadHome: spreadHome,
+    modelTotal: null,
+    modelHomeWinProb: null,
+    modelAwayWinProb: null,
+    modelHomeMl: null,
+    modelAwayMl: null,
+    modelEqualsKei: true,
+    keiReprice: null,
+    modelVersion: FIXTURE_CONTRACT_SCHEMA_VERSION,
+    simulationCount: null,
+    projectionCreatedAt: null,
+    marketHomeMl: null,
+    marketAwayMl: null,
+    marketTotal: null,
+    marketSpreadHome: null,
+    openSpreadHome: null,
+    openTotal: null,
+    oddsCapturedAt: null,
+    bestSpreadHome: null,
+    bestTotal: null,
+    bestSpreadBook: null,
+    bestTotalBook: null,
+    bestSpreadAwayJuice: null,
+    bestSpreadHomeJuice: null,
+    bestTotalOverJuice: null,
+    bestTotalUnderJuice: null,
+    dkSpreadHome: null,
+    fdSpreadHome: null,
+    stakeSpreadHome: null,
+    stakeSpreadBook: null,
+    dkTotal: null,
+    fdTotal: null,
+    stakeTotal: null,
+    stakeTotalBook: null,
+    marketHomeProbNoVig: null,
+    mlEdgeProb: null,
+    totalEdge: null,
+    spreadEdge: null,
+    marketJoined: false,
+    publishTagSpread: null,
+    publishTagTotal: null,
+    publishTagMl: null,
+    decision: null,
+    actionLabelSpread: null,
+    actionLabelTotal: null,
+  };
+}
+
+/**
+ * Project an ALLOW_FIXTURE assembly into the real NFL fair-lines board shape.
+ * Fixture-channel only. Totals / ML / probability channels stay absent.
+ * persistOdds is always false. Not a subscriber/betting allow.
+ */
+export function projectFixtureFairLinesBoard(
+  input: FixtureFairLinesProjectionInput,
+): FixtureFairLinesBoard {
+  if (input.chain !== undefined) {
+    assertFixtureChainRecord(input.chain);
+  }
+  const requested = input.requestedOutput ?? "POINT_MARGIN_SPREAD";
+  if (requested !== "POINT_MARGIN_SPREAD") {
+    const mapped = OUTPUT_REFUSE[requested as keyof typeof OUTPUT_REFUSE];
+    throw new FixtureHardRefuse(
+      mapped ?? "REFUSE_CAPABILITY",
+      `point-margin input hard-refuses ${requested} (no partial object)`,
+    );
+  }
+  const eligibility = consumeFixtureEligibility(input.eligibility, input.consumer);
+  const spreadHome = fixtureSpreadHome(input.quote);
+  const row = fixtureFairLineRow(input.quote, spreadHome, {
+    homeTeam: input.homeTeam ?? "Home",
+    awayTeam: input.awayTeam ?? "Away",
+    homeAbbr: input.homeAbbr ?? "HOM",
+    awayAbbr: input.awayAbbr ?? "AWY",
+  });
+  return {
+    season: input.season ?? 2026,
+    modelVersion: FIXTURE_CONTRACT_SCHEMA_VERSION,
+    asOf: null,
+    oddsAsOf: null,
+    currentWeek: 1,
+    count: 1,
+    lines: [row],
+    window: { daysAhead: 0, includePastDays: 0 },
+    diagnostics: {
+      oddsFeedStatus: "fixture",
+      oddsFeedError: null,
+      oddsEventsSeen: 0,
+      marketJoinedCount: 0,
+      bookmakers: [],
+      kosedgeOnly: true,
+    },
+    fixture: true,
+    persistOdds: false,
+    eligibility,
+    requestedOutput: "POINT_MARGIN_SPREAD",
+  };
 }

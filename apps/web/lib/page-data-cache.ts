@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { EligibilityDecisionInput } from "@/lib/nfl-fixture-assembly-contract";
 
 /**
  * Short CDN/browser cache for NFL page-data JSON (KEI Lines / edges / assemble).
@@ -119,4 +120,48 @@ export function pageDataPrivateJsonResponse<T extends PageDataBoardBody>(
   init?: { status?: number },
 ): NextResponse {
   return pageDataJsonResponse(body, { ...init, cache: "private" });
+}
+
+/** Fixture eligibility is never shared-cacheable (contract cacheable:false). */
+export function pageDataCacheHeadersForFixture(
+  eligibility?: Pick<EligibilityDecisionInput, "cacheable" | "fixture" | "result">,
+): Record<string, string> {
+  void eligibility;
+  return pageDataCacheHeaders({ cacheable: false });
+}
+
+type FixtureCacheEntry = {
+  generation: number;
+  body: unknown;
+};
+
+const fixtureProjectionCache = new Map<string, FixtureCacheEntry>();
+
+export function writeFixtureProjectionCache(
+  key: string,
+  body: unknown,
+  generation: number,
+): void {
+  fixtureProjectionCache.set(key, { generation, body });
+}
+
+export function invalidateFixtureProjectionCache(key: string): void {
+  fixtureProjectionCache.delete(key);
+}
+
+/**
+ * Invalidated / stale / mismatched generation cannot return via cache.
+ * Direct customer keys are not stored here.
+ */
+export function readFixtureProjectionCache(
+  key: string,
+  generation: number,
+):
+  | { ok: true; body: unknown }
+  | { ok: false; result: "REFUSE_CACHE" } {
+  const hit = fixtureProjectionCache.get(key);
+  if (!hit || hit.generation !== generation) {
+    return { ok: false, result: "REFUSE_CACHE" };
+  }
+  return { ok: true, body: hit.body };
 }

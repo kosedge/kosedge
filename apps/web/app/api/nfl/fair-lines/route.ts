@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import { nflFairLinesCustomerUnavailableResponse } from "@/lib/nfl-fair-lines-fixture-api";
 import {
   pageDataCacheHeaders,
   pageDataPrivateJsonResponse,
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
-import {
-  isNflFairLinesCustomerSurfaceClosed,
-  nflEdgeBoardAssembleUnavailablePayload,
-} from "@/lib/cfb-edge-board-public";
+import { isNflFairLinesCustomerSurfaceClosed } from "@/lib/cfb-edge-board-public";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -37,10 +35,7 @@ export async function GET(req: Request) {
   }
 
   if (isNflFairLinesCustomerSurfaceClosed()) {
-    return NextResponse.json(nflEdgeBoardAssembleUnavailablePayload(), {
-      status: 503,
-      headers: pageDataCacheHeaders({ cacheable: false }),
-    });
+    return nflFairLinesCustomerUnavailableResponse();
   }
 
   const url = new URL(req.url);
