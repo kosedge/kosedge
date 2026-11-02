@@ -1,0 +1,124 @@
+{
+  "artifact_id": "nfl-clock-play-pre-entry-pass-rz/certification_thresholds",
+  "schema": "gate1_certification_thresholds_slim_v1",
+  "bound_parent_sha": "57347d888d2832a735bb826f6105c44b34d9cc72",
+  "bound_parent_sha_short": "57347d888",
+  "clears_gate_1": false,
+  "forbidden": [
+    "Do not use Gate C isolation ±0.05/game as Gate 1 abs_delta_max",
+    "Do not fit thresholds to observed deltas at 57347d888",
+    "Do not clear Gate 1 from this wrapper alone",
+    "Do not redesign model / touch held-out / start R14 / merge / deploy"
+  ],
+  "hard_gates": {
+    "field_goal_makes_per_game": {
+      "historical_target": 3.264407963674467,
+      "abs_delta_max": 0.119987,
+      "interval": [
+        3.144421,
+        3.384395
+      ],
+      "hard_gate": true,
+      "isolation_bound_pm_0_05_NOT_PROMOTED": true
+    },
+    "final_total_mean": {
+      "historical_target": 45.59517988124345,
+      "abs_delta_max": 1.7637,
+      "interval": [
+        43.83148,
+        47.35888
+      ],
+      "hard_gate": true,
+      "isolation_bound_pm_0_05_NOT_PROMOTED": true
+    },
+    "offensive_td_per_game": {
+      "historical_target": 4.82046804051694,
+      "abs_delta_max": 0.2966,
+      "interval": [
+        4.523868,
+        5.117068
+      ],
+      "hard_gate": true,
+      "isolation_bound_pm_0_05_NOT_PROMOTED": true
+    },
+    "red_zone_entries_per_game": {
+      "historical_target": 6.697520083828152,
+      "abs_delta_max": 0.2474,
+      "interval": [
+        6.45012,
+        6.94492
+      ],
+      "hard_gate": true,
+      "isolation_bound_pm_0_05_NOT_PROMOTED": true
+    },
+    "core_drives_per_game": {
+      "historical_target": 22.564093608103388,
+      "abs_delta_max": 0.7439,
+      "interval": [
+        21.820194,
+        23.307994
+      ],
+      "hard_gate": true,
+      "isolation_bound_pm_0_05_NOT_PROMOTED": true
+    }
+  },
+  "structural_hard_gates": [
+    "freeze_state_invariants_and_structural_checks",
+    "train_denominator_lock",
+    "exclusive_routing_pytest_all_pass",
+    "certification_thresholds_artifact_present"
+  ],
+  "diagnostics": [
+    "yl_55_79_fourth_arrivals_per_game",
+    "exact_final_margin_3_rate",
+    "exact_final_margin_7_rate",
+    "overtime_games_rate",
+    "equalizing_fg_per_game",
+    "equalizing_td_per_game",
+    "td_per_red_zone_entry",
+    "fourth_down_go_share",
+    "third_down_conversion_rate",
+    "certify_drives_per_game_possession_start"
+  ],
+  "diagnostics_note": "Report only; do not hard-fail Gate 1 on diagnostics (55-79, key3/key7, OT, EQ-FG/EQ-TD, etc.)",
+  "metric_dictionary_keys": [
+    "field_goal_makes_per_game",
+    "final_total_mean",
+    "offensive_td_per_game",
+    "red_zone_entries_per_game",
+    "core_drives_per_game"
+  ],
+  "go_vs_punt": {
+    "test": "test_rz_q4_trail3_regulation_clock_blocks_early_fg_range_field_goal",
+    "file": "services/model-service/tests/test_nfl_clock_play_simulator.py",
+    "ruling": "TEST_EXPECTATION_STALE_WRONG",
+    "implementation_status": "CORRECT",
+    "intended_football_action": "punt",
+    "exact_fix": "Restore first assertion at clock_seconds=350.0 from expected go to expected punt; keep 300/240 -> field_goal",
+    "do_not_change": "_fourth_down_decision or any simulator source"
+  },
+  "bindings": {
+    "config_sha256": "2b3a8ac22569206b620ad5efe4d5dfb8c3b848894eae33b0ae934d4f242812b1",
+    "inputs_sha256": "982a5a03e4e519cbdc8f9a344000f8391f3a17a8a71e61dc8e4a8ce21afacf30",
+    "pbp_sha256": "823304baa68961187307c1d08774bee80a58d9757ee57be01f6879b34c5bca2c",
+    "seed_manifest_sha256": "46de6deb6fde81d366aa8191e48e4e58e9938abe0be576fa9f60efe5c7cfcad2",
+    "root_seeds": {
+      "neutral-structural": 114729,
+      "home-offense-edge": 228451,
+      "away-defense-edge": 336182,
+      "tempo-contrast": 443917
+    },
+    "train_window": "2013-2023 regular season (REG only)",
+    "train_games_locked": 2863,
+    "sim_games_contract": 2048
+  },
+  "threshold_rule": "|sim - train| <= max(1.0 * season_sd_of_means, 3.0 * approx_mc_se) at 2048 sim games",
+  "provenance": {
+    "authored_by": "Alex Rourke",
+    "contract_artifact": "GATE1_CERTIFICATION_THRESHOLDS_57347d888",
+    "contract_path_on_box": "/workspace/gate1-cert-contract/GATE1_CERTIFICATION_THRESHOLDS_57347d888.json",
+    "bound_source_sha": "57347d888d2832a735bb826f6105c44b34d9cc72",
+    "prior_gate1_packet": "GATE_1_NOT_CLEARED packet (builder_827) under misapplied ±0.05",
+    "note": "Slim machine schema for commit; authority is Alex CERT_CONTRACT_READY at bound_parent_sha. Thresholds NOT fitted to SHA closeness."
+  }
+}
