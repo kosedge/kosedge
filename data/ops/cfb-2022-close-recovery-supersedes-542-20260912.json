@@ -1,0 +1,47 @@
+{
+  "kind": "cfb_2022_close_recovery_evidence_lock",
+  "generated_at": "2026-09-12T02:50:00Z",
+  "authoritative_pr": 543,
+  "superseded_pr": 542,
+  "authoritative_environment": "mac_private_worker",
+  "use_private_worker": true,
+  "lake_path": "/Volumes/KosEdgeData/clean/odds/cfb/snapshots-2022.parquet",
+  "copied_parquet_into_repo": false,
+  "densified": false,
+  "odds_api_credits_spent": false,
+  "funnel_2022": {
+    "raw_lake_snapshots": 28322,
+    "valid_pregame_lake_closes": 717,
+    "identity_matched": 713,
+    "fbs_fbs": 713,
+    "actual_available": 713,
+    "train0_w1_14_lake_close_actual": 712,
+    "leakage_failures": 0,
+    "gate": 700,
+    "gate_passed": true
+  },
+  "frozen_140_scoring": {
+    "completed": true,
+    "report": "data/ops/cfb-frozen-140-scoring-20260912.md",
+    "decision": "RECALIBRATION JUSTIFIED",
+    "recalibrated": false,
+    "train0_n": 712,
+    "val0_n": 710,
+    "train1_n": 1422,
+    "val1_n": 717,
+    "val1_total_vs_close_bias": 11.34,
+    "val1_high_tail_n": 217,
+    "val1_high_tail_total_vs_close_bias": 17.79
+  },
+  "forbidden": [
+    "copy_or_densify_parquet",
+    "spend_odds_api_credits",
+    "reopen_pr_542_as_missing_data",
+    "recalibrate_coefficients",
+    "change_qb_contract_or_close_semantics_or_gates",
+    "unseal_2025",
+    "publish_cfb"
+  ],
+  "kill_switch": true,
+  "play": false
+}
