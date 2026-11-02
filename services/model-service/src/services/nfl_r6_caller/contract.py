@@ -7,7 +7,9 @@ Does not open science data or run IF/Q2.
 
 from __future__ import annotations
 
-from typing import Any, Dict, FrozenSet, Literal, Tuple
+import re
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, FrozenSet, Literal, Mapping, Tuple
 
 PACKAGE_ID = "t5208u-r6-caller-v1"
 SCHEMA_VERSION = "r6-caller-v1"
@@ -83,6 +85,9 @@ class R6RefuseCode:
     REFUSE_IDENTITY = "REFUSE_IDENTITY"
     REFUSE_MISSING = "REFUSE_MISSING"
     REFUSE_VERSION = "REFUSE_VERSION"
+    REFUSE_TAMPER = "REFUSE_TAMPER"
+    REFUSE_CUTOFF = "REFUSE_CUTOFF"
+    REFUSE_HASH = "REFUSE_HASH"
 
 
 class R6Refuse(Exception):
@@ -104,8 +109,104 @@ class R6Refuse(Exception):
         }
 
 
+SHA256_HEX_RE = re.compile(r"^[0-9a-f]{64}$")
+PIN_KEYS = ("if_tip", "sim_sha256", "fw_sha256", "algorithm_tip")
+
+
 def expected_c_mean(if_mean: float, q2_mean: float) -> float:
     return C_WEIGHT_IF * float(if_mean) + C_WEIGHT_Q2 * float(q2_mean)
+
+
+def parse_utc(text: Any) -> datetime:
+    if not isinstance(text, str) or not text.strip() or text.strip() == "not-a-time":
+        raise R6Refuse(R6RefuseCode.REFUSE_CUTOFF, f"kickoff/cutoff unparseable: {text!r}")
+    try:
+        dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise R6Refuse(R6RefuseCode.REFUSE_CUTOFF, f"kickoff/cutoff unparseable: {text!r}") from exc
+    if dt.tzinfo is None:
+        raise R6Refuse(R6RefuseCode.REFUSE_CUTOFF, f"naive timestamp refused: {text!r}")
+    return dt.astimezone(timezone.utc)
+
+
+def iso_z(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def cutoff_from_kickoff(kickoff_utc: Any) -> Dict[str, Any]:
+    kickoff = parse_utc(kickoff_utc)
+    cut = kickoff - timedelta(minutes=PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES)
+    return {
+        "kickoff_utc": iso_z(kickoff),
+        "cutoff_utc": iso_z(cut),
+        "decision_offset_minutes": PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES,
+    }
+
+
+def require_parsed_cutoff(cutoff: Any) -> Dict[str, Any]:
+    if not isinstance(cutoff, Mapping):
+        raise R6Refuse(R6RefuseCode.REFUSE_CUTOFF, "cutoff block missing")
+    kickoff = cutoff.get("kickoff_utc") or cutoff.get("kickoff_ts")
+    parsed = cutoff_from_kickoff(kickoff)
+    given = cutoff.get("cutoff_utc")
+    if given not in (None, ""):
+        if parse_utc(given) != parse_utc(parsed["cutoff_utc"]):
+            raise R6Refuse(
+                R6RefuseCode.REFUSE_CUTOFF,
+                f"cutoff_utc {given!r} != KO−{PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES} ({parsed['cutoff_utc']})",
+            )
+    offset = cutoff.get("decision_offset_minutes")
+    if offset not in (None, "") and int(offset) != PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES:
+        raise R6Refuse(
+            R6RefuseCode.REFUSE_CUTOFF,
+            f"decision_offset_minutes {offset!r} != {PAPER_SEAL_OFFSET_BEFORE_KICKOFF_MINUTES}",
+        )
+    return parsed
+
+
+def require_canonical_hash(
+    value: Any,
+    *,
+    label: str,
+    forbidden: FrozenSet[str] | None = None,
+) -> str:
+    if value is None or (isinstance(value, str) and value.strip() == ""):
+        raise R6Refuse(R6RefuseCode.REFUSE_HASH, f"{label} empty")
+    text = str(value)
+    if not SHA256_HEX_RE.fullmatch(text):
+        raise R6Refuse(R6RefuseCode.REFUSE_HASH, f"{label} is not a 64-hex canonical hash")
+    if text == "0" * 64:
+        raise R6Refuse(R6RefuseCode.REFUSE_HASH, f"{label} is an empty/default zero hash")
+    blocked = set(forbidden or ())
+    if text in blocked:
+        raise R6Refuse(R6RefuseCode.REFUSE_HASH, f"{label} must not be schema_hash")
+    return text
+
+
+def expected_pins() -> Dict[str, str]:
+    return {
+        "if_tip": IF_TIP,
+        "sim_sha256": SIM_SHA256,
+        "fw_sha256": FW_SHA256,
+        "algorithm_tip": ALGORITHM_TIP,
+    }
+
+
+def require_full_pins(packet: Mapping[str, Any]) -> Dict[str, str]:
+    """Exact full-pin equality. Missing or sha8-prefix-only matches refuse."""
+    preflight = packet.get("if_preflight") if isinstance(packet.get("if_preflight"), Mapping) else {}
+    out: Dict[str, str] = {}
+    for key, expected in expected_pins().items():
+        got = packet.get(key)
+        if got is None:
+            got = preflight.get(key)
+        if got is None:
+            raise R6Refuse(R6RefuseCode.REFUSE_PIN, f"{key} missing")
+        text = str(got)
+        if text != expected:
+            raise R6Refuse(R6RefuseCode.REFUSE_PIN, f"{key} {text!r} != full pin {expected}")
+        out[key] = text
+    return out
 
 
 def pin_block() -> Dict[str, Any]:

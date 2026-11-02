@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Mapping
 
 from src.services.nfl_t5107u.q2 import Game, SEALED_SEASONS
+from src.services.nfl_t5208u.hashing import canonical_sha256
 from src.services.nfl_t5208u.pins import (
     CELL_META_FIELDS,
     CHANNEL_SYNTHETIC,
@@ -35,8 +34,7 @@ def _utc(text: str) -> datetime:
 
 
 def _source_byte_hash(payload: Mapping[str, Any]) -> str:
-    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
-    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    return canonical_sha256(payload)
 
 
 def _cell(value: Any, *, source: str, available_at: str, observed_at: str) -> dict[str, Any]:

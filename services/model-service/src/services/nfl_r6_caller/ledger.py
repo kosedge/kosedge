@@ -1,5 +1,7 @@
 """Atomic per-game paired-arm seal. Duplicate / race / partial-write refuse.
 
+Verify digest, identities, hashes, KO−60 cutoff and finite arms on BOTH
+seal and read. Tampered files refuse without overwrite.
 Offline only. No network, DB, or outcome reader.
 """
 
@@ -8,6 +10,7 @@ from __future__ import annotations
 import fcntl
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
@@ -17,9 +20,13 @@ from src.services.nfl_r6_caller.contract import (
     PACKAGE_ID,
     PAIRED_ARMS,
     SCHEMA_VERSION,
+    SYNTHETIC_CHANNEL,
     R6Refuse,
     R6RefuseCode,
     pin_block,
+    require_canonical_hash,
+    require_full_pins,
+    require_parsed_cutoff,
 )
 
 REQUIRED_SEAL_KEYS = (
@@ -36,6 +43,7 @@ REQUIRED_SEAL_KEYS = (
     "refusals",
     "manifest_id",
     "synthetic",
+    "pins",
 )
 
 
@@ -45,6 +53,11 @@ def canonical_json(obj: Any) -> str:
 
 def sha256_hex(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def seal_digest(record: Mapping[str, Any]) -> str:
+    body = {key: record[key] for key in record if key != "seal_id"}
+    return sha256_hex(canonical_json(body))
 
 
 def _is_complete_seal(record: Mapping[str, Any]) -> bool:
@@ -62,6 +75,53 @@ def _is_complete_seal(record: Mapping[str, Any]) -> bool:
         if not isinstance(arm, dict) or "status" not in arm:
             return False
     return True
+
+
+def _finite_arm_mean(arm: Mapping[str, Any], *, name: str) -> None:
+    status = str(arm.get("status") or "")
+    if status != "SEALED":
+        return
+    value = arm.get("mean")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise R6Refuse(R6RefuseCode.REFUSE_OUTPUT, f"{name} mean is not a number")
+    if not math.isfinite(float(value)):
+        raise R6Refuse(R6RefuseCode.REFUSE_OUTPUT, f"{name} mean is not finite")
+
+
+def verify_seal_record(record: Mapping[str, Any]) -> Dict[str, Any]:
+    """Fail-closed verify. Used on both seal and read. Does not write."""
+    if not isinstance(record, dict) or not _is_complete_seal(record):
+        raise R6Refuse(R6RefuseCode.REFUSE_PARTIAL, "paired-arm seal incomplete")
+    if record.get("package_id") != PACKAGE_ID or record.get("schema_version") != SCHEMA_VERSION:
+        raise R6Refuse(R6RefuseCode.REFUSE_VERSION, "seal package/schema mismatch")
+    if record.get("output_kind") != OUTPUT_KIND:
+        raise R6Refuse(R6RefuseCode.REFUSE_OUTPUT, "output_kind must be POINT_MARGIN")
+    if record.get("synthetic") is not True:
+        raise R6Refuse(R6RefuseCode.REFUSE_SYNTHETIC, "seal.synthetic must be true")
+    game_id = str(record.get("game_id") or "").strip()
+    if not game_id:
+        raise R6Refuse(R6RefuseCode.REFUSE_IDENTITY, "game_id missing")
+    schema_hash = record.get("schema_hash")
+    forbidden = frozenset([str(schema_hash)]) if schema_hash else frozenset()
+    require_canonical_hash(record.get("input_hash"), label="input_hash", forbidden=forbidden)
+    require_canonical_hash(record.get("state_hash"), label="state_hash", forbidden=forbidden)
+    require_canonical_hash(record.get("config_hash"), label="config_hash", forbidden=forbidden)
+    require_parsed_cutoff(record.get("cutoff"))
+    pins = record.get("pins")
+    if not isinstance(pins, Mapping):
+        raise R6Refuse(R6RefuseCode.REFUSE_PIN, "pins missing on seal")
+    require_full_pins(pins)
+    arms = record["arms"]
+    for name in PAIRED_ARMS:
+        _finite_arm_mean(arms[name], name=name)
+    digest = seal_digest(record)
+    seal_id = str(record.get("seal_id") or "")
+    if seal_id != digest:
+        raise R6Refuse(
+            R6RefuseCode.REFUSE_TAMPER,
+            f"seal_id {seal_id!r} != digest {digest}",
+        )
+    return dict(record)
 
 
 class PairedArmLedger:
@@ -92,35 +152,32 @@ class PairedArmLedger:
         finally:
             os.close(fd)
 
+    def _load_raw(self, path: Path) -> Any:
+        return json.loads(path.read_text(encoding="utf-8"))
+
     def read(self, game_id: str) -> Optional[Dict[str, Any]]:
         path = self.path_for(game_id)
         if not path.exists():
             return None
-        raw = json.loads(path.read_text(encoding="utf-8"))
-        if not isinstance(raw, dict) or not _is_complete_seal(raw):
-            raise R6Refuse(
-                R6RefuseCode.REFUSE_PARTIAL,
-                f"existing seal for {game_id} is incomplete",
-            )
-        return raw
+        raw = self._load_raw(path)
+        return verify_seal_record(raw)
 
     def seal(self, record: Mapping[str, Any]) -> Dict[str, Any]:
-        if not isinstance(record, dict) or not _is_complete_seal(record):
-            raise R6Refuse(R6RefuseCode.REFUSE_PARTIAL, "paired-arm seal incomplete")
-        if record.get("package_id") != PACKAGE_ID or record.get("schema_version") != SCHEMA_VERSION:
-            raise R6Refuse(R6RefuseCode.REFUSE_VERSION, "seal package/schema mismatch")
-        game_id = str(record["game_id"])
+        verified = verify_seal_record(record)
+        game_id = str(verified["game_id"])
         dest = self.path_for(game_id)
         fd = self._lock(blocking=False)
         tmp: Optional[Path] = None
         try:
             if dest.exists():
-                existing = json.loads(dest.read_text(encoding="utf-8"))
-                if not isinstance(existing, dict) or not _is_complete_seal(existing):
+                existing = self._load_raw(dest)
+                try:
+                    verify_seal_record(existing)
+                except R6Refuse as exc:
                     raise R6Refuse(
-                        R6RefuseCode.REFUSE_PARTIAL,
-                        f"refusing to overwrite incomplete seal {dest.name}",
-                    )
+                        R6RefuseCode.REFUSE_TAMPER,
+                        f"existing seal for {game_id} failed verify; will not overwrite",
+                    ) from exc
                 raise R6Refuse(
                     R6RefuseCode.REFUSE_DUPLICATE,
                     f"game {game_id} already sealed",
@@ -131,9 +188,7 @@ class PairedArmLedger:
                     R6RefuseCode.REFUSE_PARTIAL,
                     f"partial tmp present for {game_id}",
                 )
-            payload = dict(record)
-            payload["pins"] = pin_block()
-            blob = canonical_json(payload) + "\n"
+            blob = canonical_json(verified) + "\n"
             tmp = dest.with_name(f".{dest.name}.{os.getpid()}.tmp")
             with open(tmp, "w", encoding="utf-8") as handle:
                 handle.write(blob)
@@ -146,7 +201,7 @@ class PairedArmLedger:
                 os.fsync(dir_fd)
             finally:
                 os.close(dir_fd)
-            return json.loads(dest.read_text(encoding="utf-8"))
+            return verify_seal_record(self._load_raw(dest))
         finally:
             if tmp is not None and tmp.exists():
                 tmp.unlink()
@@ -164,8 +219,10 @@ def make_seal_record(
     refusals: list[str],
     manifest_id: str,
     synthetic: bool,
+    schema_hash: str | None = None,
 ) -> Dict[str, Any]:
-    body = {
+    parsed_cutoff = require_parsed_cutoff(cutoff)
+    body: Dict[str, Any] = {
         "package_id": PACKAGE_ID,
         "schema_version": SCHEMA_VERSION,
         "game_id": game_id,
@@ -174,10 +231,14 @@ def make_seal_record(
         "input_hash": input_hash,
         "state_hash": state_hash,
         "config_hash": config_hash,
-        "cutoff": dict(cutoff),
+        "cutoff": parsed_cutoff,
         "refusals": list(refusals),
         "manifest_id": manifest_id,
         "synthetic": bool(synthetic),
+        "channel": SYNTHETIC_CHANNEL,
+        "pins": pin_block(),
     }
-    body["seal_id"] = sha256_hex(canonical_json(body))
+    if schema_hash:
+        body["schema_hash"] = str(schema_hash)
+    body["seal_id"] = seal_digest(body)
     return body
