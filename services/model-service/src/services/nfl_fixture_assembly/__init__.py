@@ -1,9 +1,16 @@
 """OPT-IN INTERNAL FIXTURE-ONLY assembly (t5178u W-FIX-A).
 
 Binds the shared typed contract. Assembly is implemented in assemble.py.
-Does not import simulator / produce_mu / result-loader / network / DB / jobs.
+Does not import simulator, produce_mu, outcome loaders, network, DB, or jobs.
 """
 
+from src.services.nfl_fixture_assembly.assemble import (
+    NON_FIXTURE_CONSUMERS,
+    assemble_fixture_batch,
+    assemble_fixture_only,
+    consume_eligibility,
+    forbidden_import_names,
+)
 from src.services.nfl_fixture_assembly.contract import (
     CONTRACT_ID,
     CONTRACT_SCHEMA_VERSION,
@@ -29,6 +36,11 @@ from src.services.nfl_fixture_assembly.contract import (
 )
 
 __all__ = [
+    "NON_FIXTURE_CONSUMERS",
+    "assemble_fixture_batch",
+    "assemble_fixture_only",
+    "consume_eligibility",
+    "forbidden_import_names",
     "CONTRACT_ID",
     "CONTRACT_SCHEMA_VERSION",
     "FIXTURE_CHANNEL",

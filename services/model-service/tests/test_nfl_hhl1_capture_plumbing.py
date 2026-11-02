@@ -623,14 +623,19 @@ def test_package_does_not_import_acquisition_or_scoring() -> None:
 
 
 def test_plumbing_not_wired_to_live_callers() -> None:
+    """Live/production callers stay unwired. t5178u fixture-assembly is the only attach."""
     src_root = PACKAGE_DIR.parents[1]
+    authorized = "services/nfl_fixture_assembly/"
     hits: list[str] = []
     for path in src_root.rglob("*.py"):
         if PACKAGE_DIR in path.parents or path.parent == PACKAGE_DIR:
             continue
+        rel = str(path.relative_to(src_root))
+        if rel.startswith(authorized):
+            continue
         text = path.read_text(encoding="utf-8")
         if "nfl_hhl1_capture" in text:
-            hits.append(str(path.relative_to(src_root)))
+            hits.append(rel)
     assert hits == []
 
 

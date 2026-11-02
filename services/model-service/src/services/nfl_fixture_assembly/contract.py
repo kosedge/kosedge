@@ -64,7 +64,10 @@ class QuoteSide(str, Enum):
 
 
 class FixturePeriod(str, Enum):
+    """Only FULL_GAME is authorized. Other values exist so they can be refused."""
+
     FULL_GAME = "full_game"
+    H1 = "h1"
 
 
 class FixtureEligibilityResult(str, Enum):

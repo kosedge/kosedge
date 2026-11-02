@@ -28,7 +28,7 @@ export type RequestedOutput = (typeof REQUESTED_OUTPUTS)[number];
 export const QUOTE_SIDES = ["HOME", "AWAY"] as const;
 export type QuoteSide = (typeof QUOTE_SIDES)[number];
 
-export const FIXTURE_PERIODS = ["full_game"] as const;
+export const FIXTURE_PERIODS = ["full_game", "h1"] as const;
 export type FixturePeriod = (typeof FIXTURE_PERIODS)[number];
 
 /** ONE eligibility/refusal enum. */
