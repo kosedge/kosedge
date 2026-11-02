@@ -1,0 +1,646 @@
+{
+  "n_previous_partial": 29,
+  "n_now_complete": 29,
+  "n_still_refused_or_partial": 0,
+  "now_complete": [
+    {
+      "game_id": "2021_07_ATL_MIA",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 6,
+      "selected_rating_week_away": 5,
+      "t1_home": "t1=2021_02_BUF_MIA|2021_03_MIA_LV|2021_04_IND_MIA|2021_05_MIA_TB|2021_06_MIA_JAX",
+      "t1_away": "t1=2021_01_PHI_ATL|2021_02_ATL_TB|2021_03_ATL_NYG|2021_04_WAS_ATL|2021_05_NYJ_ATL",
+      "consumed_game_ids_home": [
+        "2021_02_BUF_MIA",
+        "2021_03_MIA_LV",
+        "2021_04_IND_MIA",
+        "2021_05_MIA_TB",
+        "2021_06_MIA_JAX"
+      ],
+      "consumed_game_ids_away": [
+        "2021_01_PHI_ATL",
+        "2021_02_ATL_TB",
+        "2021_03_ATL_NYG",
+        "2021_04_WAS_ATL",
+        "2021_05_NYJ_ATL"
+      ]
+    },
+    {
+      "game_id": "2021_07_IND_SF",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 5,
+      "selected_rating_week_away": 6,
+      "t1_home": "t1=2021_01_SF_DET|2021_02_SF_PHI|2021_03_GB_SF|2021_04_SEA_SF|2021_05_SF_ARI",
+      "t1_away": "t1=2021_02_LA_IND|2021_03_IND_TEN|2021_04_IND_MIA|2021_05_IND_BAL|2021_06_HOU_IND",
+      "consumed_game_ids_home": [
+        "2021_01_SF_DET",
+        "2021_02_SF_PHI",
+        "2021_03_GB_SF",
+        "2021_04_SEA_SF",
+        "2021_05_SF_ARI"
+      ],
+      "consumed_game_ids_away": [
+        "2021_02_LA_IND",
+        "2021_03_IND_TEN",
+        "2021_04_IND_MIA",
+        "2021_05_IND_BAL",
+        "2021_06_HOU_IND"
+      ]
+    },
+    {
+      "game_id": "2021_07_NYJ_NE",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 6,
+      "selected_rating_week_away": 5,
+      "t1_home": "t1=2021_02_NE_NYJ|2021_03_NO_NE|2021_04_TB_NE|2021_05_NE_HOU|2021_06_DAL_NE",
+      "t1_away": "t1=2021_01_NYJ_CAR|2021_02_NE_NYJ|2021_03_NYJ_DEN|2021_04_TEN_NYJ|2021_05_NYJ_ATL",
+      "consumed_game_ids_home": [
+        "2021_02_NE_NYJ",
+        "2021_03_NO_NE",
+        "2021_04_TB_NE",
+        "2021_05_NE_HOU",
+        "2021_06_DAL_NE"
+      ],
+      "consumed_game_ids_away": [
+        "2021_01_NYJ_CAR",
+        "2021_02_NE_NYJ",
+        "2021_03_NYJ_DEN",
+        "2021_04_TEN_NYJ",
+        "2021_05_NYJ_ATL"
+      ]
+    },
+    {
+      "game_id": "2021_07_NO_SEA",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 6,
+      "selected_rating_week_away": 5,
+      "t1_home": "t1=2021_02_TEN_SEA|2021_03_SEA_MIN|2021_04_SEA_SF|2021_05_LA_SEA|2021_06_SEA_PIT",
+      "t1_away": "t1=2021_01_GB_NO|2021_02_NO_CAR|2021_03_NO_NE|2021_04_NYG_NO|2021_05_NO_WAS",
+      "consumed_game_ids_home": [
+        "2021_02_TEN_SEA",
+        "2021_03_SEA_MIN",
+        "2021_04_SEA_SF",
+        "2021_05_LA_SEA",
+        "2021_06_SEA_PIT"
+      ],
+      "consumed_game_ids_away": [
+        "2021_01_GB_NO",
+        "2021_02_NO_CAR",
+        "2021_03_NO_NE",
+        "2021_04_NYG_NO",
+        "2021_05_NO_WAS"
+      ]
+    },
+    {
+      "game_id": "2021_08_DAL_MIN",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 6,
+      "selected_rating_week_away": 6,
+      "t1_home": "t1=2021_02_MIN_ARI|2021_03_SEA_MIN|2021_04_CLE_MIN|2021_05_DET_MIN|2021_06_MIN_CAR",
+      "t1_away": "t1=2021_02_DAL_LAC|2021_03_PHI_DAL|2021_04_CAR_DAL|2021_05_NYG_DAL|2021_06_DAL_NE",
+      "consumed_game_ids_home": [
+        "2021_02_MIN_ARI",
+        "2021_03_SEA_MIN",
+        "2021_04_CLE_MIN",
+        "2021_05_DET_MIN",
+        "2021_06_MIN_CAR"
+      ],
+      "consumed_game_ids_away": [
+        "2021_02_DAL_LAC",
+        "2021_03_PHI_DAL",
+        "2021_04_CAR_DAL",
+        "2021_05_NYG_DAL",
+        "2021_06_DAL_NE"
+      ]
+    },
+    {
+      "game_id": "2021_08_JAX_SEA",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 7,
+      "selected_rating_week_away": 6,
+      "t1_home": "t1=2021_03_SEA_MIN|2021_04_SEA_SF|2021_05_LA_SEA|2021_06_SEA_PIT|2021_07_NO_SEA",
+      "t1_away": "t1=2021_02_DEN_JAX|2021_03_ARI_JAX|2021_04_JAX_CIN|2021_05_TEN_JAX|2021_06_MIA_JAX",
+      "consumed_game_ids_home": [
+        "2021_03_SEA_MIN",
+        "2021_04_SEA_SF",
+        "2021_05_LA_SEA",
+        "2021_06_SEA_PIT",
+        "2021_07_NO_SEA"
+      ],
+      "consumed_game_ids_away": [
+        "2021_02_DEN_JAX",
+        "2021_03_ARI_JAX",
+        "2021_04_JAX_CIN",
+        "2021_05_TEN_JAX",
+        "2021_06_MIA_JAX"
+      ]
+    },
+    {
+      "game_id": "2021_08_MIA_BUF",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 6,
+      "selected_rating_week_away": 7,
+      "t1_home": "t1=2021_02_BUF_MIA|2021_03_WAS_BUF|2021_04_HOU_BUF|2021_05_BUF_KC|2021_06_BUF_TEN",
+      "t1_away": "t1=2021_03_MIA_LV|2021_04_IND_MIA|2021_05_MIA_TB|2021_06_MIA_JAX|2021_07_ATL_MIA",
+      "consumed_game_ids_home": [
+        "2021_02_BUF_MIA",
+        "2021_03_WAS_BUF",
+        "2021_04_HOU_BUF",
+        "2021_05_BUF_KC",
+        "2021_06_BUF_TEN"
+      ],
+      "consumed_game_ids_away": [
+        "2021_03_MIA_LV",
+        "2021_04_IND_MIA",
+        "2021_05_MIA_TB",
+        "2021_06_MIA_JAX",
+        "2021_07_ATL_MIA"
+      ]
+    },
+    {
+      "game_id": "2021_08_NE_LAC",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 6,
+      "selected_rating_week_away": 7,
+      "t1_home": "t1=2021_02_DAL_LAC|2021_03_LAC_KC|2021_04_LV_LAC|2021_05_CLE_LAC|2021_06_LAC_BAL",
+      "t1_away": "t1=2021_03_NO_NE|2021_04_TB_NE|2021_05_NE_HOU|2021_06_DAL_NE|2021_07_NYJ_NE",
+      "consumed_game_ids_home": [
+        "2021_02_DAL_LAC",
+        "2021_03_LAC_KC",
+        "2021_04_LV_LAC",
+        "2021_05_CLE_LAC",
+        "2021_06_LAC_BAL"
+      ],
+      "consumed_game_ids_away": [
+        "2021_03_NO_NE",
+        "2021_04_TB_NE",
+        "2021_05_NE_HOU",
+        "2021_06_DAL_NE",
+        "2021_07_NYJ_NE"
+      ]
+    },
+    {
+      "game_id": "2021_08_PIT_CLE",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 7,
+      "selected_rating_week_away": 6,
+      "t1_home": "t1=2021_03_CHI_CLE|2021_04_CLE_MIN|2021_05_CLE_LAC|2021_06_ARI_CLE|2021_07_DEN_CLE",
+      "t1_away": "t1=2021_02_LV_PIT|2021_03_CIN_PIT|2021_04_PIT_GB|2021_05_DEN_PIT|2021_06_SEA_PIT",
+      "consumed_game_ids_home": [
+        "2021_03_CHI_CLE",
+        "2021_04_CLE_MIN",
+        "2021_05_CLE_LAC",
+        "2021_06_ARI_CLE",
+        "2021_07_DEN_CLE"
+      ],
+      "consumed_game_ids_away": [
+        "2021_02_LV_PIT",
+        "2021_03_CIN_PIT",
+        "2021_04_PIT_GB",
+        "2021_05_DEN_PIT",
+        "2021_06_SEA_PIT"
+      ]
+    },
+    {
+      "game_id": "2021_09_LV_NYG",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 8,
+      "selected_rating_week_away": 7,
+      "t1_home": "t1=2021_04_NYG_NO|2021_05_NYG_DAL|2021_06_LA_NYG|2021_07_CAR_NYG|2021_08_NYG_KC",
+      "t1_away": "t1=2021_03_MIA_LV|2021_04_LV_LAC|2021_05_CHI_LV|2021_06_LV_DEN|2021_07_PHI_LV",
+      "consumed_game_ids_home": [
+        "2021_04_NYG_NO",
+        "2021_05_NYG_DAL",
+        "2021_06_LA_NYG",
+        "2021_07_CAR_NYG",
+        "2021_08_NYG_KC"
+      ],
+      "consumed_game_ids_away": [
+        "2021_03_MIA_LV",
+        "2021_04_LV_LAC",
+        "2021_05_CHI_LV",
+        "2021_06_LV_DEN",
+        "2021_07_PHI_LV"
+      ]
+    },
+    {
+      "game_id": "2021_09_MIN_BAL",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 7,
+      "selected_rating_week_away": 8,
+      "t1_home": "t1=2021_03_BAL_DET|2021_04_BAL_DEN|2021_05_IND_BAL|2021_06_LAC_BAL|2021_07_CIN_BAL",
+      "t1_away": "t1=2021_03_SEA_MIN|2021_04_CLE_MIN|2021_05_DET_MIN|2021_06_MIN_CAR|2021_08_DAL_MIN",
+      "consumed_game_ids_home": [
+        "2021_03_BAL_DET",
+        "2021_04_BAL_DEN",
+        "2021_05_IND_BAL",
+        "2021_06_LAC_BAL",
+        "2021_07_CIN_BAL"
+      ],
+      "consumed_game_ids_away": [
+        "2021_03_SEA_MIN",
+        "2021_04_CLE_MIN",
+        "2021_05_DET_MIN",
+        "2021_06_MIN_CAR",
+        "2021_08_DAL_MIN"
+      ]
+    },
+    {
+      "game_id": "2021_10_DET_PIT",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 9,
+      "selected_rating_week_away": 8,
+      "t1_home": "t1=2021_04_PIT_GB|2021_05_DEN_PIT|2021_06_SEA_PIT|2021_08_PIT_CLE|2021_09_CHI_PIT",
+      "t1_away": "t1=2021_04_DET_CHI|2021_05_DET_MIN|2021_06_CIN_DET|2021_07_DET_LA|2021_08_PHI_DET",
+      "consumed_game_ids_home": [
+        "2021_04_PIT_GB",
+        "2021_05_DEN_PIT",
+        "2021_06_SEA_PIT",
+        "2021_08_PIT_CLE",
+        "2021_09_CHI_PIT"
+      ],
+      "consumed_game_ids_away": [
+        "2021_04_DET_CHI",
+        "2021_05_DET_MIN",
+        "2021_06_CIN_DET",
+        "2021_07_DET_LA",
+        "2021_08_PHI_DET"
+      ]
+    },
+    {
+      "game_id": "2021_10_SEA_GB",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 9,
+      "selected_rating_week_away": 8,
+      "t1_home": "t1=2021_05_GB_CIN|2021_06_GB_CHI|2021_07_WAS_GB|2021_08_GB_ARI|2021_09_GB_KC",
+      "t1_away": "t1=2021_04_SEA_SF|2021_05_LA_SEA|2021_06_SEA_PIT|2021_07_NO_SEA|2021_08_JAX_SEA",
+      "consumed_game_ids_home": [
+        "2021_05_GB_CIN",
+        "2021_06_GB_CHI",
+        "2021_07_WAS_GB",
+        "2021_08_GB_ARI",
+        "2021_09_GB_KC"
+      ],
+      "consumed_game_ids_away": [
+        "2021_04_SEA_SF",
+        "2021_05_LA_SEA",
+        "2021_06_SEA_PIT",
+        "2021_07_NO_SEA",
+        "2021_08_JAX_SEA"
+      ]
+    },
+    {
+      "game_id": "2021_10_TB_WAS",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 8,
+      "selected_rating_week_away": 8,
+      "t1_home": "t1=2021_04_WAS_ATL|2021_05_NO_WAS|2021_06_KC_WAS|2021_07_WAS_GB|2021_08_WAS_DEN",
+      "t1_away": "t1=2021_04_TB_NE|2021_05_MIA_TB|2021_06_TB_PHI|2021_07_CHI_TB|2021_08_TB_NO",
+      "consumed_game_ids_home": [
+        "2021_04_WAS_ATL",
+        "2021_05_NO_WAS",
+        "2021_06_KC_WAS",
+        "2021_07_WAS_GB",
+        "2021_08_WAS_DEN"
+      ],
+      "consumed_game_ids_away": [
+        "2021_04_TB_NE",
+        "2021_05_MIA_TB",
+        "2021_06_TB_PHI",
+        "2021_07_CHI_TB",
+        "2021_08_TB_NO"
+      ]
+    },
+    {
+      "game_id": "2021_11_BAL_CHI",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 9,
+      "selected_rating_week_away": 10,
+      "t1_home": "t1=2021_05_CHI_LV|2021_06_GB_CHI|2021_07_CHI_TB|2021_08_SF_CHI|2021_09_CHI_PIT",
+      "t1_away": "t1=2021_05_IND_BAL|2021_06_LAC_BAL|2021_07_CIN_BAL|2021_09_MIN_BAL|2021_10_BAL_MIA",
+      "consumed_game_ids_home": [
+        "2021_05_CHI_LV",
+        "2021_06_GB_CHI",
+        "2021_07_CHI_TB",
+        "2021_08_SF_CHI",
+        "2021_09_CHI_PIT"
+      ],
+      "consumed_game_ids_away": [
+        "2021_05_IND_BAL",
+        "2021_06_LAC_BAL",
+        "2021_07_CIN_BAL",
+        "2021_09_MIN_BAL",
+        "2021_10_BAL_MIA"
+      ]
+    },
+    {
+      "game_id": "2021_11_CIN_LV",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 10,
+      "selected_rating_week_away": 9,
+      "t1_home": "t1=2021_05_CHI_LV|2021_06_LV_DEN|2021_07_PHI_LV|2021_09_LV_NYG|2021_10_KC_LV",
+      "t1_away": "t1=2021_05_GB_CIN|2021_06_CIN_DET|2021_07_CIN_BAL|2021_08_CIN_NYJ|2021_09_CLE_CIN",
+      "consumed_game_ids_home": [
+        "2021_05_CHI_LV",
+        "2021_06_LV_DEN",
+        "2021_07_PHI_LV",
+        "2021_09_LV_NYG",
+        "2021_10_KC_LV"
+      ],
+      "consumed_game_ids_away": [
+        "2021_05_GB_CIN",
+        "2021_06_CIN_DET",
+        "2021_07_CIN_BAL",
+        "2021_08_CIN_NYJ",
+        "2021_09_CLE_CIN"
+      ]
+    },
+    {
+      "game_id": "2021_11_HOU_TEN",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 10,
+      "selected_rating_week_away": 9,
+      "t1_home": "t1=2021_06_BUF_TEN|2021_07_KC_TEN|2021_08_TEN_IND|2021_09_TEN_LA|2021_10_NO_TEN",
+      "t1_away": "t1=2021_05_NE_HOU|2021_06_HOU_IND|2021_07_HOU_ARI|2021_08_LA_HOU|2021_09_HOU_MIA",
+      "consumed_game_ids_home": [
+        "2021_06_BUF_TEN",
+        "2021_07_KC_TEN",
+        "2021_08_TEN_IND",
+        "2021_09_TEN_LA",
+        "2021_10_NO_TEN"
+      ],
+      "consumed_game_ids_away": [
+        "2021_05_NE_HOU",
+        "2021_06_HOU_IND",
+        "2021_07_HOU_ARI",
+        "2021_08_LA_HOU",
+        "2021_09_HOU_MIA"
+      ]
+    },
+    {
+      "game_id": "2021_11_NYG_TB",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 10,
+      "selected_rating_week_away": 9,
+      "t1_home": "t1=2021_05_MIA_TB|2021_06_TB_PHI|2021_07_CHI_TB|2021_08_TB_NO|2021_10_TB_WAS",
+      "t1_away": "t1=2021_05_NYG_DAL|2021_06_LA_NYG|2021_07_CAR_NYG|2021_08_NYG_KC|2021_09_LV_NYG",
+      "consumed_game_ids_home": [
+        "2021_05_MIA_TB",
+        "2021_06_TB_PHI",
+        "2021_07_CHI_TB",
+        "2021_08_TB_NO",
+        "2021_10_TB_WAS"
+      ],
+      "consumed_game_ids_away": [
+        "2021_05_NYG_DAL",
+        "2021_06_LA_NYG",
+        "2021_07_CAR_NYG",
+        "2021_08_NYG_KC",
+        "2021_09_LV_NYG"
+      ]
+    },
+    {
+      "game_id": "2021_12_LAC_DEN",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 10,
+      "selected_rating_week_away": 11,
+      "t1_home": "t1=2021_06_LV_DEN|2021_07_DEN_CLE|2021_08_WAS_DEN|2021_09_DEN_DAL|2021_10_PHI_DEN",
+      "t1_away": "t1=2021_06_LAC_BAL|2021_08_NE_LAC|2021_09_LAC_PHI|2021_10_MIN_LAC|2021_11_PIT_LAC",
+      "consumed_game_ids_home": [
+        "2021_06_LV_DEN",
+        "2021_07_DEN_CLE",
+        "2021_08_WAS_DEN",
+        "2021_09_DEN_DAL",
+        "2021_10_PHI_DEN"
+      ],
+      "consumed_game_ids_away": [
+        "2021_06_LAC_BAL",
+        "2021_08_NE_LAC",
+        "2021_09_LAC_PHI",
+        "2021_10_MIN_LAC",
+        "2021_11_PIT_LAC"
+      ]
+    },
+    {
+      "game_id": "2021_12_LA_GB",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 11,
+      "selected_rating_week_away": 10,
+      "t1_home": "t1=2021_07_WAS_GB|2021_08_GB_ARI|2021_09_GB_KC|2021_10_SEA_GB|2021_11_GB_MIN",
+      "t1_away": "t1=2021_06_LA_NYG|2021_07_DET_LA|2021_08_LA_HOU|2021_09_TEN_LA|2021_10_LA_SF",
+      "consumed_game_ids_home": [
+        "2021_07_WAS_GB",
+        "2021_08_GB_ARI",
+        "2021_09_GB_KC",
+        "2021_10_SEA_GB",
+        "2021_11_GB_MIN"
+      ],
+      "consumed_game_ids_away": [
+        "2021_06_LA_NYG",
+        "2021_07_DET_LA",
+        "2021_08_LA_HOU",
+        "2021_09_TEN_LA",
+        "2021_10_LA_SF"
+      ]
+    },
+    {
+      "game_id": "2021_13_ARI_CHI",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 12,
+      "selected_rating_week_away": 11,
+      "t1_home": "t1=2021_07_CHI_TB|2021_08_SF_CHI|2021_09_CHI_PIT|2021_11_BAL_CHI|2021_12_CHI_DET",
+      "t1_away": "t1=2021_07_HOU_ARI|2021_08_GB_ARI|2021_09_ARI_SF|2021_10_CAR_ARI|2021_11_ARI_SEA",
+      "consumed_game_ids_home": [
+        "2021_07_CHI_TB",
+        "2021_08_SF_CHI",
+        "2021_09_CHI_PIT",
+        "2021_11_BAL_CHI",
+        "2021_12_CHI_DET"
+      ],
+      "consumed_game_ids_away": [
+        "2021_07_HOU_ARI",
+        "2021_08_GB_ARI",
+        "2021_09_ARI_SF",
+        "2021_10_CAR_ARI",
+        "2021_11_ARI_SEA"
+      ]
+    },
+    {
+      "game_id": "2021_13_DEN_KC",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 11,
+      "selected_rating_week_away": 12,
+      "t1_home": "t1=2021_07_KC_TEN|2021_08_NYG_KC|2021_09_GB_KC|2021_10_KC_LV|2021_11_DAL_KC",
+      "t1_away": "t1=2021_07_DEN_CLE|2021_08_WAS_DEN|2021_09_DEN_DAL|2021_10_PHI_DEN|2021_12_LAC_DEN",
+      "consumed_game_ids_home": [
+        "2021_07_KC_TEN",
+        "2021_08_NYG_KC",
+        "2021_09_GB_KC",
+        "2021_10_KC_LV",
+        "2021_11_DAL_KC"
+      ],
+      "consumed_game_ids_away": [
+        "2021_07_DEN_CLE",
+        "2021_08_WAS_DEN",
+        "2021_09_DEN_DAL",
+        "2021_10_PHI_DEN",
+        "2021_12_LAC_DEN"
+      ]
+    },
+    {
+      "game_id": "2021_14_ATL_CAR",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 12,
+      "selected_rating_week_away": 13,
+      "t1_home": "t1=2021_08_CAR_ATL|2021_09_NE_CAR|2021_10_CAR_ARI|2021_11_WAS_CAR|2021_12_CAR_MIA",
+      "t1_away": "t1=2021_09_ATL_NO|2021_10_ATL_DAL|2021_11_NE_ATL|2021_12_ATL_JAX|2021_13_TB_ATL",
+      "consumed_game_ids_home": [
+        "2021_08_CAR_ATL",
+        "2021_09_NE_CAR",
+        "2021_10_CAR_ARI",
+        "2021_11_WAS_CAR",
+        "2021_12_CAR_MIA"
+      ],
+      "consumed_game_ids_away": [
+        "2021_09_ATL_NO",
+        "2021_10_ATL_DAL",
+        "2021_11_NE_ATL",
+        "2021_12_ATL_JAX",
+        "2021_13_TB_ATL"
+      ]
+    },
+    {
+      "game_id": "2021_14_BAL_CLE",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 12,
+      "selected_rating_week_away": 13,
+      "t1_home": "t1=2021_08_PIT_CLE|2021_09_CLE_CIN|2021_10_CLE_NE|2021_11_DET_CLE|2021_12_CLE_BAL",
+      "t1_away": "t1=2021_09_MIN_BAL|2021_10_BAL_MIA|2021_11_BAL_CHI|2021_12_CLE_BAL|2021_13_BAL_PIT",
+      "consumed_game_ids_home": [
+        "2021_08_PIT_CLE",
+        "2021_09_CLE_CIN",
+        "2021_10_CLE_NE",
+        "2021_11_DET_CLE",
+        "2021_12_CLE_BAL"
+      ],
+      "consumed_game_ids_away": [
+        "2021_09_MIN_BAL",
+        "2021_10_BAL_MIA",
+        "2021_11_BAL_CHI",
+        "2021_12_CLE_BAL",
+        "2021_13_BAL_PIT"
+      ]
+    },
+    {
+      "game_id": "2021_14_CHI_GB",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 12,
+      "selected_rating_week_away": 13,
+      "t1_home": "t1=2021_08_GB_ARI|2021_09_GB_KC|2021_10_SEA_GB|2021_11_GB_MIN|2021_12_LA_GB",
+      "t1_away": "t1=2021_08_SF_CHI|2021_09_CHI_PIT|2021_11_BAL_CHI|2021_12_CHI_DET|2021_13_ARI_CHI",
+      "consumed_game_ids_home": [
+        "2021_08_GB_ARI",
+        "2021_09_GB_KC",
+        "2021_10_SEA_GB",
+        "2021_11_GB_MIN",
+        "2021_12_LA_GB"
+      ],
+      "consumed_game_ids_away": [
+        "2021_08_SF_CHI",
+        "2021_09_CHI_PIT",
+        "2021_11_BAL_CHI",
+        "2021_12_CHI_DET",
+        "2021_13_ARI_CHI"
+      ]
+    },
+    {
+      "game_id": "2021_14_JAX_TEN",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 12,
+      "selected_rating_week_away": 13,
+      "t1_home": "t1=2021_08_TEN_IND|2021_09_TEN_LA|2021_10_NO_TEN|2021_11_HOU_TEN|2021_12_TEN_NE",
+      "t1_away": "t1=2021_09_BUF_JAX|2021_10_JAX_IND|2021_11_SF_JAX|2021_12_ATL_JAX|2021_13_JAX_LA",
+      "consumed_game_ids_home": [
+        "2021_08_TEN_IND",
+        "2021_09_TEN_LA",
+        "2021_10_NO_TEN",
+        "2021_11_HOU_TEN",
+        "2021_12_TEN_NE"
+      ],
+      "consumed_game_ids_away": [
+        "2021_09_BUF_JAX",
+        "2021_10_JAX_IND",
+        "2021_11_SF_JAX",
+        "2021_12_ATL_JAX",
+        "2021_13_JAX_LA"
+      ]
+    },
+    {
+      "game_id": "2021_15_NE_IND",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 13,
+      "selected_rating_week_away": 13,
+      "t1_home": "t1=2021_09_NYJ_IND|2021_10_JAX_IND|2021_11_IND_BUF|2021_12_TB_IND|2021_13_IND_HOU",
+      "t1_away": "t1=2021_09_NE_CAR|2021_10_CLE_NE|2021_11_NE_ATL|2021_12_TEN_NE|2021_13_NE_BUF",
+      "consumed_game_ids_home": [
+        "2021_09_NYJ_IND",
+        "2021_10_JAX_IND",
+        "2021_11_IND_BUF",
+        "2021_12_TB_IND",
+        "2021_13_IND_HOU"
+      ],
+      "consumed_game_ids_away": [
+        "2021_09_NE_CAR",
+        "2021_10_CLE_NE",
+        "2021_11_NE_ATL",
+        "2021_12_TEN_NE",
+        "2021_13_NE_BUF"
+      ]
+    },
+    {
+      "game_id": "2021_15_NYJ_MIA",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 13,
+      "selected_rating_week_away": 14,
+      "t1_home": "t1=2021_09_HOU_MIA|2021_10_BAL_MIA|2021_11_MIA_NYJ|2021_12_CAR_MIA|2021_13_NYG_MIA",
+      "t1_away": "t1=2021_10_BUF_NYJ|2021_11_MIA_NYJ|2021_12_NYJ_HOU|2021_13_PHI_NYJ|2021_14_NO_NYJ",
+      "consumed_game_ids_home": [
+        "2021_09_HOU_MIA",
+        "2021_10_BAL_MIA",
+        "2021_11_MIA_NYJ",
+        "2021_12_CAR_MIA",
+        "2021_13_NYG_MIA"
+      ],
+      "consumed_game_ids_away": [
+        "2021_10_BUF_NYJ",
+        "2021_11_MIA_NYJ",
+        "2021_12_NYJ_HOU",
+        "2021_13_PHI_NYJ",
+        "2021_14_NO_NYJ"
+      ]
+    },
+    {
+      "game_id": "2021_15_WAS_PHI",
+      "status": "COMPLETE_27",
+      "selected_rating_week_home": 13,
+      "selected_rating_week_away": 14,
+      "t1_home": "t1=2021_09_LAC_PHI|2021_10_PHI_DEN|2021_11_NO_PHI|2021_12_PHI_NYG|2021_13_PHI_NYJ",
+      "t1_away": "t1=2021_10_TB_WAS|2021_11_WAS_CAR|2021_12_SEA_WAS|2021_13_WAS_LV|2021_14_DAL_WAS",
+      "consumed_game_ids_home": [
+        "2021_09_LAC_PHI",
+        "2021_10_PHI_DEN",
+        "2021_11_NO_PHI",
+        "2021_12_PHI_NYG",
+        "2021_13_PHI_NYJ"
+      ],
+      "consumed_game_ids_away": [
+        "2021_10_TB_WAS",
+        "2021_11_WAS_CAR",
+        "2021_12_SEA_WAS",
+        "2021_13_WAS_LV",
+        "2021_14_DAL_WAS"
+      ]
+    }
+  ],
+  "still_refused_or_partial": []
+}

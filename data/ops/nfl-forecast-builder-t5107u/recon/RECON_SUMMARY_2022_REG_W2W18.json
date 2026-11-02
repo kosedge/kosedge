@@ -1,0 +1,217 @@
+{
+  "season": 2022,
+  "split": "EVAL",
+  "weeks": "2-18",
+  "n_identity": 271,
+  "n_targets_reconstructed": 255,
+  "n_eligible": 253,
+  "n_excluded": 18,
+  "completeness_sha256": "6d2c51c43eaeab622c893bcb35c17c1aedd3b2c42dcfcf8692c596ae3574f425",
+  "completeness_file_sha256": "817aa6de155b78bf524be28e4cb32c1b62cc6854c555b8b64d862313268c2548",
+  "matrix_sha256": "7a6816357761336b13af928a00ffe687edd4a5fa5a490b0b2dba1c22f9327ab0",
+  "matrix_file_sha256": "4d5266ab4dacbde3819e3346f170d50a020bfea22a677e3a885f7d6a63a7f784",
+  "n_complete_27": 221,
+  "n_partial": 32,
+  "n_cells": 6831,
+  "partial": [
+    {
+      "game_id": "2022_02_CIN_DAL",
+      "derived": 26,
+      "missing": 1,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_07_DET_DAL",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_07_HOU_LV",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_07_IND_TEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_08_ARI_MIN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_08_GB_BUF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_08_PIT_PHI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_08_SF_LA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_09_LAC_ATL",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_09_TEN_KC",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_10_CLE_MIA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_10_DAL_GB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_10_DEN_TEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_10_HOU_NYG",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_10_LAC_SF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_10_NO_PIT",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_11_CAR_BAL",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_11_CIN_PIT",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_11_NYJ_NE",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_12_BAL_JAX",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_12_HOU_MIA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_12_LV_SEA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_12_TB_CLE",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_14_CAR_SEA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_14_NE_ARI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_15_IND_MIN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_15_ATL_NO",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_15_NYG_WAS",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_15_PHI_CHI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_15_LA_GB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_18_BAL_CIN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2022_18_NE_BUF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    }
+  ],
+  "label": "RECONSTRUCTED",
+  "fit_label": "RETRO_FIT",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "helper_sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "frozen_before_errors": true,
+  "opened_1ee90fac": false
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "nfl-t5146u-r4-last-played-t2-v1",
+  "status": "STOP_AWAITING_ALEX_SOURCE_SELECTION_PREFLIGHT_GO",
+  "cert_candidate": 0,
+  "reconstruction_run_authorized": false,
+  "new_dev_2020_21_artifact": "not generated",
+  "requires": [
+    "Alex source/selection PREFLIGHT GO",
+    "Cos EXEC release"
+  ],
+  "this_tip_may_do": [
+    "isolated opt-in last-played T2 selector",
+    "focused identity tests",
+    "freeze spec/code/source/identity manifest"
+  ],
+  "this_tip_must_not": [
+    "merge",
+    "deploy",
+    "runtime-config",
+    "paid Odds",
+    "model network",
+    "DB secrets",
+    "protected opening",
+    "2020-21 reconstruction artifact"
+  ]
+}

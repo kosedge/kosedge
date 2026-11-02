@@ -1,0 +1,112 @@
+{
+  "schema_version": "nfl-t5157u-r5-history-id-v1",
+  "r5_history_id": "e6cc6927",
+  "pbp_2013_2019": {
+    "n_reg": 1792,
+    "n_post": 77,
+    "n_unmatched": 0,
+    "n_conflict": 0,
+    "join_how": {
+      "canonical_game_id": 1869
+    },
+    "reg_by_season": {
+      "2013": 256,
+      "2014": 256,
+      "2015": 256,
+      "2016": 256,
+      "2017": 256,
+      "2018": 256,
+      "2019": 256
+    },
+    "post_by_season": {
+      "2013": 11,
+      "2014": 11,
+      "2015": 11,
+      "2016": 11,
+      "2017": 11,
+      "2018": 11,
+      "2019": 11
+    },
+    "n_post_week_le_18": 28,
+    "unmatched_examples": [],
+    "conflict_examples": [],
+    "post_week_le_18_examples": [
+      {
+        "game_id": "2013_18_KC_IND",
+        "season": 2013,
+        "week": 18
+      },
+      {
+        "game_id": "2013_18_NO_PHI",
+        "season": 2013,
+        "week": 18
+      },
+      {
+        "game_id": "2013_18_SD_CIN",
+        "season": 2013,
+        "week": 18
+      },
+      {
+        "game_id": "2013_18_SF_GB",
+        "season": 2013,
+        "week": 18
+      },
+      {
+        "game_id": "2014_18_ARI_CAR",
+        "season": 2014,
+        "week": 18
+      },
+      {
+        "game_id": "2014_18_BAL_PIT",
+        "season": 2014,
+        "week": 18
+      },
+      {
+        "game_id": "2014_18_CIN_IND",
+        "season": 2014,
+        "week": 18
+      },
+      {
+        "game_id": "2014_18_DET_DAL",
+        "season": 2014,
+        "week": 18
+      }
+    ]
+  },
+  "schedule_2020_2021_reg": {
+    "n_reg": 528,
+    "n_post": 0,
+    "n_unmatched": 0,
+    "n_conflict": 0,
+    "join_how": {
+      "canonical_game_id": 528
+    },
+    "reg_by_season": {
+      "2020": 256,
+      "2021": 272
+    },
+    "unmatched_examples": [],
+    "conflict_examples": []
+  },
+  "n_reg": 2320,
+  "n_post": 77,
+  "n_unmatched": 0,
+  "n_conflict": 0,
+  "kickoff_source": "games.csv 4fe1cdd7 (not PBP start_time; start_time is naive)",
+  "score_source": "outcomes 50bda875 score-only",
+  "reg_membership_2013_2019": "PBP explicit season_type=REG",
+  "reg_membership_2020_2021": "schedule_results_2020_2023.csv season_type=REG",
+  "week_le_18_proxy": false,
+  "disclose_not_old_kickoff_only_asof": true,
+  "publication_timestamp_status": "unverified",
+  "observation_timestamp_status": "unverified",
+  "fit_label": "RETRO_FIT",
+  "label": "RECONSTRUCTED",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "production_causal_claim": false,
+  "nfl_green": false,
+  "eval": null,
+  "scoring": null,
+  "market_edge": null,
+  "cert_candidate": 0
+}

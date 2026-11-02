@@ -1,0 +1,78 @@
+{
+  "schema_version": "nfl-t5146u-r4-last-played-t2-v1",
+  "path_id": "R4_LAST_PLAYED_T2_DEV",
+  "experiment": "R4-LAST-PLAYED-DEV",
+  "ticket": "t5146u",
+  "cert_candidate": 0,
+  "eval": null,
+  "scored_look": false,
+  "new_scoring_or_tuning": false,
+  "reconstruction_artifact_generated": false,
+  "opt_in": true,
+  "isolated_from": [
+    "recon_driver exact-week lookup_t2(team, target_week-1)",
+    "helper 7e77c57f formulas",
+    "frozen matrices/forecasts",
+    "closed R2 records",
+    "R3 STOP",
+    "Export KEI"
+  ],
+  "selection": {
+    "rule": "most recent same-season T2 snapshot with rating_week < target_week",
+    "exact_week_minus_one_required": false,
+    "home_and_away": "independent",
+    "w1_or_no_same_season_prior": "refuse",
+    "other_team_fill": "refuse",
+    "other_season_fill": "refuse",
+    "zero_or_default_substitution": "refuse",
+    "skip_newer_nonfinite_to_older_finite": false,
+    "duplicate_at_selected_week": "refuse (DUPLICATE_CONFLICT or AMBIGUOUS_DUPLICATE)",
+    "retain": [
+      "selected_rating_week per side",
+      "exact consumed source-game IDs",
+      "last-five played-game identities in chronological order"
+    ]
+  },
+  "consumed_identities": {
+    "unambiguous": true,
+    "strictly_earlier_than": "target_kickoff_utc minus 60 minutes",
+    "exclude_target": true,
+    "exclude_future": true,
+    "chronological_prior_game_order": true,
+    "invented_eligibility_thresholds": false
+  },
+  "preserved_formulas": [
+    "t1_from_plays",
+    "rolling_5g ROWS 4 PRECEDING AND CURRENT",
+    "t4_from_t2_sides helper.main contract",
+    "rest_days_et",
+    "team_strength_from_record / record_asof"
+  ],
+  "labels": ["RECONSTRUCTED", "RETRO_FIT"],
+  "publication_timestamp_status": "unverified",
+  "observation_timestamp_status": "unverified",
+  "production_causal_claim": false,
+  "realtime_source_availability_claim": false,
+  "step0": {
+    "accepted_equivalent_found": false,
+    "evidence": [
+      "61436fdb recon_driver.py uses lookup_t2(team, week-1); notes 'no last-played fill'",
+      "2021 RECON_SUMMARY n_partial=29 reason='T2 exact rating_week miss or non-finite'",
+      "later R2/R3/Export KEI tips contain no last-played T2 selector"
+    ]
+  },
+  "provenance_gap_2021_partials": {
+    "file": "data/ops/nfl-forecast-builder-t5107u/recon/RECON_SUMMARY_2021_REG_W2W18.json",
+    "file_sha256": "f06c8b90c3a18b75710f077a0a17209bc379e371a121f511a63266a82bc335a3",
+    "n_partial": 29,
+    "reason_only": "T2 exact rating_week miss or non-finite",
+    "missing_fields": [
+      "per-side selected/missing rating_week",
+      "bye flag",
+      "which metric was non-finite",
+      "consumed source-game IDs"
+    ],
+    "do_not_assume_all_byes": true
+  },
+  "stop": "implementation + focused tests + this freeze. No NEW DEV 2020-21 reconstruction artifact until Alex source/selection PREFLIGHT GO + Cos EXEC release."
+}

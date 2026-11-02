@@ -1,0 +1,186 @@
+{
+  "helper_sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "season": 2023,
+  "weeks": "2-18",
+  "n_targets_reconstructed": 256,
+  "n_eligible": 256,
+  "n_excluded": 16,
+  "completeness_sha256": "b2ded70823363d1a8a002824ae4c3d32476640cbffa66814b2ada081f027401c",
+  "matrix_sha256": "dd3593dca5fc4969197a915b69a2b000912bbd2c023972e5f666c233cd923b4a",
+  "matrix_file_sha256": "52b5dd358f96621445eed42cdf06bf1c9f0d257dda2e0d5899f351eab0844644",
+  "n_complete_27": 228,
+  "n_partial": 28,
+  "partial": [
+    {
+      "game_id": "2023_02_BAL_CIN",
+      "derived": 26,
+      "missing": 1,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_06_DET_TB",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_06_SEA_CIN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_06_SF_CLE",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_06_DAL_LAC",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_07_GB_DEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_07_PIT_LA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_08_ATL_TEN",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_08_CIN_SF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_08_HOU_CAR",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_08_LA_DAL",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_08_NYJ_NYG",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_10_DET_LAC",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_10_SF_JAX",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_10_DEN_BUF",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_11_LV_MIA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_11_SEA_LA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_11_PHI_KC",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_12_NE_NYG",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_12_NO_ATL",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_12_TB_IND",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_14_BUF_KC",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_14_DET_CHI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_14_LA_BAL",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_14_MIN_LV",
+      "derived": 11,
+      "missing": 16,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_14_GB_NYG",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_15_SF_ARI",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    },
+    {
+      "game_id": "2023_15_WAS_LA",
+      "derived": 16,
+      "missing": 11,
+      "reason": "T2 exact rating_week miss or non-finite"
+    }
+  ],
+  "n_cells": 6912,
+  "label": "RECONSTRUCTED",
+  "cert_candidate": 0
+}

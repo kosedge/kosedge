@@ -1,0 +1,15 @@
+{
+  "artifact": "build_recon_t4893u.py",
+  "source_pr": 686,
+  "source_tip": "43b5a62233b3d1d03ad2b25f5ec7dc52be29b31b",
+  "source_path": "research/q2s_w7w17_t5044u/gate2/method_7e77c57f/build_recon_t4893u.py",
+  "sha256": "7e77c57f3cc7c1b00527309cdcb556a3f4af8e50b0112bbaedc08ca1049fec64",
+  "companion": "research/q2s_w7w17_t5044u/gate2/rebuild_w7w17.py",
+  "contract_sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+  "stage_b_full_matrix_sha256": "cd9af2858e21fac5247a489051f0cc61b9490cb97ffdec9ac41a31a2d224d810",
+  "stage_b_w7w8_slice_sha256": "3ab291d66a5b5da88daa073413635196e7361ffc9e1e2eafb35c652bedc7c441",
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "do_not_call": ["main", "load_oos_2016_2017"],
+  "do_not_open": ["1ee90fac"]
+}

@@ -23,3 +23,29 @@ apps/web/src/generated
 **/.venv
 *.min.js
 *.min.css
+
+# t5146u/t5149u hashed last-played artifacts. Original 502 JSON/matrix
+# bytes are frozen history (t5149u must not rewrite them).
+data/ops/nfl-t5146u-r4-last-played-dev/
+
+# t5151u hashed cohort-enforcement manifest + accepted identity records.
+# Frozen before verification; prettier must not rewrite ID order / bytes.
+data/ops/nfl-t5151u-cohort-enforcement/
+
+# Immutable published DEV437 / matched72 results (66c3bde1 / 316345fa).
+data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json
+data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json
+
+# t5155u hashed DEV_R5_496 Phase 1 freeze. Prettier must not rewrite IDs / mus.
+data/ops/nfl-t5155u-r5-496-freeze/
+
+# t5155u Phase-2 one-exec receipts. Frozen bytes.
+data/ops/nfl-t5155u-r5-phase2/
+
+# t5155u B1 universe + market intersection + verify receipts. Frozen bytes.
+data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/
+data/ops/nfl-t5155u-r5-phase1/
+data/ops/nfl-t5151u-verify-integrate/
+
+# t5157u R5-HISTORY-ID freeze. Prettier must not rewrite IDs / mus / history lists.
+data/ops/nfl-t5157u-r5-history-id/

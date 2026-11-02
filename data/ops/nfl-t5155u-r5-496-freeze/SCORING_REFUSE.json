@@ -1,0 +1,11 @@
+{
+  "refused": true,
+  "reason": "blocked coverage \u2014 refuse before target-outcome loading",
+  "outcome_loader_reads": 0,
+  "target_labels_loaded": 0,
+  "phase": 1,
+  "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND",
+  "cert_candidate": 0,
+  "eval": null,
+  "scoring": null
+}

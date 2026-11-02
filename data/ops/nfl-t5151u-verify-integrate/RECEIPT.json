@@ -1,0 +1,1042 @@
+{
+  "schema_version": "nfl-t5155u-verify-integrate-receipt-v1",
+  "ticket": "t5155u",
+  "package": "C_VERIFY_INTEGRATE_R5_PHASE1",
+  "cert_candidate": 0,
+  "draft": true,
+  "verified": false,
+  "status": "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT",
+  "stop": "STOP_AWAITING_ALEX_INDEPENDENT_RO",
+  "self_accept": false,
+  "nfl_green": false,
+  "real_eval_executed": false,
+  "owner_clear_sha8": "d6aa1ef5",
+  "owner_amend_sha8": "cd253f7a",
+  "cos_order_b_sha8": "d821fe61",
+  "cos_order_return_sha8": "42b6e832",
+  "cos_accept_scoped_sha8": "96908853",
+  "alex_return_sha8": "7057e5a9",
+  "alex_return_accepted_sha8": "ee23cc57",
+  "owner_clear_t5155u_sha8": "659cd7d9",
+  "cos_order_t5155u_sha8": "3e14602b",
+  "cos_accept_700_sha8": "4b23584a",
+  "alex_700_sha8": "f4147e76",
+  "closed_700_tip": "12ccc482db54dd53bc6d79cea5f4af01c5540950",
+  "worker_a_tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+  "worker_a_stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+  "worker_a_forecast_freeze": {
+    "ok": true,
+    "status": "PINNED",
+    "tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+    "stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+    "pr": 702,
+    "branch": "cursor/t5155u-r5-496-freeze-c279",
+    "command": "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+    "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+    "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+    "n_forecasts": 496,
+    "n_if_finite": 496,
+    "n_q2_hold": 496,
+    "n_q2_finite": 0,
+    "n_candidate_finite": 0,
+    "q2": {
+      "status": "HOLD",
+      "leg": "HOLD",
+      "hold_q2": true,
+      "n_hold": 496,
+      "candidate": "HOLD",
+      "invented_q2": false,
+      "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+      "years_unproven": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ],
+      "reg_unproven": true
+    },
+    "common437": {
+      "n_common": 437,
+      "n_replayed": 437,
+      "n_blocker": 0
+    },
+    "phase2_positive_path": {
+      "status": "READINESS_ONLY",
+      "executed": false,
+      "cos_bind": false,
+      "score_flag": false,
+      "target_scoring_loader": false,
+      "one_dev_diagnostic": false,
+      "invoke_outcome_after_gates_available": true,
+      "invoke_outcome_after_gates": false,
+      "requires": [
+        "Alex source/numerical-identity PREFLIGHT GO",
+        "Cos bind / EXEC release for target scoring loader"
+      ]
+    },
+    "scoring_refuse": {
+      "refused": true,
+      "outcome_loader_reads": 0,
+      "target_labels_loaded": 0,
+      "coverage_blocked": true,
+      "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND"
+    },
+    "cos_bind": false,
+    "scoring": null,
+    "eval": null,
+    "bytes_verified": {
+      "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+      "q2_history_freeze": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966",
+      "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+      "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
+      "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+    }
+  },
+  "q2_hold": {
+    "status": "HOLD",
+    "leg": "HOLD",
+    "hold_q2": true,
+    "n_hold": 496,
+    "candidate": "HOLD",
+    "invented_q2": false,
+    "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+    "years_unproven": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019
+    ],
+    "reg_unproven": true
+  },
+  "phase2_positive_path": {
+    "status": "READINESS_ONLY",
+    "executed": false,
+    "cos_bind": false,
+    "score_flag": false,
+    "target_scoring_loader": false,
+    "one_dev_diagnostic": false,
+    "invoke_outcome_after_gates_available": true,
+    "invoke_outcome_after_gates": false,
+    "requires": [
+      "Alex source/numerical-identity PREFLIGHT GO",
+      "Cos bind / EXEC release for target scoring loader"
+    ]
+  },
+  "phase2_one_exec": {
+    "status": "CHECKS_PASSED_AWAITING_ALEX_RE_PREFLIGHT",
+    "outcome_loader_reads": 0,
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "cos_bind": false,
+    "score_flag": false,
+    "scored": null
+  },
+  "package_a_tip": "42ff285cc1be2459512af4761651ba6dfe17dc75",
+  "package_a_stamp": "f7ec09ee2ffcce7b130c9b858304bbe8006a4428",
+  "partial_plumbing_tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
+  "partial_plumbing_stamp": "bad2049446168f009b54b89f45d522fc803a4d7f",
+  "partial_plumbing_not_verified": true,
+  "r4_496_accepted_tip": "bc1b62fc13a1c16ba1e39ccce39fb60180dc565e",
+  "alex_pass_ro": "274cf246",
+  "matched72_source_tip": "316345fae6631fe2d357e34de0417f7a57916e3f",
+  "command": "python3 scripts/nfl/run_nfl_t5151u_verify_integrate.py",
+  "receipt_path": "data/ops/nfl-t5151u-verify-integrate/RECEIPT.json",
+  "profiles": {
+    "FEATURE_RECON_REG496": "FEATURE_RECON_REG496",
+    "DEV_IF437": "DEV_IF437",
+    "DEV_MARKET72": "DEV_MARKET72"
+  },
+  "hashes": {
+    "code": {
+      "sha256": "1abceb10c4a8955be12257dcaf294b72f9182dd1cb5649f4603c970e6b13f89f",
+      "files": [
+        {
+          "path": "scripts/nfl/freeze_nfl_t5155u_market_arm.py",
+          "sha256": "d7c9519919a3001c9397d1fd21ebfe41f843d110b71107e4f1dc1295be891d4a"
+        },
+        {
+          "path": "scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+          "sha256": "fd9a2437c9857d50897f4b0319784f3726f8d9003a374dc4041779bd3ab409b8"
+        },
+        {
+          "path": "scripts/nfl/run_nfl_t5151u_verify_integrate.py",
+          "sha256": "345d8b231f0e5b8540c0e06123205997ce3c5ae2ad85b3d144808f764bbae868"
+        },
+        {
+          "path": "scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py",
+          "sha256": "8edea44d2fe457a7a3daa2703701a0eb71de2a4564cc541606ddc52759c0818a"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/cohort_enforcement.py",
+          "sha256": "488c96d8441a643803024b418854447442096abc11ea1a907e4f9426cbb8cd28"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/eval_result_contract.py",
+          "sha256": "62f6a728ff33b21f25b21a51a303539cbfa116e11ad7d728e16fcbc6abbb7bd6"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/market_arm_freeze.py",
+          "sha256": "c965739bf3812495edec0c42f53a13762054f6a0bc81837f2bb394c2dfef5f0b"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/r5_496_freeze.py",
+          "sha256": "2f8b9a99044fa0475ba62b3288555ecd20bc7b65089f9cd31d3b9cf53d095608"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/r5_phase2_one_exec.py",
+          "sha256": "e82b44aa6f4a2d2115c6f72fff958cd92fb4ad31cb66a8f5c16ffa6fad1c7d95"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/verify_integrate.py",
+          "sha256": "85d5220554b135a837db69087a91238c01b150d8652936e5c0220fb4bda941e0"
+        }
+      ]
+    },
+    "spec": {
+      "sha256": "87798bbd95b3fe823515d7caef84c25d49abd4ecddb5656c0058083fa52c301e",
+      "files": [
+        {
+          "path": "ops/CURSOR_ADDENDUM_t5151u_NUMERICAL_INTEGRATION_v1.md",
+          "sha256": "14c9d09190c5bcc3b777d5c6e2c571322c10800024a909d4b18a7c0445b5c019"
+        },
+        {
+          "path": "ops/CURSOR_ADDENDUM_t5155u_R5_496_FREEZE_v1.md",
+          "sha256": "870860c915e0d6b5ff0d00c796484887bac0d3ce209377753d5ecfc18e9bb3c7"
+        },
+        {
+          "path": "ops/CURSOR_ADDENDUM_t5155u_R5_PHASE1_v1.md",
+          "sha256": "23b1d84d959ad74223eb5049f8cd5c661a8b405167a39d60991c9bce5d490480"
+        }
+      ]
+    },
+    "input": {
+      "sha256": "6675e4c982524580bffc681774beece4f5780d683729a010b8f78451a79bed04",
+      "files": [
+        {
+          "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
+          "sha256": "66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50"
+        },
+        {
+          "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json",
+          "sha256": "88d63eb7f6b09e967fcf60122f525c2873072aaada93bb0dab3d8c3ff17fd9ea"
+        },
+        {
+          "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
+          "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+        },
+        {
+          "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021.json",
+          "sha256": "e2f3fab5255430aa31232c7aa3b88e9001461595ef79a00fb3f1e505e51e23b9"
+        },
+        {
+          "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json",
+          "sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+        },
+        {
+          "path": "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
+          "sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6"
+        },
+        {
+          "path": "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json",
+          "sha256": "c61ca6948ecfd1ea79f785e63117cc3399725fc893be2ea398b4b91ece42bb14"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+          "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+          "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+          "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+          "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+          "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
+        }
+      ]
+    },
+    "artifacts": [
+      {
+        "name": "FEATURE_RECON_REG496",
+        "ok": true,
+        "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json",
+        "sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+      },
+      {
+        "name": "ORIGINAL_502_HISTORICAL",
+        "ok": true,
+        "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021.json",
+        "sha256": "e2f3fab5255430aa31232c7aa3b88e9001461595ef79a00fb3f1e505e51e23b9"
+      },
+      {
+        "name": "DEV437_RESULT_66c3bde1",
+        "ok": true,
+        "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
+        "sha256": "66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50"
+      },
+      {
+        "name": "MATCHED72_RESULT_316345fa",
+        "ok": true,
+        "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json",
+        "sha256": "88d63eb7f6b09e967fcf60122f525c2873072aaada93bb0dab3d8c3ff17fd9ea"
+      },
+      {
+        "name": "B1_UNIVERSE_ADMISSIBLE_QUOTES",
+        "ok": true,
+        "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
+        "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+      },
+      {
+        "name": "WORKER_A_FORECASTS_DEV_R5_496",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+        "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+      },
+      {
+        "name": "WORKER_A_FREEZE_MANIFEST",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+        "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+      },
+      {
+        "name": "WORKER_A_Q2_HISTORY_FREEZE",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+        "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
+      },
+      {
+        "name": "WORKER_A_COMPARE_437",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+        "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+      },
+      {
+        "name": "WORKER_A_PHASE2_POSITIVE_PATH",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+        "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+      },
+      {
+        "name": "TASK_MANIFEST",
+        "ok": true,
+        "path": "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json",
+        "sha256": "c61ca6948ecfd1ea79f785e63117cc3399725fc893be2ea398b4b91ece42bb14"
+      },
+      {
+        "name": "ACCEPTED_DEV_MARKET72",
+        "ok": true,
+        "path": "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
+        "sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6"
+      }
+    ],
+    "profiles": {
+      "FEATURE_RECON_REG496": {
+        "cohort_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+        "joined_row_sha256": "c3be6609a2b4c18659437ccd1dd9dcf73c6cd29230f9ebb4795a78ff3b8f4e23",
+        "n": 496
+      },
+      "DEV_IF437": {
+        "cohort_sha256": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+        "joined_row_sha256": "53e4112f1e8a673320c16aa89bd30a67a10887ff55c86db7fd31db531cabdd57",
+        "n": 437
+      },
+      "DEV_MARKET72": {
+        "cohort_sha256": "bcf90863d8b5ffccd67c1d69e058e9174a9cdaa2a701aff9134a9ef6d9ab62b2",
+        "joined_row_sha256": "ba4e1655119546b219bfbabc84cc1e4366741601c0cef43ea4636932adf92cbd",
+        "n": 72
+      }
+    },
+    "market_intersection": {
+      "n": 96,
+      "bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+      "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+      "b1_universe_sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+    },
+    "worker_a_forecast_freeze": {
+      "status": "PINNED",
+      "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+      "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+      "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+      "n_if_finite": 496,
+      "q2_hold": 496,
+      "n_candidate_finite": 0,
+      "common437_replay": "437/437",
+      "n_blocker": 0
+    },
+    "output_sha256": "4ac7ecd18a53127ac5a13964af6c8e4b6c5d9a548f8da6e524a422e33018ff2e"
+  },
+  "pinned_artifacts": {
+    "ok": true,
+    "checks": [
+      {
+        "name": "FEATURE_RECON_REG496",
+        "ok": true,
+        "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json",
+        "sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+      },
+      {
+        "name": "ORIGINAL_502_HISTORICAL",
+        "ok": true,
+        "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021.json",
+        "sha256": "e2f3fab5255430aa31232c7aa3b88e9001461595ef79a00fb3f1e505e51e23b9"
+      },
+      {
+        "name": "DEV437_RESULT_66c3bde1",
+        "ok": true,
+        "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
+        "sha256": "66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50"
+      },
+      {
+        "name": "MATCHED72_RESULT_316345fa",
+        "ok": true,
+        "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json",
+        "sha256": "88d63eb7f6b09e967fcf60122f525c2873072aaada93bb0dab3d8c3ff17fd9ea"
+      },
+      {
+        "name": "B1_UNIVERSE_ADMISSIBLE_QUOTES",
+        "ok": true,
+        "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
+        "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+      },
+      {
+        "name": "WORKER_A_FORECASTS_DEV_R5_496",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+        "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+      },
+      {
+        "name": "WORKER_A_FREEZE_MANIFEST",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+        "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+      },
+      {
+        "name": "WORKER_A_Q2_HISTORY_FREEZE",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+        "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
+      },
+      {
+        "name": "WORKER_A_COMPARE_437",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+        "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+      },
+      {
+        "name": "WORKER_A_PHASE2_POSITIVE_PATH",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+        "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+      },
+      {
+        "name": "TASK_MANIFEST",
+        "ok": true,
+        "path": "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json",
+        "sha256": "c61ca6948ecfd1ea79f785e63117cc3399725fc893be2ea398b4b91ece42bb14"
+      },
+      {
+        "name": "ACCEPTED_DEV_MARKET72",
+        "ok": true,
+        "path": "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
+        "sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6"
+      }
+    ],
+    "errors": [],
+    "cohort_module": true,
+    "cohort_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640"
+  },
+  "profile_results": {
+    "FEATURE_RECON_REG496": {
+      "ok": true,
+      "profile": "FEATURE_RECON_REG496",
+      "feature_gate": {
+        "ok": true,
+        "gate": "before_feature_output_finalization",
+        "profile": "FEATURE_RECON_REG496",
+        "n": 496,
+        "n_by_season": {
+          "2020": 240,
+          "2021": 256
+        },
+        "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+        "limitations": {
+          "publication_timestamp_status": "unverified",
+          "observation_timestamp_status": "unverified",
+          "fit_label": "RETRO_FIT",
+          "label": "RECONSTRUCTED",
+          "production_causal_claim": false,
+          "nfl_green": false,
+          "eval": null,
+          "cert_candidate": 0
+        },
+        "cert_candidate": 0
+      },
+      "outcome_gate": {
+        "ok": true,
+        "gate": "before_target_outcome_loading",
+        "profile": "FEATURE_RECON_REG496",
+        "n": 496,
+        "n_by_season": {
+          "2020": 240,
+          "2021": 256
+        },
+        "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+        "limitations": {
+          "publication_timestamp_status": "unverified",
+          "observation_timestamp_status": "unverified",
+          "fit_label": "RETRO_FIT",
+          "label": "RECONSTRUCTED",
+          "production_causal_claim": false,
+          "nfl_green": false,
+          "eval": null,
+          "cert_candidate": 0
+        },
+        "cert_candidate": 0,
+        "outcome_loader_invoked": false
+      },
+      "numerical": {
+        "ok": true,
+        "profile": "FEATURE_RECON_REG496",
+        "n": 496,
+        "n_by_season": {
+          "2020": 240,
+          "2021": 256
+        },
+        "invented_metrics": false,
+        "w18_2021_retained": 16,
+        "joined_row_sha256": "c3be6609a2b4c18659437ccd1dd9dcf73c6cd29230f9ebb4795a78ff3b8f4e23"
+      },
+      "outcome_loader_reads": 0,
+      "outcome_loader_invoked_after_gates": false,
+      "real_eval_executed": false,
+      "cert_candidate": 0,
+      "limitations": {
+        "publication_timestamp_status": "unverified",
+        "observation_timestamp_status": "unverified",
+        "fit_label": "RETRO_FIT",
+        "label": "RECONSTRUCTED",
+        "production_causal_claim": false,
+        "nfl_green": false,
+        "eval": null,
+        "real_eval_executed": false,
+        "cert_candidate": 0,
+        "self_accept": false,
+        "partial_plumbing_only": {
+          "tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
+          "stamp": "bad2049446168f009b54b89f45d522fc803a4d7f",
+          "not_integrated_verified": true
+        }
+      }
+    },
+    "DEV_IF437": {
+      "ok": true,
+      "profile": "DEV_IF437",
+      "feature_gate": {
+        "ok": true,
+        "gate": "before_feature_output_finalization",
+        "profile": "DEV_IF437",
+        "n": 437,
+        "n_by_season": {
+          "2020": 210,
+          "2021": 227
+        },
+        "identity_sha256": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+        "limitations": {
+          "publication_timestamp_status": "unverified",
+          "observation_timestamp_status": "unverified",
+          "fit_label": "RETRO_FIT",
+          "label": "RECONSTRUCTED",
+          "production_causal_claim": false,
+          "nfl_green": false,
+          "eval": null,
+          "cert_candidate": 0
+        },
+        "cert_candidate": 0
+      },
+      "outcome_gate": {
+        "ok": true,
+        "gate": "before_target_outcome_loading",
+        "profile": "DEV_IF437",
+        "n": 437,
+        "n_by_season": {
+          "2020": 210,
+          "2021": 227
+        },
+        "identity_sha256": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+        "limitations": {
+          "publication_timestamp_status": "unverified",
+          "observation_timestamp_status": "unverified",
+          "fit_label": "RETRO_FIT",
+          "label": "RECONSTRUCTED",
+          "production_causal_claim": false,
+          "nfl_green": false,
+          "eval": null,
+          "cert_candidate": 0
+        },
+        "cert_candidate": 0,
+        "outcome_loader_invoked": false
+      },
+      "numerical": {
+        "ok": true,
+        "profile": "DEV_IF437",
+        "n": 437,
+        "n_by_season": {
+          "2020": 210,
+          "2021": 227
+        },
+        "joined_row_sha256": "53e4112f1e8a673320c16aa89bd30a67a10887ff55c86db7fd31db531cabdd57",
+        "market_unavailable": true,
+        "cannot_satisfy_profile": "DEV_MARKET72"
+      },
+      "outcome_loader_reads": 0,
+      "outcome_loader_invoked_after_gates": false,
+      "real_eval_executed": false,
+      "cert_candidate": 0,
+      "limitations": {
+        "publication_timestamp_status": "unverified",
+        "observation_timestamp_status": "unverified",
+        "fit_label": "RETRO_FIT",
+        "label": "RECONSTRUCTED",
+        "production_causal_claim": false,
+        "nfl_green": false,
+        "eval": null,
+        "real_eval_executed": false,
+        "cert_candidate": 0,
+        "self_accept": false,
+        "partial_plumbing_only": {
+          "tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
+          "stamp": "bad2049446168f009b54b89f45d522fc803a4d7f",
+          "not_integrated_verified": true
+        }
+      },
+      "n_by_season": {
+        "2020": 210,
+        "2021": 227
+      },
+      "joined_row_sha256": "53e4112f1e8a673320c16aa89bd30a67a10887ff55c86db7fd31db531cabdd57"
+    },
+    "DEV_MARKET72": {
+      "ok": true,
+      "profile": "DEV_MARKET72",
+      "feature_gate": {
+        "ok": true,
+        "gate": "before_feature_output_finalization",
+        "profile": "DEV_MARKET72",
+        "n": 72,
+        "n_by_season": {
+          "2020": 35,
+          "2021": 37
+        },
+        "identity_sha256": "bcf90863d8b5ffccd67c1d69e058e9174a9cdaa2a701aff9134a9ef6d9ab62b2",
+        "limitations": {
+          "publication_timestamp_status": "unverified",
+          "observation_timestamp_status": "unverified",
+          "fit_label": "RETRO_FIT",
+          "label": "RECONSTRUCTED",
+          "production_causal_claim": false,
+          "nfl_green": false,
+          "eval": null,
+          "cert_candidate": 0
+        },
+        "cert_candidate": 0
+      },
+      "outcome_gate": {
+        "ok": true,
+        "gate": "before_target_outcome_loading",
+        "profile": "DEV_MARKET72",
+        "n": 72,
+        "n_by_season": {
+          "2020": 35,
+          "2021": 37
+        },
+        "identity_sha256": "bcf90863d8b5ffccd67c1d69e058e9174a9cdaa2a701aff9134a9ef6d9ab62b2",
+        "limitations": {
+          "publication_timestamp_status": "unverified",
+          "observation_timestamp_status": "unverified",
+          "fit_label": "RETRO_FIT",
+          "label": "RECONSTRUCTED",
+          "production_causal_claim": false,
+          "nfl_green": false,
+          "eval": null,
+          "cert_candidate": 0
+        },
+        "cert_candidate": 0,
+        "outcome_loader_invoked": false
+      },
+      "numerical": {
+        "ok": true,
+        "profile": "DEV_MARKET72",
+        "n": 72,
+        "n_by_season": {
+          "2020": 35,
+          "2021": 37
+        },
+        "joined_row_sha256": "ba4e1655119546b219bfbabc84cc1e4366741601c0cef43ea4636932adf92cbd"
+      },
+      "outcome_loader_reads": 0,
+      "outcome_loader_invoked_after_gates": false,
+      "real_eval_executed": false,
+      "cert_candidate": 0,
+      "limitations": {
+        "publication_timestamp_status": "unverified",
+        "observation_timestamp_status": "unverified",
+        "fit_label": "RETRO_FIT",
+        "label": "RECONSTRUCTED",
+        "production_causal_claim": false,
+        "nfl_green": false,
+        "eval": null,
+        "real_eval_executed": false,
+        "cert_candidate": 0,
+        "self_accept": false,
+        "partial_plumbing_only": {
+          "tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
+          "stamp": "bad2049446168f009b54b89f45d522fc803a4d7f",
+          "not_integrated_verified": true
+        }
+      },
+      "joined_row_sha256": "ba4e1655119546b219bfbabc84cc1e4366741601c0cef43ea4636932adf92cbd",
+      "n_by_season": {
+        "2020": 35,
+        "2021": 37
+      }
+    }
+  },
+  "checks": [
+    {
+      "name": "FEATURE_RECON_REG496",
+      "ok": true,
+      "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json",
+      "sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+    },
+    {
+      "name": "ORIGINAL_502_HISTORICAL",
+      "ok": true,
+      "path": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021.json",
+      "sha256": "e2f3fab5255430aa31232c7aa3b88e9001461595ef79a00fb3f1e505e51e23b9"
+    },
+    {
+      "name": "DEV437_RESULT_66c3bde1",
+      "ok": true,
+      "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
+      "sha256": "66c3bde18fd6b1a4766f1001403deb68b9f625ccd00372f280f187ef95a54e50"
+    },
+    {
+      "name": "MATCHED72_RESULT_316345fa",
+      "ok": true,
+      "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json",
+      "sha256": "88d63eb7f6b09e967fcf60122f525c2873072aaada93bb0dab3d8c3ff17fd9ea"
+    },
+    {
+      "name": "B1_UNIVERSE_ADMISSIBLE_QUOTES",
+      "ok": true,
+      "path": "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl",
+      "sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+    },
+    {
+      "name": "WORKER_A_FORECASTS_DEV_R5_496",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json",
+      "sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407"
+    },
+    {
+      "name": "WORKER_A_FREEZE_MANIFEST",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
+      "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+    },
+    {
+      "name": "WORKER_A_Q2_HISTORY_FREEZE",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+      "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
+    },
+    {
+      "name": "WORKER_A_COMPARE_437",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json",
+      "sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384"
+    },
+    {
+      "name": "WORKER_A_PHASE2_POSITIVE_PATH",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
+      "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+    },
+    {
+      "name": "TASK_MANIFEST",
+      "ok": true,
+      "path": "data/ops/nfl-t5151u-cohort-enforcement/TASK_MANIFEST.json",
+      "sha256": "c61ca6948ecfd1ea79f785e63117cc3399725fc893be2ea398b4b91ece42bb14"
+    },
+    {
+      "name": "ACCEPTED_DEV_MARKET72",
+      "ok": true,
+      "path": "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
+      "sha256": "9f754b0e1c7680a0051b119ec59e2f0603236be447c483491b90a70af61b81e6"
+    }
+  ],
+  "errors": [],
+  "tests": {
+    "ok": true,
+    "commands": [
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5151u_numerical_output_contract.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "....................                                                     [100%]\n20 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5151u_verify_integrate.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "..................                                                       [100%]\n18 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5149u_last_played_reg_cohort.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "........                                                                 [100%]\n8 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_n1_output_hash.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "...                                                                      [100%]\n3 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "..........                                                               [100%]\n10 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": ".............                                                            [100%]\n13 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_combine.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "...                                                                      [100%]\n3 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "......                                                                   [100%]\n6 passed",
+        "stderr_tail": ""
+      },
+      {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "............                                                             [100%]\n12 passed",
+        "stderr_tail": ""
+      }
+    ],
+    "tests": [
+      "services/model-service/tests/test_nfl_t5151u_numerical_output_contract.py",
+      "services/model-service/tests/test_nfl_t5151u_verify_integrate.py",
+      "services/model-service/tests/test_nfl_t5149u_last_played_reg_cohort.py",
+      "services/model-service/tests/test_nfl_t5155u_n1_output_hash.py",
+      "services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py",
+      "services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py",
+      "services/model-service/tests/test_nfl_t5155u_r5_combine.py",
+      "services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py",
+      "services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py"
+    ],
+    "interpreter_excluded_from_output_hash": true,
+    "timing_excluded_from_output_hash": true
+  },
+  "market_arm": {
+    "status": "FROZEN",
+    "ok": true,
+    "n": 96,
+    "n_by_season": {
+      "2020": 41,
+      "2021": 55
+    },
+    "missing_n": 400,
+    "one_book_n": 5,
+    "two_book_n": 91,
+    "bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+    "b1_universe_sha256": "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6",
+    "r2c_hold_unchanged": true,
+    "worker_a_forecast_freeze": {
+      "ok": true,
+      "status": "PINNED",
+      "tip": "661df712a804bc1d9662f77008af28f8418cd0a1",
+      "stamp": "3fbf5999360433ca46cbe77688daedaedd6a9c9b",
+      "pr": 702,
+      "branch": "cursor/t5155u-r5-496-freeze-c279",
+      "command": "PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+      "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+      "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+      "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+      "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+      "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+      "n_forecasts": 496,
+      "n_if_finite": 496,
+      "n_q2_hold": 496,
+      "n_q2_finite": 0,
+      "n_candidate_finite": 0,
+      "q2": {
+        "status": "HOLD",
+        "leg": "HOLD",
+        "hold_q2": true,
+        "n_hold": 496,
+        "candidate": "HOLD",
+        "invented_q2": false,
+        "reason": "Q2 prior/carry requires canonically identified REG score history for 2013\u20132019. Those years are UNPROVEN. HOLD Q2 leg. IF pipeline continues. No invented history. Disclose: this is not the old kickoff-only as-of.",
+        "years_unproven": [
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "reg_unproven": true
+      },
+      "common437": {
+        "n_common": 437,
+        "n_replayed": 437,
+        "n_blocker": 0
+      },
+      "phase2_positive_path": {
+        "status": "READINESS_ONLY",
+        "executed": false,
+        "cos_bind": false,
+        "score_flag": false,
+        "target_scoring_loader": false,
+        "one_dev_diagnostic": false,
+        "invoke_outcome_after_gates_available": true,
+        "invoke_outcome_after_gates": false,
+        "requires": [
+          "Alex source/numerical-identity PREFLIGHT GO",
+          "Cos bind / EXEC release for target scoring loader"
+        ]
+      },
+      "scoring_refuse": {
+        "refused": true,
+        "outcome_loader_reads": 0,
+        "target_labels_loaded": 0,
+        "coverage_blocked": true,
+        "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND"
+      },
+      "cos_bind": false,
+      "scoring": null,
+      "eval": null,
+      "bytes_verified": {
+        "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+        "freeze_manifest": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+        "q2_history_freeze": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966",
+        "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
+        "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
+        "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
+      }
+    },
+    "scoring": null,
+    "eval": null
+  },
+  "interval_contract": {
+    "B": 10000,
+    "seed": 20261101,
+    "level": 0.95,
+    "statistic": "MEAN signed paired absolute-loss difference",
+    "rerun_intervals": false
+  },
+  "evidence_limits": {
+    "publication_timestamp_status": "unverified",
+    "observation_timestamp_status": "unverified",
+    "fit_label": "RETRO_FIT",
+    "label": "RECONSTRUCTED",
+    "production_causal_claim": false,
+    "nfl_green": false,
+    "eval": null,
+    "real_eval_executed": false,
+    "cert_candidate": 0,
+    "self_accept": false,
+    "partial_plumbing_only": {
+      "tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
+      "stamp": "bad2049446168f009b54b89f45d522fc803a4d7f",
+      "not_integrated_verified": true
+    }
+  },
+  "limitations": {
+    "publication_timestamp_status": "unverified",
+    "observation_timestamp_status": "unverified",
+    "fit_label": "RETRO_FIT",
+    "label": "RECONSTRUCTED",
+    "production_causal_claim": false,
+    "nfl_green": false,
+    "eval": null,
+    "real_eval_executed": false,
+    "cert_candidate": 0,
+    "self_accept": false,
+    "partial_plumbing_only": {
+      "tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
+      "stamp": "bad2049446168f009b54b89f45d522fc803a4d7f",
+      "not_integrated_verified": true
+    }
+  },
+  "runtime": {
+    "interpreter": "python3",
+    "tip_sha": "a52b53ec84798cf710a8922a252c1eeacb65d87f",
+    "pytest_elapsed": [
+      "0.51",
+      "0.97",
+      "2.10",
+      "0.39",
+      "0.54",
+      "1.99",
+      "0.17",
+      "1.35",
+      "0.32"
+    ]
+  },
+  "side_metadata": {
+    "pytest_elapsed": [
+      "0.51",
+      "0.97",
+      "2.10",
+      "0.39",
+      "0.54",
+      "1.99",
+      "0.17",
+      "1.35",
+      "0.32"
+    ],
+    "pytest_elapsed_semantic": false
+  },
+  "tip_sha": "a52b53ec84798cf710a8922a252c1eeacb65d87f",
+  "interpreter": "python3"
+}

@@ -1,0 +1,319 @@
+{
+  "schema_version": "nfl-t5115u-identity-resolution-v1",
+  "label": "RESEARCH_CONSUMED_RETRO",
+  "cert_candidate": 0,
+  "games_pin": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+  "pbp_2020_publisher_sha256": "a7700b519197ec563aabf24ce7791896d8803f67cb73a45fcad0e8ae7db7245f",
+  "schedule_extract_sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+  "rule": {
+    "pin_filter": "games.csv 4fe1cdd7 season in 2020\u201323 AND week 1\u201318 (load_games_identity)",
+    "declared_reg_universe": "owned PBP REG game_id count (INPUT_BINDINGS n_reg_games)",
+    "do_not": [
+      "treat pin extras as extra NFL REG games",
+      "rewrite declared universe to pass coverage",
+      "drop excluded/missing rows"
+    ]
+  },
+  "seasons": {
+    "2020": {
+      "declared_reg": 256,
+      "pin_week_1_18": 262,
+      "pbp_reg": 256,
+      "pbp_minus_pin": 0,
+      "pin_minus_pbp": 6,
+      "duplicate_game_id": 0,
+      "duplicate_week_home_away": 0,
+      "recon_n_identity": 262,
+      "recon_eligible": 246,
+      "recon_excluded": 16,
+      "recon_complete_27": 216,
+      "recon_partial": 30,
+      "declared_eligible_reg": 240,
+      "declared_complete_reg": 210,
+      "freeze_dev_2020": 216,
+      "freeze_2020_includes_wildcard_w18": 6
+    },
+    "2021": {
+      "declared_reg": 272,
+      "pin_week_1_18": 272,
+      "pbp_reg": 272,
+      "pin_minus_pbp": 0,
+      "recon_eligible": 256,
+      "recon_excluded": 16,
+      "recon_complete_27": 227,
+      "recon_partial": 29
+    },
+    "2022": {
+      "declared_reg": 271,
+      "pin_week_1_18": 271,
+      "pbp_reg": 271,
+      "pin_minus_pbp": 0,
+      "recon_eligible": 253,
+      "recon_excluded": 18,
+      "recon_complete_27": 221,
+      "recon_partial": 32,
+      "note": "2022 W17 BUF-CIN cancelled; PBP REG 271 is the declared universe"
+    },
+    "2023": {
+      "declared_reg": 272,
+      "pin_week_1_18": 272,
+      "pbp_reg": 272,
+      "pin_minus_pbp": 0,
+      "recon_eligible": 256,
+      "recon_excluded": 16,
+      "recon_complete_27": 228,
+      "recon_partial": 28
+    }
+  },
+  "2020_week18_wildcard": {
+    "classification": "NON_REG_WILDCARD",
+    "season_type": "POST (Wild Card, 2020-21 NFL playoffs)",
+    "reason": "2020 REG ended week 17 (256 games). games.csv week=18 rows are Jan 9\u201311 2021 Wild Card. Pin filter week<=18 admitted them. Not duplicate REG identities; CLE@PIT and LAR@SEA also played in 2020 REG at different weeks.",
+    "preserved": true,
+    "counted_as_extra_reg": false,
+    "in_eval_metric_cohort": false,
+    "in_dev_freeze": true,
+    "rows": [
+      {
+        "game_id": "2020_18_IND_BUF",
+        "season": 2020,
+        "week": 18,
+        "home": "BUF",
+        "away": "IND",
+        "kickoff_utc": "2021-01-09T18:05:00Z",
+        "nflverse_gameday": "2021-01-09",
+        "nflverse_join": "ok"
+      },
+      {
+        "game_id": "2020_18_LA_SEA",
+        "season": 2020,
+        "week": 18,
+        "home": "SEA",
+        "away": "LAR",
+        "kickoff_utc": "2021-01-09T21:40:00Z",
+        "nflverse_gameday": "2021-01-09",
+        "nflverse_join": "ok"
+      },
+      {
+        "game_id": "2020_18_TB_WAS",
+        "season": 2020,
+        "week": 18,
+        "home": "WSH",
+        "away": "TB",
+        "kickoff_utc": "2021-01-10T01:15:00Z",
+        "nflverse_gameday": "2021-01-09",
+        "nflverse_join": "ok"
+      },
+      {
+        "game_id": "2020_18_BAL_TEN",
+        "season": 2020,
+        "week": 18,
+        "home": "TEN",
+        "away": "BAL",
+        "kickoff_utc": "2021-01-10T18:05:00Z",
+        "nflverse_gameday": "2021-01-10",
+        "nflverse_join": "ok"
+      },
+      {
+        "game_id": "2020_18_CHI_NO",
+        "season": 2020,
+        "week": 18,
+        "home": "NO",
+        "away": "CHI",
+        "kickoff_utc": "2021-01-10T21:40:00Z",
+        "nflverse_gameday": "2021-01-10",
+        "nflverse_join": "ok"
+      },
+      {
+        "game_id": "2020_18_CLE_PIT",
+        "season": 2020,
+        "week": 18,
+        "home": "PIT",
+        "away": "CLE",
+        "kickoff_utc": "2021-01-11T01:15:00Z",
+        "nflverse_gameday": "2021-01-10",
+        "nflverse_join": "ok"
+      }
+    ],
+    "game_ids": [
+      "2020_18_BAL_TEN",
+      "2020_18_CHI_NO",
+      "2020_18_CLE_PIT",
+      "2020_18_IND_BUF",
+      "2020_18_LA_SEA",
+      "2020_18_TB_WAS"
+    ],
+    "cohort_sha256": "93579246b2a5089e3979ff7c26d4d2480e9c3b53971933bb281f53b715c2c4fd"
+  },
+  "2020_w1_excluded_preserved": [
+    {
+      "game_id": "2020_01_HOU_KC",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_ARI_SF",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_CHI_DET",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_CLE_BAL",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_DAL_LA",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_GB_MIN",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_IND_JAX",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_LAC_CIN",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_LV_CAR",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_MIA_NE",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_NYJ_BUF",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_PHI_WAS",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_SEA_ATL",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_TB_NO",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_PIT_NYG",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    },
+    {
+      "game_id": "2020_01_TEN_DEN",
+      "week": 1,
+      "reasons": [
+        "W1_NO_PRIOR: rating_week=0 / T5 0-0 refused / no last-played fill"
+      ]
+    }
+  ],
+  "g5_hold_declared_reg": {
+    "hold_threshold": 0.3,
+    "any_season_hold": false,
+    "seasons": [
+      {
+        "declared_n": 256,
+        "excluded_n": 46,
+        "exclusion_rate": 0.1796875,
+        "hold_threshold": 0.3,
+        "hold": false,
+        "season": 2020,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 262,
+        "pin_minus_declared": 6
+      },
+      {
+        "declared_n": 272,
+        "excluded_n": 45,
+        "exclusion_rate": 0.16544117647058823,
+        "hold_threshold": 0.3,
+        "hold": false,
+        "season": 2021,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 272,
+        "pin_minus_declared": 0
+      },
+      {
+        "declared_n": 271,
+        "excluded_n": 50,
+        "exclusion_rate": 0.18450184501845018,
+        "hold_threshold": 0.3,
+        "hold": false,
+        "season": 2022,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 271,
+        "pin_minus_declared": 0
+      },
+      {
+        "declared_n": 272,
+        "excluded_n": 44,
+        "exclusion_rate": 0.16176470588235295,
+        "hold_threshold": 0.3,
+        "hold": false,
+        "season": 2023,
+        "declared_source": "owned_pbp_reg",
+        "pin_week_1_18": 272,
+        "pin_minus_declared": 0
+      }
+    ],
+    "quote_eligibility": "REQUIRED_BEFORE_METRICS_NOT_APPLIED_t5115u",
+    "notes": [
+      "Declared n is owned PBP REG, not games.csv week\u226418.",
+      "2020 pin 262 \u2212 declared 256 = 6 Wild Card rows preserved, not extra REG games.",
+      "Owned-quote eligibility must still run before metrics; HOLD is reapplied after that filter."
+    ]
+  },
+  "written_at_utc": "2026-11-01T19:56:42Z"
+}

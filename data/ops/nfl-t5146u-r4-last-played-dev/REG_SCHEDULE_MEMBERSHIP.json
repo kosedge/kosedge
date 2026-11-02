@@ -1,0 +1,14 @@
+{
+  "schema_version": "nfl-t5149u-reg-membership-v1",
+  "schedule_path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
+  "schedule_sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+  "rule": "season_type=REG AND season in {2020,2021} AND week>=2 \u2014 not week<=18",
+  "n_schedule": 496,
+  "n_derived": 496,
+  "n_by_season": {
+    "2020": 240,
+    "2021": 256
+  },
+  "equal": true,
+  "not_437": true
+}
