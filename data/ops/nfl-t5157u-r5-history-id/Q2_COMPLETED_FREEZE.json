@@ -1,0 +1,3996 @@
+{
+  "schema_version": "nfl-t5157u-r5-history-id-v1",
+  "r5_history_id": "e6cc6927",
+  "hold_q2": false,
+  "n_q2_finite": 496,
+  "n_q2_hold": 0,
+  "a_q2": 2.5637441292077354,
+  "b_q2": 1.660624056183471,
+  "ridge": 20.0,
+  "prior_reg": 0.5,
+  "initial_prior_2013": null,
+  "end_season_carry": 0.5,
+  "history_choice_sha256": "679d24283869ccf6b0a2b434efa200e92fd3e2c12a98c446da7d8f968da913b7",
+  "q2_2017_eval": "CLOSED",
+  "rows": [
+    {
+      "game_id": "2020_02_CIN_CLE",
+      "m_q2": 2.945517401943153,
+      "rating_diff": 0.2298974721664746,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_ATL_DAL",
+      "m_q2": 6.298444100254489,
+      "rating_diff": 2.248973786174113,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_BAL_HOU",
+      "m_q2": -5.97853334608414,
+      "rating_diff": -5.144016457839448,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_BUF_MIA",
+      "m_q2": -3.4923963237263203,
+      "rating_diff": -3.6469063725672983,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_CAR_TB",
+      "m_q2": 4.935624725851699,
+      "rating_diff": 1.4283067788956025,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_DEN_PIT",
+      "m_q2": 4.958151895873229,
+      "rating_diff": 1.4418722634721073,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_DET_GB",
+      "m_q2": 7.095736879866935,
+      "rating_diff": 2.7290901476369376,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_JAX_TEN",
+      "m_q2": 6.365180890324605,
+      "rating_diff": 2.289161563667529,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_KC_LAC",
+      "m_q2": -1.9597110642838138,
+      "rating_diff": -2.72394897366932,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_LA_PHI",
+      "m_q2": 0.5802195540291306,
+      "rating_diff": -1.194445285670039,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_MIN_IND",
+      "m_q2": 0.15900075057456098,
+      "rating_diff": -1.4480961959324348,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_NE_SEA",
+      "m_q2": -0.4878402373984918,
+      "rating_diff": -1.8376130077385067,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_NYG_CHI",
+      "m_q2": 7.289070830388171,
+      "rating_diff": 2.8455126153239143,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_SF_NYJ",
+      "m_q2": -3.285335260183983,
+      "rating_diff": -3.522217667275256,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_WAS_ARI",
+      "m_q2": 4.073528290283582,
+      "rating_diff": 0.9091667409333497,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_02_NO_LV",
+      "m_q2": -1.4592665139105594,
+      "rating_diff": -2.4225896452230002,
+      "n_history": 1808,
+      "n_asof_games": 16,
+      "history_ids_sha256": "f9768bc4cf0311bc7b3d43d936776b7712d13d52e97310641bb45a4ecd6a68a0"
+    },
+    {
+      "game_id": "2020_03_MIA_JAX",
+      "m_q2": 6.132086835963811,
+      "rating_diff": 2.148796227218952,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_CAR_LAC",
+      "m_q2": 6.815523954908603,
+      "rating_diff": 2.560350616305366,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_CHI_ATL",
+      "m_q2": 1.0010544752021717,
+      "rating_diff": -0.9410255428895898,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_CIN_PHI",
+      "m_q2": 5.316210805462999,
+      "rating_diff": 1.6574893432419133,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_DAL_SEA",
+      "m_q2": 2.76022744047218,
+      "rating_diff": 0.1183189599914698,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_DET_ARI",
+      "m_q2": 4.887946723241145,
+      "rating_diff": 1.3995958840768616,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_GB_NO",
+      "m_q2": 3.019751677257512,
+      "rating_diff": 0.2746001097309141,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_HOU_PIT",
+      "m_q2": 5.182719789392472,
+      "rating_diff": 1.5771032886298162,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_LA_BUF",
+      "m_q2": -0.10981506572094846,
+      "rating_diff": -1.6099725792682966,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_LV_NE",
+      "m_q2": 6.461001254131094,
+      "rating_diff": 2.346862982269587,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_NYJ_IND",
+      "m_q2": 7.768302237282674,
+      "rating_diff": 3.1340977439748245,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_SF_NYG",
+      "m_q2": -4.907446589748865,
+      "rating_diff": -4.499025948189178,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_TB_DEN",
+      "m_q2": 1.324312305881692,
+      "rating_diff": -0.7463650901062866,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_TEN_MIN",
+      "m_q2": 1.6540991798827809,
+      "rating_diff": -0.5477729567615357,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_WAS_CLE",
+      "m_q2": 3.752614404243026,
+      "rating_diff": 0.7159177723630066,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_03_KC_BAL",
+      "m_q2": 6.504959719058769,
+      "rating_diff": 2.3733340337782005,
+      "n_history": 1824,
+      "n_asof_games": 32,
+      "history_ids_sha256": "e7377f58a870fda38d8e9fe4004e73c6b63478a6b12658cccc9bc9da14a1d43b"
+    },
+    {
+      "game_id": "2020_04_DEN_NYJ",
+      "m_q2": -1.243222449790764,
+      "rating_diff": -2.292491527400765,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_ARI_CAR",
+      "m_q2": 1.0136512979792291,
+      "rating_diff": -0.9334399471431281,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_BAL_WAS",
+      "m_q2": -10.926485821420169,
+      "rating_diff": -8.123590586560466,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_BUF_LV",
+      "m_q2": 1.7278355195159465,
+      "rating_diff": -0.5033701677265328,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_CLE_DAL",
+      "m_q2": 7.018094630273145,
+      "rating_diff": 2.6823352850268956,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_IND_CHI",
+      "m_q2": 1.3098646022767384,
+      "rating_diff": -0.7550652552948832,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_JAX_CIN",
+      "m_q2": 2.0217658011340878,
+      "rating_diff": -0.326370273907298,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_LAC_TB",
+      "m_q2": 3.9143657016544426,
+      "rating_diff": 0.8133216951889599,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_MIN_HOU",
+      "m_q2": 0.3470062001754366,
+      "rating_diff": -1.3348824622756075,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_NO_DET",
+      "m_q2": -3.6526562597349588,
+      "rating_diff": -3.7434122225288817,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_NYG_LA",
+      "m_q2": 11.232317010960609,
+      "rating_diff": 5.220069436832933,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_PHI_SF",
+      "m_q2": 9.356700463402575,
+      "rating_diff": 4.090604558509619,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_SEA_MIA",
+      "m_q2": -4.324665358295478,
+      "rating_diff": -4.148084849098537,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_ATL_GB",
+      "m_q2": 7.6195774462324355,
+      "rating_diff": 3.0445381651547723,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_04_NE_KC",
+      "m_q2": 3.2613096882013317,
+      "rating_diff": 0.42006229910746695,
+      "n_history": 1840,
+      "n_asof_games": 48,
+      "history_ids_sha256": "7bda265361e9c07b6e93343fd647810fba9c9998766c636888d8b9efa796e65a"
+    },
+    {
+      "game_id": "2020_05_TB_CHI",
+      "m_q2": 1.1688217172474713,
+      "rating_diff": -0.8399989189402353,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_ARI_NYJ",
+      "m_q2": -1.9961534448916516,
+      "rating_diff": -2.745893965055023,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_CAR_ATL",
+      "m_q2": 3.152192541567498,
+      "rating_diff": 0.35435378053727806,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_CIN_BAL",
+      "m_q2": 14.568679975143551,
+      "rating_diff": 7.229171347503033,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_IND_CLE",
+      "m_q2": -1.6562764396910983,
+      "rating_diff": -2.5412257236580658,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_JAX_HOU",
+      "m_q2": 4.300690558294697,
+      "rating_diff": 1.0459600549680694,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_LA_WAS",
+      "m_q2": -6.552520550280052,
+      "rating_diff": -5.489661940968892,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_LV_KC",
+      "m_q2": 10.411619930234318,
+      "rating_diff": 4.725859397137099,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_MIA_SF",
+      "m_q2": 11.362717679593331,
+      "rating_diff": 5.298594535964892,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_MIN_SEA",
+      "m_q2": 4.5177476518803195,
+      "rating_diff": 1.176668202171762,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_NYG_DAL",
+      "m_q2": 9.082410918241829,
+      "rating_diff": 3.925431987307,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_PHI_PIT",
+      "m_q2": 4.962262250974053,
+      "rating_diff": 1.4443474504872047,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_LAC_NO",
+      "m_q2": 6.226249573427077,
+      "rating_diff": 2.205499450993558,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_05_BUF_TEN",
+      "m_q2": 2.632162364483586,
+      "rating_diff": 0.04120031564103244,
+      "n_history": 1855,
+      "n_asof_games": 63,
+      "history_ids_sha256": "44719148bf00ee0f99f56e6dd0d03a241b5fa008ba570a761b551e7b6c55a4f0"
+    },
+    {
+      "game_id": "2020_06_ATL_MIN",
+      "m_q2": 6.327853270467861,
+      "rating_diff": 2.2666834960291906,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_BAL_PHI",
+      "m_q2": -8.573519790400159,
+      "rating_diff": -6.7066738423650865,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_CHI_CAR",
+      "m_q2": 0.3298970425825978,
+      "rating_diff": -1.345185310490489,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_CIN_IND",
+      "m_q2": 8.895635769532106,
+      "rating_diff": 3.812959120245819,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_CLE_PIT",
+      "m_q2": 5.448795812165781,
+      "rating_diff": 1.7373298141836,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_DEN_NE",
+      "m_q2": 9.467924911089444,
+      "rating_diff": 4.157582058487844,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_DET_JAX",
+      "m_q2": 1.2545785236091138,
+      "rating_diff": -0.7883576061203228,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_GB_TB",
+      "m_q2": -0.3000947887815828,
+      "rating_diff": -1.7245558423205885,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_HOU_TEN",
+      "m_q2": 6.882199162214867,
+      "rating_diff": 2.6005013096895757,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_LA_SF",
+      "m_q2": 0.7427823144982932,
+      "rating_diff": -1.0965527133784074,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_NYJ_MIA",
+      "m_q2": 8.332679811226322,
+      "rating_diff": 3.473956468676626,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_WAS_NYG",
+      "m_q2": 3.718339007639522,
+      "rating_diff": 0.6952777024592396,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_ARI_DAL",
+      "m_q2": 4.640522689382575,
+      "rating_diff": 1.2506012739257768,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_06_KC_BUF",
+      "m_q2": -4.1844737366332545,
+      "rating_diff": -4.063663801998678,
+      "n_history": 1869,
+      "n_asof_games": 77,
+      "history_ids_sha256": "f71846d454e3a42ca58006648e70dda593eb0bbc3c83a2dc9446423c437dc5a2"
+    },
+    {
+      "game_id": "2020_07_NYG_PHI",
+      "m_q2": 6.962862335026097,
+      "rating_diff": 2.64907532167674,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_BUF_NYJ",
+      "m_q2": -6.333580690613271,
+      "rating_diff": -5.3578200235574585,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_CAR_NO",
+      "m_q2": 8.136055315287466,
+      "rating_diff": 3.355552489638319,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_CLE_CIN",
+      "m_q2": 0.7906551346872612,
+      "rating_diff": -1.0677245026761057,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_DAL_WAS",
+      "m_q2": -3.07317256562548,
+      "rating_diff": -3.3944568452105037,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_DET_ATL",
+      "m_q2": 3.3783689678113236,
+      "rating_diff": 0.4905534371673499,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_GB_HOU",
+      "m_q2": -1.405478674970757,
+      "rating_diff": -2.3901995092740966,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_JAX_LAC",
+      "m_q2": 7.986045016039887,
+      "rating_diff": 3.265218799307263,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_KC_DEN",
+      "m_q2": -5.5963991904775074,
+      "rating_diff": -4.9139016680508,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_PIT_TEN",
+      "m_q2": 1.9967107654234382,
+      "rating_diff": -0.34145799687346545,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_SEA_ARI",
+      "m_q2": 0.08372908791096023,
+      "rating_diff": -1.493423530787859,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_SF_NE",
+      "m_q2": 3.924154645340699,
+      "rating_diff": 0.8192164331640037,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_TB_LV",
+      "m_q2": -0.44425609171601366,
+      "rating_diff": -1.8113673650114914,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_07_CHI_LA",
+      "m_q2": 5.320540492985309,
+      "rating_diff": 1.6600966085685762,
+      "n_history": 1883,
+      "n_asof_games": 91,
+      "history_ids_sha256": "aa87ceb5aa886d67396ca4ea82244a786508626903c0b07d8de84c6f4ffc25ae"
+    },
+    {
+      "game_id": "2020_08_ATL_CAR",
+      "m_q2": 1.9681403123628631,
+      "rating_diff": -0.35866264530318726,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_DAL_PHI",
+      "m_q2": 3.925887616891748,
+      "rating_diff": 0.8202599996139754,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_IND_DET",
+      "m_q2": -1.1728294662412364,
+      "rating_diff": -2.2501020514158703,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_LAC_DEN",
+      "m_q2": -0.18219092823701022,
+      "rating_diff": -1.6535561117641464,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_LA_MIA",
+      "m_q2": -3.0531108460142335,
+      "rating_diff": -3.3823760135878707,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_LV_CLE",
+      "m_q2": 1.0088227254024347,
+      "rating_diff": -0.9363476326959267,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_MIN_GB",
+      "m_q2": 6.051480799858824,
+      "rating_diff": 2.1002566219995504,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_NE_BUF",
+      "m_q2": -0.21973542489202913,
+      "rating_diff": -1.6761647789788712,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_NO_CHI",
+      "m_q2": -0.7436473797788854,
+      "rating_diff": -1.9916557854688874,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_NYJ_KC",
+      "m_q2": 20.2144264959816,
+      "rating_diff": 10.628945366080956,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_PIT_BAL",
+      "m_q2": 7.932197504165281,
+      "rating_diff": 3.2327927293162264,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_SF_SEA",
+      "m_q2": 0.5656464780603188,
+      "rating_diff": -1.2032209479968297,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_TEN_CIN",
+      "m_q2": -5.179918212697986,
+      "rating_diff": -4.663103797076499,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_08_TB_NYG",
+      "m_q2": -7.59488157169268,
+      "rating_diff": -6.117354294052246,
+      "n_history": 1897,
+      "n_asof_games": 105,
+      "history_ids_sha256": "9a18815e920e3a1e1b38dbac938e2972bf31f01a17236b9ef6d43095f3656d25"
+    },
+    {
+      "game_id": "2020_09_GB_SF",
+      "m_q2": 3.67518267920975,
+      "rating_diff": 0.6692896841181368,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_BAL_IND",
+      "m_q2": -3.7630401822542416,
+      "rating_diff": -3.8098835723255196,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_CAR_KC",
+      "m_q2": 14.198281842121547,
+      "rating_diff": 7.006123793998797,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_CHI_TEN",
+      "m_q2": 4.6642329313954916,
+      "rating_diff": 1.264879184645322,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_DEN_ATL",
+      "m_q2": 3.910919034681686,
+      "rating_diff": 0.8112461700513329,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_DET_MIN",
+      "m_q2": 6.23038820260429,
+      "rating_diff": 2.207991664184017,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_HOU_JAX",
+      "m_q2": -1.4908435158899915,
+      "rating_diff": -2.4416047870679303,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_LV_LAC",
+      "m_q2": 3.1171855236812736,
+      "rating_diff": 0.333273140547828,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_MIA_ARI",
+      "m_q2": 3.796589263220892,
+      "rating_diff": 0.7423986960941316,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_NO_TB",
+      "m_q2": 3.67071510077614,
+      "rating_diff": 0.666599383193629,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_NYG_WAS",
+      "m_q2": 2.5166572941344847,
+      "rating_diff": -0.02835490362669324,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_PIT_DAL",
+      "m_q2": -5.134539107565988,
+      "rating_diff": -4.635777259825021,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_SEA_BUF",
+      "m_q2": -0.8337925153626959,
+      "rating_diff": -2.0459396766651805,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_09_NE_NYJ",
+      "m_q2": -10.045898693946759,
+      "rating_diff": -7.593315763553735,
+      "n_history": 1911,
+      "n_asof_games": 119,
+      "history_ids_sha256": "dc8308164b16092e0ad17010a759f82dc6114ffde78e2867cf5a74aa39c71dec"
+    },
+    {
+      "game_id": "2020_10_IND_TEN",
+      "m_q2": 3.0116025376378293,
+      "rating_diff": 0.26969283430675106,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_BAL_NE",
+      "m_q2": -5.0024707169787295,
+      "rating_diff": -4.556247886457527,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_BUF_ARI",
+      "m_q2": 2.337698598882766,
+      "rating_diff": -0.13612083329954794,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_CIN_PIT",
+      "m_q2": 10.892373424412211,
+      "rating_diff": 5.015361101263188,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_DEN_LV",
+      "m_q2": 5.271567563042378,
+      "rating_diff": 1.6306059301934346,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_HOU_CLE",
+      "m_q2": 1.4741116347435086,
+      "rating_diff": -0.6561584426089035,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_JAX_GB",
+      "m_q2": 12.709752065681592,
+      "rating_diff": 6.109756087595115,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_LAC_MIA",
+      "m_q2": 2.5511940744508816,
+      "rating_diff": -0.0075574328278111835,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_PHI_NYG",
+      "m_q2": -2.1832148431295306,
+      "rating_diff": -2.8585392067889006,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_SEA_LA",
+      "m_q2": 3.332457139938895,
+      "rating_diff": 0.4629061032018613,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_SF_NO",
+      "m_q2": 4.97575254832109,
+      "rating_diff": 1.4524710816587543,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_TB_CAR",
+      "m_q2": -2.3502168718291387,
+      "rating_diff": -2.9591050320747394,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_WAS_DET",
+      "m_q2": 4.164834230674707,
+      "rating_diff": 0.9641496493472919,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_10_MIN_CHI",
+      "m_q2": 1.0866393485879977,
+      "rating_diff": -0.88948776522875,
+      "n_history": 1925,
+      "n_asof_games": 133,
+      "history_ids_sha256": "b41ef7c8d6b233849916fea665102496fcbf5dd2809cdb3e6d367cadbaae5e41"
+    },
+    {
+      "game_id": "2020_11_ARI_SEA",
+      "m_q2": 4.456039654595295,
+      "rating_diff": 1.1395086794879554,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_ATL_NO",
+      "m_q2": 9.698230823549528,
+      "rating_diff": 4.296268422570383,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_CIN_WAS",
+      "m_q2": 2.0557865870178906,
+      "rating_diff": -0.3058835263155575,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_DAL_MIN",
+      "m_q2": 7.330609528134765,
+      "rating_diff": 2.8705265235543305,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_DET_CAR",
+      "m_q2": 2.889084475818601,
+      "rating_diff": 0.19591450900607743,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_GB_IND",
+      "m_q2": 1.633462525064298,
+      "rating_diff": -0.5602000047388551,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_KC_LV",
+      "m_q2": -5.016084049847333,
+      "rating_diff": -4.564445607559971,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_MIA_DEN",
+      "m_q2": -1.6881360644336483,
+      "rating_diff": -2.5604110561985154,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_NE_HOU",
+      "m_q2": -2.2009967904022774,
+      "rating_diff": -2.8692471976833684,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_NYJ_LAC",
+      "m_q2": 11.94003962121899,
+      "rating_diff": 5.646248142135387,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_PHI_CLE",
+      "m_q2": 0.8262914250599926,
+      "rating_diff": -1.0462649253322531,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_PIT_JAX",
+      "m_q2": -9.053498712264169,
+      "rating_diff": -6.995709112013728,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_TEN_BAL",
+      "m_q2": 10.164639887424757,
+      "rating_diff": 4.577132150961234,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_11_LA_TB",
+      "m_q2": 2.5242584143177034,
+      "rating_diff": -0.023777636330753804,
+      "n_history": 1939,
+      "n_asof_games": 147,
+      "history_ids_sha256": "15f3ed644a27c2d681a547e4dc343909dda910996a4e417b66c8dc2d603ca736"
+    },
+    {
+      "game_id": "2020_12_HOU_DET",
+      "m_q2": -0.3917757459782676,
+      "rating_diff": -1.779764579575299,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_WAS_DAL",
+      "m_q2": 4.641065174916988,
+      "rating_diff": 1.2509279496308485,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_ARI_NE",
+      "m_q2": 4.442791287891622,
+      "rating_diff": 1.1315307348987864,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_CAR_MIN",
+      "m_q2": 6.001686221371869,
+      "rating_diff": 2.070271160629446,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_CHI_GB",
+      "m_q2": 6.769311630836928,
+      "rating_diff": 2.532522328560407,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_CLE_JAX",
+      "m_q2": -1.8766746980351114,
+      "rating_diff": -2.673945864332496,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_KC_TB",
+      "m_q2": -2.4805789737344637,
+      "rating_diff": -3.0376069069692475,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_LAC_BUF",
+      "m_q2": 3.8529128263929406,
+      "rating_diff": 0.7763158027157795,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_LV_ATL",
+      "m_q2": -0.08655427462699672,
+      "rating_diff": -1.5959653203662363,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_MIA_NYJ",
+      "m_q2": -7.1281952261647294,
+      "rating_diff": -5.836323591293121,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_NO_DEN",
+      "m_q2": -7.792265360045885,
+      "rating_diff": -6.236215506268359,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_NYG_CIN",
+      "m_q2": 1.3975539123331286,
+      "rating_diff": -0.7022602211091673,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_SF_LA",
+      "m_q2": 4.2114890216386325,
+      "rating_diff": 0.9922443832457941,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_TEN_IND",
+      "m_q2": 3.6318873089752572,
+      "rating_diff": 0.6432179371304434,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_SEA_PHI",
+      "m_q2": -1.4526053767931493,
+      "rating_diff": -2.418578419989567,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_12_BAL_PIT",
+      "m_q2": 0.5860033069828556,
+      "rating_diff": -1.1909624064884512,
+      "n_history": 1953,
+      "n_asof_games": 161,
+      "history_ids_sha256": "79e1b60719b6eea6d6e5168ba7c5a38fa506afabc4c43aa5ebb2996fb91e426a"
+    },
+    {
+      "game_id": "2020_13_CIN_MIA",
+      "m_q2": 8.337489556091873,
+      "rating_diff": 3.476852816496978,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_CLE_TEN",
+      "m_q2": 8.259724462542978,
+      "rating_diff": 3.4300239793141554,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_DEN_KC",
+      "m_q2": 15.94208433185504,
+      "rating_diff": 8.056212453885603,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_DET_CHI",
+      "m_q2": 6.811023377029919,
+      "rating_diff": 2.5576404436676006,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_IND_HOU",
+      "m_q2": -0.3710857894041708,
+      "rating_diff": -1.7673054341732701,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_JAX_MIN",
+      "m_q2": 10.624852339282116,
+      "rating_diff": 4.854264383355267,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_LA_ARI",
+      "m_q2": -1.1081678177251422,
+      "rating_diff": -2.2111638894186854,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_LV_NYJ",
+      "m_q2": -7.409488627345739,
+      "rating_diff": -6.00571376731375,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_NE_LAC",
+      "m_q2": -0.7789517300893909,
+      "rating_diff": -2.0129154740655006,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_NO_ATL",
+      "m_q2": -4.79978207783712,
+      "rating_diff": -4.434192181924715,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_NYG_SEA",
+      "m_q2": 9.69147440918167,
+      "rating_diff": 4.292199822972117,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_PHI_GB",
+      "m_q2": 8.634710339569608,
+      "rating_diff": 3.6558341954376297,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_BUF_SF",
+      "m_q2": 4.267522212288791,
+      "rating_diff": 1.0259866323969575,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_WAS_PIT",
+      "m_q2": 13.006393950354347,
+      "rating_diff": 6.288388863368889,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_13_DAL_BAL",
+      "m_q2": 14.999266432891377,
+      "rating_diff": 7.4884633023223675,
+      "n_history": 1969,
+      "n_asof_games": 177,
+      "history_ids_sha256": "81c3aea6460d6a9862eed85735bc03ee4aa3230a89b4fed5f74b63f7ab4df8cb"
+    },
+    {
+      "game_id": "2020_14_NE_LA",
+      "m_q2": 2.4411571470714066,
+      "rating_diff": -0.07381982796158226,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_ARI_NYG",
+      "m_q2": -1.1163770556472454,
+      "rating_diff": -2.2161073550342385,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_ATL_LAC",
+      "m_q2": -1.3352890437559437,
+      "rating_diff": -2.347932488660095,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_DAL_CIN",
+      "m_q2": 1.0600994823012988,
+      "rating_diff": -0.9054696283047878,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_DEN_CAR",
+      "m_q2": 4.9383771835691554,
+      "rating_diff": 1.4299642628440061,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_GB_DET",
+      "m_q2": -7.388702046745941,
+      "rating_diff": -5.993196436541383,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_HOU_CHI",
+      "m_q2": 2.1995669329110483,
+      "rating_diff": -0.21930140957590194,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_IND_LV",
+      "m_q2": -0.6467926391709145,
+      "rating_diff": -1.9333314824772956,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_KC_MIA",
+      "m_q2": -5.401322994546868,
+      "rating_diff": -4.796430049351638,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_MIN_TB",
+      "m_q2": 5.131516661738489,
+      "rating_diff": 1.546269622537046,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_NO_PHI",
+      "m_q2": -7.390152151322212,
+      "rating_diff": -5.9940696652356635,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_NYJ_SEA",
+      "m_q2": 15.502485699381333,
+      "rating_diff": 7.791493518352406,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_PIT_BUF",
+      "m_q2": -2.095821095814316,
+      "rating_diff": -2.8059121555368143,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_TEN_JAX",
+      "m_q2": -6.9335037327413005,
+      "rating_diff": -5.719083634002078,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_WAS_SF",
+      "m_q2": 7.763120281209591,
+      "rating_diff": 3.1309772567978573,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_14_BAL_CLE",
+      "m_q2": -8.371437756657672,
+      "rating_diff": -6.584983425446207,
+      "n_history": 1984,
+      "n_asof_games": 192,
+      "history_ids_sha256": "8e16893132d2a95ccfcf3dc4e4d6b740990d7a947ab1d785d9e917d2e3211589"
+    },
+    {
+      "game_id": "2020_15_LAC_LV",
+      "m_q2": 4.150495668196233,
+      "rating_diff": 0.955515207117527,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_BUF_DEN",
+      "m_q2": -4.066241915396178,
+      "rating_diff": -3.99246657900481,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_CAR_GB",
+      "m_q2": 10.094737536544468,
+      "rating_diff": 4.535038125754264,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_CHI_MIN",
+      "m_q2": 3.100338005662048,
+      "rating_diff": 0.3231278473031032,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_CLE_NYG",
+      "m_q2": 0.25375206330824973,
+      "rating_diff": -1.3910385419854898,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_DET_TEN",
+      "m_q2": 10.87122243282138,
+      "rating_diff": 5.00262432829397,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_HOU_IND",
+      "m_q2": 8.052360094603447,
+      "rating_diff": 3.30515262919286,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_JAX_BAL",
+      "m_q2": 18.951812347630796,
+      "rating_diff": 9.868620268025586,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_KC_NO",
+      "m_q2": 1.5567276672102317,
+      "rating_diff": -0.606408451237229,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_NE_MIA",
+      "m_q2": -0.23653654612342612,
+      "rating_diff": -1.6862821328548654,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_NYJ_LA",
+      "m_q2": 19.874406049851213,
+      "rating_diff": 10.424190746957926,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_PHI_ARI",
+      "m_q2": 4.940824187292058,
+      "rating_diff": 1.4314378075116212,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_SEA_WAS",
+      "m_q2": -3.7401869705351287,
+      "rating_diff": -3.796121750898197,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_SF_DAL",
+      "m_q2": -2.593540439945992,
+      "rating_diff": -3.1056304104171875,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_TB_ATL",
+      "m_q2": -1.2837245602925127,
+      "rating_diff": -2.316881220149666,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_15_PIT_CIN",
+      "m_q2": -10.102888794566969,
+      "rating_diff": -7.6276342478657035,
+      "n_history": 2000,
+      "n_asof_games": 208,
+      "history_ids_sha256": "4204b9f9b0ee54c2933acbac940deacc1c5afc23c35881698a91353fe9e44546"
+    },
+    {
+      "game_id": "2020_16_MIN_NO",
+      "m_q2": 9.525268191024317,
+      "rating_diff": 4.192113221469224,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_MIA_LV",
+      "m_q2": -0.30694038737956575,
+      "rating_diff": -1.728678147168873,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_SF_ARI",
+      "m_q2": 2.3551174073370436,
+      "rating_diff": -0.1256315185209157,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_TB_DET",
+      "m_q2": -7.315288825035594,
+      "rating_diff": -5.948988223708993,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_ATL_KC",
+      "m_q2": 11.028968182120467,
+      "rating_diff": 5.097616177118336,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_CAR_WAS",
+      "m_q2": 2.8850154528999346,
+      "rating_diff": 0.19346421153898063,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_CHI_JAX",
+      "m_q2": -6.1821463781614,
+      "rating_diff": -5.266628816319437,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_CIN_HOU",
+      "m_q2": 6.1319249896142765,
+      "rating_diff": 2.1486987660573287,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_CLE_NYJ",
+      "m_q2": -7.1594317716110485,
+      "rating_diff": -5.85513371591465,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_DEN_LAC",
+      "m_q2": 5.095263433768625,
+      "rating_diff": 1.524438535702628,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_IND_PIT",
+      "m_q2": 4.091301684902719,
+      "rating_diff": 0.9198695815630253,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_LA_SEA",
+      "m_q2": 1.80932262391527,
+      "rating_diff": -0.4542999979334965,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_NYG_BAL",
+      "m_q2": 17.11665066674491,
+      "rating_diff": 8.763516633008068,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_PHI_DAL",
+      "m_q2": 1.5563533908001104,
+      "rating_diff": -0.6066338342242619,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_TEN_GB",
+      "m_q2": 3.5102123106006005,
+      "rating_diff": 0.5699472905192553,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_16_BUF_NE",
+      "m_q2": 1.8938785309191692,
+      "rating_diff": -0.4033818465981305,
+      "n_history": 2016,
+      "n_asof_games": 224,
+      "history_ids_sha256": "da6749d08db6300be514601011808cc2c1cbaf903db14d3cc580addcc9cdd407"
+    },
+    {
+      "game_id": "2020_17_ARI_LA",
+      "m_q2": 6.257658092386414,
+      "rating_diff": 2.224413135184983,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_ATL_TB",
+      "m_q2": 7.972084561069332,
+      "rating_diff": 3.256812047087475,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_BAL_CIN",
+      "m_q2": -12.968153145892474,
+      "rating_diff": -9.353048462272906,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_DAL_NYG",
+      "m_q2": -0.7496574652607597,
+      "rating_diff": -1.9952749583090588,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_GB_CHI",
+      "m_q2": -2.4705454230071715,
+      "rating_diff": -3.0315648707299605,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_JAX_IND",
+      "m_q2": 14.983183019574092,
+      "rating_diff": 7.478778140134456,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_LAC_KC",
+      "m_q2": 14.065355400545489,
+      "rating_diff": 6.926077716693644,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_LV_DEN",
+      "m_q2": -1.2862644804944026,
+      "rating_diff": -2.3184107175650697,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_MIA_BUF",
+      "m_q2": 6.300340394725999,
+      "rating_diff": 2.2501157029519945,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_MIN_DET",
+      "m_q2": -4.457821202893932,
+      "rating_diff": -4.228269069062494,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_NO_CAR",
+      "m_q2": -7.815869042382502,
+      "rating_diff": -6.250429248535145,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_NYJ_NE",
+      "m_q2": 14.623706843988414,
+      "rating_diff": 7.262307606513593,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_PIT_CLE",
+      "m_q2": -4.421083752278523,
+      "rating_diff": -4.206146391459087,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_SEA_SF",
+      "m_q2": -0.31641168354852756,
+      "rating_diff": -1.7343816031279111,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_TEN_HOU",
+      "m_q2": -3.5196205495948534,
+      "rating_diff": -3.663300345524128,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2020_17_WAS_PHI",
+      "m_q2": 2.5991177924229576,
+      "rating_diff": 0.02130142766721077,
+      "n_history": 2032,
+      "n_asof_games": 240,
+      "history_ids_sha256": "1d9c475908faf297270515374f77370ac3d3ca8b49aa6b51c97f87d595f89bdb"
+    },
+    {
+      "game_id": "2021_02_NYG_WAS",
+      "m_q2": 4.595141945042958,
+      "rating_diff": 1.2232737495709185,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_ATL_TB",
+      "m_q2": 7.854413064533343,
+      "rating_diff": 3.1859522422461386,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_BUF_MIA",
+      "m_q2": 0.04472392108184442,
+      "rating_diff": -1.516911789122957,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_CIN_CHI",
+      "m_q2": 4.437044885003983,
+      "rating_diff": 1.128070347301581,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_DAL_LAC",
+      "m_q2": 3.000880123044418,
+      "rating_diff": 0.2632359757820988,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_DEN_JAX",
+      "m_q2": -1.6713092722993532,
+      "rating_diff": -2.550278243734647,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_HOU_CLE",
+      "m_q2": 1.9850693819612908,
+      "rating_diff": -0.3484682430630227,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_KC_BAL",
+      "m_q2": 3.163457173804229,
+      "rating_diff": 0.3611371534474719,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_LA_IND",
+      "m_q2": -0.4647609674279427,
+      "rating_diff": -1.8237150578174446,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_LV_PIT",
+      "m_q2": 5.459796377295867,
+      "rating_diff": 1.7439541703038937,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_MIN_ARI",
+      "m_q2": 5.203198380413937,
+      "rating_diff": 1.5894351532353006,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_NE_NYJ",
+      "m_q2": -3.952150297922223,
+      "rating_diff": -3.923762517390668,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_NO_CAR",
+      "m_q2": -5.883848514325612,
+      "rating_diff": -5.0869988376225415,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_SF_PHI",
+      "m_q2": 1.8791980639801291,
+      "rating_diff": -0.4122221779689644,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_TEN_SEA",
+      "m_q2": 6.13321158042076,
+      "rating_diff": 2.1494735294974303,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_02_DET_GB",
+      "m_q2": 7.285080830789969,
+      "rating_diff": 2.8431099043771804,
+      "n_history": 2064,
+      "n_asof_games": 16,
+      "history_ids_sha256": "7934f18d0e22f378edb379302c47d5b035b8510be61a7562c5020b5b6a401b99"
+    },
+    {
+      "game_id": "2021_03_CAR_HOU",
+      "m_q2": 0.8031695838721342,
+      "rating_diff": -1.0601885109275373,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_ARI_JAX",
+      "m_q2": -5.984073467145077,
+      "rating_diff": -5.147352625974739,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_ATL_NYG",
+      "m_q2": 2.573118776706784,
+      "rating_diff": 0.005645255748368161,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_BAL_DET",
+      "m_q2": -7.190385450110854,
+      "rating_diff": -5.873773502797507,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_CHI_CLE",
+      "m_q2": 3.3428662434554957,
+      "rating_diff": 0.4691742910423551,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_CIN_PIT",
+      "m_q2": 8.072403552066726,
+      "rating_diff": 3.3172224636557814,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_GB_SF",
+      "m_q2": 2.172275991036324,
+      "rating_diff": -0.23573555779452138,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_IND_TEN",
+      "m_q2": 1.6539810949232958,
+      "rating_diff": -0.5478440655468416,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_LAC_KC",
+      "m_q2": 7.3250248525116355,
+      "rating_diff": 2.867163525407739,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_MIA_LV",
+      "m_q2": 5.589576531411064,
+      "rating_diff": 1.8221056059837206,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_NO_NE",
+      "m_q2": -1.0445338349534952,
+      "rating_diff": -2.1728445705248634,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_NYJ_DEN",
+      "m_q2": 7.935167860553953,
+      "rating_diff": 3.23458142819579,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_SEA_MIN",
+      "m_q2": -0.8621515137089406,
+      "rating_diff": -2.063016990606676,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_TB_LA",
+      "m_q2": 1.7070154621117841,
+      "rating_diff": -0.5159076576699291,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_WAS_BUF",
+      "m_q2": 8.8417340479452,
+      "rating_diff": 3.780500406073759,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_03_PHI_DAL",
+      "m_q2": 1.609751080938279,
+      "rating_diff": -0.5744786393507817,
+      "n_history": 2080,
+      "n_asof_games": 32,
+      "history_ids_sha256": "722dc0a9f259df93f0243d86529883ef716f950877931c931185f4325fcd5613"
+    },
+    {
+      "game_id": "2021_04_JAX_CIN",
+      "m_q2": 7.495587371767794,
+      "rating_diff": 2.9698734184874245,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_ARI_LA",
+      "m_q2": 4.3630089375126495,
+      "rating_diff": 1.0834871394312293,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_BAL_DEN",
+      "m_q2": -1.417424713838313,
+      "rating_diff": -2.397393213847431,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_CAR_DAL",
+      "m_q2": 2.0408570500492873,
+      "rating_diff": -0.31487384348759434,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_CLE_MIN",
+      "m_q2": 2.2646500416524487,
+      "rating_diff": -0.18010945128825817,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_DET_CHI",
+      "m_q2": 5.134814623080826,
+      "rating_diff": 1.548255599634063,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_HOU_BUF",
+      "m_q2": 10.837473807706036,
+      "rating_diff": 4.982301471359747,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_IND_MIA",
+      "m_q2": 0.24326916557292977,
+      "rating_diff": -1.397351167468835,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_KC_PHI",
+      "m_q2": -1.99347049069647,
+      "rating_diff": -2.744278334963919,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_NYG_NO",
+      "m_q2": 12.727883937953141,
+      "rating_diff": 6.120674797464477,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_PIT_GB",
+      "m_q2": 3.643277581463246,
+      "rating_diff": 0.6500769684961374,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_SEA_SF",
+      "m_q2": 2.2187688010091744,
+      "rating_diff": -0.20773836613652374,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_TB_NE",
+      "m_q2": -0.574737209607215,
+      "rating_diff": -1.8899409093398085,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_TEN_NYJ",
+      "m_q2": -6.041047502481783,
+      "rating_diff": -5.18166143604199,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_WAS_ATL",
+      "m_q2": 2.0487843905444536,
+      "rating_diff": -0.3101001317822578,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_04_LV_LAC",
+      "m_q2": 1.7349745144806774,
+      "rating_diff": -0.49907118449902355,
+      "n_history": 2096,
+      "n_asof_games": 48,
+      "history_ids_sha256": "d9a4ce46edda0997e3f279a7a85a97a8dd675379e80b231a0b3a7646ee58d5ce"
+    },
+    {
+      "game_id": "2021_05_LA_SEA",
+      "m_q2": 1.5767025532694279,
+      "rating_diff": -0.5943799093256397,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_BUF_KC",
+      "m_q2": -1.6356249314908289,
+      "rating_diff": -2.5287897312229495,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_CHI_LV",
+      "m_q2": 4.0713697055357025,
+      "rating_diff": 0.9078668773430077,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_CLE_LAC",
+      "m_q2": 1.9301863149210068,
+      "rating_diff": -0.3815179070347823,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_DEN_PIT",
+      "m_q2": 3.495469966533392,
+      "rating_diff": 0.5610696977779517,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_DET_MIN",
+      "m_q2": 8.111841866200338,
+      "rating_diff": 3.34097155604473,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_GB_CIN",
+      "m_q2": -2.1360683326827385,
+      "rating_diff": -2.8301483676515065,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_MIA_TB",
+      "m_q2": 9.457481782717197,
+      "rating_diff": 4.151293381449015,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_NE_HOU",
+      "m_q2": -2.7194567352067627,
+      "rating_diff": -3.181455094993995,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_NO_WAS",
+      "m_q2": -5.351358817702563,
+      "rating_diff": -4.766342458690609,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_NYG_DAL",
+      "m_q2": 6.742473002262702,
+      "rating_diff": 2.516360555837503,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_NYJ_ATL",
+      "m_q2": 6.619785209427562,
+      "rating_diff": 2.4424800213611397,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_PHI_CAR",
+      "m_q2": 5.130902876058618,
+      "rating_diff": 1.5459000110782783,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_SF_ARI",
+      "m_q2": 5.5034439566187,
+      "rating_diff": 1.7702380117069536,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_TEN_JAX",
+      "m_q2": -4.500801774011947,
+      "rating_diff": -4.254151249293457,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_05_IND_BAL",
+      "m_q2": 7.411220693243935,
+      "rating_diff": 2.919069217374167,
+      "n_history": 2112,
+      "n_asof_games": 64,
+      "history_ids_sha256": "4a62d25533be7f47c0c97b74dfeb6d86e3ab2330afd31dc3bb1d3347de2a84a9"
+    },
+    {
+      "game_id": "2021_06_TB_PHI",
+      "m_q2": -4.565031255403996,
+      "rating_diff": -4.2928291674850465,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_ARI_CLE",
+      "m_q2": -0.5170130004770894,
+      "rating_diff": -1.8551803571755876,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_CIN_DET",
+      "m_q2": -0.4491775069175463,
+      "rating_diff": -1.8143309588382865,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_DAL_NE",
+      "m_q2": 0.6766710079821099,
+      "rating_diff": -1.1363638351491734,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_GB_CHI",
+      "m_q2": -1.0732229355436789,
+      "rating_diff": -2.1901206665101993,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_HOU_IND",
+      "m_q2": 7.530648034054375,
+      "rating_diff": 2.9909863622365105,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_KC_WAS",
+      "m_q2": -3.2907866884890127,
+      "rating_diff": -3.525500426118072,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_LAC_BAL",
+      "m_q2": 6.922220347628672,
+      "rating_diff": 2.624601397403458,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_LA_NYG",
+      "m_q2": -5.700209200307285,
+      "rating_diff": -4.9764143177039415,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_LV_DEN",
+      "m_q2": 2.6971467854693763,
+      "rating_diff": 0.08033284581474354,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_MIA_JAX",
+      "m_q2": -0.943531498431537,
+      "rating_diff": -2.112022654724073,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_MIN_CAR",
+      "m_q2": 2.824210756082716,
+      "rating_diff": 0.1568486412714013,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_SEA_PIT",
+      "m_q2": 1.770949671830376,
+      "rating_diff": -0.47740754713586353,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_06_BUF_TEN",
+      "m_q2": -5.700419409677952,
+      "rating_diff": -4.976540902267067,
+      "n_history": 2128,
+      "n_asof_games": 80,
+      "history_ids_sha256": "a1ff496aff7679b63ce9180a65b1cf47e9c394519ed1f28a71bd1157b789f45a"
+    },
+    {
+      "game_id": "2021_07_DEN_CLE",
+      "m_q2": 3.848464727058273,
+      "rating_diff": 0.7736372317784834,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_ATL_MIA",
+      "m_q2": 1.319916170845412,
+      "rating_diff": -0.7490123690132195,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_CAR_NYG",
+      "m_q2": -3.117984159872003,
+      "rating_diff": -3.421441636909542,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_CHI_TB",
+      "m_q2": 9.726129507555747,
+      "rating_diff": 4.313068542924135,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_CIN_BAL",
+      "m_q2": 10.32295089969988,
+      "rating_diff": 4.672464391684617,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_DET_LA",
+      "m_q2": 14.445225308662822,
+      "rating_diff": 7.154829014558357,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_HOU_ARI",
+      "m_q2": 14.349282171413662,
+      "rating_diff": 7.097053663844926,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_IND_SF",
+      "m_q2": 1.2341051154609162,
+      "rating_diff": -0.8006863496863112,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_KC_TEN",
+      "m_q2": 0.21569737135588207,
+      "rating_diff": -1.4139544402652167,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_NYJ_NE",
+      "m_q2": 10.98581277425186,
+      "rating_diff": 5.071628713123753,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_PHI_LV",
+      "m_q2": 3.8252900742667646,
+      "rating_diff": 0.7596818439197954,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_WAS_GB",
+      "m_q2": 9.535893671515765,
+      "rating_diff": 4.198511707900806,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_07_NO_SEA",
+      "m_q2": -1.5419395967168996,
+      "rating_diff": -2.4723739913539022,
+      "n_history": 2142,
+      "n_asof_games": 94,
+      "history_ids_sha256": "43976494aaa6baf8d69e55d93561a179c8e438ac3373e7bf971506d3695ef262"
+    },
+    {
+      "game_id": "2021_08_GB_ARI",
+      "m_q2": 5.598604896291584,
+      "rating_diff": 1.8275423361376064,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_CAR_ATL",
+      "m_q2": 0.9524548302762517,
+      "rating_diff": -0.9702914352780299,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_CIN_NYJ",
+      "m_q2": -8.445464117864088,
+      "rating_diff": -6.6295608606163,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_DAL_MIN",
+      "m_q2": 0.16916302158000107,
+      "rating_diff": -1.4419766464970283,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_JAX_SEA",
+      "m_q2": 11.860198525156829,
+      "rating_diff": 5.598169171001092,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_LA_HOU",
+      "m_q2": -10.29713968272531,
+      "rating_diff": -7.74460888004391,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_MIA_BUF",
+      "m_q2": 15.74361651204469,
+      "rating_diff": 7.936698456077767,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_NE_LAC",
+      "m_q2": -0.36015093487957284,
+      "rating_diff": -1.7607206478792976,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_PHI_DET",
+      "m_q2": -1.624231391654519,
+      "rating_diff": -2.5219287323148074,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_PIT_CLE",
+      "m_q2": 0.9939614286745355,
+      "rating_diff": -0.9452968567376729,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_SF_CHI",
+      "m_q2": -0.5212683311876303,
+      "rating_diff": -1.8577428460752852,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_TB_NO",
+      "m_q2": 1.0247239603734977,
+      "rating_diff": -0.9267721752575899,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_TEN_IND",
+      "m_q2": 2.267476815826252,
+      "rating_diff": -0.17840721521424863,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_WAS_DEN",
+      "m_q2": 5.294406132452391,
+      "rating_diff": 1.6443589342673979,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_08_NYG_KC",
+      "m_q2": 9.200202388233807,
+      "rating_diff": 3.9963640381546144,
+      "n_history": 2155,
+      "n_asof_games": 107,
+      "history_ids_sha256": "4b76e74bba3a7350103652ed2a7c112f041689c2ee07d1eae2059d10a28d62c4"
+    },
+    {
+      "game_id": "2021_09_NYJ_IND",
+      "m_q2": 14.572750635378114,
+      "rating_diff": 7.231622630934345,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_ARI_SF",
+      "m_q2": -3.2492668067688544,
+      "rating_diff": -3.500497848583707,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_ATL_NO",
+      "m_q2": 12.781439676951186,
+      "rating_diff": 6.152925166714896,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_BUF_JAX",
+      "m_q2": -15.02966354107435,
+      "rating_diff": -10.594455502900598,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_CLE_CIN",
+      "m_q2": 3.569386438109719,
+      "rating_diff": 0.6055809592528733,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_DEN_DAL",
+      "m_q2": 7.306736993272306,
+      "rating_diff": 2.8561508827983335,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_GB_KC",
+      "m_q2": 0.8388279930429983,
+      "rating_diff": -1.0387156140138216,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_HOU_MIA",
+      "m_q2": 5.402310339208579,
+      "rating_diff": 1.70933704075357,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_LAC_PHI",
+      "m_q2": 3.058047453000354,
+      "rating_diff": 0.297661184632391,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_LV_NYG",
+      "m_q2": -1.595068364508022,
+      "rating_diff": -2.5043672456930124,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_MIN_BAL",
+      "m_q2": 7.393935439151219,
+      "rating_diff": 2.9086603267957405,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_NE_CAR",
+      "m_q2": -1.234544116468732,
+      "rating_diff": -2.2872655803902315,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_TEN_LA",
+      "m_q2": 5.4439647792163655,
+      "rating_diff": 1.7344206470356072,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_09_CHI_PIT",
+      "m_q2": 7.92713765486606,
+      "rating_diff": 3.2297457727938395,
+      "n_history": 2170,
+      "n_asof_games": 122,
+      "history_ids_sha256": "4b6b7616889d5984873898d87b50ffd01af23c26a6598ff0de883cf785d8139b"
+    },
+    {
+      "game_id": "2021_10_BAL_MIA",
+      "m_q2": -7.227795090414169,
+      "rating_diff": -5.8963009617753634,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_ATL_DAL",
+      "m_q2": 7.959087650823099,
+      "rating_diff": 3.2489855253664155,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_BUF_NYJ",
+      "m_q2": -15.668782979685096,
+      "rating_diff": -10.979322526975633,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_CAR_ARI",
+      "m_q2": 11.855671492117779,
+      "rating_diff": 5.595443067508737,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_CLE_NE",
+      "m_q2": 5.066514456855341,
+      "rating_diff": 1.5071263831981319,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_DET_PIT",
+      "m_q2": 12.823532757322372,
+      "rating_diff": 6.178272914878876,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_JAX_IND",
+      "m_q2": 13.253301081676186,
+      "rating_diff": 6.437072203467727,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_KC_LV",
+      "m_q2": -0.5795352005844023,
+      "rating_diff": -1.892830179165403,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_MIN_LAC",
+      "m_q2": 1.82538441726908,
+      "rating_diff": -0.4446278549255696,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_NO_TEN",
+      "m_q2": 0.5481126077364702,
+      "rating_diff": -1.2137795511066423,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_PHI_DEN",
+      "m_q2": 2.6566807268224064,
+      "rating_diff": 0.05596486288911334,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_SEA_GB",
+      "m_q2": 3.250784011158678,
+      "rating_diff": 0.4137239126415715,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_TB_WAS",
+      "m_q2": -9.141752525769384,
+      "rating_diff": -7.048854080723891,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_10_LA_SF",
+      "m_q2": -2.8196829095620264,
+      "rating_diff": -3.241809618934596,
+      "n_history": 2184,
+      "n_asof_games": 136,
+      "history_ids_sha256": "3f97617eedbf314a966a6059ab5ff28ed3a20ddb33252de4f61d2ffb911effa9"
+    },
+    {
+      "game_id": "2021_11_NE_ATL",
+      "m_q2": -7.834423459527914,
+      "rating_diff": -6.2616024078521635,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_ARI_SEA",
+      "m_q2": -0.9972634734780366,
+      "rating_diff": -2.144379150371853,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_BAL_CHI",
+      "m_q2": -5.438735896549401,
+      "rating_diff": -4.818959472470148,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_CIN_LV",
+      "m_q2": 1.9240736326739794,
+      "rating_diff": -0.3851988619289779,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_DAL_KC",
+      "m_q2": 2.319684852284168,
+      "rating_diff": -0.1469684098666355,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_DET_CLE",
+      "m_q2": 9.796092260057927,
+      "rating_diff": 4.355198940976403,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_GB_MIN",
+      "m_q2": -1.2445919785556803,
+      "rating_diff": -2.293316234690664,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_HOU_TEN",
+      "m_q2": 14.701336316237718,
+      "rating_diff": 7.309054774820739,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_IND_BUF",
+      "m_q2": 9.21635287122964,
+      "rating_diff": 4.006089588579886,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_MIA_NYJ",
+      "m_q2": -4.4798115824890505,
+      "rating_diff": -4.241511307432603,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_NO_PHI",
+      "m_q2": -2.953833882601464,
+      "rating_diff": -3.322593088582597,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_PIT_LAC",
+      "m_q2": 0.8422103405156873,
+      "rating_diff": -1.0366788210021254,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_SF_JAX",
+      "m_q2": -6.438080216379431,
+      "rating_diff": -5.420747888161761,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_WAS_CAR",
+      "m_q2": 5.745209804452557,
+      "rating_diff": 1.9158253569785233,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_11_NYG_TB",
+      "m_q2": 12.4894554598657,
+      "rating_diff": 5.977097160370981,
+      "n_history": 2198,
+      "n_asof_games": 150,
+      "history_ids_sha256": "e1513c44acb6941cf3e6ec6355562275a885ad984d356965e1b2721968d0b7d4"
+    },
+    {
+      "game_id": "2021_12_BUF_NO",
+      "m_q2": -0.08006274937962576,
+      "rating_diff": -1.592056232560842,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_CHI_DET",
+      "m_q2": -1.8698445993754613,
+      "rating_diff": -2.6698328932875337,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_LV_DAL",
+      "m_q2": 9.2744565550263,
+      "rating_diff": 4.041078654034109,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_ATL_JAX",
+      "m_q2": 0.1541278399723538,
+      "rating_diff": -1.4510305811017106,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_CAR_MIA",
+      "m_q2": -0.09670260699746258,
+      "rating_diff": -1.6020764761890594,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_CLE_BAL",
+      "m_q2": 7.777360704915996,
+      "rating_diff": 3.139552601502386,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_LAC_DEN",
+      "m_q2": 1.3990009185184993,
+      "rating_diff": -0.701388858214006,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_LA_GB",
+      "m_q2": 2.7050289129310894,
+      "rating_diff": 0.08507933098841258,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_MIN_SF",
+      "m_q2": 3.765449150486135,
+      "rating_diff": 0.7236466416367697,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_NYJ_HOU",
+      "m_q2": 6.351103491892373,
+      "rating_diff": 2.2806843900533007,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_PHI_NYG",
+      "m_q2": -3.060144937874329,
+      "rating_diff": -3.3866118259223383,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_PIT_CIN",
+      "m_q2": 1.5496969074231963,
+      "rating_diff": -0.6106422570530942,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_TB_IND",
+      "m_q2": -0.038956505120745,
+      "rating_diff": -1.5673027405794282,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_TEN_NE",
+      "m_q2": 5.665664064449896,
+      "rating_diff": 1.8679242443176132,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_12_SEA_WAS",
+      "m_q2": -2.260760845626399,
+      "rating_diff": -2.9052361110088047,
+      "n_history": 2213,
+      "n_asof_games": 165,
+      "history_ids_sha256": "7a4752628f3438cb75e19e949c2fb92569403793f2fd0878a6acc23689864a6d"
+    },
+    {
+      "game_id": "2021_13_DAL_NO",
+      "m_q2": 3.0331323328795206,
+      "rating_diff": 0.2826577164915678,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_ARI_CHI",
+      "m_q2": -7.00046819760021,
+      "rating_diff": -5.759408513440961,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_BAL_PIT",
+      "m_q2": -2.6213238411939677,
+      "rating_diff": -3.1223611094242996,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_DEN_KC",
+      "m_q2": 7.887432444542256,
+      "rating_diff": 3.2058359599882507,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_IND_HOU",
+      "m_q2": -9.078560082977617,
+      "rating_diff": -7.010800649812502,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_JAX_LA",
+      "m_q2": 14.99667287347124,
+      "rating_diff": 7.486901504267908,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_LAC_CIN",
+      "m_q2": 5.188848477868023,
+      "rating_diff": 1.580793882206809,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_MIN_DET",
+      "m_q2": -6.139397220992416,
+      "rating_diff": -5.240885989693624,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_NYG_MIA",
+      "m_q2": 4.380364966128894,
+      "rating_diff": 1.0939386492426268,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_PHI_NYJ",
+      "m_q2": -8.361882881562453,
+      "rating_diff": -6.57922963965728,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_SF_SEA",
+      "m_q2": 1.2369270813342257,
+      "rating_diff": -0.7989870090903457,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_TB_ATL",
+      "m_q2": -10.516644405698914,
+      "rating_diff": -7.8767909486802505,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_WAS_LV",
+      "m_q2": 3.2518857248057773,
+      "rating_diff": 0.41438734615200223,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_13_NE_BUF",
+      "m_q2": 4.235118107531381,
+      "rating_diff": 1.0064734231087078,
+      "n_history": 2228,
+      "n_asof_games": 180,
+      "history_ids_sha256": "9997fe637f69ab493a30a5002ee92ed123ada3297fbc1360dbb3579ed598c9b1"
+    },
+    {
+      "game_id": "2021_14_PIT_MIN",
+      "m_q2": 3.4706433553493756,
+      "rating_diff": 0.5461195282368251,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_ATL_CAR",
+      "m_q2": 6.4027287320997806,
+      "rating_diff": 2.3117722452575995,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_BAL_CLE",
+      "m_q2": -2.87031412832841,
+      "rating_diff": -3.272298891071691,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_BUF_TB",
+      "m_q2": 1.4930244770147485,
+      "rating_diff": -0.6447694456828286,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_CHI_GB",
+      "m_q2": 11.1535539057004,
+      "rating_diff": 5.172639613708953,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_DAL_WAS",
+      "m_q2": -4.451243244342969,
+      "rating_diff": -4.224307932568975,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_DET_DEN",
+      "m_q2": 9.130366698340278,
+      "rating_diff": 3.954310155077653,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_JAX_TEN",
+      "m_q2": 14.697935263767647,
+      "rating_diff": 7.307006717972829,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_LV_KC",
+      "m_q2": 10.145229282414626,
+      "rating_diff": 4.565443409648681,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_NO_NYJ",
+      "m_q2": -11.589518139560818,
+      "rating_diff": -8.522857546274674,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_NYG_LAC",
+      "m_q2": 6.8703587244500035,
+      "rating_diff": 2.593371196332025,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_SEA_HOU",
+      "m_q2": -7.7076673481736275,
+      "rating_diff": -6.1852720000863,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_SF_CIN",
+      "m_q2": 0.6671503452779217,
+      "rating_diff": -1.1420970188090975,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_14_LA_ARI",
+      "m_q2": 3.8724225088682167,
+      "rating_diff": 0.7880642068188215,
+      "n_history": 2242,
+      "n_asof_games": 194,
+      "history_ids_sha256": "b0bcafa7bbaa93008c07e2a9e999c059b7a93db2a6322c68e72f722d182e9158"
+    },
+    {
+      "game_id": "2021_15_KC_LAC",
+      "m_q2": -3.6204101187545885,
+      "rating_diff": -3.723994136382111,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_NE_IND",
+      "m_q2": 0.129103514217495,
+      "rating_diff": -1.4660998110467296,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_ARI_DET",
+      "m_q2": -12.116162899970456,
+      "rating_diff": -8.83999420249053,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_ATL_SF",
+      "m_q2": 10.355055605423072,
+      "rating_diff": 4.691797307887805,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_CAR_BUF",
+      "m_q2": 13.808393876336721,
+      "rating_diff": 6.771339789555982,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_CIN_DEN",
+      "m_q2": 2.4021136335152256,
+      "rating_diff": -0.09733117805361496,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_DAL_NYG",
+      "m_q2": -6.7551841673372675,
+      "rating_diff": -5.611702577621469,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_GB_BAL",
+      "m_q2": 1.4677190058140464,
+      "rating_diff": -0.6600079767076412,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_HOU_JAX",
+      "m_q2": 1.6307935288271298,
+      "rating_diff": -0.5618072295813654,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_NO_TB",
+      "m_q2": 6.482259460159565,
+      "rating_diff": 2.3596643179778787,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_NYJ_MIA",
+      "m_q2": 11.940353601175431,
+      "rating_diff": 5.646437215607659,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_TEN_PIT",
+      "m_q2": -1.326871920271771,
+      "rating_diff": -2.342863837840043,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_LV_CLE",
+      "m_q2": 5.761628546154492,
+      "rating_diff": 1.9257124483047017,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_MIN_CHI",
+      "m_q2": -2.5352123362581156,
+      "rating_diff": -3.0705062030623154,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_SEA_LA",
+      "m_q2": 5.465811652256731,
+      "rating_diff": 1.747576468161416,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_15_WAS_PHI",
+      "m_q2": 6.784270462975872,
+      "rating_diff": 2.5415302867934844,
+      "n_history": 2256,
+      "n_asof_games": 208,
+      "history_ids_sha256": "88f96cea0cde66775aedfde5b3a277f6c99bf64d1ee30b6bc875465745c4539d"
+    },
+    {
+      "game_id": "2021_16_SF_TEN",
+      "m_q2": 2.19951834969151,
+      "rating_diff": -0.21933066557719716,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_CLE_GB",
+      "m_q2": 8.962552133385394,
+      "rating_diff": 3.8532550340645537,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_IND_ARI",
+      "m_q2": 1.3579830486156983,
+      "rating_diff": -0.7260891326379899,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_BAL_CIN",
+      "m_q2": -1.132349715342079,
+      "rating_diff": -2.225725823245245,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_BUF_NE",
+      "m_q2": 0.7660729025655855,
+      "rating_diff": -1.0825275112379424,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_CHI_SEA",
+      "m_q2": 9.218273173714213,
+      "rating_diff": 4.007245962581228,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_DEN_LV",
+      "m_q2": -0.9658356621029047,
+      "rating_diff": -2.125453848610682,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_DET_ATL",
+      "m_q2": 4.025516155622415,
+      "rating_diff": 0.8802546373886675,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_JAX_NYJ",
+      "m_q2": 2.32386184464175,
+      "rating_diff": -0.14445309501133874,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_LAC_HOU",
+      "m_q2": -6.711689013684911,
+      "rating_diff": -5.585510524404849,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_LA_MIN",
+      "m_q2": -1.9719582210838955,
+      "rating_diff": -2.731324006419495,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_NYG_PHI",
+      "m_q2": 9.604770110790515,
+      "rating_diff": 4.239987946317492,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_PIT_KC",
+      "m_q2": 10.015323275799405,
+      "rating_diff": 4.487216187700701,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_TB_CAR",
+      "m_q2": -8.15523562930418,
+      "rating_diff": -6.4547901245913595,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_WAS_DAL",
+      "m_q2": 10.687556880066198,
+      "rating_diff": 4.892024007847395,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_16_MIA_NO",
+      "m_q2": 9.19881783166842,
+      "rating_diff": 3.995530281374907,
+      "n_history": 2272,
+      "n_asof_games": 224,
+      "history_ids_sha256": "226e1d0e1366a000510683f1ce5f4bd08071470790e352a731b6b73b1d5cd9db"
+    },
+    {
+      "game_id": "2021_17_ARI_DAL",
+      "m_q2": 4.665767243211056,
+      "rating_diff": 1.2658031215290806,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_ATL_BUF",
+      "m_q2": 18.140817812505738,
+      "rating_diff": 9.380252938824702,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_CAR_NO",
+      "m_q2": 10.41986684689871,
+      "rating_diff": 4.73082555226034,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_DEN_LAC",
+      "m_q2": 2.81241041258678,
+      "rating_diff": 0.14974267201123287,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_DET_SEA",
+      "m_q2": 11.943243995416095,
+      "rating_diff": 5.648177762620634,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_HOU_SF",
+      "m_q2": 13.454376897837376,
+      "rating_diff": 6.558156693007949,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_JAX_NE",
+      "m_q2": 20.476778329767434,
+      "rating_diff": 10.786929247386869,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_KC_CIN",
+      "m_q2": -3.9193083766750845,
+      "rating_diff": -3.9039856623434046,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_LA_BAL",
+      "m_q2": -0.04084111675344326,
+      "rating_diff": -1.568437622147403,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_LV_IND",
+      "m_q2": 12.302785771566361,
+      "rating_diff": 5.864687799803031,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_MIA_TEN",
+      "m_q2": 6.123092388763144,
+      "rating_diff": 2.143379921723933,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_MIN_GB",
+      "m_q2": 6.9541384723409365,
+      "rating_diff": 2.6438219576461055,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_NYG_CHI",
+      "m_q2": 4.380500215110622,
+      "rating_diff": 1.0940200939147213,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_PHI_WAS",
+      "m_q2": -4.832595710925212,
+      "rating_diff": -4.453952002316276,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_TB_NYJ",
+      "m_q2": -16.978090712891923,
+      "rating_diff": -11.767765719961732,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_17_CLE_PIT",
+      "m_q2": 2.08091146754206,
+      "rating_diff": -0.2907537439722181,
+      "n_history": 2288,
+      "n_asof_games": 240,
+      "history_ids_sha256": "98037921e41c998e6410682d29602256bdb6e77f272aea26b5cdb7ac961106e8"
+    },
+    {
+      "game_id": "2021_18_DAL_PHI",
+      "m_q2": -1.0728145558208864,
+      "rating_diff": -2.189874747079325,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_KC_DEN",
+      "m_q2": -6.479508639442734,
+      "rating_diff": -5.4456953908244135,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_CAR_TB",
+      "m_q2": 15.06603473806034,
+      "rating_diff": 7.528670057680599,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_CHI_MIN",
+      "m_q2": 5.62864790419559,
+      "rating_diff": 1.8456337324365697,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_CIN_CLE",
+      "m_q2": -0.4260398446693108,
+      "rating_diff": -1.800397846065362,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_GB_DET",
+      "m_q2": -11.945501812598163,
+      "rating_diff": -8.7372249533418,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_IND_JAX",
+      "m_q2": -15.54474608698458,
+      "rating_diff": -10.904629587150598,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_LAC_LV",
+      "m_q2": -1.0867346530686692,
+      "rating_diff": -2.198257196554238,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_NE_MIA",
+      "m_q2": -7.557909159002493,
+      "rating_diff": -6.095090126221775,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_NO_ATL",
+      "m_q2": -7.521185433766316,
+      "rating_diff": -6.072975713811914,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_NYJ_BUF",
+      "m_q2": 23.113741914291676,
+      "rating_diff": 12.374864562851734,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_PIT_BAL",
+      "m_q2": 6.679176298779263,
+      "rating_diff": 2.4782443408834016,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_SEA_ARI",
+      "m_q2": 4.757028887436581,
+      "rating_diff": 1.320759355533824,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_SF_LA",
+      "m_q2": 5.158862946408277,
+      "rating_diff": 1.562737097260155,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_TEN_HOU",
+      "m_q2": -9.725295819622433,
+      "rating_diff": -7.400254081031111,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    },
+    {
+      "game_id": "2021_18_WAS_NYG",
+      "m_q2": 0.2506065137037621,
+      "rating_diff": -1.3929327392860618,
+      "n_history": 2304,
+      "n_asof_games": 256,
+      "history_ids_sha256": "21e0b895022ada490607982c8ec627d7da1ce4cbd62aea07de59104895ecad1c"
+    }
+  ],
+  "publication_timestamp_status": "unverified",
+  "observation_timestamp_status": "unverified",
+  "fit_label": "RETRO_FIT",
+  "label": "RECONSTRUCTED",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "production_causal_claim": false,
+  "nfl_green": false,
+  "eval": null,
+  "scoring": null,
+  "market_edge": null,
+  "cert_candidate": 0
+}

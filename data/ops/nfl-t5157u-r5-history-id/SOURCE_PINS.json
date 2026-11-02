@@ -1,0 +1,22 @@
+{
+  "schema_version": "nfl-t5157u-r5-history-id-v1",
+  "pins": {
+    "if_forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "reg496_identity": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
+    "dev_if437_identity": "92b915850b6094c4fa73923eeeb86763b91368007b8d5977d97e6770f40e6c49",
+    "games": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "outcomes": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+    "schedule": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+    "market_intersection_bytes": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "market_intersection_identity": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+    "r5_history_id": "e6cc6927",
+    "parent_tip": "255adf7802830bc25814a739d62f65f095216203"
+  },
+  "holds": {
+    "R3_STOP": "81b6c0fc",
+    "Q2_2017": "CLOSED",
+    "HOLD_t5155u_not_overwritten": true,
+    "IF496_not_regenerated": true,
+    "Phase2_score": false
+  }
+}

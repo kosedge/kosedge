@@ -1,0 +1,20 @@
+{
+  "schema_version": "nfl-t5157u-r5-history-id-v1",
+  "refused": true,
+  "phase2_score": false,
+  "outcome_loader_reads": 0,
+  "target_labels_loaded": 0,
+  "reason": "t5157u R5-HISTORY-ID must not run Phase2 --score",
+  "stop": "STOP_FOR_COS_B",
+  "publication_timestamp_status": "unverified",
+  "observation_timestamp_status": "unverified",
+  "fit_label": "RETRO_FIT",
+  "label": "RECONSTRUCTED",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "production_causal_claim": false,
+  "nfl_green": false,
+  "eval": null,
+  "scoring": null,
+  "market_edge": null,
+  "cert_candidate": 0
+}
