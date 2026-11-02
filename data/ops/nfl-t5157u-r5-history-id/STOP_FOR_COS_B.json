@@ -1,0 +1,38 @@
+{
+  "schema_version": "nfl-t5157u-r5-history-id-v1",
+  "stop": "STOP_FOR_COS_B",
+  "ticket": "t5157u",
+  "owner_clear": "t5157u",
+  "r5_history_id": "e6cc6927",
+  "cos_order_a": "1e3c47b8",
+  "parent_tip": "255adf7802830bc25814a739d62f65f095216203",
+  "parent_stamp": "df074369",
+  "status": "IDENTITY_Q2_COMPLETE",
+  "hold_q2": false,
+  "phase2_score": false,
+  "cert_candidate": 0,
+  "eval": null,
+  "green": false,
+  "hash6": false,
+  "q2_2017_eval": "CLOSED",
+  "preserve_market_intersection": {
+    "n": 96,
+    "bytes_sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+    "identity_sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e"
+  },
+  "preserve_if496": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+  "worker_b_owns": [
+    "N1",
+    "market intersection",
+    "integration-owner combine"
+  ],
+  "publication_timestamp_status": "unverified",
+  "observation_timestamp_status": "unverified",
+  "fit_label": "RETRO_FIT",
+  "label": "RECONSTRUCTED",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "production_causal_claim": false,
+  "nfl_green": false,
+  "scoring": null,
+  "market_edge": null
+}

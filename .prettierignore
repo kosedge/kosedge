@@ -46,3 +46,6 @@ data/ops/nfl-t5155u-r5-phase2/
 data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/
 data/ops/nfl-t5155u-r5-phase1/
 data/ops/nfl-t5151u-verify-integrate/
+
+# t5157u R5-HISTORY-ID freeze. Prettier must not rewrite IDs / mus / history lists.
+data/ops/nfl-t5157u-r5-history-id/
