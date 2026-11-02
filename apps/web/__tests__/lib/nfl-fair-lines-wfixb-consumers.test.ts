@@ -270,6 +270,8 @@ describe("t5178u W-FIX-B same-contract consumer wiring", () => {
       env_bypass_honored: false,
       cacheable: false,
       contract_id: FIXTURE_CONTRACT_ID,
+      schema_version: "nfl-fixture-assembly-v0",
+      channel: "FIXTURE",
     };
     expect(() =>
       projectFixtureFairLinesBoard({

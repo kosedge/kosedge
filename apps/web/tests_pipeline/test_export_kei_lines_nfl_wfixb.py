@@ -44,6 +44,7 @@ def _allow() -> dict[str, Any]:
         "env_bypass_honored": False,
         "cacheable": False,
         "contract_id": "t5178u-nfl-fixture-assembly-v0",
+        "schema_version": "nfl-fixture-assembly-v0",
     }
 
 

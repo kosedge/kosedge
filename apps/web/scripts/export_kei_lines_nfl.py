@@ -32,7 +32,30 @@ NFL_EXPORT_STATUS_CONTRACT = "nfl-export-status-v1"
 
 # Same ONE contract as services/model-service/.../nfl_fixture_assembly/contract.py
 FIXTURE_CONTRACT_ID = "t5178u-nfl-fixture-assembly-v0"
+FIXTURE_CONTRACT_SCHEMA_VERSION = "nfl-fixture-assembly-v0"
+CHAIN_CONTRACT_ID = "t5194u-nfl-fixture-chain-v1"
+CHAIN_SCHEMA_VERSION = "nfl-fixture-chain-v1"
 FIXTURE_CHANNEL = "FIXTURE"
+ELIGIBILITY_REQUIRED_KEYS = (
+    "result",
+    "reason",
+    "contract_id",
+    "schema_version",
+    "channel",
+    "fixture",
+    "subscriber_consumable",
+    "betting_consumable",
+    "production_consumable",
+    "env_bypass_honored",
+    "cacheable",
+)
+ELIGIBILITY_REQUIRED_FALSE_BOOLS = (
+    "subscriber_consumable",
+    "betting_consumable",
+    "production_consumable",
+    "env_bypass_honored",
+    "cacheable",
+)
 NON_FIXTURE_CONSUMERS = frozenset(
     {
         "subscriber",
@@ -155,28 +178,42 @@ def assemble_games(payload: object) -> list[dict[str, object]]:
 
 
 def consume_fixture_eligibility(decision: object, consumer: str) -> dict[str, object]:
-    """Alex X1 — ALLOW_FIXTURE is fixture-channel-only. Same enum as contract.py."""
+    """Same exact-field gate as assemble.consume_fixture_eligibility (A tip)."""
     if not isinstance(decision, dict):
         raise NflExportRefuse("REFUSE_PARTIAL")
-    token = str(consumer or "").strip().lower()
+    missing = [key for key in ELIGIBILITY_REQUIRED_KEYS if key not in decision]
+    if missing:
+        raise NflExportRefuse("REFUSE_MISSING")
+    if decision["contract_id"] != FIXTURE_CONTRACT_ID:
+        raise NflExportRefuse("REFUSE_VERSION")
+    if decision["schema_version"] != FIXTURE_CONTRACT_SCHEMA_VERSION:
+        raise NflExportRefuse("REFUSE_VERSION")
+    if decision["channel"] != FIXTURE_CHANNEL:
+        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
+    if decision["fixture"] is not True:
+        if decision["fixture"] is False:
+            raise NflExportRefuse("REFUSE_QUALIFICATION")
+        raise NflExportRefuse("REFUSE_PARTIAL")
+    for key in ELIGIBILITY_REQUIRED_FALSE_BOOLS:
+        value = decision[key]
+        if value is not False:
+            if not isinstance(value, bool):
+                raise NflExportRefuse("REFUSE_PARTIAL")
+            raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
+    result = decision["result"]
+    if result != "ALLOW_FIXTURE":
+        raise NflExportRefuse(str(result) if result else "REFUSE_QUALIFICATION")
+    if not isinstance(decision["reason"], str) or not decision["reason"]:
+        raise NflExportRefuse("REFUSE_PARTIAL")
+    token = consumer if isinstance(consumer, str) else ""
+    token = token.strip().lower()
     if token in NON_FIXTURE_CONSUMERS:
         raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
     if token != "fixture":
         raise NflExportRefuse("REFUSE_QUALIFICATION")
-    result = str(decision.get("result") or "")
-    if result != "ALLOW_FIXTURE":
-        raise NflExportRefuse(result or "REFUSE_QUALIFICATION")
-    if (
-        decision.get("subscriber_consumable")
-        or decision.get("betting_consumable")
-        or decision.get("production_consumable")
-        or decision.get("env_bypass_honored")
-        or decision.get("cacheable")
-    ):
-        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
     return {
         "result": "ALLOW_FIXTURE",
-        "reason": decision.get("reason") or "",
+        "reason": decision["reason"],
         "fixture": True,
         "channel": FIXTURE_CHANNEL,
         "subscriber_consumable": False,
@@ -185,8 +222,94 @@ def consume_fixture_eligibility(decision: object, consumer: str) -> dict[str, ob
         "env_bypass_honored": False,
         "cacheable": False,
         "contract_id": FIXTURE_CONTRACT_ID,
+        "schema_version": FIXTURE_CONTRACT_SCHEMA_VERSION,
         "actionable": False,
     }
+
+
+def assert_fixture_chain_record(payload: object) -> dict[str, object]:
+    """Refuse mutated/missing A→B handoff before any export projection."""
+    if not isinstance(payload, dict):
+        raise NflExportRefuse("REFUSE_PARTIAL")
+    if payload.get("chain_contract_id") != CHAIN_CONTRACT_ID:
+        raise NflExportRefuse("REFUSE_VERSION")
+    if payload.get("chain_schema_version") != CHAIN_SCHEMA_VERSION:
+        raise NflExportRefuse("REFUSE_VERSION")
+    if payload.get("channel") != FIXTURE_CHANNEL:
+        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
+    if payload.get("fixture") is not True:
+        raise NflExportRefuse("REFUSE_QUALIFICATION")
+    if payload.get("production_mode") is not False:
+        raise NflExportRefuse("REFUSE_PRODUCTION_CHANNEL")
+    if payload.get("cacheable") is not False:
+        raise NflExportRefuse("REFUSE_CACHE")
+    if payload.get("honor_env_bypass") is not False:
+        raise NflExportRefuse("REFUSE_ENV_BYPASS")
+    for key in (
+        "eligibility",
+        "quote",
+        "forecast",
+        "provenance",
+        "cutoff",
+        "capability",
+        "l1_candidate",
+        "game_id",
+        "admitted_capture_id",
+    ):
+        if key not in payload:
+            raise NflExportRefuse("REFUSE_PARTIAL")
+    forecast = payload["forecast"]
+    quote = payload["quote"]
+    cutoff = payload["cutoff"]
+    provenance = payload["provenance"]
+    capability = payload["capability"]
+    candidate = payload["l1_candidate"]
+    if not all(isinstance(x, dict) for x in (forecast, quote, cutoff, provenance, capability, candidate)):
+        raise NflExportRefuse("REFUSE_PARTIAL")
+    game_id = payload.get("game_id")
+    if (
+        not isinstance(game_id, str)
+        or not game_id
+        or game_id != forecast.get("game_id")
+        or game_id != quote.get("event_id")
+        or game_id != candidate.get("game_id")
+    ):
+        raise NflExportRefuse("REFUSE_GAME")
+    if payload.get("admitted_capture_id") != candidate.get("capture_id"):
+        raise NflExportRefuse("REFUSE_IDENTITY")
+    fid = forecast.get("forecast_id")
+    if not isinstance(fid, str) or len(fid) != 64:
+        raise NflExportRefuse("REFUSE_HASH")
+    if quote.get("period") != "full_game" or forecast.get("period") != "full_game":
+        raise NflExportRefuse("REFUSE_PERIOD")
+    if quote.get("side") != forecast.get("side"):
+        raise NflExportRefuse("REFUSE_SIGN")
+    try:
+        point_margin = float(forecast.get("point_margin"))  # type: ignore[arg-type]
+        line = float(quote.get("line"))  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        raise NflExportRefuse("REFUSE_LINE") from None
+    if not math.isfinite(point_margin) or not math.isfinite(line):
+        raise NflExportRefuse("REFUSE_LINE")
+    expected = -point_margin if quote.get("side") == "HOME" else point_margin
+    if line != expected:
+        raise NflExportRefuse("REFUSE_SIGN" if line == -expected else "REFUSE_LINE")
+    if quote.get("time") != cutoff.get("captured_at") or quote.get("time") != provenance.get(
+        "captured_at"
+    ):
+        raise NflExportRefuse("REFUSE_TIME")
+    if cutoff.get("decision_ts") != provenance.get("decision_ts") or cutoff.get(
+        "kickoff_ts"
+    ) != provenance.get("kickoff_ts"):
+        raise NflExportRefuse("REFUSE_CUTOFF")
+    as_of = cutoff.get("as_of_ts")
+    kickoff = cutoff.get("kickoff_ts")
+    if isinstance(as_of, str) and isinstance(kickoff, str) and as_of > kickoff:
+        raise NflExportRefuse("REFUSE_STALE")
+    bits = capability.get("bits")
+    if not isinstance(bits, list) or "POINT_MARGIN" not in bits:
+        raise NflExportRefuse("REFUSE_CAPABILITY")
+    return payload
 
 
 def project_fixture_assembly_to_export(
@@ -202,6 +325,10 @@ def project_fixture_assembly_to_export(
     """Project the SAME t5178u contract into the export game shape. Spread only."""
     if not isinstance(assembly, dict):
         raise NflExportRefuse("unexpected_empty_payload")
+    if assembly.get("chain_contract_id") is not None:
+        assert_fixture_chain_record(assembly)
+        if assembly.get("requested_output") not in (None, "POINT_MARGIN_SPREAD"):
+            requested_output = str(assembly["requested_output"])
     if requested_output != "POINT_MARGIN_SPREAD":
         raise NflExportRefuse(
             OUTPUT_REFUSE.get(requested_output, "REFUSE_CAPABILITY")

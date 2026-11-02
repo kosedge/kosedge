@@ -10,8 +10,35 @@
 export const FIXTURE_CHANNEL = "FIXTURE" as const;
 export const FIXTURE_CONTRACT_ID = "t5178u-nfl-fixture-assembly-v0";
 export const FIXTURE_CONTRACT_SCHEMA_VERSION = "nfl-fixture-assembly-v0";
+/** Additive A→B chain (t5194u). Does not rewrite v0 evidence. */
+export const CHAIN_CONTRACT_ID = "t5194u-nfl-fixture-chain-v1";
+export const CHAIN_SCHEMA_VERSION = "nfl-fixture-chain-v1";
 export const SYNTHETIC_ADJUSTMENT_POLICY =
   "TRANSPORT_ONLY_NOT_INJURY_POLICY" as const;
+export const AMERICAN_PRICE_MIN_ABS = 100;
+
+/** Must be present on consumeFixtureEligibility input — no truthiness defaults. */
+export const ELIGIBILITY_REQUIRED_KEYS = [
+  "result",
+  "reason",
+  "contract_id",
+  "schema_version",
+  "channel",
+  "fixture",
+  "subscriber_consumable",
+  "betting_consumable",
+  "production_consumable",
+  "env_bypass_honored",
+  "cacheable",
+] as const;
+
+export const ELIGIBILITY_REQUIRED_FALSE_BOOLS = [
+  "subscriber_consumable",
+  "betting_consumable",
+  "production_consumable",
+  "env_bypass_honored",
+  "cacheable",
+] as const;
 
 export const FORECAST_CAPABILITIES = ["POINT_MARGIN", "JOINT_SCORE"] as const;
 export type ForecastCapability = (typeof FORECAST_CAPABILITIES)[number];
@@ -111,6 +138,41 @@ export type EligibilityDecision = {
   env_bypass_honored: false;
   cacheable: false;
   contract_id: typeof FIXTURE_CONTRACT_ID;
+  schema_version: typeof FIXTURE_CONTRACT_SCHEMA_VERSION;
+};
+
+/** t5194u additive chain record — B consumes this JSON, not v0-only to_dict. */
+export type FixtureChainRecord = {
+  chain_contract_id: typeof CHAIN_CONTRACT_ID;
+  chain_schema_version: typeof CHAIN_SCHEMA_VERSION;
+  base_contract_id: typeof FIXTURE_CONTRACT_ID;
+  base_schema_version: typeof FIXTURE_CONTRACT_SCHEMA_VERSION;
+  channel: typeof FIXTURE_CHANNEL;
+  fixture: true;
+  production_mode: false;
+  cacheable: false;
+  honor_env_bypass: false;
+  requested_output: RequestedOutput;
+  eligibility: EligibilityDecision;
+  quote: SyntheticQuote;
+  forecast: ForecastRecord;
+  provenance: ProvenanceRecord;
+  cutoff: {
+    source_published_at: string;
+    captured_at: string;
+    decision_ts: string;
+    kickoff_ts: string;
+    as_of_ts: string;
+  };
+  capability: CapabilityRecord;
+  l1_candidate: Record<string, unknown>;
+  game_id: string;
+  admitted_capture_id: string;
+  offense_raw: number;
+  defense_raw: number;
+  offense_multiplier: number;
+  defense_multiplier: number;
+  adjustment_policy: typeof SYNTHETIC_ADJUSTMENT_POLICY;
 };
 
 /** Consumer tokens that MUST refuse ALLOW_FIXTURE (Alex X1 / props-eligibility). */
@@ -149,16 +211,17 @@ export const FIXTURE_ENV_BYPASS_KEYS = [
 
 /** Loose input so refuse rows can share the same consume gate. */
 export type EligibilityDecisionInput = {
-  result: FixtureEligibilityResult;
-  reason: string;
-  fixture?: boolean;
-  channel?: string;
-  subscriber_consumable?: boolean;
-  betting_consumable?: boolean;
-  production_consumable?: boolean;
-  env_bypass_honored?: boolean;
-  cacheable?: boolean;
-  contract_id?: string;
+  result?: unknown;
+  reason?: unknown;
+  fixture?: unknown;
+  channel?: unknown;
+  subscriber_consumable?: unknown;
+  betting_consumable?: unknown;
+  production_consumable?: unknown;
+  env_bypass_honored?: unknown;
+  cacheable?: unknown;
+  contract_id?: unknown;
+  schema_version?: unknown;
 };
 
 export class FixtureHardRefuse extends Error {
@@ -203,20 +266,103 @@ export function allowFixtureEligibility(
     env_bypass_honored: false,
     cacheable: false,
     contract_id: FIXTURE_CONTRACT_ID,
+    schema_version: FIXTURE_CONTRACT_SCHEMA_VERSION,
   };
 }
 
+function envTruthy(name: string): boolean {
+  const raw = (typeof process !== "undefined" ? process.env?.[name] : "") ?? "";
+  return ["1", "true", "yes", "y", "on"].includes(raw.trim().toLowerCase());
+}
+
 /**
- * Alex X1 — ALLOW_FIXTURE cannot be consumed by subscriber/betting/production.
- * Mirrors assemble.consume_eligibility against the same contract enum.
+ * t5194u — same gate as assemble.consume_fixture_eligibility.
+ * Exact contract_id / schema_version / channel / fixture + explicit false
+ * flags BEFORE normalize. No truthiness defaults. Does not accept bare
+ * {result:"ALLOW_FIXTURE"} or rewrite fixture=false / PRODUCTION / wrong
+ * contract_id into allow.
  */
 export function consumeFixtureEligibility(
   decision: EligibilityDecision | EligibilityDecisionInput,
   consumer: string,
 ): EligibilityDecision {
-  const token = String(consumer ?? "")
-    .trim()
-    .toLowerCase();
+  if (decision == null || typeof decision !== "object") {
+    throw new FixtureHardRefuse("REFUSE_PARTIAL", "eligibility must be an object");
+  }
+  const raw = decision as Record<string, unknown>;
+  const missing = ELIGIBILITY_REQUIRED_KEYS.filter((key) => !(key in raw));
+  if (missing.length > 0) {
+    throw new FixtureHardRefuse(
+      "REFUSE_MISSING",
+      `eligibility missing required fields ${JSON.stringify(missing)} (no default / no normalize)`,
+    );
+  }
+
+  if (raw.contract_id !== FIXTURE_CONTRACT_ID) {
+    throw new FixtureHardRefuse(
+      "REFUSE_VERSION",
+      `contract_id ${JSON.stringify(raw.contract_id)} != ${FIXTURE_CONTRACT_ID} (not rewritten)`,
+    );
+  }
+  if (raw.schema_version !== FIXTURE_CONTRACT_SCHEMA_VERSION) {
+    throw new FixtureHardRefuse(
+      "REFUSE_VERSION",
+      `schema_version ${JSON.stringify(raw.schema_version)} != ${FIXTURE_CONTRACT_SCHEMA_VERSION}`,
+    );
+  }
+  if (raw.channel !== FIXTURE_CHANNEL) {
+    throw new FixtureHardRefuse(
+      "REFUSE_PRODUCTION_CHANNEL",
+      `channel=${JSON.stringify(raw.channel)} is not ${FIXTURE_CHANNEL} (not rewritten)`,
+    );
+  }
+  if (raw.fixture !== true) {
+    if (raw.fixture === false) {
+      throw new FixtureHardRefuse(
+        "REFUSE_QUALIFICATION",
+        "fixture=false cannot be rewritten into ALLOW_FIXTURE",
+      );
+    }
+    throw new FixtureHardRefuse(
+      "REFUSE_PARTIAL",
+      `fixture must be boolean true (got ${JSON.stringify(raw.fixture)})`,
+    );
+  }
+  for (const key of ELIGIBILITY_REQUIRED_FALSE_BOOLS) {
+    const value = raw[key];
+    if (value !== false) {
+      if (typeof value !== "boolean") {
+        throw new FixtureHardRefuse(
+          "REFUSE_PARTIAL",
+          `${key} must be boolean false (got ${typeof value})`,
+        );
+      }
+      throw new FixtureHardRefuse(
+        "REFUSE_PRODUCTION_CHANNEL",
+        `${key}=${JSON.stringify(value)} must be false (no rewrite)`,
+      );
+    }
+  }
+
+  const resultRaw = raw.result;
+  if (
+    typeof resultRaw !== "string" ||
+    !(FIXTURE_ELIGIBILITY_RESULTS as readonly string[]).includes(resultRaw)
+  ) {
+    throw new FixtureHardRefuse(
+      "REFUSE_VALIDATION",
+      `result ${JSON.stringify(resultRaw)} is not a FixtureEligibilityResult`,
+    );
+  }
+  const result = resultRaw as FixtureEligibilityResult;
+  if (result !== "ALLOW_FIXTURE") {
+    throw new FixtureHardRefuse(result, "eligibility is not ALLOW_FIXTURE");
+  }
+  if (typeof raw.reason !== "string" || !raw.reason) {
+    throw new FixtureHardRefuse("REFUSE_PARTIAL", "reason must be a non-empty string");
+  }
+
+  const token = typeof consumer === "string" ? consumer.trim().toLowerCase() : "";
   if ((NON_FIXTURE_CONSUMERS as readonly string[]).includes(token)) {
     throw new FixtureHardRefuse(
       "REFUSE_PRODUCTION_CHANNEL",
@@ -229,24 +375,18 @@ export function consumeFixtureEligibility(
       `unknown consumer ${JSON.stringify(consumer)}; only consumer='fixture' is qualified`,
     );
   }
-  if (decision.result !== "ALLOW_FIXTURE") {
-    throw new FixtureHardRefuse(decision.result, "eligibility is not ALLOW_FIXTURE");
-  }
-  if (
-    decision.subscriber_consumable ||
-    decision.betting_consumable ||
-    decision.production_consumable ||
-    decision.env_bypass_honored ||
-    decision.cacheable
-  ) {
+
+  const bypassHit = FIXTURE_ENV_BYPASS_KEYS.filter((name) => envTruthy(name));
+  if (bypassHit.length > 0 && raw.env_bypass_honored !== false) {
     throw new FixtureHardRefuse(
-      "REFUSE_PRODUCTION_CHANNEL",
-      "ALLOW_FIXTURE payload illegally set a production/cache consumable bit",
+      "REFUSE_ENV_BYPASS",
+      `env ${bypassHit.join(",")} must not be honored for ALLOW_FIXTURE`,
     );
   }
+
   return {
     result: "ALLOW_FIXTURE",
-    reason: decision.reason,
+    reason: raw.reason,
     fixture: true,
     channel: FIXTURE_CHANNEL,
     subscriber_consumable: false,
@@ -255,6 +395,7 @@ export function consumeFixtureEligibility(
     env_bypass_honored: false,
     cacheable: false,
     contract_id: FIXTURE_CONTRACT_ID,
+    schema_version: FIXTURE_CONTRACT_SCHEMA_VERSION,
   };
 }
 
