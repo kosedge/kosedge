@@ -1,11 +1,10 @@
-"""t5155u RETURN-FIX R2 — frozen Phase-2 one-exec runner for DEV_R5_496.
+"""t5155u / t5160u Phase-2 one-exec runner for DEV_R5_496.
 
 Loads committed FORECASTS (sha 96d3aa6f). Never regenerates produce-μ.
-Default / unbound --score refuse target labels (0 reads). Bound
-``--score --cos-bind`` verifies code/input pins + exclusive claim, then
-the real loader once. FOCUSED_TESTS / verify_integrate use a synthetic
-loader only — real schedule_outcome_loader(ROOT) is blocked there.
-Q2/candidate stay HOLD. CERT=0. Not EVAL. No Cos bind in this change.
+Default / unbound --score refuse target labels (0 reads). Real schedule
+labels require a verified + atomically claimed hash-matching bind.
+Env flags cannot authorize real loading. FOCUSED_TESTS / API positive
+hooks use synthetic fixtures only. CERT=0. Not EVAL.
 """
 
 from __future__ import annotations
@@ -13,7 +12,6 @@ from __future__ import annotations
 import csv
 import json
 import math
-import os
 from collections import Counter
 from pathlib import Path
 from typing import Any, Callable, Mapping, Sequence
@@ -46,9 +44,11 @@ from .market_arm_freeze import (
     INTERSECTION_N,
 )
 from .one_run import (
+    STATUS_IN_PROGRESS,
     OneRunRefuse,
     bind_one_run,
     claim_one_run,
+    claim_path_for,
     complete_one_run,
     fail_one_run,
     load_one_run,
@@ -105,8 +105,12 @@ RUNNER_CODE_RELPATHS = (
     "services/model-service/src/services/nfl_t5107u/one_run.py",
     "services/model-service/src/services/nfl_t5107u/evaluator.py",
 )
-SKIP_NESTED_TESTS_ENV = "T5151U_SKIP_NESTED_TESTS"
-ALLOW_REAL_LOADER_ENV = "T5157U_ALLOW_REAL_LOADER"
+OWNER_T5160U = "t5160u"
+SUPERSEDED_COS_ONE_DEV_ORDER = "5d029306"
+OWNER_T5162U_RECONCILE_SHA8 = "3c978ef9"
+ALEX_APPEND_PREFLIGHT_ORDER = "b8cc05b2"
+PROTOCOL_DEVIATION_PATH = "ops/CURSOR_PROTOCOL_DEVIATION_t5160u_REAL_LABEL_EXPOSURE_v1.md"
+PROTOCOL_DEVIATION_SEAL_PATH = "data/ops/nfl-t5155u-r5-phase2/PROTOCOL_DEVIATION.json"
 
 
 class Phase2OneExecRefuse(ValueError):
@@ -117,12 +121,6 @@ def _repo_root(root: Path | None) -> Path:
     if root is not None:
         return Path(root)
     return Path(__file__).resolve().parents[5]
-
-
-def _real_loader_blocked() -> bool:
-    skip = os.environ.get(SKIP_NESTED_TESTS_ENV) == "1"
-    allow = os.environ.get(ALLOW_REAL_LOADER_ENV) == "1"
-    return skip and not allow
 
 
 def runner_code_hashes(root: Path | None = None) -> dict[str, str]:
@@ -347,22 +345,60 @@ def synthetic_outcome_loader(
     return _load
 
 
-def schedule_outcome_loader(root: Path) -> Callable[[], dict[str, dict[str, Any]]]:
-    """Repo-relative schedule scores for 2020–21 REG496. Bound command only.
-
-    Refuses inside FOCUSED_TESTS / verify_integrate (T5151U_SKIP_NESTED_TESTS=1)
-    unless T5157U_ALLOW_REAL_LOADER=1 after a verified Cos bind.
-    """
-    if _real_loader_blocked():
+def assert_claimed_hash_matching_context(
+    root: Path,
+    bind_path: Path,
+    claimed_bind: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Real labels require verified + exclusive claim + live hash match. Env flags ignored."""
+    if not claimed_bind:
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — no verified claimed bind")
+    dest = Path(bind_path)
+    live = load_one_run(dest)
+    if not live:
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — missing one-run record")
+    bind_id = str(claimed_bind.get("bind_id") or "")
+    if not bind_id or live.get("bind_id") != bind_id:
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — bind_id mismatch")
+    if live.get("status") != STATUS_IN_PROGRESS:
         raise Phase2OneExecRefuse(
-            "real schedule_outcome_loader(ROOT) refused inside FOCUSED_TESTS / verify_integrate"
+            f"real schedule_outcome_loader refused — bind status {live.get('status')} is not claimed"
         )
+    claim = claim_path_for(dest, bind_id)
+    if not claim.is_file():
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — claim file missing")
+    if live.get("code_sha256") != runner_code_sha256(root):
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — code hash mismatch")
+    if live.get("input_sha256") != runner_input_sha256():
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — input hash mismatch")
+    if live.get("effective_spec_sha256") != runner_spec_sha256():
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — spec hash mismatch")
+    if live.get("forecast_sha256") != FORECASTS_SHA256:
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — forecast pin mismatch")
+    if live.get("cohort_sha256") != REG496_IDENTITY_SHA256:
+        raise Phase2OneExecRefuse("real schedule_outcome_loader refused — cohort pin mismatch")
+    return live
+
+
+def schedule_outcome_loader(
+    root: Path,
+    *,
+    claimed_bind: Mapping[str, Any] | None = None,
+    bind_path: Path | None = None,
+) -> Callable[[], dict[str, dict[str, Any]]]:
+    """Repo-relative schedule scores for 2020–21 REG496.
+
+    Env flags cannot authorize this reader. Requires a verified atomically
+    claimed hash-matching bind record + claim file.
+    """
+    if claimed_bind is None or bind_path is None:
+        raise Phase2OneExecRefuse(
+            "real schedule_outcome_loader refused — no verified claimed bind"
+        )
+    record = assert_claimed_hash_matching_context(root, Path(bind_path), claimed_bind)
 
     def _load() -> dict[str, dict[str, Any]]:
-        if _real_loader_blocked():
-            raise Phase2OneExecRefuse(
-                "real schedule_outcome_loader(ROOT) refused inside FOCUSED_TESTS / verify_integrate"
-            )
+        assert_claimed_hash_matching_context(root, Path(bind_path), record)
         path = Path(root) / SCHEDULE_PATH
         if sha256_file(path) != SCHEDULE_SHA256:
             raise Phase2OneExecRefuse("schedule pin drifted")
@@ -542,8 +578,6 @@ def run_phase2_one_exec(
     spec_sha = runner_spec_sha256()
     bind_record: dict[str, Any] | None = None
     bound = False
-    allow_prior: str | None = None
-    allow_mutated = False
 
     if score_flag and cos_bind_path is None:
         raise Phase2OneExecRefuse("unbound --score refused — 0 reads")
@@ -559,28 +593,17 @@ def run_phase2_one_exec(
         bound = True
         invoke_outcome_after_gates = True
         if outcome_loader is None:
-            allow_prior = os.environ.get(ALLOW_REAL_LOADER_ENV)
-            os.environ[ALLOW_REAL_LOADER_ENV] = "1"
-            allow_mutated = True
             try:
-                outcome_loader = OutcomeReadSpy(schedule_outcome_loader(repo))
+                outcome_loader = OutcomeReadSpy(
+                    schedule_outcome_loader(
+                        repo,
+                        claimed_bind=bind_record,
+                        bind_path=Path(cos_bind_path),
+                    )
+                )
             except Exception as exc:
-                if allow_prior is None:
-                    os.environ.pop(ALLOW_REAL_LOADER_ENV, None)
-                else:
-                    os.environ[ALLOW_REAL_LOADER_ENV] = allow_prior
                 fail_one_run(Path(cos_bind_path), bind_record["bind_id"], str(exc))
                 raise
-
-    def _restore_allow() -> None:
-        nonlocal allow_mutated
-        if not allow_mutated:
-            return
-        if allow_prior is None:
-            os.environ.pop(ALLOW_REAL_LOADER_ENV, None)
-        else:
-            os.environ[ALLOW_REAL_LOADER_ENV] = allow_prior
-        allow_mutated = False
 
     forecasts = load_committed_forecasts(repo)
     completed = load_completed_forecasts(repo)
@@ -619,12 +642,10 @@ def run_phase2_one_exec(
         if invoke_outcome_after_gates:
             loaded = spy()
     except Phase2OneExecRefuse:
-        _restore_allow()
         if bound and bind_record is not None:
             fail_one_run(Path(cos_bind_path), bind_record["bind_id"], "phase2 refuse after claim")
         raise
     except Exception as exc:
-        _restore_allow()
         if getattr(spy, "reads", 0) != 0:
             if bound and bind_record is not None:
                 fail_one_run(Path(cos_bind_path), bind_record["bind_id"], str(exc))
@@ -653,7 +674,6 @@ def run_phase2_one_exec(
         if write:
             _write_receipt(repo, receipt, dest=dest)
         return receipt
-    _restore_allow()
     if not invoke_outcome_after_gates:
         if getattr(spy, "reads", 0) != 0:
             raise Phase2OneExecRefuse("target scoring outcomes were read before Cos bind")
@@ -724,7 +744,7 @@ def run_phase2_one_exec(
             bind_record = complete_one_run(
                 Path(cos_bind_path),
                 bind_record["bind_id"],
-                result={"n": 496, "market_n": INTERSECTION_N, "q2": "HOLD"},
+                result={"n": 496, "market_n": INTERSECTION_N, "q2": "COMPLETED"},
             )
         receipt = _receipt(
             repo,
@@ -799,6 +819,12 @@ def _receipt(
         "score_flag": bool(score_flag),
         "owner_clear_sha8": OWNER_CLEAR_SHA8,
         "owner_t5157u_sha8": OWNER_T5157U_SHA8,
+        "owner_t5160u": OWNER_T5160U,
+        "superseded_cos_one_dev_order": SUPERSEDED_COS_ONE_DEV_ORDER,
+        "owner_t5162u_reconcile_sha8": OWNER_T5162U_RECONCILE_SHA8,
+        "alex_append_preflight_order": ALEX_APPEND_PREFLIGHT_ORDER,
+        "protocol_deviation_path": PROTOCOL_DEVIATION_PATH,
+        "protocol_deviation_seal_path": PROTOCOL_DEVIATION_SEAL_PATH,
         "cos_order_return_fix_sha8": COS_ORDER_RETURN_FIX_SHA8,
         "cos_order_t5157u_sha8": COS_ORDER_T5157U_SHA8,
         "alex_return_fix_sha8": ALEX_RETURN_FIX_SHA8,

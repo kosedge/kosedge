@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""t5155u RETURN-FIX R2 — Phase-2 one-exec (CERT=0).
+"""t5155u / t5160u Phase-2 one-exec (CERT=0).
 
 Loads committed FORECASTS sha 96d3aa6f. Never regenerates.
 Default: refuse target labels. Unbound --score refused (0 reads).
 ``--score --cos-bind FILE`` verifies pins + exclusive claim, then the
-real loader once. Not a Cos bind in this change. Q2 HOLD.
+real loader once — only after a verified claimed hash-matching bind.
+Env flags cannot authorize real labels. Q2/candidate COMPLETED pins.
 
   PYTHONPATH=services/model-service python scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py
 """

@@ -1,4 +1,4 @@
-"""t5155u RETURN-FIX R2 — synthetic loader + --cos-bind proofs. CERT=0."""
+"""t5155u / t5160u loader-boundary proofs. Synthetic only. CERT=0."""
 
 from __future__ import annotations
 
@@ -10,16 +10,20 @@ import pytest
 
 from src.services.nfl_t5107u.cohort_enforcement import OutcomeReadSpy
 from src.services.nfl_t5107u.evaluator import BOOT_B, BOOT_SEED, MIN_N_REPORT
-from src.services.nfl_t5107u.one_run import STATUS_CONSUMED, bind_one_run, load_one_run
+from src.services.nfl_t5107u.last_played_cohort import SCHEDULE_PATH
+from src.services.nfl_t5107u.one_run import STATUS_BOUND, STATUS_CONSUMED, bind_one_run, load_one_run
 from src.services.nfl_t5107u.r5_496_freeze import freeze_q2_history_sources
 from src.services.nfl_t5107u.r5_phase2_one_exec import (
     CANDIDATE_COMPLETED_SHA256,
     FORECASTS_SHA256,
     IDENTITY_FREEZE_SHA256,
     INTERSECTION_BYTES_SHA256,
+    OWNER_T5160U,
+    PROTOCOL_DEVIATION_PATH,
     Q2_COMPLETED_SHA256,
     Q2_HISTORY_SHA256,
     REG496_IDENTITY_SHA256,
+    SUPERSEDED_COS_ONE_DEV_ORDER,
     Phase2OneExecRefuse,
     bind_phase2_one_exec_fixture,
     load_committed_forecasts,
@@ -125,6 +129,11 @@ def test_phase2_refusal_reads_zero_target_labels():
     assert receipt["freeze_manifest_sha256"].startswith("36f051c4")
     assert receipt["runner_code_sha256"] == runner_code_sha256(ROOT)
     assert set(receipt["runner_code_hashes"]) == set(runner_code_hashes(ROOT))
+    assert receipt["owner_t5160u"] == OWNER_T5160U
+    assert receipt["superseded_cos_one_dev_order"] == SUPERSEDED_COS_ONE_DEV_ORDER
+    assert receipt["protocol_deviation_path"] == PROTOCOL_DEVIATION_PATH
+    assert receipt["one_run_bind_id"] is None
+    assert receipt["one_run_status"] is None
 
 
 def test_phase2_positive_invokes_loader_once_if_only_and_market96():
@@ -180,6 +189,8 @@ def test_phase2_positive_invokes_loader_once_if_only_and_market96():
     )
     assert receipt["cos_bind"] is False
     assert receipt["runner_code_sha256"] == runner_code_sha256(ROOT)
+    assert receipt["owner_t5160u"] == OWNER_T5160U
+    assert receipt["superseded_cos_one_dev_order"] == SUPERSEDED_COS_ONE_DEV_ORDER
 
 
 def test_phase2_command_does_not_live_score():
@@ -203,12 +214,103 @@ def test_focused_tests_do_not_call_real_schedule_loader():
     assert "invoke_outcome_after_gates=True" not in command_fn
 
 
-def test_real_schedule_loader_blocked_inside_focused_tests(monkeypatch):
+def _count_schedule_opens(monkeypatch) -> list[str]:
+    opens: list[str] = []
+    real_open = Path.open
+
+    def spy_open(self: Path, *args, **kwargs):
+        text = self.as_posix()
+        if SCHEDULE_PATH.split("/")[-1] in text or "schedule_results_2020_2023" in text:
+            opens.append(text)
+        return real_open(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", spy_open)
+    return opens
+
+
+def test_direct_real_loader_refuses_without_claimed_bind_zero_reads(monkeypatch):
+    opens = _count_schedule_opens(monkeypatch)
+    monkeypatch.setenv("T5157U_ALLOW_REAL_LOADER", "1")
+    monkeypatch.delenv("T5151U_SKIP_NESTED_TESTS", raising=False)
+    with pytest.raises(Phase2OneExecRefuse, match="claimed bind"):
+        schedule_outcome_loader(ROOT)
+    assert opens == []
+
+
+def test_nested_env_cannot_authorize_real_loader(monkeypatch):
+    opens = _count_schedule_opens(monkeypatch)
     monkeypatch.setenv("T5151U_SKIP_NESTED_TESTS", "1")
-    monkeypatch.delenv("T5157U_ALLOW_REAL_LOADER", raising=False)
-    repo = Path(__file__).resolve().parents[3]
-    with pytest.raises(Phase2OneExecRefuse, match="FOCUSED_TESTS"):
-        schedule_outcome_loader(repo)
+    monkeypatch.setenv("T5157U_ALLOW_REAL_LOADER", "1")
+    with pytest.raises(Phase2OneExecRefuse, match="claimed bind"):
+        schedule_outcome_loader(ROOT, claimed_bind={"status": "IN_PROGRESS", "bind_id": "x"})
+    assert opens == []
+
+
+def test_forged_claimed_bind_without_record_zero_reads(tmp_path, monkeypatch):
+    opens = _count_schedule_opens(monkeypatch)
+    with pytest.raises(Phase2OneExecRefuse, match="claimed bind|missing one-run"):
+        schedule_outcome_loader(
+            ROOT,
+            claimed_bind={"status": "IN_PROGRESS", "bind_id": "forged"},
+            bind_path=tmp_path / "ONE_RUN.json",
+        )
+    assert opens == []
+
+
+def test_unclaimed_matching_bind_refuses_real_loader_zero_reads(tmp_path, monkeypatch):
+    opens = _count_schedule_opens(monkeypatch)
+    bind = bind_phase2_one_exec_fixture(path=tmp_path / "ONE_RUN.json", root=ROOT)
+    assert bind["status"] == STATUS_BOUND
+    with pytest.raises(Phase2OneExecRefuse, match="not claimed"):
+        schedule_outcome_loader(
+            ROOT,
+            claimed_bind=bind,
+            bind_path=tmp_path / "ONE_RUN.json",
+        )
+    assert opens == []
+
+
+def test_unbound_default_api_zero_real_schedule_reads(monkeypatch):
+    calls: list[object] = []
+
+    def boom(*_a, **_k):
+        calls.append(1)
+        raise AssertionError("real schedule_outcome_loader must not run unbound")
+
+    monkeypatch.setattr(
+        "src.services.nfl_t5107u.r5_phase2_one_exec.schedule_outcome_loader",
+        boom,
+    )
+    receipt = run_phase2_one_exec(root=ROOT, write=False)
+    assert receipt["outcome_loader_reads"] == 0
+    assert receipt["scored"] is None
+    assert receipt["cos_bind"] is False
+    assert receipt["owner_t5160u"] == OWNER_T5160U
+    assert calls == []
+
+
+def test_positive_synthetic_does_not_call_real_schedule_loader(monkeypatch):
+    calls: list[object] = []
+
+    def boom(*_a, **_k):
+        calls.append(1)
+        raise AssertionError("positive API hook must stay synthetic")
+
+    monkeypatch.setattr(
+        "src.services.nfl_t5107u.r5_phase2_one_exec.schedule_outcome_loader",
+        boom,
+    )
+    loader = OutcomeReadSpy(synthetic_outcome_loader(root=ROOT))
+    receipt = run_phase2_one_exec(
+        root=ROOT,
+        outcome_loader=loader,
+        invoke_outcome_after_gates=True,
+        write=False,
+    )
+    assert loader.reads == 1
+    assert receipt["outcome_loader_reads"] == 1
+    assert receipt["scored"]["if_only"]["full496"]["n"] == 496
+    assert calls == []
 
 
 def test_positive_without_labels_refuses():
