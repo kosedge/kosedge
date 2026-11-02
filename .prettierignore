@@ -52,3 +52,6 @@ data/ops/nfl-t5157u-r5-history-id/
 
 # t5165u reporting-arithmetic addendum. Hashed joined rows + report.
 data/ops/nfl-t5165u-r5-reporting/
+
+# t5168u market96 MARKET absolute-error schema correction. Hashed output.
+data/ops/nfl-t5168u-market96-schema/
