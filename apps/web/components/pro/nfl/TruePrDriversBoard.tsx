@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import TruePrDriverChips from "@/components/pro/nfl/TruePrDriverChips";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import { isPackagedDepthStale } from "@/lib/nfl-depth-pack-freshness";
 import { nflDepthPackFreshnessStamp } from "@/lib/nfl-surface-honesty";
 import { driverChipsForTeam } from "@/lib/nfl-true-pr-format";
@@ -16,6 +17,10 @@ export default function TruePrDriversBoard({
 }: {
   surface: TruePrProductSurface;
 }) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return null;
+  }
+
   if (surface.error) {
     return (
       <section className="mt-6 rounded-2xl border border-amber-500/25 bg-amber-500/10 px-4 py-4 text-sm text-amber-100/90">

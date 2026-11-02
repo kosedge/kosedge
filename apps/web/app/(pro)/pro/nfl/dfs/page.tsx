@@ -1,8 +1,11 @@
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
+import SportHubShell from "@/components/pro/SportHubShell";
 import {
   NflDfsBoardTable,
   NflDfsDeskControls,
 } from "@/components/pro/nfl/NflDfsDeskClient";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import { fetchNflDfsBoard } from "@/lib/nfl-dfs-board";
 import {
   formatDfsNumber,
@@ -42,6 +45,20 @@ export default async function NflDfsPage({
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="DFS Board"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL DFS" />
+      </SportHubShell>
+    );
+  }
+
   const search = await searchParams;
   const site = canonicalDfsSite(firstValue(search.site)) ?? "DK";
   const seasonRaw = Number(firstValue(search.season));

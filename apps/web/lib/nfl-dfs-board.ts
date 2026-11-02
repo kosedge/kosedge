@@ -1,4 +1,8 @@
 import "server-only";
+import {
+  footballPublicNumbersUnavailableMessage,
+  isFootballPublicNumbersDisabled,
+} from "@/lib/cfb-edge-board-public";
 import { env } from "@/lib/config/env";
 import {
   canonicalDfsSite,
@@ -115,6 +119,13 @@ export async function fetchNflDfsBoard(params: {
   slateId?: string;
   position?: string;
 }): Promise<NflDfsBoardResponse> {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return emptyBoard(
+      params,
+      "unavailable",
+      footballPublicNumbersUnavailableMessage("nfl"),
+    );
+  }
   const site = canonicalDfsSite(params.site);
   if (!site) {
     return emptyBoard(params, "invalid_site", "Site must be DK or FD.");

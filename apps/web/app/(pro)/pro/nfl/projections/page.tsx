@@ -1,5 +1,8 @@
 import Link from "next/link";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import AutoSubmitForm from "@/components/pro/AutoSubmitForm";
+import SportHubShell from "@/components/pro/SportHubShell";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import {
   CurrentYtdHint,
   PlayerFutureColumnHeaders,
@@ -164,6 +167,20 @@ export default async function NflProjectionsPage({
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="Futures"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Futures" />
+      </SportHubShell>
+    );
+  }
+
   const search = await searchParams;
   const bundle = loadLatestNflPreseasonBundle2026();
   const pointer = loadNflWebLaunchPointer();

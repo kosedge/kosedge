@@ -1,5 +1,8 @@
 import Link from "next/link";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
+import SportHubShell from "@/components/pro/SportHubShell";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import { loadPlayerSeasonTotalsSpine } from "@/lib/nfl-player-season-totals-spine";
 import type { PlayerProjectionTotalsRow } from "@/lib/nfl-preseason-artifacts";
 
@@ -41,6 +44,20 @@ export default async function NflWeeklyFantasyPage({
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="Weekly Fantasy"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Weekly Fantasy" />
+      </SportHubShell>
+    );
+  }
+
   const search = await searchParams;
   const scoringRaw = (firstValue(search.scoring) ?? "half_ppr").toLowerCase();
   const scoring: Scoring =
