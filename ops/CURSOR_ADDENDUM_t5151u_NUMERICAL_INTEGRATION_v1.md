@@ -5,11 +5,12 @@ Authority: OWNER CLEAR t5151u **d6aa1ef5** · Cos ORDER B+integration **d821fe61
 Cos ACCEPT scoped **96908853**
 Reuse: R4 REG-only 496 tip **bc1b62fc** · #698 · Alex **274cf246**
 Package A tip **42ff285c** · stamp **f7ec09ee** · PR **#699** (merged, not rewritten)
+Implementation tip **ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc**.
 Starting points: #693 `eval_result_contract.py` + `metric_cohorts.py`; #698 `last_played_cohort.py`
 Worker B = single integration owner. Package A cohort files are not rewritten here.
 
 No merge. No prod default. No real EVAL. No GREEN. No self-ACCEPT.
-STOP — awaiting Alex independent RO.
+**STOP — awaiting Alex independent RO.** CERT=0.
 
 ## Exact offline command
 
@@ -60,19 +61,30 @@ EVAL paths in this package are synthetic tests only.
 
 ## Required proofs (still green after integrate)
 
-- 502 fails REG
-- 496 passes
-- 2021 REG W18 retained
-- byte-change fails before outcome loader
-- blocked coverage → zero outcomes
-- numerical failure cases
-- positive controls
+Complete command ran once after implementation tip `ac35ed55`. Result:
+`CHECKS_PASSED_AWAITING_ALEX_RO` · `verified: false` · focused tests **42 passed**
+(12 A + 14 numerical + 8 verify-integrate + 8 t5149u).
+
+| Proof | Result |
+| --- | --- |
+| old 502 fails REG | GREEN |
+| corrected 496 passes REG | GREEN |
+| 2021 REG week 18 retained | GREEN |
+| byte-change fails before outcome loader | GREEN |
+| blocked coverage → spy ZERO target outcomes | GREEN |
+| numerical failure cases (null/NaN/inf, missing market, inconsistent counts) | GREEN |
+| positive controls (recon lineage, IF-only unavailable, MARKET72 consistency) | GREEN |
+| A 12/12 cohort proofs | GREEN |
 
 ## Preserve
 
 | Pin | sha8 / tip |
 | --- | --- |
+| Implementation tip | `ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc` |
+| Package A tip | `42ff285cc1be2459512af4761651ba6dfe17dc75` |
 | R4 REG-only 496 | `bc1b62fc` |
 | Original 502 historical | `e2f3fab5` |
 | REG496 artifact | `282f979b` |
+| Task manifest | `c61ca694` |
 | Interval B / seed | `10000` / `20261101` |
+| Cos ACCEPT scoped | `96908853` |
