@@ -3,10 +3,13 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import {
   fetchNflFairLines,
+  inspectOwnedNflFairLinesOddsEvents,
+  inspectOwnedNflFairLinesOddsPayload,
   NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED,
+  NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+  NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
   NFL_FAIR_LINES_REUSE_UNAVAILABLE,
   NflFairLinesUnavailableError,
-  ownedNflFairLinesFixtureRows,
 } from "@/lib/nfl-fair-lines";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 
@@ -56,14 +59,14 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines", () => {
     }
   });
 
-  it("assemble reuse is owned-fixture gated (no live fallthrough)", () => {
+  it("assemble fair-lines caller is skip+persist0 (overlay cannot join)", () => {
     const src = readApp("lib/build-edge-board-rows.ts");
-    expect(src).toContain("ownedNflFairLinesFixtureRows");
-    expect(src).toContain('oddsMode: "reuse"');
     expect(src).toContain('oddsMode: "skip"');
     expect(src).toContain("persistOdds: false");
     expect(src).not.toContain('oddsMode: "live"');
     expect(src).not.toContain("persistOdds: true");
+    expect(src).not.toContain("oddsPayload:");
+    expect(src).not.toContain("ownedNflFairLinesFixtureRows");
   });
 
   it("refuses oddsMode=live before upstreamFetch", async () => {
@@ -113,50 +116,110 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines", () => {
     expect(board.count).toBe(0);
   });
 
-  it("refuses malformed reuse payload before upstream", async () => {
+  it("refuses overlay odds_payload reuse before upstream", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     const board = await fetchNflFairLines({
       season: 2026,
       oddsMode: "reuse",
-      oddsPayload: [null, "x", 1],
+      oddsPayload: [{ game: "NE @ SEA", market: "Spread" }],
     });
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(board.error).toBe(NFL_FAIR_LINES_REUSE_UNAVAILABLE);
+    expect(board.error).toBe(NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE);
   });
 
-  it("refuses unidentified object rows as malformed reuse", async () => {
+  it("does not discard a nonempty overlay payload when events are otherwise present", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     const board = await fetchNflFairLines({
       season: 2026,
       oddsMode: "reuse",
-      oddsPayload: [{ foo: "bar" }],
+      oddsEvents: [
+        {
+          id: "evt-1",
+          sport_key: "americanfootball_nfl",
+          commence_time: "2026-09-13T17:00:00Z",
+          home_team: "Seattle Seahawks",
+          away_team: "New England Patriots",
+          bookmakers: [
+            {
+              key: "draftkings",
+              last_update: "2026-09-10T14:00:00Z",
+              markets: [
+                {
+                  key: "spreads",
+                  last_update: "2026-09-10T14:00:00Z",
+                  outcomes: [
+                    { name: "Seattle Seahawks", point: -3.5, price: -110 },
+                    { name: "New England Patriots", point: 3.5, price: -110 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      oddsPayload: [{ game: "NE @ SEA", market: "Spread" }],
     });
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(board.error).toBe(NFL_FAIR_LINES_REUSE_UNAVAILABLE);
+    expect(board.error).toBe(NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE);
   });
 
-  it("POSTs reuse persist=0 only with validated owned fixture", async () => {
+  it("does not discard a malformed events channel when payload is absent", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const board = await fetchNflFairLines({
+      season: 2026,
+      oddsMode: "reuse",
+      oddsEvents: [{ home_team: {}, market: 1, bookmakers: [] }],
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(board.error).toBe(NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE);
+  });
+
+  it("POSTs reuse persist=0 with exact odds_events when that channel alone is valid", async () => {
+    const events = [
+      {
+        id: "evt-1",
+        sport_key: "americanfootball_nfl",
+        commence_time: "2026-09-13T17:00:00Z",
+        home_team: "Seattle Seahawks",
+        away_team: "New England Patriots",
+        bookmakers: [
+          {
+            key: "draftkings",
+            last_update: "2026-09-10T14:00:00Z",
+            markets: [
+              {
+                key: "spreads",
+                last_update: "2026-09-10T14:00:00Z",
+                outcomes: [
+                  { name: "Seattle Seahawks", point: -3.5, price: -110 },
+                  { name: "New England Patriots", point: 3.5, price: -110 },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ];
     const fetchMock = vi.fn(
       async (input: RequestInfo | URL, init?: RequestInit) => {
         const href = String(input);
         expect(href).toContain("persist=0");
         expect(href).toContain("odds_mode=reuse");
-        expect(href).not.toMatch(/persist=1/);
         expect(String(init?.method || "GET").toUpperCase()).toBe("POST");
         const body = JSON.parse(String(init?.body || "{}"));
         expect(body.odds_mode).toBe("reuse");
         expect(body.persist).toBe(0);
-        expect(body.odds_payload).toEqual([
-          { game: "NE @ SEA", market: "Spread" },
-        ]);
+        expect(body.odds_events).toEqual(events);
+        expect(body.odds_payload).toEqual([]);
         return new Response(
           JSON.stringify({
             season: 2026,
             count: 0,
             lines: [],
-            odds_as_of: "2026-09-03T14:00:00Z",
+            odds_as_of: "2026-09-10T14:00:00Z",
             diagnostics: { odds_mode: "reuse" },
           }),
           { status: 200, headers: { "content-type": "application/json" } },
@@ -164,29 +227,28 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines", () => {
       },
     );
     vi.stubGlobal("fetch", fetchMock);
-
     const board = await fetchNflFairLines({
       season: 2026,
       oddsMode: "reuse",
-      oddsPayload: [{ game: "NE @ SEA", market: "Spread" }],
+      oddsEvents: events,
     });
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(board.error).toBeUndefined();
-    expect(board.oddsAsOf).toBe("2026-09-03T14:00:00Z");
+    expect(board.oddsAsOf).toBe("2026-09-10T14:00:00Z");
   });
 
-  it("owned fixture validator accepts identity rows and rejects empty/malformed", () => {
+  it("inspectors: absence is distinct from malformed (B owns fuller cases)", () => {
+    expect(inspectOwnedNflFairLinesOddsEvents(undefined).status).toBe("absent");
+    expect(inspectOwnedNflFairLinesOddsEvents([]).status).toBe("absent");
+    expect(inspectOwnedNflFairLinesOddsEvents([{ home_team: {} }]).status).toBe(
+      "malformed",
+    );
+    expect(inspectOwnedNflFairLinesOddsPayload(undefined).status).toBe("absent");
+    expect(inspectOwnedNflFairLinesOddsPayload([]).status).toBe("absent");
     expect(
-      ownedNflFairLinesFixtureRows([{ game: "NE @ SEA", market: "Spread" }]),
-    ).toHaveLength(1);
-    expect(
-      ownedNflFairLinesFixtureRows([
-        { home_team: "Seattle Seahawks", away_team: "New England Patriots" },
-      ]),
-    ).toHaveLength(1);
-    expect(ownedNflFairLinesFixtureRows([])).toBeNull();
-    expect(ownedNflFairLinesFixtureRows(undefined)).toBeNull();
-    expect(ownedNflFairLinesFixtureRows([{}])).toBeNull();
-    expect(ownedNflFairLinesFixtureRows(["x"])).toBeNull();
+      inspectOwnedNflFairLinesOddsPayload([{ game: "NE @ SEA", market: "Spread" }])
+        .status,
+    ).toBe("malformed");
+    expect(NFL_FAIR_LINES_REUSE_UNAVAILABLE).toMatch(/unavailable/i);
   });
 });
