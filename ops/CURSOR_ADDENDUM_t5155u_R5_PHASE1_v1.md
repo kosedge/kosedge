@@ -15,9 +15,13 @@ No Cos bind. No `--score` / target scoring loader / ONE DEV diagnostic.
 CERT=0. Alex PREFLIGHT in flight.
 
 Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
-stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Merge conflict: only
+stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Combine implementation
+tip **581493080881d6363935f41c70236b5cb070b401**. Merge conflict: only
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
-**072e99e0** unchanged.
+**072e99e0** unchanged. One-command:
+`CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false` · focused
+tests **87 passed**. Worker A forecast freeze **PINNED**. Q2 **HOLD**.
+Phase 2 **READINESS_ONLY**.
 
 ## Exact offline commands
 
@@ -124,4 +128,5 @@ target scoring loader · ONE DEV diagnostic.
 | REG496 identity        | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640`        |
 | Package A tip          | `42ff285cc1be2459512af4761651ba6dfe17dc75`                                |
 | Worker A tip / stamp   | `661df712a` / `3fbf59993`                                                 |
+| Combine implementation | `581493080881d6363935f41c70236b5cb070b401`                                |
 | R2-C HOLD threshold    | `0.30` unchanged                                                          |
