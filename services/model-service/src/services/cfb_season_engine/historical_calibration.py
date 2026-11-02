@@ -31,6 +31,9 @@ from src.services.cfb_season_engine.conferences import conference_for
 from src.services.cfb_season_engine.efficiency import build_efficiency_profile
 from src.services.cfb_season_engine.home_field import build_home_field_profile
 from src.services.cfb_season_engine.position_groups import build_position_groups
+from src.services.cfb_season_engine.qb_feature_contract import (
+    QB_FEATURE_CONTRACT_PLACEHOLDER,
+)
 from src.services.cfb_season_engine.qb_situation import build_qb_situation
 from src.services.cfb_season_engine.roster_construction import build_roster_construction
 from src.services.cfb_season_engine.team_projection import (
@@ -434,10 +437,13 @@ def build_historical_proxy_universe(
             "mode": "historical_proxy",
             "reconstruction": "prior_year_efficiency_league_avg_identity",
             "efficiency_prior_season": str(season - 1),
+            "qb_feature_contract_version": QB_FEATURE_CONTRACT_PLACEHOLDER,
             "detail": (
                 f"Historical proxy universe for {season}: prior-year efficiency "
                 f"({season - 1} cfb_ratings) + league-avg roster/QB/units + "
-                "curated HFA. Not a full live-hierarchy reconstruction."
+                "curated HFA. Not a full live-hierarchy reconstruction. "
+                "QB contract is placeholder unknown@50 — illegal for "
+                "re-estimating MATCHUP_RESPONSE / QB weights."
             ),
         },
     )
@@ -622,6 +628,7 @@ def summarize_rows(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     return {
         "engine_version": P.ENGINE_VERSION,
         "calibration_tag": P.CALIBRATION_TAG,
+        "qb_feature_contract_version": QB_FEATURE_CONTRACT_PLACEHOLDER,
         "n_games": len(rows),
         "overall": overall,
         "slices": slices,
@@ -630,6 +637,9 @@ def summarize_rows(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
         "reconstruction_limits": [
             "Prior-year cfb_ratings adj EPA stands in for SP+ efficiency.",
             "Roster / QB / position groups forced to league-average (no hist roster).",
+            "QB feature contract is cfb-qb-feature-placeholder-unknown-50 "
+            "(unknown @ talent 50). Illegal for re-estimating MATCHUP_RESPONSE "
+            "/ QB weights. See data/ops/cfb-qb-calibration-protocol-20260911.md.",
             "Coaching flags assumed all-returning.",
             "HFA from curated 2026 venue proxies (not season-Y home splits).",
             "ESPN betting lines are resolved closing-ish (core_odds_api / pickcenter).",
@@ -674,6 +684,7 @@ def run_historical_backtest(
         "priors_snapshot": {
             "ENGINE_VERSION": P.ENGINE_VERSION,
             "CALIBRATION_TAG": P.CALIBRATION_TAG,
+            "QB_FEATURE_CONTRACT_VERSION": QB_FEATURE_CONTRACT_PLACEHOLDER,
             "HFA_BASELINE_POINTS": P.HFA_BASELINE_POINTS,
             "LEAGUE_TEAM_PPG": P.LEAGUE_TEAM_PPG,
             "MATCHUP_RESPONSE": P.MATCHUP_RESPONSE,
