@@ -1,0 +1,27 @@
+{
+  "2020": {
+    "n_no_bye_games": 210,
+    "n_t4_compared": 3360,
+    "n_skipped_missing_or_partial_exact": 0,
+    "n_mismatches": 0,
+    "mismatches": [],
+    "pass": true,
+    "exact_week_csv": "/Users/ryankos/kosedge/data/ops/nfl-forecast-builder-t5107u/recon/RECON_MATRIX_2020_REG_W2W18.csv",
+    "exact_week_csv_sha256": "8615a938de0efc6773368f5c8e8a3db76b71a758311fab14324ec7a2b0ef67f2"
+  },
+  "2021": {
+    "n_no_bye_games": 227,
+    "n_t4_compared": 3632,
+    "n_skipped_missing_or_partial_exact": 0,
+    "n_mismatches": 0,
+    "mismatches": [],
+    "pass": true,
+    "exact_week_csv": "/Users/ryankos/kosedge/data/ops/nfl-forecast-builder-t5107u/recon/RECON_MATRIX_2021_REG_W2W18.csv",
+    "exact_week_csv_sha256": "d51b3b1ba54da2a9a5b7c91246f7db599a321d1e01e09065df2ab0c996b306e0"
+  },
+  "note": {
+    "original_2020_no_bye_included_6_wildcard": 216,
+    "reg_only_2020_no_bye": 210,
+    "2021_no_bye_unchanged": 227
+  }
+}

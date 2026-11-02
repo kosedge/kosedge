@@ -1,0 +1,67 @@
+{
+  "schema_version": "nfl-t5149u-exclusion-manifest-v1",
+  "cert_candidate": 0,
+  "exclude_exactly": [
+    "2020_18_BAL_TEN",
+    "2020_18_CHI_NO",
+    "2020_18_CLE_PIT",
+    "2020_18_IND_BUF",
+    "2020_18_LA_SEA",
+    "2020_18_TB_WAS"
+  ],
+  "n": 6,
+  "source": "services/model-service/src/services/nfl_t5107u/metric_cohorts.py WILDCARD_2020_W18",
+  "t5115u_identity": "data/ops/nfl-forecast-builder-t5107u/IDENTITY_RESOLUTION_2020_t5115u.json",
+  "not_a_week_le_18_filter": true,
+  "does_not_exclude_2021_reg_week_18": true,
+  "rows": [
+    {
+      "game_id": "2020_18_BAL_TEN",
+      "classification": "NON_REG_WILDCARD",
+      "season": 2020,
+      "week": 18,
+      "in_declared_reg_2020": false,
+      "reason": "t5115u: 2020 REG ended week 17; this ID is Wild Card POST"
+    },
+    {
+      "game_id": "2020_18_CHI_NO",
+      "classification": "NON_REG_WILDCARD",
+      "season": 2020,
+      "week": 18,
+      "in_declared_reg_2020": false,
+      "reason": "t5115u: 2020 REG ended week 17; this ID is Wild Card POST"
+    },
+    {
+      "game_id": "2020_18_CLE_PIT",
+      "classification": "NON_REG_WILDCARD",
+      "season": 2020,
+      "week": 18,
+      "in_declared_reg_2020": false,
+      "reason": "t5115u: 2020 REG ended week 17; this ID is Wild Card POST"
+    },
+    {
+      "game_id": "2020_18_IND_BUF",
+      "classification": "NON_REG_WILDCARD",
+      "season": 2020,
+      "week": 18,
+      "in_declared_reg_2020": false,
+      "reason": "t5115u: 2020 REG ended week 17; this ID is Wild Card POST"
+    },
+    {
+      "game_id": "2020_18_LA_SEA",
+      "classification": "NON_REG_WILDCARD",
+      "season": 2020,
+      "week": 18,
+      "in_declared_reg_2020": false,
+      "reason": "t5115u: 2020 REG ended week 17; this ID is Wild Card POST"
+    },
+    {
+      "game_id": "2020_18_TB_WAS",
+      "classification": "NON_REG_WILDCARD",
+      "season": 2020,
+      "week": 18,
+      "in_declared_reg_2020": false,
+      "reason": "t5115u: 2020 REG ended week 17; this ID is Wild Card POST"
+    }
+  ]
+}
