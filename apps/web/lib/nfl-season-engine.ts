@@ -888,6 +888,8 @@ export async function loadSeasonEngineMatchups(params?: {
       season,
       daysAhead: params?.daysAhead ?? 21,
       includePastDays: 0,
+      oddsMode: "skip",
+      persistOdds: false,
     });
     if (!result.error) {
       const now = Date.now();

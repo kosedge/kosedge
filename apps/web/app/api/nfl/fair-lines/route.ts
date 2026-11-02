@@ -62,7 +62,8 @@ export async function GET(req: Request) {
       includePastDays,
       timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
       throwOnTransportError: true,
-      // Read-only subscriber path — beat/worker owns odds_snapshots persist.
+      // Owned-only subscriber read — never omit (backend GET defaults live).
+      oddsMode: "skip",
       persistOdds: false,
     });
     return pageDataPrivateJsonResponse(board);

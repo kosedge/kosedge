@@ -67,6 +67,8 @@ export default async function ExecutionPage({
       season: 2026,
       daysAhead: 120,
       includePastDays: 1,
+      oddsMode: "skip",
+      persistOdds: false,
     });
     const week = fairLines.currentWeek || 1;
     const weekRows = fairLines.lines.filter(

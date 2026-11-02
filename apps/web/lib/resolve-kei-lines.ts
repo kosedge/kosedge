@@ -96,6 +96,8 @@ export async function resolveKeiGames(
         season: NFL_KEI_SEASON,
         daysAhead: 120,
         includePastDays: 7,
+        oddsMode: "skip",
+        persistOdds: false,
       });
       if (board.lines.length > 0) {
         return keiGamesFromNflFairLines(board.lines);

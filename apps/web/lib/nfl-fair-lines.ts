@@ -1,6 +1,7 @@
 import "server-only";
 import { env } from "@/lib/config/env";
 import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
+import { NFL_ODDS_API_CARRIED_BOOKS } from "@/lib/odds-api";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
@@ -629,25 +630,30 @@ export async function fetchNflFairLines(params: {
    */
   throwOnTransportError?: boolean;
   /**
-   * When false (default), send persist=0 so model-service skips odds_snapshots
-   * writes on this subscriber/page-data read. Beat/worker scheduled persist stays.
-   * Pass true only for rare ops paths that intentionally land training snaps.
+   * WEB_OWNED_ONLY_R1: persist=1 is refused on this helper. The param is accepted
+   * only so explicit true can fail closed before upstreamFetch. No ENV / flag
+   * can grant odds_snapshots writes on this web read path.
    */
   persistOdds?: boolean;
   /**
-   * WS-02 DUP-C / S1: Odds acquire mode for model-service fair-lines.
-   * - live (default): model may HTTP The Odds API once
-   * - skip: model never calls fetch_odds
-   * - reuse: assemble already pulled Odds; POST payload so model skips fetch_odds
+   * WEB_OWNED_ONLY_R1: subscriber default is skip (never omit — backend GET
+   * defaults to live). live is refused before upstreamFetch. reuse requires
+   * validated Odds-API odds_events (POST persist=0). odds_payload cannot
+   * establish the market-join contract and is refused when supplied nonempty.
    */
   oddsMode?: "live" | "reuse" | "skip";
   /**
-   * Odds-API-shaped events for fair-lines market join on reuse (preferred).
+   * Odds-API event fixtures for market join.
+   * Producer: apps/web/lib/odds-api.ts OddsEvent.
+   * Consumer: services/model-service/src/routes/nfl.py
+   *   _extract_book_market_prices / _event_odds_last_update / _nfl_team_to_abbr.
    */
   oddsEvents?: Array<Record<string, unknown>>;
   /**
-   * Assemble overlay rows (pullOddsRows) as reuse signal when raw events unavailable.
-   * Non-empty → model odds_mode=reuse skips fetch_odds (D1).
+   * EdgeBoard overlay rows (pullOddsRows / overlayOddsOntoFairLineRows).
+   * Backend nfl_fair_lines_reuse treats this as a skip-HTTP signal only
+   * (supplied join list stays odds_events). This channel cannot establish
+   * typed quote+time for market join — nonempty supply is refused.
    */
   oddsPayload?: unknown[];
 }): Promise<NflFairLinesResponse> {
@@ -676,19 +682,48 @@ export async function fetchNflFairLines(params: {
     error,
   });
 
+  const refuseBeforeUpstream = (
+    error: NflFairLinesUnavailableError,
+  ): NflFairLinesResponse => {
+    if (params.throwOnTransportError) throw error;
+    return softEmpty(error.message);
+  };
+
+  // Paid acquisition is hard-closed on this helper. No ENV read, no caller
+  // flag, no persistOdds=true can grant live Odds HTTP or snapshot writes.
+  if (params.persistOdds === true || params.oddsMode === "live") {
+    return refuseBeforeUpstream(
+      new NflFairLinesUnavailableError(NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED),
+    );
+  }
+
+  const oddsMode = params.oddsMode ?? "skip";
+  const eventsChannel = inspectOwnedNflFairLinesOddsEvents(params.oddsEvents);
+  const payloadChannel = inspectOwnedNflFairLinesOddsPayload(params.oddsPayload);
+  // Never drop a malformed supplied channel because the other looks valid.
+  if (oddsMode === "reuse" && eventsChannel.status === "malformed") {
+    return refuseBeforeUpstream(
+      new NflFairLinesUnavailableError(eventsChannel.reason),
+    );
+  }
+  if (oddsMode === "reuse" && payloadChannel.status === "malformed") {
+    return refuseBeforeUpstream(
+      new NflFairLinesUnavailableError(payloadChannel.reason),
+    );
+  }
+  const useReusePost =
+    oddsMode === "reuse" && eventsChannel.status === "ok";
+  if (oddsMode === "reuse" && !useReusePost) {
+    return refuseBeforeUpstream(
+      new NflFairLinesUnavailableError(NFL_FAIR_LINES_REUSE_UNAVAILABLE),
+    );
+  }
+
   if (!base) {
     const error = "MODEL_SERVICE_URL is not configured.";
     if (params.throwOnTransportError) throw new Error(error);
     return softEmpty(error);
   }
-
-  const oddsMode = params.oddsMode ?? "live";
-  const oddsEvents = Array.isArray(params.oddsEvents) ? params.oddsEvents : [];
-  const oddsPayload = Array.isArray(params.oddsPayload)
-    ? params.oddsPayload
-    : [];
-  const useReusePost =
-    oddsMode === "reuse" && (oddsEvents.length > 0 || oddsPayload.length > 0);
 
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/fair-lines`);
   url.searchParams.set("season", String(params.season));
@@ -703,12 +738,9 @@ export async function fetchNflFairLines(params: {
   if (params.bookmakers) {
     url.searchParams.set("bookmakers", params.bookmakers);
   }
-  // Default read-only: page-data / SSR must not write odds_snapshots on GET.
-  const persistOdds = params.persistOdds === true;
-  url.searchParams.set("persist", persistOdds ? "1" : "0");
-  if (!useReusePost && oddsMode !== "live") {
-    url.searchParams.set("odds_mode", oddsMode);
-  }
+  // Always explicit: omit → backend GET defaults to live. persist=1 is dead.
+  url.searchParams.set("persist", "0");
+  url.searchParams.set("odds_mode", useReusePost ? "reuse" : "skip");
 
   try {
     const response = await upstreamFetch(url.toString(), {
@@ -727,8 +759,10 @@ export async function fetchNflFairLines(params: {
         ? {
             body: JSON.stringify({
               odds_mode: "reuse",
-              odds_events: oddsEvents,
-              odds_payload: oddsPayload,
+              persist: 0,
+              // Exact supplied events array — no remap / invent / drop.
+              odds_events: params.oddsEvents,
+              odds_payload: [],
             }),
           }
         : {}),
@@ -905,6 +939,215 @@ export function formatKickoff(value: string | null): string {
     timeZone: "America/New_York",
     timeZoneName: "short",
   });
+}
+
+export const NFL_FAIR_LINES_PAID_ACQUISITION_REFUSED =
+  "NFL fair-lines paid acquisition unavailable: web read helper refuses live/persist.";
+
+export const NFL_FAIR_LINES_REUSE_UNAVAILABLE =
+  "NFL fair-lines reuse unavailable: owned fixture payload empty or malformed.";
+
+export const NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE =
+  "NFL fair-lines reuse unavailable: odds_events failed Odds-API market-join schema (typed identity, source observation time, complete finite quote).";
+
+export const NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE =
+  "NFL fair-lines reuse unavailable: odds_payload (EdgeBoard overlay) cannot establish market-join quote contract; backend joins odds_events only.";
+
+export class NflFairLinesUnavailableError extends Error {
+  readonly code = "NFL_FAIR_LINES_UNAVAILABLE" as const;
+  constructor(message: string) {
+    super(message);
+    this.name = "NflFairLinesUnavailableError";
+  }
+}
+
+export type OwnedReuseChannelStatus = "absent" | "ok" | "malformed";
+
+export type OwnedReuseChannelInspection =
+  | { status: "absent" }
+  | { status: "ok"; rows: readonly Record<string, unknown>[] }
+  | { status: "malformed"; reason: string };
+
+const NFL_REUSE_CARRIED_BOOKS = new Set<string>(NFL_ODDS_API_CARRIED_BOOKS);
+const NFL_REUSE_SPORT_KEY = "americanfootball_nfl";
+const NFL_REUSE_QUOTE_MARKETS = new Set(["h2h", "spreads", "totals"]);
+
+function isNonemptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+function isValidSourceTimestamp(value: unknown): value is string {
+  if (typeof value !== "string" || !value.trim()) return false;
+  const ms = Date.parse(value);
+  return Number.isFinite(ms);
+}
+
+function asDict(value: unknown): Record<string, unknown> | null {
+  if (value == null || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+  return value as Record<string, unknown>;
+}
+
+function bookHasSourceObservationTime(book: Record<string, unknown>): boolean {
+  if (isValidSourceTimestamp(book.last_update)) return true;
+  const markets = book.markets;
+  if (!Array.isArray(markets)) return false;
+  return markets.some((market) => {
+    const row = asDict(market);
+    return row != null && isValidSourceTimestamp(row.last_update);
+  });
+}
+
+function marketHasCompleteFiniteQuote(
+  market: Record<string, unknown>,
+  homeTeam: string,
+  awayTeam: string,
+): boolean {
+  const key = market.key;
+  if (typeof key !== "string" || !NFL_REUSE_QUOTE_MARKETS.has(key)) return false;
+  const outcomes = market.outcomes;
+  if (!Array.isArray(outcomes) || outcomes.length === 0) return false;
+  const rows: Record<string, unknown>[] = [];
+  for (const outcome of outcomes) {
+    const row = asDict(outcome);
+    if (!row || !isNonemptyString(row.name)) return false;
+    rows.push(row);
+  }
+  if (key === "h2h") {
+    const home = rows.find((row) => row.name === homeTeam);
+    const away = rows.find((row) => row.name === awayTeam);
+    return (
+      home != null &&
+      away != null &&
+      isFiniteNumber(home.price) &&
+      isFiniteNumber(away.price)
+    );
+  }
+  if (key === "spreads") {
+    const home = rows.find((row) => row.name === homeTeam);
+    const away = rows.find((row) => row.name === awayTeam);
+    return (
+      home != null &&
+      away != null &&
+      isFiniteNumber(home.point) &&
+      isFiniteNumber(away.point) &&
+      isFiniteNumber(home.price) &&
+      isFiniteNumber(away.price)
+    );
+  }
+  const over = rows.find((row) => row.name === "Over");
+  const under = rows.find((row) => row.name === "Under");
+  return (
+    over != null &&
+    under != null &&
+    isFiniteNumber(over.point) &&
+    isFiniteNumber(under.point) &&
+    isFiniteNumber(over.price) &&
+    isFiniteNumber(under.price)
+  );
+}
+
+/**
+ * Bind odds_events to OddsEvent + fair-lines join.
+ * Producer: apps/web/lib/odds-api.ts OddsEvent / OddsBookmaker.
+ * Consumer: services/model-service/src/routes/nfl.py
+ *   _extract_book_market_prices, _event_odds_last_update, _nfl_team_to_abbr.
+ * Undefined / [] = absent. One bad row fails the whole supplied channel.
+ */
+export function inspectOwnedNflFairLinesOddsEvents(
+  raw: unknown,
+): OwnedReuseChannelInspection {
+  if (raw === undefined) return { status: "absent" };
+  if (!Array.isArray(raw)) {
+    return {
+      status: "malformed",
+      reason: NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+    };
+  }
+  if (raw.length === 0) return { status: "absent" };
+  for (const item of raw) {
+    if (!isValidOwnedNflOddsEvent(item)) {
+      return {
+        status: "malformed",
+        reason: NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      };
+    }
+  }
+  return { status: "ok", rows: raw as Record<string, unknown>[] };
+}
+
+function isValidOwnedNflOddsEvent(raw: unknown): boolean {
+  const ev = asDict(raw);
+  if (!ev) return false;
+  if (!isNonemptyString(ev.id)) return false;
+  if (ev.sport_key !== NFL_REUSE_SPORT_KEY) return false;
+  if (!isNonemptyString(ev.home_team) || !isNonemptyString(ev.away_team)) {
+    return false;
+  }
+  if (ev.home_team === ev.away_team) return false;
+  if (!isValidSourceTimestamp(ev.commence_time)) return false;
+  const books = ev.bookmakers;
+  if (!Array.isArray(books) || books.length === 0) return false;
+  let completeCarriedQuote = false;
+  for (const bookRaw of books) {
+    const book = asDict(bookRaw);
+    if (!book || !isNonemptyString(book.key)) return false;
+    if (!bookHasSourceObservationTime(book)) return false;
+    const markets = book.markets;
+    if (!Array.isArray(markets) || markets.length === 0) return false;
+    for (const marketRaw of markets) {
+      const market = asDict(marketRaw);
+      if (!market || !isNonemptyString(market.key)) return false;
+      if (
+        NFL_REUSE_QUOTE_MARKETS.has(market.key) &&
+        !marketHasCompleteFiniteQuote(market, ev.home_team, ev.away_team)
+      ) {
+        return false;
+      }
+    }
+    if (
+      NFL_REUSE_CARRIED_BOOKS.has(book.key.trim().toLowerCase()) &&
+      (markets as unknown[]).some((marketRaw) => {
+        const market = asDict(marketRaw);
+        return (
+          market != null &&
+          marketHasCompleteFiniteQuote(market, ev.home_team, ev.away_team)
+        );
+      })
+    ) {
+      completeCarriedQuote = true;
+    }
+  }
+  return completeCarriedQuote;
+}
+
+/**
+ * odds_payload producer: pullOddsRows → fetchEdgeBoard → edgeBoardRowsFromOddsEvents
+ * (EdgeBoard display row). Consumer for join is NOT this shape —
+ * nfl_fair_lines_reuse copies odds_events only into _extract_book_market_prices.
+ * Overlay rows cannot prove finite market/side/line/price/book + source time
+ * for that join. Undefined / [] = absent; any nonempty supply is malformed.
+ */
+export function inspectOwnedNflFairLinesOddsPayload(
+  raw: unknown,
+): OwnedReuseChannelInspection {
+  if (raw === undefined) return { status: "absent" };
+  if (!Array.isArray(raw)) {
+    return {
+      status: "malformed",
+      reason: NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
+    };
+  }
+  if (raw.length === 0) return { status: "absent" };
+  return {
+    status: "malformed",
+    reason: NFL_FAIR_LINES_REUSE_PAYLOAD_UNAVAILABLE,
+  };
 }
 
 export function edgeToneClass(value: number | null): string {
