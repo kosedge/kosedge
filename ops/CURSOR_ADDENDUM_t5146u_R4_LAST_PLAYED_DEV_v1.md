@@ -4,6 +4,7 @@ Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5146u **fdbd23f9** · Cos ORDER Cursor **b1153a45**
 Parent tip **61436fdb** (t5116u stamp). Implementation tip **a7f53657**.
 EXEC tip **6aed4d10**.
+Correction tip **bc1b62fc**.
 Isolated opt-in path. Alex PREFLIGHT GO **686ce4dc** accepted.
 Cos EXEC RELEASE honored — **one** NEW DEV 2020–21 last-played reconstruction.
 OWNER RETURN t5149u: 502 is **not** REG coverage (six 2020 Wild Card IDs).
