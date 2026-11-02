@@ -1,0 +1,28 @@
+{
+  "schema_version": "nfl-t5155u-r5-496-freeze-v1",
+  "phase": 2,
+  "executed": false,
+  "requires": [
+    "Alex source/numerical-identity PREFLIGHT GO",
+    "Cos bind / EXEC release for target scoring loader"
+  ],
+  "steps": [
+    "Reuse frozen FEATURE_RECON_REG496 IDs (this Phase 1 identity manifest).",
+    "Call check_cohort_before_target_outcome_loading(FEATURE_RECON_REG496, frozen_ids).",
+    "Only after hook ok: load target home/away scores for those IDs.",
+    "Score IF / Q2 / candidate home-margin vs actual. No market-edge / GREEN here.",
+    "Worker B still owns N1 + market intersection + integration-owner combine."
+  ],
+  "refuses_if": [
+    "Alex preflight missing",
+    "Cos bind missing",
+    "hook fail / changed frozen bytes / blocked coverage",
+    "2022\u201323 regen/scoring",
+    "2024\u201326",
+    "Q2/2017 reopen",
+    "Stage C / R2-C change"
+  ],
+  "cert_candidate": 0,
+  "eval": null,
+  "scoring": null
+}

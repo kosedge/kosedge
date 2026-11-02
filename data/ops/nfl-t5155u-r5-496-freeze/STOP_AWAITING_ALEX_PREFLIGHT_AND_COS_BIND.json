@@ -1,0 +1,47 @@
+{
+  "schema_version": "nfl-t5155u-r5-496-freeze-v1",
+  "stop": "AWAITING_ALEX_PREFLIGHT_AND_COS_BIND",
+  "phase": 1,
+  "target_scoring_loader_executed": false,
+  "diagnostic_execution": false,
+  "owner_clear_sha8": "659cd7d9",
+  "cos_order_sha8": "3e14602b",
+  "closed_quality_do_not_reopen": {
+    "pr_700_tip": "12ccc482",
+    "stamp": "9d436eb1",
+    "alex": "f4147e76",
+    "cos": "4b23584a",
+    "component": "ACCEPT only",
+    "return_record": "7057e5a9"
+  },
+  "worker_b_owns": [
+    "metric_cohorts.py numerical strengthening",
+    "eval_result_contract.py",
+    "verify_integrate.py",
+    "N1",
+    "market intersection",
+    "integration-owner combine"
+  ],
+  "forbidden": [
+    "paid pulls",
+    "2024-26",
+    "2022-23 regen/scoring",
+    "Q2/2017 reopen",
+    "merge/deploy",
+    "secrets",
+    "new installs",
+    "Stage C change",
+    "R2-C change"
+  ],
+  "publication_timestamp_status": "unverified",
+  "observation_timestamp_status": "unverified",
+  "fit_label": "RETRO_FIT",
+  "label": "RECONSTRUCTED",
+  "research_label": "RESEARCH_CONSUMED_RETRO",
+  "production_causal_claim": false,
+  "nfl_green": false,
+  "eval": null,
+  "scoring": null,
+  "market_edge": null,
+  "cert_candidate": 0
+}
