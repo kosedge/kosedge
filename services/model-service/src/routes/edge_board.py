@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
 from fastapi import APIRouter, HTTPException
-from src.services.odds_api import get_odds_api_keys
+from src.services.odds_api import get_odds_api_keys, request_path_paid_odds_allowed
 from zoneinfo import ZoneInfo
 
 router = APIRouter(prefix="/edge-board", tags=["edge-board"])
@@ -237,6 +237,15 @@ async def edge_board_ncaam_today() -> Dict[str, Any]:
     cached = _CACHE["data"] is not None and (now - float(_CACHE["ts"])) < CACHE_TTL_SECONDS
     if cached:
         return {"rows": _CACHE["data"], "cached": True, "ttl": CACHE_TTL_SECONDS}
+
+    if not request_path_paid_odds_allowed():
+        return {
+            "rows": [],
+            "cached": False,
+            "ttl": CACHE_TTL_SECONDS,
+            "source": "none",
+            "reason": "paid_fetch_denied",
+        }
 
     events = await _fetch_odds_ncaab()
     rows: List[Dict[str, Any]] = []

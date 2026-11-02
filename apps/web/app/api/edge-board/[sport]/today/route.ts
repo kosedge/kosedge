@@ -5,14 +5,11 @@ import { logError } from "@/lib/logger";
 import { EdgeBoardResponseSchema } from "@kosedge/contracts";
 import { assembleEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { loadEdgeBoardFallback } from "@/lib/edge-board-fallback";
-import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { getSport } from "@/lib/sports";
-import { fetchEdgeBoard, SPORT_KEY_MAP } from "@/lib/odds-api";
-import { getCache, setCache } from "@/lib/cache/redis";
+import { getCache } from "@/lib/cache/redis";
 
 export const dynamic = "force-dynamic";
 
-/** Odds refresh at most every 6 hours to avoid burning API credits (500/mo free tier). */
 const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
@@ -69,9 +66,8 @@ export async function GET(
 
   const now = Date.now();
   const url = new URL(req.url);
-  const skipCache = url.searchParams.get("refresh") === "1";
+  // ?refresh= is not an acquisition signal — never live-pull.
   const slateParam = url.searchParams.get("slate");
-  // NFL: week1 (default) | full. Legacy aliases: live → week1, all → full.
   const slateRaw = String(slateParam ?? "")
     .trim()
     .toLowerCase();
@@ -81,72 +77,79 @@ export async function GET(
       : "week1";
   const cacheBucket = `${sport}:${slate}`;
   const cached = sportCache.get(cacheBucket);
-  if (!skipCache && cached && now - cached.ts < ODDS_CACHE_TTL_MS) {
-    return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
-  }
-  if (!skipCache) {
-    const distributed = await getCache<{ rows: unknown[]; ts: number }>(
-      cacheKeyForSport(sport, slate),
+  if (cached) {
+    const stale = now - cached.ts >= ODDS_CACHE_TTL_MS;
+    return json(
+      {
+        rows: cached.rows,
+        source: "cache",
+        reason: stale ? "stale" : "ok",
+        availability: stale ? "stale" : "ok",
+      },
+      200,
+      { "x-request-id": requestId },
     );
-    if (distributed && now - distributed.ts < ODDS_CACHE_TTL_MS) {
-      sportCache.set(cacheBucket, distributed);
-      return json({ rows: distributed.rows }, 200, {
-        "x-request-id": requestId,
-      });
-    }
   }
 
-  let oddsRows: Awaited<ReturnType<typeof fetchEdgeBoard>> = [];
-  const keys = getOddsApiKeys();
-  if (keys.length && SPORT_KEY_MAP[sport]) {
-    for (const key of keys) {
-      try {
-        oddsRows = await fetchEdgeBoard(sport, key);
-        if (oddsRows.length > 0) break;
-      } catch (e) {
-        logError(e instanceof Error ? e : new Error(String(e)), {
-          sport,
-          route: "edge-board/today",
-        });
-      }
-    }
+  const distributed = await getCache<{ rows: unknown[]; ts: number }>(
+    cacheKeyForSport(sport, slate),
+  );
+  if (distributed) {
+    sportCache.set(cacheBucket, distributed);
+    const stale = now - distributed.ts >= ODDS_CACHE_TTL_MS;
+    return json(
+      {
+        rows: distributed.rows,
+        source: "snapshot",
+        reason: stale ? "stale" : "ok",
+        availability: stale ? "stale" : "ok",
+      },
+      200,
+      { "x-request-id": requestId },
+    );
   }
 
-  if (
-    oddsRows.length === 0 &&
-    cached &&
-    (cached.rows as unknown[]).length > 0
-  ) {
-    return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
-  }
-
-  // When Odds API is empty (quota/outage), use shipped last-known snapshot.
-  if (oddsRows.length === 0) {
-    oddsRows = loadEdgeBoardFallback(sport);
-  }
-
+  // Miss / Redis absent: shipped snapshot only. Never fetchEdgeBoard.
+  const fallback = loadEdgeBoardFallback(sport);
   try {
-    const rows = await assembleEdgeBoardRows(sport, oddsRows, { slate });
+    const rows = await assembleEdgeBoardRows(sport, fallback, { slate });
     const parsed = EdgeBoardResponseSchema.safeParse({ rows });
     if (!parsed.success) {
-      if (cached)
-        return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
-      return json({ rows: [] }, 200, { "x-request-id": requestId });
+      return json(
+        {
+          rows: [],
+          source: "none",
+          reason: "paid_fetch_denied",
+          availability: "unavailable",
+        },
+        200,
+        { "x-request-id": requestId },
+      );
     }
-    sportCache.set(cacheBucket, { rows: parsed.data.rows, ts: now });
-    await setCache(
-      cacheKeyForSport(sport, slate),
-      { rows: parsed.data.rows, ts: now },
-      Math.ceil(ODDS_CACHE_TTL_MS / 1000),
+    return json(
+      {
+        ...parsed.data,
+        source: fallback.length > 0 ? "snapshot" : "none",
+        reason: fallback.length > 0 ? "stale" : "paid_fetch_denied",
+        availability: fallback.length > 0 ? "stale" : "unavailable",
+      },
+      200,
+      { "x-request-id": requestId },
     );
-    return json(parsed.data, 200, { "x-request-id": requestId });
   } catch (e) {
     logError(e instanceof Error ? e : new Error(String(e)), {
       sport,
       route: "edge-board/today",
     });
-    if (cached)
-      return json({ rows: cached.rows }, 200, { "x-request-id": requestId });
-    return json({ rows: [] }, 200, { "x-request-id": requestId });
+    return json(
+      {
+        rows: [],
+        source: "none",
+        reason: "paid_fetch_denied",
+        availability: "unavailable",
+      },
+      200,
+      { "x-request-id": requestId },
+    );
   }
 }

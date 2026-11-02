@@ -61,3 +61,7 @@ process.env.AUTH_SECRET = "test-secret-key-at-least-32-characters-long";
 process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test";
 process.env.MODEL_SERVICE_URL = "http://localhost:8000";
 process.env.NODE_ENV = "test";
+// Odds keys BEFORE any test-file import of `@/lib/config/env` (E6 / G-C7-VACUOUS).
+process.env.ODDS_API_KEY = "dummy-odds-key-t4662u";
+process.env.ODDS_API_KEY_BACKUP = "dummy-odds-key-t4662u";
+process.env.ODDS_WIDGET_ACCESS_KEY = "dummy-odds-key-t4662u";

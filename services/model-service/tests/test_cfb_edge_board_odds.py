@@ -67,3 +67,39 @@ def test_empty_warehouse_without_live_fails_closed(monkeypatch) -> None:
     assert payload["source"] == "none"
     assert payload["fresh"] is False
     assert payload["reason"] == "warehouse_empty"
+
+
+def test_default_allow_live_is_false_on_warehouse_miss(monkeypatch) -> None:
+    """G-CFB-RAIL-LIVE: default must not live-pull. Mutation: default True → fail."""
+    import src.services.cfb_edge_board_odds as mod
+
+    def _boom(*_a, **_k):
+        raise AssertionError("fetch_odds must not run on default request path")
+
+    monkeypatch.setattr(mod, "_load_warehouse_events", lambda _now: ([], None))
+    monkeypatch.setattr(mod, "fetch_odds", _boom)
+    payload = current_cfb_odds_events(
+        now=datetime(2026, 9, 10, 16, 0, tzinfo=timezone.utc),
+    )
+    assert payload["source"] == "none"
+    assert payload["events"] == []
+    assert payload["reason"] == "warehouse_empty"
+
+
+def test_cfb_edge_board_odds_route_never_live_pulls(monkeypatch) -> None:
+    from fastapi.testclient import TestClient
+
+    import src.services.cfb_edge_board_odds as mod
+    from src.main import app
+
+    def _boom(*_a, **_k):
+        raise AssertionError("fetch_odds must not run on /cfb/edge-board-odds")
+
+    monkeypatch.setattr(mod, "_load_warehouse_events", lambda _now: ([], None))
+    monkeypatch.setattr(mod, "fetch_odds", _boom)
+    client = TestClient(app)
+    response = client.get("/cfb/edge-board-odds")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["source"] == "none"
+    assert payload.get("events") == []

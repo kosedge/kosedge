@@ -119,10 +119,11 @@ export default async function CfbFuturesPage({
         <p className="mt-1 text-xs leading-relaxed text-kos-text/70">
           Sim-derived probabilities from season paths. Engine{" "}
           {version.engine_version} · sim as_of {version.as_of} ·
-          used_in_spread=false. Market odds from {market.source} (
-          {market.sportKey}), updated {formatCfbOddsAsOf(market.asOfUtc)}. Best
-          American among configured books. Implied % is raw (juice in), not
-          no-vig. Not advice.
+          used_in_spread=false.{" "}
+          {market.status === "ok"
+            ? `Market odds from ${market.source} (${market.sportKey}), updated ${formatCfbOddsAsOf(market.asOfUtc)}. Best American among configured books. Implied % is raw (juice in), not no-vig.`
+            : "Market data unavailable / as-of. Book column is —."}{" "}
+          Not advice.
         </p>
         <p className="mt-2 text-xs leading-relaxed text-kos-text/60">
           {market.note} {market.cfpNote} {market.confNote}

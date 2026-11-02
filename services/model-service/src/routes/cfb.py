@@ -425,9 +425,9 @@ def cfb_season_engine_simulate(
 def cfb_edge_board_odds() -> Dict[str, Any]:
     """Current NCAAF book observations for CFB Edge Board.
 
-    Warehouse first (beat PROD_LIVE). One cached live pull if warehouse is
-    empty/stale. Never HIST. Never persist. Never invent Fair→Market.
+    Warehouse first (beat PROD_LIVE). Request path never live-pulls
+    (G-CFB-RAIL-LIVE / S4 S5 DENIED). Never HIST. Never persist.
     """
     from src.services.cfb_edge_board_odds import current_cfb_odds_events
 
-    return current_cfb_odds_events()
+    return current_cfb_odds_events(allow_live=False)

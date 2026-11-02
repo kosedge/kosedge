@@ -24,6 +24,7 @@ import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-supp
 import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
+import { isPaidFetchDenied } from "@/lib/odds-acquire/errors";
 import {
   fairLinesToEdgeBoardRows,
   filterNflProjectionBackedRows,
@@ -114,8 +115,8 @@ async function pullOddsRows(sport: string): Promise<EdgeBoardRow[]> {
     try {
       const rows = await fetchEdgeBoard(sport, key);
       if (rows.length > 0) return rows;
-    } catch {
-      // try next key
+    } catch (err) {
+      if (isPaidFetchDenied(err)) return [];
     }
   }
   return [];

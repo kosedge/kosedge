@@ -95,9 +95,10 @@ describe("Compare Odds fat-payload fix", () => {
       path.join(process.cwd(), "app/api/odds/[sport]/compare/route.ts"),
       "utf8",
     );
-    expect(route).toContain("slimOddsComparisonForBoard");
     expect(route).toContain("odds:${sport}:compare:v8");
     expect(route).toContain("bookFeedStatusForSport");
+    expect(route).toContain("paid_fetch_denied");
+    expect(route).not.toContain("fetchOddsComparison");
   });
 
   it("Compare Odds UI labels not-carried feed columns", () => {

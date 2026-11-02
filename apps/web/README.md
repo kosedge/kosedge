@@ -24,7 +24,7 @@ See [Conventions](#conventions) for required vs optional.
 | `DATABASE_URL`                                 | Yes (run + build) | PostgreSQL connection string                                        |
 | `AUTH_SECRET`                                  | Yes (production)  | NextAuth secret (min 32 chars)                                      |
 | `NODE_ENV`                                     | No                | `development` \| `test` \| `production`                             |
-| `ODDS_API_KEY`                                 | No                | [The Odds API](https://the-odds-api.com) key (NCAAM etc.)           |
+| `ODDS_API_KEY`                                 | No                | The Odds API key (NCAAM etc.; server-only)                          |
 | `ODDS_WIDGET_ACCESS_KEY`                       | No                | Odds widget embed (server-only)                                     |
 | `MODEL_SERVICE_URL`                            | No                | Upstream model service for edge board                               |
 | `INTERNAL_API_SECRET`                          | No                | Secret for server-to-server edge board calls                        |

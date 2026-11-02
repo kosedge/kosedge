@@ -11,7 +11,10 @@ import {
   type OddsEvent,
 } from "@/lib/odds-api";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import { oddsAcquire } from "@/lib/odds-acquire/acquire";
+import { ODDS_API_HOST } from "@/lib/odds-acquire/hosts";
+import { isPaidFetchDenied } from "@/lib/odds-acquire/errors";
+import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 import { closed } from "@/lib/line-curve/guardrails";
 import type {
   LineCurveClosed,
@@ -19,8 +22,6 @@ import type {
   OddsAltSnapshot,
   PostedAlt,
 } from "@/lib/line-curve/types";
-
-const ODDS_API_BASE = "https://api.the-odds-api.com/v4";
 
 function snapshotId(eventId: string, book: string, capturedAt: string): string {
   return `${eventId}:${book}:${capturedAt}`;
@@ -171,14 +172,27 @@ export async function fetchAlternateSpreadSnapshot(args: {
   const book = args.book.trim().toLowerCase();
   const regions =
     args.sport === "nfl" || args.sport === "cfb" ? "us,us2" : "us";
-  const url =
-    `${ODDS_API_BASE}/sports/${sportKey}/events/${encodeURIComponent(args.eventId)}` +
-    `/odds?regions=${regions}&markets=spreads,alternate_spreads` +
-    `&oddsFormat=american&bookmakers=${encodeURIComponent(book)}&apiKey=${keys[0]}`;
-  const res = await upstreamFetch(url, {
-    cache: "no-store",
-    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+  const qs = new URLSearchParams({
+    regions,
+    markets: "spreads,alternate_spreads",
+    oddsFormat: "american",
+    bookmakers: book,
+    apiKey: keys[0],
   });
+  let res: Response;
+  try {
+    res = await oddsAcquire({
+      host: ODDS_API_HOST,
+      path: `/v4/sports/${sportKey}/events/${encodeURIComponent(args.eventId)}/odds?${qs.toString()}`,
+      caller: `fetchAlternateSpreadSnapshot:${args.sport}`,
+      init: { timeoutMs: UPSTREAM_TIMEOUT_MS.fast },
+    });
+  } catch (err) {
+    if (isPaidFetchDenied(err)) {
+      return closed("unavailable_alt_market", "Market alt prices unavailable");
+    }
+    return closed("missing_odds", "Alternate-spread snapshot unavailable.");
+  }
   if (!res.ok) {
     return closed(
       "missing_odds",

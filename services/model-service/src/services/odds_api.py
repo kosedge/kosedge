@@ -111,6 +111,15 @@ def assert_odds_key_present() -> None:
         )
 
 
+def request_path_paid_odds_allowed() -> bool:
+    """C8: request-path paid Odds only when ODDS_API_REQUEST_PATH_ALLOW==\"1\".
+
+    Unset / any other value denies. Beat/worker does not consult this flag.
+    Setting the flag is an env CLEAR (A1 HOLD) — default deny is the ship state.
+    """
+    return os.getenv("ODDS_API_REQUEST_PATH_ALLOW", "").strip() == "1"
+
+
 def fetch_odds(endpoint: str, params: dict):
     return fetch_odds_with_metadata(endpoint=endpoint, params=params)["payload"]
 

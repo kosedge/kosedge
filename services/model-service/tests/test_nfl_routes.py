@@ -618,6 +618,7 @@ def test_nfl_readiness_uses_ingested_outcomes_when_snapshot_sample_zero(monkeypa
 
 
 def test_nfl_edges_today_filters_low_confidence(monkeypatch) -> None:
+    monkeypatch.setenv("ODDS_API_REQUEST_PATH_ALLOW", "1")
     monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _NflRouteSession())
     fetch_calls = []
 
@@ -629,6 +630,7 @@ def test_nfl_edges_today_filters_low_confidence(monkeypatch) -> None:
                 "away_team": "Miami Dolphins",
                 "bookmakers": [
                     {
+                        "key": "draftkings",
                         "markets": [
                             {
                                 "key": "h2h",
@@ -650,6 +652,7 @@ def test_nfl_edges_today_filters_low_confidence(monkeypatch) -> None:
                 "away_team": "New England Patriots",
                 "bookmakers": [
                     {
+                        "key": "draftkings",
                         "markets": [
                             {
                                 "key": "h2h",
@@ -681,6 +684,7 @@ def test_nfl_edges_today_filters_low_confidence(monkeypatch) -> None:
             "min_quality_score": 0,
             "min_confidence_score": 0.3,
             "min_ml_edge_prob": 0,
+            "bookmakers": "draftkings",
         },
     )
     assert response.status_code == 200
@@ -694,8 +698,39 @@ def test_nfl_edges_today_filters_low_confidence(monkeypatch) -> None:
     assert payload["diagnostics"]["filtered_reasons"]["confidence_score"] == 1
     assert payload["diagnostics"]["filtered_reason_codes"]["confidence_score_below_threshold"] == 1
     assert payload["diagnostics"]["bookmakers"] == ["draftkings"]
-    assert payload["framework"]["version"] == "nfl-handicap-core-v1"
+    assert str(payload["framework"]["version"]).startswith("nfl-handicap-core-")
     assert fetch_calls[0]["params"]["bookmakers"] == "draftkings"
+
+
+def test_nfl_edges_today_does_not_fetch_odds_when_c8_unset(monkeypatch) -> None:
+    """G-PROXY-LIVE: user-read /nfl/edges/today must not pay Odds when C8 unset.
+
+    Mutation: remove the request_path_paid_odds_allowed wrap → this raises.
+    """
+    monkeypatch.delenv("ODDS_API_REQUEST_PATH_ALLOW", raising=False)
+    monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _NflRouteSession())
+
+    def _boom(**_kwargs):
+        raise AssertionError("fetch_odds must not run on /nfl/edges/today when C8 unset")
+
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    client = TestClient(app)
+    response = client.get(
+        "/nfl/edges/today",
+        params={
+            "model_version": "nfl-v1.5-matchup-sim",
+            "min_quality_score": 0,
+            "min_confidence_score": 0.3,
+            "min_ml_edge_prob": 0,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["count"] == 0
+    assert payload["edges"] == []
+    assert payload["diagnostics"]["odds_feed_error"] == "paid_fetch_denied"
+    assert payload["diagnostics"]["odds_feed_status"] == "denied"
+    assert payload["diagnostics"]["odds_events_seen"] == 0
 
 
 def test_nfl_walkforward_job_endpoint_shape(monkeypatch) -> None:

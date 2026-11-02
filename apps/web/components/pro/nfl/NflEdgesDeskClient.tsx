@@ -19,7 +19,7 @@ import {
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
-import { bookDisplay } from "@/lib/odds-api";
+import { bookDisplay } from "@/lib/odds-book-display";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
 const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];

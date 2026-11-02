@@ -26,7 +26,7 @@ from src.services.mlb_simulator import (
     MlbGameInputs,
     simulate_mlb_game,
 )
-from src.services.odds_api import fetch_odds
+from src.services.odds_api import fetch_odds, request_path_paid_odds_allowed
 
 router = APIRouter(prefix="/mlb", tags=["mlb-model"])
 MODEL_STATE_KEY = "mlb_active_model"
@@ -605,6 +605,16 @@ def run_single_game_simulation(
 def mlb_edges_today(
     model_version: Optional[str] = Query(None),
 ) -> Dict[str, Any]:
+    # G-PROXY-LIVE: /pro/mlb/edges user-read cannot live-pull Odds unless C8.
+    if not request_path_paid_odds_allowed():
+        return {
+            "edges": [],
+            "count": 0,
+            "model_version": model_version,
+            "source": "none",
+            "reason": "paid_fetch_denied",
+        }
+
     # Pull current MLB market for moneyline + totals.
     market_events = fetch_odds(
         endpoint="sports/baseball_mlb/odds",

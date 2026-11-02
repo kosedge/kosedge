@@ -68,4 +68,37 @@ describe("rateLimit", () => {
     expect(res).not.toBeNull();
     expect(res!.status).toBe(429);
   });
+
+  it("does not exempt spoofed x-kosedge-warm or x-vercel-cron headers", async () => {
+    const prev = process.env.CRON_SECRET;
+    process.env.CRON_SECRET = "rate-limit-cron";
+    try {
+      const ip = "spoof-header-rl-" + Date.now();
+      for (let i = 0; i < 10; i += 1) {
+        const ok = await rateLimit(
+          new NextRequest("http://localhost/api/edge-board/nba/today", {
+            headers: {
+              "x-forwarded-for": ip,
+              "x-kosedge-warm": "1",
+              "x-vercel-cron": "1",
+            },
+          }),
+        );
+        expect(ok).toBeNull();
+      }
+      const limited = await rateLimit(
+        new NextRequest("http://localhost/api/edge-board/nba/today", {
+          headers: {
+            "x-forwarded-for": ip,
+            "x-kosedge-warm": "1",
+            "x-vercel-cron": "1",
+          },
+        }),
+      );
+      expect(limited?.status).toBe(429);
+    } finally {
+      if (prev == null) delete process.env.CRON_SECRET;
+      else process.env.CRON_SECRET = prev;
+    }
+  });
 });

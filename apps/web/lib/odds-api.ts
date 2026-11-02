@@ -1,5 +1,6 @@
 /**
- * Odds API (the-odds-api.com) fetcher.
+ * Odds mapping + compare payload helpers.
+ * Paid HTTP is denied on request paths; live pulls go through lib/odds-acquire.
  * Supports: NCAAM, NBA, NFL, MLB, NHL, CFB, WNBA.
  * Designated books: DraftKings, FanDuel, BetMGM, BetRivers, Hard Rock Bet,
  * Fanatics, Bovada, Caesars, BetOnline, Bet365, Circa, Betr — see NFL feed coverage below.
@@ -12,11 +13,26 @@ import {
   selectFeaturedFullGameMarket,
   stampOddsMarketPeriod,
 } from "@/lib/edge-board-market-identity";
-import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
+import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import { bookDisplay } from "@/lib/odds-book-display";
 
 export { americanImpliedProb, noVigHomeProb };
+export { bookDisplay };
 
-const ODDS_API_BASE = "https://api.the-odds-api.com/v4";
+async function paidOddsGet(
+  path: string,
+  caller: string,
+  timeoutMs: number,
+): Promise<Response> {
+  const { oddsAcquire } = await import("@/lib/odds-acquire/acquire");
+  const { ODDS_API_HOST } = await import("@/lib/odds-acquire/hosts");
+  return oddsAcquire({
+    host: ODDS_API_HOST,
+    path,
+    caller,
+    init: { timeoutMs },
+  });
+}
 
 /** Sport key (our app) → Odds API sport key */
 export const SPORT_KEY_MAP: Record<string, string> = {
@@ -113,25 +129,6 @@ export function bookFeedStatusForSport(
 ): BookFeedStatus {
   if (!sportUsesDesignatedBookFeedHonesty(sportKey)) return "carried";
   return nflBookFeedStatus(bookKey);
-}
-
-const BOOK_DISPLAY: Record<string, string> = {
-  draftkings: "DraftKings",
-  fanduel: "FanDuel",
-  circa: "Circa",
-  hardrockbet: "Hard Rock Bet",
-  betmgm: "BetMGM",
-  bet365: "Bet365",
-  fanatics: "Fanatics",
-  betrivers: "BetRivers",
-  betr: "Betr",
-  bovada: "Bovada",
-  williamhill_us: "Caesars",
-  betonlineag: "BetOnline",
-};
-
-export function bookDisplay(key: string): string {
-  return BOOK_DISPLAY[key.toLowerCase()] ?? key;
 }
 
 export type OddsBookmaker = {
@@ -682,11 +679,11 @@ export async function fetchEdgeBoard(
   const markets = isMlb ? "h2h,totals" : "spreads,totals";
   const regions = regionsForSport(normalizedSport);
 
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
-  const res = await upstreamFetch(url, {
-    cache: "no-store",
-    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
-  });
+  const res = await paidOddsGet(
+    `/v4/sports/${oddsSportKey}/odds?regions=${regions}&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`,
+    `fetchEdgeBoard:${normalizedSport}`,
+    UPSTREAM_TIMEOUT_MS.fast,
+  );
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
@@ -792,11 +789,18 @@ export type OddsCompareBoardBook = {
   feedStatus: BookFeedStatus;
 };
 
+export type OddsReadSource = "snapshot" | "cache" | "none";
+export type OddsReadReason = "ok" | "paid_fetch_denied" | "stale";
+export type OddsReadAvailability = "ok" | "stale" | "unavailable";
+
 export type OddsCompareBoardPayload = {
   rows: OddsCompareBoardRow[];
   books: OddsCompareBoardBook[];
   asOf: string | null;
   bookAsOf: OddsComparisonBookAsOf[];
+  source?: OddsReadSource;
+  reason?: OddsReadReason;
+  availability?: OddsReadAvailability;
 };
 
 /** Strip unused book fields before shipping Compare Odds over the wire. */
@@ -853,11 +857,11 @@ export async function fetchOddsComparison(
   const regions = regionsForSport(normalizedSport);
   const usesFeedHonesty = sportUsesDesignatedBookFeedHonesty(normalizedSport);
 
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=spreads,h2h,totals&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
-  const res = await upstreamFetch(url, {
-    cache: "no-store",
-    timeoutMs: UPSTREAM_TIMEOUT_MS.heavy,
-  });
+  const res = await paidOddsGet(
+    `/v4/sports/${oddsSportKey}/odds?regions=${regions}&markets=spreads,h2h,totals&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`,
+    `fetchOddsComparison:${normalizedSport}`,
+    UPSTREAM_TIMEOUT_MS.heavy,
+  );
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);

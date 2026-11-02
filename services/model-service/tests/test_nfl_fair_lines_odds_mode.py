@@ -131,3 +131,72 @@ def test_post_reuse_with_odds_events_does_not_call_fetch_odds(
     assert response.status_code == 200
     assert response.json()["diagnostics"]["odds_mode"] == "reuse"
     assert response.json()["diagnostics"]["odds_events_seen"] == 1
+
+
+def test_get_default_odds_mode_skip_does_not_call_fetch_odds(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """G-PROXY-LIVE: omitting odds_mode must not live-pull."""
+
+    def _boom(**kwargs: Any) -> Any:
+        raise AssertionError("fetch_odds must not be called on default GET")
+
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    response = client.get("/nfl/fair-lines", params={"season": 2026, "days_ahead": 14})
+    assert response.status_code == 200
+    assert response.json()["diagnostics"]["odds_mode"] == "skip"
+
+
+def test_get_odds_mode_live_denied_when_c8_unset(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """C8 unset: explicit live remaps to skip. Mutation: remove remap → this fails."""
+
+    def _boom(**kwargs: Any) -> Any:
+        raise AssertionError("fetch_odds must not be called when C8 unset")
+
+    monkeypatch.delenv("ODDS_API_REQUEST_PATH_ALLOW", raising=False)
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    response = client.get(
+        "/nfl/fair-lines",
+        params={"season": 2026, "days_ahead": 14, "odds_mode": "live"},
+    )
+    assert response.status_code == 200
+    assert response.json()["diagnostics"]["odds_mode"] == "skip"
+
+
+def test_reuse_without_supply_denied_when_c8_unset(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Reuse with no supplied events must not fall through to live when C8 unset."""
+
+    def _boom(**kwargs: Any) -> Any:
+        raise AssertionError("reuse-without-supply must not live-pull when C8 unset")
+
+    monkeypatch.delenv("ODDS_API_REQUEST_PATH_ALLOW", raising=False)
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    market, err, mode = nfl_routes._resolve_nfl_fair_lines_market_events(
+        odds_mode="reuse",
+        bookmakers="draftkings",
+        supplied_events=None,
+    )
+    assert mode == "skip"
+    assert err is None
+    assert market == []
+
+
+def test_post_reuse_empty_denied_when_c8_unset(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def _boom(**kwargs: Any) -> Any:
+        raise AssertionError("empty reuse POST must not live-pull when C8 unset")
+
+    monkeypatch.delenv("ODDS_API_REQUEST_PATH_ALLOW", raising=False)
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    response = client.post(
+        "/nfl/fair-lines",
+        params={"season": 2026, "days_ahead": 14, "persist": "0"},
+        json={"odds_mode": "reuse", "odds_events": [], "odds_payload": []},
+    )
+    assert response.status_code == 200
+    assert response.json()["diagnostics"]["odds_mode"] == "skip"

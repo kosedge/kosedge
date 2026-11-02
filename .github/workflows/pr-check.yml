@@ -207,6 +207,10 @@ jobs:
       - name: Enforce web Python boundary policy
         run: pnpm check:web-python-boundary
 
+      - name: Odds acquire choke (the-odds-api.com)
+        if: steps.paths.outputs.web == '1'
+        run: bash scripts/check-odds-acquire-choke.sh
+
       - name: Truth-chain audit (fixture step 1)
         run: python3 scripts/ops/truth_chain_audit.py --fixture data/ops/truth-chain-fixtures/step1_inventory.json
 

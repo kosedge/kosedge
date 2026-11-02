@@ -10,7 +10,8 @@ export const maxDuration = 40;
  * Hits authentic **public** page-data assemble routes (no Authorization on the
  * warm GET) so Vercel stores HIT for the 45s band instead of CDN BYPASS.
  * Bounded paths only (NFL week1 + CFB current-week default). Does not remat, invent SoT,
- * mint as-of clocks, or warm full-slate (avoids uncontrolled Odds spend).
+ * mint as-of clocks, or warm full-slate. Not an Odds acquisition job — even with
+ * CRON_SECRET it must only prime SoT-backed assemble reads (t4662u S5).
  */
 const WARM_PATHS = [
   "/api/edge-board/nfl/assemble?slate=week1",
@@ -93,7 +94,8 @@ export async function GET(req: Request) {
     try {
       // Public cache path: do NOT forward CRON_SECRET Authorization — that
       // forces Vercel CDN BYPASS and defeats the warm. Auth stays on this
-      // cron route only. x-kosedge-warm skips rate-limit without BYPASS.
+      // cron route only. x-kosedge-warm is observational only and NEVER
+      // grants rate-limit exemption or Odds acquisition (t4662u S5).
       const res = await fetch(`${origin}${path}`, {
         method: "GET",
         headers: {
