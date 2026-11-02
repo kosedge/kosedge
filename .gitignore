@@ -110,6 +110,8 @@ kosedge-vercel-push/
 data/backups/
 *.dump
 *.dump.sha256
+# t4696u S1 pin-gated nflverse PBP restage binaries (VM-durable; do not commit)
+data/raw/nfl/pbp/
 # Vendored into image via CI sync + committed snapshot for Railway --path-as-root uploads.
 # (Previously ignored, which stripped the package from `railway up` archives.)
 
