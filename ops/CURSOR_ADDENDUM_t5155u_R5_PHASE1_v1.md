@@ -2,7 +2,8 @@
 
 Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5155u **659cd7d9** · Cos ORDER **3e14602b**
-HARD END 02:30 EST / 07:30Z.
+RETURN-FIX Cos ORDER **b51a9a10** · Alex RETURN **9332de97** ACCEPTED
+**c5574733**. HARD END 02:30 EST / 07:30Z.
 
 Closed quality (do not re-review): #700 tip **12ccc482** · Cos ACCEPT
 **4b23584a** · Alex **f4147e76**. Preserve RETURN **7057e5a9**.
@@ -11,8 +12,8 @@ Reuse: #699 Package A **42ff285c** / stamp **f7ec09ee** · #700 RETURN-FIX
 Do not open a third PR. A PR **#702** is the source tip only.
 
 No merge. No prod default. No real EVAL. No GREEN. No self-ACCEPT.
-No Cos bind. No `--score` / target scoring loader / ONE DEV diagnostic.
-CERT=0. Alex PREFLIGHT in flight.
+No Cos bind. No live `--score` until Alex re-PREFLIGHT.
+CERT=0. STOP for Alex re-PREFLIGHT.
 
 Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
 stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Combine implementation
@@ -28,6 +29,7 @@ Phase 2 **READINESS_ONLY**.
 ```
 python3 scripts/nfl/freeze_nfl_t5155u_market_arm.py
 PYTHONPATH=services/model-service python scripts/nfl/run_nfl_r5_496_freeze_t5155u.py
+PYTHONPATH=services/model-service python scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py
 python3 scripts/nfl/run_nfl_t5151u_verify_integrate.py
 ```
 
@@ -95,16 +97,22 @@ Read-only bind. No produce-μ rewrite. Q2/candidate stay **HOLD**.
 | FEATURE_RECON_REG496 identity | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640` |
 | Feature JSON                  | `282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c` |
 | Forecasts                     | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
-| Freeze manifest               | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
+| Q2 history freeze (R3)        | `07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966` |
+| Freeze manifest (R3 rewrite)  | `36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38` |
 | IF finite                     | **496**                                                            |
 | Q2 HOLD                       | **496** · 2013–19 REG unproven · do not invent Q2                  |
 | Candidate finite              | **0** (HOLD)                                                       |
 | common437 IF replay           | **437 / 437** · **0 BLOCKER**                                      |
 
-Phase 2 positive path: **READINESS ONLY**. `executed: false`. Cos bind
-false. `--score` / target scoring loader / ONE DEV diagnostic not wired
-on the normal command. `invoke_outcome_after_gates` remains available
-for tests; one-command leaves it false.
+Phase 2 one-exec runner is implemented and tested. Default command
+refuses labels (`outcome_loader_reads=0`). Tests may invoke the loader
+once after gates. Live `--score` refused until Cos bind. STOP for Alex
+re-PREFLIGHT.
+
+R3 env-hash: `Q2_HISTORY_FREEZE` / `FREEZE_MANIFEST` carry sha pins +
+repo-relative/role labels only. No `/tmp` paths, no host `present`.
+Drifted on-box `0dba03ee` / `1f4f0537` replaced by env-stable
+`07bbc340` / `36f051c4`. Forecasts `96d3aa6f` unchanged.
 
 ## Forbidden (honored)
 
@@ -129,4 +137,5 @@ target scoring loader · ONE DEV diagnostic.
 | Package A tip          | `42ff285cc1be2459512af4761651ba6dfe17dc75`                                |
 | Worker A tip / stamp   | `661df712a` / `3fbf59993`                                                 |
 | Combine implementation | `581493080881d6363935f41c70236b5cb070b401`                                |
+| RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
 | R2-C HOLD threshold    | `0.30` unchanged                                                          |

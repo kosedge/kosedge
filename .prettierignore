@@ -39,6 +39,9 @@ data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5137u_MATCHED72.json
 # t5155u hashed DEV_R5_496 Phase 1 freeze. Prettier must not rewrite IDs / mus.
 data/ops/nfl-t5155u-r5-496-freeze/
 
+# t5155u Phase-2 one-exec receipts. Frozen bytes.
+data/ops/nfl-t5155u-r5-phase2/
+
 # t5155u B1 universe + market intersection + verify receipts. Frozen bytes.
 data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/
 data/ops/nfl-t5155u-r5-phase1/

@@ -96,7 +96,10 @@ A_FORECASTS_SHA256 = (
 )
 A_MANIFEST_PATH = "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json"
 A_MANIFEST_SHA256 = (
-    "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+    "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+)
+A_Q2_SHA256 = (
+    "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
 )
 A_COMPARE_PATH = "data/ops/nfl-t5155u-r5-496-freeze/COMPARE_437.json"
 A_COMPARE_SHA256 = (
@@ -134,6 +137,7 @@ FOCUSED_TESTS = (
     "services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py",
     "services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py",
     "services/model-service/tests/test_nfl_t5155u_r5_combine.py",
+    "services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py",
 )
 COHORT_TEST = "services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py"
 
@@ -548,6 +552,7 @@ def verify_pinned_artifacts(root: Path) -> dict[str, Any]:
     pin("B1_UNIVERSE_ADMISSIBLE_QUOTES", root / B1_UNIVERSE_PATH, B1_UNIVERSE_SHA256)
     pin("WORKER_A_FORECASTS_DEV_R5_496", root / A_FORECASTS_PATH, A_FORECASTS_SHA256)
     pin("WORKER_A_FREEZE_MANIFEST", root / A_MANIFEST_PATH, A_MANIFEST_SHA256)
+    pin("WORKER_A_Q2_HISTORY_FREEZE", root / A_Q2_PATH, A_Q2_SHA256)
     pin("WORKER_A_COMPARE_437", root / A_COMPARE_PATH, A_COMPARE_SHA256)
     pin("WORKER_A_PHASE2_POSITIVE_PATH", root / A_PHASE2_PATH, A_PHASE2_SHA256)
     ce = try_load_cohort_module()
@@ -571,6 +576,7 @@ def bind_worker_a_forecast_freeze(
     pins = (
         (A_FORECASTS_PATH, A_FORECASTS_SHA256, "forecasts"),
         (A_MANIFEST_PATH, A_MANIFEST_SHA256, "freeze_manifest"),
+        (A_Q2_PATH, A_Q2_SHA256, "q2_history_freeze"),
         (A_COMPARE_PATH, A_COMPARE_SHA256, "compare_437"),
         (A_PHASE2_PATH, A_PHASE2_SHA256, "phase2_positive_path"),
         (REG496_PATH, REG496_SHA256, "feature_json"),
@@ -776,15 +782,18 @@ def build_receipt(
     interpreter: str | None = None,
     market_arm: Mapping[str, Any] | None = None,
     worker_a: Mapping[str, Any] | None = None,
+    phase2_one_exec: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     code_files = [
         root / "services/model-service/src/services/nfl_t5107u/eval_result_contract.py",
         root / "services/model-service/src/services/nfl_t5107u/verify_integrate.py",
         root / "services/model-service/src/services/nfl_t5107u/market_arm_freeze.py",
         root / "services/model-service/src/services/nfl_t5107u/r5_496_freeze.py",
+        root / "services/model-service/src/services/nfl_t5107u/r5_phase2_one_exec.py",
         root / "scripts/nfl/run_nfl_t5151u_verify_integrate.py",
         root / "scripts/nfl/freeze_nfl_t5155u_market_arm.py",
         root / "scripts/nfl/run_nfl_r5_496_freeze_t5155u.py",
+        root / "scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py",
     ]
     ce_path = root / "services/model-service/src/services/nfl_t5107u/cohort_enforcement.py"
     if ce_path.is_file():
@@ -808,6 +817,7 @@ def build_receipt(
         root / B1_UNIVERSE_PATH,
         root / A_FORECASTS_PATH,
         root / A_MANIFEST_PATH,
+        root / A_Q2_PATH,
         root / A_COMPARE_PATH,
         root / A_PHASE2_PATH,
     ]
@@ -823,6 +833,8 @@ def build_receipt(
     if market_arm is not None and not market_arm.get("ok", True):
         failed = True
     if worker_a is not None and not worker_a.get("ok", True):
+        failed = True
+    if phase2_one_exec is not None and phase2_one_exec.get("error"):
         failed = True
     status = "FAILED" if failed else "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT"
     elapsed = list((tests or {}).get("_elapsed_for_runtime") or collect_pytest_elapsed(tests))
@@ -907,6 +919,18 @@ def build_receipt(
             "status": "READINESS_ONLY",
             "executed": False,
             "cos_bind": False,
+        },
+        "phase2_one_exec": {
+            "status": (phase2_one_exec or {}).get("status")
+            if isinstance(phase2_one_exec, Mapping)
+            else "NOT_RUN",
+            "outcome_loader_reads": (phase2_one_exec or {}).get("outcome_loader_reads")
+            if isinstance(phase2_one_exec, Mapping)
+            else 0,
+            "forecasts_sha256": A_FORECASTS_SHA256,
+            "cos_bind": False,
+            "score_flag": False,
+            "scored": None,
         },
         "package_a_tip": PACKAGE_A_TIP,
         "package_a_stamp": PACKAGE_A_STAMP,
@@ -1129,6 +1153,22 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
         errors.append(f"WORKER_A_FORECAST_FREEZE: {exc}")
         worker_a = {"ok": False, "status": "FAILED", "error": str(exc)}
 
+    try:
+        from .r5_phase2_one_exec import run_phase2_one_exec
+
+        spy_p2 = OutcomeReadSpy(lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}})
+        phase2_exec = run_phase2_one_exec(
+            root=repo,
+            outcome_loader=spy_p2,
+            invoke_outcome_after_gates=False,
+            write=True,
+        )
+        if spy_p2.reads != 0:
+            raise VerifyIntegrateRefuse("Phase-2 default command read target scoring outcomes")
+    except Exception as exc:
+        errors.append(f"PHASE2_ONE_EXEC: {exc}")
+        phase2_exec = {"ok": False, "error": str(exc)}
+
     market_arm: dict[str, Any] | None = None
     try:
         from .market_arm_freeze import run_market_arm_freeze
@@ -1163,6 +1203,7 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
         interpreter="python3",
         market_arm=market_arm,
         worker_a=worker_a,
+        phase2_one_exec=phase2_exec,
     )
     write_receipt(receipt, repo)
     if receipt["status"] != "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT":

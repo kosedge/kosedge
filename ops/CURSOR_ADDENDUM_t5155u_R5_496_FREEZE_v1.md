@@ -104,7 +104,7 @@ from frozen identities (not outcomes).
 | `SPEC.json`                                      | `4cd87c0f8f898e63926903e8b3a6c9ab6e6c74edba21fb60a65272dc10b9f1e5` |
 | `IDENTITY_MANIFEST.json`                         | `c94200d4f344207bf06a24185d7a424bb736229588dd53eb4ce7ee35ea466fd0` |
 | `FEATURE_VALIDATION.json`                        | `3e0d40b936e5bc2dcdd08e4e1f28f07ffbd77f7d81d37a5023984937574b7690` |
-| `Q2_HISTORY_FREEZE.json`                         | `5c34107e1ee7a15e2d910658b39e4224b305eebc9719416c4bb6ef061f916c9d` |
+| `Q2_HISTORY_FREEZE.json`                         | `07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966` |
 | `SPLIT_SCAFFOLDING.json`                         | `0b7a7d1ea26d6563a16cb79dd3417c57346164516b9816a7314a1b565f8cc20c` |
 | `FORECASTS_DEV_R5_496.json`                      | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
 | `COMPARE_437.json`                               | `a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384` |
@@ -112,7 +112,7 @@ from frozen identities (not outcomes).
 | `PHASE2_POSITIVE_PATH.json`                      | `bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086` |
 | `SCORING_REFUSE.json`                            | `83f1e775d34742eb36c969baeb4fe218908f526f992ae1037a7dcb37c07288ad` |
 | `SOURCE_PINS.json`                               | `43a21807286da1b5594fe07d913459b3b30ba19eee08ec7fb2e4d1b71e85c144` |
-| `FREEZE_MANIFEST.json`                           | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
+| `FREEZE_MANIFEST.json`                           | `36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38` |
 
 Code sha `r5_496_freeze.py` =
 `24d118bb2453107002779937613de83ac27160ac4c9ca3d2cf7adb0298bf09ea`.
@@ -170,4 +170,4 @@ CERT=0.
 | FEATURE_RECON_REG496 identity | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640` |
 | Feature JSON                  | `282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c` |
 | Forecasts                     | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
-| Freeze manifest               | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
+| Freeze manifest               | `36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38` |

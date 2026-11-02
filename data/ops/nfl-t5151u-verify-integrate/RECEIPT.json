@@ -35,7 +35,7 @@
     "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
     "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
     "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
-    "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+    "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
     "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
     "n_forecasts": 496,
     "n_if_finite": 496,
@@ -92,7 +92,8 @@
     "eval": null,
     "bytes_verified": {
       "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
-      "freeze_manifest": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "freeze_manifest": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+      "q2_history_freeze": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966",
       "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
       "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
       "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
@@ -131,6 +132,14 @@
       "Cos bind / EXEC release for target scoring loader"
     ]
   },
+  "phase2_one_exec": {
+    "status": "CHECKS_PASSED_AWAITING_ALEX_RE_PREFLIGHT",
+    "outcome_loader_reads": 0,
+    "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
+    "cos_bind": false,
+    "score_flag": false,
+    "scored": null
+  },
   "package_a_tip": "42ff285cc1be2459512af4761651ba6dfe17dc75",
   "package_a_stamp": "f7ec09ee2ffcce7b130c9b858304bbe8006a4428",
   "partial_plumbing_tip": "ac35ed55a8aa1d11ecf742b9280e5483ebe95bfc",
@@ -148,7 +157,7 @@
   },
   "hashes": {
     "code": {
-      "sha256": "7a057473636fa88eea59daf9234db5e3e583daaaa09698466495beff63756408",
+      "sha256": "1abceb10c4a8955be12257dcaf294b72f9182dd1cb5649f4603c970e6b13f89f",
       "files": [
         {
           "path": "scripts/nfl/freeze_nfl_t5155u_market_arm.py",
@@ -161,6 +170,10 @@
         {
           "path": "scripts/nfl/run_nfl_t5151u_verify_integrate.py",
           "sha256": "345d8b231f0e5b8540c0e06123205997ce3c5ae2ad85b3d144808f764bbae868"
+        },
+        {
+          "path": "scripts/nfl/run_nfl_t5155u_r5_phase2_one_exec.py",
+          "sha256": "8edea44d2fe457a7a3daa2703701a0eb71de2a4564cc541606ddc52759c0818a"
         },
         {
           "path": "services/model-service/src/services/nfl_t5107u/cohort_enforcement.py",
@@ -176,16 +189,20 @@
         },
         {
           "path": "services/model-service/src/services/nfl_t5107u/r5_496_freeze.py",
-          "sha256": "24d118bb2453107002779937613de83ac27160ac4c9ca3d2cf7adb0298bf09ea"
+          "sha256": "2f8b9a99044fa0475ba62b3288555ecd20bc7b65089f9cd31d3b9cf53d095608"
+        },
+        {
+          "path": "services/model-service/src/services/nfl_t5107u/r5_phase2_one_exec.py",
+          "sha256": "e82b44aa6f4a2d2115c6f72fff958cd92fb4ad31cb66a8f5c16ffa6fad1c7d95"
         },
         {
           "path": "services/model-service/src/services/nfl_t5107u/verify_integrate.py",
-          "sha256": "1c295528e4e3b9b994ed69316b6710fbab5e1af21fe5693bad50ad308e44fa35"
+          "sha256": "85d5220554b135a837db69087a91238c01b150d8652936e5c0220fb4bda941e0"
         }
       ]
     },
     "spec": {
-      "sha256": "ce34a62352b1327c508d36e24a64edfb8b31c261c6af3cb9639011afb47baca0",
+      "sha256": "87798bbd95b3fe823515d7caef84c25d49abd4ecddb5656c0058083fa52c301e",
       "files": [
         {
           "path": "ops/CURSOR_ADDENDUM_t5151u_NUMERICAL_INTEGRATION_v1.md",
@@ -193,16 +210,16 @@
         },
         {
           "path": "ops/CURSOR_ADDENDUM_t5155u_R5_496_FREEZE_v1.md",
-          "sha256": "e06e847b8807e20b73b3a06199032265112113386f4e4926dd722236ffce2e55"
+          "sha256": "870860c915e0d6b5ff0d00c796484887bac0d3ce209377753d5ecfc18e9bb3c7"
         },
         {
           "path": "ops/CURSOR_ADDENDUM_t5155u_R5_PHASE1_v1.md",
-          "sha256": "7714e9295cdf777623daac616c1fbdfbb95d0004c357ec3677078ef10e19f7e3"
+          "sha256": "23b1d84d959ad74223eb5049f8cd5c661a8b405167a39d60991c9bce5d490480"
         }
       ]
     },
     "input": {
-      "sha256": "1b1df5e811c5c4a566bde2b248780faf3bcef8277dbdfd12a301e97a1b18be7c",
+      "sha256": "6675e4c982524580bffc681774beece4f5780d683729a010b8f78451a79bed04",
       "files": [
         {
           "path": "data/ops/nfl-forecast-builder-t5107u/DEV_RESEARCH_t5125u_R2B2_437.json",
@@ -242,11 +259,15 @@
         },
         {
           "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
-          "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+          "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
         },
         {
           "path": "data/ops/nfl-t5155u-r5-496-freeze/PHASE2_POSITIVE_PATH.json",
           "sha256": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086"
+        },
+        {
+          "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+          "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
         }
       ]
     },
@@ -291,7 +312,13 @@
         "name": "WORKER_A_FREEZE_MANIFEST",
         "ok": true,
         "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
-        "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+        "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+      },
+      {
+        "name": "WORKER_A_Q2_HISTORY_FREEZE",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+        "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
       },
       {
         "name": "WORKER_A_COMPARE_437",
@@ -346,14 +373,14 @@
       "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
       "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
       "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
-      "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
       "n_if_finite": 496,
       "q2_hold": 496,
       "n_candidate_finite": 0,
       "common437_replay": "437/437",
       "n_blocker": 0
     },
-    "output_sha256": "c764ab32660c43775ac43edf0bb6652069c9f2193d9e2fd6b3e41d66c5205030"
+    "output_sha256": "4ac7ecd18a53127ac5a13964af6c8e4b6c5d9a548f8da6e524a422e33018ff2e"
   },
   "pinned_artifacts": {
     "ok": true,
@@ -398,7 +425,13 @@
         "name": "WORKER_A_FREEZE_MANIFEST",
         "ok": true,
         "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
-        "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+        "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+      },
+      {
+        "name": "WORKER_A_Q2_HISTORY_FREEZE",
+        "ok": true,
+        "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+        "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
       },
       {
         "name": "WORKER_A_COMPARE_437",
@@ -726,7 +759,13 @@
       "name": "WORKER_A_FREEZE_MANIFEST",
       "ok": true,
       "path": "data/ops/nfl-t5155u-r5-496-freeze/FREEZE_MANIFEST.json",
-      "sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1"
+      "sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38"
+    },
+    {
+      "name": "WORKER_A_Q2_HISTORY_FREEZE",
+      "ok": true,
+      "path": "data/ops/nfl-t5155u-r5-496-freeze/Q2_HISTORY_FREEZE.json",
+      "sha256": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966"
     },
     {
       "name": "WORKER_A_COMPARE_437",
@@ -807,6 +846,13 @@
         "stderr_tail": ""
       },
       {
+        "command": "python -m pytest services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py -q --tb=line",
+        "ok": true,
+        "returncode": 0,
+        "stdout_tail": "......                                                                   [100%]\n6 passed",
+        "stderr_tail": ""
+      },
+      {
         "command": "python -m pytest services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py -q --tb=line",
         "ok": true,
         "returncode": 0,
@@ -822,6 +868,7 @@
       "services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py",
       "services/model-service/tests/test_nfl_t5155u_r5_496_freeze.py",
       "services/model-service/tests/test_nfl_t5155u_r5_combine.py",
+      "services/model-service/tests/test_nfl_t5155u_r5_phase2_one_exec.py",
       "services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py"
     ],
     "interpreter_excluded_from_output_hash": true,
@@ -853,7 +900,7 @@
       "identity_sha256": "6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640",
       "feature_json_sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
       "forecasts_sha256": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
-      "freeze_manifest_sha256": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+      "freeze_manifest_sha256": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
       "compare_437_sha256": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
       "n_forecasts": 496,
       "n_if_finite": 496,
@@ -910,7 +957,8 @@
       "eval": null,
       "bytes_verified": {
         "forecasts": "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407",
-        "freeze_manifest": "f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1",
+        "freeze_manifest": "36f051c4f0ecb96abac973f3e43bfc157a1f632e65d5d8b1de7991495eff7f38",
+        "q2_history_freeze": "07bbc340223976ff4d832bb02bce9cae40b2febe3b226f619913241300ec6966",
         "compare_437": "a0a54294eb7f05df3d3543b373394a99d438d7faa6b95ef945b59d66f2af5384",
         "phase2_positive_path": "bca0143f9ae1270193bc5d2a66499f896743eac9e857f40448d21a42b73e0086",
         "feature_json": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
@@ -962,31 +1010,33 @@
   },
   "runtime": {
     "interpreter": "python3",
-    "tip_sha": "581493080881d6363935f41c70236b5cb070b401",
+    "tip_sha": "a52b53ec84798cf710a8922a252c1eeacb65d87f",
     "pytest_elapsed": [
+      "0.51",
+      "0.97",
+      "2.10",
+      "0.39",
       "0.54",
-      "0.85",
-      "2.46",
-      "0.40",
-      "0.52",
-      "2.03",
-      "0.20",
-      "0.29"
+      "1.99",
+      "0.17",
+      "1.35",
+      "0.32"
     ]
   },
   "side_metadata": {
     "pytest_elapsed": [
+      "0.51",
+      "0.97",
+      "2.10",
+      "0.39",
       "0.54",
-      "0.85",
-      "2.46",
-      "0.40",
-      "0.52",
-      "2.03",
-      "0.20",
-      "0.29"
+      "1.99",
+      "0.17",
+      "1.35",
+      "0.32"
     ],
     "pytest_elapsed_semantic": false
   },
-  "tip_sha": "581493080881d6363935f41c70236b5cb070b401",
+  "tip_sha": "a52b53ec84798cf710a8922a252c1eeacb65d87f",
   "interpreter": "python3"
 }

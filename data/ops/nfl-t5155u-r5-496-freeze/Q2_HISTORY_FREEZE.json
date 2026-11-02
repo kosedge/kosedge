@@ -48,22 +48,19 @@
   "score_sources": {
     "games_csv": {
       "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
-      "path": "/tmp/t5111u-recon-43b5a622/pins/games_4fe1cdd7.csv",
-      "present": true,
+      "path": "data/ops/nfl-t4422u-walkforward-pergame-unblended-2013-2023/games.csv",
       "season_type_column": false,
       "role": "kickoff identity only \u2014 not REG membership"
     },
     "outcomes_50bda875": {
       "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
-      "path": "/tmp/t5111u-recon-43b5a622/pins/outcomes_2013_2022_score_only.csv",
-      "present": true,
+      "path": "outcomes_2013_2022_score_only.csv",
       "season_type_column": false,
       "role": "score-only 2013\u20132022 \u2014 REG membership not proven by this file"
     },
     "schedule_results_2020_2023": {
       "sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
       "path": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
-      "present": true,
       "season_type_column": true,
       "proven_reg_years": [
         2020,

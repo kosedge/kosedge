@@ -469,10 +469,8 @@ def freeze_q2_history_sources(root: Path | None = None) -> dict[str, Any]:
     repo = _repo_root(root)
     refuse_week_le_18_proxy(claimed_reg=True, used_week_le_18=False)
     transfer = verify_q2_transfer_policy(proposed_refit=False)
-    games_path, games_sha = _locate_pin(DEFAULT_GAMES_CANDIDATES, GAMES_SHA256, "games.csv")
-    outcomes_path, outcomes_sha = _locate_pin(
-        DEFAULT_OUTCOMES_CANDIDATES, OUTCOMES_SHA256, "outcomes 50bda875"
-    )
+    _locate_pin(DEFAULT_GAMES_CANDIDATES, GAMES_SHA256, "games.csv")
+    _locate_pin(DEFAULT_OUTCOMES_CANDIDATES, OUTCOMES_SHA256, "outcomes 50bda875")
     schedule = repo / SCHEDULE_PATH
     schedule_sha = sha256_file(schedule)
     if schedule_sha != SCHEDULE_SHA256:
@@ -537,23 +535,20 @@ def freeze_q2_history_sources(root: Path | None = None) -> dict[str, Any]:
         "training_seasons": list(TRAINING_SEASONS),
         "score_sources": {
             "games_csv": {
-                "sha256": games_sha or GAMES_SHA256,
-                "path": str(games_path) if games_path else None,
-                "present": games_path is not None,
+                "sha256": GAMES_SHA256,
+                "path": "data/ops/nfl-t4422u-walkforward-pergame-unblended-2013-2023/games.csv",
                 "season_type_column": False,
                 "role": "kickoff identity only — not REG membership",
             },
             "outcomes_50bda875": {
-                "sha256": outcomes_sha or OUTCOMES_SHA256,
-                "path": str(outcomes_path) if outcomes_path else None,
-                "present": outcomes_path is not None,
+                "sha256": OUTCOMES_SHA256,
+                "path": "outcomes_2013_2022_score_only.csv",
                 "season_type_column": False,
                 "role": "score-only 2013–2022 — REG membership not proven by this file",
             },
             "schedule_results_2020_2023": {
-                "sha256": schedule_sha,
+                "sha256": SCHEDULE_SHA256,
                 "path": SCHEDULE_PATH,
-                "present": True,
                 "season_type_column": True,
                 "proven_reg_years": list(PROVEN_REG_YEARS),
                 "role": "authoritative REG membership 2020–21 (and 2022–23 unused here)",
@@ -1305,3 +1300,33 @@ def run_phase1_freeze(
         bundle["FREEZE_MANIFEST"] = manifest
     bundle["written"] = written
     return bundle
+
+
+def rewrite_env_stable_q2_history_freeze(*, root: Path | None = None) -> dict[str, str]:
+    """Rewrite Q2_HISTORY_FREEZE + FREEZE_MANIFEST only. Never touch forecasts."""
+    repo = _repo_root(root)
+    forecasts = repo / "data/ops/nfl-t5155u-r5-496-freeze/FORECASTS_DEV_R5_496.json"
+    before = sha256_file(forecasts)
+    if before != "96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407":
+        raise R5FreezeRefuse("refusing Q2 rewrite — committed forecasts drifted")
+    payload = freeze_q2_history_sources(repo)
+    blob = json.dumps(payload, default=str)
+    if "/tmp/" in blob or "present" in payload.get("score_sources", {}).get("games_csv", {}):
+        raise R5FreezeRefuse("Q2 history freeze still host-dependent")
+    dest = repo / OUT_DIR / "Q2_HISTORY_FREEZE.json"
+    dest.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    q2_sha = sha256_file(dest)
+    manifest_path = repo / OUT_DIR / "FREEZE_MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    files = dict(manifest.get("files") or {})
+    files["Q2_HISTORY_FREEZE"] = q2_sha
+    manifest["files"] = files
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    after = sha256_file(forecasts)
+    if after != before:
+        raise R5FreezeRefuse("Q2 rewrite mutated forecasts — refuse")
+    return {
+        "Q2_HISTORY_FREEZE": q2_sha,
+        "FREEZE_MANIFEST": sha256_file(manifest_path),
+        "FORECASTS_DEV_R5_496": after,
+    }
