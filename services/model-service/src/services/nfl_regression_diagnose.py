@@ -214,8 +214,16 @@ def decompose_matchup(
     factors = decomp.get("factor_contributions") if isinstance(decomp.get("factor_contributions"), dict) else {}
     components = {
         name: {
-            "margin_points": float((item or {}).get("margin_points") or 0.0),
-            "total_points": float((item or {}).get("total_points") or 0.0),
+            "margin_points": (
+                None
+                if (item or {}).get("margin_points") is None
+                else float((item or {}).get("margin_points"))
+            ),
+            "total_points": (
+                None
+                if (item or {}).get("total_points") is None
+                else float((item or {}).get("total_points"))
+            ),
         }
         for name, item in factors.items()
         if isinstance(item, dict)

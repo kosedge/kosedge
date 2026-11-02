@@ -647,10 +647,15 @@ def fetch_inactive_qb_ids(
     # Prefer injury report style tables when present; tolerate absence.
     for sql in (
         """
-        SELECT player_id FROM nfl_dp_injuries
-        WHERE season = :season AND week = :week
-          AND UPPER(COALESCE(position, '')) = 'QB'
-          AND UPPER(COALESCE(status, report_status, '')) IN
+        SELECT i.player_id
+        FROM nfl_dp_injuries i
+        LEFT JOIN nfl_dp_rosters r
+          ON r.season = i.season
+         AND r.team = i.team
+         AND r.player_id = i.player_id
+        WHERE i.season = :season AND i.week = :week
+          AND UPPER(COALESCE(r.position, '')) = 'QB'
+          AND UPPER(COALESCE(i.report_status, '')) IN
               ('OUT', 'INACTIVE', 'IR', 'PUP', 'SUSPENDED')
         """,
         """

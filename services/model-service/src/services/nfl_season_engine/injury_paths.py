@@ -249,15 +249,23 @@ def availability_for_week(path: InjuryPath, week: int) -> float:
     return _clamp(start + (1.0 - start) * t, 0.0, 1.0)
 
 
+# Structural conversion: offense-index units → spread points on the
+# full-strength prior. QB1 out = 0.12 index units × 12.5 pts/unit = 1.5
+# (D-2 a-priori floor). Not a fit coefficient. Not KEI desk 3.5.
+QB1_INDEX_UNITS = 0.12
+QB1_POINTS_PER_INDEX_UNIT = 12.5
+QB1_FLOOR_SPREAD_POINTS = QB1_INDEX_UNITS * QB1_POINTS_PER_INDEX_UNIT
+
+
 def player_offense_value(role: PlayerRole) -> float:
     """Transparent offense-index value weight for one skill role (full-season healthy).
 
-    Anchored so a QB1 out ≈ −0.12 O, RB1 workhorse ≈ −0.05, WR1 ≈ −0.04.
+    Anchored so a QB1 out ≈ −QB1_INDEX_UNITS O, RB1 workhorse ≈ −0.05, WR1 ≈ −0.04.
     """
     pos = (role.position or "").upper()
     depth = max(1, int(role.depth_order or 1))
     if pos == "QB":
-        return 0.12 if depth == 1 else 0.035
+        return QB1_INDEX_UNITS if depth == 1 else 0.035
     if pos == "RB":
         rush = max(0.0, float(role.rush_share))
         tgt = max(0.0, float(role.target_share))

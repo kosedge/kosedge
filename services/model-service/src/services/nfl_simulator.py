@@ -409,59 +409,59 @@ def _build_totals_adjustments(inputs: NflGameInputs) -> Dict[str, Any]:
         weight=_env_float("NFL_TOTALS_SUCCESS_DELTA_WEIGHT", 7.4),
     )
 
-    home_off_mult = _clamp(inputs.injury_nowcast_offense_multiplier_home or 1.0, 0.82, 1.08)
-    away_off_mult = _clamp(inputs.injury_nowcast_offense_multiplier_away or 1.0, 0.82, 1.08)
-    home_def_mult = _clamp(inputs.injury_nowcast_defense_multiplier_home or 1.0, 0.90, 1.18)
-    away_def_mult = _clamp(inputs.injury_nowcast_defense_multiplier_away or 1.0, 0.90, 1.18)
-    injury_conf = _clamp(
-        (
-            (inputs.injury_nowcast_confidence_home or 0.0)
-            + (inputs.injury_nowcast_confidence_away or 0.0)
-        )
-        / 2.0,
-        0.0,
-        1.0,
+    # Game-line guard (§7.1.5 / C-7): never invent an injury term from
+    # multiplier default 1.0 or impact 0.0. EPA-only totals stay EPA-only.
+    injury_inputs = (
+        inputs.injury_nowcast_offense_multiplier_home,
+        inputs.injury_nowcast_offense_multiplier_away,
+        inputs.injury_nowcast_defense_multiplier_home,
+        inputs.injury_nowcast_defense_multiplier_away,
+        inputs.injury_nowcast_confidence_home,
+        inputs.injury_nowcast_confidence_away,
+        inputs.injury_nowcast_impact_home,
+        inputs.injury_nowcast_impact_away,
     )
-    offense_drag = ((1.0 - home_off_mult) + (1.0 - away_off_mult))
-    defense_leak = ((home_def_mult - 1.0) + (away_def_mult - 1.0))
-    injury_total_raw = (0.7 * defense_leak) - (1.25 * offense_drag)
-    injury_component = _feature_component(
-        injury_total_raw * injury_conf,
-        low=-0.22,
-        high=0.22,
-        weight=_env_float("NFL_TOTALS_INJURY_WEIGHT", 6.0),
-    )
+    injury_complete = all(value is not None for value in injury_inputs)
+    totals_components: Dict[str, Any] = {
+        "combined_pass_rate_5g": pass_rate_component,
+        "offense_defense_epa_interaction_5g": epa_interaction_component,
+        "combined_success_rate_delta_5g": success_delta_component,
+        "injury_total_signal_applied": False,
+    }
+    if injury_complete:
+        # Still do not apply on the game-line path (guard). Record raw only.
+        totals_components["injury_inputs_complete"] = True
+    else:
+        totals_components["injury_inputs_complete"] = False
+        totals_components["injury_dropped_fields"] = [
+            name
+            for name, value in (
+                ("offense_multiplier_home", inputs.injury_nowcast_offense_multiplier_home),
+                ("offense_multiplier_away", inputs.injury_nowcast_offense_multiplier_away),
+                ("defense_multiplier_home", inputs.injury_nowcast_defense_multiplier_home),
+                ("defense_multiplier_away", inputs.injury_nowcast_defense_multiplier_away),
+                ("confidence_home", inputs.injury_nowcast_confidence_home),
+                ("confidence_away", inputs.injury_nowcast_confidence_away),
+                ("impact_home", inputs.injury_nowcast_impact_home),
+                ("impact_away", inputs.injury_nowcast_impact_away),
+            )
+            if value is None
+        ]
 
     total_points = _clamp(
         pass_rate_component["points"]
         + epa_interaction_component["points"]
-        + success_delta_component["points"]
-        + injury_component["points"],
+        + success_delta_component["points"],
         -_env_float("NFL_TOTALS_MAX_ADJUSTMENT_POINTS", 4.2),
         _env_float("NFL_TOTALS_MAX_ADJUSTMENT_POINTS", 4.2),
     )
 
-    injury_impact_strength = _clamp(
-        ((inputs.injury_nowcast_impact_home or 0.0) + (inputs.injury_nowcast_impact_away or 0.0)) * injury_conf,
-        0.0,
-        1.0,
-    )
-    stdev_points = _clamp(
-        injury_impact_strength * _env_float("NFL_TOTALS_INJURY_STDEV_WEIGHT", 1.35),
-        0.0,
-        _env_float("NFL_TOTALS_MAX_STDEV_ADJUSTMENT", 2.0),
-    )
+    stdev_points = 0.0
     return {
         "applied": True,
         "total_points": total_points,
         "stdev_points": stdev_points,
-        "components": {
-            "combined_pass_rate_5g": pass_rate_component,
-            "offense_defense_epa_interaction_5g": epa_interaction_component,
-            "combined_success_rate_delta_5g": success_delta_component,
-            "injury_total_signal": injury_component,
-            "injury_confidence": injury_conf,
-        },
+        "components": totals_components,
     }
 
 
@@ -746,6 +746,8 @@ def simulate_nfl_game(
         },
         "injury_nowcast": {
             "source": inputs.injury_nowcast_source,
+            "applied": False,
+            "disclosure": "no injury adjustment applied",
             "home_confidence": inputs.injury_nowcast_confidence_home,
             "away_confidence": inputs.injury_nowcast_confidence_away,
             "home_freshness_hours": inputs.injury_nowcast_freshness_home_hours,

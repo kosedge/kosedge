@@ -35,6 +35,16 @@ def _to_float(value: Any, default: Optional[float] = None) -> Optional[float]:
         return default
 
 
+def _sum_available_points(*values: Any) -> float:
+    """Add published point contributions. Skip null/unavailable (G-2 / PC-W2)."""
+    total = 0.0
+    for value in values:
+        if value is None:
+            continue
+        total += float(value)
+    return total
+
+
 def _to_bool(value: Any, default: bool = False) -> bool:
     if value is None:
         return bool(default)
@@ -308,38 +318,28 @@ def compute_nfl_projection_decomposition(
         factors_cfg["rest_travel"]["max_total_points"],
     )
 
-    injury_conf = _clamp(
-        ((_to_float(injury_nowcast_confidence_home, 0.0) or 0.0) + (_to_float(injury_nowcast_confidence_away, 0.0) or 0.0))
-        / 2.0,
-        0.0,
-        1.0,
+    # Game-line guard (§7.1.5 / C-7): injuries_depth never moves the line.
+    # Missing fields stay NULL; no _to_float(x, 0.0) / multiplier default 1.0.
+    _injury_fields = (
+        injury_nowcast_impact_home,
+        injury_nowcast_impact_away,
+        injury_nowcast_confidence_home,
+        injury_nowcast_confidence_away,
+        injury_nowcast_offense_multiplier_home,
+        injury_nowcast_offense_multiplier_away,
+        injury_nowcast_defense_multiplier_home,
+        injury_nowcast_defense_multiplier_away,
     )
-    offense_mult_home = _clamp(_to_float(injury_nowcast_offense_multiplier_home, 1.0) or 1.0, 0.82, 1.12)
-    offense_mult_away = _clamp(_to_float(injury_nowcast_offense_multiplier_away, 1.0) or 1.0, 0.82, 1.12)
-    defense_mult_home = _clamp(_to_float(injury_nowcast_defense_multiplier_home, 1.0) or 1.0, 0.9, 1.2)
-    defense_mult_away = _clamp(_to_float(injury_nowcast_defense_multiplier_away, 1.0) or 1.0, 0.9, 1.2)
-    injury_margin_signal = (
-        (_to_float(injury_nowcast_impact_away, 0.0) or 0.0)
-        - (_to_float(injury_nowcast_impact_home, 0.0) or 0.0)
-        + (offense_mult_home - offense_mult_away)
-        + ((defense_mult_away - 1.0) - (defense_mult_home - 1.0))
-    )
-    injury_margin_points = _clamp(
-        injury_margin_signal * injury_conf * factors_cfg["injuries_depth"]["margin_weight"],
-        -factors_cfg["injuries_depth"]["max_margin_points"],
-        factors_cfg["injuries_depth"]["max_margin_points"],
-    )
-    injury_total_points = _clamp(
-        _safe_component_points(totals_components, "injury_total_signal")
-        + (
-            (_to_float(injury_nowcast_impact_home, 0.0) or 0.0)
-            + (_to_float(injury_nowcast_impact_away, 0.0) or 0.0)
-        )
-        * injury_conf
-        * factors_cfg["injuries_depth"]["total_weight"],
-        -factors_cfg["injuries_depth"]["max_total_points"],
-        factors_cfg["injuries_depth"]["max_total_points"],
-    )
+    injury_conf = _to_float(injury_nowcast_confidence_home)
+    injury_conf_away = _to_float(injury_nowcast_confidence_away)
+    if injury_conf is not None and injury_conf_away is not None:
+        injury_conf_mean: Optional[float] = _clamp((injury_conf + injury_conf_away) / 2.0, 0.0, 1.0)
+    else:
+        injury_conf_mean = None
+    # PC-W2 / G-2: a skipped contribution is null/unavailable, never numeric 0.
+    injury_margin_points: Optional[float] = None
+    injury_total_points: Optional[float] = None
+    injuries_depth_available = False
 
     short_rest_threshold = factors_cfg["situational_flags"]["short_rest_threshold_days"]
     home_short = 1.0 if rest_days_home < short_rest_threshold else 0.0
@@ -462,19 +462,33 @@ def compute_nfl_projection_decomposition(
             "raw_signals": {"rest_days_home": rest_days_home, "rest_days_away": rest_days_away, "rest_delta": round(rest_delta, 4)},
         },
         "injuries_depth": {
-            "margin_points": round(injury_margin_points, 4),
-            "total_points": round(injury_total_points, 4),
-            "available": bool(
-                injury_nowcast_impact_home is not None
-                or injury_nowcast_impact_away is not None
-                or injury_nowcast_offense_multiplier_home is not None
-                or injury_nowcast_offense_multiplier_away is not None
+            "margin_points": (
+                None if injury_margin_points is None else round(injury_margin_points, 4)
             ),
-            "notes": "Uses injury nowcast multipliers and confidence-aware scaling.",
+            "total_points": (
+                None if injury_total_points is None else round(injury_total_points, 4)
+            ),
+            "available": injuries_depth_available,
+            "notes": "Game-line injuries_depth guarded off; residual is export-only.",
             "raw_signals": {
-                "injury_confidence": round(injury_conf, 4),
+                "injury_confidence": injury_conf_mean,
                 "home_impact": _to_float(injury_nowcast_impact_home),
                 "away_impact": _to_float(injury_nowcast_impact_away),
+                "dropped_fields": [
+                    name
+                    for name, value in (
+                        ("impact_home", injury_nowcast_impact_home),
+                        ("impact_away", injury_nowcast_impact_away),
+                        ("confidence_home", injury_nowcast_confidence_home),
+                        ("confidence_away", injury_nowcast_confidence_away),
+                        ("offense_multiplier_home", injury_nowcast_offense_multiplier_home),
+                        ("offense_multiplier_away", injury_nowcast_offense_multiplier_away),
+                        ("defense_multiplier_home", injury_nowcast_defense_multiplier_home),
+                        ("defense_multiplier_away", injury_nowcast_defense_multiplier_away),
+                    )
+                    if value is None
+                ],
+                "game_line_guard": True,
             },
         },
         "weather_environment": {
@@ -779,36 +793,36 @@ def compute_nfl_projection_decomposition(
             "raw_signals": tw.get("raw_signals") or {},
         }
 
-    predicted_margin = float(
-        contributions["base_efficiency"]["margin_points"]
-        + contributions["home_field_advantage"]["margin_points"]
-        + contributions["rest_travel"]["margin_points"]
-        + contributions["injuries_depth"]["margin_points"]
-        + contributions["weather_environment"]["margin_points"]
-        + contributions["travel_schedule"]["margin_points"]
-        + contributions["situational_flags"]["margin_points"]
-        + contributions["regression_luck"]["margin_points"]
-        + contributions["kav_efficiency"]["margin_points"]
-        + contributions["external_dvoa"]["margin_points"]
-        + contributions["personnel_efficiency"]["margin_points"]
-        + contributions["coach_aggression"]["margin_points"]
-        + contributions["info_velocity"]["margin_points"]
-        + contributions["travel_weather_interaction"]["margin_points"]
+    predicted_margin = _sum_available_points(
+        contributions["base_efficiency"]["margin_points"],
+        contributions["home_field_advantage"]["margin_points"],
+        contributions["rest_travel"]["margin_points"],
+        contributions["injuries_depth"]["margin_points"],
+        contributions["weather_environment"]["margin_points"],
+        contributions["travel_schedule"]["margin_points"],
+        contributions["situational_flags"]["margin_points"],
+        contributions["regression_luck"]["margin_points"],
+        contributions["kav_efficiency"]["margin_points"],
+        contributions["external_dvoa"]["margin_points"],
+        contributions["personnel_efficiency"]["margin_points"],
+        contributions["coach_aggression"]["margin_points"],
+        contributions["info_velocity"]["margin_points"],
+        contributions["travel_weather_interaction"]["margin_points"],
     )
-    predicted_total = float(
-        priors["base_total_points"]
-        + contributions["base_efficiency"]["total_points"]
-        + contributions["rest_travel"]["total_points"]
-        + contributions["injuries_depth"]["total_points"]
-        + contributions["weather_environment"]["total_points"]
-        + contributions["travel_schedule"]["total_points"]
-        + contributions["regression_luck"]["total_points"]
-        + contributions["kav_efficiency"]["total_points"]
-        + contributions["external_dvoa"]["total_points"]
-        + contributions["personnel_efficiency"]["total_points"]
-        + contributions["coach_aggression"]["total_points"]
-        + contributions["info_velocity"]["total_points"]
-        + contributions["travel_weather_interaction"]["total_points"]
+    predicted_total = _sum_available_points(
+        priors["base_total_points"],
+        contributions["base_efficiency"]["total_points"],
+        contributions["rest_travel"]["total_points"],
+        contributions["injuries_depth"]["total_points"],
+        contributions["weather_environment"]["total_points"],
+        contributions["travel_schedule"]["total_points"],
+        contributions["regression_luck"]["total_points"],
+        contributions["kav_efficiency"]["total_points"],
+        contributions["external_dvoa"]["total_points"],
+        contributions["personnel_efficiency"]["total_points"],
+        contributions["coach_aggression"]["total_points"],
+        contributions["info_velocity"]["total_points"],
+        contributions["travel_weather_interaction"]["total_points"],
     )
     predicted_total = _clamp(predicted_total, 30.0, 66.0)
 
@@ -834,10 +848,10 @@ def compute_nfl_projection_decomposition(
         if val is None:
             continue
         hours_change = val if hours_change is None else min(hours_change, val)
-    injury_impact_avg = (
-        (_to_float(injury_nowcast_impact_home, 0.0) or 0.0)
-        + (_to_float(injury_nowcast_impact_away, 0.0) or 0.0)
-    ) / 2.0
+    _imp_h = _to_float(injury_nowcast_impact_home)
+    _imp_a = _to_float(injury_nowcast_impact_away)
+    _imp_parts = [v for v in (_imp_h, _imp_a) if v is not None]
+    injury_impact_avg = (sum(_imp_parts) / len(_imp_parts)) if _imp_parts else 0.0
     if not bool(err_cfg.get("enabled")):
         contributions["error_regime"] = {
             "margin_points": 0.0,
@@ -1017,8 +1031,12 @@ def summarize_nfl_factor_attribution_from_points(points: Iterable[Dict[str, Any]
             bucket["rows"] += 1.0
             if bool(payload.get("available")):
                 bucket["available_rows"] += 1.0
-            bucket["sum_abs_margin_points"] += abs(_to_float(payload.get("margin_points"), 0.0) or 0.0)
-            bucket["sum_abs_total_points"] += abs(_to_float(payload.get("total_points"), 0.0) or 0.0)
+            margin_points = payload.get("margin_points")
+            total_points = payload.get("total_points")
+            if margin_points is not None:
+                bucket["sum_abs_margin_points"] += abs(float(margin_points))
+            if total_points is not None:
+                bucket["sum_abs_total_points"] += abs(float(total_points))
 
     factors_summary: Dict[str, Any] = {}
     for factor_name, bucket in factor_accumulator.items():

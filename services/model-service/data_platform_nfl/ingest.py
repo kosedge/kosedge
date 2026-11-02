@@ -48,6 +48,22 @@ def _safe_load_nflverse_table(loader: Any, *, seasons: List[int]) -> Any:
         raise
 
 
+def _parse_report_time(row: Dict[str, Any]) -> datetime | None:
+    """Listing timestamp from the source row. Never invent ingest-now."""
+    for key in ("date_modified", "date_reported", "report_time", "listing_as_of"):
+        raw = row.get(key)
+        if raw is None or raw == "":
+            continue
+        if isinstance(raw, datetime):
+            return raw if raw.tzinfo else raw.replace(tzinfo=timezone.utc)
+        try:
+            parsed = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+        except (TypeError, ValueError):
+            continue
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+    return None
+
+
 def _to_int(v: Any) -> int | None:
     try:
         if v is None:
@@ -2189,9 +2205,9 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                 text(
                     """
                     INSERT INTO nfl_dp_injuries (
-                      season, week, team, player_key, player_id, player_name, report_status, practice_status, injury, source, updated_at
+                      season, week, team, player_key, player_id, player_name, report_status, practice_status, injury, source, updated_at, report_time
                     ) VALUES (
-                      :season, :week, :team, :player_key, :player_id, :player_name, :report_status, :practice_status, :injury, :source, :updated_at
+                      :season, :week, :team, :player_key, :player_id, :player_name, :report_status, :practice_status, :injury, :source, :updated_at, :report_time
                     )
                     ON CONFLICT (season, week, team, player_key) DO UPDATE SET
                       player_id = EXCLUDED.player_id,
@@ -2200,7 +2216,8 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                       practice_status = EXCLUDED.practice_status,
                       injury = EXCLUDED.injury,
                       source = EXCLUDED.source,
-                      updated_at = EXCLUDED.updated_at
+                      updated_at = EXCLUDED.updated_at,
+                      report_time = COALESCE(EXCLUDED.report_time, nfl_dp_injuries.report_time)
                     """
                 ),
                 {
@@ -2215,6 +2232,7 @@ def ingest_nflverse_snapshot(*, seasons: List[int], include_pbp: bool = True) ->
                     "injury": injury_label,
                     "source": "nflverse",
                     "updated_at": _now(),
+                    "report_time": _parse_report_time(row),
                 },
             )
             metrics["rows"]["injuries"] += 1

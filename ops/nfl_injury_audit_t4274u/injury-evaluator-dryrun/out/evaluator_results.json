@@ -1,0 +1,2573 @@
+{
+  "close_label": "comparative research, not certified CLV",
+  "cohorts": [
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": 0.0,
+          "ci_lo": 0.0,
+          "excludes_0": false,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0,
+          "p": 1.0,
+          "seed": 2708041115
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": 0.0,
+          "ci_lo": 0.0,
+          "excludes_0": false,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0,
+          "p": 1.0,
+          "seed": 2708041115
+        },
+        "ml_logloss_delta": {
+          "ci_hi": -0.010730715907124655,
+          "ci_lo": -0.010730715907124655,
+          "excludes_0": true,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.010730715907124655,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_ats_delta": {
+          "ci_hi": 0.0,
+          "ci_lo": 0.0,
+          "excludes_0": false,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0,
+          "p": 1.0,
+          "seed": 2708041115
+        },
+        "spread_clv_delta": {
+          "ci_hi": 0.0,
+          "ci_lo": 0.0,
+          "excludes_0": false,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0,
+          "p": 1.0,
+          "seed": 2708041115
+        },
+        "spread_logloss_delta": {
+          "ci_hi": 0.010348162256727633,
+          "ci_lo": 0.010348162256727633,
+          "excludes_0": true,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.010348162256727633,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "total_ats_delta": {
+          "ci_hi": 0.0,
+          "ci_lo": 0.0,
+          "excludes_0": false,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0,
+          "p": 1.0,
+          "seed": 2708041115
+        },
+        "total_clv_delta": {
+          "ci_hi": null,
+          "ci_lo": null,
+          "excludes_0": false,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": "statistic undefined on this cohort",
+          "obs": null,
+          "p": 1.0,
+          "seed": 2708041115
+        },
+        "total_logloss_delta": {
+          "ci_hi": 0.008710311397799542,
+          "ci_lo": 0.008710311397799542,
+          "excludes_0": true,
+          "n_blocks": 4,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.008710311397799542,
+          "p": 0.0,
+          "seed": 2708041115
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "expected_outcome_note": "Known answer: I-2 shortfall (1 season, n_nonzero<500) \u2192 INCONCLUSIVE.",
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 1.0,
+          "significant": false,
+          "test_id": "ml_ats_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "INCONCLUSIVE",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "INCONCLUSIVE",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": false,
+        "primary_ci_excludes_0": false,
+        "primary_significant_after_holm": false,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": -0.00533961516296394,
+        "logloss_delta_ci_hi": -0.010730715907124655,
+        "notes": [
+          "slope undefined (need >=2 occupied reliability bins); K-4 fail"
+        ],
+        "pass": false,
+        "slope_adj": null,
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "slope_adj": "need >=2 occupied reliability bins; not a stub",
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": "no row with both arms defined for this metric (usually edge=0 on that market); not a stub",
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": -0.00533961516296394,
+        "logloss_delta_adj_minus_base": -0.010730715907124655,
+        "mean_brier_adj": 0.21672730981734545,
+        "mean_brier_base": 0.2220669249803094,
+        "mean_logloss_adj": 0.6264894937128249,
+        "mean_logloss_base": 0.6372202096199495,
+        "ml_ats_delta": 0.0,
+        "ml_clv_implied_prob_delta": 0.0,
+        "ml_logloss_delta": -0.010730715907124655,
+        "slope_adj": null,
+        "spread_ats_delta": 0.0,
+        "spread_clv_delta": 0.0,
+        "spread_logloss_delta": 0.010348162256727633,
+        "total_ats_delta": 0.0,
+        "total_clv_delta": null,
+        "total_logloss_delta": 0.008710311397799542
+      },
+      "missing": {
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 40,
+        "n_incomplete_by_season": {},
+        "n_incomplete_residual": 0,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_paired_both_clv": 40,
+        "n_universe": 40,
+        "n_universe_by_season": {
+          "2018": 40
+        }
+      },
+      "n_full_seasons": 0,
+      "n_nonzero_adjustment": 20,
+      "n_nonzero_by_season": {
+        "2018": 20
+      },
+      "name": "synthetic_inconclusive",
+      "notes": "Known answer: I-2 shortfall (1 season, n_nonzero<500) \u2192 INCONCLUSIVE.",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5344955250945402,
+            "mean_y": 1.0,
+            "n": 40,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.44833731676017125,
+            "mean_y": 0.0,
+            "n": 40,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5043174402629403,
+            "mean_y": 0.0,
+            "n": 40,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ]
+      },
+      "weeks": {
+        "2018": {
+          "expected": 17,
+          "full": false,
+          "weeks": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": -0.09146241830065419,
+          "ci_lo": -0.10947712418300654,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.10130718954248366,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": 0.06499044860377964,
+          "ci_lo": 0.03520315966038064,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.05009680413208014,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "ml_logloss_delta": {
+          "ci_hi": 0.08720461012603105,
+          "ci_lo": 0.07449768886709003,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.08052603154006754,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_ats_delta": {
+          "ci_hi": -0.042483660130718956,
+          "ci_lo": -0.0784313725490196,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.06045751633986928,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_clv_delta": {
+          "ci_hi": -0.042483660130718956,
+          "ci_lo": -0.0784313725490196,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.06045751633986928,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_logloss_delta": {
+          "ci_hi": -0.010412092724660354,
+          "ci_lo": -0.05229733070867574,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.031756081811972356,
+          "p": 0.0034,
+          "seed": 2708041115
+        },
+        "total_ats_delta": {
+          "ci_hi": -0.35130718954248363,
+          "ci_lo": -0.5571895424836601,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.4542483660130719,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "total_clv_delta": {
+          "ci_hi": 2.2287581699346406,
+          "ci_lo": 1.4052287581699345,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 1.8169934640522876,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "total_logloss_delta": {
+          "ci_hi": 0.259738199288635,
+          "ci_lo": 0.25688077160834805,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.2583094854484915,
+          "p": 0.0,
+          "seed": 2708041115
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "expected_outcome_note": "Known answer: 2 full seasons, n>=500, adj worse \u2192 I-4 NO CLAIM (FAIL).",
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 0.0034,
+          "significant": true,
+          "test_id": "spread_logloss_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "MET",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "NO CLAIM",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": false,
+        "primary_ci_excludes_0": true,
+        "primary_significant_after_holm": true,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": 0.034383504214631766,
+        "logloss_delta_ci_hi": 0.08720461012603105,
+        "notes": [
+          "logloss_CI_hi 0.08720461012603105 > 0.002",
+          "brier_CI_hi 0.034383504214631766 > 0.0005"
+        ],
+        "pass": false,
+        "slope_adj": 0.9990752469489775,
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "slope_adj": null,
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": null,
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": 0.03228647713997771,
+        "logloss_delta_adj_minus_base": 0.08052603154006754,
+        "mean_brier_adj": 0.1762254659869745,
+        "mean_brier_base": 0.1439389888469968,
+        "mean_logloss_adj": 0.5246329529780714,
+        "mean_logloss_base": 0.44410692143800384,
+        "ml_ats_delta": -0.10130718954248366,
+        "ml_clv_implied_prob_delta": 0.05009680413208014,
+        "ml_logloss_delta": 0.08052603154006754,
+        "slope_adj": 0.9990752469489775,
+        "spread_ats_delta": -0.06045751633986928,
+        "spread_clv_delta": -0.06045751633986928,
+        "spread_logloss_delta": -0.031756081811972356,
+        "total_ats_delta": -0.4542483660130719,
+        "total_clv_delta": 1.8169934640522876,
+        "total_logloss_delta": 0.2583094854484915
+      },
+      "missing": {
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 612,
+        "n_incomplete_by_season": {},
+        "n_incomplete_residual": 0,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_paired_both_clv": 612,
+        "n_universe": 612,
+        "n_universe_by_season": {
+          "2018": 306,
+          "2019": 306
+        }
+      },
+      "n_full_seasons": 2,
+      "n_nonzero_adjustment": 612,
+      "n_nonzero_by_season": {
+        "2018": 306,
+        "2019": 306
+      },
+      "name": "synthetic_fail",
+      "notes": "Known answer: 2 full seasons, n>=500, adj worse \u2192 I-4 NO CLAIM (FAIL).",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.05001895433626302,
+            "mean_y": 0.04411764705882353,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.14995804623715214,
+            "mean_y": 0.14705882352941177,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.24997314970004686,
+            "mean_y": 0.25,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3499927779548031,
+            "mean_y": 0.35294117647058826,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4499997084670482,
+            "mean_y": 0.45588235294117646,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5500002915329518,
+            "mean_y": 0.5441176470588235,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6500072220451969,
+            "mean_y": 0.6470588235294118,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7500268502999532,
+            "mean_y": 0.75,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8500419537628479,
+            "mean_y": 0.8529411764705882,
+            "n": 34,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.949981045663737,
+            "mean_y": 0.9411764705882353,
+            "n": 34,
+            "nan_reason": null
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.03136283027639358,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.1457721700447549,
+            "mean_y": 0.0,
+            "n": 136,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.27365323012631193,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.36612903556399967,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.46382608234895434,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5670539752059206,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6765643656130702,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7939352929471261,
+            "mean_y": 0.0,
+            "n": 34,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.9233840890824001,
+            "mean_y": 0.0,
+            "n": 34,
+            "nan_reason": null
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4003125703548006,
+            "mean_y": 1.0,
+            "n": 278,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6272928631256388,
+            "mean_y": 0.0,
+            "n": 334,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ]
+      },
+      "weeks": {
+        "2018": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2019": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        }
+      }
+    },
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": 0.13075980392156805,
+          "ci_lo": 0.11274509803921569,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.12091503267973856,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": -0.03828012353927482,
+          "ci_lo": -0.08038825943247713,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.05933419148587597,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "ml_logloss_delta": {
+          "ci_hi": -0.08465366735389333,
+          "ci_lo": -0.09801095715520551,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.09099082098072642,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_ats_delta": {
+          "ci_hi": -0.032679738562091505,
+          "ci_lo": -0.06862745098039216,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.05065359477124183,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_clv_delta": {
+          "ci_hi": -0.5882352941176471,
+          "ci_lo": -1.2352941176470589,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.9117647058823529,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_logloss_delta": {
+          "ci_hi": 0.04141216341511661,
+          "ci_lo": -0.0004730745688987765,
+          "excludes_0": false,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.020870914518413223,
+          "p": 0.0568,
+          "seed": 2708041115
+        },
+        "total_ats_delta": {
+          "ci_hi": 0.5571895424836601,
+          "ci_lo": 0.35130718954248363,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.4542483660130719,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "total_clv_delta": {
+          "ci_hi": -1.4052287581699345,
+          "ci_lo": -2.2287581699346406,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -1.8169934640522876,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "total_logloss_delta": {
+          "ci_hi": -0.13003681438048367,
+          "ci_lo": -0.13694997625545,
+          "excludes_0": true,
+          "n_blocks": 34,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.13349339531796683,
+          "p": 0.0,
+          "seed": 2708041115
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "expected_outcome_note": "Known answer: 2 full seasons, n>=500, primary Holm-significant, CI excludes 0, K-4 passes \u2192 VALUE PROVEN on this fixture only. Not a product claim (I-5). Not the holdout.",
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_clv_implied_prob_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 0.0568,
+          "significant": false,
+          "test_id": "spread_logloss_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "MET",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "VALUE PROVEN",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": true,
+        "primary_ci_excludes_0": true,
+        "primary_significant_after_holm": true,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": -0.03472994036376619,
+        "logloss_delta_ci_hi": -0.08465366735389333,
+        "notes": [],
+        "pass": true,
+        "slope_adj": 0.9990752469489775,
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "slope_adj": null,
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": null,
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": -0.03637786998944293,
+        "logloss_delta_adj_minus_base": -0.09099082098072642,
+        "mean_brier_adj": 0.1762254659869745,
+        "mean_brier_base": 0.21260333597641742,
+        "mean_logloss_adj": 0.5246329529780714,
+        "mean_logloss_base": 0.6156237739587979,
+        "ml_ats_delta": 0.12091503267973856,
+        "ml_clv_implied_prob_delta": -0.05933419148587597,
+        "ml_logloss_delta": -0.09099082098072642,
+        "slope_adj": 0.9990752469489775,
+        "spread_ats_delta": -0.05065359477124183,
+        "spread_clv_delta": -0.9117647058823529,
+        "spread_logloss_delta": 0.020870914518413223,
+        "total_ats_delta": 0.4542483660130719,
+        "total_clv_delta": -1.8169934640522876,
+        "total_logloss_delta": -0.13349339531796683
+      },
+      "missing": {
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 612,
+        "n_incomplete_by_season": {},
+        "n_incomplete_residual": 0,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_paired_both_clv": 612,
+        "n_universe": 612,
+        "n_universe_by_season": {
+          "2018": 306,
+          "2019": 306
+        }
+      },
+      "n_full_seasons": 2,
+      "n_nonzero_adjustment": 612,
+      "n_nonzero_by_season": {
+        "2018": 306,
+        "2019": 306
+      },
+      "name": "synthetic_pass",
+      "notes": "Known answer: 2 full seasons, n>=500, primary Holm-significant, CI excludes 0, K-4 passes \u2192 VALUE PROVEN on this fixture only. Not a product claim (I-5). Not the holdout.",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.05001895433626302,
+            "mean_y": 0.04411764705882353,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.14995804623715214,
+            "mean_y": 0.14705882352941177,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.24997314970004686,
+            "mean_y": 0.25,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3499927779548031,
+            "mean_y": 0.35294117647058826,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4499997084670482,
+            "mean_y": 0.45588235294117646,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5500002915329518,
+            "mean_y": 0.5441176470588235,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6500072220451969,
+            "mean_y": 0.6470588235294118,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7500268502999532,
+            "mean_y": 0.75,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8500419537628479,
+            "mean_y": 0.8529411764705882,
+            "n": 34,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.949981045663737,
+            "mean_y": 0.9411764705882353,
+            "n": 34,
+            "nan_reason": null
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.03136283027639358,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.1457721700447549,
+            "mean_y": 0.0,
+            "n": 136,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.27365323012631193,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.36612903556399967,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.46382608234895434,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5670539752059206,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6765643656130702,
+            "mean_y": 0.0,
+            "n": 68,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7939352929471261,
+            "mean_y": 0.0,
+            "n": 34,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.9233840890824001,
+            "mean_y": 0.0,
+            "n": 34,
+            "nan_reason": null
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3864380028488617,
+            "mean_y": 0.0,
+            "n": 334,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5287602255960249,
+            "mean_y": 1.0,
+            "n": 278,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ]
+      },
+      "weeks": {
+        "2018": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2019": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        }
+      }
+    },
+    {
+      "bootstrap": {
+        "ml_ats_delta": {
+          "ci_hi": -0.022774255670040416,
+          "ci_lo": -0.05458362491252624,
+          "excludes_0": true,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.038569424964936885,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "ml_clv_implied_prob_delta": {
+          "ci_hi": 0.009340224825123334,
+          "ci_lo": -0.008086580240291507,
+          "excludes_0": false,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.0007436326253718226,
+          "p": 0.861,
+          "seed": 2708041115
+        },
+        "ml_logloss_delta": {
+          "ci_hi": 0.013748431943960889,
+          "ci_lo": 0.007186489532057683,
+          "excludes_0": true,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.01045045357435217,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "spread_ats_delta": {
+          "ci_hi": 0.003873273544046951,
+          "ci_lo": -0.014089716438900588,
+          "excludes_0": false,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.004908835904628331,
+          "p": 0.3092,
+          "seed": 2708041115
+        },
+        "spread_clv_delta": {
+          "ci_hi": 0.2996526352698014,
+          "ci_lo": -0.10623344972143366,
+          "excludes_0": false,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.09431977559607294,
+          "p": 0.3612,
+          "seed": 2708041115
+        },
+        "spread_logloss_delta": {
+          "ci_hi": 0.011560488039276826,
+          "ci_lo": 0.004961958843151479,
+          "excludes_0": true,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.008263327270575181,
+          "p": 0.0,
+          "seed": 2708041115
+        },
+        "total_ats_delta": {
+          "ci_hi": 0.007296797248697646,
+          "ci_lo": -0.016520210896309315,
+          "excludes_0": false,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": -0.00455820476858345,
+          "p": 0.4624,
+          "seed": 2708041115
+        },
+        "total_clv_delta": {
+          "ci_hi": 0.4187136533602282,
+          "ci_lo": -0.23661411143822425,
+          "excludes_0": false,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.09291725105189341,
+          "p": 0.5704,
+          "seed": 2708041115
+        },
+        "total_logloss_delta": {
+          "ci_hi": 0.012625428728812222,
+          "ci_lo": 0.0051345535017674705,
+          "excludes_0": true,
+          "n_blocks": 190,
+          "n_boot": 10000,
+          "nan_reason": null,
+          "obs": 0.008856415696099525,
+          "p": 0.0,
+          "seed": 2708041115
+        }
+      },
+      "close_label": "comparative research, not certified CLV",
+      "expected_outcome_note": "Sealed le2023 export + OOS season<=2023. Close proxy is comparative research, not certified CLV. Not the sealed holdout.",
+      "holm": [
+        {
+          "holm_rank": 1,
+          "holm_threshold": 0.005555555555555556,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "spread_logloss_delta"
+        },
+        {
+          "holm_rank": 2,
+          "holm_threshold": 0.00625,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "total_logloss_delta"
+        },
+        {
+          "holm_rank": 3,
+          "holm_threshold": 0.0071428571428571435,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_ats_delta"
+        },
+        {
+          "holm_rank": 4,
+          "holm_threshold": 0.008333333333333333,
+          "p": 0.0,
+          "significant": true,
+          "test_id": "ml_logloss_delta"
+        },
+        {
+          "holm_rank": 5,
+          "holm_threshold": 0.01,
+          "p": 0.3092,
+          "significant": false,
+          "test_id": "spread_ats_delta"
+        },
+        {
+          "holm_rank": 6,
+          "holm_threshold": 0.0125,
+          "p": 0.3612,
+          "significant": false,
+          "test_id": "spread_clv_delta"
+        },
+        {
+          "holm_rank": 7,
+          "holm_threshold": 0.016666666666666666,
+          "p": 0.4624,
+          "significant": false,
+          "test_id": "total_ats_delta"
+        },
+        {
+          "holm_rank": 8,
+          "holm_threshold": 0.025,
+          "p": 0.5704,
+          "significant": false,
+          "test_id": "total_clv_delta"
+        },
+        {
+          "holm_rank": 9,
+          "holm_threshold": 0.05,
+          "p": 0.861,
+          "significant": false,
+          "test_id": "ml_clv_implied_prob_delta"
+        }
+      ],
+      "i1_verbatim": "Paired comparison, adjusted vs base, same games, priced at the same as_of_ts, against the CLOSING line: CLV (points and implied-prob), ATS win rate, log-loss delta.",
+      "i2": "MET",
+      "i2_verbatim": "Minimum sample: >= 500 games with a non-zero adjustment in the sealed holdout and >= 2 full seasons; below that the result is INCONCLUSIVE (no claim).",
+      "i3_verbatim": "Multiple comparisons: 3 markets x 3 metrics = 9 tests; Holm-Bonferroni at family alpha 0.05. Primary endpoint = mean CLV delta (spread) - stated now, not chosen later.",
+      "i4": {
+        "decision": "NO CLAIM",
+        "i5": "null results reported as null; no product claim",
+        "k4_pass": false,
+        "primary_ci_excludes_0": false,
+        "primary_significant_after_holm": false,
+        "product_claim": false
+      },
+      "i4_verbatim": "Decision rule: VALUE PROVEN only if primary endpoint significant after Holm, its 95% block-bootstrap CI excludes 0, and K-4 passes. Anything else = NO CLAIM.",
+      "i5_verbatim": "Soft, borderline or insignificant results cannot become a product claim, marketing copy, or a \"improves accuracy\" statement. Report them as null results.",
+      "k2_verbatim": "Metrics, base vs adjusted on the same games: Brier and log loss (win prob); cover reliability for spread and total (predicted cover prob vs actual); reliability diagram in 10 bins with counts.",
+      "k3_verbatim": "CIs: block bootstrap by NFL week, 10,000 resamples, 95% percentile CI, paired.",
+      "k4": {
+        "brier_delta_ci_hi": 0.006767162022532177,
+        "logloss_delta_ci_hi": 0.013748431943960889,
+        "notes": [
+          "logloss_CI_hi 0.013748431943960889 > 0.002",
+          "brier_CI_hi 0.006767162022532177 > 0.0005",
+          "slope 0.29283212349145965 outside [0.9, 1.1]"
+        ],
+        "pass": false,
+        "slope_adj": 0.29283212349145965,
+        "thresholds": {
+          "brier_upper": 0.0005,
+          "logloss_upper": 0.002,
+          "slope": [
+            0.9,
+            1.1
+          ]
+        }
+      },
+      "k4_verbatim": "Gate: adjusted must not be worse than base: upper 95% CI of (adj - base) log loss <= 0.002 and Brier <= 0.0005. Calibration slope of adjusted within [0.9, 1.1]. Failing = layer stays off.",
+      "metric_undefined": {
+        "ml_ats_delta": null,
+        "ml_clv_implied_prob_delta": null,
+        "ml_logloss_delta": null,
+        "slope_adj": null,
+        "spread_ats_delta": null,
+        "spread_clv_delta": null,
+        "spread_logloss_delta": null,
+        "total_ats_delta": null,
+        "total_clv_delta": null,
+        "total_logloss_delta": null
+      },
+      "metrics": {
+        "brier_delta_adj_minus_base": 0.005148161667945172,
+        "logloss_delta_adj_minus_base": 0.01045045357435217,
+        "mean_brier_adj": 0.24338119186507587,
+        "mean_brier_base": 0.23823303019713066,
+        "mean_logloss_adj": 0.6798735161229172,
+        "mean_logloss_base": 0.6694230625485651,
+        "ml_ats_delta": -0.038569424964936885,
+        "ml_clv_implied_prob_delta": 0.0007436326253718226,
+        "ml_logloss_delta": 0.01045045357435217,
+        "slope_adj": 0.29283212349145965,
+        "spread_ats_delta": -0.004908835904628331,
+        "spread_clv_delta": 0.09431977559607294,
+        "spread_logloss_delta": 0.008263327270575181,
+        "total_ats_delta": -0.00455820476858345,
+        "total_clv_delta": 0.09291725105189341,
+        "total_logloss_delta": 0.008856415696099525
+      },
+      "missing": {
+        "n_edge0_adj": 0,
+        "n_edge0_base": 0,
+        "n_identical_cohort": 2852,
+        "n_incomplete_by_season": {
+          "2013": 2,
+          "2014": 1,
+          "2015": 1,
+          "2017": 1,
+          "2020": 2,
+          "2022": 3,
+          "2023": 1
+        },
+        "n_incomplete_residual": 11,
+        "n_missing_actual": 0,
+        "n_missing_actual_by_season": {},
+        "n_missing_baseline": 0,
+        "n_missing_baseline_by_season": {},
+        "n_missing_close": 0,
+        "n_missing_close_by_season": {},
+        "n_paired_both_clv": 2852,
+        "n_universe": 2863,
+        "n_universe_by_season": {
+          "2013": 256,
+          "2014": 256,
+          "2015": 256,
+          "2016": 256,
+          "2017": 256,
+          "2018": 256,
+          "2019": 256,
+          "2020": 256,
+          "2021": 272,
+          "2022": 271,
+          "2023": 272
+        }
+      },
+      "n_full_seasons": 11,
+      "n_nonzero_adjustment": 2845,
+      "n_nonzero_by_season": {
+        "2013": 250,
+        "2014": 254,
+        "2015": 253,
+        "2016": 256,
+        "2017": 255,
+        "2018": 256,
+        "2019": 256,
+        "2020": 254,
+        "2021": 272,
+        "2022": 268,
+        "2023": 271
+      },
+      "name": "le2023",
+      "notes": "Sealed le2023 export + OOS season<=2023. Close proxy is comparative research, not certified CLV. Not the sealed holdout.",
+      "reliability": {
+        "ml": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2954454456839607,
+            "mean_y": 0.5,
+            "n": 6,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3654231118739446,
+            "mean_y": 0.43956043956043955,
+            "n": 91,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4620565592946832,
+            "mean_y": 0.48160919540229885,
+            "n": 870,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5472975621226485,
+            "mean_y": 0.5615696887686062,
+            "n": 1478,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6311757864475207,
+            "mean_y": 0.7071240105540897,
+            "n": 379,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.722601279417105,
+            "mean_y": 0.5,
+            "n": 28,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "spread": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": 0.08719564865282678,
+            "mean_y": 0.6,
+            "n": 5,
+            "nan_reason": null
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.17063276028543004,
+            "mean_y": 0.4603174603174603,
+            "n": 63,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.25837429153683733,
+            "mean_y": 0.49110320284697506,
+            "n": 281,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.35684867107718415,
+            "mean_y": 0.4376068376068376,
+            "n": 585,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4465395509681684,
+            "mean_y": 0.49175824175824173,
+            "n": 728,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5486652000098778,
+            "mean_y": 0.47513812154696133,
+            "n": 543,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6454504542719532,
+            "mean_y": 0.4766949152542373,
+            "n": 472,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.742321099333335,
+            "mean_y": 0.5367647058823529,
+            "n": 136,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8310076951677099,
+            "mean_y": 0.38461538461538464,
+            "n": 39,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          }
+        ],
+        "total": [
+          {
+            "bin": 0,
+            "hi": 0.1,
+            "lo": 0.0,
+            "mean_p": null,
+            "mean_y": null,
+            "n": 0,
+            "nan_reason": "bin empty; not a stub"
+          },
+          {
+            "bin": 1,
+            "hi": 0.2,
+            "lo": 0.1,
+            "mean_p": 0.16902345522577208,
+            "mean_y": 0.8571428571428571,
+            "n": 7,
+            "nan_reason": null
+          },
+          {
+            "bin": 2,
+            "hi": 0.3,
+            "lo": 0.2,
+            "mean_p": 0.2668121071716506,
+            "mean_y": 0.4766355140186916,
+            "n": 107,
+            "nan_reason": null
+          },
+          {
+            "bin": 3,
+            "hi": 0.4,
+            "lo": 0.3,
+            "mean_p": 0.3566042534103249,
+            "mean_y": 0.470404984423676,
+            "n": 321,
+            "nan_reason": null
+          },
+          {
+            "bin": 4,
+            "hi": 0.5,
+            "lo": 0.4,
+            "mean_p": 0.4541788991917224,
+            "mean_y": 0.47530864197530864,
+            "n": 648,
+            "nan_reason": null
+          },
+          {
+            "bin": 5,
+            "hi": 0.6,
+            "lo": 0.5,
+            "mean_p": 0.5480213550106497,
+            "mean_y": 0.47292817679558014,
+            "n": 905,
+            "nan_reason": null
+          },
+          {
+            "bin": 6,
+            "hi": 0.7,
+            "lo": 0.6,
+            "mean_p": 0.6427758811245555,
+            "mean_y": 0.4840182648401826,
+            "n": 657,
+            "nan_reason": null
+          },
+          {
+            "bin": 7,
+            "hi": 0.8,
+            "lo": 0.7,
+            "mean_p": 0.7386911222108753,
+            "mean_y": 0.4895833333333333,
+            "n": 192,
+            "nan_reason": null
+          },
+          {
+            "bin": 8,
+            "hi": 0.9,
+            "lo": 0.8,
+            "mean_p": 0.8332121910547986,
+            "mean_y": 0.35714285714285715,
+            "n": 14,
+            "nan_reason": null
+          },
+          {
+            "bin": 9,
+            "hi": 1.0,
+            "lo": 0.9,
+            "mean_p": 0.9091921607623754,
+            "mean_y": 0.0,
+            "n": 1,
+            "nan_reason": null
+          }
+        ]
+      },
+      "weeks": {
+        "2013": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2014": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2015": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2016": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2017": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2018": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2019": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2020": {
+          "expected": 17,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17
+          ]
+        },
+        "2021": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        "2022": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        "2023": {
+          "expected": 18,
+          "full": true,
+          "weeks": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18
+          ]
+        }
+      }
+    }
+  ],
+  "command": "python3 /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/run_injury_residual_evaluator.py --out /workspace/ops/nfl_injury_audit_t4274u/injury-evaluator-dryrun/out --cohorts synthetic_inconclusive,synthetic_fail,synthetic_pass,le2023",
+  "export_sha": "d87e6129c451bbdc51d49eb7745a31ebb64ab6108ac58d8f8c4948dcc13e18e8",
+  "fit_object_sha": "6a5490dbc09b160f4509ea65b3b2257f9703f9d43635092d0da94c1577abb657",
+  "frozen_fit_head": "8e2a15ac581277ecda71ea745c3b3477185d733b",
+  "head": "2241af8e9dcc1b6446ba4b0b9e73ab159762b05a",
+  "holdout": "STOPPED",
+  "kind": "evaluator_dry_run",
+  "known_answers": {
+    "synthetic_fail": "NO CLAIM",
+    "synthetic_inconclusive": "INCONCLUSIVE",
+    "synthetic_pass": "VALUE PROVEN"
+  },
+  "n_boot": 10000,
+  "protocol": "injury-residual-cal-v2",
+  "ryan": {
+    "t4315u": "d6fca6f0",
+    "t4317u": "5c4e6578",
+    "t4320u": "package-checker"
+  },
+  "seed": 2708041115,
+  "spec_sha": "a156459b545e3b7d6a483f1db34cda7a4d32fc3afc70ed499b3adc726b1b6881"
+}
