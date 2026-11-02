@@ -17,7 +17,8 @@ CERT=0. STOP for Alex re-PREFLIGHT.
 
 Worker A implementation tip **661df712a804bc1d9662f77008af28f8418cd0a1** ·
 stamp **3fbf5999360433ca46cbe77688daedaedd6a9c9b**. Combine implementation
-tip **581493080881d6363935f41c70236b5cb070b401**. Merge conflict: only
+tip **581493080881d6363935f41c70236b5cb070b401**. RETURN-FIX
+implementation tip **255adf7802830bc25814a739d62f65f095216203**. Merge conflict: only
 `.prettierignore` (kept both hashed-dir ignores). N1 + market∩96 bytes
 **072e99e0** unchanged. One-command:
 `CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT` · `verified: false` · focused
@@ -137,5 +138,6 @@ target scoring loader · ONE DEV diagnostic.
 | Package A tip          | `42ff285cc1be2459512af4761651ba6dfe17dc75`                                |
 | Worker A tip / stamp   | `661df712a` / `3fbf59993`                                                 |
 | Combine implementation | `581493080881d6363935f41c70236b5cb070b401`                                |
+| RETURN-FIX tip         | `255adf7802830bc25814a739d62f65f095216203`                                |
 | RETURN-FIX Cos / Alex  | `b51a9a10` / `9332de97` ACCEPTED `c5574733`                               |
 | R2-C HOLD threshold    | `0.30` unchanged                                                          |
