@@ -1,0 +1,84 @@
+{
+  "artifact": "nfl-hist-bt-stage1-t4885u",
+  "note": "Pins only. Contract text is 2026-W9 E1-shaped; this packet uses it as the field/transform SoT, not as an emit authorization.",
+  "contract": {
+    "name": "ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md",
+    "sha8": "b41f4b43",
+    "sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+    "path": "data/ops/nfl-efficiency-2026-w1-w8-t4770u/ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md",
+    "git_ref": "origin/cursor/hift1-efficiency-recovery-f693",
+    "rehash_this_run": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+    "match": true,
+    "required_20": [
+      "offense_index_home",
+      "offense_index_away",
+      "defense_index_home",
+      "defense_index_away",
+      "home_off_epa_5g",
+      "away_off_epa_5g",
+      "home_def_epa_allowed_5g",
+      "away_def_epa_allowed_5g",
+      "home_pass_rate_5g",
+      "away_pass_rate_5g",
+      "home_success_offense_5g",
+      "away_success_offense_5g",
+      "home_success_defense_allowed_5g",
+      "away_success_defense_allowed_5g",
+      "matchup_diff_off_epa_5g",
+      "matchup_diff_def_epa_allowed_5g",
+      "matchup_diff_success_rate_5g",
+      "matchup_diff_pressure_generated_5g",
+      "matchup_diff_pressure_allowed_5g",
+      "matchup_diff_red_zone_td_rate_5g"
+    ],
+    "required_context": [
+      "game_id",
+      "home_team",
+      "away_team",
+      "matchup_season",
+      "matchup_week",
+      "rest_days_home",
+      "rest_days_away"
+    ]
+  },
+  "pass_contract": {
+    "name": "IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt",
+    "sha8": "1a53bbd3",
+    "sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+    "path": "data/ops/nfl-efficiency-2026-w1-w8-t4770u/IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt",
+    "git_ref": "origin/cursor/hift1-efficiency-recovery-f693",
+    "note": "PASS_CONTRACT ≠ DATA ACCEPT ≠ emit"
+  },
+  "as_of": {
+    "identity_sha8": "cf514078",
+    "status": "PASS_ASOF_BOUNDARY",
+    "tip": "1010b86f",
+    "branch": "origin/cursor/t4822u-if-665-asof-correction-c8e4",
+    "module": "services/model-service/src/services/nfl_pregame_asof.py",
+    "module_sha256": "7dc6afea2f13705b02683a5d16e53193adb7acd5441bde8494268fe850c50c98",
+    "module_sha8": "7dc6afea",
+    "contract_string": "pregame as-of: every consumed game completed and required source available before target forecast cutoff; rating_week = target_week - 1 (contiguous weekly IF pipeline); every frame game completed and game_date < target game_date; no silent substitute window",
+    "distinct_from_source_pin_52d9e909": true
+  },
+  "source_only": {
+    "sha8": "52d9e909",
+    "sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "object": "services/model-service/src/services/nfl_simulator.py",
+    "commit": "1b39f4e9",
+    "note": "Cited only. Stage-1 does not invoke Independent Fair."
+  },
+  "games_csv": {
+    "sha8": "4fe1cdd7",
+    "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+    "path": "data/ops/nfl-t4422u-walkforward-pergame-unblended-2013-2023/games.csv",
+    "git_ref": "origin/cursor/t4422u-walkforward-pergame-export-f36b",
+    "tip": "82ffb211",
+    "rehash_this_run_match": true
+  },
+  "historical_oos": {
+    "sha8": "1ee90fac",
+    "sha256": "1ee90facf7d44dfd19758cbf89d5518417cbc1fba6faec4e76fb33d8532adaed",
+    "path": "data/ops/nfl-reopening-packet-20260916/historical-oos/historical_oos_games.csv",
+    "use": "2016–2017 REG scores only, for Week-2 T5 W-L as-of. season≥2024 rows not copied into the working set."
+  }
+}
