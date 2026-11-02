@@ -4,6 +4,8 @@ Date: 2026-11-02 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER **8e571382** · Cos ORDER **ca4dac65**.
 Same draft **#701**. HARD END 02:30 EST / 07:30Z.
 
+Correction tip **7834cbc79226e44fa3bd625e1eb526e9a800a128**.
+
 **No new scientific look.** Additive market96 MARKET absolute-error schema
 correction on frozen JOINED_ROWS. Does not invoke the one-exec runner,
 `--score`, or `--cos-bind`. Does not claim / reset / rebind. Does not
