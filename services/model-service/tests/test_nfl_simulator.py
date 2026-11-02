@@ -127,7 +127,7 @@ def test_simulator_baseline_unchanged_without_matchup_features() -> None:
     assert matchup_diag["home_points"] == 0.0
     assert matchup_diag["away_points"] == 0.0
     framework = out["diagnostics"]["framework"]
-    assert framework["framework_version"] == "nfl-handicap-core-v1"
+    assert framework["framework_version"] == "nfl-handicap-core-v3.1"
     assert framework["factor_contributions"]["weather_environment"]["available"] is False
     assert out["diagnostics"]["mean_home_points"] == round(float(out["decomposition"]["expected_home_points"]), 3)
     assert out["diagnostics"]["mean_away_points"] == round(float(out["decomposition"]["expected_away_points"]), 3)

@@ -2,6 +2,10 @@
 #
 # Enable the cron when REG Week 1 has kicked off. Until then this workflow
 # is workflow_dispatch / manual only. Do not also enable Railway + launchd.
+#
+# t4359u (2026-10-26): scheduling stays DISABLED. Local fair-line path is
+# scripts/nfl/run_nfl_enterprise_green_local.py. Do not uncomment cron,
+# do not start Beat, do not deploy from this worktree.
 name: NFL Weekly Operate
 
 on:
