@@ -34,19 +34,40 @@ def _payload() -> dict:
     return json.loads(PINNED.read_text(encoding="utf-8"))
 
 
-def test_command_and_pinned_digest() -> None:
-    proc = subprocess.run(
-        [sys.executable, str(CHAIN_CMD)],
+def _run_chain(*args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(CHAIN_CMD), *args],
         cwd=str(REPO),
-        env={**dict(**{k: v for k, v in __import__("os").environ.items()}), "PYTHONPATH": str(REPO / "services" / "model-service")},
+        env={
+            **{k: v for k, v in __import__("os").environ.items()},
+            "PYTHONPATH": str(REPO / "services" / "model-service"),
+        },
         capture_output=True,
         text=True,
         check=False,
     )
+
+
+def test_command_and_pinned_digest() -> None:
+    proc = _run_chain()
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert f"digest {EXPECTED}" in proc.stdout
     assert "OK" in proc.stdout
+    assert "guard_active true" in proc.stdout
     assert "forbidden_call_attempts 0" in proc.stdout
+
+
+def test_command_forbidden_import_and_connect_increments_and_refuses() -> None:
+    proc = _run_chain("--probe-forbidden")
+    assert proc.returncode != 0, proc.stdout + proc.stderr
+    assert "guard_active true" in proc.stdout
+    assert "PROBE_REFUSED" in proc.stdout
+    assert "OK" not in proc.stdout
+    attempts_line = [
+        line for line in proc.stdout.splitlines() if line.startswith("forbidden_call_attempts ")
+    ]
+    assert attempts_line, proc.stdout
+    assert int(attempts_line[-1].split()[-1]) >= 2
 
 
 def test_export_consumes_a_artifact_not_invented_allow() -> None:
