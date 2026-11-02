@@ -575,7 +575,9 @@ def run_focused_tests(root: Path) -> dict[str, Any]:
         "elapsed_side_metadata": [row.get("elapsed") or [] for row in commands],
     }
     semantic = semantic_tests_payload(raw_tests)
-    semantic["_elapsed_for_runtime"] = collect_pytest_elapsed(raw_tests)
+    semantic["_elapsed_for_runtime"] = [
+        item for row in commands for item in (row.get("elapsed") or [])
+    ]
     return semantic
 
 
