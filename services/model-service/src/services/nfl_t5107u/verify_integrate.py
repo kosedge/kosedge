@@ -14,6 +14,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -56,11 +57,25 @@ from .eval_result_contract import (
 from .last_played_cohort import ORIGINAL_502_PATH, ORIGINAL_502_SHA256
 from .recon_driver import sha256_file
 
-TICKET = "t5153u"
-PACKAGE = "C_VERIFY_INTEGRATE_RETURN_FIX"
-SCHEMA = "nfl-t5153u-verify-integrate-receipt-v2"
+TICKET = "t5155u"
+PACKAGE = "C_VERIFY_INTEGRATE_R5_PHASE1"
+SCHEMA = "nfl-t5155u-verify-integrate-receipt-v1"
 OUT_DIR = Path("data/ops/nfl-t5151u-verify-integrate")
+R5_OUT_DIR = Path("data/ops/nfl-t5155u-r5-phase1")
 RECEIPT_NAME = "RECEIPT.json"
+OWNER_CLEAR_T5155U_SHA8 = "659cd7d9"
+COS_ORDER_T5155U_SHA8 = "3e14602b"
+COS_ACCEPT_700_SHA8 = "4b23584a"
+ALEX_700_SHA8 = "f4147e76"
+TIP_700 = "12ccc482db54dd53bc6d79cea5f4af01c5540950"
+B1_UNIVERSE_PATH = (
+    "data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl"
+)
+B1_UNIVERSE_SHA256 = (
+    "b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6"
+)
+PYTEST_ELAPSED_RE = re.compile(r"\s+in\s+\d+(?:\.\d+)?s\b")
+PYTEST_ELAPSED_CAPTURE_RE = re.compile(r"in\s+(\d+(?:\.\d+)?)s\b")
 REG496_PATH = "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json"
 REG496_SHA256 = "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c"
 FEATURE_RECON_REG496_ARTIFACT_PATH = REG496_PATH
@@ -75,6 +90,7 @@ PROTECTED_ORIGINALS = frozenset(
         MARKET72_RESULT_PATH,
         TASK_MANIFEST_REL,
         "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
+        B1_UNIVERSE_PATH,
     }
 )
 
@@ -82,6 +98,8 @@ FOCUSED_TESTS = (
     "services/model-service/tests/test_nfl_t5151u_numerical_output_contract.py",
     "services/model-service/tests/test_nfl_t5151u_verify_integrate.py",
     "services/model-service/tests/test_nfl_t5149u_last_played_reg_cohort.py",
+    "services/model-service/tests/test_nfl_t5155u_n1_output_hash.py",
+    "services/model-service/tests/test_nfl_t5155u_market_arm_freeze.py",
 )
 COHORT_TEST = "services/model-service/tests/test_nfl_t5151u_cohort_enforcement.py"
 
@@ -140,6 +158,41 @@ def _repo_root(root: Path | None) -> Path:
 
 def sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def strip_pytest_elapsed(text: str) -> str:
+    """Drop pytest ``passed in Xs`` duration tokens from semantic text."""
+    return PYTEST_ELAPSED_RE.sub("", text or "")
+
+
+def extract_pytest_elapsed(text: str) -> list[str]:
+    return PYTEST_ELAPSED_CAPTURE_RE.findall(text or "")
+
+
+def semantic_tests_payload(tests: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Copy test results without elapsed-timing strings (N1)."""
+    body = json.loads(json.dumps(tests or {}, default=str))
+    for command in body.get("commands") or []:
+        if not isinstance(command, Mapping):
+            continue
+        if "stdout_tail" in command:
+            command["stdout_tail"] = strip_pytest_elapsed(command.get("stdout_tail") or "")
+        if "stderr_tail" in command:
+            command["stderr_tail"] = strip_pytest_elapsed(command.get("stderr_tail") or "")
+    body.pop("elapsed", None)
+    body.pop("durations", None)
+    body["timing_excluded_from_output_hash"] = True
+    return body
+
+
+def collect_pytest_elapsed(tests: Mapping[str, Any] | None) -> list[str]:
+    elapsed: list[str] = []
+    for command in (tests or {}).get("commands") or []:
+        if not isinstance(command, Mapping):
+            continue
+        elapsed.extend(extract_pytest_elapsed(command.get("stdout_tail") or ""))
+        elapsed.extend(extract_pytest_elapsed(command.get("stderr_tail") or ""))
+    return elapsed
 
 
 def repo_relative_posix(root: Path, path: Path) -> str:
@@ -448,6 +501,7 @@ def verify_pinned_artifacts(root: Path) -> dict[str, Any]:
     pin("ORIGINAL_502_HISTORICAL", root / ORIGINAL_502_PATH, ORIGINAL_502_SHA256)
     pin("DEV437_RESULT_66c3bde1", root / DEV437_RESULT_PATH, DEV437_RESULT_SHA256)
     pin("MATCHED72_RESULT_316345fa", root / MARKET72_RESULT_PATH, MARKET72_RESULT_SHA256)
+    pin("B1_UNIVERSE_ADMISSIBLE_QUOTES", root / B1_UNIVERSE_PATH, B1_UNIVERSE_SHA256)
     ce = try_load_cohort_module()
     if ce is not None:
         pin("TASK_MANIFEST", root / ce.TASK_MANIFEST_REL, ce.TASK_MANIFEST_SHA256)
@@ -491,21 +545,27 @@ def run_focused_tests(root: Path) -> dict[str, Any]:
         proc = subprocess.run(cmd, cwd=str(root), env=env, capture_output=True, text=True)
         ok = proc.returncode == 0
         all_ok = all_ok and ok
+        raw_stdout = "\n".join((proc.stdout or "").splitlines()[-12:])
+        raw_stderr = "\n".join((proc.stderr or "").splitlines()[-12:])
         commands.append(
             {
                 "command": f"python -m pytest {test} -q --tb=line",
                 "ok": ok,
                 "returncode": proc.returncode,
-                "stdout_tail": "\n".join((proc.stdout or "").splitlines()[-12:]),
-                "stderr_tail": "\n".join((proc.stderr or "").splitlines()[-12:]),
+                "stdout_tail": strip_pytest_elapsed(raw_stdout),
+                "stderr_tail": strip_pytest_elapsed(raw_stderr),
+                "elapsed": extract_pytest_elapsed(raw_stdout) + extract_pytest_elapsed(raw_stderr),
             }
         )
-    return {
-        "ok": all_ok,
-        "commands": commands,
-        "tests": tests,
-        "interpreter_excluded_from_output_hash": True,
-    }
+    semantic = semantic_tests_payload(
+        {
+            "ok": all_ok,
+            "commands": [{k: v for k, v in row.items() if k != "elapsed"} for row in commands],
+            "tests": tests,
+            "interpreter_excluded_from_output_hash": True,
+        }
+    )
+    return semantic
 
 
 def git_tip(root: Path) -> str:
@@ -529,16 +589,26 @@ def build_receipt(
     tests: Mapping[str, Any],
     errors: Sequence[str],
     interpreter: str | None = None,
+    market_arm: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     code_files = [
         root / "services/model-service/src/services/nfl_t5107u/eval_result_contract.py",
         root / "services/model-service/src/services/nfl_t5107u/verify_integrate.py",
+        root / "services/model-service/src/services/nfl_t5107u/market_arm_freeze.py",
         root / "scripts/nfl/run_nfl_t5151u_verify_integrate.py",
+        root / "scripts/nfl/freeze_nfl_t5155u_market_arm.py",
     ]
     ce_path = root / "services/model-service/src/services/nfl_t5107u/cohort_enforcement.py"
     if ce_path.is_file():
         code_files.append(ce_path)
-    spec_files = [p for p in [root / "ops/CURSOR_ADDENDUM_t5151u_NUMERICAL_INTEGRATION_v1.md"] if p.is_file()]
+    spec_files = [
+        p
+        for p in [
+            root / "ops/CURSOR_ADDENDUM_t5151u_NUMERICAL_INTEGRATION_v1.md",
+            root / "ops/CURSOR_ADDENDUM_t5155u_R5_PHASE1_v1.md",
+        ]
+        if p.is_file()
+    ]
     input_files = [
         root / REG496_PATH,
         root / ORIGINAL_502_PATH,
@@ -546,6 +616,7 @@ def build_receipt(
         root / MARKET72_RESULT_PATH,
         root / TASK_MANIFEST_REL,
         root / "data/ops/nfl-t5151u-cohort-enforcement/ACCEPTED_DEV_MARKET72_IDS.json",
+        root / B1_UNIVERSE_PATH,
     ]
     code = hash_file_list(root, code_files)
     spec = hash_file_list(root, spec_files)
@@ -556,11 +627,47 @@ def build_receipt(
         body = profiles.get(name)
         if not isinstance(body, Mapping) or not body.get("ok"):
             failed = True
-    status = "FAILED" if failed else "CHECKS_PASSED_AWAITING_ALEX_RO"
+    if market_arm is not None and not market_arm.get("ok", True):
+        failed = True
+    status = "FAILED" if failed else "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT"
+    elapsed = collect_pytest_elapsed(tests)
+    semantic_tests = semantic_tests_payload(tests)
     runtime = {
         "interpreter": interpreter or "python3",
         "tip_sha": git_tip(root),
+        "pytest_elapsed": elapsed,
     }
+    market_summary = {
+        "status": "NOT_RUN",
+        "worker_a_forecast_freeze": "PENDING",
+        "scoring": None,
+        "eval": None,
+    }
+    if market_arm:
+        market_summary = {
+            "status": "FROZEN" if market_arm.get("ok") else "FAILED",
+            "ok": bool(market_arm.get("ok")),
+            "n": market_arm.get("n"),
+            "n_by_season": (market_arm.get("payload") or {}).get("intersection", {}).get(
+                "n_by_season"
+            ),
+            "missing_n": (market_arm.get("payload") or {}).get("intersection", {}).get(
+                "missing_n"
+            ),
+            "one_book_n": (market_arm.get("payload") or {}).get("intersection", {}).get(
+                "one_book_n"
+            ),
+            "two_book_n": (market_arm.get("payload") or {}).get("intersection", {}).get(
+                "two_book_n"
+            ),
+            "bytes_sha256": market_arm.get("bytes_sha256"),
+            "identity_sha256": market_arm.get("identity_sha256"),
+            "b1_universe_sha256": B1_UNIVERSE_SHA256,
+            "r2c_hold_unchanged": True,
+            "worker_a_forecast_freeze": "PENDING",
+            "scoring": None,
+            "eval": None,
+        }
     receipt = {
         "schema_version": SCHEMA,
         "ticket": TICKET,
@@ -580,6 +687,11 @@ def build_receipt(
         "cos_accept_scoped_sha8": COS_ACCEPT_SCOPED_SHA8,
         "alex_return_sha8": ALEX_RETURN_SHA8,
         "alex_return_accepted_sha8": ALEX_RETURN_ACCEPTED_SHA8,
+        "owner_clear_t5155u_sha8": OWNER_CLEAR_T5155U_SHA8,
+        "cos_order_t5155u_sha8": COS_ORDER_T5155U_SHA8,
+        "cos_accept_700_sha8": COS_ACCEPT_700_SHA8,
+        "alex_700_sha8": ALEX_700_SHA8,
+        "closed_700_tip": TIP_700,
         "package_a_tip": PACKAGE_A_TIP,
         "package_a_stamp": PACKAGE_A_STAMP,
         "partial_plumbing_tip": PARTIAL_PLUMBING_TIP,
@@ -613,17 +725,28 @@ def build_receipt(
         "profile_results": profiles,
         "checks": artifacts,
         "errors": list(errors),
-        "tests": tests,
+        "tests": semantic_tests,
+        "market_arm": market_summary,
         "interval_contract": dict(INTERVAL_CONTRACT),
         "evidence_limits": dict(LIMITATIONS),
         "limitations": dict(LIMITATIONS),
     }
+    receipt["hashes"]["market_intersection"] = {
+        "n": market_summary.get("n"),
+        "bytes_sha256": market_summary.get("bytes_sha256"),
+        "identity_sha256": market_summary.get("identity_sha256"),
+        "b1_universe_sha256": market_summary.get("b1_universe_sha256"),
+    }
     canonical = {
         k: v
         for k, v in receipt.items()
-        if k not in {"hashes", "runtime"}
+        if k not in {"hashes", "runtime", "tip_sha", "interpreter", "side_metadata"}
     }
     receipt["runtime"] = runtime
+    receipt["side_metadata"] = {
+        "pytest_elapsed": elapsed,
+        "pytest_elapsed_semantic": False,
+    }
     receipt["tip_sha"] = runtime["tip_sha"]
     receipt["interpreter"] = runtime["interpreter"]
     receipt["hashes"]["output_sha256"] = sha256_text(
@@ -636,6 +759,9 @@ def write_receipt(receipt: Mapping[str, Any], root: Path) -> Path:
     dest = root / OUT_DIR / RECEIPT_NAME
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    r5 = root / R5_OUT_DIR / RECEIPT_NAME
+    r5.parent.mkdir(parents=True, exist_ok=True)
+    r5.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     return dest
 
 
@@ -765,6 +891,18 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
             errors.append(f"missing profile result {name} — no partial-result fallback")
             profiles[name] = {"ok": False, "error": "missing"}
 
+    market_arm: dict[str, Any] | None = None
+    try:
+        from .market_arm_freeze import run_market_arm_freeze
+
+        spy = OutcomeReadSpy(lambda: {"SHOULD_NOT_LOAD": {"home_score": 99}})
+        market_arm = run_market_arm_freeze(root=repo, outcome_loader=spy, finalize=True)
+        if spy.reads != 0:
+            raise VerifyIntegrateRefuse("market-arm freeze read target scoring outcomes")
+    except Exception as exc:
+        errors.append(f"MARKET_ARM_FREEZE: {exc}")
+        market_arm = {"ok": False, "error": str(exc)}
+
     tests = run_focused_tests(repo)
     if not tests["ok"]:
         errors.append("focused tests failed")
@@ -780,9 +918,10 @@ def run_one_command(*, root: Path | None = None, hooks: CohortHooks | None = Non
         tests=tests,
         errors=errors,
         interpreter="python3",
+        market_arm=market_arm,
     )
     write_receipt(receipt, repo)
-    if receipt["status"] != "CHECKS_PASSED_AWAITING_ALEX_RO":
+    if receipt["status"] != "CHECKS_PASSED_AWAITING_ALEX_PREFLIGHT":
         raise VerifyIntegrateRefuse(
             "nonzero failure prevented VERIFIED/final output: " + "; ".join(errors[:8])
         )
