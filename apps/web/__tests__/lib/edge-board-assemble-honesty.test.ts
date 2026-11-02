@@ -47,23 +47,44 @@ describe("Edge Board assemble 10s honesty", () => {
     expect(edgeBoardAssembleHonestyCopy("timeout")).toMatch(
       /taking longer than usual/i,
     );
+    expect(edgeBoardAssembleHonestyCopy("timeout")).toMatch(
+      /as-of stay unavailable/i,
+    );
     expect(edgeBoardAssembleHonestyCopy("timeout")).toMatch(/do not invent/i);
+    expect(
+      edgeBoardAssembleHonestyCopy("timeout", "2026-09-03T18:30:00.000Z"),
+    ).toMatch(/last known market as-of/i);
+    expect(
+      edgeBoardAssembleHonestyCopy("timeout", "2026-09-03T18:30:00.000Z"),
+    ).not.toMatch(/as-of stay unavailable/i);
     expect(edgeBoardAssembleHonestyCopy("unavailable")).toMatch(/unavailable/i);
     expect(edgeBoardAssembleHonestyCopy("unavailable")).toMatch(
       /do not invent/i,
     );
+    expect(
+      edgeBoardAssembleHonestyCopy("unavailable", "2026-09-03T18:30:00.000Z"),
+    ).toMatch(/last known market as-of/i);
   });
 
-  it("remembers last good linesAsOf stamp only (never rows)", () => {
+  it("remembers last good linesAsOf stamp only (never rows; blank does not wipe)", () => {
     const storage = memoryStorage();
     rememberEdgeBoardLinesAsOf("nfl", "2026-09-03T18:30:00.000Z", storage);
     expect(recallEdgeBoardLinesAsOf("nfl", storage)).toBe(
       "2026-09-03T18:30:00.000Z",
     );
+    // Empty Week 1 / blank assemble must not erase Full-slate vintage.
     rememberEdgeBoardLinesAsOf("nfl", "  ", storage);
-    expect(recallEdgeBoardLinesAsOf("nfl", storage)).toBeNull();
+    expect(recallEdgeBoardLinesAsOf("nfl", storage)).toBe(
+      "2026-09-03T18:30:00.000Z",
+    );
     rememberEdgeBoardLinesAsOf("nfl", null, storage);
-    expect(recallEdgeBoardLinesAsOf("nfl", storage)).toBeNull();
+    expect(recallEdgeBoardLinesAsOf("nfl", storage)).toBe(
+      "2026-09-03T18:30:00.000Z",
+    );
+    rememberEdgeBoardLinesAsOf("nfl", "2026-09-04T12:00:00.000Z", storage);
+    expect(recallEdgeBoardLinesAsOf("nfl", storage)).toBe(
+      "2026-09-04T12:00:00.000Z",
+    );
   });
 
   it("EdgeBoardSportClient escalates honesty at 10s without aborting assemble", () => {
@@ -79,6 +100,13 @@ describe("Edge Board assemble 10s honesty", () => {
     expect(client).toContain('data-testid="edge-board-unavailable"');
     expect(client).toContain("MarketAsOfStamp");
     expect(client).toContain('status: "slow"');
+    // Copy receives lastLinesAsOf so stamp + banner stay consistent.
+    expect(client).toContain(
+      'edgeBoardAssembleHonestyCopy("timeout", state.lastLinesAsOf)',
+    );
+    expect(client).toContain(
+      "edgeBoardAssembleHonestyCopy(state.reason, state.lastLinesAsOf)",
+    );
     // Keep fetch alive past honesty ceiling (do not abort on the 10s timer).
     expect(client).not.toMatch(
       /setTimeout\(\(\) => \{\s*timedOut = true;\s*controller\.abort\(\)/,
