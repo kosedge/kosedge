@@ -4,6 +4,7 @@ Date: 2026-11-01 · CERT=0 · DRAFT≠merge · RESEARCH_CONSUMED_RETRO
 Authority: OWNER CLEAR t5155u **659cd7d9** · Cos ORDER **3e14602b**
 Worker A. Parallel Worker B owns N1 + market intersection + integration-owner combine.
 Parent tip **f7ec09ee** (t5151u Package A stamp).
+Implementation tip **661df712**.
 **STOP — awaiting Alex preflight + Cos bind.** No target scoring loader. No EVAL.
 
 Closed quality not reopened: #700 tip **12ccc482** / stamp **9d436eb1** ·
@@ -159,3 +160,14 @@ new installs. No #700 re-review.
 **STOP for Alex preflight + Cos bind before any target scoring loader.**
 
 CERT=0.
+
+## Pins
+
+| Item               | Value                                                              |
+| ------------------ | ------------------------------------------------------------------ |
+| Implementation tip | `661df712a804bc1d9662f77008af28f8418cd0a1`                         |
+| Parent tip         | `f7ec09ee2ffcce7b130c9b858304bbe8006a4428`                         |
+| FEATURE_RECON_REG496 identity | `6429f8596a1b605a9f1dc8aec21d81fc4454ff25e985dc77e691ec29d489c640` |
+| Feature JSON       | `282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c` |
+| Forecasts          | `96d3aa6f85e7896df2385df8d025ea0bd4d15d5e2a82edc3f5c9184cd35af407` |
+| Freeze manifest    | `f19cb3c275553b3dda70b97c9d0a1a99802eea6081458b60210f7c95231b78b1` |
