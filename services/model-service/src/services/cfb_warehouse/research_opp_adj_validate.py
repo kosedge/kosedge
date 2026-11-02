@@ -6,6 +6,10 @@ untouched until the recommendation is written.
 Baselines on the same next-game observations:
   (a) unadjusted season-to-date EPA/play
   (b) simple prior-season blend (n0=4, raw EPA — not opponent-adjusted)
+
+When STD and prior-season raw are both missing, baselines use IBF-v1
+(train-period league mean of ``y`` on 2014–2022 FBS-offense rows) — never
+the candidate adj-model μ. See docs/cfb/EVAL_PROTOCOL.md §6.
 """
 
 from __future__ import annotations
@@ -45,6 +49,16 @@ VAL_SEASONS = (2023, 2024)
 APPLY_SEASON = 2026
 SIMPLE_BLEND_N0 = 4.0
 EARLY_WEEKS = (1, 2, 3, 4)
+# IBF-v1: independent baseline fallback seasons (seed ∪ train). Never val/holdout/apply.
+IBF_FALLBACK_SEASONS = tuple(range(2014, 2023))  # 2014–2022
+IBF_RULE_ID = "IBF-v1"
+IBF_RULE = (
+    "When a team has no same-season STD (week < W) and no prior-season raw mean, "
+    "use mean(y) over FBS-offense team-games in seasons 2014–2022 "
+    "(PRIOR_SEED ∪ TRAIN). One constant, computed once. Never fit.mu. "
+    "Never 2023–2024 val, 2025 holdout, or 2026 apply games. "
+    "If those rows are absent, use 0.0 (league-centered raw)."
+)
 
 PARAM_GRID = (
     AdjParams(lam=40.0, prior_n0=3.0, prior_decay=0.65),
@@ -102,6 +116,7 @@ def _std_to_date(
     def_s: Dict[str, float] = defaultdict(float)
     def_n: Dict[str, float] = defaultdict(float)
     n_g: Dict[str, int] = defaultdict(int)
+    n_d: Dict[str, int] = defaultdict(int)
     for g in games:
         if g.season != season or g.week >= week:
             continue
@@ -110,9 +125,10 @@ def _std_to_date(
         def_s[g.defense] += g.n_weighted * g.y
         def_n[g.defense] += g.n_weighted
         n_g[g.offense] += 1
+        n_d[g.defense] += 1
     off = {t: off_s[t] / off_n[t] for t in off_n if off_n[t]}
     deff = {t: def_s[t] / def_n[t] for t in def_n if def_n[t]}
-    return off, deff, dict(n_g)
+    return off, deff, dict(n_g), dict(n_d)
 
 
 def _season_raw_means(
@@ -120,6 +136,24 @@ def _season_raw_means(
     season: int,
 ) -> Tuple[Dict[str, float], Dict[str, float]]:
     return _std_to_date(games, season=season, week=99)[:2]
+
+
+def independent_league_raw_mean(games: Sequence[TeamGameEpa]) -> float:
+    """IBF-v1: train-period league mean of raw EPA/play. Independent of the candidate.
+
+    Mean of garbage-weighted team-game ``y`` on FBS-offense rows in
+    ``IBF_FALLBACK_SEASONS`` (2014–2022). Never uses the adj-model μ.
+    """
+    ys = [
+        float(g.y)
+        for g in games
+        if int(g.season) in IBF_FALLBACK_SEASONS
+        and not g.fcs_offense
+        and math.isfinite(float(g.y))
+    ]
+    if not ys:
+        return 0.0
+    return sum(ys) / len(ys)
 
 
 def build_season_finals(
@@ -223,8 +257,11 @@ def evaluate_seasons(
     n_cold = 0
     n_insufficient = 0
     n_games = 0
+    n_ibf_off = 0
+    n_ibf_def = 0
 
     by_week: Dict[str, Any] = {}
+    ibf_mu = independent_league_raw_mean(games)
 
     for season in seasons:
         prior = finals.get(int(season) - 1)
@@ -238,7 +275,7 @@ def evaluate_seasons(
             fit = pregame_fit(
                 games, season=int(season), week=int(week), params=params, prior_fit=prior
             )
-            std_off, std_def, n_g = _std_to_date(games, season=int(season), week=int(week))
+            std_off, std_def, n_g, n_d = _std_to_date(games, season=int(season), week=int(week))
             targets = [
                 g
                 for g in games
@@ -261,22 +298,28 @@ def evaluate_seasons(
                 raw_o = std_off.get(g.offense)
                 raw_d = std_def.get(g.defense)
                 if raw_o is None:
-                    raw_o = prior_raw_off.get(g.offense, fit.mu)
+                    if g.offense in prior_raw_off:
+                        raw_o = prior_raw_off[g.offense]
+                    else:
+                        raw_o = ibf_mu
+                        n_ibf_off += 1
                 if raw_d is None:
-                    raw_d = prior_raw_def.get(g.defense, fit.mu)
+                    if g.defense in prior_raw_def:
+                        raw_d = prior_raw_def[g.defense]
+                    else:
+                        raw_d = ibf_mu
+                        n_ibf_def += 1
                 raw_off.append(raw_o - g.y)
                 raw_def.append(raw_d - g.y)
 
                 ng = n_g.get(g.offense, 0)
                 w = ng / (ng + SIMPLE_BLEND_N0)
-                blend_o = w * raw_o + (1.0 - w) * prior_raw_off.get(g.offense, fit.mu)
-                ngd = sum(
-                    1
-                    for x in games
-                    if x.season == int(season) and x.week < int(week) and x.defense == g.defense
-                )
+                prior_o = prior_raw_off.get(g.offense, ibf_mu)
+                blend_o = w * raw_o + (1.0 - w) * prior_o
+                ngd = n_d.get(g.defense, 0)
                 wd = ngd / (ngd + SIMPLE_BLEND_N0)
-                blend_d = wd * raw_d + (1.0 - wd) * prior_raw_def.get(g.defense, fit.mu)
+                prior_d = prior_raw_def.get(g.defense, ibf_mu)
+                blend_d = wd * raw_d + (1.0 - wd) * prior_d
                 blend_off.append(blend_o - g.y)
                 blend_def.append(blend_d - g.y)
 
@@ -320,6 +363,15 @@ def evaluate_seasons(
         "mean_mae": _mean_pair_mae(adj_off, adj_def),
         "mean_mae_unadj": _mean_pair_mae(raw_off, raw_def),
         "mean_mae_blend": _mean_pair_mae(blend_off, blend_def),
+        "baseline_fallback": {
+            "rule_id": IBF_RULE_ID,
+            "rule": IBF_RULE,
+            "fallback_value": ibf_mu,
+            "fallback_seasons": list(IBF_FALLBACK_SEASONS),
+            "offense_rows_using_ibf": n_ibf_off,
+            "defense_rows_using_ibf": n_ibf_def,
+            "uses_candidate_mu": False,
+        },
     }
 
 
@@ -534,6 +586,8 @@ def run_validation_suite(
         "production_nfl_unchanged": True,
         "production_kei_unchanged": True,
         "spreads_totals_out_of_scope": True,
+        "baseline_fallback_rule": IBF_RULE,
+        "baseline_fallback_rule_id": IBF_RULE_ID,
     }
     if dest is not None:
         dest.mkdir(parents=True, exist_ok=True)

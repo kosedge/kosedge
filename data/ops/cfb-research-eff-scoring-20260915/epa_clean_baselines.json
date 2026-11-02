@@ -1,0 +1,202 @@
+{
+  "pipeline_version": "cfb-research-opp-adj-epa-v1-ibf",
+  "research_only": true,
+  "production_promote": false,
+  "as_of": "20260915",
+  "generated_at": "2026-09-15T18:02:50.307069+00:00",
+  "ibf": {
+    "rule_id": "IBF-v1",
+    "rule": "When a team has no same-season STD (week < W) and no prior-season raw mean, use mean(y) over FBS-offense team-games in seasons 2014\u20132022 (PRIOR_SEED \u222a TRAIN). One constant, computed once. Never fit.mu. Never 2023\u20132024 val, 2025 holdout, or 2026 apply games. If those rows are absent, use 0.0 (league-centered raw).",
+    "fallback_value": 0.040693502722139334,
+    "uses_candidate_mu": false
+  },
+  "obs_keys_sha256": "009ce549ab9e0b0b5a94aa0bdc88b0c9d57d11e156c291634dca5e08f2532508",
+  "obs_keys_match_560": true,
+  "n_holdout_obs": 1713,
+  "n_unique_games": 930,
+  "holdout": {
+    "params": {
+      "lam": 40.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "seasons": [
+      2025
+    ],
+    "n_team_games": 1713,
+    "n_cold_start": 0,
+    "n_insufficient_history": 281,
+    "adjusted": {
+      "off": {
+        "n": 1713,
+        "mae": 0.16728386119705843,
+        "rmse": 0.20973567497565507,
+        "bias": -0.010732400126399092
+      },
+      "def": {
+        "n": 1713,
+        "mae": 0.16728386119705843,
+        "rmse": 0.20973567497565507,
+        "bias": -0.010732400126399092
+      },
+      "early_off": {
+        "n": 585,
+        "mae": 0.17745232526068308,
+        "rmse": 0.22274793312212224,
+        "bias": -0.04031225074496646
+      },
+      "early_def": {
+        "n": 585,
+        "mae": 0.17745232526068308,
+        "rmse": 0.22274793312212224,
+        "bias": -0.04031225074496646
+      }
+    },
+    "unadjusted_std": {
+      "off": {
+        "n": 1713,
+        "mae": 0.19060067436327593,
+        "rmse": 0.2422287191934373,
+        "bias": 0.010847499549085456
+      },
+      "def": {
+        "n": 1713,
+        "mae": 0.19131339994733193,
+        "rmse": 0.24232236588356118,
+        "bias": -0.02863651006881277
+      }
+    },
+    "prior_blend": {
+      "off": {
+        "n": 1713,
+        "mae": 0.18387396759975136,
+        "rmse": 0.23196791863386038,
+        "bias": 0.0035994662537891606
+      },
+      "def": {
+        "n": 1713,
+        "mae": 0.18325477145632374,
+        "rmse": 0.22982607142326417,
+        "bias": -0.02121622585881515
+      },
+      "n0": 4.0
+    },
+    "by_week_head": {
+      "2025w1": {
+        "n": 229,
+        "adj_off_mae": 0.18036369810495406,
+        "adj_def_mae": 0.18036369810495406
+      },
+      "2025w2": {
+        "n": 130,
+        "adj_off_mae": 0.17284998093479378,
+        "adj_def_mae": 0.17284998093479378
+      },
+      "2025w3": {
+        "n": 115,
+        "adj_off_mae": 0.19270448424602793,
+        "adj_def_mae": 0.19270448424602793
+      },
+      "2025w4": {
+        "n": 111,
+        "adj_off_mae": 0.16103432614097946,
+        "adj_def_mae": 0.16103432614097946
+      },
+      "2025w5": {
+        "n": 102,
+        "adj_off_mae": 0.15678830593505017,
+        "adj_def_mae": 0.15678830593505017
+      },
+      "2025w6": {
+        "n": 100,
+        "adj_off_mae": 0.1575209928081237,
+        "adj_def_mae": 0.1575209928081237
+      },
+      "2025w7": {
+        "n": 110,
+        "adj_off_mae": 0.16230414882297867,
+        "adj_def_mae": 0.16230414882297867
+      },
+      "2025w8": {
+        "n": 117,
+        "adj_off_mae": 0.17038388364116652,
+        "adj_def_mae": 0.17038388364116652
+      },
+      "2025w9": {
+        "n": 105,
+        "adj_off_mae": 0.14600178897912414,
+        "adj_def_mae": 0.14600178897912414
+      },
+      "2025w10": {
+        "n": 103,
+        "adj_off_mae": 0.17259098828929842,
+        "adj_def_mae": 0.17259098828929842
+      },
+      "2025w11": {
+        "n": 101,
+        "adj_off_mae": 0.1549308984356623,
+        "adj_def_mae": 0.1549308984356623
+      },
+      "2025w12": {
+        "n": 116,
+        "adj_off_mae": 0.15672857996190667,
+        "adj_def_mae": 0.15672857996190667
+      }
+    },
+    "mean_mae": 0.16728386119705843,
+    "mean_mae_unadj": 0.19095703715530393,
+    "mean_mae_blend": 0.18356436952803756,
+    "baseline_fallback": {
+      "rule_id": "IBF-v1",
+      "rule": "When a team has no same-season STD (week < W) and no prior-season raw mean, use mean(y) over FBS-offense team-games in seasons 2014\u20132022 (PRIOR_SEED \u222a TRAIN). One constant, computed once. Never fit.mu. Never 2023\u20132024 val, 2025 holdout, or 2026 apply games. If those rows are absent, use 0.0 (league-centered raw).",
+      "fallback_value": 0.040693502722139334,
+      "fallback_seasons": [
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "offense_rows_using_ibf": 0,
+      "defense_rows_using_ibf": 5,
+      "uses_candidate_mu": false
+    }
+  },
+  "previous_coupled_mu_fallback": {
+    "source": "data/ops/cfb-research-opp-adj-epa-20260915/frozen_method.json",
+    "mae_adj": 0.16728386119705843,
+    "mae_unadj": 0.191058774041983,
+    "mae_blend": 0.1836882878268385,
+    "rel_vs_unadj": 0.12443769182618271,
+    "rel_vs_blend": 0.08930578440169461,
+    "note": "5 defender rows used adj-model \u03bc when STD and prior-season raw were missing. Offense unadj/blend was bit-identical; defense ticked. See ryan_audit_560.json."
+  },
+  "delta_vs_previous": {
+    "mae_adj": 0.0,
+    "mae_unadj": -0.00010173688667905467,
+    "mae_blend": -0.00012391829880092908,
+    "claim_old_pair_mae_improvement": false,
+    "note": "Do not claim the old 12.4% / 8.9% pair-MAE cut if unadj/blend moved. Adj MAE should be unchanged (candidate untouched).",
+    "previous_unadj_off_mae": 0.19060067436327593,
+    "previous_unadj_def_mae": 0.19151687372069004
+  },
+  "frozen_knobs": {
+    "lam": 40.0,
+    "n0": 4.0,
+    "decay": 0.75,
+    "retuned": false
+  },
+  "clean_holdout_pair_mae": {
+    "mae_adj": 0.16728386119705843,
+    "mae_unadj": 0.19095703715530393,
+    "mae_blend": 0.18356436952803756,
+    "rel_vs_unadj": 0.12397121525818545,
+    "rel_vs_blend": 0.08869100453883265
+  }
+}
