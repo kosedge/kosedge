@@ -1,0 +1,105 @@
+# W8 prospective capture — spec-to-code map (draft)
+
+**Status:** paper/code draft only. NFL NO-GO stays. Coming Soon ON.  
+**Owner (build):** Cursor per `DECISION_RYAN_t4445u_RD7_CURSOR_W8_BUILDER_v1` (ops path cite `91aebe69`).  
+**Parallel:** t4447u (not this PR).  
+**PR:** draft `#640`. Paper-verify continue vs receipt sha8 `2a9164bc`.  
+**t4450u:** decision sha8 `20ea635f` — Post-Merge Execution. ACCEPT #634–#636 / receipt `6685ba74`.  
+**t4455u:** H-1 auth `89fdd45f`. IMV RETURN sealing-controls pin `e5c84d60` (was mis-cited as `d831`). ENG PASS `86c6dbce` stands for eng-package only — not sealing ACCEPT.  
+**t4468u:** B3 ledger RETURN `03a4caca`.  
+**IMV package:** `data/ops/nfl-w8-imv-package-t4450u/INDEX.md`  
+**RETURN close map:** `data/ops/nfl-w8-imv-return-t4455u-b1-b7.md`  
+**Module:** `services/model-service/src/services/nfl_w8_capture/`
+
+Cited sha8 (authority; files not in this checkout — do not invent bodies):
+
+| Cite | sha8 |
+| --- | --- |
+| `IMV_SPEC_W8_PROSPECTIVE_CAPTURE_ACCEPTANCE_t4191u_v2` | `08808adf` |
+| FINAL ADOPT PART B | `0448042a` |
+| PART B freeze | `2e40ead4` |
+| PR unblock path | `0511c346` |
+| PAPER_GAPS receipt | `2a9164bc` |
+
+**no prior grades** for this capture product (`data/knowledge/` has no W8 capture cards).
+
+---
+
+## Hard holds (unchanged)
+
+| Hold | This PR |
+| --- | --- |
+| Odds API hold (H-1a / H-1c) | **Default ON.** R1: KEEP-ack replaces **only** `NFL_W8_PR_ROTATE_CONFIRM`; lift still needs `NFL_W8_H1_AUTH_CITE=89fdd45f` **plus** KEEP STATEMENT fields. R2: `CREDENTIAL_POLICY=KEEP_EXISTING` `KEEP_AUTH_SHA8=a9ae5ae6` `VERIFY_PASS_SHA8=e64e73ac` `H1C_AUTH_SHA8=89fdd45f` `T4500U_SHA8=20325274` `ROTATION_ASSERTED=false`. R3: truthy rotate-confirm FAIL CLOSED. R4: process-scoped only. Paper 2539d916 / IMV ACCEPT 91b13a45. |
+| Seal-ack (AC-12) | **Still blocking.** `streams.refuse_seal` always raises. `seal.produce_seal` is AC-1/AC-2 only. |
+| Merge / deploy / Railway / Coming Soon / public NFL numbers | **Not in scope.** Draft PR only. |
+
+---
+
+## PAPER_GAPS 1–6 (this turn)
+
+| # | Item | Status | Code / config |
+| --- | --- | --- | --- |
+| 1 | Scheduler wiring | **Closed** | Beat key `nfl-w8-capture-pre-kickoff-tick` in `services/model-service/src/celerybeat_schedule.py`. Task `src.tasks.run_nfl_w8_capture_tick` → `tick.run_capture_tick`. Default `NFL_W8_CAPTURE_TICK_MINUTE=*/2` on queue `nfl_market`. Kickoffs: `NFL_W8_KICKOFFS_JSON` or `NFL_W8_USE_SYNTHETIC_SLATE`. Bundle: `NFL_W8_EVIDENCE_DIR`. Tick never fetches Odds API. |
+| 2 | Alert delivery | **Closed (draft path)** | `alerts.deliver_alert`. File sink = hash-chained `alerts.jsonl`. `NFL_W8_ALERTS_ENABLED` default off. `NFL_W8_ALERT_WEBHOOK_URL` name only. Hold → `hold_blocked` (no POST). |
+| 3 | Tamper-proof store | **Closed** | `store.BundleStore`: chained JSONL (`prev_entry_sha`/`entry_sha`) + evidence log + `SHA256SUMS` rewritten last. Snapshot writes go through the store. Tamper / overwrite fail closed. |
+| 4 | Forecast archiver | **Closed** | `archive.archive_forecasts` writes `forecasts/s_mkt/` and `forecasts/s_ind/` with `prediction=UNSET`. S-IND forbidden-input still fail-closed. No invented predictions. |
+| 5 | Restore P-evidence | **Closed (read-only)** | `restore.restore_p_evidence` verifies chain + SHA256SUMS, copies to `p_evidence/<id>/` at 0444, `eval=not_run`. No protected eval. |
+| 6 | CI green proof | **Wired** | `.github/workflows/pr-check.yml`: `tests/test_nfl_w8_capture.py` on the NFL pytest list **and** named step `W8 prospective capture unit tests`. Local pytest is the pre-push proof; PR Checks is the CI evidence. |
+
+---
+
+## AC-1..AC-14
+
+| ID | Requirement | Status | Code |
+| --- | --- | --- | --- |
+| AC-1 | Seal >= 60 min pre-kickoff | **Implemented (producer)** | `seal.produce_seal` refuses inside 60m. Not a seal-ack. |
+| AC-2 | Independent seal timestamp / custodian receipt | **Implemented (slot)** | `custodian_receipt.slot=AC-2`; `receipt_id=UNSET` until custodian. Cursor cannot ack. |
+| AC-3 | as_of < kickoff and < seal; no default fill | **Partial** | Close / cell logic fail-closed on missing stamps. Full feature as_of proofs not wired to production features. |
+| AC-4 | Manifest: code / weights / schema / input shas / interpreter / host | **Implemented (shape)** | `pin.build_pin_manifest` / `validate_pin_manifest`. Empty sha = UNSET. No fake shas. |
+| AC-5 | Odds snapshots: book, market, price/line, provider captured_at, received_at, raw sha | **Implemented (offline)** | Snapshot payload + close cells. Live source pull blocked on H-1a/H-1c. |
+| AC-6 | SHA256SUMS + append-only hash-chain log | **Implemented** | `store.BundleStore` + `evidence.*`. Secrets redacted. |
+| AC-7 | S-MKT vs S-IND; forbidden-input check | **Implemented** | Scaffold + archiver. No invented predictions. |
+| AC-8 | Filing-E baselines | **EXPLICIT_CARVE_OUT** | `carveouts.AC8_FILING_E_BASELINES`. No invented baselines. Surfaced in PR body. |
+| AC-9 | No post-seal edits | **Partial** | No seal; store refuses artifact overwrite. |
+| AC-10 | Blind grading | **EXPLICIT_CARVE_OUT** | `carveouts.AC10_BLIND_GRADING`. Restore stays `eval=not_run`. Surfaced in PR body. |
+| AC-11 | Missing/late = FAIL, counted | **Partial** | Close/cadence/alerts mark MISSING; no grader. |
+| AC-12 | Cursor cannot seal-ack | **Implemented (refuse)** | `streams.refuse_seal`. |
+| AC-13 | Isolated from PIT historical rebuild | **Implemented** | New package; P-evidence restore is a read-only copy, not a shared mutable store. |
+| AC-14 | No public NFL numbers; NO-GO stays | **Honored** | No Coming Soon / kill-switch / public number edits. |
+
+---
+
+## PART B / RA / DR
+
+Unchanged from first draft (close definition, five PRIMARY books including circa, k=3, DR-7..DR-10, RA-5). Production `NFL_ODDS_API_CARRIED_BOOKMAKERS` is still not edited.
+
+---
+
+## One-shot first-seal entrypoint (t4497u successor)
+
+Word-for-word SYNTHETIC demo (zero live Odds, no secrets):
+
+```
+cd services/model-service && PYTHONPATH=. NFL_W8_H1_AUTH_CITE=89fdd45f CREDENTIAL_POLICY=KEEP_EXISTING KEEP_AUTH_SHA8=a9ae5ae6 VERIFY_PASS_SHA8=e64e73ac H1C_AUTH_SHA8=89fdd45f T4500U_SHA8=20325274 ROTATION_ASSERTED=false python3 -m src.services.nfl_w8_capture --synthetic --bundle-dir /tmp/nfl-w8-synthetic-demo
+```
+
+PART B constants (not argv): books `draftkings,fanduel,betmgm,fanatics,circa`; S=10; k≥3; F-8 90m.
+Production HTTP: `http_transport.OddsHttpTransport` (ODDS_API_KEY from env only). Library `transport=None` still refuses to open a socket. `--synthetic` injects fixture transport. Celery tick still never fetches/seals.
+AC-12: `seal_ack=CURSOR_CANNOT_SEAL_ACK`. AC-2 needs a named custodian receipt; slot stays UNSET until then.
+R5 credit: (a) bundle ledger cumulative ≤3000 **and** (b) account `(used−11622)≤3000` (used≤14622). Ledger not optional.
+R6 receipt echoes KEEP STATEMENT. R7: paper ACCEPT does not authorize live lift/Odds/capture/merge/deploy.
+
+## t4520u / t4523u Option A (credit accounting)
+
+**KEEP 11622 / 14622.** Receipt `072005fe` immutable. Evidence packet sha8 `75aa28b4`.  
+Baseline note is note-only (no ledger seed of 11622). T-0 snapshot (`last=0`) is the reconcile prior. Reserve worst-case (`T-0 used + estimate`) before execute; do not ignore counter differences. After: this-request `last` vs concurrent `used_after−T-0−last` (beat/worker left running). Unexplained discrepancy or insufficient headroom → fail closed. Abort recovery = new bundle + new T-0. See `data/ops/nfl-w8-t4520u-t4523u-t0-reserve-reconcile.md`.
+
+## Still blocked after this tip
+
+- IMV path / sealing re-grade on successor tip (R1–R7 bound)
+- Ryan A vs B (not authorized by KEEP-ack paper ACCEPT)
+- Named custodian for AC-2 receipt
+- Condition 5 first sealed capture
+- Webhook live POST (path present, unwired)
+- AC-8 / AC-10 remain **EXPLICIT_CARVE_OUT**
+- NFL NO-GO / Coming Soon ON. sealed=0. No merge. No deploy. No live Odds.

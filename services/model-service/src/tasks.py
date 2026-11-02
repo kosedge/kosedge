@@ -18825,3 +18825,11 @@ def write_nfl_projection_actuals(*, season: int = 2026) -> Dict[str, Any]:
         "source": payload.get("source"),
         "asOfUtc": payload.get("asOfUtc"),
     }
+
+
+@celery_app.task(name="src.tasks.run_nfl_w8_capture_tick")
+def run_nfl_w8_capture_tick() -> Dict[str, Any]:
+    """W8 REG close-window tick. Plans due samples; never calls Odds API."""
+    from src.services.nfl_w8_capture.tick import run_capture_tick
+
+    return run_capture_tick()
