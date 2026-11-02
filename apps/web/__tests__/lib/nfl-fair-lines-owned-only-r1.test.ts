@@ -1,7 +1,8 @@
 /**
  * WEB_OWNED_ONLY_R1 — B independent helper/route + integration (CERT=0).
- * OWNER b2159329 · Cos LAUNCH fa4d187b · B ORDER dce6dd05.
- * CONSUME A tip a44707dd (#710). Same DRAFT #711. Defect 58243.
+ * OWNER b2159329 · Cos LAUNCH fa4d187b · B ORDER RETURN-1 companion.
+ * PlatRel RETURN_DELTA c028c4d2. CONSUME A tip a44707dd (#710) STANDS.
+ * Same DRAFT #711. Defect 58243 + RETURN-1 quote/time refuse.
  *
  * Mocked / synthetic only. No live Odds API, network, DB, job, simulator,
  * or outcome calls. No access flip. No collector/scheduler edits.
@@ -239,6 +240,75 @@ const ADMISSIBLE_ODDS_PAYLOAD = {
   commenceTime: "2026-09-10T20:15:00Z",
   last_update: "2026-09-03T14:00:00Z",
 };
+
+function cloneAdmissible(
+  mutate: (ev: Record<string, unknown>) => void,
+): Record<string, unknown> {
+  const ev = structuredClone(ADMISSIBLE_ODDS_EVENT) as Record<string, unknown>;
+  mutate(ev);
+  return ev;
+}
+
+function book0(ev: Record<string, unknown>): Record<string, unknown> {
+  return (ev.bookmakers as Record<string, unknown>[])[0];
+}
+
+function market0(ev: Record<string, unknown>): Record<string, unknown> {
+  return (book0(ev).markets as Record<string, unknown>[])[0];
+}
+
+function outcomesOf(ev: Record<string, unknown>): Record<string, unknown>[] {
+  return market0(ev).outcomes as Record<string, unknown>[];
+}
+
+/** RETURN-1: near-admissible events that fail finite quote / source time. */
+const RETURN1_PRICE_NAN = cloneAdmissible((ev) => {
+  outcomesOf(ev)[0].price = Number.NaN;
+});
+const RETURN1_PRICE_POS_INF = cloneAdmissible((ev) => {
+  outcomesOf(ev)[0].price = Number.POSITIVE_INFINITY;
+});
+const RETURN1_PRICE_NEG_INF = cloneAdmissible((ev) => {
+  outcomesOf(ev)[1].price = Number.NEGATIVE_INFINITY;
+});
+const RETURN1_POINT_POS_INF = cloneAdmissible((ev) => {
+  outcomesOf(ev)[0].point = Number.POSITIVE_INFINITY;
+});
+const RETURN1_POINT_NEG_INF = cloneAdmissible((ev) => {
+  outcomesOf(ev)[1].point = Number.NEGATIVE_INFINITY;
+});
+const RETURN1_COMMENCE_NOT_A_DATE = cloneAdmissible((ev) => {
+  ev.commence_time = "not-a-date";
+});
+const RETURN1_COMMENCE_EMPTY = cloneAdmissible((ev) => {
+  ev.commence_time = "";
+});
+const RETURN1_COMMENCE_GARBAGE = cloneAdmissible((ev) => {
+  ev.commence_time = "2026-13-99T99:99:99Z";
+});
+const RETURN1_NO_LAST_UPDATE = cloneAdmissible((ev) => {
+  delete book0(ev).last_update;
+  delete market0(ev).last_update;
+});
+const RETURN1_INVALID_LAST_UPDATE = cloneAdmissible((ev) => {
+  book0(ev).last_update = "not-a-timestamp";
+  market0(ev).last_update = "also-not-a-timestamp";
+});
+const RETURN1_NUMERIC_LAST_UPDATE = cloneAdmissible((ev) => {
+  book0(ev).last_update = 1_725_000_000_000;
+  market0(ev).last_update = 1_725_000_000_000;
+});
+const RETURN1_SPREADS_MISSING_POINT = cloneAdmissible((ev) => {
+  delete outcomesOf(ev)[0].point;
+});
+const RETURN1_SPREADS_MISSING_PRICE = cloneAdmissible((ev) => {
+  delete outcomesOf(ev)[1].price;
+});
+const RETURN1_H2H_ONE_SIDE = cloneAdmissible((ev) => {
+  const market = market0(ev);
+  market.key = "h2h";
+  market.outcomes = [{ name: "Seattle Seahawks", price: -150 }];
+});
 
 const MALFORMED_IDENTITY_ROWS: Array<Record<string, unknown>> = [
   { id: { nested: true }, home_team: "Seattle Seahawks" },
@@ -595,6 +665,116 @@ describe("WEB_OWNED_ONLY_R1 fetchNflFairLines + /api/nfl/fair-lines", () => {
     });
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(board.error).toBeUndefined();
+  });
+
+  it("RETURN-1a) price NaN → refuse + ZERO upstream", async () => {
+    const fetchMock = installFetchMock();
+    expect(inspectOwnedNflFairLinesOddsEvents([RETURN1_PRICE_NAN]).status).toBe(
+      "malformed",
+    );
+    await expectOwnedRefusal(
+      () =>
+        fetchNflFairLines({
+          season: 2026,
+          oddsMode: "reuse",
+          oddsEvents: [RETURN1_PRICE_NAN],
+        }),
+      fetchMock,
+      NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+    );
+  });
+
+  it("RETURN-1b) price/point ±Infinity → refuse + ZERO upstream", async () => {
+    const fetchMock = installFetchMock();
+    for (const row of [
+      RETURN1_PRICE_POS_INF,
+      RETURN1_PRICE_NEG_INF,
+      RETURN1_POINT_POS_INF,
+      RETURN1_POINT_NEG_INF,
+    ]) {
+      expect(inspectOwnedNflFairLinesOddsEvents([row]).status).toBe(
+        "malformed",
+      );
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines({
+            season: 2026,
+            oddsMode: "reuse",
+            oddsEvents: [row],
+          }),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      );
+    }
+  });
+
+  it("RETURN-1c) invalid commence_time string → refuse + ZERO upstream", async () => {
+    const fetchMock = installFetchMock();
+    for (const row of [
+      RETURN1_COMMENCE_NOT_A_DATE,
+      RETURN1_COMMENCE_EMPTY,
+      RETURN1_COMMENCE_GARBAGE,
+    ]) {
+      expect(inspectOwnedNflFairLinesOddsEvents([row]).status).toBe(
+        "malformed",
+      );
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines({
+            season: 2026,
+            oddsMode: "reuse",
+            oddsEvents: [row],
+          }),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      );
+    }
+  });
+
+  it("RETURN-1d) invalid/absent book+market last_update → refuse + ZERO upstream", async () => {
+    const fetchMock = installFetchMock();
+    for (const row of [
+      RETURN1_NO_LAST_UPDATE,
+      RETURN1_INVALID_LAST_UPDATE,
+      RETURN1_NUMERIC_LAST_UPDATE,
+    ]) {
+      expect(inspectOwnedNflFairLinesOddsEvents([row]).status).toBe(
+        "malformed",
+      );
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines({
+            season: 2026,
+            oddsMode: "reuse",
+            oddsEvents: [row],
+          }),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      );
+    }
+  });
+
+  it("RETURN-1e) partial quote (spreads missing point/price OR h2h one side) → refuse + ZERO upstream", async () => {
+    const fetchMock = installFetchMock();
+    for (const row of [
+      RETURN1_SPREADS_MISSING_POINT,
+      RETURN1_SPREADS_MISSING_PRICE,
+      RETURN1_H2H_ONE_SIDE,
+    ]) {
+      expect(inspectOwnedNflFairLinesOddsEvents([row]).status).toBe(
+        "malformed",
+      );
+      await expectOwnedRefusal(
+        () =>
+          fetchNflFairLines({
+            season: 2026,
+            oddsMode: "reuse",
+            oddsEvents: [row],
+          }),
+        fetchMock,
+        NFL_FAIR_LINES_REUSE_EVENTS_UNAVAILABLE,
+      );
+    }
   });
 
   it("5) authorized closed route → 503 + zero upstream", async () => {
