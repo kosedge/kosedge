@@ -1,0 +1,38 @@
+{
+  "adjustment_policy": "TRANSPORT_ONLY_NOT_INJURY_POLICY",
+  "admitted_capture_id": "adc143a4b27d94bce436c5de5bc642f8c200050f20fa6bf57e01b831e6874877",
+  "admitted_game_id": "2026_99_TST_SYN",
+  "capability_bits": [
+    "POINT_MARGIN"
+  ],
+  "contract_id": "t5178u-nfl-fixture-assembly-v0",
+  "defense_multiplier": 1.03,
+  "defense_raw": -0.08,
+  "eligibility": {
+    "betting_consumable": false,
+    "cacheable": false,
+    "channel": "FIXTURE",
+    "contract_id": "t5178u-nfl-fixture-assembly-v0",
+    "env_bypass_honored": false,
+    "fixture": true,
+    "production_consumable": false,
+    "reason": "fixture-channel transport admitted; not a production/betting allow",
+    "result": "ALLOW_FIXTURE",
+    "subscriber_consumable": false
+  },
+  "offense_multiplier": 0.97,
+  "offense_raw": 0.12,
+  "quote": {
+    "book": "SYNTH-BOOK-T5178U",
+    "event_id": "2026_99_TST_SYN",
+    "fixture": true,
+    "injury_policy_approved": false,
+    "line": -3.0,
+    "period": "full_game",
+    "price": -110,
+    "side": "HOME",
+    "time": "2026-11-08T16:15:00Z",
+    "transport_only": true
+  },
+  "schema_version": "nfl-fixture-assembly-v0"
+}

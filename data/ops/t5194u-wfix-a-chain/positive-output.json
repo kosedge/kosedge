@@ -1,0 +1,158 @@
+{
+  "adjustment_policy": "TRANSPORT_ONLY_NOT_INJURY_POLICY",
+  "admitted_capture_id": "adc143a4b27d94bce436c5de5bc642f8c200050f20fa6bf57e01b831e6874877",
+  "base_contract_id": "t5178u-nfl-fixture-assembly-v0",
+  "base_schema_version": "nfl-fixture-assembly-v0",
+  "cacheable": false,
+  "capability": {
+    "bits": [
+      "POINT_MARGIN"
+    ]
+  },
+  "chain_contract_id": "t5194u-nfl-fixture-chain-v1",
+  "chain_schema_version": "nfl-fixture-chain-v1",
+  "channel": "FIXTURE",
+  "cutoff": {
+    "as_of_ts": "2026-11-08T16:15:00Z",
+    "captured_at": "2026-11-08T16:15:00Z",
+    "decision_ts": "2026-11-08T16:30:00Z",
+    "kickoff_ts": "2026-11-08T18:00:00Z",
+    "source_published_at": "2026-11-08T16:05:00Z"
+  },
+  "defense_multiplier": 1.03,
+  "defense_raw": -0.08,
+  "eligibility": {
+    "betting_consumable": false,
+    "cacheable": false,
+    "channel": "FIXTURE",
+    "contract_id": "t5178u-nfl-fixture-assembly-v0",
+    "env_bypass_honored": false,
+    "fixture": true,
+    "production_consumable": false,
+    "reason": "fixture-channel transport admitted; not a production/betting allow",
+    "result": "ALLOW_FIXTURE",
+    "schema_version": "nfl-fixture-assembly-v0",
+    "subscriber_consumable": false
+  },
+  "fixture": true,
+  "forecast": {
+    "forecast_id": "3c68732d8757ff695cd1fee3dbeb45ac22bdbb20be0e4a4ea5806e86600d064f",
+    "game_id": "2026_99_TST_SYN",
+    "period": "full_game",
+    "point_margin": 3.0,
+    "side": "HOME"
+  },
+  "game_id": "2026_99_TST_SYN",
+  "honor_env_bypass": false,
+  "l1_candidate": {
+    "as_of_ts": "2026-11-08T16:15:00Z",
+    "baseline_personnel_ref": {
+      "as_of_completed_week": "2026-W99-SYNTH",
+      "player_ids": [
+        "00-SYNTH-QB1",
+        "00-SYNTH-WR1",
+        "00-SYNTH-RB1",
+        "00-SYNTH-TE1",
+        "00-SYNTH-OL1"
+      ],
+      "rating_window": "UNRESOLVED",
+      "ref_sha256": "fcc0e13dce6e430dfb9a22d70cd8be5cbbca412a7d03cab5365b1001bca3ebd9",
+      "snap_share_threshold": 0.5,
+      "source_id": "nflverse_snap_counts",
+      "team": "SYN"
+    },
+    "capture_id": "adc143a4b27d94bce436c5de5bc642f8c200050f20fa6bf57e01b831e6874877",
+    "captured_at": "2026-11-08T16:15:00Z",
+    "decision_ts": "2026-11-08T16:30:00Z",
+    "defense_multiplier": 1.03,
+    "defense_raw": -0.08,
+    "delta_players": [
+      {
+        "injury": null,
+        "injury_weight": null,
+        "player_id": "00-SYNTH-WR2",
+        "player_impact": null,
+        "position": "WR",
+        "position_weight_defense": null,
+        "position_weight_offense": null,
+        "practice_status": null,
+        "practice_weight": null,
+        "report_status": "Out",
+        "status_weight": null,
+        "table_sha": null
+      }
+    ],
+    "expected_starters_asof": [
+      {
+        "player_id": "00-SYNTH-QB1",
+        "position": "QB"
+      },
+      {
+        "player_id": "00-SYNTH-WR1",
+        "position": "WR"
+      },
+      {
+        "player_id": "00-SYNTH-RB1",
+        "position": "RB"
+      },
+      {
+        "player_id": "00-SYNTH-TE1",
+        "position": "TE"
+      },
+      {
+        "player_id": "00-SYNTH-OL1",
+        "position": "OL"
+      }
+    ],
+    "factor": "availability",
+    "game_id": "2026_99_TST_SYN",
+    "kickoff_ts": "2026-11-08T18:00:00Z",
+    "missing_enum": "OBSERVED",
+    "offense_multiplier": 0.97,
+    "offense_raw": 0.12,
+    "provenance": {
+      "parser_version": "hhl1-capture-plumbing-v0-no-parser",
+      "protocol_sha": "a9f1c28f1cbbc0f623603f78b340e09aeff6ecb54926a3fed34e1cf4ee2a242a",
+      "source_id": "official_nfl_injury_report",
+      "source_snapshot_id": "3ab485bf4fbb390f94ec645079af98420b0e8347ee98edfc604fdbf104a4373b",
+      "source_url": "https://example.test/synth/official-nfl-injury-report",
+      "table_sha": null
+    },
+    "registry_id": "hhl1-synth-registry-t5178u",
+    "schema_version": "hhl1-capture-plumbing-v0",
+    "source_published_at": "2026-11-08T16:05:00Z",
+    "source_snapshot_id": "3ab485bf4fbb390f94ec645079af98420b0e8347ee98edfc604fdbf104a4373b",
+    "supersedes_capture_id": null,
+    "team": "SYN",
+    "uncertainty": null
+  },
+  "offense_multiplier": 0.97,
+  "offense_raw": 0.12,
+  "production_mode": false,
+  "provenance": {
+    "as_of_ts": "2026-11-08T16:15:00Z",
+    "captured_at": "2026-11-08T16:15:00Z",
+    "decision_ts": "2026-11-08T16:30:00Z",
+    "kickoff_ts": "2026-11-08T18:00:00Z",
+    "parser_version": "hhl1-capture-plumbing-v0-no-parser",
+    "protocol_sha": "a9f1c28f1cbbc0f623603f78b340e09aeff6ecb54926a3fed34e1cf4ee2a242a",
+    "schema_version": "hhl1-capture-plumbing-v0",
+    "source_id": "official_nfl_injury_report",
+    "source_published_at": "2026-11-08T16:05:00Z",
+    "source_snapshot_id": "3ab485bf4fbb390f94ec645079af98420b0e8347ee98edfc604fdbf104a4373b",
+    "source_url": "https://example.test/synth/official-nfl-injury-report"
+  },
+  "quote": {
+    "book": "SYNTH-BOOK-T5178U",
+    "event_id": "2026_99_TST_SYN",
+    "fixture": true,
+    "injury_policy_approved": false,
+    "line": -3.0,
+    "period": "full_game",
+    "price": -110,
+    "side": "HOME",
+    "time": "2026-11-08T16:15:00Z",
+    "transport_only": true
+  },
+  "requested_output": "POINT_MARGIN_SPREAD"
+}

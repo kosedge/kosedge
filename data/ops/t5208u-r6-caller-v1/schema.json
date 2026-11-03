@@ -1,0 +1,59 @@
+{
+  "c_formula": "C=0.5*IF+0.5*Q2",
+  "cell_meta_fields": [
+    "status",
+    "reconstructed_value",
+    "source",
+    "available_at",
+    "observed_at",
+    "source_byte_hash"
+  ],
+  "contract_27": [
+    "game_id",
+    "home_team",
+    "away_team",
+    "matchup_season",
+    "matchup_week",
+    "rest_days_home",
+    "rest_days_away",
+    "offense_index_home",
+    "offense_index_away",
+    "defense_index_home",
+    "defense_index_away",
+    "home_off_epa_5g",
+    "away_off_epa_5g",
+    "home_def_epa_allowed_5g",
+    "away_def_epa_allowed_5g",
+    "home_success_offense_5g",
+    "away_success_offense_5g",
+    "home_success_defense_allowed_5g",
+    "away_success_defense_allowed_5g",
+    "home_pass_rate_5g",
+    "away_pass_rate_5g",
+    "matchup_diff_off_epa_5g",
+    "matchup_diff_def_epa_allowed_5g",
+    "matchup_diff_success_rate_5g",
+    "matchup_diff_pressure_allowed_5g",
+    "matchup_diff_pressure_generated_5g",
+    "matchup_diff_red_zone_td_rate_5g"
+  ],
+  "envelope_fields": [
+    "game_id",
+    "season",
+    "week",
+    "season_type",
+    "home_team",
+    "away_team",
+    "kickoff_utc",
+    "venue_id",
+    "identity_kind"
+  ],
+  "n_contract_27": 27,
+  "notes": [
+    "CONTRACT_27 is the literal tuple from recon_contract.py@455a8e43.",
+    "No injury/QB/news/weather/travel/KAV unless already in the 27.",
+    "No market inputs. POINT_MARGIN only."
+  ],
+  "output_kind": "POINT_MARGIN",
+  "schema_id": "nfl-t5208u-r6-caller-v1"
+}

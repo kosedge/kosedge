@@ -1,0 +1,471 @@
+{
+  "c_formula_controls": [
+    {
+      "expected_c": 3.0,
+      "if_margin": 2.0,
+      "label": "CONTROL_A_IF2_Q24",
+      "q2_margin": 4.0
+    },
+    {
+      "expected_c": 0.0,
+      "if_margin": -1.0,
+      "label": "CONTROL_B_IF_NEG1_Q2_1",
+      "q2_margin": 1.0
+    }
+  ],
+  "channel": "SYNTHETIC",
+  "franchise_bind": {
+    "away_team_raw": "LAR",
+    "franchise_key_away": "LAR",
+    "franchise_key_home": "LAC",
+    "home_team_raw": "LAC"
+  },
+  "history": [
+    {
+      "away_score": 10,
+      "away_team": "BUF",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2017_W02_SD_BUF",
+      "home_score": 24,
+      "home_team": "SD",
+      "kickoff_utc": "2017-09-17T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2017,
+      "season_type": "REG",
+      "source_byte_hash": "b4f453717d231b5afe63e3332263d19005cd7681744c8c1f3a0eef596c6f8120",
+      "week": 2
+    },
+    {
+      "away_score": 17,
+      "away_team": "MIA",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2017_W03_STL_MIA",
+      "home_score": 27,
+      "home_team": "STL",
+      "kickoff_utc": "2017-09-24T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2017,
+      "season_type": "REG",
+      "source_byte_hash": "38623b049b215c5c690995ab65023223bcf09ac54eae50323226c914161a6b7c",
+      "week": 3
+    },
+    {
+      "away_score": 13,
+      "away_team": "MIA",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2017_W06_BUF_MIA",
+      "home_score": 20,
+      "home_team": "BUF",
+      "kickoff_utc": "2017-10-15T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2017,
+      "season_type": "REG",
+      "source_byte_hash": "4eb10dd238bd5ff10867f150834d4c0831826d602be1141470c2f5fbaf95aa9f",
+      "week": 6
+    },
+    {
+      "away_score": 23,
+      "away_team": "SD",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2017_W08_NE_SD",
+      "home_score": 16,
+      "home_team": "NE",
+      "kickoff_utc": "2017-10-29T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2017,
+      "season_type": "REG",
+      "source_byte_hash": "c62ab4eedafdade09c0eb00e275ea9ff66364fda8372c9a917beb060296b363a",
+      "week": 8
+    },
+    {
+      "away_score": 31,
+      "away_team": "STL",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2017_W12_MIA_STL",
+      "home_score": 14,
+      "home_team": "MIA",
+      "kickoff_utc": "2017-11-26T18:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2017,
+      "season_type": "REG",
+      "source_byte_hash": "ada5f2cbdf2b9cba8f39729cfd0a0be9072b01abd2e03fb7dcc8bbfe7fd424a8",
+      "week": 12
+    },
+    {
+      "away_score": 28,
+      "away_team": "NE",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2017_W14_BUF_NE",
+      "home_score": 10,
+      "home_team": "BUF",
+      "kickoff_utc": "2017-12-10T18:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2017,
+      "season_type": "REG",
+      "source_byte_hash": "b52d1ca0b0a7615dcbdf9f3b625a3137a35672bcc0a601aad124c2062a65c0a8",
+      "week": 14
+    },
+    {
+      "away_score": 20,
+      "away_team": "MIA",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2018_W01_SD_MIA",
+      "home_score": 27,
+      "home_team": "SD",
+      "kickoff_utc": "2018-09-09T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2018,
+      "season_type": "REG",
+      "source_byte_hash": "67f95e678256ab43956f94a691cd0a62598a351a98a59e0c66d629367d0259f9",
+      "week": 1
+    },
+    {
+      "away_score": 6,
+      "away_team": "BUF",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2018_W02_STL_BUF",
+      "home_score": 24,
+      "home_team": "STL",
+      "kickoff_utc": "2018-09-16T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2018,
+      "season_type": "REG",
+      "source_byte_hash": "f1c0f72a9a6341baa7a355dfb60583adafdd5cfea483829527b2dbe45c463ba3",
+      "week": 2
+    },
+    {
+      "away_score": 22,
+      "away_team": "SD",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2018_W03_BUF_SD",
+      "home_score": 13,
+      "home_team": "BUF",
+      "kickoff_utc": "2018-09-23T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2018,
+      "season_type": "REG",
+      "source_byte_hash": "0156c29ad3390e73f3e7de927cfbab7030d850242923e1fb00459b764a190e20",
+      "week": 3
+    },
+    {
+      "away_score": 38,
+      "away_team": "STL",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2018_W04_MIA_STL",
+      "home_score": 17,
+      "home_team": "MIA",
+      "kickoff_utc": "2018-09-30T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2018,
+      "season_type": "REG",
+      "source_byte_hash": "fd5c770c9acebc2aee738d1eb389eb9f6a68e51d06c10cd0618fae077e3e2c59",
+      "week": 4
+    },
+    {
+      "away_score": 17,
+      "away_team": "KC",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2018_W05_SD_KC",
+      "home_score": 20,
+      "home_team": "SD",
+      "kickoff_utc": "2018-10-07T17:00:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2018,
+      "season_type": "REG",
+      "source_byte_hash": "86e5d2c0b0a7c9c8f540a6e7eb1c5107b467465f36726398a937dcf9c301feb9",
+      "week": 5
+    },
+    {
+      "away_score": 27,
+      "away_team": "NE",
+      "channel": "SYNTHETIC",
+      "game_id": "SYNTHETIC_2018_W05_STL_NE",
+      "home_score": 13,
+      "home_team": "STL",
+      "kickoff_utc": "2018-10-07T20:25:00Z",
+      "note": "SYNTHETIC_REG_SCORE_HISTORY_STATE_ONLY",
+      "season": 2018,
+      "season_type": "REG",
+      "source_byte_hash": "d85c14b45a5de2c0e30bbd537fb7f21ad1182f6cd4da2d01f4c9b495d62fb408",
+      "week": 5
+    }
+  ],
+  "packet": {
+    "channel": "SYNTHETIC",
+    "contract_27": {
+      "away_def_epa_allowed_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.02,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "6c580269c77f2f802c96345e269e152acd0f41c20e718d7c36ebac91a16e976d",
+        "status": "DERIVED_PREGAME"
+      },
+      "away_off_epa_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.03,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "fb459252a7aab534d48258202769ca8ab8fcea84d56863c67973875ea643c3ed",
+        "status": "DERIVED_PREGAME"
+      },
+      "away_pass_rate_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.57,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "4ff050392938b5e233c036e70db3622c8e20012b8a08b4fb6d9c6c59f2ba47dd",
+        "status": "DERIVED_PREGAME"
+      },
+      "away_success_defense_allowed_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.45,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "6aa81d4acdc80c9ad0af97f0c606cdc2c869514b88552fa6cd91bf905fff3d3d",
+        "status": "DERIVED_PREGAME"
+      },
+      "away_success_offense_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.46,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "88b8f41393f0f5add0a34568d703a00388181fc8b35db0510dc2e96a091713f3",
+        "status": "DERIVED_PREGAME"
+      },
+      "away_team": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": "LAR",
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "f614b4740b5c4fae781b0d768e0ca445eadceb28f34deef287d27f782a32888b",
+        "status": "DERIVED_PREGAME"
+      },
+      "defense_index_away": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 1.04,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "64aa766703eee5907447e03715f95998f98a05844502697b3e0c5c9d69f1b6d9",
+        "status": "DERIVED_PREGAME"
+      },
+      "defense_index_home": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 1.01,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "681bd04d5c803a92bf89f462a5ffa97bed0d6326613c3d4aa333bcbd1ad1b772",
+        "status": "DERIVED_PREGAME"
+      },
+      "game_id": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": "SYNTHETIC_2018_W06_LAC_LAR",
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "396d1a40f5cb10eaa3914a78343ed6445e5d7522aa1fd825d6362e0cd405c233",
+        "status": "DERIVED_PREGAME"
+      },
+      "home_def_epa_allowed_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": -0.01,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "69883c9e2b7c1d692469fb998ddba267a76aef078f0ba2193ede5ecf7af51031",
+        "status": "DERIVED_PREGAME"
+      },
+      "home_off_epa_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.07,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "af091581a4840f2319cefcf1af1500d27d4a70f63193d00d75e430577e60c0f2",
+        "status": "DERIVED_PREGAME"
+      },
+      "home_pass_rate_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.59,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "e2d6e881278de2091c20280472a4f410e725a593e2b186090014c4250ec9e32d",
+        "status": "DERIVED_PREGAME"
+      },
+      "home_success_defense_allowed_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.44,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "17ce9592c0976e844857e386ce2fffce69156d6261c71aef29c306931ae39e18",
+        "status": "DERIVED_PREGAME"
+      },
+      "home_success_offense_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.48,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "469b4d742eb1a2f846762a2ed857db279e34f641accf0429bfd8e79b07324f2a",
+        "status": "DERIVED_PREGAME"
+      },
+      "home_team": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": "LAC",
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "5a629ae72e2c7bd798464cd6b81382c2777292d38466225c04a0984a1d57cec9",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_diff_def_epa_allowed_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": -0.03,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "7c89c7c0676970336f357486467ce617d568097a351b04806e6668340bce27a5",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_diff_off_epa_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.04,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "5512cf9c3cd47dca6dbeb8e26d08ad08ecc8c22129b4cbd33083d623149840f4",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_diff_pressure_allowed_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": -0.01,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "69883c9e2b7c1d692469fb998ddba267a76aef078f0ba2193ede5ecf7af51031",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_diff_pressure_generated_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.02,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "6c580269c77f2f802c96345e269e152acd0f41c20e718d7c36ebac91a16e976d",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_diff_red_zone_td_rate_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.03,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "fb459252a7aab534d48258202769ca8ab8fcea84d56863c67973875ea643c3ed",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_diff_success_rate_5g": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 0.02,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "6c580269c77f2f802c96345e269e152acd0f41c20e718d7c36ebac91a16e976d",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_season": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 2018,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "c4cbea00cbef65deb5558fa0ac93b7d25ea46508db854a38ab336fe2b241f85d",
+        "status": "DERIVED_PREGAME"
+      },
+      "matchup_week": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 6,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "c27d200eb71d2efa48de23660ab723a9c1813170f83cc73b0c6013a85b6f03a2",
+        "status": "DERIVED_PREGAME"
+      },
+      "offense_index_away": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 1.03,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "3026897a2574ad91c2222e3a57d864761e338ee5b5f1c7f8e8f00c3597fa94bd",
+        "status": "DERIVED_PREGAME"
+      },
+      "offense_index_home": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 1.08,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "e3bd1bd43c33003e1c2d817228d87821b77cb4fdb32220bed48a57393158fbdc",
+        "status": "DERIVED_PREGAME"
+      },
+      "rest_days_away": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 4.0,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "be011cacd05630dc7e2b8ef3d205f69fe7ce19eba8b294f7145faddd48e22a02",
+        "status": "DERIVED_PREGAME"
+      },
+      "rest_days_home": {
+        "available_at": "2018-10-11T20:00:00Z",
+        "observed_at": "2018-10-11T21:00:00Z",
+        "reconstructed_value": 4.0,
+        "source": "SYNTHETIC_TYPED_PACKET_t5289u_R7",
+        "source_byte_hash": "be011cacd05630dc7e2b8ef3d205f69fe7ce19eba8b294f7145faddd48e22a02",
+        "status": "DERIVED_PREGAME"
+      }
+    },
+    "envelope": {
+      "away_team": "LAR",
+      "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+      "home_team": "LAC",
+      "identity_kind": "SYNTHETIC_REG",
+      "kickoff_utc": "2018-10-12T00:20:00Z",
+      "season": 2018,
+      "season_type": "REG",
+      "venue_id": "SYNTHETIC_VENUE_TNF",
+      "week": 6
+    },
+    "franchise_bind": {
+      "away_team_raw": "LAR",
+      "franchise_key_away": "LAR",
+      "franchise_key_home": "LAC",
+      "home_team_raw": "LAC"
+    },
+    "mode_gate": "SYNTHETIC_ONLY",
+    "packet_class": "SYNTHETIC",
+    "real_mode_usable": false,
+    "rest_calendar": {
+      "away_franchise": "LAR",
+      "away_prev_et_date": "2018-10-07",
+      "away_prev_kickoff_utc": "2018-10-07T20:25:00Z",
+      "bound_from": "actual_prior_kickoff_et_calendar_date",
+      "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
+      "home_franchise": "LAC",
+      "home_prev_et_date": "2018-10-07",
+      "home_prev_kickoff_utc": "2018-10-07T17:00:00Z",
+      "kickoff_et_date": "2018-10-11",
+      "kickoff_utc": "2018-10-12T00:20:00Z",
+      "rest_days_away": 4.0,
+      "rest_days_home": 4.0,
+      "tz": "America/New_York",
+      "used_production_rest_days_from_schedule": false,
+      "utc_date_delta_away": 5,
+      "utc_date_delta_home": 5
+    },
+    "source_byte_hash": "53884c2851751f336c3ba628ddd55340d5ad1a1eb2f97a0991bf592e61eb29d6"
+  },
+  "rest_calendar": {
+    "away_franchise": "LAR",
+    "away_prev_et_date": "2018-10-07",
+    "away_prev_kickoff_utc": "2018-10-07T20:25:00Z",
+    "bound_from": "actual_prior_kickoff_et_calendar_date",
+    "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
+    "home_franchise": "LAC",
+    "home_prev_et_date": "2018-10-07",
+    "home_prev_kickoff_utc": "2018-10-07T17:00:00Z",
+    "kickoff_et_date": "2018-10-11",
+    "kickoff_utc": "2018-10-12T00:20:00Z",
+    "rest_days_away": 4.0,
+    "rest_days_home": 4.0,
+    "tz": "America/New_York",
+    "used_production_rest_days_from_schedule": false,
+    "utc_date_delta_away": 5,
+    "utc_date_delta_home": 5
+  }
+}
