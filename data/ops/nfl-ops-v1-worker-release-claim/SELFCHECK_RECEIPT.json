@@ -1,0 +1,15 @@
+{
+  "cert": 0,
+  "default_not_a_pass": true,
+  "evidence_label_default": "SOURCE_INSPECTION",
+  "evidence_label_synthetic_board": "EXECUTED_HERE",
+  "handoff_sha256": "e540113aba5ebb889f66e92f09a3ae83832d24b6fa4c700505d94297fe92d049",
+  "sample_release_kind": "PLATFORM_LIMITATION",
+  "sample_sha256": "43808c2ae3dc32b32d07a923d6890533ff679f0fc922c27d25783e73a3f4ceb7",
+  "sample_state": "QUIESCENT",
+  "schema": "nfl-ops-v1-worker-release-claim-v1",
+  "self_accept": false,
+  "synthetic": true,
+  "synthetic_board_kind": "SYNTHETIC_PLATFORM_RELEASE",
+  "synthetic_board_state": "RELEASE_CONFIRMED"
+}
