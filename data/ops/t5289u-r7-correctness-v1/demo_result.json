@@ -28,7 +28,17 @@
     "framework": {
       "fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
       "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
-      "observed_fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3"
+      "observed_fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+      "settings": {
+        "base_eff_margin_weight": 16.0,
+        "base_eff_total_weight": 10.5,
+        "base_score_stdev": 9.8,
+        "home_field_points": 1.05,
+        "prior_margin_points": 1.5,
+        "prior_total_points": 45.3,
+        "rest_margin_per_day": 0.18,
+        "rest_total_per_day_abs": 0.12
+      }
     },
     "helper": {
       "a_q2": 2.5637441292077354,
@@ -93,6 +103,15 @@
       "observed_sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
       "seed_base": 201710,
       "seed_mod": 1000003,
+      "settings": {
+        "epa_interaction_weight": 3.4,
+        "injury_stdev_weight": 1.35,
+        "injury_weight": 6.0,
+        "max_adjustment_points": 4.2,
+        "max_stdev_adjustment": 2.0,
+        "pass_rate_weight": 3.2,
+        "success_delta_weight": 7.4
+      },
       "sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
       "simulations": 4000
     }
@@ -119,7 +138,7 @@
   "output_kind": "POINT_MARGIN",
   "owner_clear": "86257",
   "package": "R7_CORRECTNESS_V1",
-  "packet_hash": "6a2ff0f42f5d726766093fbaad9694388282adc12e3d02caabeb7da48cb39fcb",
+  "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
   "q2_canonical_state_slots": true,
   "q2_consumed_franchise_aliases": {
     "JAC": "JAX",
@@ -137,14 +156,14 @@
   "q2_margin": 1.93920745003233,
   "r6_a_tip": "54b08a301cf824c79ee3203180a51e2d832bb6f9",
   "r6_b_tip": "afb13301b5c7e3b8780a8dd1f85145e91bebef55",
-  "r6_code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
+  "r6_code_hash": "c5a3cc412289968788ba340e40884fe9cc678fdf07ab2249c9fc94017ef697bb",
   "r6_config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
   "r6_point_margin": {
     "binds": {
-      "code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
+      "code_hash": "c5a3cc412289968788ba340e40884fe9cc678fdf07ab2249c9fc94017ef697bb",
       "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
       "history_hash": "0d453ec50ce316024f6206d11975d964cd7a38a44a22924dd7ee8d7628796db4",
-      "packet_hash": "6a2ff0f42f5d726766093fbaad9694388282adc12e3d02caabeb7da48cb39fcb",
+      "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
       "schema_hash_is_not_an_input_bind": true
     },
     "c_formula": "C=0.5*IF+0.5*Q2",
@@ -152,9 +171,10 @@
     "candidate_weight": 0.5,
     "cert": 0,
     "channel": "SYNTHETIC",
-    "code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
+    "code_hash": "c5a3cc412289968788ba340e40884fe9cc678fdf07ab2249c9fc94017ef697bb",
     "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
     "cutoff_utc": "2018-10-11T23:20:00Z",
+    "effective_config_bound": true,
     "envelope": {
       "away_team": "LAR",
       "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
@@ -203,7 +223,7 @@
     "kickoff_utc": "2018-10-12T00:20:00Z",
     "market_blend": 0,
     "output_kind": "POINT_MARGIN",
-    "packet_hash": "6a2ff0f42f5d726766093fbaad9694388282adc12e3d02caabeb7da48cb39fcb",
+    "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
     "q2": {
       "a_q2": 2.5637441292077354,
       "b_q2": 1.660624056183471,
@@ -220,16 +240,19 @@
     "seed": 276287,
     "simulations": 4000
   },
-  "r7_code_hash": "270853ff56e3b02fd11885c75ef53cac12a77358b3ff992573f9bae4d2a5a6d0",
-  "r7_config_hash": "08863125382d782a362af4983942d6a68290a9ee6dc5cc89df92b10a982a4fb4",
+  "r7_code_hash": "cdbdc378288072a4020170b041563611aae09ccfa851ba5c0eba863dfb66181b",
+  "r7_config_hash": "f50229af2c95babfd9bef5e35ba9f016002806243204ea26cef69be107277e48",
   "replay_ok": true,
   "rest_calendar": {
     "actual_versus_scheduled_proof": true,
     "away_franchise": "LAR",
+    "away_prev_availability": "BEFORE_SEAL",
+    "away_prev_available_at": "2018-10-08T00:25:00Z",
     "away_prev_et_date": "2018-10-07",
     "away_prev_game_id": "SYNTHETIC_2018_W05_STL_NE",
     "away_prev_kickoff_kind": "ACTUAL_KICKOFF",
     "away_prev_kickoff_utc": "2018-10-07T20:25:00Z",
+    "away_prev_observed_at": "2018-10-08T01:25:00Z",
     "away_prev_source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
     "away_prev_status": "PLAYED",
     "away_prev_used_actual_not_scheduled": false,
@@ -237,10 +260,13 @@
     "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
     "cutoff_utc": "2018-10-11T23:20:00Z",
     "home_franchise": "LAC",
+    "home_prev_availability": "BEFORE_SEAL",
+    "home_prev_available_at": "2018-10-07T21:00:00Z",
     "home_prev_et_date": "2018-10-07",
     "home_prev_game_id": "SYNTHETIC_2018_W05_SD_KC",
     "home_prev_kickoff_kind": "ACTUAL_KICKOFF",
     "home_prev_kickoff_utc": "2018-10-07T17:00:00Z",
+    "home_prev_observed_at": "2018-10-07T22:00:00Z",
     "home_prev_source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
     "home_prev_status": "PLAYED",
     "home_prev_used_actual_not_scheduled": false,
