@@ -7,14 +7,16 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from types import MappingProxyType
+from typing import Any, Mapping, Optional
 
 from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
 from src.services.nfl_r7_correctness_v1.franchise import (
+    canonical_q2_carry,
     key_packet_and_history_for_q2,
     q2_consumed_franchise_aliases,
 )
-from src.services.nfl_r7_correctness_v1.packets import build_synthetic_r7_demo, refuse_if_real
+from src.services.nfl_r7_correctness_v1.packets import require_typed_synthetic_input, refuse_if_real
 from src.services.nfl_r7_correctness_v1.pins import (
     AUTHORITY,
     CALENDAR_ID,
@@ -26,6 +28,8 @@ from src.services.nfl_r7_correctness_v1.pins import (
     FW_SHA256,
     GATE_713_TIP,
     IF_TIP,
+    KO_MINUS_MINUTES,
+    LA_SOURCE_MAP,
     OWNER_CLEAR,
     PACKAGE,
     PLAN_FINGERPRINT,
@@ -40,7 +44,18 @@ from src.services.nfl_t5107u.builder import challenger_margin
 from src.services.nfl_t5208u.caller import call_r6_point_margin, replay_call
 from src.services.nfl_t5208u.hashing import canonical_sha256, sha256_file
 from src.services.nfl_t5208u.if_tree import preflight_if_tree
-from src.services.nfl_t5208u.pins import CANDIDATE_WEIGHT, C_FORMULA
+from src.services.nfl_t5208u.pins import (
+    A_Q2,
+    B_Q2,
+    CANDIDATE_WEIGHT,
+    C_FORMULA,
+    MARKET_BLEND,
+    PRIOR_CARRY,
+    RIDGE,
+    SEED_BASE,
+    SEED_MOD,
+    SIMULATIONS,
+)
 from src.services.nfl_t5208u.validate import config_content_hash as r6_config_hash
 
 
@@ -48,31 +63,108 @@ class R7ProduceRefuse(ValueError):
     """Fail-closed R7 produce."""
 
 
+NUMERICAL_ENV_KEYS = (
+    "T5108U_IF_TREE",
+    "SIMULATIONS",
+    "NFL_SIMULATIONS",
+    "MARKET_BLEND",
+    "CANDIDATE_WEIGHT",
+    "KO_MINUS_MINUTES",
+    "A_Q2",
+    "B_Q2",
+    "RIDGE",
+    "PRIOR_CARRY",
+    "SEED_BASE",
+    "SEED_MOD",
+)
+
+
 def repo_root() -> Path:
     return Path(__file__).resolve().parents[5]
 
 
-def r7_config_hash() -> str:
-    return canonical_sha256(
-        {
+def _freeze(obj: Any) -> Any:
+    if isinstance(obj, dict):
+        return MappingProxyType({key: _freeze(value) for key, value in obj.items()})
+    if isinstance(obj, list):
+        return tuple(_freeze(value) for value in obj)
+    return obj
+
+
+def _unfreeze(obj: Any) -> Any:
+    if isinstance(obj, Mapping):
+        return {key: _unfreeze(value) for key, value in obj.items()}
+    if isinstance(obj, tuple):
+        return [_unfreeze(value) for value in obj]
+    return obj
+
+
+def refuse_ambient_numerical_env() -> None:
+    present = [key for key in NUMERICAL_ENV_KEYS if os.environ.get(key)]
+    if present:
+        raise R7ProduceRefuse(f"ambient numerical env reread refused: {present}")
+
+
+def consume_effective_config() -> MappingProxyType:
+    """Immutable framework/simulator/helper settings. No ambient numerical env rereads."""
+    refuse_ambient_numerical_env()
+    preflight = preflight_if_tree()
+    if preflight["sim_sha256"] != SIM_SHA256 or preflight["fw_sha256"] != FW_SHA256:
+        raise R7ProduceRefuse("consumed IF tree pin mismatch")
+    if preflight["if_tip"] != IF_TIP:
+        raise R7ProduceRefuse("consumed IF tip mismatch")
+    body = {
+        "framework": {
+            "fw_sha256": FW_SHA256,
+            "if_tip": IF_TIP,
+            "observed_fw_sha256": preflight["fw_sha256"],
+        },
+        "simulator": {
+            "sim_sha256": SIM_SHA256,
+            "simulations": SIMULATIONS,
+            "market_blend": MARKET_BLEND,
+            "seed_base": SEED_BASE,
+            "seed_mod": SEED_MOD,
+            "observed_sim_sha256": preflight["sim_sha256"],
+        },
+        "helper": {
+            "c_formula": C_FORMULA,
+            "candidate_weight": CANDIDATE_WEIGHT,
+            "ko_minus_minutes": KO_MINUS_MINUTES,
+            "a_q2": A_Q2,
+            "b_q2": B_Q2,
+            "ridge": RIDGE,
+            "prior_carry": PRIOR_CARRY,
             "calendar_id": CALENDAR_ID,
             "calendar_tz": CALENDAR_TZ,
             "franchise_aliases": dict(sorted(FRANCHISE_ALIASES.items())),
-            "fw_sha256": FW_SHA256,
-            "if_tip": IF_TIP,
-            "owner_clear": OWNER_CLEAR,
-            "package": PACKAGE,
-            "plan_fingerprint": PLAN_FINGERPRINT,
-            "r6_a_tip": R6_A_TIP,
-            "r6_b_tip": R6_B_TIP,
-            "r6_config_hash": r6_config_hash(),
-            "scope_id": SCOPE_ID,
-            "sim_sha256": SIM_SHA256,
+            "la_source_map": dict(sorted(LA_SOURCE_MAP.items())),
+            "q2_consumed_franchise_aliases": q2_consumed_franchise_aliases(),
             "used_production_rest_days_from_schedule": False,
             "q2_consumes_franchise_keys": True,
-            "q2_consumed_franchise_aliases": q2_consumed_franchise_aliases(),
-        }
-    )
+            "canonical_state_slots": True,
+        },
+        "r6": {
+            "config_hash": r6_config_hash(),
+            "r6_a_tip": R6_A_TIP,
+            "r6_b_tip": R6_B_TIP,
+        },
+        "meta": {
+            "package": PACKAGE,
+            "owner_clear": OWNER_CLEAR,
+            "scope_id": SCOPE_ID,
+            "plan_fingerprint": PLAN_FINGERPRINT,
+            "consumed": True,
+            "immutable": True,
+            "ambient_env_reread": False,
+        },
+    }
+    return _freeze(body)
+
+
+def r7_config_hash(cfg: Mapping[str, Any] | None = None) -> str:
+    consumed = _unfreeze(cfg) if cfg is not None else _unfreeze(consume_effective_config())
+    return canonical_sha256(consumed)
 
 
 def r7_code_hash(root: Path | None = None) -> str:
@@ -86,17 +178,31 @@ def r7_code_hash(root: Path | None = None) -> str:
     return canonical_sha256(rows)
 
 
+def assert_consumed_config_bound(result: Mapping[str, Any], cfg: Mapping[str, Any]) -> None:
+    if int(result.get("simulations", -1)) != int(cfg["simulator"]["simulations"]):
+        raise R7ProduceRefuse("R6 simulations did not bind consumed simulator settings")
+    if int(result.get("market_blend", -1)) != int(cfg["simulator"]["market_blend"]):
+        raise R7ProduceRefuse("R6 market_blend did not bind consumed simulator settings")
+    if result.get("config_hash") != cfg["r6"]["config_hash"]:
+        raise R7ProduceRefuse("R6 config_hash did not bind consumed r6 settings")
+    if result.get("c_formula") != cfg["helper"]["c_formula"]:
+        raise R7ProduceRefuse("R6 c_formula did not bind consumed helper settings")
+    if float(result.get("candidate_weight")) != float(cfg["helper"]["candidate_weight"]):
+        raise R7ProduceRefuse("R6 candidate_weight did not bind consumed helper settings")
+
+
 def produce_r7_point_margin(
     *,
     mode: str = "SYNTHETIC",
     surface: Optional[ForbiddenSurfaceSpy] = None,
     outcome_spy: Optional[OutcomeReadSpy] = None,
+    synthetic_input: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     refuse_if_real(mode)
     if outcome_spy is not None and getattr(outcome_spy, "reads", 0) not in (None, 0):
         raise R7ProduceRefuse("outcome loader already read before produce")
-    preflight = preflight_if_tree()
-    demo = build_synthetic_r7_demo(mode=mode)
+    cfg = consume_effective_config()
+    demo = require_typed_synthetic_input(synthetic_input, mode=mode)
     rest = demo["rest_calendar"]
     if rest["used_production_rest_days_from_schedule"] is not False:
         raise R7ProduceRefuse("production rest helper leaked into R7 bind")
@@ -104,18 +210,16 @@ def produce_r7_point_margin(
         raise R7ProduceRefuse("Q2 history leaked into physical rest bind")
     if rest.get("predecessor_bound_to") != "KO_MINUS_60_CUTOFF":
         raise R7ProduceRefuse("calendar predecessor not bound to KO−60 cutoff")
-    if rest["rest_days_home"] == rest["utc_date_delta_home"]:
-        # TNF control must differ ET vs UTC date delta on this slate.
-        raise R7ProduceRefuse("ET/UTC rest control collapsed — slate is not the TNF probe")
     packet = demo["packet"]
     bound_home = float(packet["contract_27"]["rest_days_home"]["reconstructed_value"])
     bound_away = float(packet["contract_27"]["rest_days_away"]["reconstructed_value"])
     if bound_home != rest["rest_days_home"] or bound_away != rest["rest_days_away"]:
         raise R7ProduceRefuse("rest_days cells not bound from ET calendar")
 
+    weight = float(cfg["helper"]["candidate_weight"])
     controls = []
     for row in demo["c_formula_controls"]:
-        got = challenger_margin(row["if_margin"], row["q2_margin"], w=CANDIDATE_WEIGHT)
+        got = challenger_margin(row["if_margin"], row["q2_margin"], w=weight)
         controls.append({**row, "got_c": got, "ok": got == row["expected_c"]})
     if not all(item["ok"] for item in controls):
         raise R7ProduceRefuse(f"C formula controls failed: {controls}")
@@ -123,11 +227,13 @@ def produce_r7_point_margin(
     keyed_packet, keyed_history = key_packet_and_history_for_q2(packet, demo["history"])
     if surface is not None:
         surface.note("call_r6_point_margin")
-    result = call_r6_point_margin(keyed_packet, keyed_history, mode=mode)
-    replay = replay_call(keyed_packet, keyed_history, mode=mode)
-    cfg = r7_config_hash()
+    with canonical_q2_carry():
+        result = call_r6_point_margin(keyed_packet, keyed_history, mode=mode)
+        replay = replay_call(keyed_packet, keyed_history, mode=mode)
+    assert_consumed_config_bound(result, cfg)
+    digest = r7_config_hash(cfg)
     code = r7_code_hash()
-    if cfg == result["schema_hash"] or code == result["schema_hash"]:
+    if digest == result["schema_hash"] or code == result["schema_hash"]:
         raise R7ProduceRefuse("R7 config/code hash collapsed onto schema_hash")
     out = {
         "package": PACKAGE,
@@ -141,11 +247,17 @@ def produce_r7_point_margin(
         "opt_in": True,
         "implemented_ne_verified": True,
         "command": EXPECTED_COMMAND,
-        "if_preflight": preflight,
+        "if_preflight": {
+            "status": "PRESENT_PIN_MATCH",
+            "if_tip": cfg["framework"]["if_tip"],
+            "sim_sha256": cfg["simulator"]["observed_sim_sha256"],
+            "fw_sha256": cfg["framework"]["observed_fw_sha256"],
+        },
+        "effective_config": _unfreeze(cfg),
         "franchise_bind": demo["franchise_bind"],
         "rest_calendar": rest,
         "r6_point_margin": result,
-        "r7_config_hash": cfg,
+        "r7_config_hash": digest,
         "r7_code_hash": code,
         "r6_config_hash": result["config_hash"],
         "r6_code_hash": result["code_hash"],
@@ -153,7 +265,7 @@ def produce_r7_point_margin(
         "r6_b_tip": R6_B_TIP,
         "gate_713_tip": GATE_713_TIP,
         "replay_ok": replay["replay_ok"],
-        "c_formula": C_FORMULA,
+        "c_formula": cfg["helper"]["c_formula"],
         "c_formula_controls": controls,
         "output_kind": "POINT_MARGIN",
         "if_margin": result["if_margin"],
@@ -166,6 +278,7 @@ def produce_r7_point_margin(
         "seal_utc": result["seal_utc"],
         "kickoff_utc": result["kickoff_utc"],
         "q2_franchise_keyed": True,
+        "q2_canonical_state_slots": True,
         "q2_consumed_franchise_aliases": q2_consumed_franchise_aliases(),
         "demo": demo,
     }

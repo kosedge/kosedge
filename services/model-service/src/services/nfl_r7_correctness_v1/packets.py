@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Mapping
 
 from src.services.nfl_r7_correctness_v1.calendar import bind_rest_from_et_calendar
 from src.services.nfl_r7_correctness_v1.franchise import franchise_bind
@@ -18,6 +18,51 @@ from src.services.nfl_t5208u.validate import cell_content_hash, packet_content_h
 
 class R7PacketRefuse(ValueError):
     """Typed R7 packet refuse."""
+
+
+TYPED_SYNTHETIC_KEYS = (
+    "packet",
+    "history",
+    "physical_schedule",
+    "franchise_bind",
+    "rest_calendar",
+    "c_formula_controls",
+)
+
+DEFAULT_TNF_ENVELOPE = {
+    "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+    "season": 2018,
+    "week": 6,
+    "season_type": "REG",
+    "home_team": "LAC",
+    "away_team": "LAR",
+    "kickoff_utc": "2018-10-12T00:20:00Z",
+    "venue_id": "SYNTHETIC_VENUE_TNF",
+    "identity_kind": "SYNTHETIC_REG",
+}
+
+DEFAULT_INDEX_VALUES = {
+    "offense_index_home": 1.08,
+    "offense_index_away": 1.03,
+    "defense_index_home": 1.01,
+    "defense_index_away": 1.04,
+    "home_off_epa_5g": 0.07,
+    "away_off_epa_5g": 0.03,
+    "home_def_epa_allowed_5g": -0.01,
+    "away_def_epa_allowed_5g": 0.02,
+    "home_success_offense_5g": 0.48,
+    "away_success_offense_5g": 0.46,
+    "home_success_defense_allowed_5g": 0.44,
+    "away_success_defense_allowed_5g": 0.45,
+    "home_pass_rate_5g": 0.59,
+    "away_pass_rate_5g": 0.57,
+    "matchup_diff_off_epa_5g": 0.04,
+    "matchup_diff_def_epa_allowed_5g": -0.03,
+    "matchup_diff_success_rate_5g": 0.02,
+    "matchup_diff_pressure_allowed_5g": -0.01,
+    "matchup_diff_pressure_generated_5g": 0.02,
+    "matchup_diff_red_zone_td_rate_5g": 0.03,
+}
 
 
 def _cell(value: Any, *, source: str, available_at: str, observed_at: str) -> dict[str, Any]:
@@ -82,6 +127,11 @@ def _phys(
         "home_team": home,
         "away_team": away,
         "kickoff_utc": kickoff_utc,
+        "actual_kickoff_utc": kickoff_utc,
+        "scheduled_kickoff_utc": kickoff_utc,
+        "status": "PLAYED",
+        "kickoff_kind": "ACTUAL_KICKOFF",
+        "source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
         "note": "SYNTHETIC_PHYSICAL_SCHEDULE_NON_OUTCOME",
     }
 
@@ -90,6 +140,7 @@ def synthetic_physical_schedule() -> list[dict[str, Any]]:
     """Non-outcome physical predecessors. May include same-week kickoffs.
 
     Not Q2 history. validate.py:299 same-week refuse must not see these rows.
+    Other-season rows are present as exclusion controls (same-season filter).
     """
     return [
         _phys("SYNTHETIC_2017_W02_SD_BUF", 2017, 2, "SD", "BUF", "2017-09-17T17:00:00Z"),
@@ -128,61 +179,49 @@ def synthetic_history() -> list[dict[str, Any]]:
     ]
 
 
-def build_synthetic_r7_demo(*, mode: str = CHANNEL_SYNTHETIC) -> dict[str, Any]:
-    """TNF-shaped fictional slate. Opt-in SYNTHETIC only."""
+def build_typed_synthetic_input(
+    *,
+    mode: str = CHANNEL_SYNTHETIC,
+    envelope: Mapping[str, Any] | None = None,
+    history: list[Mapping[str, Any]] | None = None,
+    physical_schedule: list[Mapping[str, Any]] | None = None,
+    extra_values: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Generic typed SYNTHETIC input. Default envelope is the TNF slate."""
     refuse_real_mode(mode)
     available_at = "2018-10-11T20:00:00Z"
     observed_at = "2018-10-11T21:00:00Z"
     source = "SYNTHETIC_TYPED_PACKET_t5289u_R7"
-    envelope = {
-        "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
-        "season": 2018,
-        "week": 6,
-        "season_type": "REG",
-        "home_team": "LAC",
-        "away_team": "LAR",
-        "kickoff_utc": "2018-10-12T00:20:00Z",
-        "venue_id": "SYNTHETIC_VENUE_TNF",
-        "identity_kind": "SYNTHETIC_REG",
-    }
-    history = synthetic_history()
-    physical_schedule = synthetic_physical_schedule()
-    franchises = franchise_bind(envelope["home_team"], envelope["away_team"])
+    env = dict(envelope or DEFAULT_TNF_ENVELOPE)
+    hist = list(history) if history is not None else synthetic_history()
+    schedule = list(physical_schedule) if physical_schedule is not None else synthetic_physical_schedule()
+    franchises = franchise_bind(
+        env["home_team"],
+        env["away_team"],
+        home_source=env.get("home_team_source"),
+        away_source=env.get("away_team_source"),
+    )
     rest = bind_rest_from_et_calendar(
-        home_team=envelope["home_team"],
-        away_team=envelope["away_team"],
-        kickoff_utc=str(envelope["kickoff_utc"]),
-        physical_schedule=physical_schedule,
+        home_team=str(env["home_team"]),
+        away_team=str(env["away_team"]),
+        kickoff_utc=str(env["kickoff_utc"]),
+        physical_schedule=schedule,
+        target_season=int(env["season"]),
+        home_source=env.get("home_team_source"),
+        away_source=env.get("away_team_source"),
     )
     values: dict[str, Any] = {
-        "game_id": envelope["game_id"],
-        "home_team": "LAC",
-        "away_team": "LAR",
-        "matchup_season": 2018,
-        "matchup_week": 6,
+        "game_id": env["game_id"],
+        "home_team": franchises["franchise_key_home"],
+        "away_team": franchises["franchise_key_away"],
+        "matchup_season": int(env["season"]),
+        "matchup_week": int(env["week"]),
         "rest_days_home": rest["rest_days_home"],
         "rest_days_away": rest["rest_days_away"],
-        "offense_index_home": 1.08,
-        "offense_index_away": 1.03,
-        "defense_index_home": 1.01,
-        "defense_index_away": 1.04,
-        "home_off_epa_5g": 0.07,
-        "away_off_epa_5g": 0.03,
-        "home_def_epa_allowed_5g": -0.01,
-        "away_def_epa_allowed_5g": 0.02,
-        "home_success_offense_5g": 0.48,
-        "away_success_offense_5g": 0.46,
-        "home_success_defense_allowed_5g": 0.44,
-        "away_success_defense_allowed_5g": 0.45,
-        "home_pass_rate_5g": 0.59,
-        "away_pass_rate_5g": 0.57,
-        "matchup_diff_off_epa_5g": 0.04,
-        "matchup_diff_def_epa_allowed_5g": -0.03,
-        "matchup_diff_success_rate_5g": 0.02,
-        "matchup_diff_pressure_allowed_5g": -0.01,
-        "matchup_diff_pressure_generated_5g": 0.02,
-        "matchup_diff_red_zone_td_rate_5g": 0.03,
+        **DEFAULT_INDEX_VALUES,
     }
+    if extra_values:
+        values.update(dict(extra_values))
     values = {name: values[name] for name in CONTRACT_27}
     contract_27 = {
         name: _cell(
@@ -198,7 +237,7 @@ def build_synthetic_r7_demo(*, mode: str = CHANNEL_SYNTHETIC) -> dict[str, Any]:
         "packet_class": CHANNEL_SYNTHETIC,
         "mode_gate": "SYNTHETIC_ONLY",
         "real_mode_usable": False,
-        "envelope": envelope,
+        "envelope": env,
         "contract_27": contract_27,
         "franchise_bind": franchises,
         "rest_calendar": rest,
@@ -207,14 +246,62 @@ def build_synthetic_r7_demo(*, mode: str = CHANNEL_SYNTHETIC) -> dict[str, Any]:
     return {
         "channel": CHANNEL_SYNTHETIC,
         "packet": packet,
-        "history": history,
-        "physical_schedule": physical_schedule,
+        "history": hist,
+        "physical_schedule": schedule,
         "franchise_bind": franchises,
         "rest_calendar": rest,
         "c_formula_controls": [
             {"label": "CONTROL_A_IF2_Q24", "if_margin": 2.0, "q2_margin": 4.0, "expected_c": 3.0},
             {"label": "CONTROL_B_IF_NEG1_Q2_1", "if_margin": -1.0, "q2_margin": 1.0, "expected_c": 0.0},
         ],
+    }
+
+
+def build_synthetic_r7_demo(*, mode: str = CHANNEL_SYNTHETIC) -> dict[str, Any]:
+    """TNF-shaped fictional slate. Opt-in SYNTHETIC only. Thin default wrapper."""
+    return build_typed_synthetic_input(mode=mode)
+
+
+def require_typed_synthetic_input(
+    synthetic_input: Mapping[str, Any] | None,
+    *,
+    mode: str = CHANNEL_SYNTHETIC,
+) -> dict[str, Any]:
+    """Accept a generic typed SYNTHETIC input or build the default TNF slate."""
+    refuse_real_mode(mode)
+    if synthetic_input is None:
+        return build_typed_synthetic_input(mode=mode)
+    missing = [name for name in TYPED_SYNTHETIC_KEYS if name not in synthetic_input]
+    if missing:
+        raise R7PacketRefuse(f"typed synthetic_input missing {missing}")
+    packet = synthetic_input["packet"]
+    if not isinstance(packet, Mapping):
+        raise R7PacketRefuse("typed synthetic_input.packet missing")
+    refuse_if_real(mode, dict(packet))
+    if packet.get("channel") != CHANNEL_SYNTHETIC:
+        raise R7PacketRefuse("typed synthetic_input channel must be SYNTHETIC")
+    if packet.get("real_mode_usable") is True:
+        raise RealModeRefuse("R7 real_mode_usable refused")
+    history = synthetic_input["history"]
+    physical = synthetic_input["physical_schedule"]
+    if not isinstance(history, list) or not history:
+        raise R7PacketRefuse("typed synthetic_input.history missing")
+    if not isinstance(physical, list) or not physical:
+        raise R7PacketRefuse("typed synthetic_input.physical_schedule missing")
+    rest = synthetic_input["rest_calendar"]
+    if not isinstance(rest, Mapping):
+        raise R7PacketRefuse("typed synthetic_input.rest_calendar missing")
+    controls = synthetic_input["c_formula_controls"]
+    if not isinstance(controls, list) or not controls:
+        raise R7PacketRefuse("typed synthetic_input.c_formula_controls missing")
+    return {
+        "channel": CHANNEL_SYNTHETIC,
+        "packet": dict(packet),
+        "history": list(history),
+        "physical_schedule": list(physical),
+        "franchise_bind": dict(synthetic_input["franchise_bind"]),
+        "rest_calendar": dict(rest),
+        "c_formula_controls": list(controls),
     }
 
 

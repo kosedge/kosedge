@@ -25,17 +25,58 @@ from src.services.nfl_ops_v1_evidence.validate_r7 import dest_is_actually_temp, 
 from src.services.nfl_r7_correctness_v1.calendar import CalendarRefuse, bind_rest_from_et_calendar
 from src.services.nfl_r7_correctness_v1.consume_b import HANDOFF_SHA256, consume_b_handoff
 from src.services.nfl_r7_correctness_v1.franchise import (
+    FranchiseRefuse,
+    canonical_carry_prior,
+    canonical_q2_carry,
     franchise_bind,
     franchise_key,
     key_packet_and_history_for_q2,
 )
-from src.services.nfl_r7_correctness_v1.packets import build_synthetic_r7_demo
+from src.services.nfl_r7_correctness_v1.packets import (
+    R7PacketRefuse,
+    build_synthetic_r7_demo,
+    build_typed_synthetic_input,
+    require_typed_synthetic_input,
+)
 from src.services.nfl_r7_correctness_v1.pins import CALENDAR_ID, FW_SHA256, IF_TIP, OPS_REL, SIM_SHA256
+from src.services.nfl_r7_correctness_v1.produce import (
+    R7ProduceRefuse,
+    consume_effective_config,
+    produce_r7_point_margin,
+)
 from src.services.nfl_t5208u.caller import model_spy_counts, produce_q2_margin, reset_model_spy
 from src.services.nfl_t5208u.if_tree import preflight_if_tree
 from src.services.nfl_t5208u.packets import PacketRefuse, RealModeRefuse, history_games_for_q2
 
 REPO = Path(__file__).resolve().parents[3]
+
+
+def _phys(
+    home: str,
+    away: str,
+    kickoff_utc: str,
+    *,
+    season: int = 2018,
+    week: int = 5,
+    game_id: str | None = None,
+    **extra: object,
+) -> dict:
+    row = {
+        "game_id": game_id or f"SYNTHETIC_{home}_{away}_{kickoff_utc}",
+        "season": season,
+        "week": week,
+        "season_type": "REG",
+        "home_team": home,
+        "away_team": away,
+        "kickoff_utc": kickoff_utc,
+        "actual_kickoff_utc": kickoff_utc,
+        "scheduled_kickoff_utc": kickoff_utc,
+        "status": "PLAYED",
+        "kickoff_kind": "ACTUAL_KICKOFF",
+        "source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
+    }
+    row.update(extra)
+    return row
 
 
 def setup_function() -> None:
@@ -51,29 +92,14 @@ def test_preflight_if_pins_match() -> None:
 
 
 def test_et_calendar_tnf_differs_from_utc_date_delta() -> None:
-    history = [
-        {
-            "home_team": "SD",
-            "away_team": "KC",
-            "kickoff_utc": "2018-10-07T17:00:00Z",
-        },
-        {
-            "home_team": "STL",
-            "away_team": "NE",
-            "kickoff_utc": "2018-10-07T20:25:00Z",
-        },
-    ]
     rest = bind_rest_from_et_calendar(
         home_team="LAC",
         away_team="LAR",
         kickoff_utc="2018-10-12T00:20:00Z",
+        target_season=2018,
         physical_schedule=[
-            {
-                "home_team": row["home_team"],
-                "away_team": row["away_team"],
-                "kickoff_utc": row["kickoff_utc"],
-            }
-            for row in history
+            _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+            _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
         ],
     )
     assert rest["calendar_id"] == CALENDAR_ID
@@ -93,7 +119,8 @@ def test_franchise_relocation_aliases() -> None:
     assert franchise_key("OAK") == "LV"
     assert franchise_key("WSH") == "WAS"
     assert franchise_key("WAS") == "WAS"
-    assert franchise_key("LA") == "LAR"
+    assert franchise_key("LA", source="RAMS") == "LAR"
+    assert franchise_key("LA", source="CHARGERS") == "LAC"
     bind = franchise_bind("LAC", "LAR")
     assert bind["franchise_key_home"] == "LAC"
     assert bind["franchise_key_away"] == "LAR"
@@ -199,9 +226,10 @@ def test_keyed_q2_differs_from_raw_on_synthetic_slate() -> None:
     demo = build_synthetic_r7_demo()
     raw = produce_q2_margin(demo["packet"], demo["history"])
     keyed_packet, keyed_history = key_packet_and_history_for_q2(demo["packet"], demo["history"])
-    keyed = produce_q2_margin(keyed_packet, keyed_history)
+    with canonical_q2_carry():
+        keyed = produce_q2_margin(keyed_packet, keyed_history)
     assert raw["q2_margin"] == pytest.approx(2.4320498873107033)
-    assert keyed["q2_margin"] == pytest.approx(1.93921, abs=1e-5)
+    assert keyed["q2_margin"] == pytest.approx(1.93920745003233)
     assert raw["q2_margin"] != keyed["q2_margin"]
     assert keyed_history[0]["home_team"] == "LAC"
     assert keyed_history[1]["home_team"] == "LAR"
@@ -209,13 +237,14 @@ def test_keyed_q2_differs_from_raw_on_synthetic_slate() -> None:
 
 def test_physical_same_week_sets_rest_q2_history_stays_prior() -> None:
     physical = [
-        {"home_team": "LAC", "away_team": "KC", "kickoff_utc": "2018-10-12T00:20:00Z"},
-        {"home_team": "LAR", "away_team": "NE", "kickoff_utc": "2018-10-12T00:20:00Z"},
+        _phys("LAC", "KC", "2018-10-12T00:20:00Z", week=6, game_id="SYNTHETIC_2018_W06_TNF_LAC_KC"),
+        _phys("LAR", "NE", "2018-10-12T00:20:00Z", week=6, game_id="SYNTHETIC_2018_W06_TNF_LAR_NE"),
     ]
     rest = bind_rest_from_et_calendar(
         home_team="LAC",
         away_team="LAR",
         kickoff_utc="2018-10-14T17:00:00Z",
+        target_season=2018,
         physical_schedule=physical,
     )
     assert rest["rest_days_home"] == 3.0
@@ -258,6 +287,7 @@ def test_q2_history_cannot_set_physical_rest() -> None:
             home_team="LAC",
             away_team="LAR",
             kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
             physical_schedule=demo["physical_schedule"],
             history=demo["history"],
         )
@@ -266,30 +296,22 @@ def test_q2_history_cannot_set_physical_rest() -> None:
             home_team="LAC",
             away_team="LAR",
             kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
             physical_schedule=demo["history"],
         )
 
 
 def test_calendar_predecessor_bound_to_cutoff_not_ko() -> None:
-    between_cutoff_and_ko = {
-        "home_team": "LAC",
-        "away_team": "BUF",
-        "kickoff_utc": "2018-10-11T23:30:00Z",
-    }
-    prior = {
-        "home_team": "LAC",
-        "away_team": "KC",
-        "kickoff_utc": "2018-10-07T17:00:00Z",
-    }
-    away_prior = {
-        "home_team": "LAR",
-        "away_team": "NE",
-        "kickoff_utc": "2018-10-07T20:25:00Z",
-    }
+    between_cutoff_and_ko = _phys(
+        "LAC", "BUF", "2018-10-11T23:30:00Z", week=6, game_id="SYNTHETIC_BETWEEN_CUTOFF_KO"
+    )
+    prior = _phys("LAC", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_LAC_KC")
+    away_prior = _phys("LAR", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_LAR_NE")
     rest = bind_rest_from_et_calendar(
         home_team="LAC",
         away_team="LAR",
         kickoff_utc="2018-10-12T00:20:00Z",
+        target_season=2018,
         physical_schedule=[prior, away_prior, between_cutoff_and_ko],
     )
     assert rest["home_prev_kickoff_utc"] == "2018-10-07T17:00:00Z"
@@ -488,3 +510,147 @@ def test_b2_exit_mismatch_refused_at_direct_api(tmp_path: Path) -> None:
         )
     assert exc.value.refuse_class == RefuseClass.EXIT
     assert spy.reads == 0
+
+
+def test_unknown_franchise_token_refused() -> None:
+    with pytest.raises(FranchiseRefuse, match="unknown franchise token"):
+        franchise_key("XYZ")
+
+
+def test_source_unqualified_la_refused() -> None:
+    with pytest.raises(FranchiseRefuse, match="source-unqualified LA"):
+        franchise_key("LA")
+    with pytest.raises(FranchiseRefuse, match="source-unqualified LA"):
+        franchise_key("LA", source="NFL")
+
+
+def test_canonical_carry_prior_one_slot_refuses_legacy_duplicate() -> None:
+    out = canonical_carry_prior({"LAC": 2.0, "LAR": 4.0})
+    assert set(out) == {"LAC", "LAR"}
+    assert "SD" not in out and "STL" not in out
+    with pytest.raises(FranchiseRefuse, match="duplicate legacy-slot"):
+        canonical_carry_prior({"SD": 1.0, "LAC": 1.0})
+
+
+def test_calendar_same_season_excludes_prior_season_rows() -> None:
+    rest = bind_rest_from_et_calendar(
+        home_team="LAC",
+        away_team="LAR",
+        kickoff_utc="2018-10-12T00:20:00Z",
+        target_season=2018,
+        physical_schedule=[
+            _phys("SD", "BUF", "2017-10-29T17:00:00Z", season=2017, week=8, game_id="SYNTHETIC_2017_W08_NE_SD"),
+            _phys("STL", "MIA", "2017-11-26T18:00:00Z", season=2017, week=12, game_id="SYNTHETIC_2017_W12_MIA_STL"),
+            _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+            _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
+        ],
+    )
+    assert rest["rest_days_home"] == 4.0
+    assert rest["rest_days_away"] == 4.0
+    assert rest["home_prev_game_id"] == "SYNTHETIC_2018_W05_SD_KC"
+    assert rest["home_prev_status"] == "PLAYED"
+    assert rest["home_prev_kickoff_kind"] == "ACTUAL_KICKOFF"
+    assert rest["actual_versus_scheduled_proof"] is True
+
+
+def test_calendar_refuses_unsupported_and_ambiguous_predecessors() -> None:
+    priors = [
+        _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+        _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
+    ]
+    with pytest.raises(CalendarRefuse, match="REG required"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=priors + [
+                _phys("LAC", "BUF", "2018-10-08T17:00:00Z", week=5, season_type="POST", game_id="SYNTHETIC_POST")
+            ],
+        )
+    with pytest.raises(CalendarRefuse, match="not PLAYED"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=priors + [
+                _phys("LAC", "BUF", "2018-10-08T17:00:00Z", week=5, status="SCHEDULED", game_id="SYNTHETIC_SCHED")
+            ],
+        )
+    with pytest.raises(CalendarRefuse, match="missing"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=priors + [
+                _phys("LAC", "BUF", "2018-10-08T17:00:00Z", week=5, source="", game_id="SYNTHETIC_NOSRC")
+            ],
+        )
+    with pytest.raises(CalendarRefuse, match="duplicate-identity"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=priors + [
+                _phys("LAC", "BUF", "2018-10-08T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC")
+            ],
+        )
+    with pytest.raises(CalendarRefuse, match="ambiguous predecessor"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=priors + [
+                _phys("LAC", "BUF", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_DUP_TIME")
+            ],
+        )
+
+
+def test_consumed_effective_config_bound_and_ambient_env_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+    cfg = consume_effective_config()
+    assert cfg["meta"]["consumed"] is True
+    assert cfg["meta"]["ambient_env_reread"] is False
+    assert cfg["simulator"]["simulations"] == 4000
+    assert cfg["simulator"]["market_blend"] == 0
+    assert cfg["helper"]["c_formula"] == "C=0.5*IF+0.5*Q2"
+    assert cfg["helper"]["candidate_weight"] == 0.5
+    monkeypatch.setenv("SIMULATIONS", "1")
+    with pytest.raises(R7ProduceRefuse, match="ambient numerical env"):
+        consume_effective_config()
+    monkeypatch.delenv("SIMULATIONS")
+    monkeypatch.setenv("T5108U_IF_TREE", "/tmp/bypass")
+    with pytest.raises(R7ProduceRefuse, match="ambient numerical env"):
+        consume_effective_config()
+
+
+def test_generic_typed_synthetic_input_caller_allows_et_eq_utc() -> None:
+    sunday = build_typed_synthetic_input(
+        envelope={
+            "game_id": "SYNTHETIC_2018_W06_SUN_LAC_LAR",
+            "season": 2018,
+            "week": 6,
+            "season_type": "REG",
+            "home_team": "LAC",
+            "away_team": "LAR",
+            "kickoff_utc": "2018-10-14T17:00:00Z",
+            "venue_id": "SYNTHETIC_VENUE_SUN",
+            "identity_kind": "SYNTHETIC_REG",
+        },
+        physical_schedule=[
+            _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+            _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
+        ],
+    )
+    rest = sunday["rest_calendar"]
+    assert rest["rest_days_home"] == rest["utc_date_delta_home"]
+    produced = produce_r7_point_margin(synthetic_input=sunday)
+    assert produced["game_id"] == "SYNTHETIC_2018_W06_SUN_LAC_LAR"
+    assert produced["effective_config"]["meta"]["consumed"] is True
+    assert produced["q2_canonical_state_slots"] is True
+    assert produced["c_formula"] == "C=0.5*IF+0.5*Q2"
+    with pytest.raises(R7PacketRefuse, match="missing"):
+        require_typed_synthetic_input({"packet": sunday["packet"]})
