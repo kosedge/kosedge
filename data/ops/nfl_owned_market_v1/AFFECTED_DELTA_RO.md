@@ -1,29 +1,28 @@
-# Affected-delta map — CONTINUE 69537 Worker B (#715)
+# Affected-delta map — EVIDENCE 70648 Worker B (#715)
 
-CERT=0. Preserve DELTA 58426 ACCEPTed surfaces (Cos 3b9549a5).
-No Python / fixture change. Clock not marked verified. Owned completion not claimed.
+CERT=0. A tip d3f2c56a PRESERVE — no A work. No full Alex/PE re-review.
 
-## Changed vs tip a8184e52
+## Changed vs start tip 2497a156
 
 | path | delta |
 |---|---|
-| `START_PREFLIGHT_CONTINUE69537_B.md` | GATE0 PASS 245.325 GiB `/dev/vdc` |
-| `CLOCK_SOURCE_HOLD_CONTINUE69537.md` | **HOLD** — exact freeze#limitations locator |
-| `OWNED_187_400_CLOCK_UNAVAILABLE.md` | CONTINUE 69537 HOLD note |
-| `RECEIPT.md` / `receipt.json` | continue 69537 · clock_source=HOLD |
+| `clock_lineage.py` | **NEW** — verify staged sha256; expand 44; classify evidenced vs unresolved |
+| `constants.py` | 70648 pins (staged sha / 44 / 143) |
+| `tests/test_nfl_owned_market_v1.py` | +2 focused tests (15 total) |
+| `CLOCK_LINEAGE_LEDGER_70648.json` | source-bound 44 subset + remaining-field reasons |
+| `START_PREFLIGHT_EVIDENCE70648_B.md` | GATE0 PASS |
 
-Unchanged: `arithmetic.py` risk1 fixture `ca253545…` · 187 identities · 400 IDs · readiness clock `UNVERIFIED_ON_ORIGINAL`.
+Unchanged: risk1 `ca253545…` · readiness 187/400 · freeze#limitations not marked verified.
 
 ## Integrated command
 
 ```
-df -h /agent/repos/kosedge
-# /dev/vdc Avail 246G / 245.325142 GiB · PASS
+cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_owned_market_v1.py -q --tb=short
+# 15 passed
 ```
 
-No pytest delta (no code change). Prior 13 tests remain the package bar.
+## Remaining blockers
 
-## Remaining blocker
-
-`7834cbc7:data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json#limitations`
-`publication_timestamp_status=unverified` · `observation_timestamp_status=unverified`
+1. `7834cbc7:…/MARKET_ARM_FREEZE.json#limitations` publication/observation still unverified
+2. Odds API `event_id` ↔ freeze `game_id` mapping absent (overlap 0)
+3. 143 JSONL clocks preserved unknown

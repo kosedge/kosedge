@@ -6,6 +6,10 @@ from pathlib import Path
 
 import pytest
 
+from src.services.nfl_owned_market_v1.clock_lineage import (
+    build_clock_lineage_ledger,
+    verify_staged_metadata,
+)
 from src.services.nfl_owned_market_v1.arithmetic import (
     RISK1_U,
     american_profit,
@@ -16,6 +20,10 @@ from src.services.nfl_owned_market_v1.arithmetic import (
 )
 from src.services.nfl_owned_market_v1.constants import (
     CERT,
+    PIN_CSV_CLOCK_METADATA_PATH,
+    PIN_CSV_CLOCK_METADATA_SHA256,
+    PIN_CSV_SELECTED_N,
+    PIN_JSONL_UNKNOWN_N,
     PROFILE_OWNED_MARKET_TRACE,
     PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
     ROLE_FICTIONAL_ECONOMIC,
@@ -178,6 +186,41 @@ def test_identity_projection_no_values_no_2223() -> None:
         seasons.add(row["season"])
         assert not (set(row) & forbidden)
     assert seasons <= {2020, 2021}
+
+
+def _repo_root() -> Path:
+    here = Path(__file__).resolve()
+    for path in (here, *here.parents):
+        if (path / ".git").exists():
+            return path
+    raise AssertionError("git root not found")
+
+
+def test_csv_clock_metadata_sha256_match() -> None:
+    raw = verify_staged_metadata(_repo_root() / PIN_CSV_CLOCK_METADATA_PATH)
+    assert len(raw) == 19889
+
+
+def test_clock_lineage_44_and_143_hold() -> None:
+    ledger = build_clock_lineage_ledger(_repo_root())
+    assert ledger["staged_sha256"] == PIN_CSV_CLOCK_METADATA_SHA256
+    assert ledger["n_selected_csv_associations"] == PIN_CSV_SELECTED_N
+    assert len(ledger["subset"]) == PIN_CSV_SELECTED_N
+    assert ledger["n_jsonl_unknown_preserved"] == PIN_JSONL_UNKNOWN_N
+    assert ledger["owned_completion_claimed"] is False
+    assert ledger["freeze_limitations_marked_verified"] is False
+    assert (
+        ledger["provider_historical_timestamp_is_contemporaneous_model_availability"]
+        is False
+    )
+    forbidden = {"line", "price", "spread_home", "home_margin"}
+    for row in ledger["subset"]:
+        assert not (set(row) & forbidden)
+        assert row["pulled_at"].startswith("2026-08-18")
+        assert row["request_date"] < "2023-01-01"
+    locators = {row["field"] for row in ledger["unresolved"]}
+    assert "publication_timestamp_status" in locators
+    assert "observation_timestamp_status" in locators
 
 
 def test_schema_hashes_stable() -> None:

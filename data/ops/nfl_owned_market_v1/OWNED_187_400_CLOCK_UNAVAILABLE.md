@@ -39,6 +39,9 @@ No 2022/23 values used. Raw ADMISSIBLE file was **not** copied onto this tip (av
 
 ## CONTINUE 69537 (t5320u)
 
-Clock/source-value lineage still **HOLD**. No EXISTING AND VERIFIED permitted clock source on this Cursor host.
-Do not treat freeze `#limitations` unverified timestamps as verified.
-See `CLOCK_SOURCE_HOLD_CONTINUE69537.md`.
+Clock/source-value lineage still **HOLD** on freeze `#limitations`. See `CLOCK_SOURCE_HOLD_CONTINUE69537.md`.
+
+## EVIDENCE 70648 (t5324u)
+
+Staged three-envelope metadata MATCH `496be81d…`. 44 CSV associations evidenced at request/snapshot/book-update/download fields only.
+Does **not** close freeze `#limitations`. 143 JSONL unknowns preserved. See `CLOCK_LINEAGE_LEDGER_70648.md`.
