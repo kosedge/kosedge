@@ -45,3 +45,8 @@ Clock/source-value lineage still **HOLD** on freeze `#limitations`. See `CLOCK_S
 
 Staged three-envelope metadata MATCH `496be81d…`. 44 CSV associations evidenced at request/snapshot/book-update/download fields only.
 Does **not** close freeze `#limitations`. 143 JSONL unknowns preserved. See `CLOCK_LINEAGE_LEDGER_70648.md`.
+
+## IDENTITY 81759 (t5329u)
+
+Provider identities MATCH `f03041ad…`. **23/23** events and **44/44** associations proven to freeze `game_id` via exact full-name + kickoff + REG season (namespaces differ; overlap 0 expected).
+freeze `#limitations` still unverified. 143 JSONL unknown preserved. See `CLOCK_LINEAGE_LEDGER_81759.md`.

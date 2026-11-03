@@ -10,6 +10,12 @@ from src.services.nfl_owned_market_v1.clock_lineage import (
     build_clock_lineage_ledger,
     verify_staged_metadata,
 )
+from src.services.nfl_owned_market_v1.identity_join import (
+    _require_full_name,
+    build_identity_ledger,
+    join_provider_events,
+    verify_provider_identities,
+)
 from src.services.nfl_owned_market_v1.arithmetic import (
     RISK1_U,
     american_profit,
@@ -22,6 +28,9 @@ from src.services.nfl_owned_market_v1.constants import (
     CERT,
     PIN_CSV_CLOCK_METADATA_PATH,
     PIN_CSV_CLOCK_METADATA_SHA256,
+    PIN_CSV_PROVIDER_EVENT_N,
+    PIN_CSV_PROVIDER_IDENTITIES_PATH,
+    PIN_CSV_PROVIDER_IDENTITIES_SHA256,
     PIN_CSV_SELECTED_N,
     PIN_JSONL_UNKNOWN_N,
     PROFILE_OWNED_MARKET_TRACE,
@@ -221,6 +230,46 @@ def test_clock_lineage_44_and_143_hold() -> None:
     locators = {row["field"] for row in ledger["unresolved"]}
     assert "publication_timestamp_status" in locators
     assert "observation_timestamp_status" in locators
+
+
+def test_provider_identities_sha256_and_unique_join() -> None:
+    root = _repo_root()
+    verify_provider_identities(root / PIN_CSV_PROVIDER_IDENTITIES_PATH)
+    joined = join_provider_events(root)
+    assert joined["n_provider_events"] == PIN_CSV_PROVIDER_EVENT_N
+    assert joined["n_proven"] == PIN_CSV_PROVIDER_EVENT_N
+    assert joined["n_hold"] == 0
+    assert joined["uniqueness"]["bijection"] is True
+    assert joined["uniqueness"]["time_tolerance_seconds"] == 0
+    assert joined["uniqueness"]["ambiguous_abbreviation_fallback"] is False
+    gids = [row["game_id"] for row in joined["proven"]]
+    eids = [row["provider_event_id"] for row in joined["proven"]]
+    assert len(set(gids)) == len(gids) == PIN_CSV_PROVIDER_EVENT_N
+    assert len(set(eids)) == len(eids) == PIN_CSV_PROVIDER_EVENT_N
+    assert not (set(gids) & set(eids))
+
+
+def test_identity_ledger_44_and_holds_honesty() -> None:
+    ledger = build_identity_ledger(_repo_root())
+    assert ledger["provider_identities_sha256"] == PIN_CSV_PROVIDER_IDENTITIES_SHA256
+    assert ledger["n_44_mapped"] == PIN_CSV_SELECTED_N
+    assert ledger["n_44_hold"] == 0
+    assert ledger["n_jsonl_unknown_preserved"] == PIN_JSONL_UNKNOWN_N
+    assert ledger["owned_completion_claimed"] is False
+    assert ledger["freeze_limitations_marked_verified"] is False
+    for row in ledger["subset"]:
+        assert row["identity_status"] == "PROVEN"
+        assert row["game_id"]
+        assert row["kickoff_utc"] == row["commence_time"]
+
+
+def test_refuse_ambiguous_short_team_name() -> None:
+    with pytest.raises(OwnedMarketRefuse, match="ambiguous"):
+        _require_full_name("Los Angeles", field="provider_home_team")
+    with pytest.raises(OwnedMarketRefuse, match="ambiguous"):
+        _require_full_name("LA", field="provider_home_team")
+    assert _require_full_name("Los Angeles Rams", field="home") == "LA"
+    assert _require_full_name("Los Angeles Chargers", field="home") == "LAC"
 
 
 def test_schema_hashes_stable() -> None:

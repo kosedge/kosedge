@@ -1,28 +1,26 @@
-# Affected-delta map — EVIDENCE 70648 Worker B (#715)
+# Affected-delta map — IDENTITY 81759 Worker B (#715)
 
-CERT=0. A tip d3f2c56a PRESERVE — no A work. No full Alex/PE re-review.
+CERT=0. A tip d3f2c56a PRESERVE. Delta review only after eng ACCEPT. No full re-review.
+Preserve EVIDENCE 70648 tip 98ec5d86 / Cos ACCEPT 451ea843.
 
-## Changed vs start tip 2497a156
+## Changed vs 8c0a04fb (after Codex stage)
 
 | path | delta |
 |---|---|
-| `clock_lineage.py` | **NEW** — verify staged sha256; expand 44; classify evidenced vs unresolved |
-| `constants.py` | 70648 pins (staged sha / 44 / 143) |
-| `tests/test_nfl_owned_market_v1.py` | +2 focused tests (15 total) |
-| `CLOCK_LINEAGE_LEDGER_70648.json` | source-bound 44 subset + remaining-field reasons |
-| `START_PREFLIGHT_EVIDENCE70648_B.md` | GATE0 PASS |
+| `identity_join.py` | **NEW** — exact home/away+kickoff+season/REG join; uniqueness; no slop |
+| `constants.py` | 81759 pins |
+| `tests/test_nfl_owned_market_v1.py` | +3 focused (18 total) |
+| `CLOCK_LINEAGE_LEDGER_81759.json` | 44 associations annotated with proven game_ids |
 
-Unchanged: risk1 `ca253545…` · readiness 187/400 · freeze#limitations not marked verified.
+Unchanged: risk1 `ca253545…` · 187/400 identities · freeze#limitations unverified.
 
 ## Integrated command
 
 ```
 cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_owned_market_v1.py -q --tb=short
-# 15 passed
+# 18 passed
 ```
 
 ## Remaining blockers
 
-1. `7834cbc7:…/MARKET_ARM_FREEZE.json#limitations` publication/observation still unverified
-2. Odds API `event_id` ↔ freeze `game_id` mapping absent (overlap 0)
-3. 143 JSONL clocks preserved unknown
+freeze `#limitations` unverified · 143 JSONL unknown · `pulled_at` not causal. Identity success ≠ lineage/GO.
