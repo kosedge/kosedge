@@ -1,0 +1,20 @@
+{
+  "cert": 0,
+  "synthetic": true,
+  "self_accept": false,
+  "commands": [
+    {
+      "cmd": "PYTHONPATH=. python3 -m pytest -q tests/test_nfl_ops_v1_worker_release.py",
+      "cwd": "services/model-service",
+      "exit": 0,
+      "evidence_label": "EXECUTED_HERE",
+      "note": "18 passed"
+    },
+    {
+      "cmd": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_worker_release_selfcheck.py",
+      "cwd": ".",
+      "exit": 0,
+      "evidence_label": "EXECUTED_HERE"
+    }
+  ]
+}
