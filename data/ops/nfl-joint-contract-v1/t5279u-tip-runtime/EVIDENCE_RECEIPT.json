@@ -1,0 +1,98 @@
+{
+  "accepted": false,
+  "authority": "t5279u",
+  "cert": 0,
+  "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_joint_contract_v1_integrated.py",
+  "command_emitted_receipt_sha256": "534c4f1250d8b0ff0084da0a70daa238b06c04210665193ff6b0efe163d2f687",
+  "command_emitted_stale_fields": {
+    "note": "Retained on COMMAND_EMITTED_RECEIPT; this evidence receipt is the new-run labeled receipt.",
+    "parent_tip": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+    "residuals_emitted": [
+      "PE R1",
+      "PE R2",
+      "PE R3",
+      "PE R4",
+      "PE R5",
+      "Alex D-a",
+      "C1"
+    ]
+  },
+  "common_digest": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc",
+  "cwd": "/agent/repos/kosedge",
+  "data_label": "SYNTHETIC",
+  "end_utc": "2026-11-03T05:38:23Z",
+  "evidence_packaging_revision": "THIS_APPEND_ONLY_COMMIT_MAY_DIFFER",
+  "evidence_packaging_revision_note": "Packaging commit is not required to equal 6c546d92. No impossible self-referential demand.",
+  "executed_source_revision": "6c546d921eb39e67fcbe7650dcd61701d54ce229",
+  "exit": 0,
+  "freeze_parent": "6f4c5b65ad7c7d534045937590b06d79cbc16891",
+  "joint_adapter_sha256": "ce72ad72c4f00f6002a0283b5300f82115bfb4fddeb5e030554446eeb5101828",
+  "log_hash": "ff93cfa45044691f88b4ec1bdfc987ff9ee582808092729d940d5959c379edb6",
+  "not_integrated_through_evidence_gate": false,
+  "old_integrated_receipt_not_rewritten": {
+    "note": "Historical 78f5d052 run. Not this tip. Not rewritten as 6c546d92.",
+    "path": "data/ops/nfl-joint-contract-v1/INTEGRATED_RECEIPT.json",
+    "receipt_head": "78f5d0524e79dff89c8d6a773360a8457e5fb986"
+  },
+  "order": "4d36f417",
+  "output_hashes": {
+    "/tmp/nfl-joint-t5279u-runtime/joint_adapter.json": "ce72ad72c4f00f6002a0283b5300f82115bfb4fddeb5e030554446eeb5101828"
+  },
+  "output_paths": [
+    "/tmp/nfl-joint-t5279u-runtime/joint_adapter.json"
+  ],
+  "package": "PARTIAL",
+  "parent_tip": "78f5d0524e79dff89c8d6a773360a8457e5fb986",
+  "parent_tip_note": "Accurate git parent of executed tip 6c546d92. Command-emitted parent_tip f408c8b8 is retained on COMMAND_EMITTED_RECEIPT.json only (R10).",
+  "preserve": {
+    "alex": [
+      "7d52bab5",
+      "3078fdaa"
+    ],
+    "freeze": "6f4c5b65",
+    "numerical_tip": [
+      "f02e0f65",
+      "78f5d052"
+    ],
+    "pe": [
+      "23959d7a",
+      "ecdc37d0"
+    ]
+  },
+  "profile": "SYNTHETIC_JOINT_LITERAL_LAW",
+  "ready_for_review": false,
+  "receipt_head": "6c546d921eb39e67fcbe7650dcd61701d54ce229",
+  "residuals_remain_explicit": [
+    "PE R1",
+    "PE R2",
+    "PE R3",
+    "PE R4",
+    "PE R5",
+    "PE R6",
+    "PE R7",
+    "PE R8",
+    "PE R9",
+    "PE R10",
+    "PE R11",
+    "Alex D-a",
+    "C1",
+    "B PLATFORM_LIMITATION"
+  ],
+  "return": null,
+  "reviewed_source_revision": "6c546d921eb39e67fcbe7650dcd61701d54ce229",
+  "schema": "nfl-joint-contract-v1-t5279u-tip-runtime-evidence-v1",
+  "self_accept": false,
+  "start_utc": "2026-11-03T05:38:23Z",
+  "status": "GATED_OK_AWAITING_CHIEF",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a5309ca963dd696db26c8c9e386fddcc497fd3dafdc6986e8d8c691823acd62e",
+  "supersede_seal": "919cf943",
+  "superseded_close": "c9b6fd71",
+  "tip_accept_stands": "e94d3b8f",
+  "worker_handoff": {
+    "content_hash_bound": true,
+    "not_a_pass": true,
+    "release_kind": "PLATFORM_LIMITATION",
+    "state": "QUIESCENT"
+  }
+}
