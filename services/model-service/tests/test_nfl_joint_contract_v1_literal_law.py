@@ -220,12 +220,23 @@ def test_identity_mutation_refused() -> None:
 
 
 def test_weights_one_one_one_one_never_renormalize() -> None:
-    from src.services.nfl_joint_contract_v1.oracle import law_from_pairs
+    from src.services.nfl_joint_contract_v1.oracle import (
+        law_from_pairs,
+        normalize_weights,
+        parse_weights,
+    )
 
     with pytest.raises(JointContractRefuse) as exc:
         law_from_pairs(weights=[1, 1, 1, 1])
     assert _refuse_class(exc.value) == RefuseClass.PARTITION
     assert "renormal" in str(exc.value).lower() or "sum" in str(exc.value)
+    with pytest.raises(JointContractRefuse) as exc_alias:
+        normalize_weights([1, 1, 1, 1])
+    assert _refuse_class(exc_alias.value) == RefuseClass.PARTITION
+    preserved = parse_weights([0.25, 0.25, 0.25, 0.25])
+    assert preserved == (0.25, 0.25, 0.25, 0.25)
+    law = law_from_pairs(weights=[0.25, 0.25, 0.25, 0.25])
+    assert law["weights"] == [0.25, 0.25, 0.25, 0.25]
 
 
 def test_consume_refuses_home_win_999() -> None:
@@ -278,6 +289,29 @@ def test_consume_refuses_fake_code_hash() -> None:
         consume_literal_law(mutated, root=REPO, outcome_spy=spy)
     assert _refuse_class(exc.value) == RefuseClass.HASH_MUTATED
     assert spy.reads == 0
+    assert FORBIDDEN_CALL_ATTEMPTS == []
+
+
+def test_consume_refuses_type_nonfinite_real_mode() -> None:
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    typed = copy.deepcopy(adapted)
+    typed["outcomes"][0]["home"] = 24.5
+    with pytest.raises(JointContractRefuse) as exc_type:
+        consume_literal_law(typed, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc_type.value) == RefuseClass.TYPE
+    nonfinite = copy.deepcopy(adapted)
+    nonfinite["partitions"]["ml"]["home_win"] = float("nan")
+    with pytest.raises(JointContractRefuse) as exc_nan:
+        consume_literal_law(nonfinite, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc_nan.value) == RefuseClass.NONFINITE
+    real = copy.deepcopy(adapted)
+    real["data_label"] = "REAL"
+    with pytest.raises(JointContractRefuse) as exc_real:
+        consume_literal_law(real, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc_real.value) == RefuseClass.REAL_MODE
+    assert spy.reads == 0
+    assert FORBIDDEN_CALL_ATTEMPTS == []
 
 
 def test_consume_sample_positive() -> None:

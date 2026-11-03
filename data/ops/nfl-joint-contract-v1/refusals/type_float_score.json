@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "type_float_score",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "outcomes[0].home must be a nonnegative int",
+  "refuse_class": "TYPE",
+  "self_accept": false,
+  "settled_p": null
+}

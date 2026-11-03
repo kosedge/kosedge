@@ -5,6 +5,7 @@
   "detail": {},
   "ev": null,
   "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
   "ok": false,
   "ready_for_review": false,
   "reason": "weights sum 4.0 ; abs(sum-1) must be <= 1e-12 (no renormalization)",

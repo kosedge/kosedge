@@ -5,14 +5,14 @@
     "EXPECTED_COMMAND_JOINT": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_joint_contract_v1_integrated.py",
     "JOINT_CHAIN_DIGEST": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc",
     "PROFILE_JOINT": "SYNTHETIC_JOINT_LITERAL_LAW",
-    "weight_parser": "abs(sum-1)<=1e-12; no renormalization"
+    "weight_parser": "abs(sum-1)<=1e-12; no renormalization; leftover renormalize alias removed"
   },
-  "command_receipt_sha256": "b2c0ee1fedd17679b097d8a7edf3845c0635a1e80acbee935a3c26f1f6be3aac",
+  "command_receipt_sha256": "744620de154eac8b5098639ecf06d0f4bec98c66537f98f5bab0479cba0b3745",
   "file_sha256": {
     "scripts/nfl/run_nfl_joint_contract_v1_integrated.py": "c99d5887be3d3c4b3f2bfc5af0b71650771e1526a87fb34519cefaa978203bfb",
     "services/model-service/src/services/nfl_joint_contract_v1/consume.py": "65bc9be001a6782558798acab43de7da361d20ffb4713db7be5a1ac8d7e7177d",
     "services/model-service/src/services/nfl_joint_contract_v1/integrate.py": "4e1a57917e930dcb16afae403dfef2abb02b8a01e2a4e341737343c92e63d4f5",
-    "services/model-service/src/services/nfl_joint_contract_v1/oracle.py": "b3eb702802e594cf102faddf11d5ff958991387dfc2f91e09f2aa8b851cbfd29",
+    "services/model-service/src/services/nfl_joint_contract_v1/oracle.py": "406dfb3eeed04d7ad92a7aee9165cf72fc1d36bc339c1fdbb9fae8c562fb7e90",
     "services/model-service/src/services/nfl_ops_v1_evidence/constants.py": "0c2bd1d6b7f13191f84b8dfba3cfe89ef011b62542e4da4c40fb0944f1d104c1",
     "services/model-service/src/services/nfl_ops_v1_evidence/gate.py": "1bd9b90fe845d568ff4c962ee9624840b1efa07251b676ba9744cdb6be22c1c9",
     "services/model-service/src/services/nfl_ops_v1_evidence/validate.py": "6ec1d72043a5fb533eb6833ff7e1870b42334d7dea51694dacb248ed606261a7",
@@ -29,9 +29,21 @@
   "package": "PARTIAL",
   "pytest": {
     "exit": 0,
-    "passed": 78
+    "passed": 79
   },
   "ready_for_review": false,
+  "refusal_receipts": {
+    "actionable": "22165b31019881d3ad6e5eab1216897f14fc2313abf12ad99587488817778124",
+    "fake_code_hash": "678b0a28bda21d3abdeec6ce21822e44bf1c4c7d24ff3efb8f49898200203a5e",
+    "home_score_999": "43eb5f82a1eab65179e4e96e1f9991908071e2f5f4805e1560ae4ecf6fccbace",
+    "home_win_999": "dd68ae574fd1aaf60213e1f3ef8e91c61b46a243a8c523ad1f5b4b434b948065",
+    "nonfinite_home_win": "58395425556bf6761a8d2010a712b286c0a646f4ef48c7f74edf9f7002b76ba8",
+    "production": "20d728457c0d89e0239aa7746fb985f5ee3efe4144d96588a484dc7371e10af7",
+    "real_mode": "16c908d9973279eb93450aa0000e63509f4f7c022d31727ac641ebcf226dc259",
+    "type_float_score": "2a7658274acad6b89710da7d6dd9b72c2fe93b6d7e36740f1fd742f94967c81d",
+    "weights_sum4": "18a68b6ae0017828b6ff31a3c483e724ea44a2debd58e527a56734b993768908",
+    "weights_sum4_alias": "8810d1f04e2766d24ecba3045807ff714b2443f6fd56f2a9236462f817cb1e65"
+  },
   "self_accept": false,
   "silent_re_freeze": false,
   "superseded_close": "c5468e71"

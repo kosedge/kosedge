@@ -89,14 +89,6 @@ def _int_score(value: Any, name: str) -> int:
     return value
 
 
-def normalize_weights(weights: Sequence[Any]) -> tuple[float, ...]:
-    parsed = tuple(_finite_weight(w, f"weight[{i}]") for i, w in enumerate(weights))
-    total = sum(parsed)
-    if total <= 0:
-        raise JointContractRefuse("weights sum must be > 0", refuse_class=RefuseClass.PARTITION)
-    return tuple(w / total for w in parsed)
-
-
 def law_from_pairs(
     pairs: Sequence[Sequence[Any]] | None = None,
     weights: Sequence[Any] | None = None,

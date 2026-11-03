@@ -5,6 +5,7 @@
   "detail": {},
   "ev": null,
   "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
   "ok": false,
   "ready_for_review": false,
   "reason": "partitions.ml.home_win=999.0 is not a probability in [0,1]",
