@@ -23,8 +23,17 @@
     "path": "data/ops/t5194u-wfix-a-chain/positive-output.json"
   },
   "worker_handoff": {
-    "schema": "nfl-ops-v1-worker-handoff-slot-v1",
-    "status": "SLOT_RESERVED",
-    "note": "Primary B binds the release/claim record here. Do not wait on B."
+    "schema": "nfl-ops-v1-worker-release-claim-v1",
+    "status": "BOUND",
+    "pr": 712,
+    "tip": "82683cd93ec2c231733f34b5c0372cf1d42fa68a",
+    "cos_accept": "bc6a567d",
+    "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+    "path": "data/ops/nfl-ops-v1-worker-release-claim/THIS_WORKER_HANDOFF.json",
+    "via": "as_worker_handoff()",
+    "release_kind": "PLATFORM_LIMITATION",
+    "not_a_pass": true,
+    "mocked_release": false,
+    "note": "Bound B actual record. SLOT_RESERVED is an invented substitute. Mocked reclaim is not PASS."
   }
 }

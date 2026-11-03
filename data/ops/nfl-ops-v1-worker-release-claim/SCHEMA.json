@@ -1,0 +1,89 @@
+{
+  "schema": "nfl-ops-v1-worker-release-claim-v1",
+  "schema_version": 1,
+  "cert": 0,
+  "synthetic": true,
+  "self_accept": false,
+  "worker_handoff_field": "worker_handoff",
+  "states": [
+    "WRITING",
+    "HANDOFF_RECORDED",
+    "QUIESCENT",
+    "RELEASE_CONFIRMED",
+    "CLAIMED_BY_SUCCESSOR"
+  ],
+  "legal_transitions": {
+    "WRITING": ["HANDOFF_RECORDED"],
+    "HANDOFF_RECORDED": ["QUIESCENT"],
+    "QUIESCENT": ["RELEASE_CONFIRMED"],
+    "RELEASE_CONFIRMED": ["CLAIMED_BY_SUCCESSOR"],
+    "CLAIMED_BY_SUCCESSOR": []
+  },
+  "required_top_level": [
+    "schema",
+    "schema_version",
+    "cert",
+    "synthetic",
+    "self_accept",
+    "scope_id",
+    "protocol",
+    "protocol_hash",
+    "owner_clear",
+    "task",
+    "worker",
+    "branch",
+    "head",
+    "workspace_alias",
+    "dirty",
+    "untracked",
+    "saved_artifacts",
+    "log_hashes",
+    "tests",
+    "limits",
+    "active_writer",
+    "running_jobs",
+    "pending_prompts",
+    "successor",
+    "release_evidence",
+    "state",
+    "state_history",
+    "content_hash"
+  ],
+  "worker_handoff_keys": [
+    "field",
+    "schema",
+    "schema_version",
+    "content_hash",
+    "state",
+    "task_id",
+    "worker_id",
+    "branch",
+    "head",
+    "workspace_alias",
+    "release_kind",
+    "evidence_label",
+    "platform_capability",
+    "mocked_release",
+    "not_a_pass",
+    "record"
+  ],
+  "release_kinds": [
+    "NOT_RELEASED",
+    "PLATFORM_LIMITATION",
+    "SYNTHETIC_PLATFORM_RELEASE",
+    "PLATFORM_RELEASE_CONFIRMED"
+  ],
+  "evidence_labels": [
+    "EXECUTED_HERE",
+    "INDEPENDENT_EXECUTION",
+    "SOURCE_INSPECTION",
+    "REPORTED_ONLY",
+    "NOT_RUN"
+  ],
+  "notes": [
+    "Mocked release is not actual platform reclaim.",
+    "Missing Cursor/GitHub/Railway workspace-reclaim capability => PLATFORM_LIMITATION, never invented PASS.",
+    "Preserve drafts. No self-kill, deletion, or forced takeover.",
+    "Passing tests are not self-acceptance."
+  ]
+}

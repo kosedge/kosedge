@@ -36,13 +36,13 @@ Reuse (utilities only; inherited real-outcome tests **NOT_RUN**):
 - #707 tip `f2c72e8b` — accepted produce/guard/synth/hhl1 lineage
 - #706 tip `644c517d` (`12bc48c0` pin) — `consume_chain` + digest bind `27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124`
 
-`worker_handoff` is a typed slot (`nfl-ops-v1-worker-handoff-slot-v1`, `SLOT_RESERVED`). Primary B may bind a record; mocked reclaim is not PASS. A did not wait on B.
+`worker_handoff` is bound from Primary B DRAFT #712 tip `82683cd93ec2c231733f34b5c0372cf1d42fa68a` via `as_worker_handoff()` + `THIS_WORKER_HANDOFF.json` (content_hash `b8aa6100…`). `PLATFORM_LIMITATION` / `not_a_pass=true` / `mocked_release=false` / capability `ABSENT` preserved. SLOT_RESERVED is now an invented substitute. Mocked reclaim is not PASS.
 
 ## Exact test commands
 
 ```
 cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_ops_v1_evidence_manifest_gate.py -q --tb=line
-# exit 0 · 41 passed
+# INTEGRATION DELTA: exit 0 · 44 passed
 
 PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py /tmp/nfl-ops-v1-evidence
 # exit 0 · status GATED_OK_AWAITING_CHIEF · digest 27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124
@@ -59,7 +59,7 @@ Inherited #700/#701 real-outcome tests: **NOT_RUN**.
 | rehashed_faults | EXECUTED_HERE |
 | spy_positive_control | EXECUTED_HERE |
 | inherited_real_outcome_tests | NOT_RUN |
-| primary_b_worker_handoff | NOT_RUN |
+| primary_b_worker_handoff | SOURCE_INSPECTION (bound #712 82683cd9; not platform reclaim) |
 | chief_review | NOT_RUN |
 | ready_for_review | NOT_RUN |
 | lineage #706/#707 / utility #700/#701 | SOURCE_INSPECTION |
@@ -75,7 +75,7 @@ Numerical positive: `n=1` · `game_id=2026_99_TST_SYN` · `point_margin=3.0` · 
 - CERT=0. SYNTHETIC_ONLY. Not customer/production eligible.
 - Passing tests are necessary, not self-acceptance. Chief reviews.
 - READY_FOR_REVIEW cannot be self-stamped.
-- Primary B release/claim record is SLOT_RESERVED until bound.
+- Primary B worker_handoff bound from #712 tip 82683cd9; PLATFORM_LIMITATION / not_a_pass preserved; not RELEASE_CONFIRMED.
 - Fixture assembly + hhl1 plumbing were copied from accepted draft tips onto this branch so the gate sits on the real caller; those draft PRs stay unmerged.
 - No real-data fit/calibration/forecast/scoring/outcome join.
 - No merge / deploy / prod config / public output.
@@ -90,5 +90,5 @@ Numerical positive: `n=1` · `game_id=2026_99_TST_SYN` · `point_margin=3.0` · 
 | dirty/untracked at handoff | see git status after this commit (expect clean on this branch) |
 | running processes/jobs | none owned by this lane (pytest/cli finished) |
 | pending prompts | none |
-| successor | Chief + independent review; Primary B binds `worker_handoff.record` |
+| successor | Chief + independent review (B already bound; no successor launch) |
 | ownership | HANDOFF_RECORDED · not RELEASE_CONFIRMED (platform reclaim is Chief/B) |

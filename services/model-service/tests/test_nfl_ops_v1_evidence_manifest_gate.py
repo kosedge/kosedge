@@ -41,8 +41,11 @@ from src.services.nfl_ops_v1_evidence.run import (
 from src.services.nfl_ops_v1_evidence.spy import OutcomeReadSpy, run_spy_positive_control
 from src.services.nfl_ops_v1_evidence.validate import utc_now, validate_cutoff
 from src.services.nfl_ops_v1_evidence.worker_handoff import (
-    WORKER_HANDOFF_RECORD_KEYS,
+    B_CONTENT_HASH,
+    B_RELEASE_KIND,
+    B_WORKER_ID,
     empty_worker_handoff_slot,
+    load_actual_b_handoff,
     validate_worker_handoff,
 )
 
@@ -109,11 +112,17 @@ def test_positive_integrated_produce_consume_gate(integrated: dict[str, Any]) ->
     assert integrated["numerical_output"]["line"] == -3.0
     assert integrated["execution"]["produce_invoked_here"] is True
     assert integrated["execution"]["consume_invoked_here"] is True
-    assert integrated["worker_handoff"]["status"] == "SLOT_RESERVED"
-    assert integrated["worker_handoff"]["record"] is None
+    assert integrated["worker_handoff"]["content_hash"] == B_CONTENT_HASH
+    assert integrated["worker_handoff"]["release_kind"] == B_RELEASE_KIND
+    assert integrated["worker_handoff"]["not_a_pass"] is True
+    assert integrated["worker_handoff"]["mocked_release"] is False
+    assert integrated["worker_handoff"]["platform_capability"] == "ABSENT"
+    assert integrated["worker_handoff"]["state"] == "QUIESCENT"
+    assert integrated["worker_handoff"]["worker_id"] == B_WORKER_ID
     assert integrated["evidence_labels"]["produce_fixture_chain"] == "EXECUTED_HERE"
     assert integrated["evidence_labels"]["consume_fixture_chain"] == "EXECUTED_HERE"
     assert integrated["evidence_labels"]["inherited_real_outcome_tests"] == "NOT_RUN"
+    assert integrated["evidence_labels"]["primary_b_worker_handoff"] == "SOURCE_INSPECTION"
     assert integrated["positive_control"]["digest_match"] is True
     assert integrated["rehashed_faults"]["refused"] is True
     assert integrated["spy_positive_control"]["spy_fired"] is True
@@ -412,8 +421,17 @@ def test_immutable_input_unproven(produced: tuple[dict[str, Any], Path]) -> None
 # ---------------------------------------------------------------------------
 
 
-def test_worker_handoff_slot_reserved_ok() -> None:
-    validate_worker_handoff(empty_worker_handoff_slot())
+def test_worker_handoff_binds_actual_b() -> None:
+    handoff = load_actual_b_handoff(REPO)
+    assert handoff["content_hash"] == B_CONTENT_HASH
+    assert handoff["release_kind"] == B_RELEASE_KIND
+    assert handoff["not_a_pass"] is True
+
+
+def test_worker_handoff_slot_reserved_is_invented_substitute() -> None:
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        validate_worker_handoff(empty_worker_handoff_slot())
+    assert _refuse_class(exc.value) == RefuseClass.WORKER_HANDOFF
 
 
 def test_worker_handoff_invented_pass_refused() -> None:
@@ -425,22 +443,36 @@ def test_worker_handoff_invented_pass_refused() -> None:
 
 
 def test_worker_handoff_mocked_release_refused() -> None:
-    slot = empty_worker_handoff_slot()
-    slot["mocked_release_is_pass"] = True
+    slot = load_actual_b_handoff(REPO)
+    slot["mocked_release"] = True
     with pytest.raises(EvidenceGateRefuse) as exc:
         validate_worker_handoff(slot)
     assert _refuse_class(exc.value) == RefuseClass.WORKER_HANDOFF
 
 
-def test_worker_handoff_bound_record_requires_keys() -> None:
-    slot = empty_worker_handoff_slot()
-    slot["bound"] = True
-    slot["status"] = "HANDOFF_RECORDED"
-    slot["record"] = {"state": "HANDOFF_RECORDED"}
+def test_worker_handoff_rewritten_not_a_pass_refused() -> None:
+    slot = load_actual_b_handoff(REPO)
+    slot["not_a_pass"] = False
     with pytest.raises(EvidenceGateRefuse) as exc:
         validate_worker_handoff(slot)
-    assert _refuse_class(exc.value) == RefuseClass.INCOMPLETE
-    assert set(WORKER_HANDOFF_RECORD_KEYS) - {"state"}
+    assert _refuse_class(exc.value) == RefuseClass.WORKER_HANDOFF
+
+
+def test_worker_handoff_invented_release_confirmed_refused() -> None:
+    slot = load_actual_b_handoff(REPO)
+    slot["state"] = "RELEASE_CONFIRMED"
+    slot["release_kind"] = "PLATFORM_RELEASE_CONFIRMED"
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        validate_worker_handoff(slot)
+    assert _refuse_class(exc.value) == RefuseClass.WORKER_HANDOFF
+
+
+def test_worker_handoff_hash_mutated_substitute_refused() -> None:
+    slot = load_actual_b_handoff(REPO)
+    slot["content_hash"] = "0" * 64
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        validate_worker_handoff(slot)
+    assert _refuse_class(exc.value) == RefuseClass.WORKER_HANDOFF
 
 
 def test_spy_positive_control_fires() -> None:

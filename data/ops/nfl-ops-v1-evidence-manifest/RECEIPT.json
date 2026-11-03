@@ -24,7 +24,7 @@
     {
       "path": "services/model-service/src/services/nfl_ops_v1_evidence/run.py",
       "ref_kind": "file_sha256",
-      "sha256": "2793f34c6c1b264fcf9b43c784a7ecd0b2b4a2b2ae50193716a94b5e2504d9ea"
+      "sha256": "fda933e91a044d7054c8a0882108af1ac8acdb6f7ee5d1cb1bf17a5bc9c5b24e"
     },
     {
       "path": "services/model-service/src/services/nfl_ops_v1_evidence/validate.py",
@@ -32,7 +32,7 @@
       "sha256": "a26536605b84891c93e6aed75438a47c1756ba6722d0e11122cd22df73e0254f"
     }
   ],
-  "code_hash": "2d083a9e6b0df2216dfe38debea6bd288be572e7908e3807bf3c875b48284903",
+  "code_hash": "9066cf3256f6d36d90d2f2cf8b8306ba71b8db6b86e82df4d3496554c50e86f9",
   "cohort": {
     "game_ids": [
       "2026_99_TST_SYN"
@@ -45,14 +45,14 @@
   "config_hash": "826fc1b1d1af3b1fc8fb3feb7398b7a8894c6952b3e6fc695b093b603e234499",
   "cwd": "/agent/repos/kosedge",
   "data_label": "SYNTHETIC",
-  "end_utc": "2026-11-03T03:48:54Z",
+  "end_utc": "2026-11-03T03:52:54Z",
   "evidence_labels": {
     "chief_review": "NOT_RUN",
     "consume_fixture_chain": "EXECUTED_HERE",
     "inherited_real_outcome_tests": "NOT_RUN",
     "lineage_706": "SOURCE_INSPECTION",
     "lineage_707": "SOURCE_INSPECTION",
-    "primary_b_worker_handoff": "NOT_RUN",
+    "primary_b_worker_handoff": "SOURCE_INSPECTION",
     "produce_fixture_chain": "EXECUTED_HERE",
     "ready_for_review": "NOT_RUN",
     "rehashed_faults": "EXECUTED_HERE",
@@ -63,9 +63,9 @@
   "execution": {
     "consume_invoked_here": true,
     "import_only": false,
-    "process_id": 3655,
+    "process_id": 4461,
     "produce_invoked_here": true,
-    "produce_start_utc": "2026-11-03T03:48:54Z",
+    "produce_start_utc": "2026-11-03T03:52:54Z",
     "saved_output_only": false
   },
   "exit": 0,
@@ -83,7 +83,7 @@
   "hash_bindings": {
     "code": {
       "alg": "sha256",
-      "sha256": "2d083a9e6b0df2216dfe38debea6bd288be572e7908e3807bf3c875b48284903",
+      "sha256": "9066cf3256f6d36d90d2f2cf8b8306ba71b8db6b86e82df4d3496554c50e86f9",
       "source": "gate_and_caller_files"
     },
     "config": {
@@ -109,7 +109,7 @@
   },
   "head": {
     "kind": "git_commit",
-    "value": "f5e3bb58ccbe5a8892fed2a01f347c2308394a2f"
+    "value": "862ddbdb3f311b5a48b6abeb693e5acfe07c264d"
   },
   "history_hash": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
   "immutable_input_proof": {
@@ -141,11 +141,11 @@
     "SYNTHETIC_ONLY",
     "not self-accept",
     "READY_FOR_REVIEW requires Chief",
-    "Primary B worker_handoff SLOT_RESERVED until bound",
+    "Primary B worker_handoff bound from #712 tip 82683cd9 via as_worker_handoff(); PLATFORM_LIMITATION / not_a_pass preserved",
     "inherited #700/#701 real-outcome tests NOT_RUN",
     "no real-data fit/calibration/forecast/scoring/outcome join"
   ],
-  "log_hash": "9bb6951cacf1a5f34b4cefdc1ca19bd3d9f2fdafe9ec52bf39c60963cc8859ea",
+  "log_hash": "1f37b77a876bd37d0dfa96fa6c50e36c2605352fc9191057184a9d980b3ebdf3",
   "numerical_output": {
     "admitted_capture_id": "adc143a4b27d94bce436c5de5bc642f8c200050f20fa6bf57e01b831e6874877",
     "defense_multiplier": 1.03,
@@ -209,7 +209,7 @@
     "refused": true,
     "spy_fired": true
   },
-  "start_utc": "2026-11-03T03:48:54Z",
+  "start_utc": "2026-11-03T03:52:54Z",
   "status": "GATED_OK_AWAITING_CHIEF",
   "typed_references": [
     {
@@ -220,7 +220,7 @@
     {
       "kind": "git_commit",
       "label": "head",
-      "value": "f5e3bb58ccbe5a8892fed2a01f347c2308394a2f"
+      "value": "862ddbdb3f311b5a48b6abeb693e5acfe07c264d"
     },
     {
       "kind": "git_commit",
@@ -241,37 +241,148 @@
       "kind": "receipt_id",
       "path": null,
       "value": "nfl-ops-v1-evidence-gate-pending"
+    },
+    {
+      "kind": "git_commit",
+      "label": "pr712_primary_b",
+      "value": "82683cd93ec2c231733f34b5c0372cf1d42fa68a"
+    },
+    {
+      "kind": "file_sha256",
+      "path": "data/ops/nfl-ops-v1-worker-release-claim/THIS_WORKER_HANDOFF.json",
+      "value": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981"
     }
   ],
   "worker_handoff": {
-    "accepted_states": [
-      "WRITING",
-      "HANDOFF_RECORDED",
-      "QUIESCENT",
-      "RELEASE_CONFIRMED",
-      "CLAIMED_BY_SUCCESSOR"
-    ],
-    "bound": false,
-    "mocked_release_is_pass": false,
-    "note": "Primary B binds the release/claim record here. SLOT_RESERVED is not PASS. Mocked platform reclaim is not PASS. Absence of a bound record does not invent RELEASE_CONFIRMED.",
-    "record": null,
-    "record_required_keys": [
-      "task",
-      "worker",
-      "branch",
-      "head",
-      "workspace_alias",
-      "dirty_untracked",
-      "saved_artifacts",
-      "log_hashes",
-      "tests_limits",
-      "running_processes_jobs",
-      "pending_prompts",
-      "successor",
-      "ownership_release",
-      "state"
-    ],
-    "schema": "nfl-ops-v1-worker-handoff-slot-v1",
-    "status": "SLOT_RESERVED"
+    "branch": "cursor/nfl-ops-v1-worker-release-e2c7",
+    "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+    "evidence_label": "SOURCE_INSPECTION",
+    "field": "worker_handoff",
+    "head": "e6cfb87341adc8c4170bc8b53c7f1a030b489a4e",
+    "mocked_release": false,
+    "not_a_pass": true,
+    "platform_capability": "ABSENT",
+    "record": {
+      "active_writer": null,
+      "branch": "cursor/nfl-ops-v1-worker-release-e2c7",
+      "cert": 0,
+      "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+      "dirty": {
+        "changed_paths": [],
+        "clean": true,
+        "preserved": true
+      },
+      "head": "e6cfb87341adc8c4170bc8b53c7f1a030b489a4e",
+      "limits": {
+        "cert": 0,
+        "no_deletion": true,
+        "no_forced_takeover": true,
+        "no_real_data": true,
+        "no_self_kill": true,
+        "self_accept": false,
+        "synthetic_only": true
+      },
+      "log_hashes": [
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SELFCHECK_RECEIPT.json",
+          "sha256": "23257404bdaefa4b96e4e1817ea1269197b99d6fe8197a772b0868305d4348cc"
+        }
+      ],
+      "owner_clear": "f1fb6735",
+      "pending_prompts": [],
+      "protocol": "NFL_OPS_V1",
+      "protocol_hash": "ed10e80f",
+      "release_evidence": {
+        "capability_id": "cursor_cloud_workspace_reclaim",
+        "confirmed_at_utc": null,
+        "detail": "No Cursor Cloud / GitHub / Railway workspace-reclaim API is registered in this worker. Idle / closed / reclaimable stay distinct. Chief verifies actual platform release before reuse.",
+        "evidence_label": "SOURCE_INSPECTION",
+        "kind": "PLATFORM_LIMITATION",
+        "limitation": "PLATFORM_LIMITATION",
+        "mocked": false,
+        "not_a_pass": true,
+        "not_cursor_workspace_reclaim": true,
+        "platform_capability": "ABSENT"
+      },
+      "running_jobs": [],
+      "saved_artifacts": [
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SAMPLE_RECORD.json",
+          "sha256": "43808c2ae3dc32b32d07a923d6890533ff679f0fc922c27d25783e73a3f4ceb7"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SCHEMA.json",
+          "sha256": "2d3d4c175dc5182584cd6f6eaadf9d3e0687eceb757816bd2256156cafb44da2"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SELFCHECK_RECEIPT.json",
+          "sha256": "23257404bdaefa4b96e4e1817ea1269197b99d6fe8197a772b0868305d4348cc"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/TEST_COMMANDS.json",
+          "sha256": "1ab1e7d57e7ceeb011b1b55d35e03c598fe56bd05e704f3fba5a081f35454e3a"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/WORKER_HANDOFF.json",
+          "sha256": "e540113aba5ebb889f66e92f09a3ae83832d24b6fa4c700505d94297fe92d049"
+        }
+      ],
+      "schema": "nfl-ops-v1-worker-release-claim-v1",
+      "schema_version": 1,
+      "scope_id": "chief-nflgreen-overnight-ops-20261102-0330",
+      "self_accept": false,
+      "state": "QUIESCENT",
+      "state_history": [
+        {
+          "at_utc": "2026-11-03T03:45:33Z",
+          "code": "OPEN",
+          "from": null,
+          "to": "WRITING"
+        },
+        {
+          "at_utc": "2026-11-03T03:45:33Z",
+          "code": "HANDOFF",
+          "from": "WRITING",
+          "to": "HANDOFF_RECORDED"
+        },
+        {
+          "at_utc": "2026-11-03T03:45:33Z",
+          "code": "QUIESCENT",
+          "from": "HANDOFF_RECORDED",
+          "to": "QUIESCENT"
+        }
+      ],
+      "successor": {
+        "id": null,
+        "named": false,
+        "role": null
+      },
+      "synthetic": true,
+      "task": {
+        "id": "chief-nflgreen-overnight-ops-20261102-0330-primary-b",
+        "role": "PRIMARY_B",
+        "title": "worker final-state / release / claim record"
+      },
+      "tests": {
+        "commands": [],
+        "label": "SEE_TEST_COMMANDS_JSON",
+        "passed": null
+      },
+      "untracked": [],
+      "worker": {
+        "alias": "primary-b",
+        "id": "bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7",
+        "kind": "cursor_cloud_heavy",
+        "url": "https://cursor.com/agents/bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7"
+      },
+      "workspace_alias": "cursor-vm-primary-b-bc-3a3acab2"
+    },
+    "release_kind": "PLATFORM_LIMITATION",
+    "schema": "nfl-ops-v1-worker-release-claim-v1",
+    "schema_version": 1,
+    "state": "QUIESCENT",
+    "task_id": "chief-nflgreen-overnight-ops-20261102-0330-primary-b",
+    "worker_id": "bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7",
+    "workspace_alias": "cursor-vm-primary-b-bc-3a3acab2"
   }
 }

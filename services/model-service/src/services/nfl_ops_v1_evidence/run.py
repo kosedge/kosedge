@@ -67,7 +67,11 @@ from src.services.nfl_ops_v1_evidence.spy import (
     run_spy_positive_control,
 )
 from src.services.nfl_ops_v1_evidence.validate import numerical_from_consumed, utc_now
-from src.services.nfl_ops_v1_evidence.worker_handoff import empty_worker_handoff_slot
+from src.services.nfl_ops_v1_evidence.worker_handoff import (
+    B_CONTENT_HASH,
+    B_TIP,
+    load_actual_b_handoff,
+)
 
 CODE_FILES = (
     "services/model-service/src/services/nfl_ops_v1_evidence/gate.py",
@@ -202,6 +206,12 @@ def _build_manifest(
         {"kind": "git_commit", "value": LINEAGE_706_TIP, "label": "pr706"},
         {"kind": "file_sha256", "value": PINNED_CHAIN_DIGEST, "path": PINNED_OUTPUT_REL},
         {"kind": "receipt_id", "value": "nfl-ops-v1-evidence-gate-pending", "path": None},
+        {"kind": "git_commit", "value": B_TIP, "label": "pr712_primary_b"},
+        {
+            "kind": "file_sha256",
+            "value": B_CONTENT_HASH,
+            "path": "data/ops/nfl-ops-v1-worker-release-claim/THIS_WORKER_HANDOFF.json",
+        },
     ]
     output_paths = list(outputs.keys()) if outputs else None
     return {
@@ -269,7 +279,7 @@ def _build_manifest(
         "limitations": list(DEFAULT_LIMITATIONS),
         "failures": failures,
         "review_revision": 0,
-        "worker_handoff": empty_worker_handoff_slot(),
+        "worker_handoff": load_actual_b_handoff(root),
         "ready_for_review": False,
         "execution": {
             "produce_invoked_here": produce_invoked,

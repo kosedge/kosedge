@@ -1,0 +1,105 @@
+{
+  "branch": "cursor/synth-worker-handoff",
+  "content_hash": "1ce8ea2d4e4cea1e8d3667d31b9730f0aaa769c19f24742f0732b2f7e4ef6851",
+  "evidence_label": "SOURCE_INSPECTION",
+  "field": "worker_handoff",
+  "head": "f4b8caf0de3675570730dea28573979641477ad6a456a3ddd85b35e748bb4376",
+  "mocked_release": false,
+  "not_a_pass": true,
+  "platform_capability": "ABSENT",
+  "record": {
+    "active_writer": null,
+    "branch": "cursor/synth-worker-handoff",
+    "cert": 0,
+    "content_hash": "1ce8ea2d4e4cea1e8d3667d31b9730f0aaa769c19f24742f0732b2f7e4ef6851",
+    "dirty": {
+      "changed_paths": [],
+      "clean": true,
+      "preserved": true
+    },
+    "head": "f4b8caf0de3675570730dea28573979641477ad6a456a3ddd85b35e748bb4376",
+    "limits": {
+      "cert": 0,
+      "no_deletion": true,
+      "no_forced_takeover": true,
+      "no_real_data": true,
+      "no_self_kill": true,
+      "self_accept": false,
+      "synthetic_only": true
+    },
+    "log_hashes": [],
+    "owner_clear": "f1fb6735",
+    "pending_prompts": [],
+    "protocol": "NFL_OPS_V1",
+    "protocol_hash": "ed10e80f",
+    "release_evidence": {
+      "capability_id": "cursor_cloud_workspace_reclaim",
+      "confirmed_at_utc": null,
+      "detail": "No Cursor Cloud / GitHub / Railway workspace-reclaim API is registered in this worker. Idle / closed / reclaimable stay distinct. Chief verifies actual platform release before reuse.",
+      "evidence_label": "SOURCE_INSPECTION",
+      "kind": "PLATFORM_LIMITATION",
+      "limitation": "PLATFORM_LIMITATION",
+      "mocked": false,
+      "not_a_pass": true,
+      "not_cursor_workspace_reclaim": true,
+      "platform_capability": "ABSENT"
+    },
+    "running_jobs": [],
+    "saved_artifacts": [],
+    "schema": "nfl-ops-v1-worker-release-claim-v1",
+    "schema_version": 1,
+    "scope_id": "chief-nflgreen-overnight-ops-20261102-0330",
+    "self_accept": false,
+    "state": "QUIESCENT",
+    "state_history": [
+      {
+        "at_utc": "2026-11-03T03:44:56Z",
+        "code": "OPEN",
+        "from": null,
+        "to": "WRITING"
+      },
+      {
+        "at_utc": "2026-11-03T03:44:56Z",
+        "code": "HANDOFF",
+        "from": "WRITING",
+        "to": "HANDOFF_RECORDED"
+      },
+      {
+        "at_utc": "2026-11-03T03:44:56Z",
+        "code": "QUIESCENT",
+        "from": "HANDOFF_RECORDED",
+        "to": "QUIESCENT"
+      }
+    ],
+    "successor": {
+      "id": null,
+      "named": false,
+      "role": null
+    },
+    "synthetic": true,
+    "task": {
+      "id": "synth-primary-b-release-claim",
+      "role": "PRIMARY_B",
+      "title": "worker final-state / release / claim record"
+    },
+    "tests": {
+      "commands": [],
+      "label": "SYNTHETIC_SAMPLE",
+      "passed": null
+    },
+    "untracked": [],
+    "worker": {
+      "alias": "primary-b",
+      "id": "synth-worker-b",
+      "kind": "cursor_cloud_heavy"
+    },
+    "workspace_alias": "synth-ws-primary-b"
+  },
+  "release_kind": "PLATFORM_LIMITATION",
+  "schema": "nfl-ops-v1-worker-release-claim-v1",
+  "schema_version": 1,
+  "state": "QUIESCENT",
+  "task_id": "synth-primary-b-release-claim",
+  "worker_id": "synth-worker-b",
+  "workspace_alias": "synth-ws-primary-b"
+}

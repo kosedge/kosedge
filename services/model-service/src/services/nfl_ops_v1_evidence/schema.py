@@ -84,7 +84,7 @@ def default_evidence_labels() -> dict[str, str]:
         "produce_fixture_chain": "EXECUTED_HERE",
         "consume_fixture_chain": "EXECUTED_HERE",
         "inherited_real_outcome_tests": "NOT_RUN",
-        "primary_b_worker_handoff": "NOT_RUN",
+        "primary_b_worker_handoff": "SOURCE_INSPECTION",
         "chief_review": "NOT_RUN",
         "ready_for_review": "NOT_RUN",
         "rehashed_faults": "EXECUTED_HERE",

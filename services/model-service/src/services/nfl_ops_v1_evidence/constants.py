@@ -152,7 +152,7 @@ DEFAULT_LIMITATIONS = (
     "SYNTHETIC_ONLY",
     "not self-accept",
     "READY_FOR_REVIEW requires Chief",
-    "Primary B worker_handoff SLOT_RESERVED until bound",
+    "Primary B worker_handoff bound from #712 tip 82683cd9 via as_worker_handoff(); PLATFORM_LIMITATION / not_a_pass preserved",
     "inherited #700/#701 real-outcome tests NOT_RUN",
     "no real-data fit/calibration/forecast/scoring/outcome join",
 )
