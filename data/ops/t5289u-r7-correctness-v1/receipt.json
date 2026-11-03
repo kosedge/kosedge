@@ -1,8 +1,13 @@
 {
   "accepted": false,
   "artifacts": {
-    "demo_result": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/demo_result.json",
-    "synthetic_demo": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/synthetic_demo.json"
+    "B_CONSUME.json": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/B_CONSUME.json",
+    "PROFILES.json": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/PROFILES.json",
+    "RECEIPT.md": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/RECEIPT.md",
+    "demo_result.json": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/demo_result.json",
+    "receipt.json": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/receipt.json",
+    "recorder_pair.json": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/recorder_pair.json",
+    "synthetic_demo.json": "/agent/repos/kosedge/data/ops/t5289u-r7-correctness-v1/synthetic_demo.json"
   },
   "b_consume": {
     "b_tip": "f6566c9271ae16e53f67d08555814c4df94fe751",
@@ -17,6 +22,7 @@
   },
   "cert": 0,
   "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_correctness_v1.py",
+  "exit": 0,
   "franchise_bind": {
     "away_team_raw": "LAR",
     "franchise_key_away": "LAR",
@@ -24,18 +30,26 @@
     "home_team_raw": "LAC"
   },
   "gate_713_tip": "679dbdaf8c9044edffb34ffca1543c33eea77db7",
+  "git_head": "816322b9ce0016c09e99fec254d229b6d4bc3222",
+  "git_tip": "816322b9ce0016c09e99fec254d229b6d4bc3222",
+  "head": "816322b9ce0016c09e99fec254d229b6d4bc3222",
+  "immutable_input_proof": {
+    "dest": "/tmp/r7-correctness-_5mdeob7",
+    "dest_is_temp": true,
+    "pinned_originals_unwritten": true
+  },
   "ok": true,
   "package": "R7_CORRECTNESS_V1",
   "pair": {
     "accepted": false,
     "cert": 0,
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
-    "gate_hash": "23fbb9bc6bfd0342da7863ca179f54452c1f510661d2eaccc04f2e52d94c3f75",
+    "gate_hash": "19e4ba56ba5cd4f34e8627c992378bbaa78a188e9dd6f28dbb62ebf1cb5da5de",
     "ok": true,
     "package": "R7_CORRECTNESS_V1",
-    "pair_hash": "e4e1a702560fa699a5451f718ab132136825b157eed56ccc6f2e34232ad611fb",
+    "pair_hash": "97604ec2db76bf9100a2d54a2c7f66a5b2bb66e9f78902aec4c13a9e0cde1768",
     "paired": true,
-    "produce_hash": "7a13a2dc80e4e6f3704902be14261510eb124eb5af3d9866e328eda5e32b6159",
+    "produce_hash": "cd081c0dcc769158fc750b9ffe3ba26eb8e71980766466e2277653bb5413720c",
     "profile": "R7_CORRECTNESS_V1",
     "ready_for_review": false,
     "schema_id": "nfl-t5289u-r7-correctness-v1"
@@ -43,15 +57,15 @@
   "plan_fingerprint": "b15d6cec143212067b896057a048cd51071981d6ea1b3561c08db89cb6355358",
   "pr714_status": "PARTIAL_NOT_WHOLESALE_BASE",
   "produce": {
-    "c_margin": 1.9109956959566272,
+    "c_margin": 1.6645744773174405,
     "cutoff_utc": "2018-10-11T23:20:00Z",
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
-    "history_hash": "0dd85874732dc570e4d588810bd911d5459b1b7509e92d3fbe0c8c768550d9a6",
+    "history_hash": "0d453ec50ce316024f6206d11975d964cd7a38a44a22924dd7ee8d7628796db4",
     "if_margin": 1.389941504602551,
-    "packet_hash": "53884c2851751f336c3ba628ddd55340d5ad1a1eb2f97a0991bf592e61eb29d6",
-    "q2_margin": 2.4320498873107033,
-    "r7_code_hash": "3c8cce624b3daa78ecccf4dad4006f63126f16d3b800fd77455e602161dcac56",
-    "r7_config_hash": "22d0a8d8334de31dcef533ce3315819502e030202b8e113dd398fd80f7518366",
+    "packet_hash": "392c1c99f8f34d15cb148c60f5ff8c3240072373a71a8de4ba5d5843487f623a",
+    "q2_margin": 1.93920745003233,
+    "r7_code_hash": "19ca5c07d1b35210093ca5f56b2f1628ccac31d6a906ddb00c7b701c4b8ec594",
+    "r7_config_hash": "0493b026cd89e03770701578ceb58d7c67c2d6f85a8d04f4bb001f2cdfc92144",
     "replay_ok": true,
     "seal_utc": "2018-10-11T23:20:00Z"
   },
@@ -149,23 +163,50 @@
   "r6_a_tip": "54b08a301cf824c79ee3203180a51e2d832bb6f9",
   "r6_b_tip": "afb13301b5c7e3b8780a8dd1f85145e91bebef55",
   "ready_for_review": false,
+  "rehashed_faults": {
+    "evidence_label": "EXECUTED_HERE",
+    "forbidden_calls": 0,
+    "gate_invoked": 1,
+    "instrumentation_control": {
+      "fired": true,
+      "ran": true,
+      "reads": 1,
+      "surface_notes": 1
+    },
+    "ran": true,
+    "reason": "supplied produce payload != actual input",
+    "refuse_class": "HASH_MUTATED",
+    "refused": true
+  },
   "rest_calendar": {
     "away_franchise": "LAR",
     "away_prev_et_date": "2018-10-07",
     "away_prev_kickoff_utc": "2018-10-07T20:25:00Z",
     "bound_from": "actual_prior_kickoff_et_calendar_date",
     "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
+    "cutoff_utc": "2018-10-11T23:20:00Z",
     "home_franchise": "LAC",
     "home_prev_et_date": "2018-10-07",
     "home_prev_kickoff_utc": "2018-10-07T17:00:00Z",
     "kickoff_et_date": "2018-10-11",
     "kickoff_utc": "2018-10-12T00:20:00Z",
+    "physical_schedule": true,
+    "predecessor_bound_to": "KO_MINUS_60_CUTOFF",
+    "q2_history_used_for_rest": false,
     "rest_days_away": 4.0,
     "rest_days_home": 4.0,
     "tz": "America/New_York",
     "used_production_rest_days_from_schedule": false,
     "utc_date_delta_away": 5,
     "utc_date_delta_home": 5
+  },
+  "spy_positive_control": {
+    "evidence_label": "EXECUTED_HERE",
+    "forbidden_call_attempts": 1,
+    "ran": true,
+    "reason": "FIXTURE HARD REFUSE [REFUSE_QUALIFICATION] forbidden call 'socket.getaddrinfo' (zero simulator/network/DB/jobs/outcome)",
+    "refused": true,
+    "spy_fired": true
   },
   "status": "GATED_OK_AWAITING_CHIEF",
   "worker_id": "bc-54a966a5-24bf-5d5d-a63c-50f75ad0abb8"

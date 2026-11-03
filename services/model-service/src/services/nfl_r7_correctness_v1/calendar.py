@@ -1,5 +1,8 @@
 """REST_ACTUAL_ET_CALENDAR_V1 — rest from America/New_York calendar dates.
 
+Physical-schedule (non-outcome) input only. Q2 scored history must not
+set rest and must not be blocked by validate.py same-week refuse.
+Predecessor filter is KO−60 cutoff, not kickoff.
 Does not import nfl_data.rest_days_from_schedule (IF-forbidden weekday heuristic).
 Does not use UTC date subtraction as the bound rest.
 CERT=0. Synthetic kickoffs only.
@@ -7,12 +10,12 @@ CERT=0. Synthetic kickoffs only.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Mapping
 from zoneinfo import ZoneInfo
 
 from src.services.nfl_r7_correctness_v1.franchise import franchise_key
-from src.services.nfl_r7_correctness_v1.pins import CALENDAR_ID, CALENDAR_TZ
+from src.services.nfl_r7_correctness_v1.pins import CALENDAR_ID, CALENDAR_TZ, KO_MINUS_MINUTES
 
 
 class CalendarRefuse(ValueError):
@@ -57,18 +60,18 @@ def utc_calendar_date_delta(prev_kickoff_utc: datetime, this_kickoff_utc: dateti
 
 
 def last_kickoff_for_franchise(
-    history: list[Mapping[str, Any]],
+    physical_schedule: list[Mapping[str, Any]],
     *,
     franchise: str,
     before: datetime,
 ) -> datetime | None:
     latest: datetime | None = None
-    for row in history:
+    for row in physical_schedule:
         home = franchise_key(row.get("home_team"))
         away = franchise_key(row.get("away_team"))
         if franchise not in {home, away}:
             continue
-        ko = parse_aware_utc(row.get("kickoff_utc"), name="history.kickoff_utc")
+        ko = parse_aware_utc(row.get("kickoff_utc"), name="physical.kickoff_utc")
         if ko >= before:
             continue
         if latest is None or ko > latest:
@@ -76,18 +79,48 @@ def last_kickoff_for_franchise(
     return latest
 
 
+def _require_physical_schedule(physical_schedule: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    if not isinstance(physical_schedule, list) or not physical_schedule:
+        raise CalendarRefuse("physical_schedule missing")
+    out: list[Mapping[str, Any]] = []
+    for index, row in enumerate(physical_schedule):
+        if not isinstance(row, Mapping):
+            raise CalendarRefuse(f"physical_schedule[{index}] is not a row")
+        if "home_score" in row or "away_score" in row:
+            raise CalendarRefuse(
+                "physical_schedule must be non-outcome — Q2 scored history cannot set rest"
+            )
+        out.append(row)
+    return out
+
+
 def bind_rest_from_et_calendar(
     *,
     home_team: str,
     away_team: str,
     kickoff_utc: str,
-    history: list[Mapping[str, Any]],
+    physical_schedule: list[Mapping[str, Any]],
+    cutoff_utc: str | None = None,
+    history: list[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    if history is not None:
+        raise CalendarRefuse(
+            "Q2 history cannot set physical rest — pass physical_schedule "
+            "(validate.py same-week refuse must not block rest)"
+        )
+    schedule = _require_physical_schedule(physical_schedule)
     kickoff = parse_aware_utc(kickoff_utc, name="kickoff_utc")
+    if cutoff_utc is None:
+        cutoff = kickoff - timedelta(minutes=KO_MINUS_MINUTES)
+    else:
+        cutoff = parse_aware_utc(cutoff_utc, name="cutoff_utc")
+    if cutoff >= kickoff:
+        raise CalendarRefuse("cutoff must be strictly before kickoff (KO−60)")
     home_key = franchise_key(home_team)
     away_key = franchise_key(away_team)
-    home_prev = last_kickoff_for_franchise(history, franchise=home_key, before=kickoff)
-    away_prev = last_kickoff_for_franchise(history, franchise=away_key, before=kickoff)
+    # D2b: predecessor filter bound to KO−60 cutoff, not KO.
+    home_prev = last_kickoff_for_franchise(schedule, franchise=home_key, before=cutoff)
+    away_prev = last_kickoff_for_franchise(schedule, franchise=away_key, before=cutoff)
     if home_prev is None or away_prev is None:
         raise CalendarRefuse("missing prior game for franchise rest bind")
     home_et = rest_days_et(home_prev, kickoff)
@@ -96,6 +129,7 @@ def bind_rest_from_et_calendar(
         "calendar_id": CALENDAR_ID,
         "tz": CALENDAR_TZ,
         "kickoff_utc": kickoff.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "cutoff_utc": cutoff.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "kickoff_et_date": et_calendar_date(kickoff),
         "home_franchise": home_key,
         "away_franchise": away_key,
@@ -109,4 +143,7 @@ def bind_rest_from_et_calendar(
         "utc_date_delta_away": utc_calendar_date_delta(away_prev, kickoff),
         "used_production_rest_days_from_schedule": False,
         "bound_from": "actual_prior_kickoff_et_calendar_date",
+        "predecessor_bound_to": "KO_MINUS_60_CUTOFF",
+        "physical_schedule": True,
+        "q2_history_used_for_rest": False,
     }

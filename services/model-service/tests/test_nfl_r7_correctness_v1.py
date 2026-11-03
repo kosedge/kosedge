@@ -19,13 +19,21 @@ from src.services.nfl_ops_v1_evidence.profiles import (
     reset_registry_for_tests,
 )
 from src.services.nfl_ops_v1_evidence.refuse import EvidenceGateRefuse, RefuseClass
-from src.services.nfl_r7_correctness_v1.calendar import bind_rest_from_et_calendar
+from src.services.nfl_ops_v1_evidence.gate import gate_before_consume
+from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
+from src.services.nfl_ops_v1_evidence.validate_r7 import dest_is_actually_temp, readback_and_rehash
+from src.services.nfl_r7_correctness_v1.calendar import CalendarRefuse, bind_rest_from_et_calendar
 from src.services.nfl_r7_correctness_v1.consume_b import HANDOFF_SHA256, consume_b_handoff
-from src.services.nfl_r7_correctness_v1.franchise import franchise_bind, franchise_key
+from src.services.nfl_r7_correctness_v1.franchise import (
+    franchise_bind,
+    franchise_key,
+    key_packet_and_history_for_q2,
+)
 from src.services.nfl_r7_correctness_v1.packets import build_synthetic_r7_demo
-from src.services.nfl_r7_correctness_v1.pins import CALENDAR_ID, FW_SHA256, IF_TIP, SIM_SHA256
+from src.services.nfl_r7_correctness_v1.pins import CALENDAR_ID, FW_SHA256, IF_TIP, OPS_REL, SIM_SHA256
+from src.services.nfl_t5208u.caller import model_spy_counts, produce_q2_margin, reset_model_spy
 from src.services.nfl_t5208u.if_tree import preflight_if_tree
-from src.services.nfl_t5208u.packets import RealModeRefuse
+from src.services.nfl_t5208u.packets import PacketRefuse, RealModeRefuse, history_games_for_q2
 
 REPO = Path(__file__).resolve().parents[3]
 
@@ -59,7 +67,14 @@ def test_et_calendar_tnf_differs_from_utc_date_delta() -> None:
         home_team="LAC",
         away_team="LAR",
         kickoff_utc="2018-10-12T00:20:00Z",
-        history=history,
+        physical_schedule=[
+            {
+                "home_team": row["home_team"],
+                "away_team": row["away_team"],
+                "kickoff_utc": row["kickoff_utc"],
+            }
+            for row in history
+        ],
     )
     assert rest["calendar_id"] == CALENDAR_ID
     assert rest["rest_days_home"] == 4.0
@@ -67,12 +82,18 @@ def test_et_calendar_tnf_differs_from_utc_date_delta() -> None:
     assert rest["utc_date_delta_home"] == 5
     assert rest["used_production_rest_days_from_schedule"] is False
     assert rest["kickoff_et_date"] == "2018-10-11"
+    assert rest["predecessor_bound_to"] == "KO_MINUS_60_CUTOFF"
+    assert rest["cutoff_utc"] == "2018-10-11T23:20:00Z"
+    assert rest["q2_history_used_for_rest"] is False
 
 
 def test_franchise_relocation_aliases() -> None:
     assert franchise_key("SD") == "LAC"
     assert franchise_key("STL") == "LAR"
     assert franchise_key("OAK") == "LV"
+    assert franchise_key("WSH") == "WAS"
+    assert franchise_key("WAS") == "WAS"
+    assert franchise_key("LA") == "LAR"
     bind = franchise_bind("LAC", "LAR")
     assert bind["franchise_key_home"] == "LAC"
     assert bind["franchise_key_away"] == "LAR"
@@ -144,10 +165,11 @@ def test_handoff_file_sha_matches_pin() -> None:
     assert digest == HANDOFF_SHA256
 
 
-def test_r7_integrated_produce_gate_pair() -> None:
+def test_r7_integrated_produce_gate_pair(tmp_path: Path) -> None:
     from src.services.nfl_r7_correctness_v1.run import run_r7_integrated
+    from src.services.nfl_ops_v1_evidence.verify import git_tip
 
-    receipt = run_r7_integrated(root=REPO)
+    receipt = run_r7_integrated(root=REPO, dest=tmp_path / "out")
     assert receipt["ok"] is True
     assert receipt["cert"] == 0
     assert receipt["ready_for_review"] is False
@@ -156,7 +178,246 @@ def test_r7_integrated_produce_gate_pair() -> None:
     assert receipt["rest_calendar"]["rest_days_home"] == 4.0
     assert receipt["rest_calendar"]["utc_date_delta_home"] == 5
     assert receipt["pair"]["paired"] is True
+    assert receipt["exit"] == 0
+    assert receipt["git_tip"] == git_tip(REPO)
+    assert receipt["git_head"] == git_tip(REPO)
+    assert receipt["head"] == git_tip(REPO)
+    assert receipt["immutable_input_proof"]["dest_is_temp"] is True
+    assert dest_is_actually_temp(receipt["immutable_input_proof"]["dest"]) is True
+    assert receipt["rehashed_faults"]["refused"] is True
+    assert receipt["spy_positive_control"]["spy_fired"] is True
     assert receipt["b_consume"]["status"][PROFILE_OWNED_MARKET_TRACE] == "REGISTERED"
     catalog = list_profiles()
     assert catalog["R7_CORRECTNESS_V1"]["status"] == "ACTIVE"
     assert catalog[PROFILE_OWNED_MARKET_TRACE]["status"] == "REGISTERED"
+
+
+def test_keyed_q2_differs_from_raw_on_synthetic_slate() -> None:
+    demo = build_synthetic_r7_demo()
+    raw = produce_q2_margin(demo["packet"], demo["history"])
+    keyed_packet, keyed_history = key_packet_and_history_for_q2(demo["packet"], demo["history"])
+    keyed = produce_q2_margin(keyed_packet, keyed_history)
+    assert raw["q2_margin"] == pytest.approx(2.4320498873107033)
+    assert keyed["q2_margin"] == pytest.approx(1.93921, abs=1e-5)
+    assert raw["q2_margin"] != keyed["q2_margin"]
+    assert keyed_history[0]["home_team"] == "LAC"
+    assert keyed_history[1]["home_team"] == "LAR"
+
+
+def test_physical_same_week_sets_rest_q2_history_stays_prior() -> None:
+    physical = [
+        {"home_team": "LAC", "away_team": "KC", "kickoff_utc": "2018-10-12T00:20:00Z"},
+        {"home_team": "LAR", "away_team": "NE", "kickoff_utc": "2018-10-12T00:20:00Z"},
+    ]
+    rest = bind_rest_from_et_calendar(
+        home_team="LAC",
+        away_team="LAR",
+        kickoff_utc="2018-10-14T17:00:00Z",
+        physical_schedule=physical,
+    )
+    assert rest["rest_days_home"] == 3.0
+    assert rest["rest_days_away"] == 3.0
+    assert rest["q2_history_used_for_rest"] is False
+    sunday = build_synthetic_r7_demo()
+    sunday_packet = sunday["packet"]
+    sunday_packet = {
+        **sunday_packet,
+        "envelope": {
+            **sunday_packet["envelope"],
+            "game_id": "SYNTHETIC_2018_W06_SUN_LAC_LAR",
+            "kickoff_utc": "2018-10-14T17:00:00Z",
+            "week": 6,
+        },
+    }
+    same_week_scored = {
+        "channel": "SYNTHETIC",
+        "game_id": "SYNTHETIC_2018_W06_TNF_LAC_KC",
+        "season": 2018,
+        "week": 6,
+        "season_type": "REG",
+        "home_team": "LAC",
+        "away_team": "KC",
+        "kickoff_utc": "2018-10-12T00:20:00Z",
+        "home_score": 20.0,
+        "away_score": 17.0,
+    }
+    with pytest.raises(PacketRefuse, match="same-week"):
+        history_games_for_q2(sunday_packet, sunday["history"] + [same_week_scored])
+    target, hist = history_games_for_q2(sunday_packet, sunday["history"])
+    assert all(row.week < 6 or row.season < 2018 for row in hist)
+    assert target.week == 6
+
+
+def test_q2_history_cannot_set_physical_rest() -> None:
+    demo = build_synthetic_r7_demo()
+    with pytest.raises(CalendarRefuse, match="physical_schedule"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            physical_schedule=demo["physical_schedule"],
+            history=demo["history"],
+        )
+    with pytest.raises(CalendarRefuse, match="non-outcome"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            physical_schedule=demo["history"],
+        )
+
+
+def test_calendar_predecessor_bound_to_cutoff_not_ko() -> None:
+    between_cutoff_and_ko = {
+        "home_team": "LAC",
+        "away_team": "BUF",
+        "kickoff_utc": "2018-10-11T23:30:00Z",
+    }
+    prior = {
+        "home_team": "LAC",
+        "away_team": "KC",
+        "kickoff_utc": "2018-10-07T17:00:00Z",
+    }
+    away_prior = {
+        "home_team": "LAR",
+        "away_team": "NE",
+        "kickoff_utc": "2018-10-07T20:25:00Z",
+    }
+    rest = bind_rest_from_et_calendar(
+        home_team="LAC",
+        away_team="LAR",
+        kickoff_utc="2018-10-12T00:20:00Z",
+        physical_schedule=[prior, away_prior, between_cutoff_and_ko],
+    )
+    assert rest["home_prev_kickoff_utc"] == "2018-10-07T17:00:00Z"
+    assert rest["predecessor_bound_to"] == "KO_MINUS_60_CUTOFF"
+    assert rest["cutoff_utc"] == "2018-10-11T23:20:00Z"
+
+
+def test_invalid_a_refuses_before_model_zero_solver_calls() -> None:
+    from src.services.nfl_r7_correctness_v1.run import run_r7_invalid_a
+
+    reset_model_spy()
+    spy = OutcomeReadSpy()
+    surface = ForbiddenSurfaceSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        run_r7_invalid_a(root=REPO, outcome_spy=spy, surface=surface)
+    assert exc.value.refuse_class in {RefuseClass.CHANNEL, RefuseClass.REAL_MODE}
+    assert model_spy_counts() == {"produce_if_mu": 0, "asof_for_targets": 0}
+    assert spy.reads == 0
+    assert surface.count == 0
+
+
+def test_b4_rehashed_false_refused_at_direct_api(tmp_path: Path) -> None:
+    from src.services.nfl_r7_correctness_v1.run import build_r7_direct_pre_consume
+
+    bundle = build_r7_direct_pre_consume(
+        root=REPO,
+        dest=tmp_path,
+        rehashed={"ran": True, "refused": False, "gate_invoked": 1, "instrumentation_control": {"fired": True}},
+    )
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(
+            bundle["manifest"],
+            chain_payload=bundle["payload"],
+            root=REPO,
+            command=bundle["manifest"]["command"],
+            cwd=bundle["manifest"]["cwd"],
+            outcome_spy=spy,
+            verification=bundle["verification"],
+        )
+    assert exc.value.refuse_class == RefuseClass.INCOMPLETE
+    assert spy.reads == 0
+
+
+def test_b4_handmade_allow_refused_at_direct_api(tmp_path: Path) -> None:
+    from src.services.nfl_r7_correctness_v1.run import build_r7_direct_pre_consume
+
+    bundle = build_r7_direct_pre_consume(root=REPO, dest=tmp_path)
+    bundle["manifest"]["ready_for_review"] = True
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(
+            bundle["manifest"],
+            chain_payload=bundle["payload"],
+            root=REPO,
+            command=bundle["manifest"]["command"],
+            cwd=bundle["manifest"]["cwd"],
+            outcome_spy=spy,
+            verification=bundle["verification"],
+        )
+    assert exc.value.refuse_class == RefuseClass.READY_FOR_REVIEW
+    assert spy.reads == 0
+
+
+def test_b4_stale_refused_at_direct_api(tmp_path: Path) -> None:
+    from src.services.nfl_r7_correctness_v1.run import build_r7_direct_pre_consume
+
+    bundle = build_r7_direct_pre_consume(root=REPO, dest=tmp_path)
+    bundle["manifest"]["head"] = {"kind": "git_commit", "value": "a" * 40}
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(
+            bundle["manifest"],
+            chain_payload=bundle["payload"],
+            root=REPO,
+            command=bundle["manifest"]["command"],
+            cwd=bundle["manifest"]["cwd"],
+            outcome_spy=spy,
+            verification=bundle["verification"],
+        )
+    assert exc.value.refuse_class == RefuseClass.STALE
+    assert spy.reads == 0
+
+
+def test_b4_tamper_refused_at_direct_api(tmp_path: Path) -> None:
+    from src.services.nfl_r7_correctness_v1.run import build_r7_direct_pre_consume
+
+    bundle = build_r7_direct_pre_consume(root=REPO, dest=tmp_path)
+    mutated = dict(bundle["payload"])
+    mutated["channel"] = "TAMPERED"
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(
+            bundle["manifest"],
+            chain_payload=mutated,
+            root=REPO,
+            command=bundle["manifest"]["command"],
+            cwd=bundle["manifest"]["cwd"],
+            outcome_spy=spy,
+            verification=bundle["verification"],
+        )
+    assert exc.value.refuse_class in {RefuseClass.HASH_MUTATED, RefuseClass.CHANNEL}
+    assert spy.reads == 0
+
+
+def test_b4_partial_write_and_dest_lie_refused_at_direct_api(tmp_path: Path) -> None:
+    from src.services.nfl_r7_correctness_v1.run import build_r7_direct_pre_consume
+
+    partial = tmp_path / "partial.json"
+    partial.write_text("{partial", encoding="utf-8")
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        readback_and_rehash(partial, "a" * 64)
+    assert exc.value.refuse_class == RefuseClass.WRITE_TAMPER
+
+    bundle = build_r7_direct_pre_consume(root=REPO, dest=tmp_path)
+    ops = REPO / OPS_REL
+    bundle["manifest"]["immutable_input_proof"] = {
+        "dest_is_temp": True,
+        "dest": ops.as_posix(),
+        "pinned_originals_unwritten": True,
+    }
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc2:
+        gate_before_consume(
+            bundle["manifest"],
+            chain_payload=bundle["payload"],
+            root=REPO,
+            command=bundle["manifest"]["command"],
+            cwd=bundle["manifest"]["cwd"],
+            outcome_spy=spy,
+            verification=bundle["verification"],
+        )
+    assert exc2.value.refuse_class == RefuseClass.WRITE_TAMPER
+    assert spy.reads == 0

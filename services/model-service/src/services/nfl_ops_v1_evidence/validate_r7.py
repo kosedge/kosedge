@@ -5,6 +5,8 @@ Does not replace the W-FIX pin checks. Dispatched only when profile is R7.
 
 from __future__ import annotations
 
+import json
+import tempfile
 from pathlib import Path
 from typing import Any, Mapping, Optional
 
@@ -42,6 +44,67 @@ def _as_map(value: Any, name: str) -> dict[str, Any]:
     if not isinstance(value, Mapping):
         _refuse(RefuseClass.TYPE, f"{name} must be an object")
     return dict(value)
+
+
+def dest_is_actually_temp(dest: Path | str) -> bool:
+    resolved = Path(dest).resolve()
+    tmp_root = Path(tempfile.gettempdir()).resolve()
+    try:
+        resolved.relative_to(tmp_root)
+    except ValueError:
+        return False
+    return True
+
+
+def readback_and_rehash(path: Path, expected_sha256: str) -> bytes:
+    """Direct API: refuse partial / tampered writes after TEMP write."""
+    target = Path(path)
+    if not target.is_file():
+        _refuse(RefuseClass.WRITE_TAMPER, f"partial-write: artifact missing {target}")
+    data = target.read_bytes()
+    if not data:
+        _refuse(RefuseClass.WRITE_TAMPER, f"partial-write: empty artifact {target}")
+    try:
+        json.loads(data.decode("utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        _refuse(RefuseClass.WRITE_TAMPER, f"partial-write: unreadable artifact ({exc})")
+    actual = sha256_hex(data)
+    if actual != expected_sha256:
+        _refuse(RefuseClass.HASH_MUTATED, "readback hash != written bytes")
+    return data
+
+
+def _check_r7_dest(raw: Mapping[str, Any]) -> None:
+    proof = _as_map(raw.get("immutable_input_proof"), "immutable_input_proof")
+    dest = proof.get("dest")
+    if dest is None:
+        _refuse(RefuseClass.WRITE_TAMPER, "immutable-input dest missing")
+    claimed = proof.get("dest_is_temp")
+    actual = dest_is_actually_temp(str(dest))
+    if claimed is True and not actual:
+        _refuse(RefuseClass.WRITE_TAMPER, "dest_is_temp claimed but dest is not temp")
+    if claimed is not True:
+        _refuse(
+            RefuseClass.WRITE_TAMPER,
+            "gate dest must be temp-only — never write finals before gates",
+        )
+
+
+def _check_r7_controls(raw: Mapping[str, Any]) -> None:
+    faults = _as_map(raw.get("rehashed_faults"), "rehashed_faults")
+    if faults.get("ran") is not True or faults.get("refused") is not True:
+        _refuse(RefuseClass.INCOMPLETE, "rehashed_faults control not executed")
+    if require_int(faults.get("gate_invoked"), "rehashed_faults.gate_invoked") < 1:
+        _refuse(RefuseClass.INCOMPLETE, "rehashed_faults did not invoke the DIRECT gate")
+    inst = _as_map(faults.get("instrumentation_control"), "rehashed_faults.instrumentation_control")
+    if inst.get("fired") is not True:
+        _refuse(
+            RefuseClass.INCOMPLETE,
+            "rehashed_faults positive instrumentation control did not fire",
+        )
+    spy = _as_map(raw.get("spy_positive_control"), "spy_positive_control")
+    if spy.get("ran") is not True or spy.get("spy_fired") is not True:
+        _refuse(RefuseClass.SPY, "spy-positive control not executed or did not fire")
 
 
 def build_r7_verification_context(
@@ -174,6 +237,9 @@ def validate_r7_manifest(
     if labels.get("inherited_real_outcome_tests") != "NOT_RUN":
         _refuse(RefuseClass.WRONG_PROFILE_IDENTITY, "inherited real-outcome tests must stay NOT_RUN")
 
+    _check_r7_dest(raw)
+    _check_r7_controls(raw)
+
     trace = _as_map(raw.get("producer_consumer_trace"), "producer_consumer_trace")
     if trace.get("producer") != "r7_correctness_produce" or trace.get("consumer") != "r7_paired_recorder":
         _refuse(RefuseClass.PAIRED_ARM, "R7 paired producer/recorder missing")
@@ -220,4 +286,7 @@ def validate_r7_manifest(
         parse_utc(raw.get("end_utc"), field="end_utc")
         if not isinstance(raw.get("failures"), list):
             _refuse(RefuseClass.TYPE, "failures must be a list")
-    return raw
+        out = dict(raw)
+        out["ok"] = True
+        return out
+    return dict(raw)

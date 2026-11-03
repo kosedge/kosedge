@@ -3,9 +3,15 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
+from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
+from src.services.nfl_r7_correctness_v1.franchise import (
+    key_packet_and_history_for_q2,
+    q2_consumed_franchise_aliases,
+)
 from src.services.nfl_r7_correctness_v1.packets import build_synthetic_r7_demo, refuse_if_real
 from src.services.nfl_r7_correctness_v1.pins import (
     AUTHORITY,
@@ -18,7 +24,6 @@ from src.services.nfl_r7_correctness_v1.pins import (
     FW_SHA256,
     GATE_713_TIP,
     IF_TIP,
-    OPS_REL,
     OWNER_CLEAR,
     PACKAGE,
     PLAN_FINGERPRINT,
@@ -62,6 +67,8 @@ def r7_config_hash() -> str:
             "scope_id": SCOPE_ID,
             "sim_sha256": SIM_SHA256,
             "used_production_rest_days_from_schedule": False,
+            "q2_consumes_franchise_keys": True,
+            "q2_consumed_franchise_aliases": q2_consumed_franchise_aliases(),
         }
     )
 
@@ -77,13 +84,24 @@ def r7_code_hash(root: Path | None = None) -> str:
     return canonical_sha256(rows)
 
 
-def produce_r7_point_margin(*, mode: str = "SYNTHETIC") -> dict[str, Any]:
+def produce_r7_point_margin(
+    *,
+    mode: str = "SYNTHETIC",
+    surface: Optional[ForbiddenSurfaceSpy] = None,
+    outcome_spy: Optional[OutcomeReadSpy] = None,
+) -> dict[str, Any]:
     refuse_if_real(mode)
+    if outcome_spy is not None and getattr(outcome_spy, "reads", 0) not in (None, 0):
+        raise R7ProduceRefuse("outcome loader already read before produce")
     preflight = preflight_if_tree()
     demo = build_synthetic_r7_demo(mode=mode)
     rest = demo["rest_calendar"]
     if rest["used_production_rest_days_from_schedule"] is not False:
         raise R7ProduceRefuse("production rest helper leaked into R7 bind")
+    if rest.get("q2_history_used_for_rest") is not False:
+        raise R7ProduceRefuse("Q2 history leaked into physical rest bind")
+    if rest.get("predecessor_bound_to") != "KO_MINUS_60_CUTOFF":
+        raise R7ProduceRefuse("calendar predecessor not bound to KO−60 cutoff")
     if rest["rest_days_home"] == rest["utc_date_delta_home"]:
         # TNF control must differ ET vs UTC date delta on this slate.
         raise R7ProduceRefuse("ET/UTC rest control collapsed — slate is not the TNF probe")
@@ -100,8 +118,11 @@ def produce_r7_point_margin(*, mode: str = "SYNTHETIC") -> dict[str, Any]:
     if not all(item["ok"] for item in controls):
         raise R7ProduceRefuse(f"C formula controls failed: {controls}")
 
-    result = call_r6_point_margin(packet, demo["history"], mode=mode)
-    replay = replay_call(packet, demo["history"], mode=mode)
+    keyed_packet, keyed_history = key_packet_and_history_for_q2(packet, demo["history"])
+    if surface is not None:
+        surface.note("call_r6_point_margin")
+    result = call_r6_point_margin(keyed_packet, keyed_history, mode=mode)
+    replay = replay_call(keyed_packet, keyed_history, mode=mode)
     cfg = r7_config_hash()
     code = r7_code_hash()
     if cfg == result["schema_hash"] or code == result["schema_hash"]:
@@ -142,19 +163,32 @@ def produce_r7_point_margin(*, mode: str = "SYNTHETIC") -> dict[str, Any]:
         "cutoff_utc": result["cutoff_utc"],
         "seal_utc": result["seal_utc"],
         "kickoff_utc": result["kickoff_utc"],
+        "q2_franchise_keyed": True,
+        "q2_consumed_franchise_aliases": q2_consumed_franchise_aliases(),
         "demo": demo,
     }
     return out
 
 
-def write_json(path: Path, payload: Any) -> None:
+def atomic_write_bytes(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    tmp.write_bytes(data)
+    os.replace(tmp, path)
 
 
-def write_produce_artifacts(result: dict[str, Any], *, root: Path | None = None) -> dict[str, str]:
-    repo = repo_root() if root is None else Path(root)
-    dest = repo / OPS_REL
+def write_json(path: Path, payload: Any) -> None:
+    data = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    atomic_write_bytes(path, data)
+
+
+def atomic_replace_file(src: Path, dest: Path) -> None:
+    atomic_write_bytes(dest, Path(src).read_bytes())
+
+
+def write_produce_artifacts(result: dict[str, Any], *, dest: Path) -> dict[str, str]:
+    dest = Path(dest)
+    dest.mkdir(parents=True, exist_ok=True)
     demo = result["demo"]
     write_json(dest / "synthetic_demo.json", demo)
     write_json(

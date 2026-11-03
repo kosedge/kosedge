@@ -64,8 +64,54 @@ def _hist(
     return row
 
 
+def _phys(
+    game_id: str,
+    season: int,
+    week: int,
+    home: str,
+    away: str,
+    kickoff_utc: str,
+) -> dict[str, Any]:
+    """Physical-schedule row. Kickoff only. No scores / outcomes."""
+    return {
+        "channel": CHANNEL_SYNTHETIC,
+        "game_id": game_id,
+        "season": season,
+        "week": week,
+        "season_type": "REG",
+        "home_team": home,
+        "away_team": away,
+        "kickoff_utc": kickoff_utc,
+        "note": "SYNTHETIC_PHYSICAL_SCHEDULE_NON_OUTCOME",
+    }
+
+
+def synthetic_physical_schedule() -> list[dict[str, Any]]:
+    """Non-outcome physical predecessors. May include same-week kickoffs.
+
+    Not Q2 history. validate.py:299 same-week refuse must not see these rows.
+    """
+    return [
+        _phys("SYNTHETIC_2017_W02_SD_BUF", 2017, 2, "SD", "BUF", "2017-09-17T17:00:00Z"),
+        _phys("SYNTHETIC_2017_W03_STL_MIA", 2017, 3, "STL", "MIA", "2017-09-24T17:00:00Z"),
+        _phys("SYNTHETIC_2017_W06_BUF_MIA", 2017, 6, "BUF", "MIA", "2017-10-15T17:00:00Z"),
+        _phys("SYNTHETIC_2017_W08_NE_SD", 2017, 8, "NE", "SD", "2017-10-29T17:00:00Z"),
+        _phys("SYNTHETIC_2017_W12_MIA_STL", 2017, 12, "MIA", "STL", "2017-11-26T18:00:00Z"),
+        _phys("SYNTHETIC_2017_W14_BUF_NE", 2017, 14, "BUF", "NE", "2017-12-10T18:00:00Z"),
+        _phys("SYNTHETIC_2018_W01_SD_MIA", 2018, 1, "SD", "MIA", "2018-09-09T17:00:00Z"),
+        _phys("SYNTHETIC_2018_W02_STL_BUF", 2018, 2, "STL", "BUF", "2018-09-16T17:00:00Z"),
+        _phys("SYNTHETIC_2018_W03_BUF_SD", 2018, 3, "BUF", "SD", "2018-09-23T17:00:00Z"),
+        _phys("SYNTHETIC_2018_W04_MIA_STL", 2018, 4, "MIA", "STL", "2018-09-30T17:00:00Z"),
+        _phys("SYNTHETIC_2018_W05_SD_KC", 2018, 5, "SD", "KC", "2018-10-07T17:00:00Z"),
+        _phys("SYNTHETIC_2018_W05_STL_NE", 2018, 5, "STL", "NE", "2018-10-07T20:25:00Z"),
+    ]
+
+
 def synthetic_history() -> list[dict[str, Any]]:
-    """Fictional REG history. Not protected 2024-26 / EVAL / Q2-2017 reopen."""
+    """Fictional REG scored history. Strictly prior assigned week for Q2.
+
+    Not protected 2024-26 / EVAL / Q2-2017 reopen. Not a physical schedule.
+    """
     return [
         _hist("SYNTHETIC_2017_W02_SD_BUF", 2017, 2, "SD", "BUF", "2017-09-17T17:00:00Z", 24, 10),
         _hist("SYNTHETIC_2017_W03_STL_MIA", 2017, 3, "STL", "MIA", "2017-09-24T17:00:00Z", 27, 17),
@@ -100,12 +146,13 @@ def build_synthetic_r7_demo(*, mode: str = CHANNEL_SYNTHETIC) -> dict[str, Any]:
         "identity_kind": "SYNTHETIC_REG",
     }
     history = synthetic_history()
+    physical_schedule = synthetic_physical_schedule()
     franchises = franchise_bind(envelope["home_team"], envelope["away_team"])
     rest = bind_rest_from_et_calendar(
         home_team=envelope["home_team"],
         away_team=envelope["away_team"],
         kickoff_utc=str(envelope["kickoff_utc"]),
-        history=history,
+        physical_schedule=physical_schedule,
     )
     values: dict[str, Any] = {
         "game_id": envelope["game_id"],
@@ -161,6 +208,7 @@ def build_synthetic_r7_demo(*, mode: str = CHANNEL_SYNTHETIC) -> dict[str, Any]:
         "channel": CHANNEL_SYNTHETIC,
         "packet": packet,
         "history": history,
+        "physical_schedule": physical_schedule,
         "franchise_bind": franchises,
         "rest_calendar": rest,
         "c_formula_controls": [

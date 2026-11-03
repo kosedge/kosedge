@@ -33,6 +33,7 @@ CALENDAR_ID = "REST_ACTUAL_ET_CALENDAR_V1"
 CALENDAR_TZ = "America/New_York"
 
 # Franchise keys frozen to Q2 PRIOR_ALIAS plus product aliases. No new source.
+# PRIOR_ALIAS (Q2) covers STL/SD/OAK. Product map MUST cover WAS/WSH + LA→Rams.
 FRANCHISE_ALIASES = {
     "LA": "LAR",
     "LAR": "LAR",
@@ -48,6 +49,10 @@ FRANCHISE_ALIASES = {
 }
 if PRIOR_ALIAS.get("STL") != "LAR" or PRIOR_ALIAS.get("SD") != "LAC" or PRIOR_ALIAS.get("OAK") != "LV":
     raise RuntimeError("Q2 PRIOR_ALIAS drifted from frozen franchise keys")
+if FRANCHISE_ALIASES.get("WSH") != "WAS" or FRANCHISE_ALIASES.get("WAS") != "WAS":
+    raise RuntimeError("PRIOR/product alias missing WAS/WSH")
+if FRANCHISE_ALIASES.get("LA") != "LAR":
+    raise RuntimeError("PRIOR/product alias missing LA→Rams")
 
 CHANNEL_SYNTHETIC = "SYNTHETIC"
 OUTPUT_KIND = "POINT_MARGIN"

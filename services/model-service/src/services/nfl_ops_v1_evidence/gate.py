@@ -39,6 +39,7 @@ def gate_before_consume(
     cwd: Optional[str] = None,
     outcome_spy: Optional[OutcomeReadSpy] = None,
     surface: Optional[ForbiddenSurfaceSpy] = None,
+    verification: Optional[Any] = None,
 ) -> dict[str, Any]:
     spy = outcome_spy if outcome_spy is not None else OutcomeReadSpy()
     try:
@@ -53,17 +54,19 @@ def gate_before_consume(
                 "outcome loader already read — refuse (join-before-gate)",
                 refuse_class=RefuseClass.SPY,
             )
-        verification = build_verification_context(
-            root=Path(root),
-            payload=chain_payload,
-            command=command,
-            cwd=cwd,
-        )
+        ctx = verification
+        if ctx is None:
+            ctx = build_verification_context(
+                root=Path(root),
+                payload=chain_payload,
+                command=command,
+                cwd=cwd,
+            )
         return validate_manifest(
             manifest,
             stage=STAGE_PRE_CONSUME,
             chain_payload=chain_payload,
-            verification=verification,
+            verification=ctx,
         )
     except Exception:
         assert_zero_forbidden_on_refusal(outcome_spy=spy, surface=surface)
@@ -82,6 +85,7 @@ def gate_before_final_receipt(
     log_text: Optional[str] = None,
     outcome_spy: Optional[OutcomeReadSpy] = None,
     surface: Optional[ForbiddenSurfaceSpy] = None,
+    verification: Optional[Any] = None,
 ) -> dict[str, Any]:
     spy = outcome_spy if outcome_spy is not None else OutcomeReadSpy()
     try:
@@ -98,20 +102,22 @@ def gate_before_final_receipt(
                 "outcome loader already read — refuse (join-before-receipt)",
                 refuse_class=RefuseClass.SPY,
             )
-        verification = build_verification_context(
-            root=Path(root),
-            payload=chain_payload,
-            command=command,
-            cwd=cwd,
-            exit_code=exit_code,
-            output_paths=output_paths,
-            log_text=log_text,
-        )
+        ctx = verification
+        if ctx is None:
+            ctx = build_verification_context(
+                root=Path(root),
+                payload=chain_payload,
+                command=command,
+                cwd=cwd,
+                exit_code=exit_code,
+                output_paths=output_paths,
+                log_text=log_text,
+            )
         return validate_manifest(
             manifest,
             stage=STAGE_PRE_RECEIPT,
             chain_payload=chain_payload,
-            verification=verification,
+            verification=ctx,
         )
     except Exception:
         assert_zero_forbidden_on_refusal(outcome_spy=spy, surface=surface)
