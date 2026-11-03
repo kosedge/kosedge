@@ -32,11 +32,21 @@ from src.services.nfl_owned_market_v1.constants import (
     PIN_CSV_PROVIDER_IDENTITIES_PATH,
     PIN_CSV_PROVIDER_IDENTITIES_SHA256,
     PIN_CSV_SELECTED_N,
+    PIN_INTERSECTION_N,
+    PIN_JSONL_143_PROJECTION_PATH,
+    PIN_JSONL_143_PROJECTION_SHA256,
     PIN_JSONL_UNKNOWN_N,
+    PIN_MISSING_N,
+    PIN_REG496_N,
+    PIN_SELECTED_187,
     PROFILE_OWNED_MARKET_TRACE,
     PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
     ROLE_FICTIONAL_ECONOMIC,
     ROLE_OWNED_READINESS,
+)
+from src.services.nfl_owned_market_v1.jsonl_trace import (
+    build_jsonl_trace_ledger,
+    verify_staged_143_projection,
 )
 from src.services.nfl_owned_market_v1.hashing import require_sha256_hex
 from src.services.nfl_owned_market_v1.produce import (
@@ -280,3 +290,78 @@ def test_schema_hashes_stable() -> None:
     require_sha256_hex(c, name="schema_events")
     assert a == b
     assert a != c
+
+
+def test_jsonl_trace_reconcile_187_44_143_and_96_400() -> None:
+    ledger = build_jsonl_trace_ledger(_repo_root())
+    rec = ledger["reconcile"]
+    assert rec["n_187"] == PIN_SELECTED_187 == 187
+    assert rec["n_44"] == PIN_CSV_SELECTED_N == 44
+    assert rec["n_143"] == PIN_JSONL_UNKNOWN_N == 143
+    assert rec["n_96"] == PIN_INTERSECTION_N == 96
+    assert rec["n_400"] == PIN_MISSING_N == 400
+    assert rec["n_496"] == PIN_REG496_N == 496
+    assert rec["n_23"] == PIN_CSV_PROVIDER_EVENT_N == 23
+    assert rec["eq_187_44_143"] is True
+    assert rec["eq_496_96_400"] is True
+    assert rec["mapped_not_in_quotes"] == 0
+    assert len(ledger["bound_143"]) == PIN_JSONL_UNKNOWN_N
+    assert len(ledger["mapped_44_pairs"]) == PIN_CSV_SELECTED_N
+    assert len(ledger["selected_96_game_ids"]) == PIN_INTERSECTION_N
+    assert len(ledger["missing_400_game_ids"]) == PIN_MISSING_N
+    assert len(set(ledger["selected_96_game_ids"]) & set(ledger["missing_400_game_ids"])) == 0
+    assert ledger["preserved"]["n_proven_events"] == 23
+    assert ledger["preserved"]["n_44_mapped"] == 44
+
+
+def test_jsonl_trace_unique_bind_and_clocks_partial() -> None:
+    ledger = build_jsonl_trace_ledger(_repo_root())
+    assert ledger["status"] == "PARTIAL"
+    assert ledger["owned_completion_claimed"] is False
+    assert ledger["freeze_limitations_marked_verified"] is False
+    assert ledger["historical_economic_calculation"] is False
+    assert ledger["ntbb_k_implemented"] is False
+    ids = [(row["game_id"], row["book"]) for row in ledger["bound_143"]]
+    assert len(set(ids)) == len(ids) == PIN_JSONL_UNKNOWN_N
+    mapped = {(row["game_id"], row["book"]) for row in ledger["mapped_44_pairs"]}
+    assert not (set(ids) & mapped)
+    seasons = set()
+    for row in ledger["bound_143"]:
+        seasons.add(row["season"])
+        assert row["market"] == "spread"
+        assert row["side"] == "home"
+        assert row["line_status"] == "BOUND_UNIQUE_FREEZE_AND_ADMISSIBLE"
+        assert row["price_status"] == "BOUND_UNIQUE_ADMISSIBLE_SPREAD_ROW"
+        assert row["price_home"] is not None
+        assert row["price_away"] is not None
+        assert row["snapshot_kind"] == "enterprise_snapshot"
+        assert row["clocks"]["claimed_capture"]["status"] == "CLAIMED_FIELD_PRESENT_NOT_VERIFIED"
+        assert row["clocks"]["claimed_capture"]["value"]
+        for name in ("request", "provider", "book_update", "download", "availability"):
+            assert row["clocks"][name]["status"] == "NOT_EVALUABLE"
+            assert row["clocks"][name]["value"] is None
+            assert row["clocks"][name]["count_present"] == 0
+        if "snapshots-2022" in row["provenance"]:
+            assert row["season"] == 2021
+    assert seasons <= {2020, 2021}
+    assert ledger["clocks_summary"]["request"] == "NOT_EVALUABLE"
+    assert ledger["clocks_summary"]["not_evaluable_n"]["availability"] == PIN_JSONL_UNKNOWN_N
+    staged = ledger["staged_143_projection"]
+    assert staged["sha256"] == PIN_JSONL_143_PROJECTION_SHA256
+    assert staged["sha256_match"] is True
+    assert staged["value_pairs_match_bound_143"] is True
+    assert staged["clock_semantics_verified_n"] == 0
+    assert staged["contemporaneous_availability_verified_n"] == 0
+    assert all(row["status"] == "NOT_EVALUABLE" for row in staged["raw_snapshot_files"])
+    verify_staged_143_projection(_repo_root() / PIN_JSONL_143_PROJECTION_PATH)
+
+
+def test_jsonl_trace_does_not_replace_risk1(tmp_path: Path) -> None:
+    artifacts = produce_artifacts(repo_root=tmp_path)
+    assert artifacts["events_report"]["profile_role"] == ROLE_FICTIONAL_ECONOMIC
+    assert artifacts["events_report"]["n_tickets"] == 5
+    assert artifacts["trace"]["owned_completion_claimed"] is False
+    assert artifacts["join_report"]["joined"] is False
+    settled = artifacts["events"]["settlements"]
+    assert any(row.get("ats_result") == "win" for row in settled)
+    assert artifacts["events"]["roi"]["status"] == "ok"

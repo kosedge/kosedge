@@ -50,3 +50,14 @@ Does **not** close freeze `#limitations`. 143 JSONL unknowns preserved. See `CLO
 
 Provider identities MATCH `f03041ad…`. **23/23** events and **44/44** associations proven to freeze `game_id` via exact full-name + kickoff + REG season (namespaces differ; overlap 0 expected).
 freeze `#limitations` still unverified. 143 JSONL unknown preserved. See `CLOCK_LINEAGE_LEDGER_81759.md`.
+
+## CLEAR 92861 (t5335u)
+
+143 JSONL attempted from already-owned selected freeze+ADMISSIBLE only.
+Staged projection `JSONL_SELECTED_143_SOURCE_VALUE_PROJECTION.json` sha `bf5fd92e…` MATCH
+(143/143 pairs+values; clock_semantics_verified=false). Line/price uniquely bound
+143/143 with source hashes. Envelope clocks request/provider/book-update/download/availability
+= **NOT_EVALUABLE** (0/143). Raw snapshot JSONL `source_file_sha256` NOT_EVALUABLE (0/3 files
+on this host). claimed `captured_at` **not** promoted to verified publication/observation.
+187=44+143 and 496=96+400 exact. `owned_completion_claimed=false`.
+NTBB-K not implemented. See `CLOCK_LINEAGE_LEDGER_92861.md` / `TRACE_CLEAR92861_B.md`.

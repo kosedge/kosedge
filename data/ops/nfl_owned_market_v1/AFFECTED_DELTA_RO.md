@@ -1,26 +1,27 @@
-# Affected-delta map — IDENTITY 81759 Worker B (#715)
+# Affected-delta map — CLEAR 92861 Worker B (#715)
 
-CERT=0. A tip d3f2c56a PRESERVE. Delta review only after eng ACCEPT. No full re-review.
-Preserve EVIDENCE 70648 tip 98ec5d86 / Cos ACCEPT 451ea843.
+CERT=0. A is sole shared-file writer. Delta review only after eng ACCEPT. No full re-review.
+Preserve IDENTITY 81759 tip 7ea9729f / ledger `ce188c64…`.
 
-## Changed vs 8c0a04fb (after Codex stage)
+## Changed vs 7ea9729f
 
 | path | delta |
 |---|---|
-| `identity_join.py` | **NEW** — exact home/away+kickoff+season/REG join; uniqueness; no slop |
-| `constants.py` | 81759 pins |
-| `tests/test_nfl_owned_market_v1.py` | +3 focused (18 total) |
-| `CLOCK_LINEAGE_LEDGER_81759.json` | 44 associations annotated with proven game_ids |
+| `jsonl_trace.py` | **NEW** — 143 JSONL source/value/clock/export from freeze+ADMISSIBLE selected only; staged projection verify |
+| `constants.py` | 92861 pins + freeze/81759/staged-143 sha |
+| `tests/test_nfl_owned_market_v1.py` | +3 focused (21 total) |
+| `CLOCK_LINEAGE_LEDGER_92861.json` | 143 bound rows + 96/400 exact IDs + NOT_EVALUABLE clocks |
 
-Unchanged: risk1 `ca253545…` · 187/400 identities · freeze#limitations unverified.
+Unchanged: risk1 `ca253545…` · 23/44 evidence · freeze#limitations unverified · NTBB-K not implemented.
 
 ## Integrated command
 
 ```
 cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_owned_market_v1.py -q --tb=short
-# 18 passed
+# 21 passed
 ```
 
 ## Remaining blockers
 
-freeze `#limitations` unverified · 143 JSONL unknown · `pulled_at` not causal. Identity success ≠ lineage/GO.
+freeze `#limitations` unverified · 143 envelope clocks NOT_EVALUABLE · `pulled_at` not causal.
+PARTIAL ≠ owned completion. Identity+value bind ≠ lineage/GO.
