@@ -10,8 +10,8 @@ Worker A sole integration. DRAFT only. IMPLEMENTED≠VERIFIED≠ACCEPTED.
 - r7_config_hash: `0493b026cd89e03770701578ceb58d7c67c2d6f85a8d04f4bb001f2cdfc92144`
 - pair_hash: `97604ec2db76bf9100a2d54a2c7f66a5b2bb66e9f78902aec4c13a9e0cde1768`
 - exit: `0`
-- git_tip: `816322b9ce0016c09e99fec254d229b6d4bc3222`
-- git_head: `816322b9ce0016c09e99fec254d229b6d4bc3222`
+- git_tip: `d3d50f0d039ca3a9f187c1b5e162c662b99dbebf`
+- git_head: `d3d50f0d039ca3a9f187c1b5e162c662b99dbebf`
 - R6 A: `54b08a301cf824c79ee3203180a51e2d832bb6f9`
 - R6 B: `afb13301b5c7e3b8780a8dd1f85145e91bebef55`
 - #713: `679dbdaf8c9044edffb34ffca1543c33eea77db7`
