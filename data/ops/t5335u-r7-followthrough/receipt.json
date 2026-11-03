@@ -1,0 +1,70 @@
+{
+  "accepted": false,
+  "boundaries": {
+    "negatives": [
+      {
+        "name": "score_key",
+        "refused": true
+      },
+      {
+        "name": "missing_spec",
+        "refused": true
+      }
+    ],
+    "spy_positive_control": {
+      "evidence_label": "EXECUTED_HERE",
+      "forbidden_call_attempts": 1,
+      "ran": true,
+      "reason": "FIXTURE HARD REFUSE [REFUSE_QUALIFICATION] forbidden call 'socket.getaddrinfo' (zero simulator/network/DB/jobs/outcome)",
+      "refused": true,
+      "spy_fired": true
+    }
+  },
+  "cert": 0,
+  "counts": {
+    "exact496": 496,
+    "n_2020": 240,
+    "n_2021": 256,
+    "new59": 59,
+    "old437": 437,
+    "same96": 96,
+    "same96_ids_present": false,
+    "sum_240_256": 496,
+    "sum_437_59": 496
+  },
+  "fictional_chain": {
+    "apply_linear_totals_calibration": false,
+    "c_margin": 1.6645744773174405,
+    "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_followthrough_preflight.py",
+    "demo_result_sha256": "573671bed3bfa720bcfcd3b049f6a42602596f4064c5d3284118d3391eb3770c",
+    "exit": 0,
+    "exit_source": "SUBPROCESS_RETURNCODE",
+    "final_dest_is_temp": false,
+    "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+    "if_margin": 1.389941504602551,
+    "model_spy": {
+      "asof_for_targets": 0,
+      "produce_if_mu": 0
+    },
+    "ok": true,
+    "outcome_reads": 0,
+    "pair_hash": "18b8d030deec15a6528ff24598a68e182378323bc5541b934471980d32740419",
+    "q2_margin": 1.93920745003233,
+    "r7_code_hash": "b2b97615a19f931ac22b9a2f281236e3a16b9f7e308989d002d7595cae8262e2",
+    "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
+    "surface_notes": 0
+  },
+  "kernel_implemented": false,
+  "missing_n": 5,
+  "ok": true,
+  "owner_clear": "92861",
+  "package": "R7_FOLLOWTHROUGH_PREFLIGHT",
+  "packaging_revision": null,
+  "r7_code_hash": "b2b97615a19f931ac22b9a2f281236e3a16b9f7e308989d002d7595cae8262e2",
+  "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
+  "readiness": "NOT_READY",
+  "ready_for_review": false,
+  "runtime_source_revision": "2a2c91c9b839da2246a01596b203318295581914",
+  "spec_sha256": "2f3c215d7680dd5aa33a0a77690ece4ef70a0a8dbbebaac880750dd776ec66d7",
+  "status": "PREFLIGHT_NOT_READY_AWAITING_CLOUD_FILES"
+}
