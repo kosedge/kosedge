@@ -1,0 +1,6 @@
+status GATED_OK_AWAITING_CHIEF
+profile SYNTHETIC_JOINT_LITERAL_LAW
+digest 27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc
+ready_for_review false
+cert 0
+not_integrated_through_evidence_gate false

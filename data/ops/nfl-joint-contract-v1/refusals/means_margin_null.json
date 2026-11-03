@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "means_margin_null",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "partitions.means.margin is null",
+  "refuse_class": "TYPE",
+  "self_accept": false,
+  "settled_p": null
+}

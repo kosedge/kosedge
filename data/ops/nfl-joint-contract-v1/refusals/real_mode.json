@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "real_mode",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "data_label='REAL' refused before readers/model/network/DB",
+  "refuse_class": "REAL_MODE",
+  "self_accept": false,
+  "settled_p": null
+}

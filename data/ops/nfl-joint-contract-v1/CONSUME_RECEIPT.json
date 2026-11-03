@@ -1,0 +1,182 @@
+{
+  "accepted": false,
+  "cacheable": false,
+  "capability": {
+    "bits": [
+      "JOINT_LITERAL_LAW"
+    ],
+    "fitted": false,
+    "not_bits": [
+      "CENSORED_NORMAL_686",
+      "IF_R6_POINT_MEANS",
+      "JOINT_SCORE",
+      "JOINT_SCORE_PREDICTIVE",
+      "POINT_MARGIN_FROM_MEANS"
+    ],
+    "requested_output": "LITERAL_JOINT_PARTITIONS"
+  },
+  "cert": 0,
+  "channel": "FIXTURE",
+  "consumed": true,
+  "consumer": "joint_literal",
+  "contract_hash": "4f2c9e2b",
+  "contract_id": "NFL_JOINT_CONTRACT_V1",
+  "data_label": "SYNTHETIC",
+  "eligibility": "UNQUALIFIED",
+  "exposure": {
+    "actionable": false,
+    "betting_consumable": false,
+    "cacheable": false,
+    "cert": 0,
+    "env_bypass_honored": false,
+    "production_consumable": false,
+    "public_output": false,
+    "subscriber_consumable": false
+  },
+  "fitted": false,
+  "freeze_receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+  "handoff": {
+    "accepted": false,
+    "bound": true,
+    "cert": 0,
+    "contract_hash": "4f2c9e2b",
+    "contract_id": "NFL_JOINT_CONTRACT_V1",
+    "field": "worker_handoff",
+    "freeze_receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+    "mocked_release": false,
+    "not_a_pass": true,
+    "note": "Synthetic literal-law handoff only. Not Primary A evidence-gate integration. Not platform reclaim. PLATFORM_LIMITATION of #712 is a different record.",
+    "package": "NFL_JOINT_CONTRACT_V1_LITERAL_LAW",
+    "ready_for_review": false,
+    "release_kind": "SYNTHETIC_PARTIAL",
+    "schema": "nfl-joint-contract-v1-handoff-v1",
+    "self_accept": false,
+    "state": "QUIESCENT",
+    "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law"
+  },
+  "identity": {
+    "away": "TST",
+    "game_id": "2026_99_SYN_TST_JNT",
+    "home": "SYN",
+    "kickoff_ts": "2026-11-08T18:00:00Z",
+    "season": 2026,
+    "season_type": "REG",
+    "venue": "SYNTH-JOINT-VENUE",
+    "week": 99
+  },
+  "not_integrated_through_evidence_gate": true,
+  "ok": true,
+  "outcomes": [
+    {
+      "away": 21,
+      "home": 24,
+      "margin": 3,
+      "total": 45,
+      "weight": 0.25
+    },
+    {
+      "away": 24,
+      "home": 21,
+      "margin": -3,
+      "total": 45,
+      "weight": 0.25
+    },
+    {
+      "away": 20,
+      "home": 20,
+      "margin": 0,
+      "total": 40,
+      "weight": 0.25
+    },
+    {
+      "away": 21,
+      "home": 27,
+      "margin": 6,
+      "total": 48,
+      "weight": 0.25
+    }
+  ],
+  "package": "NFL_JOINT_CONTRACT_V1_LITERAL_LAW",
+  "partitions": {
+    "means": {
+      "margin": 1.5,
+      "total": 44.5
+    },
+    "ml": {
+      "away_win": 0.25,
+      "home_win": 0.5,
+      "tie": 0.25
+    },
+    "n": 4,
+    "spread": {
+      "cover": 0.25,
+      "line": -3.0,
+      "loss": 0.5,
+      "push": 0.25
+    },
+    "total": {
+      "line": 45.0,
+      "over": 0.25,
+      "push": 0.5,
+      "under": 0.25
+    },
+    "weight_sum": 1.0
+  },
+  "production_mode": false,
+  "provenance": {
+    "availability": "literal_catalog",
+    "code_hash": "2e385e934bc08390a5949f82e40841a776358ef9d09d1d4fd66774706fa92561",
+    "data_label": "SYNTHETIC",
+    "feature_catalog": [
+      "literal_joint_pairs",
+      "literal_equal_weights"
+    ],
+    "fitted": false,
+    "historical": false,
+    "observation": "AUTHORED",
+    "oracle_hash": "5480da107cd39e3a352a4ccb0059a6b3d7593d81b51ec7b0dab51e6a4721a3e0",
+    "receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+    "schema_hash": "d541b593d7f612a1ad151f9701147d699116c0ac523dd2e342fc991b35c4ddf2",
+    "source": "frozen_literal_oracle",
+    "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law"
+  },
+  "ready_for_review": false,
+  "schema_version": "nfl-joint-contract-v1-literal-law-v1",
+  "self_accept": false,
+  "settlement": {
+    "actionable": false,
+    "eligibility": "UNQUALIFIED",
+    "ev": null,
+    "fair_odds": null,
+    "minted_ev": false,
+    "minted_odds": false,
+    "settled_p": {
+      "ml": {
+        "away_win": 0.25,
+        "home_win": 0.5,
+        "tie": 0.25
+      },
+      "spread": {
+        "cover": 0.25,
+        "loss": 0.5,
+        "push": 0.25
+      },
+      "total": {
+        "over": 0.25,
+        "push": 0.5,
+        "under": 0.25
+      }
+    },
+    "settlement_profile": "SYNTHETIC_LAW_IDENTITY_V1"
+  },
+  "spy_positive_control": {
+    "evidence_label": "EXECUTED_HERE",
+    "forbidden_call_attempts": 2,
+    "ran": true,
+    "reads": 1,
+    "spy_fired": true,
+    "surface_notes": 1
+  },
+  "status": "GATED_OK_AWAITING_CHIEF",
+  "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law"
+}

@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "outcome0_margin_999",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "outcomes[0].margin supplied 999 != recomputed 3",
+  "refuse_class": "HASH_MUTATED",
+  "self_accept": false,
+  "settled_p": null
+}

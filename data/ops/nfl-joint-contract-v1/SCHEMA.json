@@ -1,0 +1,53 @@
+{
+  "cert": 0,
+  "contract_hash": "4f2c9e2b",
+  "contract_id": "NFL_JOINT_CONTRACT_V1",
+  "data_label": "SYNTHETIC",
+  "derive": [
+    "spread",
+    "total",
+    "moneyline"
+  ],
+  "eligibility": "UNQUALIFIED",
+  "feature_catalog": [
+    "literal_joint_pairs",
+    "literal_equal_weights"
+  ],
+  "fitted": false,
+  "from": "SAME_JOINT_LAW_ONLY",
+  "home_spread_rule": "sign(H-A+s) -> cover/push/loss",
+  "identity": {
+    "away": "TST",
+    "game_id": "2026_99_SYN_TST_JNT",
+    "home": "SYN",
+    "kickoff_ts": "2026-11-08T18:00:00Z",
+    "season": 2026,
+    "season_type": "REG",
+    "venue": "SYNTH-JOINT-VENUE",
+    "week": 99
+  },
+  "known_settlement_profile": "SYNTHETIC_LAW_IDENTITY_V1",
+  "not_authorized": [
+    "real_data",
+    "fit",
+    "calibrate",
+    "forecast",
+    "score",
+    "qualify",
+    "live_capture",
+    "customer_output",
+    "if_r6_point_means_to_joint",
+    "censored_normal_686"
+  ],
+  "order_hash": "ce74d8eb",
+  "output": "one shared joint law of paired nonnegative integer (H,A) with normalized weights",
+  "owner_clear": "f1fb6735",
+  "package": "NFL_JOINT_CONTRACT_V1_LITERAL_LAW",
+  "protocol": "ed10e80f",
+  "schema_version": "nfl-joint-contract-v1-literal-law-v1",
+  "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law",
+  "tie_mass": "preserved",
+  "ties_are_away_wins": false,
+  "total_rule": "H+A vs t -> over/push/under",
+  "unknown_settlement": "refuse settled_p / fair_odds / EV / actionable"
+}

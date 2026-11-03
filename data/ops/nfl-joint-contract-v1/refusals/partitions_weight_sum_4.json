@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "partitions_weight_sum_4",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "partitions.weight_sum supplied 4 != recomputed 1.0",
+  "refuse_class": "PARTITION",
+  "self_accept": false,
+  "settled_p": null
+}

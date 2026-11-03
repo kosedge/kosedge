@@ -1,0 +1,24 @@
+{
+  "adjustment_policy": "TRANSPORT_ONLY_NOT_INJURY_POLICY",
+  "book": "SYNTH-BOOK-T5178U",
+  "capability_bits": [
+    "POINT_MARGIN"
+  ],
+  "channel": "FIXTURE",
+  "contract_id": "t5178u-nfl-fixture-assembly-v0",
+  "defense_multiplier": 1.03,
+  "defense_raw": -0.08,
+  "fixture": true,
+  "game_id": "2026_99_TST_SYN",
+  "l1_capture_id": "adc143a4b27d94bce436c5de5bc642f8c200050f20fa6bf57e01b831e6874877",
+  "note": "synthetic transport only; not an injury policy; not live",
+  "offense_multiplier": 0.97,
+  "offense_raw": 0.12,
+  "period": "full_game",
+  "point_margin": 3.0,
+  "price": -110,
+  "production_mode": false,
+  "quote_line_expected": -3.0,
+  "requested_output": "POINT_MARGIN_SPREAD",
+  "side": "HOME"
+}
