@@ -1,0 +1,68 @@
+{
+  "alex_accept": "e58bdb0d",
+  "alex_return_delta": "ac752161",
+  "authority": "t5271u",
+  "cert": 0,
+  "changed_pins": {
+    "bind_score_field": "any home_score/away_score alias key present -> REFUSE (even if equal)"
+  },
+  "command_receipt_sha256": "8fb3d843ac11a0fb55df676deee7e8d0aa4c59d9ca95997e328703f0c0482259",
+  "file_sha256": {
+    "services/model-service/src/services/nfl_joint_contract_v1/consume.py": "a1a1286f0080185678c062f24f84f1d0c8ec3d0e260647db98d052a52444d2de",
+    "services/model-service/tests/test_nfl_joint_contract_v1_numerical_delta.py": "256b443123ed2cfa43d3074617df89d98dca515384eee9babd6c24cb3f6ba6db"
+  },
+  "focus": "3_extra_equal_score_alias",
+  "focus_pass_stand": [
+    "1",
+    "2",
+    "4",
+    "5",
+    "6"
+  ],
+  "freeze_parent": "6f4c5b65ad7c7d534045937590b06d79cbc16891",
+  "freeze_preserved": {
+    "code_hash": "2e385e934bc08390a5949f82e40841a776358ef9d09d1d4fd66774706fa92561",
+    "oracle_hash": "5480da107cd39e3a352a4ccb0059a6b3d7593d81b51ec7b0dab51e6a4721a3e0",
+    "receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+    "schema_hash": "d541b593d7f612a1ad151f9701147d699116c0ac523dd2e342fc991b35c4ddf2"
+  },
+  "order": "1b7abdc0",
+  "package": "PARTIAL",
+  "parent_tip": "78f5d0524e79dff89c8d6a773360a8457e5fb986",
+  "pe_pass_stands": [
+    "d3d1aff7",
+    "90c7b6ee"
+  ],
+  "pytest": {
+    "exit": 0,
+    "historical_79": true,
+    "passed": 94,
+    "prior_numerical_92": true
+  },
+  "ready_for_review": false,
+  "receipt_head": "78f5d0524e79dff89c8d6a773360a8457e5fb986",
+  "receipt_head_vs_tip": {
+    "label": "HEAD at command execution; not rebound to later commit tip",
+    "not_silently_rebound": true,
+    "receipt_head": "78f5d0524e79dff89c8d6a773360a8457e5fb986"
+  },
+  "refusal_receipts": {
+    "equal_extra_home_score": "3180ecfb79b1c257fd6a665015e70a465c5e44b8f85a6a549aaa35225cc70b94"
+  },
+  "residuals_remain_explicit": [
+    "PE R1",
+    "PE R2",
+    "PE R3",
+    "PE R4",
+    "PE R5",
+    "PE R6",
+    "PE R7",
+    "PE R8",
+    "PE R9",
+    "Alex D-a",
+    "C1"
+  ],
+  "return": "8d7171f6",
+  "self_accept": false,
+  "silent_re_freeze": false
+}

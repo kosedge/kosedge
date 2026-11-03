@@ -17,7 +17,7 @@ from src.services.nfl_joint_contract_v1.consume import (
     consume_literal_law,
     run_numerical_single_faults,
 )
-from src.services.nfl_joint_contract_v1.refuse import JointContractRefuse
+from src.services.nfl_joint_contract_v1.refuse import JointContractRefuse, RefuseClass
 from src.services.nfl_joint_contract_v1.spy import FORBIDDEN_CALL_ATTEMPTS, OutcomeReadSpy
 
 REPO = Path(__file__).resolve().parents[3]
@@ -84,3 +84,16 @@ def test_run_numerical_battery_zero_forbidden() -> None:
     assert report["all_refused"] is True
     assert report["forbidden_calls"] == 0
     assert spy.reads == 0
+
+
+def test_equal_extra_home_score_alias_refuses() -> None:
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    mutated = apply_numerical_fault(adapted, "equal_extra_home_score")
+    assert mutated["outcomes"][0]["home_score"] == mutated["outcomes"][0]["home"]
+    with pytest.raises(JointContractRefuse) as exc:
+        consume_literal_law(mutated, root=REPO, outcome_spy=spy)
+    assert exc.value.refuse_class == RefuseClass.TYPE
+    assert "extra alias" in exc.value.reason
+    assert spy.reads == 0
+    assert FORBIDDEN_CALL_ATTEMPTS == []

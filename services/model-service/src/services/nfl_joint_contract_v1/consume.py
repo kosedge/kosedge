@@ -88,9 +88,9 @@ def _close(value: Any, expected: float, name: str, *, refuse_class: str = Refuse
 
 
 def _bind_score_field(raw: Mapping[str, Any], primary: str, alias: str, idx: int) -> int:
-    """Require primary score. Conflicting or alias-only fallthrough refuses."""
+    """Require primary score. Any extra alias key refuses, even if equal."""
     has_primary = primary in raw and raw.get(primary) is not None
-    has_alias = alias in raw and raw.get(alias) is not None
+    has_alias = alias in raw
     if not has_primary:
         if has_alias:
             raise JointContractRefuse(
@@ -103,12 +103,17 @@ def _bind_score_field(raw: Mapping[str, Any], primary: str, alias: str, idx: int
         )
     primary_v = _int_score(raw.get(primary), f"outcomes[{idx}].{primary}")
     if has_alias:
-        alias_v = _int_score(raw.get(alias), f"outcomes[{idx}].{alias}")
-        if alias_v != primary_v:
-            raise JointContractRefuse(
-                f"outcomes[{idx}].{alias}={alias_v} conflicts with {primary}={primary_v}",
-                refuse_class=RefuseClass.HASH_MUTATED,
-            )
+        if raw.get(alias) is not None:
+            alias_v = _int_score(raw.get(alias), f"outcomes[{idx}].{alias}")
+            if alias_v != primary_v:
+                raise JointContractRefuse(
+                    f"outcomes[{idx}].{alias}={alias_v} conflicts with {primary}={primary_v}",
+                    refuse_class=RefuseClass.HASH_MUTATED,
+                )
+        raise JointContractRefuse(
+            f"outcomes[{idx}].{alias} extra alias not permitted",
+            refuse_class=RefuseClass.TYPE,
+        )
     return primary_v
 
 
@@ -448,6 +453,10 @@ NUMERICAL_SINGLE_FAULTS: tuple[tuple[str, Callable[[dict[str, Any]], None]], ...
     ("partitions_weight_sum_4", lambda rec: _set_path(rec, ("partitions", "weight_sum"), 4)),
     ("outcome0_margin_999", lambda rec: _set_path(rec, ("outcomes", 0, "margin"), 999)),
     ("conflicting_home_score", lambda rec: _set_path(rec, ("outcomes", 0, "home_score"), 999)),
+    (
+        "equal_extra_home_score",
+        lambda rec: _set_path(rec, ("outcomes", 0, "home_score"), rec["outcomes"][0]["home"]),
+    ),
 )
 
 

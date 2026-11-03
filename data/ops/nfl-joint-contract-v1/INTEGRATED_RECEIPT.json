@@ -15,7 +15,7 @@
     {
       "path": "services/model-service/src/services/nfl_joint_contract_v1/consume.py",
       "ref_kind": "file_sha256",
-      "sha256": "8a573e945e038477c5d874fc5d78dd257750df46ccd87e1930c3d87f3832cae7"
+      "sha256": "a1a1286f0080185678c062f24f84f1d0c8ec3d0e260647db98d052a52444d2de"
     },
     {
       "path": "services/model-service/src/services/nfl_joint_contract_v1/oracle.py",
@@ -48,7 +48,7 @@
       "sha256": "9419a1a12d896cf2df78cffef9739e564d5fbc156189039a569792610d0755a3"
     }
   ],
-  "code_hash": "4d3b761d730daa679e486319d65c49cc23bcf9e94c96930d6bf088d805bef0ff",
+  "code_hash": "d0ad74f65590e18e6849e6109e7e2a7b08b764c044eb31b7f779ae96386a425b",
   "cohort": {
     "game_ids": [
       "2026_99_SYN_TST_JNT"
@@ -61,7 +61,7 @@
   "config_hash": "d03aa8453dbb9f8b2d752af4a1626f9c17cb3282ee489562f6e82eebcf974693",
   "cwd": "/agent/repos/kosedge",
   "data_label": "SYNTHETIC",
-  "end_utc": "2026-11-03T05:13:16Z",
+  "end_utc": "2026-11-03T05:22:49Z",
   "evidence_labels": {
     "chief_review": "NOT_RUN",
     "consume_fixture_chain": "EXECUTED_HERE",
@@ -79,9 +79,9 @@
   "execution": {
     "consume_invoked_here": true,
     "import_only": false,
-    "process_id": 8787,
+    "process_id": 9493,
     "produce_invoked_here": true,
-    "produce_start_utc": "2026-11-03T05:13:16Z",
+    "produce_start_utc": "2026-11-03T05:22:49Z",
     "saved_output_only": false
   },
   "exit": 0,
@@ -118,7 +118,7 @@
   "hash_bindings": {
     "code": {
       "alg": "sha256",
-      "sha256": "4d3b761d730daa679e486319d65c49cc23bcf9e94c96930d6bf088d805bef0ff",
+      "sha256": "d0ad74f65590e18e6849e6109e7e2a7b08b764c044eb31b7f779ae96386a425b",
       "source": "gate_and_caller_files"
     },
     "config": {
@@ -144,7 +144,7 @@
   },
   "head": {
     "kind": "git_commit",
-    "value": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
+    "value": "78f5d0524e79dff89c8d6a773360a8457e5fb986"
   },
   "historical_t5266u": {
     "not_final_numerical_completion": true,
@@ -152,7 +152,7 @@
   },
   "history_hash": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
   "immutable_input_proof": {
-    "dest": "/tmp/nfl-joint-contract-v1-integrated/joint_adapter.json",
+    "dest": "/tmp/nfl-joint-alias/joint_adapter.json",
     "dest_is_temp": true,
     "pinned_originals_unwritten": true,
     "research_bytes": "temp-only"
@@ -184,7 +184,7 @@
     "SYNTHETIC_JOINT_LITERAL_LAW is not SYNTHETIC_WFIX_AB_CHAIN",
     "B PLATFORM_LIMITATION / not_a_pass reused; no platform reclaim"
   ],
-  "log_hash": "f3965e6f408ad0f1f8172aa29a55f4724a83c17879ea895ebc09311ab9a88cb4",
+  "log_hash": "ca06d056df5272223af5b0e51297257de0465cefb42a51411ba5b524719a43bb",
   "not_integrated_through_evidence_gate": false,
   "numerical_output": {
     "away_win": 0.25,
@@ -278,18 +278,26 @@
         "reason": "outcomes[0].home_score=999 conflicts with home=24",
         "refuse_class": "HASH_MUTATED",
         "refused": true
+      },
+      {
+        "case": "equal_extra_home_score",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "outcomes[0].home_score extra alias not permitted",
+        "refuse_class": "TYPE",
+        "refused": true
       }
     ],
     "forbidden_calls": 0,
-    "n": 10,
+    "n": 11,
     "ran": true
   },
   "ok": true,
   "output_hashes": {
-    "/tmp/nfl-joint-contract-v1-integrated/joint_adapter.json": "ce72ad72c4f00f6002a0283b5300f82115bfb4fddeb5e030554446eeb5101828"
+    "/tmp/nfl-joint-alias/joint_adapter.json": "ce72ad72c4f00f6002a0283b5300f82115bfb4fddeb5e030554446eeb5101828"
   },
   "output_paths": [
-    "/tmp/nfl-joint-contract-v1-integrated/joint_adapter.json"
+    "/tmp/nfl-joint-alias/joint_adapter.json"
   ],
   "owner": "Primary A",
   "owner_clear": "f1fb6735",
@@ -310,12 +318,12 @@
   "profile": "SYNTHETIC_JOINT_LITERAL_LAW",
   "protocol": "ed10e80f",
   "ready_for_review": false,
-  "receipt_head": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+  "receipt_head": "78f5d0524e79dff89c8d6a773360a8457e5fb986",
   "receipt_head_vs_tip": {
     "label": "HEAD at command execution; not rebound to later commit tip",
     "not_silently_rebound": true,
     "parent_tip": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
-    "receipt_head": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
+    "receipt_head": "78f5d0524e79dff89c8d6a773360a8457e5fb986"
   },
   "rehashed_faults": {
     "evidence_label": "EXECUTED_HERE",
@@ -352,7 +360,7 @@
     "refused": true,
     "spy_fired": true
   },
-  "start_utc": "2026-11-03T05:13:16Z",
+  "start_utc": "2026-11-03T05:22:49Z",
   "status": "GATED_OK_AWAITING_CHIEF",
   "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law",
   "typed_references": [
@@ -364,7 +372,7 @@
     {
       "kind": "git_commit",
       "label": "head",
-      "value": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
+      "value": "78f5d0524e79dff89c8d6a773360a8457e5fb986"
     },
     {
       "kind": "git_commit",
