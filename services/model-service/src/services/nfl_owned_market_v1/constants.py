@@ -14,20 +14,26 @@ DATA_LABEL = "SYNTHETIC"
 CHANNEL = "SYNTHETIC"
 OWNER_CLEAR = "86257"
 TICKET = "t5289u"
+RETURN_TICKET = "t5304u"
+RETURN_ID = "47318"
 SCOPE_ID = "chief-nflgreen-model-day-20261103-1700"
 PLAN_FINGERPRINT = "b15d6cec143212067b896057a048cd51071981d6ea1b3561c08db89cb6355358"
 WORKER = "B"
 ROLE = "NARROW_PATCH"
+PRIOR_HANDOFF_SHA256 = "5b7ee2e4fb849e1bcaf7d09f888d2e61ff6f9993550727f66b66d0126545b553"
+PRIOR_COS_ACCEPT = "5c86d228"
 
 PROFILE_OWNED_MARKET_TRACE = "OWNED_MARKET_TRACE_V1"
 PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS = "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1"
+ROLE_OWNED_READINESS = "OWNED_READINESS"
+ROLE_FICTIONAL_ECONOMIC = "FICTIONAL_ECONOMIC"
 PROFILES: Tuple[str, ...] = (
     PROFILE_OWNED_MARKET_TRACE,
     PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
 )
 
-SCHEMA_OWNED_MARKET_TRACE = "owned-market-trace-v1"
-SCHEMA_SYNTHETIC_MARKET_ECONOMIC_EVENTS = "synthetic-market-economic-events-v1"
+SCHEMA_OWNED_MARKET_TRACE = "owned-market-trace-v1-readiness"
+SCHEMA_SYNTHETIC_MARKET_ECONOMIC_EVENTS = "synthetic-market-economic-events-v1-risk1"
 
 KO_MINUS_MINUTES = 60
 SEAL_EQUALS_CUTOFF = True
@@ -54,37 +60,33 @@ PINNED_AWAY = "AAA"
 PINNED_KICKOFF_UTC = "2026-12-06T18:00:00Z"
 PINNED_CUTOFF_UTC = "2026-12-06T17:00:00Z"
 PINNED_SEAL_UTC = PINNED_CUTOFF_UTC
-PINNED_TRACE_ID = "SYNTHETIC_TRACE_OWNED_MARKET_V1"
-PINNED_BATCH_ID = "SYNTHETIC_EVT_BATCH_OWNED_MARKET_V1"
+PINNED_TRACE_ID = "OWNED_READINESS_TRACE_V1"
+PINNED_BATCH_ID = "SYNTHETIC_RISK1_SETTLEMENT_V1"
 
 MARKETS: FrozenSet[str] = frozenset({"spread", "total", "ml"})
 SIDES: FrozenSet[str] = frozenset({"home", "away", "over", "under"})
 EVENT_TYPES: FrozenSet[str] = frozenset(
     {
-        "INJURY_STATUS",
-        "WEATHER_SHIFT",
-        "LINEUP_CONFIRM",
-        "REST_SHOCK",
-        "LIQUIDITY_SHOCK",
-        "NEWS_VOID",
+        "RISK1_SETTLEMENT",
+        "ATS_GRADE",
+        "ROI_ROLLUP",
+        "LINE_CLV",
+        "MISSING_DATA_REFUSE",
     }
 )
 EFFECT_CHANNELS: FrozenSet[str] = frozenset(
-    {"SPREAD", "TOTAL", "ML", "USAGE", "VIG", "VOID"}
+    {"SPREAD", "TOTAL", "ML", "ROI", "CLV", "VOID"}
 )
 TEAMS: FrozenSet[str] = frozenset({PINNED_HOME, PINNED_AWAY, "NEUTRAL"})
 PLAYER_SLOTS: FrozenSet[str] = frozenset({"QB1", "RB1", "WR1", "TE1", "NONE"})
 OBS_STATUS = "DERIVED_PREGAME"
 OBS_SOURCE = "SYNTHETIC_OWNED_QUOTE"
-EVT_SOURCE = "SYNTHETIC_OWNED_EVENT"
+EVT_SOURCE = "SYNTHETIC_RISK1_TICKET"
 
 FORBIDDEN_OUTPUT_KEYS: FrozenSet[str] = frozenset(
     {
         "play",
         "lean",
-        "stake",
-        "units",
-        "clv",
         "edge",
         "kei",
         "bet",
@@ -158,6 +160,27 @@ EVENT_FIELDS: Tuple[str, ...] = (
     "source_byte_hash",
 )
 
+TICKET_FIELDS: Tuple[str, ...] = (
+    "ticket_id",
+    "event_type",
+    "market",
+    "side",
+    "line",
+    "juice",
+    "juice_status",
+    "open_line",
+    "close_line",
+    "open_price",
+    "close_price",
+    "home_score",
+    "away_score",
+    "settlement_status",
+    "available_at",
+    "observed_at",
+    "source",
+    "source_byte_hash",
+)
+
 CODE_BIND_FILES: Tuple[str, ...] = (
     "constants.py",
     "hashing.py",
@@ -168,5 +191,7 @@ CODE_BIND_FILES: Tuple[str, ...] = (
     "pins.py",
     "profiles.py",
     "run.py",
+    "arithmetic.py",
+    "owned_readiness.py",
     "__init__.py",
 )

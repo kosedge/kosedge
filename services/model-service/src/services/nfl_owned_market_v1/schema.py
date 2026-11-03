@@ -1,33 +1,22 @@
-"""JSON Schema bodies for the two B profiles. CERT=0. Synthetic only."""
+"""JSON Schema bodies. Profiles stay separate. CERT=0."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from src.services.nfl_owned_market_v1.constants import (
-    BOOK_ID,
     CERT,
-    CHANNEL,
-    DATA_LABEL,
-    EFFECT_CHANNELS,
-    ENVELOPE_FIELDS,
-    EVENT_FIELDS,
     EVENT_TYPES,
-    IDENTITY_KIND,
-    KO_MINUS_MINUTES,
     MARKETS,
-    OBS_FIELDS,
-    OBS_SOURCE,
-    OBS_STATUS,
     PACKAGE,
-    PLAYER_SLOTS,
     PROFILE_OWNED_MARKET_TRACE,
     PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
+    ROLE_FICTIONAL_ECONOMIC,
+    ROLE_OWNED_READINESS,
     SCHEMA_OWNED_MARKET_TRACE,
     SCHEMA_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
     SIDES,
-    TEAMS,
-    TIMING_FIELDS,
+    TICKET_FIELDS,
 )
 from src.services.nfl_owned_market_v1.hashing import canonical_sha256
 
@@ -44,142 +33,95 @@ def _utc_property() -> dict[str, Any]:
     return {"type": "string", "pattern": r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$"}
 
 
-def envelope_schema() -> dict[str, Any]:
+def ticket_schema() -> dict[str, Any]:
     return {
         "type": "object",
         "additionalProperties": False,
-        "required": list(ENVELOPE_FIELDS),
+        "required": list(TICKET_FIELDS),
         "properties": {
-            "game_id": {"type": "string", "pattern": r"^SYNTHETIC_"},
-            "season": {"type": "integer"},
-            "week": {"type": "integer"},
-            "season_type": {"const": "REG"},
-            "home_team": {"type": "string", "minLength": 1},
-            "away_team": {"type": "string", "minLength": 1},
-            "kickoff_utc": _utc_property(),
-            "venue_id": {"type": "string", "minLength": 1},
-            "identity_kind": {"const": IDENTITY_KIND},
-            "book_id": {"const": BOOK_ID},
-        },
-    }
-
-
-def timing_schema() -> dict[str, Any]:
-    return {
-        "type": "object",
-        "additionalProperties": False,
-        "required": list(TIMING_FIELDS),
-        "properties": {
-            "kickoff_utc": _utc_property(),
-            "cutoff_utc": _utc_property(),
-            "seal_utc": _utc_property(),
-            "ko_minus_minutes": {"const": KO_MINUS_MINUTES},
-        },
-    }
-
-
-def observation_schema() -> dict[str, Any]:
-    return {
-        "type": "object",
-        "additionalProperties": False,
-        "required": list(OBS_FIELDS),
-        "properties": {
-            "seq": {"type": "integer", "minimum": 1},
+            "ticket_id": {"type": "string", "pattern": r"^SYNTHETIC_TKT_"},
+            "event_type": {"enum": sorted(EVENT_TYPES)},
             "market": {"enum": sorted(MARKETS)},
             "side": {"enum": sorted(SIDES)},
             "line": {"type": ["number", "null"]},
-            "price": {"type": "integer"},
+            "juice": {"type": ["integer", "null"]},
+            "juice_status": {"enum": ["stamped", "DATA_GAP", "excluded_void"]},
+            "open_line": {"type": ["number", "null"]},
+            "close_line": {"type": ["number", "null"]},
+            "open_price": {"type": ["integer", "null"]},
+            "close_price": {"type": ["integer", "null"]},
+            "home_score": {"type": ["number", "null"]},
+            "away_score": {"type": ["number", "null"]},
+            "settlement_status": {"enum": ["final", "void"]},
             "available_at": _utc_property(),
             "observed_at": _utc_property(),
-            "source": {"const": OBS_SOURCE},
-            "status": {"const": OBS_STATUS},
-            "caused_by_event_id": {"type": ["string", "null"]},
-            "source_byte_hash": _sha256_property(),
-        },
-    }
-
-
-def event_schema() -> dict[str, Any]:
-    return {
-        "type": "object",
-        "additionalProperties": False,
-        "required": list(EVENT_FIELDS),
-        "properties": {
-            "event_id": {"type": "string", "pattern": r"^SYNTHETIC_EVT_"},
-            "event_type": {"enum": sorted(EVENT_TYPES)},
-            "effect_channel": {"enum": sorted(EFFECT_CHANNELS)},
-            "team": {"enum": sorted(TEAMS)},
-            "player_slot": {"enum": sorted(PLAYER_SLOTS)},
-            "magnitude": {"type": "number"},
-            "available_at": _utc_property(),
-            "observed_at": _utc_property(),
-            "payload": {"type": "object"},
-            "source": {"type": "string", "minLength": 1},
+            "source": {"const": "SYNTHETIC_RISK1_TICKET"},
             "source_byte_hash": _sha256_property(),
         },
     }
 
 
 def owned_market_trace_schema() -> dict[str, Any]:
+    """OWNED_READINESS only. Not a fictional quote completion."""
     return {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "title": PROFILE_OWNED_MARKET_TRACE,
         "schema_version": SCHEMA_OWNED_MARKET_TRACE,
         "profile": PROFILE_OWNED_MARKET_TRACE,
+        "profile_role": ROLE_OWNED_READINESS,
         "package": PACKAGE,
         "cert": CERT,
-        "data_label": DATA_LABEL,
-        "channel": CHANNEL,
         "type": "object",
         "additionalProperties": False,
         "required": [
             "schema_version",
             "profile",
+            "profile_role",
             "package",
             "cert",
-            "data_label",
             "channel",
-            "trace_id",
-            "envelope",
-            "timing",
-            "observations",
+            "data_label",
+            "owned_completion_claimed",
+            "probe",
+            "unavailable",
+            "scientific_hold",
             "source_byte_hash",
         ],
         "properties": {
             "schema_version": {"const": SCHEMA_OWNED_MARKET_TRACE},
             "profile": {"const": PROFILE_OWNED_MARKET_TRACE},
+            "profile_role": {"const": ROLE_OWNED_READINESS},
             "package": {"const": PACKAGE},
             "cert": {"const": CERT},
-            "data_label": {"const": DATA_LABEL},
-            "channel": {"const": CHANNEL},
-            "trace_id": {"type": "string", "pattern": r"^SYNTHETIC_"},
-            "envelope": envelope_schema(),
-            "timing": timing_schema(),
-            "observations": {
-                "type": "array",
-                "minItems": 1,
-                "items": observation_schema(),
+            "channel": {"const": "OWNED_READINESS"},
+            "data_label": {
+                "enum": ["OWNED_SOURCE_UNAVAILABLE", "OWNED_SOURCE_BOUND"]
             },
+            "owned_completion_claimed": {"const": False},
+            "probe": {"type": "object"},
+            "unavailable": {"type": "array"},
+            "scientific_hold": {"type": "array", "items": {"type": "string"}},
             "source_byte_hash": _sha256_property(),
         },
     }
 
 
 def synthetic_market_economic_events_schema() -> dict[str, Any]:
+    """FICTIONAL_ECONOMIC risk1 settlement. Not owned-readiness."""
     return {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "title": PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
         "schema_version": SCHEMA_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
         "profile": PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
+        "profile_role": ROLE_FICTIONAL_ECONOMIC,
         "package": PACKAGE,
         "cert": CERT,
-        "data_label": DATA_LABEL,
-        "channel": CHANNEL,
         "type": "object",
         "additionalProperties": False,
         "required": [
             "schema_version",
             "profile",
+            "profile_role",
             "package",
             "cert",
             "data_label",
@@ -187,24 +129,29 @@ def synthetic_market_economic_events_schema() -> dict[str, Any]:
             "batch_id",
             "envelope",
             "timing",
-            "events",
+            "tickets",
+            "settlements",
+            "roi",
             "source_byte_hash",
         ],
         "properties": {
             "schema_version": {"const": SCHEMA_SYNTHETIC_MARKET_ECONOMIC_EVENTS},
             "profile": {"const": PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS},
+            "profile_role": {"const": ROLE_FICTIONAL_ECONOMIC},
             "package": {"const": PACKAGE},
             "cert": {"const": CERT},
-            "data_label": {"const": DATA_LABEL},
-            "channel": {"const": CHANNEL},
+            "data_label": {"const": "SYNTHETIC"},
+            "channel": {"const": "SYNTHETIC"},
             "batch_id": {"type": "string", "pattern": r"^SYNTHETIC_"},
-            "envelope": envelope_schema(),
-            "timing": timing_schema(),
-            "events": {
+            "envelope": {"type": "object"},
+            "timing": {"type": "object"},
+            "tickets": {
                 "type": "array",
                 "minItems": 1,
-                "items": event_schema(),
+                "items": ticket_schema(),
             },
+            "settlements": {"type": "array"},
+            "roi": {"type": "object"},
             "source_byte_hash": _sha256_property(),
         },
     }

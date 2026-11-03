@@ -1,12 +1,15 @@
 """Isolated OWNED_MARKET_TRACE_V1 + SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1.
 
-Worker B narrow patch. CERT=0. Synthetic only. A registers the profiles.
+Worker B narrow patch. CERT=0. A registers the profiles.
+OWNED_READINESS and FICTIONAL_ECONOMIC stay separate.
 """
 
 from src.services.nfl_owned_market_v1.constants import (
     PACKAGE,
     PROFILE_OWNED_MARKET_TRACE,
     PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS,
+    ROLE_FICTIONAL_ECONOMIC,
+    ROLE_OWNED_READINESS,
 )
 from src.services.nfl_owned_market_v1.produce import (
     build_events_document,
@@ -25,6 +28,8 @@ __all__ = [
     "PACKAGE",
     "PROFILE_OWNED_MARKET_TRACE",
     "PROFILE_SYNTHETIC_MARKET_ECONOMIC_EVENTS",
+    "ROLE_FICTIONAL_ECONOMIC",
+    "ROLE_OWNED_READINESS",
     "OwnedMarketRefuse",
     "build_events_document",
     "build_trace_document",

@@ -2,159 +2,45 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "additionalProperties": false,
   "cert": 0,
-  "channel": "SYNTHETIC",
-  "data_label": "SYNTHETIC",
   "package": "nfl_owned_market_v1",
   "profile": "OWNED_MARKET_TRACE_V1",
+  "profile_role": "OWNED_READINESS",
   "properties": {
     "cert": {
       "const": 0
     },
     "channel": {
-      "const": "SYNTHETIC"
+      "const": "OWNED_READINESS"
     },
     "data_label": {
-      "const": "SYNTHETIC"
+      "enum": [
+        "OWNED_SOURCE_UNAVAILABLE",
+        "OWNED_SOURCE_BOUND"
+      ]
     },
-    "envelope": {
-      "additionalProperties": false,
-      "properties": {
-        "away_team": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "book_id": {
-          "const": "OWNED_SYNTH_BOOK"
-        },
-        "game_id": {
-          "pattern": "^SYNTHETIC_",
-          "type": "string"
-        },
-        "home_team": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "identity_kind": {
-          "const": "SYNTHETIC_OWNED_MARKET"
-        },
-        "kickoff_utc": {
-          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
-          "type": "string"
-        },
-        "season": {
-          "type": "integer"
-        },
-        "season_type": {
-          "const": "REG"
-        },
-        "venue_id": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "week": {
-          "type": "integer"
-        }
-      },
-      "required": [
-        "game_id",
-        "season",
-        "week",
-        "season_type",
-        "home_team",
-        "away_team",
-        "kickoff_utc",
-        "venue_id",
-        "identity_kind",
-        "book_id"
-      ],
-      "type": "object"
-    },
-    "observations": {
-      "items": {
-        "additionalProperties": false,
-        "properties": {
-          "available_at": {
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
-            "type": "string"
-          },
-          "caused_by_event_id": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "line": {
-            "type": [
-              "number",
-              "null"
-            ]
-          },
-          "market": {
-            "enum": [
-              "ml",
-              "spread",
-              "total"
-            ]
-          },
-          "observed_at": {
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
-            "type": "string"
-          },
-          "price": {
-            "type": "integer"
-          },
-          "seq": {
-            "minimum": 1,
-            "type": "integer"
-          },
-          "side": {
-            "enum": [
-              "away",
-              "home",
-              "over",
-              "under"
-            ]
-          },
-          "source": {
-            "const": "SYNTHETIC_OWNED_QUOTE"
-          },
-          "source_byte_hash": {
-            "not": {
-              "const": "0000000000000000000000000000000000000000000000000000000000000000"
-            },
-            "pattern": "^[0-9a-f]{64}$",
-            "type": "string"
-          },
-          "status": {
-            "const": "DERIVED_PREGAME"
-          }
-        },
-        "required": [
-          "seq",
-          "market",
-          "side",
-          "line",
-          "price",
-          "available_at",
-          "observed_at",
-          "source",
-          "status",
-          "caused_by_event_id",
-          "source_byte_hash"
-        ],
-        "type": "object"
-      },
-      "minItems": 1,
-      "type": "array"
+    "owned_completion_claimed": {
+      "const": false
     },
     "package": {
       "const": "nfl_owned_market_v1"
     },
+    "probe": {
+      "type": "object"
+    },
     "profile": {
       "const": "OWNED_MARKET_TRACE_V1"
     },
+    "profile_role": {
+      "const": "OWNED_READINESS"
+    },
     "schema_version": {
-      "const": "owned-market-trace-v1"
+      "const": "owned-market-trace-v1-readiness"
+    },
+    "scientific_hold": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
     },
     "source_byte_hash": {
       "not": {
@@ -163,52 +49,25 @@
       "pattern": "^[0-9a-f]{64}$",
       "type": "string"
     },
-    "timing": {
-      "additionalProperties": false,
-      "properties": {
-        "cutoff_utc": {
-          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
-          "type": "string"
-        },
-        "kickoff_utc": {
-          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
-          "type": "string"
-        },
-        "ko_minus_minutes": {
-          "const": 60
-        },
-        "seal_utc": {
-          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
-          "type": "string"
-        }
-      },
-      "required": [
-        "kickoff_utc",
-        "cutoff_utc",
-        "seal_utc",
-        "ko_minus_minutes"
-      ],
-      "type": "object"
-    },
-    "trace_id": {
-      "pattern": "^SYNTHETIC_",
-      "type": "string"
+    "unavailable": {
+      "type": "array"
     }
   },
   "required": [
     "schema_version",
     "profile",
+    "profile_role",
     "package",
     "cert",
-    "data_label",
     "channel",
-    "trace_id",
-    "envelope",
-    "timing",
-    "observations",
+    "data_label",
+    "owned_completion_claimed",
+    "probe",
+    "unavailable",
+    "scientific_hold",
     "source_byte_hash"
   ],
-  "schema_version": "owned-market-trace-v1",
+  "schema_version": "owned-market-trace-v1-readiness",
   "title": "OWNED_MARKET_TRACE_V1",
   "type": "object"
 }

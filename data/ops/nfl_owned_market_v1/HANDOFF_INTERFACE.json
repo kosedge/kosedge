@@ -1,45 +1,56 @@
 {
   "cert": 0,
-  "code_hash": "f3e6f54f8d15c47f4a240c19cd15a2bf7a06d73daf23c19aaa7d33e66a3ed7aa",
-  "data_label": "SYNTHETIC",
+  "code_hash": "6a0233236db7ec3be34e9630783f08eed754c5e636f53dbb1cda7f8cf7ec9c12",
   "do_not": [
     "B does not edit shared files",
     "B does not register profiles on the shared evidence gate",
-    "A alone registers OWNED_MARKET_TRACE_V1 and SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1 on R7_CORRECTNESS_V1",
-    "#714 stays PARTIAL and is not a base"
+    "A alone registers the two profile names on R7_CORRECTNESS_V1",
+    "Do not treat FICTIONAL_ECONOMIC tickets as owned-source completion",
+    "Do not join owned 2020/21 quotes to outcomes under this return"
   ],
   "join_contract": {
-    "caused_by_event_id": "observations[].caused_by_event_id -> events[].event_id",
-    "game_id": "shared envelope.game_id",
-    "timing": "event.available_at < observation.available_at < seal_utc=cutoff_utc=kickoff-60",
+    "owned_completion_claimed": false,
+    "profiles_separate": true,
     "validator": "src.services.nfl_owned_market_v1.validate:validate_join"
   },
   "owner_clear": "86257",
   "package": "nfl_owned_market_v1",
   "plan_fingerprint": "b15d6cec143212067b896057a048cd51071981d6ea1b3561c08db89cb6355358",
+  "preserves": {
+    "prior_cos_accept": "5c86d228",
+    "prior_handoff_sha256": "5b7ee2e4fb849e1bcaf7d09f888d2e61ff6f9993550727f66b66d0126545b553"
+  },
   "producers": {
-    "OWNED_MARKET_TRACE_V1": "src.services.nfl_owned_market_v1.produce:build_trace_document",
+    "OWNED_MARKET_TRACE_V1": "src.services.nfl_owned_market_v1.owned_readiness:build_owned_readiness_document",
     "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": "src.services.nfl_owned_market_v1.produce:build_events_document"
+  },
+  "profile_roles": {
+    "OWNED_MARKET_TRACE_V1": "OWNED_READINESS",
+    "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": "FICTIONAL_ECONOMIC"
   },
   "profiles": {
     "OWNED_MARKET_TRACE_V1": {
-      "document_hash": "dda58e0bccc509784cb32326f679463c58db8f203c104a1d635c2ceb7f460d59",
-      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/owned_market_trace.synthetic.json",
-      "fixture_sha256": "7e412d1f701929ae963ff0d50d2ee11af93a9b928f14d770e46b310e20da9a4b",
-      "schema_hash": "cd564061cb12a45b0cf813d3e23b6e1166e3fefb77d6b3525e6a997a819dfc57",
+      "document_hash": "3cb74f833d85a49547decba5a49e891ce13fee3f767ba81627d5d65a59ff962b",
+      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/owned_market_trace.readiness.json",
+      "fixture_sha256": "e9d92dac09de61401da4e6d707d8b4e32fa22059bfe5179dc261359adeb1732c",
+      "profile_role": "OWNED_READINESS",
+      "schema_hash": "122053db82d465c5a7be30ca19e3dd9dbcae09229edaeb758450ce8f5fa4a643",
       "schema_path": "data/ops/nfl_owned_market_v1/schemas/OWNED_MARKET_TRACE_V1.schema.json",
-      "schema_sha256": "680a4c9756cab6d3055ee91ce70769f846305470cf450e38b6ceab2f58761e4e"
+      "schema_sha256": "979293b1523b487d5a1fd9ef384043c33086a0e71a3ec9cec7c4638a0ea48089"
     },
     "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": {
-      "document_hash": "ab6e0f4ec87a109dee07024ae186c252e6a6643b09fa9ec3538858e283341efd",
-      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/synthetic_market_economic_events.synthetic.json",
-      "fixture_sha256": "37b21de21c6bb68493b87b8ac908c89f2cf0ebe03ec996d867646386957eb87f",
-      "schema_hash": "326c18108d90ce4b2de5cbbfdb499274abe2aca37baf7a2046a91aa24e3ac021",
+      "document_hash": "2eac30395dad758b0194d361fdb363147e36b38c0927e8b90667cb4d1237937e",
+      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/synthetic_market_economic_events.risk1.json",
+      "fixture_sha256": "ca25354581ae94d87d7bc09aece6829711da6bbe8fd15414e6856e100d5f4b2e",
+      "profile_role": "FICTIONAL_ECONOMIC",
+      "schema_hash": "86069d05211bfe8e57de14fd48a0de5fec30a9f937c618b398ee17490c0d9cfe",
       "schema_path": "data/ops/nfl_owned_market_v1/schemas/SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1.schema.json",
-      "schema_sha256": "a06b15d1507a44ddd0306f3b22314c89ce9a82c9c56996e8e34101862e670e55"
+      "schema_sha256": "4aa8ffa87e39632c52c49d4cdb8d4392cdeec695537593a138a0969f26c19f3a"
     }
   },
   "ready_for_A": true,
+  "return_id": "47318",
+  "return_ticket": "t5304u",
   "scope_id": "chief-nflgreen-model-day-20261103-1700",
   "source_pins": {
     "base_deploy_vercel": "f5e3bb58ccbe5a8892fed2a01f347c2308394a2f",

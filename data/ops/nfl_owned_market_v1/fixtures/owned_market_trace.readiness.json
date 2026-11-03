@@ -1,0 +1,89 @@
+{
+  "cert": 0,
+  "channel": "OWNED_READINESS",
+  "data_label": "OWNED_SOURCE_UNAVAILABLE",
+  "owned_completion_claimed": false,
+  "package": "nfl_owned_market_v1",
+  "probe": {
+    "all_present": false,
+    "database_url_set": false,
+    "related_but_not_source": [
+      {
+        "field": "Odds-API historical date dump (timestamp/data)",
+        "path": "apps/web/data/raw/odds/open/2020-*.json + 2021-*.json",
+        "reason": "date dumps exist on this VM but are not the selected-187 identity, not missingness-400, and carry no owned clock-provenance contract"
+      },
+      {
+        "field": "Odds-API historical date dump",
+        "path": "apps/web/data/raw/odds/close/2020-*.json + 2021-*.json",
+        "reason": "same: raw dumps \u2260 selected owned quote trace"
+      },
+      {
+        "field": "nfl_dp_* season=2025 warehouse export",
+        "path": "data/ops/nfl-owned-data-20260705T201049Z/*.ndjson",
+        "reason": "2025 player/schedule dump; no 2020/21 quote rows; no selected-187"
+      },
+      {
+        "field": "Postgres owned open/close",
+        "path": "DATABASE_URL / odds_snapshots / nfl_market_history_snapshots",
+        "reason": "DATABASE_URL unset; no local postgres listener on this Cursor worker"
+      }
+    ],
+    "required": [
+      {
+        "field": "quotes[187].quote_id",
+        "id": "selected_187",
+        "need": "owned 2020/21 selected 187 quote-trace identity list",
+        "path": "data/ops/nfl_owned_market_v1/owned_2020_21_selected_187.json",
+        "status": "UNAVAILABLE"
+      },
+      {
+        "field": "rows[400].missing_enum",
+        "id": "missingness_400",
+        "need": "owned 400-row missingness projection",
+        "path": "data/ops/nfl_owned_market_v1/missingness_400.json",
+        "status": "UNAVAILABLE"
+      },
+      {
+        "field": "quotes[].available_at|observed_at|captured_at_utc",
+        "id": "clock_provenance",
+        "need": "owned clock provenance for the selected 187",
+        "path": "data/ops/nfl_owned_market_v1/clock_provenance.json",
+        "status": "UNAVAILABLE"
+      }
+    ]
+  },
+  "profile": "OWNED_MARKET_TRACE_V1",
+  "profile_role": "OWNED_READINESS",
+  "schema_version": "owned-market-trace-v1-readiness",
+  "scientific_hold": [
+    "no historical performance",
+    "no outcome join",
+    "no real forecast",
+    "no scientific GO"
+  ],
+  "source_byte_hash": "3cb74f833d85a49547decba5a49e891ce13fee3f767ba81627d5d65a59ff962b",
+  "unavailable": [
+    {
+      "field": "quotes[187].quote_id",
+      "id": "selected_187",
+      "need": "owned 2020/21 selected 187 quote-trace identity list",
+      "path": "data/ops/nfl_owned_market_v1/owned_2020_21_selected_187.json",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "field": "rows[400].missing_enum",
+      "id": "missingness_400",
+      "need": "owned 400-row missingness projection",
+      "path": "data/ops/nfl_owned_market_v1/missingness_400.json",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "field": "quotes[].available_at|observed_at|captured_at_utc",
+      "id": "clock_provenance",
+      "need": "owned clock provenance for the selected 187",
+      "path": "data/ops/nfl_owned_market_v1/clock_provenance.json",
+      "status": "UNAVAILABLE"
+    }
+  ]
+}
