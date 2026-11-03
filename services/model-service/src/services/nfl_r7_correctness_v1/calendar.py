@@ -88,7 +88,11 @@ def _require_phys_row(row: Mapping[str, Any], *, index: int) -> dict[str, Any]:
     missing = [name for name in _PHYS_REQUIRED if row.get(name) in (None, "")]
     if missing:
         raise CalendarRefuse(f"physical_schedule[{index}] missing {missing}")
-    actual_raw = row.get("actual_kickoff_utc") or row.get("kickoff_utc")
+    actual_raw = row.get("actual_kickoff_utc")
+    if actual_raw in (None, ""):
+        raise CalendarRefuse(
+            "actual_kickoff_utc missing — fallback upgrade to kickoff_utc refused"
+        )
     actual = parse_aware_utc(actual_raw, name="actual_kickoff_utc")
     listed = parse_aware_utc(row.get("kickoff_utc"), name="kickoff_utc")
     if actual != listed:
@@ -153,13 +157,23 @@ def last_kickoff_for_franchise(
     *,
     franchise: str,
     before: datetime,
+    kickoff: datetime,
     target_season: int,
 ) -> dict[str, Any] | None:
     """Return the latest same-season REG PLAYED actual-kickoff predecessor record.
 
-    Rejects unsupported or ambiguous predecessors. Other-season rows are
-    excluded, not selected. Duplicate game_id identities refuse.
+    Direct API: `before` must equal actual kickoff − 60 minutes. Missing
+    kickoff or a non-exact cutoff refuses. Rejects unsupported or ambiguous
+    predecessors. Other-season rows are excluded, not selected. Duplicate
+    game_id identities refuse.
     """
+    if kickoff is None:
+        raise CalendarRefuse("last_kickoff requires actual kickoff for exact KO−60")
+    expected = kickoff - timedelta(minutes=KO_MINUS_MINUTES)
+    if before != expected:
+        raise CalendarRefuse(
+            f"last_kickoff before must equal kickoff−{KO_MINUS_MINUTES} exactly"
+        )
     latest: dict[str, Any] | None = None
     seen_ids: dict[str, tuple[str, str, str]] = {}
     for index, raw in enumerate(physical_schedule):
@@ -226,20 +240,31 @@ def bind_rest_from_et_calendar(
         )
     schedule = _require_physical_schedule(physical_schedule)
     kickoff = parse_aware_utc(kickoff_utc, name="kickoff_utc")
+    expected_cutoff = kickoff - timedelta(minutes=KO_MINUS_MINUTES)
     if cutoff_utc is None:
-        cutoff = kickoff - timedelta(minutes=KO_MINUS_MINUTES)
+        cutoff = expected_cutoff
     else:
         cutoff = parse_aware_utc(cutoff_utc, name="cutoff_utc")
-    if cutoff >= kickoff:
-        raise CalendarRefuse("cutoff must be strictly before kickoff (KO−60)")
+        if cutoff != expected_cutoff:
+            raise CalendarRefuse(
+                f"cutoff_utc must equal kickoff−{KO_MINUS_MINUTES} exactly"
+            )
     home_key = franchise_key(home_team, source=home_source)
     away_key = franchise_key(away_team, source=away_source)
-    # D2b: predecessor filter bound to KO−60 cutoff, not KO.
+    # D2b: predecessor filter bound to exact KO−60 cutoff, not KO and not a near miss.
     home_prev = last_kickoff_for_franchise(
-        schedule, franchise=home_key, before=cutoff, target_season=int(target_season)
+        schedule,
+        franchise=home_key,
+        before=cutoff,
+        kickoff=kickoff,
+        target_season=int(target_season),
     )
     away_prev = last_kickoff_for_franchise(
-        schedule, franchise=away_key, before=cutoff, target_season=int(target_season)
+        schedule,
+        franchise=away_key,
+        before=cutoff,
+        kickoff=kickoff,
+        target_season=int(target_season),
     )
     if home_prev is None or away_prev is None:
         raise CalendarRefuse("missing prior game for franchise rest bind")
@@ -286,4 +311,7 @@ def bind_rest_from_et_calendar(
         "physical_schedule": True,
         "q2_history_used_for_rest": False,
         "actual_versus_scheduled_proof": True,
+        "actual_kickoff_provenance": "required",
+        "exact_ko_minus_minutes": KO_MINUS_MINUTES,
+        "missing_actual_fallback": False,
     }

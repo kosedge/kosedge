@@ -715,6 +715,10 @@ def run_r7_integrated(
                 "cutoff_utc",
                 "seal_utc",
                 "replay_ok",
+                "linear_cal_flag",
+                "apply_linear_totals_calibration",
+                "settings_forwarded",
+                "consumed_value_decomposition",
             )},
             "rest_calendar": produced["rest_calendar"],
             "franchise_bind": produced["franchise_bind"],
@@ -772,6 +776,8 @@ def _receipt_md(receipt: dict[str, Any]) -> str:
         f"(UTC date delta home `{rest['utc_date_delta_home']}`)\n"
         f"- franchise: `{receipt['franchise_bind']}`\n"
         f"- r7_config_hash: `{p['r7_config_hash']}`\n"
+        f"- apply_linear_totals_calibration: `{p.get('apply_linear_totals_calibration')}`\n"
+        f"- settings_forwarded: `{p.get('settings_forwarded')}`\n"
         f"- pair_hash: `{receipt['pair']['pair_hash']}`\n"
         f"- exit: `{receipt['exit']}` (source `{receipt.get('exit_source')}`)\n"
         f"- log_hash source: `{receipt.get('log_source')}`\n"

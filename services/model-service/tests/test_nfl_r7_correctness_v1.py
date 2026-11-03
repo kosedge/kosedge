@@ -23,7 +23,19 @@ from src.services.nfl_ops_v1_evidence.refuse import EvidenceGateRefuse, RefuseCl
 from src.services.nfl_ops_v1_evidence.gate import gate_before_consume
 from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
 from src.services.nfl_ops_v1_evidence.validate_r7 import dest_is_actually_temp, readback_and_rehash
-from src.services.nfl_r7_correctness_v1.calendar import CalendarHold, CalendarRefuse, bind_rest_from_et_calendar
+from src.services.nfl_r7_correctness_v1.calendar import (
+    CalendarHold,
+    CalendarRefuse,
+    bind_rest_from_et_calendar,
+    last_kickoff_for_franchise,
+    parse_aware_utc,
+)
+from src.services.nfl_r7_correctness_v1.config_adapter import (
+    ADAPTER_VERSION,
+    APPLY_LINEAR_TOTALS_CALIBRATION,
+    resolve_immutable_config,
+    totals_adjustment_settings,
+)
 from src.services.nfl_r7_correctness_v1.consume_b import HANDOFF_SHA256, consume_b_handoff
 from src.services.nfl_r7_correctness_v1.franchise import (
     FranchiseRefuse,
@@ -662,6 +674,16 @@ def test_consumed_effective_config_bound_and_ambient_env_refused() -> None:
     assert cfg["helper"]["candidate_weight"] == 0.5
     assert cfg["framework"]["settings"]["prior_total_points"] == 45.3
     assert cfg["simulator"]["settings"]["pass_rate_weight"] == 3.2
+    assert cfg["adapter"]["adapter_version"] == ADAPTER_VERSION
+    assert cfg["adapter"]["framework_name_count"] == 83
+    assert cfg["adapter"]["simulator_name_count"] == 13
+    assert cfg["framework"]["name_count"] == 83
+    assert cfg["simulator"]["name_count"] == 13
+    assert cfg["simulator"]["apply_linear_totals_calibration"] is False
+    assert cfg["meta"]["apply_linear_totals_calibration"] is False
+    assert cfg["simulator"]["totals_settings_forwarded"] is True
+    assert len(cfg["framework"]["disabled"]) == 21
+    assert len(cfg["simulator"]["unavailable"]) == 6
     assert NUMERICAL_ENV_PREFIXES == ("NFL_FRAMEWORK_", "NFL_TOTALS_")
     hits = ambient_numerical_env_hits(
         (
@@ -722,5 +744,129 @@ def test_generic_typed_synthetic_input_caller_allows_et_eq_utc() -> None:
     assert produced["r6_point_margin"]["effective_config_bound"] is True
     assert produced["r6_point_margin"]["simulations"] == 4000
     assert produced["r6_point_margin"]["q2"].get("parameter_label")
+    assert produced["apply_linear_totals_calibration"] is False
+    assert produced["linear_cal_flag"] is False
+    assert produced["settings_forwarded"] is True
+    decomp = produced["consumed_value_decomposition"]
+    assert decomp["adapter_version"] == ADAPTER_VERSION
+    assert decomp["framework_name_count"] == 83
+    assert decomp["simulator_name_count"] == 13
+    assert decomp["apply_linear_totals_calibration"] is False
+    assert decomp["settings_forwarded"] is True
+    assert decomp["settings_names"] == sorted(totals_adjustment_settings())
     with pytest.raises(R7PacketRefuse, match="missing"):
         require_typed_synthetic_input({"packet": sunday["packet"]})
+
+
+def test_adapter_catalog_matches_frozen_source_name_counts() -> None:
+    import re
+
+    resolved = resolve_immutable_config()
+    assert resolved["adapter_version"] == ADAPTER_VERSION
+    assert resolved["apply_linear_totals_calibration"] is False
+    assert APPLY_LINEAR_TOTALS_CALIBRATION is False
+    assert resolved["framework_name_count"] == 83
+    assert resolved["simulator_name_count"] == 13
+    fw_src = (REPO / "services/model-service/src/services/nfl_handicapping_framework.py").read_text()
+    sim_src = (REPO / "services/model-service/src/services/nfl_simulator.py").read_text()
+    fw_names = set(re.findall(r"NFL_FRAMEWORK_[A-Z0-9_]+", fw_src))
+    sim_names = set(re.findall(r"NFL_TOTALS_[A-Z0-9_]+", sim_src))
+    assert len(fw_names) == 83
+    assert len(sim_names) == 13
+    assert {row["name"] for row in resolved["framework"]} == fw_names
+    assert {row["name"] for row in resolved["simulator"]} == sim_names
+    assert "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED" in resolved["disabled_framework"]
+    assert "NFL_FRAMEWORK_PERSONNEL_ENABLED" in resolved["disabled_framework"]
+    assert "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED" in resolved["disabled_framework"]
+    assert "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED" in resolved["disabled_framework"]
+    assert len(resolved["disabled_framework"]) == 21
+    assert len(resolved["unavailable_simulator"]) == 6
+    forwarded = totals_adjustment_settings(resolved)
+    assert set(forwarded) == set(resolved["active_simulator"])
+    assert not set(forwarded) & set(resolved["unavailable_simulator"])
+    adapter_src = (
+        REPO / "services/model-service/src/services/nfl_r7_correctness_v1/config_adapter.py"
+    ).read_text()
+    assert "os.getenv" not in adapter_src
+    assert "os.environ" not in adapter_src
+
+
+def test_calendar_refuses_missing_actual_fallback_upgrade() -> None:
+    priors = [
+        _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+        _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
+    ]
+    missing = dict(priors[0])
+    missing.pop("actual_kickoff_utc")
+    with pytest.raises(CalendarRefuse, match="fallback upgrade"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=[missing, priors[1]],
+        )
+    blank = {**priors[0], "actual_kickoff_utc": ""}
+    with pytest.raises(CalendarRefuse, match="fallback upgrade"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=[blank, priors[1]],
+        )
+
+
+def test_direct_calendar_api_requires_exact_ko_minus_60() -> None:
+    priors = [
+        _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+        _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
+    ]
+    kickoff = parse_aware_utc("2018-10-12T00:20:00Z", name="kickoff_utc")
+    cutoff = kickoff - timedelta(minutes=60)
+    found = last_kickoff_for_franchise(
+        priors,
+        franchise="LAC",
+        before=cutoff,
+        kickoff=kickoff,
+        target_season=2018,
+    )
+    assert found is not None
+    assert found["game_id"] == "SYNTHETIC_2018_W05_SD_KC"
+    with pytest.raises(CalendarRefuse, match="kickoff−60 exactly"):
+        last_kickoff_for_franchise(
+            priors,
+            franchise="LAC",
+            before=kickoff,
+            kickoff=kickoff,
+            target_season=2018,
+        )
+    with pytest.raises(CalendarRefuse, match="kickoff−60 exactly"):
+        last_kickoff_for_franchise(
+            priors,
+            franchise="LAC",
+            before=kickoff - timedelta(minutes=30),
+            kickoff=kickoff,
+            target_season=2018,
+        )
+    rest = bind_rest_from_et_calendar(
+        home_team="LAC",
+        away_team="LAR",
+        kickoff_utc="2018-10-12T00:20:00Z",
+        cutoff_utc="2018-10-11T23:20:00Z",
+        target_season=2018,
+        physical_schedule=priors,
+    )
+    assert rest["exact_ko_minus_minutes"] == 60
+    assert rest["actual_kickoff_provenance"] == "required"
+    assert rest["missing_actual_fallback"] is False
+    assert rest["cutoff_utc"] == "2018-10-11T23:20:00Z"
+    with pytest.raises(CalendarRefuse, match="kickoff−60 exactly"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            cutoff_utc="2018-10-11T23:50:00Z",
+            target_season=2018,
+            physical_schedule=priors,
+        )

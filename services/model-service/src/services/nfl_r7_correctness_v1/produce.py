@@ -11,6 +11,12 @@ from types import MappingProxyType
 from typing import Any, Mapping, Optional
 
 from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
+from src.services.nfl_r7_correctness_v1.config_adapter import (
+    ADAPTER_VERSION,
+    APPLY_LINEAR_TOTALS_CALIBRATION,
+    resolve_immutable_config,
+    totals_adjustment_settings,
+)
 from src.services.nfl_r7_correctness_v1.franchise import (
     key_packet_and_history_for_q2,
     q2_consumed_franchise_aliases,
@@ -128,12 +134,26 @@ def consume_effective_config() -> MappingProxyType:
         raise R7ProduceRefuse("consumed IF tree pin mismatch")
     if preflight["if_tip"] != IF_TIP:
         raise R7ProduceRefuse("consumed IF tip mismatch")
+    adapter = dict(resolve_immutable_config())
+    if adapter["framework_name_count"] != 83 or adapter["simulator_name_count"] != 13:
+        raise R7ProduceRefuse("adapter catalog count drifted from 83 FW / 13 SIM")
+    if adapter["apply_linear_totals_calibration"] is not False:
+        raise R7ProduceRefuse("R7 adapter must record apply_linear_totals_calibration=False")
+    if adapter["ambient_env_reread"] is not False:
+        raise R7ProduceRefuse("adapter ambient env reread must be False")
+    forwarded = totals_adjustment_settings(adapter)
     body = {
+        "adapter": adapter,
         "framework": {
             "fw_sha256": FW_SHA256,
             "if_tip": IF_TIP,
             "observed_fw_sha256": preflight["fw_sha256"],
             "settings": dict(FROZEN_FRAMEWORK_SETTINGS),
+            "name_count": 83,
+            "names": list(adapter["framework"]),
+            "values": dict(adapter["framework_values"]),
+            "active": list(adapter["active_framework"]),
+            "disabled": list(adapter["disabled_framework"]),
         },
         "simulator": {
             "sim_sha256": SIM_SHA256,
@@ -143,6 +163,14 @@ def consume_effective_config() -> MappingProxyType:
             "seed_mod": SEED_MOD,
             "observed_sim_sha256": preflight["sim_sha256"],
             "settings": dict(FROZEN_SIMULATOR_SETTINGS),
+            "name_count": 13,
+            "names": list(adapter["simulator"]),
+            "values": dict(adapter["simulator_values"]),
+            "active": list(adapter["active_simulator"]),
+            "unavailable": list(adapter["unavailable_simulator"]),
+            "apply_linear_totals_calibration": APPLY_LINEAR_TOTALS_CALIBRATION,
+            "totals_settings_forwarded": True,
+            "totals_settings_names": sorted(forwarded.keys()),
         },
         "helper": {
             "c_formula": C_FORMULA,
@@ -174,6 +202,8 @@ def consume_effective_config() -> MappingProxyType:
             "consumed": True,
             "immutable": True,
             "ambient_env_reread": False,
+            "adapter_version": ADAPTER_VERSION,
+            "apply_linear_totals_calibration": APPLY_LINEAR_TOTALS_CALIBRATION,
         },
     }
     return _freeze(body)
@@ -206,6 +236,26 @@ def assert_consumed_config_bound(result: Mapping[str, Any], cfg: Mapping[str, An
         raise R7ProduceRefuse("R6 c_formula did not bind consumed helper settings")
     if float(result.get("candidate_weight")) != float(cfg["helper"]["candidate_weight"]):
         raise R7ProduceRefuse("R6 candidate_weight did not bind consumed helper settings")
+    if cfg["simulator"].get("apply_linear_totals_calibration") is not False:
+        raise R7ProduceRefuse("consumed simulator must record apply_linear_totals_calibration=False")
+    if result.get("linear_cal_flag") is not False:
+        raise R7ProduceRefuse("R7 apply_linear_totals_calibration must be False")
+    if result.get("settings_forwarded") is not True:
+        raise R7ProduceRefuse("R7 totals settings were not forwarded")
+    adapter = cfg.get("adapter")
+    if not isinstance(adapter, Mapping):
+        raise R7ProduceRefuse("consumed adapter missing")
+    if int(adapter.get("framework_name_count", -1)) != 83:
+        raise R7ProduceRefuse("consumed adapter framework_name_count != 83")
+    if int(adapter.get("simulator_name_count", -1)) != 13:
+        raise R7ProduceRefuse("consumed adapter simulator_name_count != 13")
+    decomp = result.get("consumed_value_decomposition")
+    if not isinstance(decomp, Mapping):
+        raise R7ProduceRefuse("consumed-value decomposition missing")
+    if decomp.get("apply_linear_totals_calibration") is not False:
+        raise R7ProduceRefuse("decomposition apply_linear_totals_calibration must be False")
+    if int(decomp.get("framework_name_count", -1)) != 83 or int(decomp.get("simulator_name_count", -1)) != 13:
+        raise R7ProduceRefuse("decomposition catalog counts drifted from 83/13")
 
 
 def produce_r7_point_margin(
@@ -300,6 +350,10 @@ def produce_r7_point_margin(
         "q2_franchise_keyed": True,
         "q2_canonical_state_slots": True,
         "q2_consumed_franchise_aliases": q2_consumed_franchise_aliases(),
+        "linear_cal_flag": result.get("linear_cal_flag"),
+        "apply_linear_totals_calibration": result.get("linear_cal_flag"),
+        "settings_forwarded": result.get("settings_forwarded"),
+        "consumed_value_decomposition": result.get("consumed_value_decomposition"),
         "demo": demo,
     }
     return out

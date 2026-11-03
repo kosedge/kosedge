@@ -185,6 +185,8 @@ def produce_if_mu(
     tree: Path | None = None,
     simulations: int | None = None,
     config_overrides: Mapping[str, Any] | None = None,
+    apply_linear_totals_calibration: bool | None = None,
+    totals_settings: Mapping[str, float] | None = None,
 ) -> dict[str, Any]:
     """Run frozen IF @ 6ca03716 on a complete DERIVED_PREGAME packet. Produces μ."""
     from .if_control import REQUIRED_FIELDS, missing_required_fields
@@ -212,14 +214,30 @@ def produce_if_mu(
         raise IFProduceRefuse(f"{game_id} rest_days_away not bound from packet")
     seed = seed_for(game_id)
     sims = SIMULATIONS if simulations is None else int(simulations)
-    projection = sim.simulate_nfl_game_independent_fair(
-        inputs,
-        simulations=sims,
-        seed=seed,
-        market_spread_home=None,
-        market_total=None,
-        config_overrides=dict(config_overrides) if config_overrides is not None else None,
-    )
+    cal_flag = True if apply_linear_totals_calibration is None else bool(apply_linear_totals_calibration)
+    totals_token = None
+    if totals_settings is not None:
+        from src.services.nfl_r7_correctness_v1.config_adapter import (
+            install_totals_adapter,
+            push_totals_settings,
+            reset_totals_settings,
+        )
+
+        install_totals_adapter(sim)
+        totals_token = push_totals_settings(totals_settings)
+    try:
+        projection = sim.simulate_nfl_game_independent_fair(
+            inputs,
+            simulations=sims,
+            seed=seed,
+            market_spread_home=None,
+            market_total=None,
+            config_overrides=dict(config_overrides) if config_overrides is not None else None,
+            apply_linear_totals_calibration=cal_flag,
+        )
+    finally:
+        if totals_token is not None:
+            reset_totals_settings(totals_token)
     block = projection.get("independent_fair") or {}
     if block.get("market_blend") != MARKET_BLEND:
         raise IFProduceRefuse(f"{game_id} market_blend {block.get('market_blend')} != 0")
@@ -238,4 +256,6 @@ def produce_if_mu(
         "if_forecast_label": projection.get("forecast_label"),
         "source": "reconstructed_if_produce",
         "if_tree": str(locate_if_tree(tree)),
+        "apply_linear_totals_calibration": cal_flag,
+        "totals_settings_forwarded": totals_settings is not None,
     }

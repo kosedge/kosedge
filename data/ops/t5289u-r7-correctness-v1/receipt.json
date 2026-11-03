@@ -31,11 +31,11 @@
     "home_team_raw": "LAC"
   },
   "gate_713_tip": "679dbdaf8c9044edffb34ffca1543c33eea77db7",
-  "git_head": "e563a698c505067b43ac246cfffddd8095cccc2b",
-  "git_tip": "e563a698c505067b43ac246cfffddd8095cccc2b",
-  "head": "e563a698c505067b43ac246cfffddd8095cccc2b",
+  "git_head": "6d7330ff4c068257dde41632bfedfffa21f1db2f",
+  "git_tip": "6d7330ff4c068257dde41632bfedfffa21f1db2f",
+  "head": "6d7330ff4c068257dde41632bfedfffa21f1db2f",
   "immutable_input_proof": {
-    "dest": "/tmp/r7-correctness-rbdawgx2",
+    "dest": "/tmp/r7-correctness-io5l5gxg",
     "dest_is_temp": true,
     "pinned_originals_unwritten": true
   },
@@ -47,12 +47,12 @@
     "accepted": false,
     "cert": 0,
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
-    "gate_hash": "3e2aa2810f7e0dc0a2794ef8b81280d993fe8192528a10eb6794a11f0ad2d6e7",
+    "gate_hash": "c526971cf1dde3c1b850e5d8c71167d649a8fab8e9960999381dc41f633d4fac",
     "ok": true,
     "package": "R7_CORRECTNESS_V1",
-    "pair_hash": "94249c1cd94b0fb5571f9ebd9bad74afcd1a4f4bfd60c6ae3abb6d6aa6863180",
+    "pair_hash": "18b8d030deec15a6528ff24598a68e182378323bc5541b934471980d32740419",
     "paired": true,
-    "produce_hash": "db1e316b5a01800b2d1bebd164fba3d474bc1d3eca644ee904796ab886827993",
+    "produce_hash": "8f10735bbbeef780e23aee7164c47ca3de9c534811e4cafb263e54dd65dc5f66",
     "profile": "R7_CORRECTNESS_V1",
     "ready_for_review": false,
     "schema_id": "nfl-t5289u-r7-correctness-v1"
@@ -60,17 +60,41 @@
   "plan_fingerprint": "b15d6cec143212067b896057a048cd51071981d6ea1b3561c08db89cb6355358",
   "pr714_status": "PARTIAL_NOT_WHOLESALE_BASE",
   "produce": {
+    "apply_linear_totals_calibration": false,
     "c_margin": 1.6645744773174405,
+    "consumed_value_decomposition": {
+      "active_framework_count": 62,
+      "adapter_version": "r7-config-adapter-v1",
+      "ambient_env_reread": false,
+      "apply_linear_totals_calibration": false,
+      "disabled_framework_count": 21,
+      "framework_name_count": 83,
+      "linear_cal_flag": false,
+      "settings_forwarded": true,
+      "settings_names": [
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+        "NFL_TOTALS_INJURY_WEIGHT",
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT",
+        "NFL_TOTALS_PASS_RATE_WEIGHT",
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT"
+      ],
+      "simulator_name_count": 13,
+      "unavailable_simulator_count": 6
+    },
     "cutoff_utc": "2018-10-11T23:20:00Z",
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
     "history_hash": "0d453ec50ce316024f6206d11975d964cd7a38a44a22924dd7ee8d7628796db4",
     "if_margin": 1.389941504602551,
-    "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
+    "linear_cal_flag": false,
+    "packet_hash": "c3446ecae61469e9183703824627ff48a23b370a99c76909a5d32d580bf17b72",
     "q2_margin": 1.93920745003233,
-    "r7_code_hash": "cdbdc378288072a4020170b041563611aae09ccfa851ba5c0eba863dfb66181b",
-    "r7_config_hash": "f50229af2c95babfd9bef5e35ba9f016002806243204ea26cef69be107277e48",
+    "r7_code_hash": "b2b97615a19f931ac22b9a2f281236e3a16b9f7e308989d002d7595cae8262e2",
+    "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
     "replay_ok": true,
-    "seal_utc": "2018-10-11T23:20:00Z"
+    "seal_utc": "2018-10-11T23:20:00Z",
+    "settings_forwarded": true
   },
   "profile": "R7_CORRECTNESS_V1",
   "profiles": {
@@ -182,6 +206,7 @@
     "refused": true
   },
   "rest_calendar": {
+    "actual_kickoff_provenance": "required",
     "actual_versus_scheduled_proof": true,
     "away_franchise": "LAR",
     "away_prev_availability": "BEFORE_SEAL",
@@ -197,6 +222,7 @@
     "bound_from": "actual_prior_kickoff_et_calendar_date",
     "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
     "cutoff_utc": "2018-10-11T23:20:00Z",
+    "exact_ko_minus_minutes": 60,
     "home_franchise": "LAC",
     "home_prev_availability": "BEFORE_SEAL",
     "home_prev_available_at": "2018-10-07T21:00:00Z",
@@ -210,6 +236,7 @@
     "home_prev_used_actual_not_scheduled": false,
     "kickoff_et_date": "2018-10-11",
     "kickoff_utc": "2018-10-12T00:20:00Z",
+    "missing_actual_fallback": false,
     "physical_schedule": true,
     "predecessor_bound_to": "KO_MINUS_60_CUTOFF",
     "q2_history_used_for_rest": false,

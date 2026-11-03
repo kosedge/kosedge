@@ -431,6 +431,7 @@
     "packet_class": "SYNTHETIC",
     "real_mode_usable": false,
     "rest_calendar": {
+      "actual_kickoff_provenance": "required",
       "actual_versus_scheduled_proof": true,
       "away_franchise": "LAR",
       "away_prev_availability": "BEFORE_SEAL",
@@ -446,6 +447,7 @@
       "bound_from": "actual_prior_kickoff_et_calendar_date",
       "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
       "cutoff_utc": "2018-10-11T23:20:00Z",
+      "exact_ko_minus_minutes": 60,
       "home_franchise": "LAC",
       "home_prev_availability": "BEFORE_SEAL",
       "home_prev_available_at": "2018-10-07T21:00:00Z",
@@ -459,6 +461,7 @@
       "home_prev_used_actual_not_scheduled": false,
       "kickoff_et_date": "2018-10-11",
       "kickoff_utc": "2018-10-12T00:20:00Z",
+      "missing_actual_fallback": false,
       "physical_schedule": true,
       "predecessor_bound_to": "KO_MINUS_60_CUTOFF",
       "q2_history_used_for_rest": false,
@@ -470,7 +473,7 @@
       "utc_date_delta_away": 5,
       "utc_date_delta_home": 5
     },
-    "source_byte_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9"
+    "source_byte_hash": "c3446ecae61469e9183703824627ff48a23b370a99c76909a5d32d580bf17b72"
   },
   "physical_schedule": [
     {
@@ -691,6 +694,7 @@
     }
   ],
   "rest_calendar": {
+    "actual_kickoff_provenance": "required",
     "actual_versus_scheduled_proof": true,
     "away_franchise": "LAR",
     "away_prev_availability": "BEFORE_SEAL",
@@ -706,6 +710,7 @@
     "bound_from": "actual_prior_kickoff_et_calendar_date",
     "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
     "cutoff_utc": "2018-10-11T23:20:00Z",
+    "exact_ko_minus_minutes": 60,
     "home_franchise": "LAC",
     "home_prev_availability": "BEFORE_SEAL",
     "home_prev_available_at": "2018-10-07T21:00:00Z",
@@ -719,6 +724,7 @@
     "home_prev_used_actual_not_scheduled": false,
     "kickoff_et_date": "2018-10-11",
     "kickoff_utc": "2018-10-12T00:20:00Z",
+    "missing_actual_fallback": false,
     "physical_schedule": true,
     "predecessor_bound_to": "KO_MINUS_60_CUTOFF",
     "q2_history_used_for_rest": false,

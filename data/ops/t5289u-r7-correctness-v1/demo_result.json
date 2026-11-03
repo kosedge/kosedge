@@ -1,4 +1,5 @@
 {
+  "apply_linear_totals_calibration": false,
   "authority": "t5289u",
   "c_formula": "C=0.5*IF+0.5*Q2",
   "c_formula_controls": [
@@ -23,11 +24,1411 @@
   "cert": 0,
   "channel": "SYNTHETIC",
   "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_correctness_v1.py",
+  "consumed_value_decomposition": {
+    "active_framework_count": 62,
+    "adapter_version": "r7-config-adapter-v1",
+    "ambient_env_reread": false,
+    "apply_linear_totals_calibration": false,
+    "disabled_framework_count": 21,
+    "framework_name_count": 83,
+    "linear_cal_flag": false,
+    "settings_forwarded": true,
+    "settings_names": [
+      "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+      "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+      "NFL_TOTALS_INJURY_WEIGHT",
+      "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+      "NFL_TOTALS_MAX_STDEV_ADJUSTMENT",
+      "NFL_TOTALS_PASS_RATE_WEIGHT",
+      "NFL_TOTALS_SUCCESS_DELTA_WEIGHT"
+    ],
+    "simulator_name_count": 13,
+    "unavailable_simulator_count": 6
+  },
   "cutoff_utc": "2018-10-11T23:20:00Z",
   "effective_config": {
+    "adapter": {
+      "active_framework": [
+        "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS",
+        "NFL_FRAMEWORK_PRIOR_MARGIN_POINTS",
+        "NFL_FRAMEWORK_HOME_FIELD_POINTS",
+        "NFL_FRAMEWORK_BASE_SCORE_STDEV",
+        "NFL_FRAMEWORK_BASE_EFF_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_BASE_EFF_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_BASE_EFF_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_HFA_POINTS",
+        "NFL_FRAMEWORK_REST_MARGIN_PER_DAY",
+        "NFL_FRAMEWORK_REST_TOTAL_PER_DAY_ABS",
+        "NFL_FRAMEWORK_REST_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_REST_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_INJURY_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_INJURY_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_INJURY_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_INJURY_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_WEATHER_ENABLED",
+        "NFL_FRAMEWORK_WEATHER_WIND_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_WEATHER_PRECIP_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_WEATHER_EXTREME_TEMP_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_WEATHER_WIND_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_WEATHER_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_WEATHER_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_TRAVEL_ENABLED",
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_MARGIN",
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_MARGIN",
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_TRAVEL_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_TRAVEL_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_SHORT_REST_THRESHOLD_DAYS",
+        "NFL_FRAMEWORK_SHORT_REST_MARGIN_POINTS",
+        "NFL_FRAMEWORK_SITUATIONAL_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_REGRESSION_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_REGRESSION_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_REGRESSION_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_REGRESSION_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY",
+        "NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY",
+        "NFL_FRAMEWORK_KAV_ENABLED",
+        "NFL_FRAMEWORK_KAV_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_KAV_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED",
+        "NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN",
+        "NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_ERROR_REGIME_ENABLED",
+        "NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN",
+        "NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY",
+        "NFL_FRAMEWORK_BASE_CONFIDENCE",
+        "NFL_FRAMEWORK_MISSING_FACTOR_PENALTY",
+        "NFL_FRAMEWORK_INJURY_STALENESS_THRESHOLD_HOURS",
+        "NFL_FRAMEWORK_INJURY_STALENESS_PENALTY",
+        "NFL_FRAMEWORK_VARIANCE_PENALTY_WEIGHT",
+        "NFL_FRAMEWORK_REGRESSION_PENALTY_WEIGHT",
+        "NFL_FRAMEWORK_MAX_UNCERTAINTY_PENALTY",
+        "NFL_FRAMEWORK_MAX_INJURY_FRESHNESS_HOURS",
+        "NFL_FRAMEWORK_MIN_FACTOR_COVERAGE"
+      ],
+      "active_simulator": [
+        "NFL_TOTALS_PASS_RATE_WEIGHT",
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT",
+        "NFL_TOTALS_INJURY_WEIGHT",
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT"
+      ],
+      "adapter_version": "r7-config-adapter-v1",
+      "ambient_env_reread": false,
+      "apply_linear_totals_calibration": false,
+      "disabled_framework": [
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_PERSONNEL_ENABLED",
+        "NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED",
+        "NFL_FRAMEWORK_COACH_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_COACH_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED",
+        "NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS"
+      ],
+      "framework": [
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS",
+          "value": 45.3
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PRIOR_MARGIN_POINTS",
+          "value": 1.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_HOME_FIELD_POINTS",
+          "value": 1.05
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_SCORE_STDEV",
+          "value": 9.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_MARGIN_WEIGHT",
+          "value": 16.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_TOTAL_WEIGHT",
+          "value": 10.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_MAX_MARGIN_POINTS",
+          "value": 6.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS",
+          "value": 5.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_HFA_POINTS",
+          "value": 1.05
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_MARGIN_PER_DAY",
+          "value": 0.18
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_TOTAL_PER_DAY_ABS",
+          "value": 0.12
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_MAX_MARGIN_POINTS",
+          "value": 2.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_MAX_TOTAL_POINTS",
+          "value": 1.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_MARGIN_WEIGHT",
+          "value": 2.75
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_TOTAL_WEIGHT",
+          "value": 3.25
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_MAX_MARGIN_POINTS",
+          "value": 2.6
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_MAX_TOTAL_POINTS",
+          "value": 2.8
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_WEATHER_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_WIND_WEIGHT_TOTAL",
+          "value": -0.07
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_PRECIP_WEIGHT_TOTAL",
+          "value": -0.12
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_EXTREME_TEMP_WEIGHT_TOTAL",
+          "value": -0.06
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_WIND_MARGIN_WEIGHT",
+          "value": -0.01
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_MAX_MARGIN_POINTS",
+          "value": 0.55
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_MAX_TOTAL_POINTS",
+          "value": 2.8
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_TRAVEL_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_MARGIN",
+          "value": 0.0016
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_MARGIN",
+          "value": 0.28
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_TOTAL",
+          "value": -0.0014
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_TOTAL",
+          "value": -0.18
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MAX_MARGIN_POINTS",
+          "value": 1.75
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MAX_TOTAL_POINTS",
+          "value": 1.6
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_SHORT_REST_THRESHOLD_DAYS",
+          "value": 6.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_SHORT_REST_MARGIN_POINTS",
+          "value": 0.3
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_SITUATIONAL_MAX_MARGIN_POINTS",
+          "value": 0.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MARGIN_WEIGHT",
+          "value": 1.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_TOTAL_WEIGHT",
+          "value": 1.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MAX_MARGIN_POINTS",
+          "value": 1.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MAX_TOTAL_POINTS",
+          "value": 1.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY",
+          "value": 0.35
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY",
+          "value": 0.85
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_KAV_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_MARGIN_WEIGHT",
+          "value": 3.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_TOTAL_WEIGHT",
+          "value": 2.4
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS",
+          "value": 3.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS",
+          "value": 2.8
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_PERSONNEL_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT",
+          "value": 0.85
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT",
+          "value": 0.45
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT",
+          "value": 0.15
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS",
+          "value": 1.6
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS",
+          "value": 1.1
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_MARGIN_WEIGHT",
+          "value": 0.55
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_TOTAL_WEIGHT",
+          "value": 0.45
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS",
+          "value": 1.1
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS",
+          "value": 1.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT",
+          "value": 0.9
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT",
+          "value": 0.35
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS",
+          "value": 1.2
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS",
+          "value": 0.8
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL",
+          "value": -3.5e-05
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN",
+          "value": 0.04
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS",
+          "value": 0.75
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS",
+          "value": 1.4
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_ERROR_REGIME_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN",
+          "value": 0.85
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY",
+          "value": 0.06
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_CONFIDENCE",
+          "value": 0.72
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MISSING_FACTOR_PENALTY",
+          "value": 0.035
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_STALENESS_THRESHOLD_HOURS",
+          "value": 42.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_STALENESS_PENALTY",
+          "value": 0.08
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_VARIANCE_PENALTY_WEIGHT",
+          "value": 0.09
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_PENALTY_WEIGHT",
+          "value": 0.07
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MAX_UNCERTAINTY_PENALTY",
+          "value": 0.33
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MAX_INJURY_FRESHNESS_HOURS",
+          "value": 72.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MIN_FACTOR_COVERAGE",
+          "value": 0.55
+        }
+      ],
+      "framework_name_count": 83,
+      "framework_values": {
+        "NFL_FRAMEWORK_BASE_CONFIDENCE": 0.72,
+        "NFL_FRAMEWORK_BASE_EFF_MARGIN_WEIGHT": 16.0,
+        "NFL_FRAMEWORK_BASE_EFF_MAX_MARGIN_POINTS": 6.5,
+        "NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS": 5.0,
+        "NFL_FRAMEWORK_BASE_EFF_TOTAL_WEIGHT": 10.5,
+        "NFL_FRAMEWORK_BASE_SCORE_STDEV": 9.8,
+        "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED": false,
+        "NFL_FRAMEWORK_COACH_MARGIN_WEIGHT": 0.55,
+        "NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS": 1.1,
+        "NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS": 1.0,
+        "NFL_FRAMEWORK_COACH_TOTAL_WEIGHT": 0.45,
+        "NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY": 0.06,
+        "NFL_FRAMEWORK_ERROR_REGIME_ENABLED": true,
+        "NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN": 0.85,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED": false,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT": 0.0,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS": 0.0,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS": 0.0,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT": 0.0,
+        "NFL_FRAMEWORK_HFA_POINTS": 1.05,
+        "NFL_FRAMEWORK_HOME_FIELD_POINTS": 1.05,
+        "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED": false,
+        "NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT": 0.9,
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS": 1.2,
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS": 0.8,
+        "NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT": 0.35,
+        "NFL_FRAMEWORK_INJURY_MARGIN_WEIGHT": 2.75,
+        "NFL_FRAMEWORK_INJURY_MAX_MARGIN_POINTS": 2.6,
+        "NFL_FRAMEWORK_INJURY_MAX_TOTAL_POINTS": 2.8,
+        "NFL_FRAMEWORK_INJURY_STALENESS_PENALTY": 0.08,
+        "NFL_FRAMEWORK_INJURY_STALENESS_THRESHOLD_HOURS": 42.0,
+        "NFL_FRAMEWORK_INJURY_TOTAL_WEIGHT": 3.25,
+        "NFL_FRAMEWORK_KAV_ENABLED": true,
+        "NFL_FRAMEWORK_KAV_MARGIN_WEIGHT": 3.2,
+        "NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS": 3.5,
+        "NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS": 2.8,
+        "NFL_FRAMEWORK_KAV_TOTAL_WEIGHT": 2.4,
+        "NFL_FRAMEWORK_MAX_INJURY_FRESHNESS_HOURS": 72.0,
+        "NFL_FRAMEWORK_MAX_UNCERTAINTY_PENALTY": 0.33,
+        "NFL_FRAMEWORK_MIN_FACTOR_COVERAGE": 0.55,
+        "NFL_FRAMEWORK_MISSING_FACTOR_PENALTY": 0.035,
+        "NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT": 0.15,
+        "NFL_FRAMEWORK_PERSONNEL_ENABLED": false,
+        "NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT": 0.85,
+        "NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS": 1.6,
+        "NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS": 1.1,
+        "NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT": 0.45,
+        "NFL_FRAMEWORK_PRIOR_MARGIN_POINTS": 1.5,
+        "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS": 45.3,
+        "NFL_FRAMEWORK_REGRESSION_MARGIN_WEIGHT": 1.8,
+        "NFL_FRAMEWORK_REGRESSION_MAX_MARGIN_POINTS": 1.8,
+        "NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY": 0.85,
+        "NFL_FRAMEWORK_REGRESSION_MAX_TOTAL_POINTS": 1.2,
+        "NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY": 0.35,
+        "NFL_FRAMEWORK_REGRESSION_PENALTY_WEIGHT": 0.07,
+        "NFL_FRAMEWORK_REGRESSION_TOTAL_WEIGHT": 1.2,
+        "NFL_FRAMEWORK_REST_MARGIN_PER_DAY": 0.18,
+        "NFL_FRAMEWORK_REST_MAX_MARGIN_POINTS": 2.0,
+        "NFL_FRAMEWORK_REST_MAX_TOTAL_POINTS": 1.2,
+        "NFL_FRAMEWORK_REST_TOTAL_PER_DAY_ABS": 0.12,
+        "NFL_FRAMEWORK_SHORT_REST_MARGIN_POINTS": 0.3,
+        "NFL_FRAMEWORK_SHORT_REST_THRESHOLD_DAYS": 6.0,
+        "NFL_FRAMEWORK_SITUATIONAL_MAX_MARGIN_POINTS": 0.8,
+        "NFL_FRAMEWORK_TRAVEL_ENABLED": true,
+        "NFL_FRAMEWORK_TRAVEL_MAX_MARGIN_POINTS": 1.75,
+        "NFL_FRAMEWORK_TRAVEL_MAX_TOTAL_POINTS": 1.6,
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_MARGIN": 0.0016,
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_TOTAL": -0.0014,
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_MARGIN": 0.28,
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_TOTAL": -0.18,
+        "NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED": true,
+        "NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS": 0.75,
+        "NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS": 1.4,
+        "NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL": -3.5e-05,
+        "NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN": 0.04,
+        "NFL_FRAMEWORK_VARIANCE_PENALTY_WEIGHT": 0.09,
+        "NFL_FRAMEWORK_WEATHER_ENABLED": true,
+        "NFL_FRAMEWORK_WEATHER_EXTREME_TEMP_WEIGHT_TOTAL": -0.06,
+        "NFL_FRAMEWORK_WEATHER_MAX_MARGIN_POINTS": 0.55,
+        "NFL_FRAMEWORK_WEATHER_MAX_TOTAL_POINTS": 2.8,
+        "NFL_FRAMEWORK_WEATHER_PRECIP_WEIGHT_TOTAL": -0.12,
+        "NFL_FRAMEWORK_WEATHER_WIND_MARGIN_WEIGHT": -0.01,
+        "NFL_FRAMEWORK_WEATHER_WIND_WEIGHT_TOTAL": -0.07
+      },
+      "simulator": [
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_PASS_RATE_WEIGHT",
+          "value": 3.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+          "value": 3.4
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_SUCCESS_DELTA_WEIGHT",
+          "value": 7.4
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_INJURY_WEIGHT",
+          "value": 6.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+          "value": 4.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+          "value": 1.35
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_MAX_STDEV_ADJUSTMENT",
+          "value": 2.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_MIN_TOTAL",
+          "value": 24.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_MAX_TOTAL",
+          "value": 66.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT",
+          "value": 1.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT",
+          "value": 0.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_MIN_SAMPLE",
+          "value": 80.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX",
+          "value": 18.0
+        }
+      ],
+      "simulator_name_count": 13,
+      "simulator_values": {
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX": 18.0,
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT": 0.0,
+        "NFL_TOTALS_CALIBRATION_MAX_TOTAL": 66.0,
+        "NFL_TOTALS_CALIBRATION_MIN_SAMPLE": 80.0,
+        "NFL_TOTALS_CALIBRATION_MIN_TOTAL": 24.0,
+        "NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT": 1.0,
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT": 3.4,
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT": 1.35,
+        "NFL_TOTALS_INJURY_WEIGHT": 6.0,
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS": 4.2,
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT": 2.0,
+        "NFL_TOTALS_PASS_RATE_WEIGHT": 3.2,
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT": 7.4
+      },
+      "unavailable_simulator": [
+        "NFL_TOTALS_CALIBRATION_MIN_TOTAL",
+        "NFL_TOTALS_CALIBRATION_MAX_TOTAL",
+        "NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT",
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT",
+        "NFL_TOTALS_CALIBRATION_MIN_SAMPLE",
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX"
+      ]
+    },
     "framework": {
+      "active": [
+        "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS",
+        "NFL_FRAMEWORK_PRIOR_MARGIN_POINTS",
+        "NFL_FRAMEWORK_HOME_FIELD_POINTS",
+        "NFL_FRAMEWORK_BASE_SCORE_STDEV",
+        "NFL_FRAMEWORK_BASE_EFF_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_BASE_EFF_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_BASE_EFF_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_HFA_POINTS",
+        "NFL_FRAMEWORK_REST_MARGIN_PER_DAY",
+        "NFL_FRAMEWORK_REST_TOTAL_PER_DAY_ABS",
+        "NFL_FRAMEWORK_REST_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_REST_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_INJURY_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_INJURY_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_INJURY_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_INJURY_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_WEATHER_ENABLED",
+        "NFL_FRAMEWORK_WEATHER_WIND_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_WEATHER_PRECIP_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_WEATHER_EXTREME_TEMP_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_WEATHER_WIND_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_WEATHER_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_WEATHER_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_TRAVEL_ENABLED",
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_MARGIN",
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_MARGIN",
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_TRAVEL_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_TRAVEL_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_SHORT_REST_THRESHOLD_DAYS",
+        "NFL_FRAMEWORK_SHORT_REST_MARGIN_POINTS",
+        "NFL_FRAMEWORK_SITUATIONAL_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_REGRESSION_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_REGRESSION_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_REGRESSION_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_REGRESSION_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY",
+        "NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY",
+        "NFL_FRAMEWORK_KAV_ENABLED",
+        "NFL_FRAMEWORK_KAV_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_KAV_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED",
+        "NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL",
+        "NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN",
+        "NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_ERROR_REGIME_ENABLED",
+        "NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN",
+        "NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY",
+        "NFL_FRAMEWORK_BASE_CONFIDENCE",
+        "NFL_FRAMEWORK_MISSING_FACTOR_PENALTY",
+        "NFL_FRAMEWORK_INJURY_STALENESS_THRESHOLD_HOURS",
+        "NFL_FRAMEWORK_INJURY_STALENESS_PENALTY",
+        "NFL_FRAMEWORK_VARIANCE_PENALTY_WEIGHT",
+        "NFL_FRAMEWORK_REGRESSION_PENALTY_WEIGHT",
+        "NFL_FRAMEWORK_MAX_UNCERTAINTY_PENALTY",
+        "NFL_FRAMEWORK_MAX_INJURY_FRESHNESS_HOURS",
+        "NFL_FRAMEWORK_MIN_FACTOR_COVERAGE"
+      ],
+      "disabled": [
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_PERSONNEL_ENABLED",
+        "NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED",
+        "NFL_FRAMEWORK_COACH_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_COACH_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS",
+        "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED",
+        "NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT",
+        "NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT",
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS",
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS"
+      ],
       "fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
       "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+      "name_count": 83,
+      "names": [
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS",
+          "value": 45.3
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PRIOR_MARGIN_POINTS",
+          "value": 1.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_HOME_FIELD_POINTS",
+          "value": 1.05
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_SCORE_STDEV",
+          "value": 9.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_MARGIN_WEIGHT",
+          "value": 16.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_TOTAL_WEIGHT",
+          "value": 10.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_MAX_MARGIN_POINTS",
+          "value": 6.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS",
+          "value": 5.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_HFA_POINTS",
+          "value": 1.05
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_MARGIN_PER_DAY",
+          "value": 0.18
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_TOTAL_PER_DAY_ABS",
+          "value": 0.12
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_MAX_MARGIN_POINTS",
+          "value": 2.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REST_MAX_TOTAL_POINTS",
+          "value": 1.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_MARGIN_WEIGHT",
+          "value": 2.75
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_TOTAL_WEIGHT",
+          "value": 3.25
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_MAX_MARGIN_POINTS",
+          "value": 2.6
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_MAX_TOTAL_POINTS",
+          "value": 2.8
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_WEATHER_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_WIND_WEIGHT_TOTAL",
+          "value": -0.07
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_PRECIP_WEIGHT_TOTAL",
+          "value": -0.12
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_EXTREME_TEMP_WEIGHT_TOTAL",
+          "value": -0.06
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_WIND_MARGIN_WEIGHT",
+          "value": -0.01
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_MAX_MARGIN_POINTS",
+          "value": 0.55
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_WEATHER_MAX_TOTAL_POINTS",
+          "value": 2.8
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_TRAVEL_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_MARGIN",
+          "value": 0.0016
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_MARGIN",
+          "value": 0.28
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_TOTAL",
+          "value": -0.0014
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_TOTAL",
+          "value": -0.18
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MAX_MARGIN_POINTS",
+          "value": 1.75
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TRAVEL_MAX_TOTAL_POINTS",
+          "value": 1.6
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_SHORT_REST_THRESHOLD_DAYS",
+          "value": 6.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_SHORT_REST_MARGIN_POINTS",
+          "value": 0.3
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_SITUATIONAL_MAX_MARGIN_POINTS",
+          "value": 0.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MARGIN_WEIGHT",
+          "value": 1.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_TOTAL_WEIGHT",
+          "value": 1.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MAX_MARGIN_POINTS",
+          "value": 1.8
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MAX_TOTAL_POINTS",
+          "value": 1.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY",
+          "value": 0.35
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY",
+          "value": 0.85
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_KAV_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_MARGIN_WEIGHT",
+          "value": 3.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_TOTAL_WEIGHT",
+          "value": 2.4
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS",
+          "value": 3.5
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS",
+          "value": 2.8
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS",
+          "value": 0.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_PERSONNEL_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT",
+          "value": 0.85
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT",
+          "value": 0.45
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT",
+          "value": 0.15
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS",
+          "value": 1.6
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS",
+          "value": 1.1
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_MARGIN_WEIGHT",
+          "value": 0.55
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_TOTAL_WEIGHT",
+          "value": 0.45
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS",
+          "value": 1.1
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS",
+          "value": 1.0
+        },
+        {
+          "branch": "disabled",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED",
+          "value": false
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT",
+          "value": 0.9
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT",
+          "value": 0.35
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS",
+          "value": 1.2
+        },
+        {
+          "branch": "disabled",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS",
+          "value": 0.8
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL",
+          "value": -3.5e-05
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN",
+          "value": 0.04
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS",
+          "value": 0.75
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS",
+          "value": 1.4
+        },
+        {
+          "branch": "active",
+          "kind": "bool",
+          "name": "NFL_FRAMEWORK_ERROR_REGIME_ENABLED",
+          "value": true
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN",
+          "value": 0.85
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY",
+          "value": 0.06
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_BASE_CONFIDENCE",
+          "value": 0.72
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MISSING_FACTOR_PENALTY",
+          "value": 0.035
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_STALENESS_THRESHOLD_HOURS",
+          "value": 42.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_INJURY_STALENESS_PENALTY",
+          "value": 0.08
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_VARIANCE_PENALTY_WEIGHT",
+          "value": 0.09
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_REGRESSION_PENALTY_WEIGHT",
+          "value": 0.07
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MAX_UNCERTAINTY_PENALTY",
+          "value": 0.33
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MAX_INJURY_FRESHNESS_HOURS",
+          "value": 72.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_FRAMEWORK_MIN_FACTOR_COVERAGE",
+          "value": 0.55
+        }
+      ],
       "observed_fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
       "settings": {
         "base_eff_margin_weight": 16.0,
@@ -38,6 +1439,91 @@
         "prior_total_points": 45.3,
         "rest_margin_per_day": 0.18,
         "rest_total_per_day_abs": 0.12
+      },
+      "values": {
+        "NFL_FRAMEWORK_BASE_CONFIDENCE": 0.72,
+        "NFL_FRAMEWORK_BASE_EFF_MARGIN_WEIGHT": 16.0,
+        "NFL_FRAMEWORK_BASE_EFF_MAX_MARGIN_POINTS": 6.5,
+        "NFL_FRAMEWORK_BASE_EFF_MAX_TOTAL_POINTS": 5.0,
+        "NFL_FRAMEWORK_BASE_EFF_TOTAL_WEIGHT": 10.5,
+        "NFL_FRAMEWORK_BASE_SCORE_STDEV": 9.8,
+        "NFL_FRAMEWORK_COACH_AGGRESSION_ENABLED": false,
+        "NFL_FRAMEWORK_COACH_MARGIN_WEIGHT": 0.55,
+        "NFL_FRAMEWORK_COACH_MAX_MARGIN_POINTS": 1.1,
+        "NFL_FRAMEWORK_COACH_MAX_TOTAL_POINTS": 1.0,
+        "NFL_FRAMEWORK_COACH_TOTAL_WEIGHT": 0.45,
+        "NFL_FRAMEWORK_ERROR_REGIME_CONFIDENCE_PENALTY": 0.06,
+        "NFL_FRAMEWORK_ERROR_REGIME_ENABLED": true,
+        "NFL_FRAMEWORK_ERROR_REGIME_MAX_STDEV_WIDEN": 0.85,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_ENABLED": false,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MARGIN_WEIGHT": 0.0,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_MARGIN_POINTS": 0.0,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_MAX_TOTAL_POINTS": 0.0,
+        "NFL_FRAMEWORK_EXTERNAL_DVOA_TOTAL_WEIGHT": 0.0,
+        "NFL_FRAMEWORK_HFA_POINTS": 1.05,
+        "NFL_FRAMEWORK_HOME_FIELD_POINTS": 1.05,
+        "NFL_FRAMEWORK_INFO_VELOCITY_ENABLED": false,
+        "NFL_FRAMEWORK_INFO_VELOCITY_MARGIN_WEIGHT": 0.9,
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_MARGIN_POINTS": 1.2,
+        "NFL_FRAMEWORK_INFO_VELOCITY_MAX_TOTAL_POINTS": 0.8,
+        "NFL_FRAMEWORK_INFO_VELOCITY_TOTAL_WEIGHT": 0.35,
+        "NFL_FRAMEWORK_INJURY_MARGIN_WEIGHT": 2.75,
+        "NFL_FRAMEWORK_INJURY_MAX_MARGIN_POINTS": 2.6,
+        "NFL_FRAMEWORK_INJURY_MAX_TOTAL_POINTS": 2.8,
+        "NFL_FRAMEWORK_INJURY_STALENESS_PENALTY": 0.08,
+        "NFL_FRAMEWORK_INJURY_STALENESS_THRESHOLD_HOURS": 42.0,
+        "NFL_FRAMEWORK_INJURY_TOTAL_WEIGHT": 3.25,
+        "NFL_FRAMEWORK_KAV_ENABLED": true,
+        "NFL_FRAMEWORK_KAV_MARGIN_WEIGHT": 3.2,
+        "NFL_FRAMEWORK_KAV_MAX_MARGIN_POINTS": 3.5,
+        "NFL_FRAMEWORK_KAV_MAX_TOTAL_POINTS": 2.8,
+        "NFL_FRAMEWORK_KAV_TOTAL_WEIGHT": 2.4,
+        "NFL_FRAMEWORK_MAX_INJURY_FRESHNESS_HOURS": 72.0,
+        "NFL_FRAMEWORK_MAX_UNCERTAINTY_PENALTY": 0.33,
+        "NFL_FRAMEWORK_MIN_FACTOR_COVERAGE": 0.55,
+        "NFL_FRAMEWORK_MISSING_FACTOR_PENALTY": 0.035,
+        "NFL_FRAMEWORK_PERSONNEL_ELASTICITY_MARGIN_WEIGHT": 0.15,
+        "NFL_FRAMEWORK_PERSONNEL_ENABLED": false,
+        "NFL_FRAMEWORK_PERSONNEL_MARGIN_WEIGHT": 0.85,
+        "NFL_FRAMEWORK_PERSONNEL_MAX_MARGIN_POINTS": 1.6,
+        "NFL_FRAMEWORK_PERSONNEL_MAX_TOTAL_POINTS": 1.1,
+        "NFL_FRAMEWORK_PERSONNEL_TOTAL_WEIGHT": 0.45,
+        "NFL_FRAMEWORK_PRIOR_MARGIN_POINTS": 1.5,
+        "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS": 45.3,
+        "NFL_FRAMEWORK_REGRESSION_MARGIN_WEIGHT": 1.8,
+        "NFL_FRAMEWORK_REGRESSION_MAX_MARGIN_POINTS": 1.8,
+        "NFL_FRAMEWORK_REGRESSION_MAX_RELIABILITY": 0.85,
+        "NFL_FRAMEWORK_REGRESSION_MAX_TOTAL_POINTS": 1.2,
+        "NFL_FRAMEWORK_REGRESSION_MIN_RELIABILITY": 0.35,
+        "NFL_FRAMEWORK_REGRESSION_PENALTY_WEIGHT": 0.07,
+        "NFL_FRAMEWORK_REGRESSION_TOTAL_WEIGHT": 1.2,
+        "NFL_FRAMEWORK_REST_MARGIN_PER_DAY": 0.18,
+        "NFL_FRAMEWORK_REST_MAX_MARGIN_POINTS": 2.0,
+        "NFL_FRAMEWORK_REST_MAX_TOTAL_POINTS": 1.2,
+        "NFL_FRAMEWORK_REST_TOTAL_PER_DAY_ABS": 0.12,
+        "NFL_FRAMEWORK_SHORT_REST_MARGIN_POINTS": 0.3,
+        "NFL_FRAMEWORK_SHORT_REST_THRESHOLD_DAYS": 6.0,
+        "NFL_FRAMEWORK_SITUATIONAL_MAX_MARGIN_POINTS": 0.8,
+        "NFL_FRAMEWORK_TRAVEL_ENABLED": true,
+        "NFL_FRAMEWORK_TRAVEL_MAX_MARGIN_POINTS": 1.75,
+        "NFL_FRAMEWORK_TRAVEL_MAX_TOTAL_POINTS": 1.6,
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_MARGIN": 0.0016,
+        "NFL_FRAMEWORK_TRAVEL_MILES_WEIGHT_TOTAL": -0.0014,
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_MARGIN": 0.28,
+        "NFL_FRAMEWORK_TRAVEL_TIMEZONE_WEIGHT_TOTAL": -0.18,
+        "NFL_FRAMEWORK_TRAVEL_WEATHER_ENABLED": true,
+        "NFL_FRAMEWORK_TW_MAX_MARGIN_POINTS": 0.75,
+        "NFL_FRAMEWORK_TW_MAX_TOTAL_POINTS": 1.4,
+        "NFL_FRAMEWORK_TW_MILES_WIND_WEIGHT_TOTAL": -3.5e-05,
+        "NFL_FRAMEWORK_TW_TZ_PRECIP_WEIGHT_MARGIN": 0.04,
+        "NFL_FRAMEWORK_VARIANCE_PENALTY_WEIGHT": 0.09,
+        "NFL_FRAMEWORK_WEATHER_ENABLED": true,
+        "NFL_FRAMEWORK_WEATHER_EXTREME_TEMP_WEIGHT_TOTAL": -0.06,
+        "NFL_FRAMEWORK_WEATHER_MAX_MARGIN_POINTS": 0.55,
+        "NFL_FRAMEWORK_WEATHER_MAX_TOTAL_POINTS": 2.8,
+        "NFL_FRAMEWORK_WEATHER_PRECIP_WEIGHT_TOTAL": -0.12,
+        "NFL_FRAMEWORK_WEATHER_WIND_MARGIN_WEIGHT": -0.01,
+        "NFL_FRAMEWORK_WEATHER_WIND_WEIGHT_TOTAL": -0.07
       }
     },
     "helper": {
@@ -85,7 +1571,9 @@
       "used_production_rest_days_from_schedule": false
     },
     "meta": {
+      "adapter_version": "r7-config-adapter-v1",
       "ambient_env_reread": false,
+      "apply_linear_totals_calibration": false,
       "consumed": true,
       "immutable": true,
       "owner_clear": "86257",
@@ -99,7 +1587,98 @@
       "r6_b_tip": "afb13301b5c7e3b8780a8dd1f85145e91bebef55"
     },
     "simulator": {
+      "active": [
+        "NFL_TOTALS_PASS_RATE_WEIGHT",
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT",
+        "NFL_TOTALS_INJURY_WEIGHT",
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT"
+      ],
+      "apply_linear_totals_calibration": false,
       "market_blend": 0,
+      "name_count": 13,
+      "names": [
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_PASS_RATE_WEIGHT",
+          "value": 3.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+          "value": 3.4
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_SUCCESS_DELTA_WEIGHT",
+          "value": 7.4
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_INJURY_WEIGHT",
+          "value": 6.0
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+          "value": 4.2
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+          "value": 1.35
+        },
+        {
+          "branch": "active",
+          "kind": "float",
+          "name": "NFL_TOTALS_MAX_STDEV_ADJUSTMENT",
+          "value": 2.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_MIN_TOTAL",
+          "value": 24.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_MAX_TOTAL",
+          "value": 66.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT",
+          "value": 1.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT",
+          "value": 0.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_MIN_SAMPLE",
+          "value": 80.0
+        },
+        {
+          "branch": "unavailable",
+          "kind": "float",
+          "name": "NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX",
+          "value": 18.0
+        }
+      ],
       "observed_sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
       "seed_base": 201710,
       "seed_mod": 1000003,
@@ -113,7 +1692,40 @@
         "success_delta_weight": 7.4
       },
       "sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
-      "simulations": 4000
+      "simulations": 4000,
+      "totals_settings_forwarded": true,
+      "totals_settings_names": [
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+        "NFL_TOTALS_INJURY_WEIGHT",
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT",
+        "NFL_TOTALS_PASS_RATE_WEIGHT",
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT"
+      ],
+      "unavailable": [
+        "NFL_TOTALS_CALIBRATION_MIN_TOTAL",
+        "NFL_TOTALS_CALIBRATION_MAX_TOTAL",
+        "NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT",
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT",
+        "NFL_TOTALS_CALIBRATION_MIN_SAMPLE",
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX"
+      ],
+      "values": {
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_ABS_MAX": 18.0,
+        "NFL_TOTALS_CALIBRATION_INTERCEPT_DEFAULT": 0.0,
+        "NFL_TOTALS_CALIBRATION_MAX_TOTAL": 66.0,
+        "NFL_TOTALS_CALIBRATION_MIN_SAMPLE": 80.0,
+        "NFL_TOTALS_CALIBRATION_MIN_TOTAL": 24.0,
+        "NFL_TOTALS_CALIBRATION_SLOPE_DEFAULT": 1.0,
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT": 3.4,
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT": 1.35,
+        "NFL_TOTALS_INJURY_WEIGHT": 6.0,
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS": 4.2,
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT": 2.0,
+        "NFL_TOTALS_PASS_RATE_WEIGHT": 3.2,
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT": 7.4
+      }
     }
   },
   "franchise_bind": {
@@ -134,11 +1746,12 @@
   },
   "implemented_ne_verified": true,
   "kickoff_utc": "2018-10-12T00:20:00Z",
+  "linear_cal_flag": false,
   "opt_in": true,
   "output_kind": "POINT_MARGIN",
   "owner_clear": "86257",
   "package": "R7_CORRECTNESS_V1",
-  "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
+  "packet_hash": "c3446ecae61469e9183703824627ff48a23b370a99c76909a5d32d580bf17b72",
   "q2_canonical_state_slots": true,
   "q2_consumed_franchise_aliases": {
     "JAC": "JAX",
@@ -156,14 +1769,14 @@
   "q2_margin": 1.93920745003233,
   "r6_a_tip": "54b08a301cf824c79ee3203180a51e2d832bb6f9",
   "r6_b_tip": "afb13301b5c7e3b8780a8dd1f85145e91bebef55",
-  "r6_code_hash": "c5a3cc412289968788ba340e40884fe9cc678fdf07ab2249c9fc94017ef697bb",
+  "r6_code_hash": "1f93dd18f48c203e25b81228848029f745eb5b5aea5dad6c1cf5c2085e5fc5aa",
   "r6_config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
   "r6_point_margin": {
     "binds": {
-      "code_hash": "c5a3cc412289968788ba340e40884fe9cc678fdf07ab2249c9fc94017ef697bb",
+      "code_hash": "1f93dd18f48c203e25b81228848029f745eb5b5aea5dad6c1cf5c2085e5fc5aa",
       "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
       "history_hash": "0d453ec50ce316024f6206d11975d964cd7a38a44a22924dd7ee8d7628796db4",
-      "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
+      "packet_hash": "c3446ecae61469e9183703824627ff48a23b370a99c76909a5d32d580bf17b72",
       "schema_hash_is_not_an_input_bind": true
     },
     "c_formula": "C=0.5*IF+0.5*Q2",
@@ -171,8 +1784,29 @@
     "candidate_weight": 0.5,
     "cert": 0,
     "channel": "SYNTHETIC",
-    "code_hash": "c5a3cc412289968788ba340e40884fe9cc678fdf07ab2249c9fc94017ef697bb",
+    "code_hash": "1f93dd18f48c203e25b81228848029f745eb5b5aea5dad6c1cf5c2085e5fc5aa",
     "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
+    "consumed_value_decomposition": {
+      "active_framework_count": 62,
+      "adapter_version": "r7-config-adapter-v1",
+      "ambient_env_reread": false,
+      "apply_linear_totals_calibration": false,
+      "disabled_framework_count": 21,
+      "framework_name_count": 83,
+      "linear_cal_flag": false,
+      "settings_forwarded": true,
+      "settings_names": [
+        "NFL_TOTALS_EPA_INTERACTION_WEIGHT",
+        "NFL_TOTALS_INJURY_STDEV_WEIGHT",
+        "NFL_TOTALS_INJURY_WEIGHT",
+        "NFL_TOTALS_MAX_ADJUSTMENT_POINTS",
+        "NFL_TOTALS_MAX_STDEV_ADJUSTMENT",
+        "NFL_TOTALS_PASS_RATE_WEIGHT",
+        "NFL_TOTALS_SUCCESS_DELTA_WEIGHT"
+      ],
+      "simulator_name_count": 13,
+      "unavailable_simulator_count": 6
+    },
     "cutoff_utc": "2018-10-11T23:20:00Z",
     "effective_config_bound": true,
     "envelope": {
@@ -221,9 +1855,10 @@
     "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
     "if_tree": "/agent/repos/kosedge/services/model-service",
     "kickoff_utc": "2018-10-12T00:20:00Z",
+    "linear_cal_flag": false,
     "market_blend": 0,
     "output_kind": "POINT_MARGIN",
-    "packet_hash": "a2df93b79d4e07544cc897e5a0abf2dbe2d6af67ab0c43a9e561463cfac87df9",
+    "packet_hash": "c3446ecae61469e9183703824627ff48a23b370a99c76909a5d32d580bf17b72",
     "q2": {
       "a_q2": 2.5637441292077354,
       "b_q2": 1.660624056183471,
@@ -238,12 +1873,14 @@
     "schema_id": "nfl-t5208u-r6-caller-v1",
     "seal_utc": "2018-10-11T23:20:00Z",
     "seed": 276287,
+    "settings_forwarded": true,
     "simulations": 4000
   },
-  "r7_code_hash": "cdbdc378288072a4020170b041563611aae09ccfa851ba5c0eba863dfb66181b",
-  "r7_config_hash": "f50229af2c95babfd9bef5e35ba9f016002806243204ea26cef69be107277e48",
+  "r7_code_hash": "b2b97615a19f931ac22b9a2f281236e3a16b9f7e308989d002d7595cae8262e2",
+  "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
   "replay_ok": true,
   "rest_calendar": {
+    "actual_kickoff_provenance": "required",
     "actual_versus_scheduled_proof": true,
     "away_franchise": "LAR",
     "away_prev_availability": "BEFORE_SEAL",
@@ -259,6 +1896,7 @@
     "bound_from": "actual_prior_kickoff_et_calendar_date",
     "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
     "cutoff_utc": "2018-10-11T23:20:00Z",
+    "exact_ko_minus_minutes": 60,
     "home_franchise": "LAC",
     "home_prev_availability": "BEFORE_SEAL",
     "home_prev_available_at": "2018-10-07T21:00:00Z",
@@ -272,6 +1910,7 @@
     "home_prev_used_actual_not_scheduled": false,
     "kickoff_et_date": "2018-10-11",
     "kickoff_utc": "2018-10-12T00:20:00Z",
+    "missing_actual_fallback": false,
     "physical_schedule": true,
     "predecessor_bound_to": "KO_MINUS_60_CUTOFF",
     "q2_history_used_for_rest": false,
@@ -286,5 +1925,6 @@
   "schema_id": "nfl-t5289u-r7-correctness-v1",
   "scope_id": "chief-nflgreen-model-day-20261103-1700",
   "seal_utc": "2018-10-11T23:20:00Z",
+  "settings_forwarded": true,
   "worker_id": "bc-54a966a5-24bf-5d5d-a63c-50f75ad0abb8"
 }

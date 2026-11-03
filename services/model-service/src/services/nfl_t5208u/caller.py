@@ -156,11 +156,37 @@ def call_r6_point_margin(
     blend = int(cfg["simulator"]["market_blend"]) if cfg is not None else MARKET_BLEND
     weight = float(cfg["helper"]["candidate_weight"]) if cfg is not None else CANDIDATE_WEIGHT
     c_formula = str(cfg["helper"]["c_formula"]) if cfg is not None else C_FORMULA
-    overrides = _framework_overrides(cfg) if cfg is not None else None
+    if cfg is not None:
+        from src.services.nfl_r7_correctness_v1.config_adapter import (
+            APPLY_LINEAR_TOTALS_CALIBRATION,
+            framework_config_overrides,
+            totals_adjustment_settings,
+        )
+
+        adapter = cfg.get("adapter") if isinstance(cfg.get("adapter"), Mapping) else None
+        overrides = framework_config_overrides(adapter) if adapter is not None else _framework_overrides(cfg)
+        # Short-name snapshot is not forwarded: _build_totals_adjustments needs NFL_TOTALS_* keys.
+        totals_settings = totals_adjustment_settings(adapter) if adapter is not None else None
+        recorded = cfg["simulator"].get("apply_linear_totals_calibration", APPLY_LINEAR_TOTALS_CALIBRATION)
+        if recorded is not False:
+            raise CallerRefuse("R7 apply_linear_totals_calibration must be False")
+        cal_flag = False
+    else:
+        adapter = None
+        overrides = None
+        totals_settings = None
+        cal_flag = None
 
     if_packet = contract_packet_for_if(packet)
     _MODEL_SPY["produce_if_mu"] += 1
-    produced = produce_if_mu(if_packet, tree=if_tree, simulations=sims, config_overrides=overrides)
+    produced = produce_if_mu(
+        if_packet,
+        tree=if_tree,
+        simulations=sims,
+        config_overrides=overrides,
+        apply_linear_totals_calibration=cal_flag,
+        totals_settings=totals_settings,
+    )
     if_margin = _finite_number(produced.get("if_margin_mu"), name="if_margin")
     if int(produced.get("market_blend", -1)) != blend:
         raise CallerRefuse(f"market_blend {produced.get('market_blend')} != {blend}")
@@ -223,6 +249,31 @@ def call_r6_point_margin(
         "simulations": sims,
         "market_blend": blend,
         "effective_config_bound": cfg is not None,
+        "linear_cal_flag": produced.get("apply_linear_totals_calibration"),
+        "settings_forwarded": produced.get("totals_settings_forwarded"),
+        "consumed_value_decomposition": (
+            {
+                "adapter_version": adapter.get("adapter_version") if isinstance(adapter, Mapping) else None,
+                "framework_name_count": adapter.get("framework_name_count") if isinstance(adapter, Mapping) else None,
+                "simulator_name_count": adapter.get("simulator_name_count") if isinstance(adapter, Mapping) else None,
+                "linear_cal_flag": cal_flag,
+                "apply_linear_totals_calibration": cal_flag,
+                "settings_forwarded": bool(totals_settings),
+                "settings_names": sorted(totals_settings.keys()) if totals_settings else [],
+                "active_framework_count": (
+                    len(adapter.get("active_framework") or []) if isinstance(adapter, Mapping) else 0
+                ),
+                "disabled_framework_count": (
+                    len(adapter.get("disabled_framework") or []) if isinstance(adapter, Mapping) else 0
+                ),
+                "unavailable_simulator_count": (
+                    len(adapter.get("unavailable_simulator") or []) if isinstance(adapter, Mapping) else 0
+                ),
+                "ambient_env_reread": False,
+            }
+            if cfg is not None
+            else None
+        ),
         "if_tip": produced.get("if_tip"),
         "if_tree": str(if_tree),
         "if_preflight": preflight,

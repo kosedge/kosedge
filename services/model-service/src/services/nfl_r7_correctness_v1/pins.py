@@ -85,6 +85,7 @@ CODE_FILES = (
     "services/model-service/src/services/nfl_r7_correctness_v1/franchise.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/q2_canonical.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/packets.py",
+    "services/model-service/src/services/nfl_r7_correctness_v1/config_adapter.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/produce.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/consume_b.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/recorder.py",
