@@ -15,7 +15,7 @@
     {
       "path": "services/model-service/src/services/nfl_joint_contract_v1/consume.py",
       "ref_kind": "file_sha256",
-      "sha256": "65bc9be001a6782558798acab43de7da361d20ffb4713db7be5a1ac8d7e7177d"
+      "sha256": "8a573e945e038477c5d874fc5d78dd257750df46ccd87e1930c3d87f3832cae7"
     },
     {
       "path": "services/model-service/src/services/nfl_joint_contract_v1/oracle.py",
@@ -48,7 +48,7 @@
       "sha256": "9419a1a12d896cf2df78cffef9739e564d5fbc156189039a569792610d0755a3"
     }
   ],
-  "code_hash": "9356e0c65944ec8a9b6188feba9ecb42a28864ec65fc1e999d9df50562f40c99",
+  "code_hash": "4d3b761d730daa679e486319d65c49cc23bcf9e94c96930d6bf088d805bef0ff",
   "cohort": {
     "game_ids": [
       "2026_99_SYN_TST_JNT"
@@ -61,7 +61,7 @@
   "config_hash": "d03aa8453dbb9f8b2d752af4a1626f9c17cb3282ee489562f6e82eebcf974693",
   "cwd": "/agent/repos/kosedge",
   "data_label": "SYNTHETIC",
-  "end_utc": "2026-11-03T04:47:22Z",
+  "end_utc": "2026-11-03T05:13:16Z",
   "evidence_labels": {
     "chief_review": "NOT_RUN",
     "consume_fixture_chain": "EXECUTED_HERE",
@@ -79,9 +79,9 @@
   "execution": {
     "consume_invoked_here": true,
     "import_only": false,
-    "process_id": 8003,
+    "process_id": 8787,
     "produce_invoked_here": true,
-    "produce_start_utc": "2026-11-03T04:47:22Z",
+    "produce_start_utc": "2026-11-03T05:13:16Z",
     "saved_output_only": false
   },
   "exit": 0,
@@ -118,7 +118,7 @@
   "hash_bindings": {
     "code": {
       "alg": "sha256",
-      "sha256": "9356e0c65944ec8a9b6188feba9ecb42a28864ec65fc1e999d9df50562f40c99",
+      "sha256": "4d3b761d730daa679e486319d65c49cc23bcf9e94c96930d6bf088d805bef0ff",
       "source": "gate_and_caller_files"
     },
     "config": {
@@ -144,7 +144,11 @@
   },
   "head": {
     "kind": "git_commit",
-    "value": "9da9a6c5b961c9c411c38244b4f8b46dad6a1902"
+    "value": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
+  },
+  "historical_t5266u": {
+    "not_final_numerical_completion": true,
+    "pytest_passed": 79
   },
   "history_hash": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
   "immutable_input_proof": {
@@ -180,7 +184,7 @@
     "SYNTHETIC_JOINT_LITERAL_LAW is not SYNTHETIC_WFIX_AB_CHAIN",
     "B PLATFORM_LIMITATION / not_a_pass reused; no platform reclaim"
   ],
-  "log_hash": "8bc0c3a37707aa5a0edc9c76158889d83a40ba3fd9728a9af3b280dde7906709",
+  "log_hash": "f3965e6f408ad0f1f8172aa29a55f4724a83c17879ea895ebc09311ab9a88cb4",
   "not_integrated_through_evidence_gate": false,
   "numerical_output": {
     "away_win": 0.25,
@@ -190,6 +194,95 @@
     "mean_total": 44.5,
     "n": 4,
     "tie": 0.25
+  },
+  "numerical_single_faults": {
+    "all_refused": true,
+    "evidence_label": "EXECUTED_HERE",
+    "faults": [
+      {
+        "case": "means_margin_nan",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.means.margin must be finite",
+        "refuse_class": "NONFINITE",
+        "refused": true
+      },
+      {
+        "case": "means_margin_pos_inf",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.means.margin must be finite",
+        "refuse_class": "NONFINITE",
+        "refused": true
+      },
+      {
+        "case": "means_margin_neg_inf",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.means.margin must be finite",
+        "refuse_class": "NONFINITE",
+        "refused": true
+      },
+      {
+        "case": "means_margin_null",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.means.margin is null",
+        "refuse_class": "TYPE",
+        "refused": true
+      },
+      {
+        "case": "means_margin_bool",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.means.margin is not a non-bool numeric (got bool)",
+        "refuse_class": "TYPE",
+        "refused": true
+      },
+      {
+        "case": "means_margin_string",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.means.margin is not a non-bool numeric (got str)",
+        "refuse_class": "TYPE",
+        "refused": true
+      },
+      {
+        "case": "partitions_n_999",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.n supplied 999 != recomputed 4",
+        "refuse_class": "PARTITION",
+        "refused": true
+      },
+      {
+        "case": "partitions_weight_sum_4",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "partitions.weight_sum supplied 4 != recomputed 1.0",
+        "refuse_class": "PARTITION",
+        "refused": true
+      },
+      {
+        "case": "outcome0_margin_999",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "outcomes[0].margin supplied 999 != recomputed 3",
+        "refuse_class": "HASH_MUTATED",
+        "refused": true
+      },
+      {
+        "case": "conflicting_home_score",
+        "evidence_label": "EXECUTED_HERE",
+        "forbidden_calls": 0,
+        "reason": "outcomes[0].home_score=999 conflicts with home=24",
+        "refuse_class": "HASH_MUTATED",
+        "refused": true
+      }
+    ],
+    "forbidden_calls": 0,
+    "n": 10,
+    "ran": true
   },
   "ok": true,
   "output_hashes": {
@@ -217,6 +310,13 @@
   "profile": "SYNTHETIC_JOINT_LITERAL_LAW",
   "protocol": "ed10e80f",
   "ready_for_review": false,
+  "receipt_head": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+  "receipt_head_vs_tip": {
+    "label": "HEAD at command execution; not rebound to later commit tip",
+    "not_silently_rebound": true,
+    "parent_tip": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+    "receipt_head": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
+  },
   "rehashed_faults": {
     "evidence_label": "EXECUTED_HERE",
     "forbidden_calls": 0,
@@ -229,6 +329,15 @@
     "refuse_class": "PARTITION",
     "refused": true
   },
+  "residuals_remain_explicit": [
+    "PE R1",
+    "PE R2",
+    "PE R3",
+    "PE R4",
+    "PE R5",
+    "Alex D-a",
+    "C1"
+  ],
   "review_revision": 0,
   "schema_hash": "d6c35c95bb55d1862df1677a1999f726ce01a9b0de7b1e89e23fd95b9e51d07f",
   "schema_version": "nfl-ops-v1-evidence-manifest-v1",
@@ -243,7 +352,7 @@
     "refused": true,
     "spy_fired": true
   },
-  "start_utc": "2026-11-03T04:47:22Z",
+  "start_utc": "2026-11-03T05:13:16Z",
   "status": "GATED_OK_AWAITING_CHIEF",
   "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law",
   "typed_references": [
@@ -255,7 +364,7 @@
     {
       "kind": "git_commit",
       "label": "head",
-      "value": "9da9a6c5b961c9c411c38244b4f8b46dad6a1902"
+      "value": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
     },
     {
       "kind": "git_commit",

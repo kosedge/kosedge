@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "means_margin_pos_inf",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "partitions.means.margin must be finite",
+  "refuse_class": "NONFINITE",
+  "self_accept": false,
+  "settled_p": null
+}

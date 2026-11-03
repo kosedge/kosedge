@@ -1,0 +1,15 @@
+{
+  "actionable": false,
+  "case": "partitions_n_999",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "forbidden_calls_on_refusal": 0,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "partitions.n supplied 999 != recomputed 4",
+  "refuse_class": "PARTITION",
+  "self_accept": false,
+  "settled_p": null
+}

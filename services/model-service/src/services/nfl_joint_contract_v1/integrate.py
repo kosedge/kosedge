@@ -16,7 +16,10 @@ from src.services.nfl_joint_contract_v1.constants import (
     SYNTH_IDENTITY,
     TASK_ID,
 )
-from src.services.nfl_joint_contract_v1.consume import consume_literal_law
+from src.services.nfl_joint_contract_v1.consume import (
+    consume_literal_law,
+    run_numerical_single_faults,
+)
 from src.services.nfl_joint_contract_v1.handoff import bind_handoff
 from src.services.nfl_joint_contract_v1.hashes import sha256_bytes_map, sha256_text
 from src.services.nfl_joint_contract_v1.refuse import JointContractRefuse, RefuseClass
@@ -279,6 +282,7 @@ def run_joint_integrated_command(
     log_lines.append(f"adapted digest {digest}")
 
     rehashed = _rehashed_joint_control(adapted, root=repo)
+    numerical_faults = run_numerical_single_faults(adapted, root=repo)
     spy_control = run_spy_positive_control()
     FORBIDDEN_CALL_ATTEMPTS.clear()
 
@@ -360,6 +364,27 @@ def run_joint_integrated_command(
     gated["task_id"] = TASK_ID
     gated["not_integrated_through_evidence_gate"] = False
     gated["profile"] = PROFILE_JOINT
+    gated["receipt_head"] = git_tip(repo)
+    gated["receipt_head_vs_tip"] = {
+        "receipt_head": git_tip(repo),
+        "label": "HEAD at command execution; not rebound to later commit tip",
+        "parent_tip": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+        "not_silently_rebound": True,
+    }
+    gated["residuals_remain_explicit"] = [
+        "PE R1",
+        "PE R2",
+        "PE R3",
+        "PE R4",
+        "PE R5",
+        "Alex D-a",
+        "C1",
+    ]
+    gated["historical_t5266u"] = {
+        "pytest_passed": 79,
+        "not_final_numerical_completion": True,
+    }
+    gated["numerical_single_faults"] = numerical_faults
     if write_receipt:
         written = json.dumps(gated, indent=2, sort_keys=True) + "\n"
         receipt = dest_dir / "INTEGRATED_RECEIPT.json"

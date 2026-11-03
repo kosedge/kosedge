@@ -1,0 +1,79 @@
+{
+  "authority": "t5271u",
+  "cert": 0,
+  "changed_pins": {
+    "EXPECTED_COMMAND_JOINT": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_joint_contract_v1_integrated.py",
+    "JOINT_CHAIN_DIGEST": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc",
+    "PROFILE_JOINT": "SYNTHETIC_JOINT_LITERAL_LAW",
+    "numerical_bind": "strict non-bool finite numeric; n/weight_sum/derived H-A H+A; no alias fallthrough"
+  },
+  "command_receipt_sha256": "fe09bf5c28b437b69bce46d09853a0f8cc9bfad4dd3114dfb6bb6d2bb0594dd7",
+  "file_sha256": {
+    "services/model-service/src/services/nfl_joint_contract_v1/consume.py": "8a573e945e038477c5d874fc5d78dd257750df46ccd87e1930c3d87f3832cae7",
+    "services/model-service/src/services/nfl_joint_contract_v1/integrate.py": "bf6af370403c371ed242d2be0fdb310273427473da98abd28b24282e08fef5b8",
+    "services/model-service/tests/test_nfl_joint_contract_v1_numerical_delta.py": "9118d9cf09832d1c7c17a7209ae7664d357c5fcb7cc4f96d5905abb7916ec2d3"
+  },
+  "freeze_parent": "6f4c5b65ad7c7d534045937590b06d79cbc16891",
+  "freeze_preserved": {
+    "code_hash": "2e385e934bc08390a5949f82e40841a776358ef9d09d1d4fd66774706fa92561",
+    "oracle_hash": "5480da107cd39e3a352a4ccb0059a6b3d7593d81b51ec7b0dab51e6a4721a3e0",
+    "receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+    "schema_hash": "d541b593d7f612a1ad151f9701147d699116c0ac523dd2e342fc991b35c4ddf2"
+  },
+  "historical_t5266u": {
+    "not_final_numerical_completion": true,
+    "pytest_passed": 79,
+    "revision": "data/ops/nfl-joint-contract-v1/REVISION_t5266u.json"
+  },
+  "order": "a59f655f",
+  "package": "PARTIAL",
+  "parent_tip": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+  "prior_inform": {
+    "alex": "446bfd7c",
+    "pe": "de4b2793"
+  },
+  "pytest": {
+    "additive_numerical": true,
+    "exit": 0,
+    "historical_79": true,
+    "passed": 92
+  },
+  "ready_for_review": false,
+  "receipt_head": "f408c8b8586a367dcb7a53219b66b3be6f758b5b",
+  "receipt_head_vs_tip": {
+    "label": "HEAD at command execution; not rebound to later commit tip",
+    "not_silently_rebound": true,
+    "receipt_head": "f408c8b8586a367dcb7a53219b66b3be6f758b5b"
+  },
+  "refusal_receipts": {
+    "actionable": "22165b31019881d3ad6e5eab1216897f14fc2313abf12ad99587488817778124",
+    "conflicting_home_score": "7290fea9e7ca2a35d2d8e38686c54e395f478ed4c04e57df172f85ed7eb5044e",
+    "fake_code_hash": "678b0a28bda21d3abdeec6ce21822e44bf1c4c7d24ff3efb8f49898200203a5e",
+    "home_score_999": "43eb5f82a1eab65179e4e96e1f9991908071e2f5f4805e1560ae4ecf6fccbace",
+    "home_win_999": "dd68ae574fd1aaf60213e1f3ef8e91c61b46a243a8c523ad1f5b4b434b948065",
+    "means_margin_bool": "6d68d879e3babc9612bd0cd8fa85531b88228dabace225cc6d07359b6c7bfa54",
+    "means_margin_nan": "eda32c5a9b67d01d1ad0721ee44be25f0369e1a0e61f1c883729b01d924fc454",
+    "means_margin_neg_inf": "d1f704af029f648ba24d7bfc5607f395ceab47afcb4129a3635a5d7859b17e0d",
+    "means_margin_null": "be0dee4fc52213f108823974ab93b338a247ccf63ab0d3ea28eeb36df561abfd",
+    "means_margin_pos_inf": "86f7e2c856634ab95fbba38f3cc44c940934758cd2dafb6722407d88c74adac7",
+    "means_margin_string": "c5361c0c5d9fd4c5d467b1db550493e8150f372bd4b5cf075c734cd8b181f4c7",
+    "outcome0_margin_999": "76bbb21cc11526e521be49a155fe9acee9559ba39559f9b6e8ee9f0bf3e51d37",
+    "partitions_n_999": "488eb305ed21b248ee988c9f8d44c47c8b62091ffcb5f2cdbcd20a7ddda14742",
+    "partitions_weight_sum_4": "01cf5e08042505b1d41ef84077827ee1afb93c3e1601300bdcc81605dc9ccc2e",
+    "production": "20d728457c0d89e0239aa7746fb985f5ee3efe4144d96588a484dc7371e10af7",
+    "weights_sum4": "18a68b6ae0017828b6ff31a3c483e724ea44a2debd58e527a56734b993768908"
+  },
+  "residuals_remain_explicit": [
+    "PE R1",
+    "PE R2",
+    "PE R3",
+    "PE R4",
+    "PE R5",
+    "Alex D-a",
+    "C1"
+  ],
+  "self_accept": false,
+  "silent_re_freeze": false,
+  "supersede_seal": "26e0d15d",
+  "superseded_close": "18b8c241"
+}
