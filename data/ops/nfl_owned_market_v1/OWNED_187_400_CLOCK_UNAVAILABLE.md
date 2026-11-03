@@ -1,33 +1,38 @@
-# OWNED 2020/21 selected-187 / missingness-400 / clock — UNAVAILABLE
+# Actual original source locators — DELTA 58426
 
-CERT=0. Worker B on THIS Cursor host only. Cos DISK-1 HELD.
-`owned_completion_claimed=false`. Related dumps are **not** this source.
+CERT=0. Worker B on THIS Cursor host. Cos DISK-1 HELD. No Cos staging.
+Invented destinations (`owned_2020_21_selected_187.json`, `missingness_400.json`,
+`clock_provenance.json`) are **not** the source. This file names the originals.
 
-Probe host: `cursor` (`bc-02a716be-429a-56c8-ab0f-5f262aa479df`)
-Probe UTC: 2026-11-03T16:40:00Z
-DATABASE_URL: unset. No local postgres listener.
+History restore: `git show 7834cbc79226e44fa3bd625e1eb526e9a800a128:<path>`
+(not on `main`, not on tip `9ce485e9`).
 
-## Required SoT (worker-visible) — all UNAVAILABLE
+## Original locators (Cos-verified)
 
-| id | path | field | status |
+| id | original object | field | restore | sha256 |
+|---|---|---|---|---|
+| admissible_quotes_b1 | `7834cbc7:data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl` | jsonl rows | **RESTORED_FROM_HISTORY** | `b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6` MATCH |
+| market_arm_freeze | `7834cbc7:data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json` | `reg496.n=496` (`identity_sha256=6429f859…`) · `intersection.n=96` · `missing_n=400` · `games[].quotes` n=187 | **RESTORED_FROM_HISTORY** | `12a8752979149f2c533b389c6dc7803856a1632b965ad12210de409f56963c98` |
+
+`b1_universe` on the freeze pins the same ADMISSIBLE path+sha256.
+
+## Identity projection (before quote-value exposure)
+
+| object | n | seasons | values copied |
 |---|---|---|---|
-| selected_187 | `data/ops/nfl_owned_market_v1/owned_2020_21_selected_187.json` | `quotes[187].quote_id` | **UNAVAILABLE** |
-| missingness_400 | `data/ops/nfl_owned_market_v1/missingness_400.json` | `rows[400].missing_enum` | **UNAVAILABLE** |
-| clock_provenance | `data/ops/nfl_owned_market_v1/clock_provenance.json` | `quotes[].available_at\|observed_at\|captured_at_utc` | **UNAVAILABLE** |
+| selected-187 | 187 (`82` / `105`) | 2020 / 2021 only | **none** (no line/price/spread/home_margin) |
+| missingness-400 | 400 game_ids (`199` / `201`) | 2020 / 2021 | causes **not invented** |
 
-Also absent: `data/ops/nfl-t5119u-r2-owned-coverage`,
-`data/ops/nfl-owned-quote-trace-2020-21`,
-`/workspace/ops/nfl_enterprise_green_t4359u`,
-`/data/nfl/odds_snapshots`.
+Source of 187: `MARKET_ARM_FREEZE.json#intersection.games[].quotes` = `two_book_n=91` + `one_book_n=5`.
+No 2022/23 values used. Raw ADMISSIBLE file was **not** copied onto this tip (avoids 2022/23 value exposure).
 
-## Related but NOT the source (do not treat as owned completion)
+## Remaining blocker — clock
 
-| path | field | reason |
-|---|---|---|
-| `apps/web/data/raw/odds/open/2020-*.json` (46 files) + `2021-*.json` (161 files) | Odds-API historical date dump (`timestamp`/`data`) | no selected-187 identity; no missingness-400; no owned clock-provenance contract |
-| `apps/web/data/raw/odds/close/2020-*.json` + `2021-*.json` | same dump family | same |
-| `data/ops/nfl-owned-data-20260705T201049Z/*.ndjson` | `nfl_dp_*` season=2025 | 2025 warehouse export; no 2020/21 quote rows |
-| `DATABASE_URL` / `odds_snapshots` / `nfl_market_history_snapshots` | Postgres owned open/close | env unset; no Cos-host staging under DISK-1 |
+**Not invented.** Original freeze already states:
 
-No Cos-host run. No invented selected-187. No fictional trace labeled owned-source completion.
-Ryan may stage the three required files onto worker-visible storage; B will bind them then.
+- locator: `7834cbc7:data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json#limitations`
+- `publication_timestamp_status=unverified`
+- `observation_timestamp_status=unverified`
+- original quote objects also carry field names `captured_at`, `cutoff_utc`, `kickoff_utc` — **not** promoted to verified clock provenance
+
+`owned_completion_claimed=false`. Codex 187-row metadata not requested (187 recovered from freeze after restore).

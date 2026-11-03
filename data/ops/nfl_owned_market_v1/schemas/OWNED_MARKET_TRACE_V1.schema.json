@@ -15,7 +15,8 @@
     "data_label": {
       "enum": [
         "OWNED_SOURCE_UNAVAILABLE",
-        "OWNED_SOURCE_BOUND"
+        "OWNED_SOURCE_BOUND",
+        "OWNED_IDENTITIES_PROJECTED"
       ]
     },
     "owned_completion_claimed": {
@@ -32,6 +33,12 @@
     },
     "profile_role": {
       "const": "OWNED_READINESS"
+    },
+    "projection": {
+      "type": [
+        "object",
+        "null"
+      ]
     },
     "schema_version": {
       "const": "owned-market-trace-v1-readiness"
@@ -63,6 +70,7 @@
     "data_label",
     "owned_completion_claimed",
     "probe",
+    "projection",
     "unavailable",
     "scientific_hold",
     "source_byte_hash"

@@ -187,7 +187,11 @@ def validate_owned_market_trace(doc: Mapping[str, Any]) -> dict[str, Any]:
     if doc.get("channel") != "OWNED_READINESS":
         raise OwnedMarketRefuse("channel must be OWNED_READINESS")
     label = str(doc.get("data_label") or "")
-    if label not in {"OWNED_SOURCE_UNAVAILABLE", "OWNED_SOURCE_BOUND"}:
+    if label not in {
+        "OWNED_SOURCE_UNAVAILABLE",
+        "OWNED_SOURCE_BOUND",
+        "OWNED_IDENTITIES_PROJECTED",
+    }:
         raise OwnedMarketRefuse("owned data_label invalid")
     probe = _require_mapping(doc.get("probe"), name="probe")
     required = probe.get("required")
@@ -198,8 +202,24 @@ def validate_owned_market_trace(doc: Mapping[str, Any]) -> dict[str, Any]:
         raise OwnedMarketRefuse("unavailable must be a list")
     if label == "OWNED_SOURCE_UNAVAILABLE" and not unavailable:
         raise OwnedMarketRefuse("UNAVAILABLE label requires unavailable[] rows")
-    if label == "OWNED_SOURCE_BOUND" and unavailable:
-        raise OwnedMarketRefuse("BOUND label cannot carry unavailable rows")
+    if label in {"OWNED_SOURCE_BOUND", "OWNED_IDENTITIES_PROJECTED"} and unavailable:
+        raise OwnedMarketRefuse("projected/bound label cannot carry unavailable rows")
+    projection = doc.get("projection")
+    if label == "OWNED_IDENTITIES_PROJECTED":
+        proj = _require_mapping(projection, name="projection")
+        selected = _require_mapping(proj.get("selected_187"), name="projection.selected_187")
+        if int(selected.get("n") or 0) != 187:
+            raise OwnedMarketRefuse("selected-187 identity n != 187")
+        if selected.get("value_fields_copied") not in ([], None):
+            raise OwnedMarketRefuse("quote values must not be copied into identity projection")
+        missing = _require_mapping(proj.get("missingness_400"), name="projection.missingness_400")
+        if int(missing.get("n") or 0) != 400:
+            raise OwnedMarketRefuse("missingness n != 400")
+        if missing.get("causes_invented") is not False:
+            raise OwnedMarketRefuse("missingness causes must not be invented")
+        clock = _require_mapping(proj.get("clock"), name="projection.clock")
+        if clock.get("invented") is not False:
+            raise OwnedMarketRefuse("clock fields must not be invented")
     holds = doc.get("scientific_hold")
     if not isinstance(holds, list) or "no outcome join" not in holds:
         raise OwnedMarketRefuse("scientific_hold must include no outcome join")

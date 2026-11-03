@@ -121,7 +121,11 @@ def test_produce_and_separate_profiles(tmp_path: Path) -> None:
     assert artifacts["trace_report"]["profile_role"] == ROLE_OWNED_READINESS
     assert artifacts["events_report"]["profile_role"] == ROLE_FICTIONAL_ECONOMIC
     assert artifacts["trace_report"]["owned_completion_claimed"] is False
-    assert artifacts["trace"]["data_label"] == "OWNED_SOURCE_UNAVAILABLE"
+    assert artifacts["trace"]["data_label"] == "OWNED_IDENTITIES_PROJECTED"
+    assert artifacts["trace"]["projection"]["selected_187"]["n"] == 187
+    assert artifacts["trace"]["projection"]["missingness_400"]["n"] == 400
+    assert artifacts["trace"]["projection"]["selected_187"]["value_fields_copied"] == []
+    assert artifacts["trace"]["projection"]["clock"]["invented"] is False
     assert "observations" not in artifacts["trace"]
     assert artifacts["join_report"]["profiles_separate"] is True
     assert artifacts["join_report"]["joined"] is False
@@ -162,6 +166,18 @@ def test_in_memory_builders_validate(tmp_path: Path) -> None:
     assert validate_owned_market_trace(trace)["validated"] is True
     assert validate_synthetic_market_economic_events(events)["validated"] is True
     assert validate_join(trace, events)["profiles_separate"] is True
+
+
+def test_identity_projection_no_values_no_2223() -> None:
+    trace = build_trace_document(repo_root=Path.cwd())
+    rows = trace["projection"]["selected_187"]["identities"]
+    assert len(rows) == 187
+    forbidden = {"line", "price", "spread_home", "home_margin", "price_home", "price_away"}
+    seasons = set()
+    for row in rows:
+        seasons.add(row["season"])
+        assert not (set(row) & forbidden)
+    assert seasons <= {2020, 2021}
 
 
 def test_schema_hashes_stable() -> None:

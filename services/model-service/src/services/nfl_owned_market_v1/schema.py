@@ -83,6 +83,7 @@ def owned_market_trace_schema() -> dict[str, Any]:
             "data_label",
             "owned_completion_claimed",
             "probe",
+            "projection",
             "unavailable",
             "scientific_hold",
             "source_byte_hash",
@@ -95,10 +96,15 @@ def owned_market_trace_schema() -> dict[str, Any]:
             "cert": {"const": CERT},
             "channel": {"const": "OWNED_READINESS"},
             "data_label": {
-                "enum": ["OWNED_SOURCE_UNAVAILABLE", "OWNED_SOURCE_BOUND"]
+                "enum": [
+                    "OWNED_SOURCE_UNAVAILABLE",
+                    "OWNED_SOURCE_BOUND",
+                    "OWNED_IDENTITIES_PROJECTED",
+                ]
             },
             "owned_completion_claimed": {"const": False},
             "probe": {"type": "object"},
+            "projection": {"type": ["object", "null"]},
             "unavailable": {"type": "array"},
             "scientific_hold": {"type": "array", "items": {"type": "string"}},
             "source_byte_hash": _sha256_property(),

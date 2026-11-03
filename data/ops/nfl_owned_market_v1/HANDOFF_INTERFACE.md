@@ -1,36 +1,18 @@
-# Worker B → Worker A hand-off (RETURN 47318)
+# Worker B → Worker A hand-off (DELTA 58426 / RETURN 47318)
 
 CERT=0. Isolated `nfl_owned_market_v1`. B does **not** register.
-Preserves prior Cos ACCEPT `5c86d228` / handoff `5b7ee2e4` as engineering base.
+Preserves Cos ACCEPT `ff45970b` @ `9ce485e9` (risk1 ATS/ROI/CLV + profile split + no outcome join).
 
 Machine copy: `data/ops/nfl_owned_market_v1/HANDOFF_INTERFACE.json`
-(`sha256=c2e717fbe60a93b09973e9cc9ff549d0aff057a200debd97db2f4c5adc7753a8`).
+(`sha256=9b190d38e11ebaebe53cfb46047c19f2f3abf3f5f8f51fecd2a3c470568f33b4`).
 
-## Profile names (separate roles)
-
-| profile | role | producer | validator |
+| profile | role | fixture_sha256 | schema_hash |
 |---|---|---|---|
-| `OWNED_MARKET_TRACE_V1` | **OWNED_READINESS** | `owned_readiness:build_owned_readiness_document` | `validate_owned_market_trace` |
-| `SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1` | **FICTIONAL_ECONOMIC** | `produce:build_events_document` | `validate_synthetic_market_economic_events` |
+| OWNED_MARKET_TRACE_V1 | OWNED_READINESS · `OWNED_IDENTITIES_PROJECTED` | `f38418cd4ab2e02738717b4ce23ad341209dc956b7604aa4eb0e1d2f93c2278c` | `f972f0fa34a7c91536208ddace21c5cdd94383c7a8990ae8736003d8479964a7` |
+| SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1 | FICTIONAL_ECONOMIC (unchanged risk1) | `ca25354581ae94d87d7bc09aece6829711da6bbe8fd15414e6856e100d5f4b2e` | `86069d05211bfe8e57de14fd48a0de5fec30a9f937c618b398ee17490c0d9cfe` |
 
-`validate_join` keeps them separate (`joined=false`, `owned_completion_claimed=false`).
-Do not treat risk1 tickets as owned-source completion.
+document_hash owned `c223b5db67921d55429660f17675655a445c9f9d857ab0e71563ee77ba654aea` ·
+econ `2eac30395dad758b0194d361fdb363147e36b38c0927e8b90667cb4d1237937e`.
 
-## Schemas / fixtures
-
-| profile | schema_hash | fixture_sha256 | document_hash |
-|---|---|---|---|
-| OWNED_MARKET_TRACE_V1 | `122053db82d465c5a7be30ca19e3dd9dbcae09229edaeb758450ce8f5fa4a643` | `e9d92dac09de61401da4e6d707d8b4e32fa22059bfe5179dc261359adeb1732c` | `3cb74f833d85a49547decba5a49e891ce13fee3f767ba81627d5d65a59ff962b` |
-| SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1 | `86069d05211bfe8e57de14fd48a0de5fec30a9f937c618b398ee17490c0d9cfe` | `ca25354581ae94d87d7bc09aece6829711da6bbe8fd15414e6856e100d5f4b2e` | `2eac30395dad758b0194d361fdb363147e36b38c0927e8b90667cb4d1237937e` |
-
-Owned fixture: `fixtures/owned_market_trace.readiness.json` (`OWNED_SOURCE_UNAVAILABLE`).
-Economic fixture: `fixtures/synthetic_market_economic_events.risk1.json` (risk1 ATS/ROI/line-CLV).
-
-## 86257 arithmetic (economic only)
-
-Exact copies of desk-record American profit, book_ledger ATS, nfl_clv_semantics line-CLV.
-risk1_u=1. Push/void excluded from ROI risked. Missing juice → refuse (no flat −110).
-
-## Owned 187/400/clock
-
-See `OWNED_187_400_CLOCK_UNAVAILABLE.md`. All three required SoT paths UNAVAILABLE on this VM.
+History restore + locators: `OWNED_187_400_CLOCK_UNAVAILABLE.md`.
+Remaining blocker: original freeze clock timestamps **unverified** (not invented).
