@@ -36,3 +36,9 @@ No 2022/23 values used. Raw ADMISSIBLE file was **not** copied onto this tip (av
 - original quote objects also carry field names `captured_at`, `cutoff_utc`, `kickoff_utc` — **not** promoted to verified clock provenance
 
 `owned_completion_claimed=false`. Codex 187-row metadata not requested (187 recovered from freeze after restore).
+
+## CONTINUE 69537 (t5320u)
+
+Clock/source-value lineage still **HOLD**. No EXISTING AND VERIFIED permitted clock source on this Cursor host.
+Do not treat freeze `#limitations` unverified timestamps as verified.
+See `CLOCK_SOURCE_HOLD_CONTINUE69537.md`.

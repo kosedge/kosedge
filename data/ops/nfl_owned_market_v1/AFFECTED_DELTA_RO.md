@@ -1,28 +1,29 @@
-# Affected-delta map — DELTA 58426 Worker B (#715)
+# Affected-delta map — CONTINUE 69537 Worker B (#715)
 
-CERT=0. Alex + PE affected-delta only vs changed paths + integrated command.
-Reuse Cos ACCEPT ff45970b (risk1 / profiles / no outcome join) and prior PASS papers.
+CERT=0. Preserve DELTA 58426 ACCEPTed surfaces (Cos 3b9549a5).
+No Python / fixture change. Clock not marked verified. Owned completion not claimed.
 
-## Changed vs tip 9ce485e9
+## Changed vs tip a8184e52
 
 | path | delta |
 |---|---|
-| `owned_readiness.py` | probes **git:7834cbc7** originals (not invented destinations); identity projection 187/400 |
-| `constants.py` | history pins (7834cbc7, admissible sha, reg496/96/400/187) |
-| `schema.py` / `validate.py` | `OWNED_IDENTITIES_PROJECTED`; refuse copied values / invented clock/causes |
-| `tests/test_nfl_owned_market_v1.py` | +identity projection test (13 total) |
-| `OWNED_187_400_CLOCK_UNAVAILABLE.md` | rewritten to actual original locators |
-| fixtures/readiness | identities only; risk1 economic fixture **unchanged** `ca253545…` |
+| `START_PREFLIGHT_CONTINUE69537_B.md` | GATE0 PASS 245.325 GiB `/dev/vdc` |
+| `CLOCK_SOURCE_HOLD_CONTINUE69537.md` | **HOLD** — exact freeze#limitations locator |
+| `OWNED_187_400_CLOCK_UNAVAILABLE.md` | CONTINUE 69537 HOLD note |
+| `RECEIPT.md` / `receipt.json` | continue 69537 · clock_source=HOLD |
 
-Not restored onto tip as working-tree copies (would expose 2022/23 quote values). Readable via `git show 7834cbc7:<path>`.
+Unchanged: `arithmetic.py` risk1 fixture `ca253545…` · 187 identities · 400 IDs · readiness clock `UNVERIFIED_ON_ORIGINAL`.
 
 ## Integrated command
 
 ```
-cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_owned_market_v1.py -q --tb=short
-# 13 passed
+df -h /agent/repos/kosedge
+# /dev/vdc Avail 246G / 245.325142 GiB · PASS
 ```
+
+No pytest delta (no code change). Prior 13 tests remain the package bar.
 
 ## Remaining blocker
 
-Clock: `MARKET_ARM_FREEZE.json#limitations` publication/observation timestamps **unverified** on the original. Not invented. No Cos request (187 recovered).
+`7834cbc7:data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json#limitations`
+`publication_timestamp_status=unverified` · `observation_timestamp_status=unverified`
