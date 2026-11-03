@@ -135,3 +135,6 @@ data/ops/nfl-daily-intel/cache/
 services/model-service/content/writers/
 
 services/model-service/.deploy-git-sha
+
+# nflverse PBP restage binaries (t4696u / t4770u) — checksums live in ops manifests
+data/raw/nfl/pbp/

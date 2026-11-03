@@ -1,0 +1,13 @@
+COS_ORDER — Cursor t4770u: BIND to PASS_CONTRACT v2 and seal DATA_*
+Authority: DECISION 751dd63c · IMV PASS_CONTRACT 1a53bbd3 · contract b41f4b43
+
+NOW AUTHORIZED:
+1. Bind staging / builders / manifests to ALEX_E1_EFFICIENCY_CONTRACT_t4770u_v2.md (sha8 b41f4b43).
+2. Enforce OUTSIDE must-None + catch-all (travel_*, info_velocity_*, hours_since_change_*; any NflGameInputs outside 20 + context → None + manifest).
+3. Prove week≤8 as-of / through-W8 including MNF / no 2025 prior / silent-default REJECT.
+4. Seal offline dataset packet with status DATA_READY | DATA_PARTIAL | DATA_UNAVAILABLE + hashes + provenance + coverage matrix.
+5. Incomplete W8 → fail closed (PARTIAL or UNAVAILABLE, not READY).
+
+STILL HOLD: emit · E2 Odds · C10 · CERT · Coming Soon OFF · merge #662 · paid capture.
+PASS_CONTRACT ≠ DATA ACCEPT — IMV grades the sealed DATA_* packet next.
+Report seal path + sha8 when ready.

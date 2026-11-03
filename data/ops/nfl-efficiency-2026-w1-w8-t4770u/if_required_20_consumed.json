@@ -1,0 +1,743 @@
+{
+  "DATABASE_URL_used": false,
+  "NFL_INDEPENDENT_FAIR_PATH": false,
+  "addon_ticket": "t4776u",
+  "alex_contract_parent_v1_sha8": "24600552",
+  "alex_contract_sha256": "b41f4b43e1367bd5658c743475b9b84535c65395630a0b06c804f8b3552b81f4",
+  "alex_contract_sha8": "b41f4b43",
+  "alex_contract_version": "v2",
+  "all_20_consumed": true,
+  "c10_used": false,
+  "call_graph": {
+    "calls_simulate_nfl_game": [
+      894
+    ],
+    "code_commit": "1b39f4e9f6b2e04c264a41831f3bb7273e475011",
+    "entrypoint": "simulate_nfl_game_independent_fair",
+    "independent_fair_kwarg_true": true,
+    "simulate_nfl_game_calls": {
+      "_build_matchup_adjustments": [
+        536
+      ],
+      "_build_totals_adjustments": [
+        537
+      ],
+      "compute_nfl_projection_decomposition": [
+        538
+      ]
+    },
+    "source_sha256": {
+      "nfl_handicapping_framework.py": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+      "nfl_simulator.py": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385"
+    }
+  },
+  "code_commit": "1b39f4e9f6b2e04c264a41831f3bb7273e475011",
+  "contract_bind": "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3",
+  "decision": "751dd63c",
+  "entrypoint": "simulate_nfl_game_independent_fair",
+  "fields": [
+    {
+      "baseline_value": 1.01,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": 0.43427102498235204,
+      "delta_predicted_margin": 0.9648000000000001,
+      "delta_predicted_total": 0.6331999999999951,
+      "delta_total_mu": 0.8390837704302925,
+      "field": "offense_index_home",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "f8e35d20dcdc692e42d34efec85ec8a70284f95a9802f351875b4c550f65e86f",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "2e490cc363a9c850f73a871ee0afec96783be81de10c63590ea43f425d1b9826",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 1.07,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "simulate_nfl_game",
+          "lines": [
+            539,
+            786
+          ],
+          "path_role": "entrypoint_pass_through"
+        },
+        {
+          "file": "nfl_handicapping_framework.py",
+          "function": "compute_nfl_projection_decomposition",
+          "lines": [
+            280
+          ],
+          "path_role": "decomposition"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.9825,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -1.4456595794353846,
+      "delta_predicted_margin": -0.9412,
+      "delta_predicted_total": 0.6176999999999992,
+      "delta_total_mu": 0.8083121476273192,
+      "field": "offense_index_away",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "5fe85e3318b20c662cbb8ee26b2414a99b2e9e2e2850d110b34abb1cd9e6e96d",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "f57107dd03ec6c129ab77c7b762687bcee2c6f0c463fd29897576458ba239921",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 1.0425,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "simulate_nfl_game",
+          "lines": [
+            540,
+            787
+          ],
+          "path_role": "entrypoint_pass_through"
+        },
+        {
+          "file": "nfl_handicapping_framework.py",
+          "function": "compute_nfl_projection_decomposition",
+          "lines": [
+            281
+          ],
+          "path_role": "decomposition"
+        }
+      ]
+    },
+    {
+      "baseline_value": 1.02,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": 0.315998662761916,
+      "delta_predicted_margin": 0.8562000000000001,
+      "delta_predicted_total": -0.5619000000000014,
+      "delta_total_mu": -0.33972586734928,
+      "field": "defense_index_home",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "5c4e6261f9e725e3a86486075a6e3a48c01d3a80306de921b8272dddd44677c6",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "e623a262199b230df892f5b72e604d481749601348bd334ec1e883154594c6e7",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 1.08,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "simulate_nfl_game",
+          "lines": [
+            541,
+            788
+          ],
+          "path_role": "entrypoint_pass_through"
+        },
+        {
+          "file": "nfl_handicapping_framework.py",
+          "function": "compute_nfl_projection_decomposition",
+          "lines": [
+            281
+          ],
+          "path_role": "decomposition"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.9950000000000001,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -1.4370525886279977,
+      "delta_predicted_margin": -0.9237,
+      "delta_predicted_total": -0.606100000000005,
+      "delta_total_mu": -0.3976468431800555,
+      "field": "defense_index_away",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "bad3ccea6e79443f995447e57329443cc3bc5e122758478e8a12ea188288a30e",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "820946bcd2391ab51ba52af8195c84871ff7e7992920079ca2f63634330c26a5",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 1.0550000000000002,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "simulate_nfl_game",
+          "lines": [
+            542,
+            789
+          ],
+          "path_role": "entrypoint_pass_through"
+        },
+        {
+          "file": "nfl_handicapping_framework.py",
+          "function": "compute_nfl_projection_decomposition",
+          "lines": [
+            280
+          ],
+          "path_role": "decomposition"
+        }
+      ]
+    },
+    {
+      "baseline_value": -0.12144594343740771,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.5199527250176486,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.3257999999999939,
+      "delta_total_mu": 0.5274685204302827,
+      "field": "home_off_epa_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "3f423a22c070b1b2457c990658eb5653647b0e63a06ee69d3b22b396e83d73ee",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "1b96d540a7a159d9bb14c11eeaea4b634cb5e8ed72526256da3eb10cf990a2db",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": -0.041445943437407706,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            232,
+            289
+          ],
+          "path_role": "matchup"
+        },
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            355,
+            389
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": -0.061466652961869414,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.5199527250176486,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.3257999999999939,
+      "delta_total_mu": 0.5274685204302827,
+      "field": "away_off_epa_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "4be53605f60c29dc5055cdf1ee144bf12caa491877ec52565f0f8d0d01264b27",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "1b96d540a7a159d9bb14c11eeaea4b634cb5e8ed72526256da3eb10cf990a2db",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.018533347038130588,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            233,
+            290
+          ],
+          "path_role": "matchup"
+        },
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            356,
+            390
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": -0.05529079372174952,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.5204234750176484,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.27199999999999847,
+      "delta_total_mu": 0.47440827043029543,
+      "field": "home_def_epa_allowed_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "b83ba8ff0c760e35e07cb9f35e2ac29485fe04e3b754567f3eed654a7500d448",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "f4e4f627717b7f87a00503f92525dbde8aec006ec180746820a9371a324b4cda",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.024709206278250483,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            357,
+            391
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.04777601544662601,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.5204234750176484,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.27199999999999847,
+      "delta_total_mu": 0.47440827043029543,
+      "field": "away_def_epa_allowed_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "ca9aef92c9ff96b6a169a0ea993d08c8ce8e49aa962806a9e6c90c2ba50c3d6b",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "f4e4f627717b7f87a00503f92525dbde8aec006ec180746820a9371a324b4cda",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.127776015446626,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            358,
+            392
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.5529142703780385,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.5197794750176481,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.34559999999999746,
+      "delta_total_mu": 0.5469962704302915,
+      "field": "home_pass_rate_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "5b05891840bdc72e57883dab0c129582270b08035d59e92a5eb8f5eca8c1f55f",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "a885ecd283b0bacf771d437e505ddc4e09cc09dfac0b8c185d8083a89991b686",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.6329142703780385,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            234,
+            291
+          ],
+          "path_role": "matchup"
+        },
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            353,
+            380
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.630031746031746,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.5197794750176481,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.34559999999999746,
+      "delta_total_mu": 0.5469962704302915,
+      "field": "away_pass_rate_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "ee25e8d2a8a5107a18571507a064b577b92990cd4ae797cf0eb4e001cc1f2929",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "a885ecd283b0bacf771d437e505ddc4e09cc09dfac0b8c185d8083a89991b686",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.710031746031746,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            235,
+            291
+          ],
+          "path_role": "matchup"
+        },
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            354,
+            380
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.3763938429003265,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -0.5240618386279974,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": -0.18650000000000233,
+      "delta_total_mu": 0.02248840681993869,
+      "field": "home_success_offense_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "a7fdcc80a8b4261086be44ea8bab6ba1496d53b8c490819f3f5e522ab831d0d8",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "065c6a45632b3545de9f626b4abc7563cf47b5f1e1ecea72e3884e0e26038385",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.4363938429003265,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            359,
+            402
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.41860317460317453,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -0.5240618386279974,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": -0.18650000000000233,
+      "delta_total_mu": 0.02248840681993869,
+      "field": "away_success_offense_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "ef4c8d94d04a3dc94f87310ccf2e46acf562e04094a9d711eeeb00963b628f88",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "065c6a45632b3545de9f626b4abc7563cf47b5f1e1ecea72e3884e0e26038385",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.47860317460317453,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            360,
+            402
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.4038115388447869,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -0.5211724750176483,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.18649999999999523,
+      "delta_total_mu": 0.3899852704302873,
+      "field": "home_success_defense_allowed_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "516ab07ef3bd1b2f556e2148b660bfc07a23a55187673f4510203bbd8c47141c",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "67885d92c971b56baeca78e379ff377ec955d99dbd9dd07c615e0bb80ee5fb20",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.4638115388447869,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            361,
+            403
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.4065608344926358,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -0.5211724750176483,
+      "delta_predicted_margin": 0.0,
+      "delta_predicted_total": 0.18649999999999523,
+      "delta_total_mu": 0.3899852704302873,
+      "field": "away_success_defense_allowed_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "4e5d676666b4acc734ce56d3a836a55e78e9b09748c2d2d0407360e448192d70",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "67885d92c971b56baeca78e379ff377ec955d99dbd9dd07c615e0bb80ee5fb20",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.4665608344926358,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_totals_adjustments",
+          "lines": [
+            362,
+            403
+          ],
+          "path_role": "totals"
+        }
+      ]
+    },
+    {
+      "baseline_value": -0.059979290475538294,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.37368247501764884,
+      "delta_predicted_margin": 0.1512,
+      "delta_predicted_total": 0.0,
+      "delta_total_mu": 0.20747127043028968,
+      "field": "matchup_diff_off_epa_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "4d0d1a85dfe35ae3306330d41590d0a85a85474094c3b9ef17ca51c730bf608c",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "54f4b33bb481ff3d87bc523a8607c4b9460e05f9b1eed5919c655230bd9dca74",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.020020709524461708,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            226,
+            251
+          ],
+          "path_role": "matchup"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.10306680916837553,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.08,
+      "delta_margin_mu": -0.3847284750176514,
+      "delta_predicted_margin": 0.1399999999999999,
+      "delta_predicted_total": 0.0,
+      "delta_total_mu": 0.20737327043028841,
+      "field": "matchup_diff_def_epa_allowed_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "9f8eced0bd93f59ba4afc33af8817eb0967b9868fbb6472d1859c146c7e8588a",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "47fa5442d7dc9b8095d270303636aaec10e6b654a2f233925c8976c335343764",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.18306680916837553,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            227,
+            257
+          ],
+          "path_role": "matchup"
+        }
+      ]
+    },
+    {
+      "baseline_value": -0.019730018027499546,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -0.429580588627994,
+      "delta_predicted_margin": 0.0944999999999998,
+      "delta_predicted_total": 0.0,
+      "delta_total_mu": 0.20689965681994238,
+      "field": "matchup_diff_success_rate_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "2d82f7a681a647ef8d4b1e25619db71d547e99e50fabdeb5f7babee5d9dfe254",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "5f04b8e6a0182b4e326acb4fd334f358e8f8995fc98657a4a3cbbde8cb7ad464",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.04026998197250045,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            231,
+            281
+          ],
+          "path_role": "matchup"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.04515004928798033,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.04,
+      "delta_margin_mu": -0.42613233862799493,
+      "delta_predicted_margin": 0.09800000000000009,
+      "delta_predicted_total": 0.0,
+      "delta_total_mu": 0.20702440681994005,
+      "field": "matchup_diff_pressure_generated_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "e625c7e2756ccdc50d2628ca245c68a1d86874a45f535f93a5ea5ddcd14248b2",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "fb0bbca136b460d9636f530c80e399ec3cb742d1d5b9460afdfa35aa592a18d7",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.08515004928798034,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            228,
+            263
+          ],
+          "path_role": "matchup"
+        }
+      ]
+    },
+    {
+      "baseline_value": -0.00978440936800068,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.04,
+      "delta_margin_mu": -0.43716433862799686,
+      "delta_predicted_margin": 0.08679999999999999,
+      "delta_predicted_total": 0.0,
+      "delta_total_mu": 0.20694040681993897,
+      "field": "matchup_diff_pressure_allowed_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "73646e5bfa496ec8841d113d58232de0ef233f46b1509a1a9f345791c4e126b1",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "7a60c25afe531edb5a0247f2a42bd017434b40eec12683c13c185fbfd61d5ffb",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.03021559063199932,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            229,
+            269
+          ],
+          "path_role": "matchup"
+        }
+      ]
+    },
+    {
+      "baseline_value": 0.035238095238095235,
+      "consumed_by_if_path": true,
+      "delta_applied": 0.06,
+      "delta_margin_mu": -0.6020533386279978,
+      "delta_predicted_margin": -0.0806,
+      "delta_predicted_total": 0.0,
+      "delta_total_mu": 0.2056849068199469,
+      "field": "matchup_diff_red_zone_td_rate_5g",
+      "in_call_graph": true,
+      "input_hash_baseline": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+      "input_hash_changed": true,
+      "input_hash_perturbed": "9b6906bf530d2aaec97f5b0f8e920d71694fad3b76378cba128d176a05694a76",
+      "output_hash_baseline": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+      "output_hash_changed": true,
+      "output_hash_perturbed": "51dc3bb5819c32740a41627ec409eafa876ea1b49d82af5867afa32d2d320dba",
+      "passed_into_NflGameInputs": true,
+      "perturbed_value": 0.09523809523809523,
+      "present_in_dataset": true,
+      "readers": [
+        {
+          "file": "nfl_simulator.py",
+          "function": "_build_matchup_adjustments",
+          "lines": [
+            230,
+            275
+          ],
+          "path_role": "matchup"
+        }
+      ]
+    }
+  ],
+  "imv_pass_contract": "1a53bbd3",
+  "imv_pass_contract_sha256": "1a53bbd33f32fec8d25a102f2abea7b975a92fbd55edbaaaafe020055c25b9f8",
+  "imv_return_parent": "d2587de7",
+  "label": "DIAGNOSTIC t4776u: 20/20 required fields consumed by IF path (call graph + input-hash perturbation). Not an E1 emit.",
+  "market_blend": 0,
+  "n_consumed_by_if_path": 20,
+  "n_required": 20,
+  "path": "simulate_nfl_game_independent_fair \u2192 simulate_nfl_game(independent_fair=True) \u2192 _build_matchup_adjustments + _build_totals_adjustments + compute_nfl_projection_decomposition \u2192 Independent Fair mus",
+  "probe_as_of_week": 8,
+  "probe_game_id": "2026-W09-ARI@SEA",
+  "probe_if_output_hash": "ad53e38f94fe0ac2db1526ac8896206673fae604a27a8f62a57bed0a83ea91d5",
+  "probe_required_20_input_hash": "cea73aa192cd11f6125a208ffa92a4ab2706d7a08f3da29de6934e3033db3cb8",
+  "probe_rolling_as_of_week": 8,
+  "scoring_admissible": false,
+  "ticket": "t4770u"
+}

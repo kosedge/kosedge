@@ -1,0 +1,128 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "n": 32
+      },
+      "name": "teams_32",
+      "ok": true
+    },
+    {
+      "detail": {
+        "1": {
+          "complete": 16,
+          "expected": 16,
+          "missing": []
+        },
+        "2": {
+          "complete": 16,
+          "expected": 16,
+          "missing": []
+        },
+        "3": {
+          "complete": 16,
+          "expected": 16,
+          "missing": []
+        },
+        "4": {
+          "complete": 16,
+          "expected": 16,
+          "missing": []
+        },
+        "5": {
+          "complete": 15,
+          "expected": 15,
+          "missing": []
+        },
+        "6": {
+          "complete": 14,
+          "expected": 14,
+          "missing": []
+        },
+        "7": {
+          "complete": 14,
+          "expected": 14,
+          "missing": []
+        },
+        "8": {
+          "complete": 14,
+          "expected": 14,
+          "missing": []
+        }
+      },
+      "name": "through_w7_complete",
+      "ok": true
+    },
+    {
+      "detail": {
+        "complete": 14,
+        "expected": 14,
+        "missing": [],
+        "mnf_present": true
+      },
+      "name": "through_w8_complete",
+      "ok": true
+    },
+    {
+      "detail": "current-season 2026 only",
+      "name": "no_2025_prior_flag",
+      "ok": true
+    },
+    {
+      "detail": {
+        "max_week": 8,
+        "panel_week": 8
+      },
+      "name": "situational_weeks_le_7_in_panel",
+      "ok": true
+    },
+    {
+      "detail": "team_strength_from_record on 2026 W-L",
+      "name": "t5_ok_32",
+      "ok": true
+    },
+    {
+      "detail": "5g features non-null including pressure/RZ",
+      "name": "five_g_present",
+      "ok": true
+    },
+    {
+      "detail": "team_strength_from_record clamps",
+      "name": "indices_in_t5_clamp",
+      "ok": true
+    },
+    {
+      "detail": {
+        "n_accept": 15,
+        "n_reject": 0
+      },
+      "name": "contract_20_on_accept_or_labeled_reject",
+      "ok": true
+    },
+    {
+      "detail": 15,
+      "name": "w09_games_15",
+      "ok": true
+    },
+    {
+      "detail": [],
+      "name": "w09_no_missing_teams",
+      "ok": true
+    },
+    {
+      "detail": "as_of_week<=8",
+      "name": "no_future_week_in_current",
+      "ok": true
+    },
+    {
+      "detail": {
+        "n_catchall": 51,
+        "note": "Alex v2 b41f4b43 catch-all live from NflGameInputs; D1 CLOSED via PASS_CONTRACT 1a53bbd3"
+      },
+      "name": "v2_catchall_nfl_game_inputs_none",
+      "ok": true
+    }
+  ],
+  "failed": [],
+  "pass": true
+}
