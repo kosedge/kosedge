@@ -1,0 +1,132 @@
+{
+  "branch": "cursor/nfl-ops-v1-worker-release-e2c7",
+  "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+  "evidence_label": "SOURCE_INSPECTION",
+  "field": "worker_handoff",
+  "head": "e6cfb87341adc8c4170bc8b53c7f1a030b489a4e",
+  "mocked_release": false,
+  "not_a_pass": true,
+  "platform_capability": "ABSENT",
+  "record": {
+    "active_writer": null,
+    "branch": "cursor/nfl-ops-v1-worker-release-e2c7",
+    "cert": 0,
+    "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+    "dirty": {
+      "changed_paths": [],
+      "clean": true,
+      "preserved": true
+    },
+    "head": "e6cfb87341adc8c4170bc8b53c7f1a030b489a4e",
+    "limits": {
+      "cert": 0,
+      "no_deletion": true,
+      "no_forced_takeover": true,
+      "no_real_data": true,
+      "no_self_kill": true,
+      "self_accept": false,
+      "synthetic_only": true
+    },
+    "log_hashes": [
+      {
+        "path": "data/ops/nfl-ops-v1-worker-release-claim/SELFCHECK_RECEIPT.json",
+        "sha256": "23257404bdaefa4b96e4e1817ea1269197b99d6fe8197a772b0868305d4348cc"
+      }
+    ],
+    "owner_clear": "f1fb6735",
+    "pending_prompts": [],
+    "protocol": "NFL_OPS_V1",
+    "protocol_hash": "ed10e80f",
+    "release_evidence": {
+      "capability_id": "cursor_cloud_workspace_reclaim",
+      "confirmed_at_utc": null,
+      "detail": "No Cursor Cloud / GitHub / Railway workspace-reclaim API is registered in this worker. Idle / closed / reclaimable stay distinct. Chief verifies actual platform release before reuse.",
+      "evidence_label": "SOURCE_INSPECTION",
+      "kind": "PLATFORM_LIMITATION",
+      "limitation": "PLATFORM_LIMITATION",
+      "mocked": false,
+      "not_a_pass": true,
+      "not_cursor_workspace_reclaim": true,
+      "platform_capability": "ABSENT"
+    },
+    "running_jobs": [],
+    "saved_artifacts": [
+      {
+        "path": "data/ops/nfl-ops-v1-worker-release-claim/SAMPLE_RECORD.json",
+        "sha256": "43808c2ae3dc32b32d07a923d6890533ff679f0fc922c27d25783e73a3f4ceb7"
+      },
+      {
+        "path": "data/ops/nfl-ops-v1-worker-release-claim/SCHEMA.json",
+        "sha256": "2d3d4c175dc5182584cd6f6eaadf9d3e0687eceb757816bd2256156cafb44da2"
+      },
+      {
+        "path": "data/ops/nfl-ops-v1-worker-release-claim/SELFCHECK_RECEIPT.json",
+        "sha256": "23257404bdaefa4b96e4e1817ea1269197b99d6fe8197a772b0868305d4348cc"
+      },
+      {
+        "path": "data/ops/nfl-ops-v1-worker-release-claim/TEST_COMMANDS.json",
+        "sha256": "1ab1e7d57e7ceeb011b1b55d35e03c598fe56bd05e704f3fba5a081f35454e3a"
+      },
+      {
+        "path": "data/ops/nfl-ops-v1-worker-release-claim/WORKER_HANDOFF.json",
+        "sha256": "e540113aba5ebb889f66e92f09a3ae83832d24b6fa4c700505d94297fe92d049"
+      }
+    ],
+    "schema": "nfl-ops-v1-worker-release-claim-v1",
+    "schema_version": 1,
+    "scope_id": "chief-nflgreen-overnight-ops-20261102-0330",
+    "self_accept": false,
+    "state": "QUIESCENT",
+    "state_history": [
+      {
+        "at_utc": "2026-11-03T03:45:33Z",
+        "code": "OPEN",
+        "from": null,
+        "to": "WRITING"
+      },
+      {
+        "at_utc": "2026-11-03T03:45:33Z",
+        "code": "HANDOFF",
+        "from": "WRITING",
+        "to": "HANDOFF_RECORDED"
+      },
+      {
+        "at_utc": "2026-11-03T03:45:33Z",
+        "code": "QUIESCENT",
+        "from": "HANDOFF_RECORDED",
+        "to": "QUIESCENT"
+      }
+    ],
+    "successor": {
+      "id": null,
+      "named": false,
+      "role": null
+    },
+    "synthetic": true,
+    "task": {
+      "id": "chief-nflgreen-overnight-ops-20261102-0330-primary-b",
+      "role": "PRIMARY_B",
+      "title": "worker final-state / release / claim record"
+    },
+    "tests": {
+      "commands": [],
+      "label": "SEE_TEST_COMMANDS_JSON",
+      "passed": null
+    },
+    "untracked": [],
+    "worker": {
+      "alias": "primary-b",
+      "id": "bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7",
+      "kind": "cursor_cloud_heavy",
+      "url": "https://cursor.com/agents/bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7"
+    },
+    "workspace_alias": "cursor-vm-primary-b-bc-3a3acab2"
+  },
+  "release_kind": "PLATFORM_LIMITATION",
+  "schema": "nfl-ops-v1-worker-release-claim-v1",
+  "schema_version": 1,
+  "state": "QUIESCENT",
+  "task_id": "chief-nflgreen-overnight-ops-20261102-0330-primary-b",
+  "worker_id": "bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7",
+  "workspace_alias": "cursor-vm-primary-b-bc-3a3acab2"
+}
