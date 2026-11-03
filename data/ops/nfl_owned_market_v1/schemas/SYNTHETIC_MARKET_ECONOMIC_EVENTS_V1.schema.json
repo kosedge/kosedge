@@ -1,0 +1,224 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "cert": 0,
+  "channel": "SYNTHETIC",
+  "data_label": "SYNTHETIC",
+  "package": "nfl_owned_market_v1",
+  "profile": "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1",
+  "properties": {
+    "batch_id": {
+      "pattern": "^SYNTHETIC_",
+      "type": "string"
+    },
+    "cert": {
+      "const": 0
+    },
+    "channel": {
+      "const": "SYNTHETIC"
+    },
+    "data_label": {
+      "const": "SYNTHETIC"
+    },
+    "envelope": {
+      "additionalProperties": false,
+      "properties": {
+        "away_team": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "book_id": {
+          "const": "OWNED_SYNTH_BOOK"
+        },
+        "game_id": {
+          "pattern": "^SYNTHETIC_",
+          "type": "string"
+        },
+        "home_team": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "identity_kind": {
+          "const": "SYNTHETIC_OWNED_MARKET"
+        },
+        "kickoff_utc": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+          "type": "string"
+        },
+        "season": {
+          "type": "integer"
+        },
+        "season_type": {
+          "const": "REG"
+        },
+        "venue_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "week": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "game_id",
+        "season",
+        "week",
+        "season_type",
+        "home_team",
+        "away_team",
+        "kickoff_utc",
+        "venue_id",
+        "identity_kind",
+        "book_id"
+      ],
+      "type": "object"
+    },
+    "events": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "available_at": {
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+            "type": "string"
+          },
+          "effect_channel": {
+            "enum": [
+              "ML",
+              "SPREAD",
+              "TOTAL",
+              "USAGE",
+              "VIG",
+              "VOID"
+            ]
+          },
+          "event_id": {
+            "pattern": "^SYNTHETIC_EVT_",
+            "type": "string"
+          },
+          "event_type": {
+            "enum": [
+              "INJURY_STATUS",
+              "LINEUP_CONFIRM",
+              "LIQUIDITY_SHOCK",
+              "NEWS_VOID",
+              "REST_SHOCK",
+              "WEATHER_SHIFT"
+            ]
+          },
+          "magnitude": {
+            "type": "number"
+          },
+          "observed_at": {
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          },
+          "player_slot": {
+            "enum": [
+              "NONE",
+              "QB1",
+              "RB1",
+              "TE1",
+              "WR1"
+            ]
+          },
+          "source": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "source_byte_hash": {
+            "not": {
+              "const": "0000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "team": {
+            "enum": [
+              "AAA",
+              "NEUTRAL",
+              "ZZZ"
+            ]
+          }
+        },
+        "required": [
+          "event_id",
+          "event_type",
+          "effect_channel",
+          "team",
+          "player_slot",
+          "magnitude",
+          "available_at",
+          "observed_at",
+          "payload",
+          "source",
+          "source_byte_hash"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "package": {
+      "const": "nfl_owned_market_v1"
+    },
+    "profile": {
+      "const": "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1"
+    },
+    "schema_version": {
+      "const": "synthetic-market-economic-events-v1"
+    },
+    "source_byte_hash": {
+      "not": {
+        "const": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "timing": {
+      "additionalProperties": false,
+      "properties": {
+        "cutoff_utc": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+          "type": "string"
+        },
+        "kickoff_utc": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+          "type": "string"
+        },
+        "ko_minus_minutes": {
+          "const": 60
+        },
+        "seal_utc": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kickoff_utc",
+        "cutoff_utc",
+        "seal_utc",
+        "ko_minus_minutes"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile",
+    "package",
+    "cert",
+    "data_label",
+    "channel",
+    "batch_id",
+    "envelope",
+    "timing",
+    "events",
+    "source_byte_hash"
+  ],
+  "schema_version": "synthetic-market-economic-events-v1",
+  "title": "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1",
+  "type": "object"
+}

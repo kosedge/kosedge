@@ -1,0 +1,24 @@
+{
+  "canonical_note": "document_hash is sha256(canonical JSON without source_byte_hash). fixture_sha256 / schema_sha256 are sha256 of on-disk bytes (indent=2, sort_keys, trailing newline).",
+  "cert": 0,
+  "data_label": "SYNTHETIC",
+  "package": "nfl_owned_market_v1",
+  "profiles": {
+    "OWNED_MARKET_TRACE_V1": {
+      "document_hash": "dda58e0bccc509784cb32326f679463c58db8f203c104a1d635c2ceb7f460d59",
+      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/owned_market_trace.synthetic.json",
+      "fixture_sha256": "7e412d1f701929ae963ff0d50d2ee11af93a9b928f14d770e46b310e20da9a4b",
+      "schema_hash": "cd564061cb12a45b0cf813d3e23b6e1166e3fefb77d6b3525e6a997a819dfc57",
+      "schema_path": "data/ops/nfl_owned_market_v1/schemas/OWNED_MARKET_TRACE_V1.schema.json",
+      "schema_sha256": "680a4c9756cab6d3055ee91ce70769f846305470cf450e38b6ceab2f58761e4e"
+    },
+    "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": {
+      "document_hash": "ab6e0f4ec87a109dee07024ae186c252e6a6643b09fa9ec3538858e283341efd",
+      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/synthetic_market_economic_events.synthetic.json",
+      "fixture_sha256": "37b21de21c6bb68493b87b8ac908c89f2cf0ebe03ec996d867646386957eb87f",
+      "schema_hash": "326c18108d90ce4b2de5cbbfdb499274abe2aca37baf7a2046a91aa24e3ac021",
+      "schema_path": "data/ops/nfl_owned_market_v1/schemas/SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1.schema.json",
+      "schema_sha256": "a06b15d1507a44ddd0306f3b22314c89ce9a82c9c56996e8e34101862e670e55"
+    }
+  }
+}

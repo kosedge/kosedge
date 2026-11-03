@@ -1,0 +1,59 @@
+{
+  "cert": 0,
+  "code_hash": "f3e6f54f8d15c47f4a240c19cd15a2bf7a06d73daf23c19aaa7d33e66a3ed7aa",
+  "data_label": "SYNTHETIC",
+  "do_not": [
+    "B does not edit shared files",
+    "B does not register profiles on the shared evidence gate",
+    "A alone registers OWNED_MARKET_TRACE_V1 and SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1 on R7_CORRECTNESS_V1",
+    "#714 stays PARTIAL and is not a base"
+  ],
+  "join_contract": {
+    "caused_by_event_id": "observations[].caused_by_event_id -> events[].event_id",
+    "game_id": "shared envelope.game_id",
+    "timing": "event.available_at < observation.available_at < seal_utc=cutoff_utc=kickoff-60",
+    "validator": "src.services.nfl_owned_market_v1.validate:validate_join"
+  },
+  "owner_clear": "86257",
+  "package": "nfl_owned_market_v1",
+  "plan_fingerprint": "b15d6cec143212067b896057a048cd51071981d6ea1b3561c08db89cb6355358",
+  "producers": {
+    "OWNED_MARKET_TRACE_V1": "src.services.nfl_owned_market_v1.produce:build_trace_document",
+    "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": "src.services.nfl_owned_market_v1.produce:build_events_document"
+  },
+  "profiles": {
+    "OWNED_MARKET_TRACE_V1": {
+      "document_hash": "dda58e0bccc509784cb32326f679463c58db8f203c104a1d635c2ceb7f460d59",
+      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/owned_market_trace.synthetic.json",
+      "fixture_sha256": "7e412d1f701929ae963ff0d50d2ee11af93a9b928f14d770e46b310e20da9a4b",
+      "schema_hash": "cd564061cb12a45b0cf813d3e23b6e1166e3fefb77d6b3525e6a997a819dfc57",
+      "schema_path": "data/ops/nfl_owned_market_v1/schemas/OWNED_MARKET_TRACE_V1.schema.json",
+      "schema_sha256": "680a4c9756cab6d3055ee91ce70769f846305470cf450e38b6ceab2f58761e4e"
+    },
+    "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": {
+      "document_hash": "ab6e0f4ec87a109dee07024ae186c252e6a6643b09fa9ec3538858e283341efd",
+      "fixture_path": "data/ops/nfl_owned_market_v1/fixtures/synthetic_market_economic_events.synthetic.json",
+      "fixture_sha256": "37b21de21c6bb68493b87b8ac908c89f2cf0ebe03ec996d867646386957eb87f",
+      "schema_hash": "326c18108d90ce4b2de5cbbfdb499274abe2aca37baf7a2046a91aa24e3ac021",
+      "schema_path": "data/ops/nfl_owned_market_v1/schemas/SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1.schema.json",
+      "schema_sha256": "a06b15d1507a44ddd0306f3b22314c89ce9a82c9c56996e8e34101862e670e55"
+    }
+  },
+  "ready_for_A": true,
+  "scope_id": "chief-nflgreen-model-day-20261103-1700",
+  "source_pins": {
+    "base_deploy_vercel": "f5e3bb58ccbe5a8892fed2a01f347c2308394a2f",
+    "gate_713_tip": "679dbdaf8c9044edffb34ffca1543c33eea77db7",
+    "pr_714_is_base": false,
+    "pr_714_partial": "5558890b5f8a66c16c658fce2971f0a7e2f2c7de",
+    "r6_a": "54b08a301cf824c79ee3203180a51e2d832bb6f9",
+    "r6_b": "afb13301b5c7e3b8780a8dd1f85145e91bebef55",
+    "timing_law": "seal_utc=cutoff_utc=kickoff-60; available_at/observed_at strictly precede seal"
+  },
+  "ticket": "t5289u",
+  "validators": {
+    "OWNED_MARKET_TRACE_V1": "src.services.nfl_owned_market_v1.validate:validate_owned_market_trace",
+    "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": "src.services.nfl_owned_market_v1.validate:validate_synthetic_market_economic_events"
+  },
+  "worker": "B"
+}
