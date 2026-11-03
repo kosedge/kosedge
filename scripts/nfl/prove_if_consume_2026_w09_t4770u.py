@@ -624,6 +624,45 @@ def main() -> int:
     _write_json(OPS / "rest_days_spotcheck.json", rest_days_spotcheck(pack.get("games") or []))
     _write_json(OUT_CONSUMED, consume_doc)
 
+    if int(pack.get("as_of_week") or 0) >= 8:
+        status_doc = json.loads((OPS / "STATUS.json").read_text(encoding="utf-8"))
+        source = json.loads((OPS / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
+        pbp = source.get("pbp") or {}
+        _write_json(
+            OPS / "DATA_READY.json",
+            {
+                "status": "DATA_READY",
+                "ticket": "t4770u",
+                "addon_ticket": "t4776u",
+                "decision": DECISION_SHA8,
+                "contract_bind": CONTRACT_BIND,
+                "alex_contract_sha8": ALEX_CONTRACT_V2_SHA8,
+                "imv_pass_contract": IMV_PASS_CONTRACT_SHA8,
+                "panel": "through-W8",
+                "as_of_week": pack.get("as_of_week"),
+                "week8_complete_count": status_doc.get("week8_complete_count"),
+                "week8_expected_count": status_doc.get("week8_expected_count"),
+                "week8_missing": status_doc.get("week8_missing") or [],
+                "mnf_present": bool(status_doc.get("mnf_chi_sea_complete")),
+                "mnf_game_id": "2026-W08-CHI@SEA",
+                "fetched_at_utc": pbp.get("fetched_at_utc"),
+                "pbp_sha256": pbp.get("sha256"),
+                "pbp_archive_path": pbp.get("archive_path"),
+                "t5_through": 8,
+                "required_20_consumed": True,
+                "scoring_admissible": False,
+                "emit": False,
+                "merge_pr_663": False,
+                "historical_partial_accept": "c674da77",
+                "historical_partial_tip_sha8": "ba9e8426",
+                "note": (
+                    "Dataset seal only after O-a/O-b/O-c/O-d. "
+                    "≠emit ≠merge #663 ≠E2 ≠C10 ≠CERT. "
+                    "IMV DATA_READY grade not yet on file."
+                ),
+            },
+        )
+
     proof = {
         "ticket": "t4770u",
         "addon_ticket": "t4776u",
@@ -644,9 +683,10 @@ def main() -> int:
         "c10_used": False,
         "scoring_admissible": False,
         "label": (
-            "DIAGNOSTIC consume proof on through-W7 panel; t4776u 20-field "
-            "IF-path consumption attached. Not an E1 emit."
+            f"DIAGNOSTIC consume proof on through-W{pack.get('as_of_week')} panel; "
+            "t4776u 20-field IF-path consumption attached. Not an E1 emit."
         ),
+        "as_of_week": pack.get("as_of_week"),
         "n_consumed": sum(1 for r in rows if r.get("consumed")),
         "n_games": len(rows),
         "required_20_consumed_by_if_path": consumed_n == 20,

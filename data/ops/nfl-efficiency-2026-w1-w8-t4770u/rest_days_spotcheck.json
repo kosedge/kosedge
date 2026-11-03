@@ -1,7 +1,6 @@
 {
   "function": "nfl_data.rest_days_from_schedule",
   "heuristic": "UTC weekday: Thu=4, Mon=6, else=7",
-  "label": "DIAGNOSTIC through-W7 pack; O-d READY re-check required after W8",
   "n": 15,
   "n_short_week": 1,
   "n_utc_et_dow_mismatch": 3,

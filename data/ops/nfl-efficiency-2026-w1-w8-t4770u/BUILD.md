@@ -3,7 +3,7 @@
 Offline only. No `DATABASE_URL`. No C10 / Railway. No paid data.
 
 Bound to Alex v2 `b41f4b43` after IMV PASS_CONTRACT `1a53bbd3` (D1 CLOSED).
-Incomplete W8 → `DATA_PARTIAL`. PASS_CONTRACT ≠ DATA ACCEPT ≠ emit.
+W8 14/14 including MNF CHI@SEA → `DATA_READY` (dataset seal only). PASS_CONTRACT ≠ DATA ACCEPT ≠ emit.
 
 ## Approved source
 
@@ -15,23 +15,20 @@ Same URL template CLEARed on t4696u S1 restage (2012–2022). Public HTTPS. Hash
 
 ## Rebuild
 
-**Through-W7 PARTIAL only** (W8 incomplete — current sealed state). Reuses local parquet:
+**Through-W7 PARTIAL re-verify only** (historical `c674da77` / tip `ba9e8426`). Reuses local parquet and is refused once W8 is 14/14:
 
 ```bash
 python3 scripts/nfl/build_efficiency_2026_w1_w8_t4770u.py --skip-fetch
-python3 scripts/nfl/prove_if_consume_2026_w09_t4770u.py
-cd services/model-service && python3 -m pytest tests/test_nfl_efficiency_2026_w1_w8_t4770u.py -q
 ```
 
-**DATA_READY (only after W8 14/14 including MNF CHI@SEA).** Do **not** `--skip-fetch`. Builder refuses skip-fetch when through_w8_complete (O-a). Follow `STANDBY.md`:
+**DATA_READY (W8 14/14 including MNF CHI@SEA — current sealed state).** Do **not** `--skip-fetch`. Builder refuses skip-fetch when through_w8_complete (O-a):
 
 ```bash
 python3 scripts/nfl/check_w8_complete_t4770u.py --fetch
 # only if through_w8_complete=true and MNF present:
 python3 scripts/nfl/build_efficiency_2026_w1_w8_t4770u.py
 python3 scripts/nfl/prove_if_consume_2026_w09_t4770u.py
-# pytest PARTIAL-era asserts (status/as_of_week/STATUS sha) must be rewritten
-# to the new seal as part of the READY commit — do not withhold READY on those reds.
+cd services/model-service && python3 -m pytest tests/test_nfl_efficiency_2026_w1_w8_t4770u.py -q
 ```
 
 `--skip-fetch` reuses `data/raw/nfl/pbp/t4770u/play_by_play_2026.parquet` (gitignored). READY must re-fetch + archive + pin `fetched_at_utc`.

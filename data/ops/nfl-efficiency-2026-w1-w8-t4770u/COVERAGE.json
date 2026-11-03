@@ -1,5 +1,5 @@
 {
-  "as_of_utc": "2026-10-30T14:40:22Z",
+  "as_of_utc": "2026-11-03T14:04:27Z",
   "by_week": {
     "1": {
       "complete": 16,
@@ -37,23 +37,9 @@
       "missing": []
     },
     "8": {
-      "complete": 1,
+      "complete": 14,
       "expected": 14,
-      "missing": [
-        "2026-W08-ARI@DAL",
-        "2026-W08-ATL@TB",
-        "2026-W08-BAL@BUF",
-        "2026-W08-CHI@SEA",
-        "2026-W08-CLE@PIT",
-        "2026-W08-IND@JAX",
-        "2026-W08-KC@DEN",
-        "2026-W08-LAC@LAR",
-        "2026-W08-LV@NYJ",
-        "2026-W08-MIN@DET",
-        "2026-W08-NE@MIA",
-        "2026-W08-PHI@WAS",
-        "2026-W08-TEN@CIN"
-      ]
+      "missing": []
     }
   },
   "complete_game_ids": [
@@ -164,13 +150,10 @@
     "2026-W07-PIT@NO",
     "2026-W07-SF@ATL",
     "2026-W07-TB@CAR",
-    "2026-W08-CAR@GB"
-  ],
-  "incomplete_in_pbp": [],
-  "not_yet_kicked": [
     "2026-W08-ARI@DAL",
     "2026-W08-ATL@TB",
     "2026-W08-BAL@BUF",
+    "2026-W08-CAR@GB",
     "2026-W08-CHI@SEA",
     "2026-W08-CLE@PIT",
     "2026-W08-IND@JAX",
@@ -182,112 +165,9 @@
     "2026-W08-PHI@WAS",
     "2026-W08-TEN@CIN"
   ],
+  "incomplete_in_pbp": [],
+  "not_yet_kicked": [],
   "through_w7_complete": true,
-  "through_w8_complete": false,
-  "week8_missing": [
-    {
-      "away_team": "ARI",
-      "game_id": "2026-W08-ARI@DAL",
-      "home_team": "DAL",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "ATL",
-      "game_id": "2026-W08-ATL@TB",
-      "home_team": "TB",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "BAL",
-      "game_id": "2026-W08-BAL@BUF",
-      "home_team": "BUF",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "CHI",
-      "game_id": "2026-W08-CHI@SEA",
-      "home_team": "SEA",
-      "kickoff_utc": "2026-11-03T01:15:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "CLE",
-      "game_id": "2026-W08-CLE@PIT",
-      "home_team": "PIT",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "IND",
-      "game_id": "2026-W08-IND@JAX",
-      "home_team": "JAX",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "KC",
-      "game_id": "2026-W08-KC@DEN",
-      "home_team": "DEN",
-      "kickoff_utc": "2026-11-01T21:25:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "LAC",
-      "game_id": "2026-W08-LAC@LAR",
-      "home_team": "LAR",
-      "kickoff_utc": "2026-11-01T21:05:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "LV",
-      "game_id": "2026-W08-LV@NYJ",
-      "home_team": "NYJ",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "MIN",
-      "game_id": "2026-W08-MIN@DET",
-      "home_team": "DET",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "NE",
-      "game_id": "2026-W08-NE@MIA",
-      "home_team": "MIA",
-      "kickoff_utc": "2026-11-01T21:25:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "PHI",
-      "game_id": "2026-W08-PHI@WAS",
-      "home_team": "WAS",
-      "kickoff_utc": "2026-11-02T01:20:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    },
-    {
-      "away_team": "TEN",
-      "game_id": "2026-W08-TEN@CIN",
-      "home_team": "CIN",
-      "kickoff_utc": "2026-11-01T18:00:00.000Z",
-      "status": "NOT_YET_KICKED",
-      "week": 8
-    }
-  ]
+  "through_w8_complete": true,
+  "week8_missing": []
 }

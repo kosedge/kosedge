@@ -403,6 +403,7 @@ def rest_days_spotcheck(games: List[Dict[str, Any]]) -> Dict[str, Any]:
         "n": len(rows),
         "n_short_week": sum(1 for r in rows if r.get("short_week")),
         "n_utc_et_dow_mismatch": sum(1 for r in rows if r.get("utc_et_dow_mismatch")),
+        "scoring_admissible": False,
         "rows": rows,
     }
 
@@ -1222,12 +1223,13 @@ def dq_checks(
         coverage["by_week"],
     )
     add(
-        "through_w8_not_declared",
-        not coverage["through_w8_complete"],
+        "through_w8_complete",
+        bool(coverage["through_w8_complete"]),
         {
             "missing": coverage["week8_missing"],
             "complete": coverage["week8_complete_count"],
             "expected": coverage["week8_expected_count"],
+            "mnf_present": "2026-W08-CHI@SEA" in set(coverage.get("complete_game_ids") or []),
         },
     )
     add(
@@ -1294,8 +1296,7 @@ def dq_checks(
             "note": "Alex v2 b41f4b43 catch-all live from NflGameInputs; D1 CLOSED via PASS_CONTRACT 1a53bbd3",
         },
     )
-    failed = [c for c in checks if not c["ok"] and c["name"] != "through_w8_not_declared"]
-    # through_w8_not_declared is informational expected-true for DATA_PARTIAL
+    failed = [c for c in checks if not c["ok"]]
     return {
         "checks": checks,
         "failed": [c["name"] for c in failed],
@@ -1426,35 +1427,68 @@ def main() -> int:
         "lineage": APPROVED_CLEAR_LINEAGE,
     }
 
-    e1_retry = {
-        "scoring_admissible_now": False,
-        "reason": "through-W8 not complete; sealed panel is through W7 only",
-        "do_not": [
-            "retry E1 scoring-admissible emit on this DATA_PARTIAL set",
-            "substitute 2025 packaged priors for missing W8 games",
-            "restore C10 / Railway / DATABASE_URL",
-            "open Odds / E2",
-            "change CLEAR-P1 #662 merge status",
-        ],
-        "retry_when": [
-            "W8 slate complete after 2026-W08-CHI@SEA kickoff 2026-11-03T01:15:00Z (MNF)",
-            "re-fetch approved nflverse play_by_play_2026.parquet (same URL)",
-            "builder reports through_w8_complete=true and 32/32 teams",
-            "IMV PASS_CONTRACT 1a53bbd3 is on file for v2 b41f4b43 (D1 CLOSED) — not a DATA ACCEPT",
-            "IMV ACCEPT of through-W8 inputs against the PASSed v2 contract (separate DATA grade)",
-            "then E1 retry inside Tue 2026-11-03 00:00 – Wed 2026-11-04 23:59 America/New_York",
-        ],
-        "window_note": (
-            "W9 O4 window starts Tue 00:00 ET, immediately after MNF. "
-            "If nflverse PBP lands after Tue 00:00 ET, emit_ts may still sit inside the window "
-            "provided as_of <= emit_ts and IMV ACCEPT is on file."
-        ),
-        "engineering_demo_only": (
-            "W9 consume pack + IF consume proof (t4776u: 20-field call graph + "
-            "input-hash perturbation) may be used as an offline demo that Independent "
-            "Fair actually consumes staged 2026 inputs. That is not O4 scoring-admissible."
-        ),
-    }
+    if status == "DATA_READY":
+        e1_retry = {
+            "scoring_admissible_now": False,
+            "reason": (
+                "through-W8 14/14 including MNF CHI@SEA is sealed as DATA_READY. "
+                "DATA_READY is a dataset seal only. Scoring-admissible emit remains locked "
+                "(≠emit ≠merge #663 ≠E2 ≠C10 ≠CERT). IMV DATA_READY grade not yet on file."
+            ),
+            "do_not": [
+                "emit or merge #663 on this DATA_READY set",
+                "treat DATA_READY as IMV DATA ACCEPT or O4 scoring-admissible",
+                "substitute 2025 packaged priors",
+                "restore C10 / Railway / DATABASE_URL",
+                "open Odds / E2",
+                "change CLEAR-P1 #662 merge status",
+            ],
+            "retry_when": [
+                "IMV DATA_READY ACCEPT of this through-W8 packet against PASSed v2 b41f4b43 "
+                "(PASS_CONTRACT 1a53bbd3 is already on file; it is not this ACCEPT)",
+                "then E1 retry only if separately authorized — this recovery does not emit",
+            ],
+            "window_note": (
+                "W9 O4 window is Tue 2026-11-03 00:00 – Wed 2026-11-04 23:59 America/New_York. "
+                "This packet does not emit inside that window."
+            ),
+            "engineering_demo_only": (
+                "W9 consume pack + IF consume proof (t4776u: 20-field call graph + "
+                "input-hash perturbation) may be used as an offline demo that Independent "
+                "Fair actually consumes staged 2026 through-W8 inputs. That is not O4 "
+                "scoring-admissible."
+            ),
+        }
+    else:
+        e1_retry = {
+            "scoring_admissible_now": False,
+            "reason": "through-W8 not complete; sealed panel is through W7 only",
+            "do_not": [
+                "retry E1 scoring-admissible emit on this DATA_PARTIAL set",
+                "substitute 2025 packaged priors for missing W8 games",
+                "restore C10 / Railway / DATABASE_URL",
+                "open Odds / E2",
+                "change CLEAR-P1 #662 merge status",
+            ],
+            "retry_when": [
+                "W8 slate complete after 2026-W08-CHI@SEA kickoff 2026-11-03T01:15:00Z (MNF)",
+                "re-fetch approved nflverse play_by_play_2026.parquet (same URL)",
+                "builder reports through_w8_complete=true and 32/32 teams",
+                "IMV PASS_CONTRACT 1a53bbd3 is on file for v2 b41f4b43 (D1 CLOSED) — not a DATA ACCEPT",
+                "IMV ACCEPT of through-W8 inputs against the PASSed v2 contract (separate DATA grade)",
+                "then E1 retry inside Tue 2026-11-03 00:00 – Wed 2026-11-04 23:59 America/New_York",
+            ],
+            "window_note": (
+                "W9 O4 window starts Tue 00:00 ET, immediately after MNF. "
+                "If nflverse PBP lands after Tue 00:00 ET, emit_ts may still sit inside the window "
+                "provided as_of <= emit_ts and IMV ACCEPT is on file."
+            ),
+            "engineering_demo_only": (
+                "W9 consume pack + IF consume proof (t4776u: 20-field call graph + "
+                "input-hash perturbation) may be used as an offline demo that Independent "
+                "Fair actually consumes staged 2026 inputs. That is not O4 scoring-admissible."
+            ),
+        }
 
     report = {
         "ticket": "t4770u",
@@ -1473,6 +1507,7 @@ def main() -> int:
         "season": SEASON,
         "consistent_panel_through_week": panel_week,
         "through_w8_declared_complete": bool(coverage["through_w8_complete"]),
+        "mnf_chi_sea_complete": "2026-W08-CHI@SEA" in set(coverage.get("complete_game_ids") or []),
         "week8_missing": coverage["week8_missing"],
         "week8_complete_count": coverage["week8_complete_count"],
         "week8_expected_count": coverage["week8_expected_count"],

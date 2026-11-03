@@ -64,25 +64,24 @@ def _sha256(name: str) -> str:
     return digest.hexdigest()
 
 
-def test_status_is_data_partial_bound_to_v2_pass_contract() -> None:
+def test_status_is_data_ready_bound_to_v2_pass_contract() -> None:
     status = _load("STATUS.json")
-    assert status["status"] == "DATA_PARTIAL"
-    assert status["through_w8_declared_complete"] is False
+    assert status["status"] == "DATA_READY"
+    assert status["through_w8_declared_complete"] is True
     assert status["through_w7_complete"] is True
+    assert status["mnf_chi_sea_complete"] is True
     assert status["alex_contract_sha8"] == "b41f4b43"
     assert status["alex_contract_version"] == "v2"
     assert status["contract_bind"] == "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3"
     assert status["imv_pass_contract"] == "1a53bbd3"
     assert status["imv_d1"].startswith("CLOSED")
     assert status["week8_expected_count"] == 14
-    assert status["week8_complete_count"] == 1
-    missing = {row["game_id"] for row in status["week8_missing"]}
-    assert "2026-W08-CHI@SEA" in missing
-    assert "2026-W08-PHI@WAS" in missing
-    assert "2026-W08-CAR@GB" not in missing
-    assert len(missing) == 13
+    assert status["week8_complete_count"] == 14
+    assert status["week8_missing"] == []
+    assert status["consistent_panel_through_week"] == 8
     assert status["e1_retry"]["scoring_admissible_now"] is False
     assert "t4776u" in status.get("addon_tickets", [])
+    assert "emit" in status["e1_retry"]["reason"]
 
 
 def test_authority_files_match_operative_hashes() -> None:
@@ -92,13 +91,14 @@ def test_authority_files_match_operative_hashes() -> None:
 
 
 def test_no_2025_prior_and_no_week9_rolling() -> None:
-    current = _load("team_efficiency_current_through_w7.json")
+    current = _load("team_efficiency_current_through_w8.json")
     assert current["2025_prior_used"] is False
     assert current["n"] == 32
+    assert current["as_of_week"] == 8
     for _team, row in current["teams"].items():
         assert row["2025_prior_used"] is False
-        assert int(row["as_of_week"]) == 7
-        assert int(row["rolling_as_of_week"]) <= 7
+        assert int(row["as_of_week"]) == 8
+        assert int(row["rolling_as_of_week"]) <= 8
         assert row["t5_ok"] is True
         assert row["offense_index"] is not None
         assert 0.82 <= float(row["offense_index"]) <= 1.18
@@ -109,7 +109,7 @@ def test_w09_consume_pack_has_20_required_fields_and_v2_catchall() -> None:
     pack = _load("w09_consume_pack.json")
     assert pack["n_games"] == 15
     assert pack["week_scoring_admissible"] is False
-    assert pack["as_of_week"] == 7
+    assert pack["as_of_week"] == 8
     assert pack["contract_bind"] == "BOUND_TO_V2_PASS_CONTRACT_1a53bbd3"
     ids = [g["game_id"] for g in pack["games"]]
     assert ids == W9_IDS
@@ -128,7 +128,7 @@ def test_w09_consume_pack_has_20_required_fields_and_v2_catchall() -> None:
         assert game["row_status"] == "ACCEPT"
         assert game["t4_both_success_terms"] is True
         assert game["2025_prior_used"] is False
-        assert int(game["rolling_as_of_week"]) <= 7
+        assert int(game["rolling_as_of_week"]) <= 8
         for name in REQUIRED_20:
             assert game[name] is not None, name
             float(game[name])
@@ -203,6 +203,7 @@ def test_required_20_consumed_by_if_path_call_graph_and_input_hash() -> None:
     assert consumed["all_20_consumed"] is True
     assert consumed["scoring_admissible"] is False
     assert consumed["entrypoint"] == "simulate_nfl_game_independent_fair"
+    assert consumed.get("probe_as_of_week") == 8
     chain = consumed["call_graph"]
     assert chain["independent_fair_kwarg_true"] is True
     assert chain["simulate_nfl_game_calls"]["_build_matchup_adjustments"]
@@ -229,23 +230,34 @@ def test_required_20_consumed_by_if_path_call_graph_and_input_hash() -> None:
     assert proof["required_20_consumed_by_if_path"] is True
     assert proof["n_consumed"] == 15
     assert proof["scoring_admissible"] is False
+    assert proof.get("as_of_week") == 8
 
 
-def test_data_partial_accept_standby_does_not_claim_ready() -> None:
+def test_historical_data_partial_accept_preserved() -> None:
     accept = _load("ACCEPT.json")
-    status = _load("STATUS.json")
     assert accept["verdict"] == "DATA_PARTIAL_ACCEPT"
     assert accept["imv_data_partial_accept"] == "c674da77"
     assert accept["accepted_tip_sha8"] == "ba9e8426"
     assert accept["panel"] == "through-W7 only"
     assert accept["status_remains"] == "DATA_PARTIAL"
     assert "DATA_READY" in accept["do_not_claim"]
-    assert status["status"] == "DATA_PARTIAL"
-    assert status["through_w8_declared_complete"] is False
-    assert _sha256("STATUS.json") == (
-        "81d7dd9f4b028ea65386cfa277f714ce4ce4ffdf103481efa4aa9093d6cce445"
-    )
     assert _sha256("IMV_GRADE_t4770u_DATA_PARTIAL.txt").startswith("c674da77")
+
+
+def test_data_ready_seal_through_w8_does_not_emit() -> None:
+    status = _load("STATUS.json")
+    ready = _load("DATA_READY.json")
+    assert status["status"] == "DATA_READY"
+    assert status["through_w8_declared_complete"] is True
+    assert ready["status"] == "DATA_READY"
+    assert ready["panel"] == "through-W8"
+    assert ready["mnf_present"] is True
+    assert ready["week8_complete_count"] == 14
+    assert ready["scoring_admissible"] is False
+    assert ready["emit"] is False
+    assert ready["merge_pr_663"] is False
+    assert ready["historical_partial_accept"] == "c674da77"
+    assert ready["historical_partial_tip_sha8"] == "ba9e8426"
 
 
 def test_rest_days_spotcheck_records_heuristic() -> None:
@@ -271,10 +283,12 @@ def test_sha256sums_cover_sealed_json_and_authority() -> None:
         "IMV_GRADE_t4770u_E1_EFFICIENCY_CONTRACT_v2.txt",
         "COS_ORDER_CURSOR_t4770u_BIND_PASS_CONTRACT.txt",
         "ACCEPT.json",
+        "DATA_READY.json",
         "STANDBY.md",
         "IMV_GRADE_t4770u_DATA_PARTIAL.txt",
         "COS_ORDER_CURSOR_t4770u_STANDBY_DATA_READY.txt",
         "rest_days_spotcheck.json",
+        "team_efficiency_current_through_w8.json",
         "T4842U_READY_STANDBY_RECEIPT.json",
         "T4845U_WEEKEND_LAUNCH_ASSESS_RECEIPT.json",
     }

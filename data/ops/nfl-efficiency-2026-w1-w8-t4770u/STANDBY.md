@@ -2,7 +2,9 @@
 
 Authority: DECISION `751dd63c` · IMV **DATA_PARTIAL_ACCEPT** `c674da77` · contract `b41f4b43` · CoS STANDBY `71a49789`
 
-Accepted tip `ba9e8426` is **through-W7 only**. Do **not** claim DATA_READY. Do **not** merge #663. Do **not** emit.
+Accepted tip `ba9e8426` is **through-W7 only**. That historical grade remains on file.
+
+**STANDBY lifted 2026-11-03T14:00Z:** W8 is 14/14 including MNF `2026-W08-CHI@SEA`. This packet is sealed `DATA_READY` (dataset only). Do **not** merge #663. Do **not** emit. IMV DATA_READY grade is not yet on file.
 
 ## Hold until
 
@@ -30,4 +32,4 @@ Planning band only (not a final): kickoff + 3h00–3h45 → `2026-11-03T04:15Z`�
 
 **pytest at READY:** `tests/test_nfl_efficiency_2026_w1_w8_t4770u.py` currently pins `DATA_PARTIAL`, `as_of_week==7`, and STATUS sha `81d7dd9f…` (accepted tip `ba9e8426`). Rewrite those PARTIAL-era asserts onto the new seal in the READY commit. Do not treat those reds as a reason to withhold DATA_READY, and do not run `--skip-fetch` once 14/14.
 
-Until then: IDLE. RO prep on this lane only. ≠emit ≠E2 ≠C10 ≠CERT ≠merge #663 ≠touch #667.
+Until IMV DATA_READY ACCEPT: dataset seal only. ≠emit ≠E2 ≠C10 ≠CERT ≠merge #663 ≠touch #667.
