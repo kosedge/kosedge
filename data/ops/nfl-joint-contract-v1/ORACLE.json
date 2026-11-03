@@ -1,0 +1,80 @@
+{
+  "computed": {
+    "means": {
+      "margin": 1.5,
+      "total": 44.5
+    },
+    "ml": {
+      "away_win": 0.25,
+      "home_win": 0.5,
+      "tie": 0.25
+    },
+    "spread": {
+      "cover": 0.25,
+      "loss": 0.5,
+      "push": 0.25
+    },
+    "total": {
+      "over": 0.25,
+      "push": 0.5,
+      "under": 0.25
+    }
+  },
+  "contract_hash": "4f2c9e2b",
+  "contract_id": "NFL_JOINT_CONTRACT_V1",
+  "expected": {
+    "means": {
+      "margin": 1.5,
+      "total": 44.5
+    },
+    "ml": {
+      "away_win": 0.25,
+      "home_win": 0.5,
+      "tie": 0.25
+    },
+    "spread": {
+      "cover": 0.25,
+      "loss": 0.5,
+      "push": 0.25
+    },
+    "total": {
+      "over": 0.25,
+      "push": 0.5,
+      "under": 0.25
+    }
+  },
+  "fitted": false,
+  "historical": false,
+  "home_spread": -3.0,
+  "kind": "SYNTHETIC_LITERAL_LAW_ORACLE",
+  "notes": [
+    "Hand-authored fiction. NOT fitted parameters. NOT historical observations.",
+    "All spread/total/ML derive from this same joint law.",
+    "Tie mass preserved. Ties are not away wins."
+  ],
+  "pairs": [
+    [
+      24,
+      21
+    ],
+    [
+      21,
+      24
+    ],
+    [
+      20,
+      20
+    ],
+    [
+      27,
+      21
+    ]
+  ],
+  "total_line": 45.0,
+  "weights": [
+    0.25,
+    0.25,
+    0.25,
+    0.25
+  ]
+}

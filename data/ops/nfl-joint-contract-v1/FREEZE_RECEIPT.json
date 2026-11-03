@@ -1,0 +1,37 @@
+{
+  "cert": 0,
+  "code_files": [
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/constants.py",
+      "sha256": "b1aca177b673a68e0002bb34a692f50bd39d2c53b01588e5d9dfa39c3a7ef5cc"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/freeze.py",
+      "sha256": "c09ef0ba3a59e57547eee8000b5c79da4708b27bb3ff1013022eaa25d6f1c667"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/oracle.py",
+      "sha256": "b26c758b6c9cc012f7df7eec4414b9b5b8f4853d1a0b68522f7c6aa666a46971"
+    }
+  ],
+  "code_hash": "2e385e934bc08390a5949f82e40841a776358ef9d09d1d4fd66774706fa92561",
+  "contract_hash": "4f2c9e2b",
+  "contract_id": "NFL_JOINT_CONTRACT_V1",
+  "data_label": "SYNTHETIC",
+  "fitted": false,
+  "known_settlement_profile": "SYNTHETIC_LAW_IDENTITY_V1",
+  "note": "Sealed before adapter consumers. Hash mismatch refuses consume. Not a predictive joint-family. Literal-law only.",
+  "oracle_hash": "5480da107cd39e3a352a4ccb0059a6b3d7593d81b51ec7b0dab51e6a4721a3e0",
+  "oracle_path": "data/ops/nfl-joint-contract-v1/ORACLE.json",
+  "order_hash": "ce74d8eb",
+  "owner_clear": "f1fb6735",
+  "package": "NFL_JOINT_CONTRACT_V1_LITERAL_LAW",
+  "ready_for_review": false,
+  "receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+  "schema_hash": "d541b593d7f612a1ad151f9701147d699116c0ac523dd2e342fc991b35c4ddf2",
+  "schema_path": "data/ops/nfl-joint-contract-v1/SCHEMA.json",
+  "schema_version": "nfl-joint-contract-v1-freeze-receipt-v1",
+  "scope_id": "chief-nflgreen-overnight-ops-20261102-0330",
+  "self_accept": false,
+  "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law"
+}
