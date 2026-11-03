@@ -1,0 +1,11 @@
+{
+  "PYTHONPATH": ".",
+  "base_contract_id": "t5178u-nfl-fixture-assembly-v0",
+  "book": "SYNTH-BOOK-T5178U",
+  "chain_contract_id": "t5194u-nfl-fixture-chain-v1",
+  "cwd": "services/model-service",
+  "game_id": "2026_99_TST_SYN",
+  "note": "synthetic transport only; B consumes positive-output.json",
+  "point_margin": 3.0,
+  "producer": "python3 -m src.services.nfl_fixture_assembly.produce_chain --out <dest>"
+}
