@@ -1,0 +1,374 @@
+{
+  "cert": 0,
+  "channel": "SYNTHETIC",
+  "clocks_143": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
+  "data_label": "SYNTHETIC",
+  "demo_summaries": {
+    "spread": {
+      "d": "-3",
+      "intervals": {
+        "loss": [
+          0.764540601595658,
+          0.7645406015965781
+        ],
+        "push": [
+          0.07667582629620387,
+          0.07667582629712402
+        ],
+        "win": [
+          0.1587835721072187,
+          0.15878357210813884
+        ]
+      },
+      "loss": 0.764540601595658,
+      "push": 0.07667582629620387,
+      "side": "home",
+      "win": 0.1587835721072187
+    },
+    "total": {
+      "L": "44.5",
+      "intervals": {
+        "over": [
+          4.8102790251170705e-12,
+          5.7304318679264e-12
+        ],
+        "push": [
+          0.0,
+          9.201528428093297e-13
+        ],
+        "under": [
+          0.9999999999942711,
+          0.9999999999951913
+        ]
+      },
+      "over": 4.8102790251170705e-12,
+      "push": 0.0,
+      "under": 0.9999999999942711
+    }
+  },
+  "evidence_id": "03972",
+  "family": "NTBB-K",
+  "fitting_algorithm": "UNEXECUTED_DEPENDENCY_HELD",
+  "historical_economic_calculation": false,
+  "kernel_implemented": true,
+  "market_partial_preserved": {
+    "clock_semantics_verified_any": false,
+    "clocks_status": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
+    "preserved": true,
+    "sha256": {
+      "jsonl_143": "bf5fd92e61f3f0bac9f964e7b57b7ac4996ba166c68bb853888c9fcdb0e9e2d7",
+      "ledger_81759": "ce188c64f6d52c98ca76301455bf2654d30a6a59029cc5d7845944d7087bc5d7",
+      "ledger_92861": "6879ed43cc9e4ad7bef0a124bc0514ea7d1adb9af1775101e0bbcd6aad6d5e75"
+    }
+  },
+  "metadata_14083": "14083",
+  "metadata_ticket": "t5344u",
+  "no_install": true,
+  "oracle_max_enumerated_total": 183,
+  "owned_completion_claimed": false,
+  "owner": "92a6ca83",
+  "package": "nfl_ntbb_k_v1",
+  "pass_spec": "4f8c5827",
+  "profile": "NTBB_K_SYNTHETIC_KERNEL_V1",
+  "qualification": "UNQUALIFIED",
+  "root_nine": {
+    "max_enumerated_total": 61,
+    "n_cases": 9,
+    "oracle_max_enumerated_total": 183,
+    "results": [
+      {
+        "N": 30,
+        "enumerated_mass": 0.9999999999991873,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 1.942890293094024e-16,
+          "transpose": 1.1275702593849246e-17,
+          "variance": 5.958993298804671e-10
+        },
+        "group": "normalization",
+        "moment_bound": 2.5494273359072395e-11,
+        "name": "T0_NORM",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 4.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 1.1275702593849246e-17,
+          "tail_moment": 2.5494273359072395e-11,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.127942763280771e-13
+      },
+      {
+        "N": 46,
+        "enumerated_mass": 0.9999999999990798,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 1.0755285551056204e-16,
+          "transpose": 4.163336342344337e-17,
+          "variance": 1.3904575268952613e-09
+        },
+        "group": "symmetry",
+        "moment_bound": 4.389377750158019e-11,
+        "name": "SYM_P",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 8.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 4.163336342344337e-17,
+          "tail_moment": 4.388578389580289e-11,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.201528428093297e-13
+      },
+      {
+        "N": 46,
+        "enumerated_mass": 0.9999999999990798,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": 4.5102810375396984e-17,
+          "variance": 1.3904717377499765e-09
+        },
+        "group": "symmetry",
+        "moment_bound": 4.389377750158019e-11,
+        "name": "TRANSPOSE",
+        "params": {
+          "c": 12.0,
+          "k0": 0.2,
+          "k3": 0.1,
+          "k7": 0.05,
+          "mu": 8.0,
+          "p": 0.35,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 0.0,
+          "tail_moment": 4.388578389580289e-11,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.201528428093297e-13
+      },
+      {
+        "N": 39,
+        "enumerated_mass": 0.9999999999996266,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 9.020562075079397e-17,
+          "transpose": 3.469446951953614e-17,
+          "variance": 4.3086867407282625e-10
+        },
+        "group": "total_marginal",
+        "moment_bound": 1.5103251982395705e-11,
+        "name": "K0_BB",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 6.0,
+          "p": 0.4,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 0.0,
+          "tail_moment": 1.511057945435823e-11,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 3.7336800318144014e-13
+      },
+      {
+        "N": 39,
+        "enumerated_mass": 0.9999999999996266,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 9.020562075079397e-17,
+          "transpose": 3.469446951953614e-17,
+          "variance": 4.3086867407282625e-10
+        },
+        "group": "total_marginal",
+        "moment_bound": 1.5103251982395705e-11,
+        "name": "NB_MARGINAL",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 6.0,
+          "p": 0.4,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 0.0,
+          "tail_moment": 1.511057945435823e-11,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 3.7336800318144014e-13
+      },
+      {
+        "N": 54,
+        "enumerated_mass": 0.9999999999993358,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 1.1275702593849246e-16,
+          "transpose": 3.122502256758253e-17,
+          "variance": 1.329468091171293e-09
+        },
+        "group": "total_marginal",
+        "moment_bound": 3.712474772044061e-11,
+        "name": "VAR_ID",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 10.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 3.122502256758253e-17,
+          "tail_moment": 3.710098894771363e-11,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 6.642464356332312e-13
+      },
+      {
+        "N": 46,
+        "enumerated_mass": 0.9999999999990798,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "tie_mass_delta": 0.10462184694339637,
+          "transpose": 2.7755575615628914e-17,
+          "variance": 1.3904717377499765e-09
+        },
+        "group": "normalization",
+        "moment_bound": 4.389377750158019e-11,
+        "name": "TIE_TILT",
+        "params": {
+          "c": 12.0,
+          "k0": 1.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 8.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 2.7755575615628914e-17,
+          "tail_moment": 4.388578389580289e-11,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.201528428093297e-13
+      },
+      {
+        "N": 46,
+        "enumerated_mass": 0.99999999999908,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "m3_delta": 0.08632979266273128,
+          "m7_delta": 0.005067715090661409,
+          "transpose": 4.163336342344337e-17,
+          "variance": 1.3904717377499765e-09
+        },
+        "group": "normalization",
+        "moment_bound": 4.389377750158019e-11,
+        "name": "KEY37",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.8,
+          "k7": 0.5,
+          "mu": 8.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 4.163336342344337e-17,
+          "tail_moment": 4.388489571738319e-11,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.201528428093297e-13
+      },
+      {
+        "N": 61,
+        "enumerated_mass": 0.9999999999990519,
+        "enumeration_error": 0.0,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": 9.367506770274758e-17,
+          "variance": 2.3274644433968206e-09
+        },
+        "group": "tail_moment",
+        "moment_bound": 5.970823835355077e-11,
+        "name": "TAIL_MOMENT",
+        "params": {
+          "c": 12.0,
+          "k0": 0.1,
+          "k3": 0.1,
+          "k7": 0.1,
+          "mu": 12.0,
+          "p": 0.45,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 0.0,
+          "symmetry": 0.0,
+          "tail_moment": 5.971401151327882e-11,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.482414853323462e-13
+      }
+    ],
+    "status": "PASS"
+  },
+  "scientific_hold": [
+    "no outcomes",
+    "no forecast",
+    "no fit",
+    "no historical ATS/ROI",
+    "SciPy fitting algorithm unexecuted / dependency-held",
+    "143 clocks remain SOURCE_VALUE_MATCH not verified"
+  ],
+  "scipy_status": "ABSENT_NOT_EVALUABLE",
+  "spec": {
+    "bytes": 11064,
+    "commit": "2a2c91c9b839da2246a01596b203318295581914",
+    "path": "research/nfl_followthrough_20261103/NTBB_K_V1_SPEC.md",
+    "sha256": "2f3c215d7680dd5aa33a0a77690ece4ef70a0a8dbbebaac880750dd776ec66d7",
+    "sha256_match": true
+  },
+  "ticket": "t5343u",
+  "use_label": "RESEARCH_ONLY",
+  "worker": "B"
+}

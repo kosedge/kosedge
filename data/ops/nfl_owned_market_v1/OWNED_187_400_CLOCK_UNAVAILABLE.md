@@ -60,4 +60,6 @@ Staged projection `JSONL_SELECTED_143_SOURCE_VALUE_PROJECTION.json` sha `bf5fd92
 = **NOT_EVALUABLE** (0/143). Raw snapshot JSONL `source_file_sha256` NOT_EVALUABLE (0/3 files
 on this host). claimed `captured_at` **not** promoted to verified publication/observation.
 187=44+143 and 496=96+400 exact. `owned_completion_claimed=false`.
-NTBB-K not implemented. See `CLOCK_LINEAGE_LEDGER_92861.md` / `TRACE_CLEAR92861_B.md`.
+NTBB-K SYNTHETIC kernel is isolated under `data/ops/nfl_ntbb_k_v1/` (METADATA 14083).
+This market ledger is unchanged: 143 remains SOURCE_VALUE_MATCH ≠ verified clocks.
+See `CLOCK_LINEAGE_LEDGER_92861.md` / `TRACE_CLEAR92861_B.md`.

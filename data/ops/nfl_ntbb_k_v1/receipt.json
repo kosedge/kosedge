@@ -1,0 +1,17 @@
+{
+  "cert": 0,
+  "clear": "92861",
+  "clocks_143": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
+  "fitting_algorithm": "UNEXECUTED_DEPENDENCY_HELD",
+  "kernel_implemented": true,
+  "kernel_sha256": "2d12f9d180d30b25547ff8ac4cbac24c48258f058e680211a47e70296a3de498",
+  "max_enumerated_total": 61,
+  "metadata_14083": "14083",
+  "oracle_max_enumerated_total": 183,
+  "owned_completion_claimed": false,
+  "path": "data/ops/nfl_ntbb_k_v1/KERNEL_SYNTHETIC_92861.json",
+  "root_nine_status": "PASS",
+  "scipy_status": "ABSENT_NOT_EVALUABLE",
+  "spec_sha256_match": true,
+  "ticket": "t5343u"
+}
