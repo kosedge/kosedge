@@ -17,22 +17,37 @@
       "sha256": "086cada718c5322f2acc49068326f04af1220abf718d9a173965f2f645378894"
     },
     {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/constants.py",
+      "ref_kind": "file_sha256",
+      "sha256": "bb6287bff713d3e56316f42e2681b2fb83c7b46f091646d45f839b0758d4edc9"
+    },
+    {
       "path": "services/model-service/src/services/nfl_ops_v1_evidence/gate.py",
       "ref_kind": "file_sha256",
-      "sha256": "712179b752394a51883393a3fcbf0f52e2e16f5f7a5cf507f2bba025c0aae00c"
+      "sha256": "dfd0b0d86ebcaed2e8d29d403a518dba796d2fe80ee77cb3be09f5605ebd6492"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/refuse.py",
+      "ref_kind": "file_sha256",
+      "sha256": "9bca4b091b51b89db1fece092a7489a295ff39970bae17e7659e8c80bad744e0"
     },
     {
       "path": "services/model-service/src/services/nfl_ops_v1_evidence/run.py",
       "ref_kind": "file_sha256",
-      "sha256": "fda933e91a044d7054c8a0882108af1ac8acdb6f7ee5d1cb1bf17a5bc9c5b24e"
+      "sha256": "c8f225a82c2a3f8413567254c38d3bc4ad14860d6e27b50278e3e8c54dbec115"
     },
     {
       "path": "services/model-service/src/services/nfl_ops_v1_evidence/validate.py",
       "ref_kind": "file_sha256",
-      "sha256": "a26536605b84891c93e6aed75438a47c1756ba6722d0e11122cd22df73e0254f"
+      "sha256": "7f60470b98dfa3b7333f4a1cd0a35b6d56c6d2a0441cc8068bc42beb632613b1"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/verify.py",
+      "ref_kind": "file_sha256",
+      "sha256": "1ed769a84335662ae88e68e2609f3a9b98a1746a8ae85acc98315065718f547e"
     }
   ],
-  "code_hash": "9066cf3256f6d36d90d2f2cf8b8306ba71b8db6b86e82df4d3496554c50e86f9",
+  "code_hash": "f744c16674c18debedd6beb0911626708cb15d14c9d152e5ad3024fb971ee8a4",
   "cohort": {
     "game_ids": [
       "2026_99_TST_SYN"
@@ -42,10 +57,10 @@
   },
   "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py",
   "common_digest": "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124",
-  "config_hash": "826fc1b1d1af3b1fc8fb3feb7398b7a8894c6952b3e6fc695b093b603e234499",
+  "config_hash": "526145d32714c343d272d3865b0c45db19d5bf4ab9498db16e5b722e45203c3a",
   "cwd": "/agent/repos/kosedge",
   "data_label": "SYNTHETIC",
-  "end_utc": "2026-11-03T03:52:54Z",
+  "end_utc": "2026-11-03T04:15:56Z",
   "evidence_labels": {
     "chief_review": "NOT_RUN",
     "consume_fixture_chain": "EXECUTED_HERE",
@@ -63,9 +78,9 @@
   "execution": {
     "consume_invoked_here": true,
     "import_only": false,
-    "process_id": 4461,
+    "process_id": 5591,
     "produce_invoked_here": true,
-    "produce_start_utc": "2026-11-03T03:52:54Z",
+    "produce_start_utc": "2026-11-03T04:15:56Z",
     "saved_output_only": false
   },
   "exit": 0,
@@ -83,12 +98,12 @@
   "hash_bindings": {
     "code": {
       "alg": "sha256",
-      "sha256": "9066cf3256f6d36d90d2f2cf8b8306ba71b8db6b86e82df4d3496554c50e86f9",
+      "sha256": "f744c16674c18debedd6beb0911626708cb15d14c9d152e5ad3024fb971ee8a4",
       "source": "gate_and_caller_files"
     },
     "config": {
       "alg": "sha256",
-      "sha256": "826fc1b1d1af3b1fc8fb3feb7398b7a8894c6952b3e6fc695b093b603e234499",
+      "sha256": "526145d32714c343d272d3865b0c45db19d5bf4ab9498db16e5b722e45203c3a",
       "source": "pinned_config"
     },
     "history": {
@@ -109,11 +124,11 @@
   },
   "head": {
     "kind": "git_commit",
-    "value": "862ddbdb3f311b5a48b6abeb693e5acfe07c264d"
+    "value": "6d57f33a309014a0181184b59d6da7946112af4e"
   },
   "history_hash": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
   "immutable_input_proof": {
-    "dest": "TEMP_ONLY",
+    "dest": "/tmp/nfl-ops-v1-evidence-t5256u/produced_chain.json",
     "dest_is_temp": true,
     "pinned_originals_unwritten": true,
     "pinned_output": "data/ops/t5194u-wfix-a-chain/positive-output.json",
@@ -142,10 +157,11 @@
     "not self-accept",
     "READY_FOR_REVIEW requires Chief",
     "Primary B worker_handoff bound from #712 tip 82683cd9 via as_worker_handoff(); PLATFORM_LIMITATION / not_a_pass preserved",
+    "DIRECT gates bind source revision + input/history/config/code to independently supplied runtime/file context; declaration-only hashes are not source proof",
     "inherited #700/#701 real-outcome tests NOT_RUN",
     "no real-data fit/calibration/forecast/scoring/outcome join"
   ],
-  "log_hash": "1f37b77a876bd37d0dfa96fa6c50e36c2605352fc9191057184a9d980b3ebdf3",
+  "log_hash": "6ff5adcae2fe5934f46f772396acda4fd3705b06621247c9860ef8a69cb6569e",
   "numerical_output": {
     "admitted_capture_id": "adc143a4b27d94bce436c5de5bc642f8c200050f20fa6bf57e01b831e6874877",
     "defense_multiplier": 1.03,
@@ -161,10 +177,10 @@
   },
   "ok": true,
   "output_hashes": {
-    "TEMP/produced_chain.json": "4288d08d6aa6f3b4cd47cc0c11558d54825904436637e7e47542fcd984dd83da"
+    "/tmp/nfl-ops-v1-evidence-t5256u/produced_chain.json": "4288d08d6aa6f3b4cd47cc0c11558d54825904436637e7e47542fcd984dd83da"
   },
   "output_paths": [
-    "TEMP/produced_chain.json"
+    "/tmp/nfl-ops-v1-evidence-t5256u/produced_chain.json"
   ],
   "owner": "Primary A",
   "owner_clear": "f1fb6735",
@@ -191,9 +207,18 @@
   "rehashed_faults": {
     "evidence_label": "EXECUTED_HERE",
     "forbidden_calls": 0,
+    "gate_invoked": 1,
+    "instrumentation_control": {
+      "fired": true,
+      "ran": true,
+      "reads": 1,
+      "surface_notes": 1
+    },
     "mutated_digest": "a9d0732335d40f03d2adb8212d2638669ff36c4ca1a6773dcf88008c699a9404",
     "pinned_digest": "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124",
     "ran": true,
+    "reason": "input_hash != independently recomputed actual input bytes",
+    "refuse_class": "HASH_MUTATED",
     "refused": true
   },
   "review_revision": 0,
@@ -209,7 +234,7 @@
     "refused": true,
     "spy_fired": true
   },
-  "start_utc": "2026-11-03T03:52:54Z",
+  "start_utc": "2026-11-03T04:15:56Z",
   "status": "GATED_OK_AWAITING_CHIEF",
   "typed_references": [
     {
@@ -220,7 +245,7 @@
     {
       "kind": "git_commit",
       "label": "head",
-      "value": "862ddbdb3f311b5a48b6abeb693e5acfe07c264d"
+      "value": "6d57f33a309014a0181184b59d6da7946112af4e"
     },
     {
       "kind": "git_commit",

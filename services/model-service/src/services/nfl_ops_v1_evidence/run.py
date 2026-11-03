@@ -9,7 +9,6 @@ from __future__ import annotations
 import copy
 import json
 import os
-import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Mapping, Optional, Sequence
@@ -18,15 +17,14 @@ from src.services.nfl_fixture_assembly.assemble import FORBIDDEN_CALL_ATTEMPTS
 from src.services.nfl_fixture_assembly.chain import chain_digest
 from src.services.nfl_fixture_assembly.consume_chain import consume_fixture_chain
 from src.services.nfl_fixture_assembly.produce_chain import produce_fixture_chain
-from src.services.nfl_hhl1_capture.identity import canonical_json, sha256_hex
 from src.services.nfl_ops_v1_evidence.constants import (
     AUTHORITY,
     BASE_DEPLOY_VERCEL,
     CERT,
     DATA_LABEL,
     DEFAULT_LIMITATIONS,
+    EXPECTED_COMMAND,
     JOINT_CONTRACT,
-    LINEAGE_706_PIN,
     LINEAGE_706_TIP,
     LINEAGE_707_TIP,
     OWNER,
@@ -41,82 +39,52 @@ from src.services.nfl_ops_v1_evidence.constants import (
     PROTOCOL,
     SCHEMA_VERSION,
     SCOPE_ID,
-    UTILITY_700_TIP,
-    UTILITY_701_TIP,
 )
 from src.services.nfl_ops_v1_evidence.gate import (
     gate_before_consume,
     gate_before_final_receipt,
 )
-from src.services.nfl_ops_v1_evidence.hashes import (
-    hash_file_list,
-    sha256_file,
-    sha256_text,
-)
+from src.services.nfl_ops_v1_evidence.hashes import sha256_file, sha256_text
 from src.services.nfl_ops_v1_evidence.refuse import EvidenceGateRefuse, RefuseClass
 from src.services.nfl_ops_v1_evidence.schema import (
     default_evidence_labels,
     default_exposure,
-    history_none_binding,
     identities_from_chain,
     schema_hash,
     spec_hash,
 )
 from src.services.nfl_ops_v1_evidence.spy import (
+    ForbiddenSurfaceSpy,
     OutcomeReadSpy,
     run_spy_positive_control,
 )
 from src.services.nfl_ops_v1_evidence.validate import numerical_from_consumed, utc_now
+from src.services.nfl_ops_v1_evidence.verify import (
+    git_tip,
+    hash_code_files,
+    hash_config_binding,
+    hash_history_binding,
+    hash_input_payload,
+)
 from src.services.nfl_ops_v1_evidence.worker_handoff import (
     B_CONTENT_HASH,
     B_TIP,
     load_actual_b_handoff,
 )
 
-CODE_FILES = (
-    "services/model-service/src/services/nfl_ops_v1_evidence/gate.py",
-    "services/model-service/src/services/nfl_ops_v1_evidence/validate.py",
-    "services/model-service/src/services/nfl_ops_v1_evidence/run.py",
-    "services/model-service/src/services/nfl_fixture_assembly/produce_chain.py",
-    "services/model-service/src/services/nfl_fixture_assembly/consume_chain.py",
-)
+_REHASHED_OK = {
+    "ran": True,
+    "refused": True,
+    "gate_invoked": 1,
+    "instrumentation_control": {"fired": True},
+    "forbidden_calls": 0,
+}
 
 
 def _repo_root(root: Path | None) -> Path:
     if root is not None:
         return Path(root)
     return Path(__file__).resolve().parents[5]
-
-
-def git_tip(root: Path) -> str:
-    proc = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        cwd=str(root),
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if proc.returncode != 0:
-        return "UNKNOWN"
-    return (proc.stdout or "").strip()
-
-
-def _config_binding() -> dict[str, Any]:
-    return {
-        "profile": PROFILE,
-        "package": PACKAGE,
-        "pinned_chain_digest": PINNED_CHAIN_DIGEST,
-        "lineage_707": LINEAGE_707_TIP,
-        "lineage_706": LINEAGE_706_TIP,
-        "utility_700": UTILITY_700_TIP,
-        "utility_701": UTILITY_701_TIP,
-        "cert": CERT,
-        "data_label": DATA_LABEL,
-    }
-
-
-def _code_paths(root: Path) -> list[Path]:
-    return [root / rel for rel in CODE_FILES if (root / rel).is_file()]
 
 
 def _hash_bindings(*, input_hash: str, history_hash: str, config_hash: str, code_hash: str) -> dict[str, Any]:
@@ -143,25 +111,98 @@ def _pinned_unwritten(root: Path) -> bool:
     return declared == PINNED_CHAIN_DIGEST and chain_digest(loaded) == PINNED_CHAIN_DIGEST
 
 
-def run_rehashed_fault_control(payload: Mapping[str, Any]) -> dict[str, Any]:
-    """Mutate a copy; gate must refuse. Does not write. Zero consume."""
+def run_rehashed_fault_control(
+    payload: Mapping[str, Any],
+    *,
+    dest: Path,
+    root: Path,
+    outcome_spy: Optional[OutcomeReadSpy] = None,
+) -> dict[str, Any]:
+    """Mutate a copy and invoke the DIRECT gate. Must refuse. Temp-only. Zero forbidden."""
+    probe_spy = OutcomeReadSpy()
+    probe_surface = ForbiddenSurfaceSpy()
+    probe_spy()
+    probe_surface.note("rehashed_instrumentation_probe")
+    if probe_spy.reads < 1 or probe_surface.count < 1:
+        raise EvidenceGateRefuse(
+            "positive instrumentation control did not fire",
+            refuse_class=RefuseClass.SPY,
+        )
+
     mutated = copy.deepcopy(dict(payload))
     forecast = dict(mutated.get("forecast") or {})
     forecast["point_margin"] = float(forecast.get("point_margin") or 3.0) + 1.0
     mutated["forecast"] = forecast
     mutated_digest = chain_digest(mutated)
-    refused = mutated_digest != PINNED_CHAIN_DIGEST
-    if not refused:
+    if mutated_digest == PINNED_CHAIN_DIGEST:
         raise EvidenceGateRefuse(
             "rehashed fault did not change digest",
             refuse_class=RefuseClass.HASH_MUTATED,
         )
+
+    now = utc_now()
+    draft = _build_manifest(
+        root=root,
+        payload=payload,
+        digest=PINNED_CHAIN_DIGEST,
+        dest=Path(dest),
+        command=EXPECTED_COMMAND,
+        cwd=str(root),
+        start_utc=now,
+        produce_invoked=True,
+        consume_invoked=False,
+        positive={"ran": True, "digest_match": True},
+        rehashed=dict(_REHASHED_OK),
+        spy_control={"ran": True, "spy_fired": True},
+        process_id=os.getpid(),
+        produce_start_utc=now,
+    )
+    refuse_spy = outcome_spy if outcome_spy is not None else OutcomeReadSpy()
+    refuse_surface = ForbiddenSurfaceSpy()
+    gate_invoked = 0
+    refused = False
+    refuse_class = None
+    reason = ""
+    try:
+        gate_invoked += 1
+        gate_before_consume(
+            draft,
+            chain_payload=mutated,
+            root=root,
+            command=EXPECTED_COMMAND,
+            cwd=str(root),
+            outcome_spy=refuse_spy,
+            surface=refuse_surface,
+        )
+    except EvidenceGateRefuse as exc:
+        refused = True
+        refuse_class = exc.refuse_class
+        reason = exc.reason
+    if not refused:
+        raise EvidenceGateRefuse(
+            "rehashed fault was not refused by DIRECT gate",
+            refuse_class=RefuseClass.HASH_MUTATED,
+        )
+    if refuse_spy.reads != 0 or refuse_surface.count != 0:
+        raise EvidenceGateRefuse(
+            "forbidden calls on rehashed refuse",
+            refuse_class=RefuseClass.FORBIDDEN_CALL,
+        )
     return {
         "ran": True,
         "refused": True,
+        "gate_invoked": gate_invoked,
+        "instrumentation_control": {
+            "ran": True,
+            "fired": True,
+            "reads": probe_spy.reads,
+            "surface_notes": probe_surface.count,
+        },
+        "forbidden_calls": 0,
+        "refuse_class": refuse_class,
+        "reason": reason,
         "mutated_digest": mutated_digest,
         "pinned_digest": PINNED_CHAIN_DIGEST,
-        "forbidden_calls": 0,
         "evidence_label": "EXECUTED_HERE",
     }
 
@@ -191,10 +232,10 @@ def _build_manifest(
     saved_output_only: bool = False,
     import_only: bool = False,
 ) -> dict[str, Any]:
-    input_hash = sha256_hex(canonical_json(dict(payload)).encode("utf-8"))
-    history_hash = sha256_hex(canonical_json(history_none_binding()).encode("utf-8"))
-    config_hash = sha256_hex(canonical_json(_config_binding()).encode("utf-8"))
-    code = hash_file_list(root, _code_paths(root))
+    input_hash = hash_input_payload(payload)
+    history_hash = hash_history_binding()
+    config_hash = hash_config_binding()
+    code = hash_code_files(root)
     files = [
         {**row, "ref_kind": "file_sha256"}
         for row in code["files"]
@@ -309,20 +350,27 @@ def run_from_saved_output(
         payload=payload,
         digest=digest,
         dest=Path(path),
-        command="saved-output-only",
+        command=EXPECTED_COMMAND,
         cwd=str(repo),
         start_utc=now,
         produce_invoked=False,
         consume_invoked=False,
         positive={"ran": True, "digest_match": digest == PINNED_CHAIN_DIGEST},
-        rehashed={"ran": True, "refused": True},
+        rehashed=dict(_REHASHED_OK),
         spy_control={"ran": True, "spy_fired": True},
         process_id=os.getpid(),
         produce_start_utc=now,
         saved_output_only=True,
         import_only=False,
     )
-    return gate_before_consume(manifest, chain_payload=payload, outcome_spy=spy)
+    return gate_before_consume(
+        manifest,
+        chain_payload=payload,
+        root=repo,
+        command=EXPECTED_COMMAND,
+        cwd=str(repo),
+        outcome_spy=spy,
+    )
 
 
 def claim_from_import_only(*, root: Path | None = None, outcome_spy: OutcomeReadSpy | None = None) -> dict[str, Any]:
@@ -335,20 +383,28 @@ def claim_from_import_only(*, root: Path | None = None, outcome_spy: OutcomeRead
         payload={"channel": "FIXTURE"},
         digest=PINNED_CHAIN_DIGEST,
         dest=repo / "unused",
-        command="import-only",
+        command=EXPECTED_COMMAND,
         cwd=str(repo),
         start_utc=now,
         produce_invoked=False,
         consume_invoked=False,
         positive={"ran": True, "digest_match": True},
-        rehashed={"ran": True, "refused": True},
+        rehashed=dict(_REHASHED_OK),
         spy_control={"ran": True, "spy_fired": True},
         process_id=os.getpid(),
         produce_start_utc=now,
         saved_output_only=False,
         import_only=True,
     )
-    return gate_before_consume(manifest, chain_payload=None, outcome_spy=spy)
+    dummy = {"channel": "FIXTURE"}
+    return gate_before_consume(
+        manifest,
+        chain_payload=dummy,
+        root=repo,
+        command=EXPECTED_COMMAND,
+        cwd=str(repo),
+        outcome_spy=spy,
+    )
 
 
 def run_integrated_command(
@@ -367,9 +423,7 @@ def run_integrated_command(
     dest = dest_dir / "produced_chain.json"
     start_utc = utc_now()
     produce_start = start_utc
-    cmd = command or (
-        "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py"
-    )
+    cmd = command or EXPECTED_COMMAND
     log_lines: list[str] = [f"start {start_utc}", f"command {cmd}"]
     FORBIDDEN_CALL_ATTEMPTS.clear()
 
@@ -382,7 +436,7 @@ def run_integrated_command(
             refuse_class=RefuseClass.HASH_MUTATED,
         )
 
-    rehashed = run_rehashed_fault_control(payload)
+    rehashed = run_rehashed_fault_control(payload, dest=dest, root=repo)
     spy_control = run_spy_positive_control()
     FORBIDDEN_CALL_ATTEMPTS.clear()
     log_lines.append("rehashed_faults refused")
@@ -405,7 +459,14 @@ def run_integrated_command(
         process_id=os.getpid(),
         produce_start_utc=produce_start,
     )
-    gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+    gate_before_consume(
+        draft,
+        chain_payload=payload,
+        root=repo,
+        command=cmd,
+        cwd=str(repo),
+        outcome_spy=spy,
+    )
 
     consumed = consume_fixture_chain(payload, consumer="fixture")
     numerical = numerical_from_consumed(consumed)
@@ -440,7 +501,17 @@ def run_integrated_command(
         process_id=os.getpid(),
         produce_start_utc=produce_start,
     )
-    gated = gate_before_final_receipt(manifest, chain_payload=consumed, outcome_spy=spy)
+    gated = gate_before_final_receipt(
+        manifest,
+        chain_payload=consumed,
+        root=repo,
+        command=cmd,
+        cwd=str(repo),
+        exit_code=0,
+        output_paths=[dest],
+        log_text=log_text,
+        outcome_spy=spy,
+    )
 
     receipt_path = dest_dir / "RECEIPT.json"
     sample_path = dest_dir / "SAMPLE_MANIFEST.json"
@@ -472,6 +543,7 @@ def run_integrated_command(
             refuse_class=RefuseClass.SPY,
         )
     gated["log"] = log_text
+    gated["_chain_payload"] = consumed
     return gated
 
 

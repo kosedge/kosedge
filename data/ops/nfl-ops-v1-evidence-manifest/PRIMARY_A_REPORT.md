@@ -42,7 +42,7 @@ Reuse (utilities only; inherited real-outcome tests **NOT_RUN**):
 
 ```
 cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_ops_v1_evidence_manifest_gate.py -q --tb=line
-# INTEGRATION DELTA: exit 0 · 44 passed
+# t5256u DIRECT-gate bind: exit 0 · 53 passed
 
 PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py /tmp/nfl-ops-v1-evidence
 # exit 0 · status GATED_OK_AWAITING_CHIEF · digest 27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124
@@ -92,3 +92,13 @@ Numerical positive: `n=1` · `game_id=2026_99_TST_SYN` · `point_margin=3.0` · 
 | pending prompts | none |
 | successor | Chief + independent review (B already bound; no successor launch) |
 | ownership | HANDOFF_RECORDED · not RELEASE_CONFIRMED (platform reclaim is Chief/B) |
+
+## t5256u DIRECT-gate bind (not closed)
+
+Package CLOSE `d468000e` SUPERSEDED. Codex probe of declaration-only `validate_manifest` is refused. DIRECT gates now build `VerificationContext` from live git + on-disk files + supplied payload/command/exit/output/log bytes. Self-consistent 64-hex hashes, `exit=17`, and `head=not-a-commit` refuse. `run_rehashed_fault_control` invokes `gate_before_consume` on a mutated copy (`gate_invoked=1`, instrumentation fired, `forbidden_calls=0`).
+
+B `PLATFORM_LIMITATION` / `not_a_pass` preserved. Joint successor freeze on `cursor/nfl-joint-contract-v1-literal-law-13a1` @ `6f4c5b65` is NOT claimed integrated through this gate.
+
+Readable machine delta: `data/ops/nfl-ops-v1-evidence-manifest/DIRECT_GATE_DELTA.json`.
+
+CERT=0 · `ready_for_review=false` · `self_accept=false`.

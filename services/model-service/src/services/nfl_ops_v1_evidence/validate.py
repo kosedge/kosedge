@@ -8,14 +8,16 @@ from typing import Any, Mapping, Optional
 from src.services.nfl_fixture_assembly.assemble import NON_FIXTURE_CONSUMERS
 from src.services.nfl_fixture_assembly.chain import chain_digest
 from src.services.nfl_hhl1_capture.constants import DECISION_OFFSET_BEFORE_KICKOFF_MINUTES
-from src.services.nfl_hhl1_capture.identity import parse_utc
+from src.services.nfl_hhl1_capture.identity import canonical_json, parse_utc, sha256_hex
 from src.services.nfl_ops_v1_evidence.constants import (
     ALLOWED_TOP_LEVEL,
     AUTHORITY,
+    BASE_DEPLOY_VERCEL,
     CERT,
     CONSUME_PENDING_KEYS,
     DATA_LABEL,
     EVIDENCE_LABELS,
+    EXPECTED_COMMAND,
     JOINT_CONTRACT,
     OWNER,
     OWNER_CLEAR,
@@ -57,6 +59,10 @@ from src.services.nfl_ops_v1_evidence.finite import (
 from src.services.nfl_ops_v1_evidence.hashes import require_sha256_hex
 from src.services.nfl_ops_v1_evidence.refuse import EvidenceGateRefuse, RefuseClass
 from src.services.nfl_ops_v1_evidence.schema import schema_hash, spec_hash
+from src.services.nfl_ops_v1_evidence.verify import (
+    VerificationContext,
+    is_git_commit_sha,
+)
 from src.services.nfl_ops_v1_evidence.worker_handoff import validate_worker_handoff
 
 
@@ -127,7 +133,13 @@ def _check_typed_git(obj: Any, name: str) -> str:
     row = _as_map(obj, name)
     if row.get("kind") != "git_commit":
         _refuse(RefuseClass.TYPE, f"{name}.kind must be git_commit")
-    return require_str(row.get("value"), f"{name}.value")
+    value = require_str(row.get("value"), f"{name}.value")
+    if not is_git_commit_sha(value):
+        _refuse(
+            RefuseClass.TYPE,
+            f"{name}.value is not a 40-hex git commit (got {value!r})",
+        )
+    return value
 
 
 def _check_data_label(manifest: Mapping[str, Any]) -> None:
@@ -442,6 +454,22 @@ def _check_controls(manifest: Mapping[str, Any]) -> None:
     faults = _as_map(manifest.get("rehashed_faults"), "rehashed_faults")
     if faults.get("ran") is not True or faults.get("refused") is not True:
         _refuse(RefuseClass.INCOMPLETE, "rehashed_faults control not executed")
+    if require_int(faults.get("gate_invoked"), "rehashed_faults.gate_invoked") < 1:
+        _refuse(
+            RefuseClass.INCOMPLETE,
+            "rehashed_faults did not invoke the DIRECT gate",
+        )
+    inst = _as_map(faults.get("instrumentation_control"), "rehashed_faults.instrumentation_control")
+    if inst.get("fired") is not True:
+        _refuse(
+            RefuseClass.INCOMPLETE,
+            "rehashed_faults positive instrumentation control did not fire",
+        )
+    if require_int(faults.get("forbidden_calls"), "rehashed_faults.forbidden_calls") != 0:
+        _refuse(
+            RefuseClass.FORBIDDEN_CALL,
+            "rehashed_faults recorded forbidden calls on refuse",
+        )
     spy = _as_map(manifest.get("spy_positive_control"), "spy_positive_control")
     if spy.get("ran") is not True or spy.get("spy_fired") is not True:
         _refuse(RefuseClass.SPY, "spy-positive control not executed or did not fire")
@@ -512,6 +540,171 @@ def _check_command_clock(manifest: Mapping[str, Any], *, stage: str) -> None:
             _refuse(RefuseClass.STALE, "end_utc before start_utc")
 
 
+def _require_verification(verification: Optional[VerificationContext]) -> VerificationContext:
+    if verification is None:
+        _refuse(
+            RefuseClass.MISSING_CONTEXT,
+            "missing verification context at DIRECT gate — "
+            "self-consistent declarations are not source proof",
+        )
+    return verification
+
+
+def _bind_source_revision(
+    manifest: Mapping[str, Any],
+    verification: VerificationContext,
+) -> None:
+    if not is_git_commit_sha(verification.git_head):
+        _refuse(RefuseClass.TYPE, "verification git_head is not a 40-hex git commit")
+    if verification.source_revision != verification.git_head:
+        _refuse(
+            RefuseClass.STALE,
+            "verification source_revision != actual git_head",
+        )
+    if verification.git_base != BASE_DEPLOY_VERCEL:
+        _refuse(RefuseClass.STALE, "verification git_base is not pinned deploy-vercel")
+    base = _check_typed_git(manifest.get("base"), "base")
+    head = _check_typed_git(manifest.get("head"), "head")
+    if base != BASE_DEPLOY_VERCEL:
+        _refuse(
+            RefuseClass.STALE,
+            f"base {base} != pinned deploy-vercel {BASE_DEPLOY_VERCEL}",
+        )
+    if head != verification.git_head:
+        _refuse(
+            RefuseClass.STALE,
+            f"head {head} != actual git_head {verification.git_head} "
+            "(stale or unbound revision)",
+        )
+
+
+def _bind_canonical_hashes(
+    manifest: Mapping[str, Any],
+    verification: VerificationContext,
+    chain_payload: Optional[Mapping[str, Any]],
+) -> None:
+    declared_input = require_sha256_hex(manifest.get("input_hash"), "input_hash")
+    declared_history = require_sha256_hex(manifest.get("history_hash"), "history_hash")
+    declared_config = require_sha256_hex(manifest.get("config_hash"), "config_hash")
+    declared_code = require_sha256_hex(manifest.get("code_hash"), "code_hash")
+    if declared_input != verification.actual_input_hash:
+        _refuse(
+            RefuseClass.HASH_MUTATED,
+            "input_hash != independently recomputed actual input bytes",
+        )
+    if declared_history != verification.actual_history_hash:
+        _refuse(
+            RefuseClass.HASH_MUTATED,
+            "history_hash != independently recomputed history binding",
+        )
+    if declared_config != verification.actual_config_hash:
+        _refuse(
+            RefuseClass.HASH_MUTATED,
+            "config_hash != independently recomputed config binding",
+        )
+    if declared_code != verification.actual_code_hash:
+        _refuse(
+            RefuseClass.HASH_MUTATED,
+            "code_hash != independently recomputed on-disk code bytes",
+        )
+    if chain_payload is None:
+        _refuse(
+            RefuseClass.MISSING_CONTEXT,
+            "missing actual chain payload — cannot bind input bytes",
+        )
+    payload_hash = sha256_hex(canonical_json(dict(chain_payload)).encode("utf-8"))
+    if payload_hash != verification.actual_input_hash:
+        _refuse(
+            RefuseClass.HASH_MUTATED,
+            "supplied chain payload is not the independently supplied actual input",
+        )
+
+
+def _bind_command_exit(
+    manifest: Mapping[str, Any],
+    verification: VerificationContext,
+    *,
+    stage: str,
+) -> None:
+    command = require_str(manifest.get("command"), "command")
+    if command != EXPECTED_COMMAND:
+        _refuse(
+            RefuseClass.COMMAND,
+            f"command {command!r} != expected {EXPECTED_COMMAND!r}",
+        )
+    if verification.actual_command != EXPECTED_COMMAND:
+        _refuse(
+            RefuseClass.COMMAND,
+            f"actual command {verification.actual_command!r} != expected",
+        )
+    if command != verification.actual_command:
+        _refuse(RefuseClass.COMMAND, "declared command != actual command")
+    cwd = require_str(manifest.get("cwd"), "cwd")
+    if cwd != verification.actual_cwd:
+        _refuse(
+            RefuseClass.STALE,
+            f"cwd {cwd!r} != actual runtime cwd {verification.actual_cwd!r}",
+        )
+    if stage != STAGE_PRE_RECEIPT:
+        return
+    if verification.actual_exit is None:
+        _refuse(
+            RefuseClass.MISSING_CONTEXT,
+            "verification context missing actual_exit",
+        )
+    if verification.actual_exit != 0:
+        _refuse(
+            RefuseClass.EXIT,
+            f"actual exit {verification.actual_exit} is not successful",
+        )
+    exit_code = require_int(manifest.get("exit"), "exit")
+    if exit_code != 0:
+        _refuse(RefuseClass.EXIT, f"exit {exit_code} is not successful")
+    if exit_code != verification.actual_exit:
+        _refuse(RefuseClass.EXIT, "declared exit != actual exit")
+
+
+def _recompute_output_log(
+    manifest: Mapping[str, Any],
+    verification: VerificationContext,
+) -> None:
+    if verification.log_bytes is None:
+        _refuse(
+            RefuseClass.MISSING_CONTEXT,
+            "verification context missing log bytes",
+        )
+    recomputed_log = sha256_hex(verification.log_bytes)
+    declared_log = require_sha256_hex(manifest.get("log_hash"), "log_hash")
+    if recomputed_log != declared_log:
+        _refuse(
+            RefuseClass.HASH_MUTATED,
+            "recomputed log bytes != declared log_hash",
+        )
+    if verification.output_bytes is None:
+        _refuse(
+            RefuseClass.MISSING_CONTEXT,
+            "verification context missing output bytes",
+        )
+    hashes = manifest.get("output_hashes")
+    paths = manifest.get("output_paths")
+    if not isinstance(paths, list) or not isinstance(hashes, Mapping):
+        return
+    for path in paths:
+        require_str(path, "output_paths[]")
+        if path not in verification.output_bytes:
+            _refuse(
+                RefuseClass.MISSING_CONTEXT,
+                f"verification context missing output bytes for {path}",
+            )
+        recomputed = sha256_hex(verification.output_bytes[path])
+        declared = require_sha256_hex(hashes.get(path), f"output_hashes[{path}]")
+        if recomputed != declared:
+            _refuse(
+                RefuseClass.HASH_MUTATED,
+                f"recomputed output bytes != declared for {path}",
+            )
+
+
 def _check_ready_flag(manifest: Mapping[str, Any]) -> None:
     flag = manifest.get("ready_for_review")
     if flag is True:
@@ -528,6 +721,7 @@ def validate_manifest(
     *,
     stage: str,
     chain_payload: Optional[Mapping[str, Any]] = None,
+    verification: Optional[VerificationContext] = None,
 ) -> dict[str, Any]:
     if not isinstance(manifest, Mapping):
         _refuse(RefuseClass.TYPE, "manifest must be an object")
@@ -539,12 +733,13 @@ def validate_manifest(
         _required_present(raw, REQUIRED_TOP_LEVEL, stage=stage)
     else:
         _refuse(RefuseClass.TYPE, f"unknown gate stage {stage!r}")
+    ctx = _require_verification(verification)
     _check_package_identity(raw)
     _check_data_label(raw)
     _check_execution(raw, stage=stage)
-    _check_typed_git(raw.get("base"), "base")
-    _check_typed_git(raw.get("head"), "head")
+    _bind_source_revision(raw, ctx)
     _check_hash_bindings(raw)
+    _bind_canonical_hashes(raw, ctx, chain_payload)
     _check_identities(raw)
     _check_cohort(raw)
     _check_labels(raw)
@@ -554,6 +749,7 @@ def validate_manifest(
     validate_worker_handoff(raw.get("worker_handoff"))
     _check_ready_flag(raw)
     _check_command_clock(raw, stage=stage)
+    _bind_command_exit(raw, ctx, stage=stage)
     _check_controls(raw)
     require_int(raw.get("review_revision"), "review_revision")
     if not isinstance(raw.get("limitations"), list) or not raw.get("limitations"):
@@ -576,6 +772,7 @@ def validate_manifest(
     if stage == STAGE_PRE_RECEIPT:
         _check_typed_references(raw)
         _check_outputs(raw)
+        _recompute_output_log(raw, ctx)
         _check_numerical(raw)
         if not isinstance(raw.get("failures"), list):
             _refuse(RefuseClass.TYPE, "failures must be a list")

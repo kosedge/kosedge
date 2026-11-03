@@ -15,6 +15,22 @@ OWNER = "Primary A"
 PROFILE = "SYNTHETIC_WFIX_AB_CHAIN"
 CERT = 0
 DATA_LABEL = "SYNTHETIC"
+EXPECTED_COMMAND = (
+    "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py"
+)
+GIT_COMMIT_SHA_LEN = 40
+
+# Files whose on-disk bytes bind code_hash at DIRECT gates.
+CODE_FILES = (
+    "services/model-service/src/services/nfl_ops_v1_evidence/gate.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/validate.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/run.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/verify.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/constants.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/refuse.py",
+    "services/model-service/src/services/nfl_fixture_assembly/produce_chain.py",
+    "services/model-service/src/services/nfl_fixture_assembly/consume_chain.py",
+)
 
 # Accepted W-FIX lineage (do not fabricate allow objects).
 LINEAGE_707_TIP = "f2c72e8bf7aa3e3f219ca3b48c76b68e7b5a4236"
@@ -135,6 +151,7 @@ OPTIONAL_TOP_LEVEL: FrozenSet[str] = frozenset(
         "accepted",
         "_receipt_path",
         "_sample_path",
+        "_chain_payload",
     }
 )
 
@@ -153,6 +170,7 @@ DEFAULT_LIMITATIONS = (
     "not self-accept",
     "READY_FOR_REVIEW requires Chief",
     "Primary B worker_handoff bound from #712 tip 82683cd9 via as_worker_handoff(); PLATFORM_LIMITATION / not_a_pass preserved",
+    "DIRECT gates bind source revision + input/history/config/code to independently supplied runtime/file context; declaration-only hashes are not source proof",
     "inherited #700/#701 real-outcome tests NOT_RUN",
     "no real-data fit/calibration/forecast/scoring/outcome join",
 )

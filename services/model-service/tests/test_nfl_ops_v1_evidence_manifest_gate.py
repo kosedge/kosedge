@@ -11,7 +11,7 @@ import json
 import math
 from datetime import timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 import pytest
 
@@ -19,10 +19,13 @@ from src.services.nfl_fixture_assembly.assemble import FORBIDDEN_CALL_ATTEMPTS
 from src.services.nfl_fixture_assembly.produce_chain import produce_fixture_chain
 from src.services.nfl_hhl1_capture.identity import parse_utc
 from src.services.nfl_ops_v1_evidence.constants import (
+    EXPECTED_COMMAND,
     PINNED_CHAIN_DIGEST,
     PINNED_GAME_ID,
     PINNED_OUTPUT_REL,
     PROFILE,
+    STAGE_PRE_CONSUME,
+    STAGE_PRE_RECEIPT,
 )
 from src.services.nfl_ops_v1_evidence.gate import (
     assert_ready_for_review_allowed,
@@ -39,7 +42,7 @@ from src.services.nfl_ops_v1_evidence.run import (
     run_rehashed_fault_control,
 )
 from src.services.nfl_ops_v1_evidence.spy import OutcomeReadSpy, run_spy_positive_control
-from src.services.nfl_ops_v1_evidence.validate import utc_now, validate_cutoff
+from src.services.nfl_ops_v1_evidence.validate import utc_now, validate_cutoff, validate_manifest
 from src.services.nfl_ops_v1_evidence.worker_handoff import (
     B_CONTENT_HASH,
     B_RELEASE_KIND,
@@ -78,17 +81,53 @@ def _pre_consume_draft(payload: dict[str, Any], dest: Path) -> dict[str, Any]:
         payload=payload,
         digest=PINNED_CHAIN_DIGEST,
         dest=dest,
-        command="pytest-pre-consume",
+        command=EXPECTED_COMMAND,
         cwd=str(REPO),
         start_utc=now,
         produce_invoked=True,
         consume_invoked=False,
         positive={"ran": True, "digest_match": True},
-        rehashed={"ran": True, "refused": True},
+        rehashed={
+            "ran": True,
+            "refused": True,
+            "gate_invoked": 1,
+            "instrumentation_control": {"fired": True},
+            "forbidden_calls": 0,
+        },
         spy_control={"ran": True, "spy_fired": True},
         process_id=1,
         produce_start_utc=now,
     )
+
+
+def _pre_kwargs(payload: Mapping[str, Any], spy: OutcomeReadSpy | None = None) -> dict[str, Any]:
+    kwargs: dict[str, Any] = {
+        "chain_payload": payload,
+        "root": REPO,
+        "command": EXPECTED_COMMAND,
+        "cwd": str(REPO),
+    }
+    if spy is not None:
+        kwargs["outcome_spy"] = spy
+    return kwargs
+
+
+def _receipt_kwargs(
+    integrated: Mapping[str, Any], spy: OutcomeReadSpy | None = None
+) -> dict[str, Any]:
+    produced = Path(integrated["output_paths"][0])
+    kwargs: dict[str, Any] = {
+        "chain_payload": integrated["_chain_payload"],
+        "root": REPO,
+        "command": EXPECTED_COMMAND,
+        "cwd": str(REPO),
+        "exit_code": 0,
+        "output_paths": [produced],
+        "log_text": integrated.get("log") or "",
+    }
+    if spy is not None:
+        kwargs["outcome_spy"] = spy
+    return kwargs
 
 
 def _refuse_class(exc: EvidenceGateRefuse) -> str:
@@ -125,6 +164,12 @@ def test_positive_integrated_produce_consume_gate(integrated: dict[str, Any]) ->
     assert integrated["evidence_labels"]["primary_b_worker_handoff"] == "SOURCE_INSPECTION"
     assert integrated["positive_control"]["digest_match"] is True
     assert integrated["rehashed_faults"]["refused"] is True
+    assert integrated["rehashed_faults"]["gate_invoked"] == 1
+    assert integrated["rehashed_faults"]["instrumentation_control"]["fired"] is True
+    assert integrated["rehashed_faults"]["forbidden_calls"] == 0
+    assert integrated["command"] == EXPECTED_COMMAND
+    assert integrated["exit"] == 0
+    assert integrated["head"]["value"] != "not-a-commit"
     assert integrated["spy_positive_control"]["spy_fired"] is True
     assert integrated["data_label"] == "SYNTHETIC"
     assert integrated["hash_bindings"]["input"]["source"] != "schema_body"
@@ -134,7 +179,7 @@ def test_positive_integrated_produce_consume_gate(integrated: dict[str, Any]) ->
 def test_positive_does_not_self_stamp_ready_for_review(integrated: dict[str, Any]) -> None:
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        stamp_ready_for_review(integrated, chief_verified=False, outcome_spy=spy)
+        stamp_ready_for_review(integrated, chief_verified=False, **_receipt_kwargs(integrated, spy))
     assert _refuse_class(exc.value) == RefuseClass.READY_FOR_REVIEW
     assert spy.reads == 0
 
@@ -158,7 +203,7 @@ def test_incomplete_missing_required_field(
     del draft["profile"]
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.INCOMPLETE
     assert spy.reads == 0
 
@@ -172,7 +217,7 @@ def test_stale_as_of_after_kickoff(produced: tuple[dict[str, Any], Path]) -> Non
     draft["common_digest"] = PINNED_CHAIN_DIGEST
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=mutated, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(mutated, spy))
     assert _refuse_class(exc.value) in {RefuseClass.STALE, RefuseClass.HASH_MUTATED}
     assert spy.reads == 0
 
@@ -184,7 +229,7 @@ def test_hash_mutated_content(produced: tuple[dict[str, Any], Path]) -> None:
     draft = _pre_consume_draft(payload, dest)
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=mutated, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(mutated, spy))
     assert _refuse_class(exc.value) == RefuseClass.HASH_MUTATED
     assert spy.reads == 0
 
@@ -195,7 +240,7 @@ def test_wrong_profile(produced: tuple[dict[str, Any], Path]) -> None:
     draft["profile"] = "DEV_IF437"
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.WRONG_PROFILE_IDENTITY
     assert draft["profile"] != PROFILE
     assert spy.reads == 0
@@ -212,7 +257,7 @@ def test_wrong_identity_game_team_season_period(
     draft["input_identities"]["period"] = "h1"
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.WRONG_PROFILE_IDENTITY
     assert spy.reads == 0
 
@@ -224,7 +269,7 @@ def test_wrong_count(produced: tuple[dict[str, Any], Path]) -> None:
     draft["cohort"]["game_ids"] = [PINNED_GAME_ID, "extra"]
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.WRONG_COUNT
     assert spy.reads == 0
 
@@ -235,7 +280,7 @@ def test_nonfinite_numerical(integrated: dict[str, Any], value: object) -> None:
     manifest["numerical_output"]["point_margin"] = value
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_final_receipt(manifest, outcome_spy=spy)
+        gate_before_final_receipt(manifest, **_receipt_kwargs(integrated, spy))
     assert _refuse_class(exc.value) in {RefuseClass.NONFINITE, RefuseClass.TYPE}
     assert spy.reads == 0
 
@@ -267,7 +312,7 @@ def test_extra_top_level_key(produced: tuple[dict[str, Any], Path]) -> None:
     draft["unexpected_allow"] = {"result": "ALLOW_FIXTURE"}
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.EXTRA
     assert spy.reads == 0
 
@@ -279,7 +324,7 @@ def test_type_bool_null_cert(produced: tuple[dict[str, Any], Path], cert: object
     draft["cert"] = cert
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.TYPE
     assert spy.reads == 0
 
@@ -320,7 +365,7 @@ def test_unknown_freshness(produced: tuple[dict[str, Any], Path]) -> None:
     draft["input_identities"]["freshness"] = "UNKNOWN"
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.STALE
     assert spy.reads == 0
 
@@ -332,7 +377,7 @@ def test_unsupported_capability(produced: tuple[dict[str, Any], Path]) -> None:
     draft = _pre_consume_draft(payload, dest)
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=mutated, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(mutated, spy))
     assert _refuse_class(exc.value) in {RefuseClass.CAPABILITY, RefuseClass.HASH_MUTATED}
     assert spy.reads == 0
 
@@ -343,7 +388,7 @@ def test_paired_arm_incomplete(produced: tuple[dict[str, Any], Path]) -> None:
     draft["producer_consumer_trace"]["consumer"] = ""
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) in {RefuseClass.PAIRED_ARM, RefuseClass.INCOMPLETE}
     assert spy.reads == 0
 
@@ -355,13 +400,13 @@ def test_malformed_channel_vs_absence(produced: tuple[dict[str, Any], Path]) -> 
     absent = copy.deepcopy(payload)
     del absent["channel"]
     with pytest.raises(EvidenceGateRefuse) as exc_abs:
-        gate_before_consume(draft, chain_payload=absent, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(absent, spy))
     assert _refuse_class(exc_abs.value) in {RefuseClass.CHANNEL, RefuseClass.HASH_MUTATED}
 
     empty = copy.deepcopy(payload)
     empty["channel"] = ""
     with pytest.raises(EvidenceGateRefuse) as exc_empty:
-        gate_before_consume(draft, chain_payload=empty, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(empty, spy))
     assert _refuse_class(exc_empty.value) in {RefuseClass.CHANNEL, RefuseClass.HASH_MUTATED}
     assert spy.reads == 0
 
@@ -374,7 +419,7 @@ def test_direct_api_consumer_cache_refused(
     draft["producer_consumer_trace"]["consumer_name"] = "fair_lines_api"
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.CONSUMER
     assert spy.reads == 0
 
@@ -385,7 +430,7 @@ def test_real_mode_refuses_before_readers(produced: tuple[dict[str, Any], Path])
     draft["data_label"] = "REAL"
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.REAL_MODE
     assert spy.reads == 0
 
@@ -411,7 +456,7 @@ def test_immutable_input_unproven(produced: tuple[dict[str, Any], Path]) -> None
     draft["immutable_input_proof"]["pinned_originals_unwritten"] = False
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.WRITE_TAMPER
     assert spy.reads == 0
 
@@ -483,9 +528,12 @@ def test_spy_positive_control_fires() -> None:
 
 
 def test_rehashed_fault_control(produced: tuple[dict[str, Any], Path]) -> None:
-    payload, _dest = produced
-    result = run_rehashed_fault_control(payload)
+    payload, dest = produced
+    result = run_rehashed_fault_control(payload, dest=dest, root=REPO)
     assert result["refused"] is True
+    assert result["gate_invoked"] == 1
+    assert result["instrumentation_control"]["fired"] is True
+    assert result["forbidden_calls"] == 0
     assert result["mutated_digest"] != PINNED_CHAIN_DIGEST
 
 
@@ -498,7 +546,7 @@ def test_schema_hash_cannot_substitute_input_hash(
     draft["hash_bindings"]["input"]["sha256"] = draft["schema_hash"]
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.HASH_MUTATED
     assert spy.reads == 0
 
@@ -509,13 +557,13 @@ def test_bool_n_is_wrong_type(produced: tuple[dict[str, Any], Path]) -> None:
     draft["cohort"]["n"] = True
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse) as exc:
-        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
     assert _refuse_class(exc.value) == RefuseClass.TYPE
     assert spy.reads == 0
 
 
 def test_chief_stamp_still_not_accepted(integrated: dict[str, Any]) -> None:
-    stamped = stamp_ready_for_review(integrated, chief_verified=True)
+    stamped = stamp_ready_for_review(integrated, chief_verified=True, **_receipt_kwargs(integrated))
     assert stamped["ready_for_review"] is True
     assert stamped["accepted"] is False
     assert stamped["cert"] == 0
@@ -526,5 +574,134 @@ def test_assert_ready_requires_full_gate(produced: tuple[dict[str, Any], Path]) 
     draft = _pre_consume_draft(payload, dest)
     spy = OutcomeReadSpy()
     with pytest.raises(EvidenceGateRefuse):
-        assert_ready_for_review_allowed(draft, chief_verified=True, outcome_spy=spy)
+        assert_ready_for_review_allowed(draft, chief_verified=True, **_pre_kwargs(payload, spy))
+    assert spy.reads == 0
+
+
+# ---------------------------------------------------------------------------
+# DIRECT-gate bind (t5256u RETURN) — declaration-only is not source proof
+# ---------------------------------------------------------------------------
+
+
+def test_missing_verification_context_refuses_validate(
+    produced: tuple[dict[str, Any], Path],
+) -> None:
+    payload, dest = produced
+    draft = _pre_consume_draft(payload, dest)
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        validate_manifest(draft, stage=STAGE_PRE_CONSUME, chain_payload=payload)
+    assert _refuse_class(exc.value) == RefuseClass.MISSING_CONTEXT
+    assert spy.reads == 0
+
+
+def test_missing_verification_context_refuses_direct_gate(
+    produced: tuple[dict[str, Any], Path],
+) -> None:
+    payload, dest = produced
+    draft = _pre_consume_draft(payload, dest)
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(draft, chain_payload=payload, outcome_spy=spy)
+    assert _refuse_class(exc.value) == RefuseClass.MISSING_CONTEXT
+    assert spy.reads == 0
+
+
+def test_sample_manifest_declaration_only_probe_refuses() -> None:
+    sample_path = REPO / "data/ops/nfl-ops-v1-evidence-manifest/SAMPLE_MANIFEST.json"
+    sample = json.loads(sample_path.read_text(encoding="utf-8"))
+    for key in (
+        "receipt_sha256",
+        "receipt_id",
+        "manifest_sha256",
+        "ok",
+        "status",
+        "log",
+        "_receipt_path",
+        "_sample_path",
+        "_chain_payload",
+    ):
+        sample.pop(key, None)
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        validate_manifest(sample, stage=STAGE_PRE_RECEIPT, chain_payload=None)
+    assert _refuse_class(exc.value) == RefuseClass.MISSING_CONTEXT
+    assert spy.reads == 0
+
+
+def test_arbitrary_synchronized_hashes_refused(
+    produced: tuple[dict[str, Any], Path],
+) -> None:
+    payload, dest = produced
+    draft = _pre_consume_draft(payload, dest)
+    fake = {
+        "input": "aa" * 32,
+        "history": "bb" * 32,
+        "config": "cc" * 32,
+        "code": "dd" * 32,
+    }
+    draft["input_hash"] = fake["input"]
+    draft["history_hash"] = fake["history"]
+    draft["config_hash"] = fake["config"]
+    draft["code_hash"] = fake["code"]
+    for name, digest in fake.items():
+        draft["hash_bindings"][name]["sha256"] = digest
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
+    assert _refuse_class(exc.value) == RefuseClass.HASH_MUTATED
+    assert spy.reads == 0
+
+
+def test_head_not_a_commit_refused(produced: tuple[dict[str, Any], Path]) -> None:
+    payload, dest = produced
+    draft = _pre_consume_draft(payload, dest)
+    draft["head"]["value"] = "not-a-commit"
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
+    assert _refuse_class(exc.value) == RefuseClass.TYPE
+    assert spy.reads == 0
+
+
+def test_stale_revision_refused(produced: tuple[dict[str, Any], Path]) -> None:
+    payload, dest = produced
+    draft = _pre_consume_draft(payload, dest)
+    draft["head"]["value"] = "0" * 40
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
+    assert _refuse_class(exc.value) == RefuseClass.STALE
+    assert spy.reads == 0
+
+
+def test_exit_17_refused(integrated: dict[str, Any]) -> None:
+    manifest = copy.deepcopy(integrated)
+    manifest["exit"] = 17
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_final_receipt(manifest, **_receipt_kwargs(integrated, spy))
+    assert _refuse_class(exc.value) == RefuseClass.EXIT
+    assert spy.reads == 0
+
+
+def test_arbitrary_output_hashes_refused(integrated: dict[str, Any]) -> None:
+    manifest = copy.deepcopy(integrated)
+    path = manifest["output_paths"][0]
+    manifest["output_hashes"][path] = "ee" * 32
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_final_receipt(manifest, **_receipt_kwargs(integrated, spy))
+    assert _refuse_class(exc.value) == RefuseClass.HASH_MUTATED
+    assert spy.reads == 0
+
+
+def test_wrong_command_refused(produced: tuple[dict[str, Any], Path]) -> None:
+    payload, dest = produced
+    draft = _pre_consume_draft(payload, dest)
+    draft["command"] = "pytest-pre-consume"
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_consume(draft, **_pre_kwargs(payload, spy))
+    assert _refuse_class(exc.value) == RefuseClass.COMMAND
     assert spy.reads == 0

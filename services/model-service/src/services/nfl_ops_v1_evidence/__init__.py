@@ -16,8 +16,13 @@ from src.services.nfl_ops_v1_evidence.run import (
     claim_from_import_only,
     run_from_saved_output,
     run_integrated_command,
+    run_rehashed_fault_control,
 )
 from src.services.nfl_ops_v1_evidence.spy import OutcomeReadSpy, run_spy_positive_control
+from src.services.nfl_ops_v1_evidence.verify import (
+    VerificationContext,
+    build_verification_context,
+)
 from src.services.nfl_ops_v1_evidence.worker_handoff import empty_worker_handoff_slot
 
 __all__ = [
@@ -34,6 +39,9 @@ __all__ = [
     "gate_before_final_receipt",
     "run_from_saved_output",
     "run_integrated_command",
+    "run_rehashed_fault_control",
     "run_spy_positive_control",
     "stamp_ready_for_review",
+    "VerificationContext",
+    "build_verification_context",
 ]

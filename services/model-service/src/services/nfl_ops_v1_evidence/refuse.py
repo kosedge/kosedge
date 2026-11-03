@@ -27,6 +27,9 @@ class RefuseClass:
     READY_FOR_REVIEW = "READY_FOR_REVIEW"
     SPY = "SPY"
     FORBIDDEN_CALL = "FORBIDDEN_CALL"
+    MISSING_CONTEXT = "MISSING_CONTEXT"
+    COMMAND = "COMMAND"
+    EXIT = "EXIT"
 
 
 class EvidenceGateRefuse(ValueError):
