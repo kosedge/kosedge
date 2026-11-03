@@ -179,6 +179,9 @@ def test_r7_integrated_produce_gate_pair(tmp_path: Path) -> None:
     assert receipt["rest_calendar"]["utc_date_delta_home"] == 5
     assert receipt["pair"]["paired"] is True
     assert receipt["exit"] == 0
+    assert receipt["exit_source"] == "SUBPROCESS_RETURNCODE"
+    assert receipt["log_source"] == "SUBPROCESS_STDOUT"
+    assert receipt["log_hash"]
     assert receipt["git_tip"] == git_tip(REPO)
     assert receipt["git_head"] == git_tip(REPO)
     assert receipt["head"] == git_tip(REPO)
@@ -420,4 +423,68 @@ def test_b4_partial_write_and_dest_lie_refused_at_direct_api(tmp_path: Path) -> 
             verification=bundle["verification"],
         )
     assert exc2.value.refuse_class == RefuseClass.WRITE_TAMPER
+    assert spy.reads == 0
+
+
+def test_b2_exit_not_literal_zero_in_runner() -> None:
+    text = (
+        REPO / "services/model-service/src/services/nfl_r7_correctness_v1/run.py"
+    ).read_text(encoding="utf-8")
+    assert "exit_code = 0" not in text
+    assert "EXIT_SOURCE = \"SUBPROCESS_RETURNCODE\"" in text
+
+
+def test_b2_exit_mismatch_refused_at_direct_api(tmp_path: Path) -> None:
+    from dataclasses import replace
+
+    from src.services.nfl_ops_v1_evidence.gate import gate_before_final_receipt
+    from src.services.nfl_ops_v1_evidence.hashes import sha256_text
+    from src.services.nfl_ops_v1_evidence.validate import utc_now
+    from src.services.nfl_r7_correctness_v1.run import build_r7_direct_pre_consume
+    from src.services.nfl_t5208u.hashing import sha256_file
+
+    dest = tmp_path / "gate"
+    dest.mkdir()
+    out = dest / "demo_result.json"
+    out.write_text("{}\n", encoding="utf-8")
+    bundle = build_r7_direct_pre_consume(root=REPO, dest=dest)
+    log_text = "observed-stdout\n"
+    manifest = bundle["manifest"]
+    manifest["exit"] = 0
+    manifest["end_utc"] = utc_now()
+    manifest["log_hash"] = sha256_text(log_text)
+    manifest["output_paths"] = [out.as_posix()]
+    manifest["output_hashes"] = {out.as_posix(): sha256_file(out)}
+    manifest["failures"] = []
+    manifest["numerical_output"] = {
+        "n": 1,
+        "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+        "if_margin": 1.0,
+        "q2_margin": 1.0,
+        "c_margin": 1.0,
+    }
+    trace = dict(manifest["producer_consumer_trace"])
+    trace["consumer_digest"] = trace["producer_digest"]
+    manifest["producer_consumer_trace"] = trace
+    ctx = replace(
+        bundle["verification"],
+        actual_exit=1,
+        log_bytes=log_text.encode("utf-8"),
+        output_bytes={out.as_posix(): out.read_bytes()},
+    )
+    spy = OutcomeReadSpy()
+    with pytest.raises(EvidenceGateRefuse) as exc:
+        gate_before_final_receipt(
+            manifest,
+            chain_payload=bundle["payload"],
+            root=REPO,
+            command=manifest["command"],
+            cwd=manifest["cwd"],
+            exit_code=1,
+            output_paths=[out],
+            log_text=log_text,
+            outcome_spy=spy,
+            verification=ctx,
+        )
+    assert exc.value.refuse_class == RefuseClass.EXIT
     assert spy.reads == 0

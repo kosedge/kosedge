@@ -23,6 +23,7 @@
   "cert": 0,
   "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_correctness_v1.py",
   "exit": 0,
+  "exit_source": "SUBPROCESS_RETURNCODE",
   "franchise_bind": {
     "away_team_raw": "LAR",
     "franchise_key_away": "LAR",
@@ -30,26 +31,28 @@
     "home_team_raw": "LAC"
   },
   "gate_713_tip": "679dbdaf8c9044edffb34ffca1543c33eea77db7",
-  "git_head": "d3d50f0d039ca3a9f187c1b5e162c662b99dbebf",
-  "git_tip": "d3d50f0d039ca3a9f187c1b5e162c662b99dbebf",
-  "head": "d3d50f0d039ca3a9f187c1b5e162c662b99dbebf",
+  "git_head": "58c01d3b11484021182c3a3295ebaf41dae35b3e",
+  "git_tip": "58c01d3b11484021182c3a3295ebaf41dae35b3e",
+  "head": "58c01d3b11484021182c3a3295ebaf41dae35b3e",
   "immutable_input_proof": {
-    "dest": "/tmp/r7-correctness-tlgr613j",
+    "dest": "/tmp/r7-correctness-3xb8utv8",
     "dest_is_temp": true,
     "pinned_originals_unwritten": true
   },
+  "log_hash": "5218069097f910381a5d92286588a31b6a832718b6a48b2a52880b77c437abbb",
+  "log_source": "SUBPROCESS_STDOUT",
   "ok": true,
   "package": "R7_CORRECTNESS_V1",
   "pair": {
     "accepted": false,
     "cert": 0,
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
-    "gate_hash": "19e4ba56ba5cd4f34e8627c992378bbaa78a188e9dd6f28dbb62ebf1cb5da5de",
+    "gate_hash": "936c1c26f8cb9fafcbcecfc91aaa3c7e19df3d8f301293ccd8f16efeb7fa8ee2",
     "ok": true,
     "package": "R7_CORRECTNESS_V1",
-    "pair_hash": "97604ec2db76bf9100a2d54a2c7f66a5b2bb66e9f78902aec4c13a9e0cde1768",
+    "pair_hash": "a4c50b98787b9287af95bff4fcafa881dd47083294ccf7ec7cb318c9cf69b81f",
     "paired": true,
-    "produce_hash": "cd081c0dcc769158fc750b9ffe3ba26eb8e71980766466e2277653bb5413720c",
+    "produce_hash": "c226a42a5c319009f72079e81a4163de6b04607d86b08b848b6b72d694e8b395",
     "profile": "R7_CORRECTNESS_V1",
     "ready_for_review": false,
     "schema_id": "nfl-t5289u-r7-correctness-v1"
@@ -64,7 +67,7 @@
     "if_margin": 1.389941504602551,
     "packet_hash": "392c1c99f8f34d15cb148c60f5ff8c3240072373a71a8de4ba5d5843487f623a",
     "q2_margin": 1.93920745003233,
-    "r7_code_hash": "19ca5c07d1b35210093ca5f56b2f1628ccac31d6a906ddb00c7b701c4b8ec594",
+    "r7_code_hash": "a774175a289661cd4b7e7d26de7d5b050baba0c6ee618f03d44bb4dbbdb020dd",
     "r7_config_hash": "0493b026cd89e03770701578ceb58d7c67c2d6f85a8d04f4bb001f2cdfc92144",
     "replay_ok": true,
     "seal_utc": "2018-10-11T23:20:00Z"

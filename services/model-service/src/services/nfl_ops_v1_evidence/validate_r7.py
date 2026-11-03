@@ -269,8 +269,17 @@ def validate_r7_manifest(
             _refuse(RefuseClass.CONSUMER, f"exposure.{key} must be false")
 
     if stage == STAGE_PRE_RECEIPT:
-        if verification.actual_exit != 0 or raw.get("exit") != 0:
-            _refuse(RefuseClass.EXIT, "R7 exit must be 0")
+        if verification.actual_exit is None:
+            _refuse(RefuseClass.MISSING_CONTEXT, "observed process exit missing")
+        if type(raw.get("exit")) is not int:
+            _refuse(RefuseClass.TYPE, "manifest.exit must be the observed process int")
+        if raw.get("exit") != verification.actual_exit:
+            _refuse(
+                RefuseClass.EXIT,
+                "manifest.exit != observed process exit",
+                declared=raw.get("exit"),
+                observed=verification.actual_exit,
+            )
         numerical = _as_map(raw.get("numerical_output"), "numerical_output")
         require_finite(numerical.get("if_margin"), "if_margin")
         require_finite(numerical.get("q2_margin"), "q2_margin")

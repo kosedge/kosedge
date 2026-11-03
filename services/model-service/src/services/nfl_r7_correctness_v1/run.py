@@ -15,6 +15,8 @@ import copy
 import json
 import os
 import shutil
+import subprocess
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any, Mapping, Optional
@@ -69,12 +71,11 @@ from src.services.nfl_r7_correctness_v1.pins import (
 )
 from src.services.nfl_r7_correctness_v1.produce import (
     atomic_replace_file,
-    produce_r7_point_margin,
+    load_produce_artifacts,
     r7_code_hash,
     r7_config_hash,
     repo_root,
     write_json,
-    write_produce_artifacts,
 )
 from src.services.nfl_r7_correctness_v1.recorder import pair_record
 from src.services.nfl_t5208u.caller import model_spy_counts, reset_model_spy
@@ -498,6 +499,43 @@ def _atomic_publish(src: Path, dest: Path, extras: Mapping[str, Any]) -> dict[st
     return published
 
 
+PRODUCE_ONLY_REL = "scripts/nfl/run_nfl_r7_produce_only.py"
+EXIT_SOURCE = "SUBPROCESS_RETURNCODE"
+LOG_SOURCE = "SUBPROCESS_STDOUT"
+
+
+def observe_produce_subprocess(*, repo: Path, dest: Path, mode: str) -> dict[str, Any]:
+    """Run produce in a child process. Bind the OS returncode — never a literal."""
+    dest = Path(dest)
+    dest.mkdir(parents=True, exist_ok=True)
+    script = Path(repo) / PRODUCE_ONLY_REL
+    if not script.is_file():
+        raise EvidenceGateRefuse(
+            f"produce child script missing {PRODUCE_ONLY_REL}",
+            refuse_class=RefuseClass.MISSING_CONTEXT,
+        )
+    env = os.environ.copy()
+    ms = str(Path(repo) / "services" / "model-service")
+    prior = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = ms if not prior else ms + os.pathsep + prior
+    proc = subprocess.run(
+        [sys.executable, str(script), "--dest", str(dest), "--mode", mode],
+        cwd=str(repo),
+        env=env,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return {
+        "returncode": int(proc.returncode),
+        "stdout": proc.stdout or "",
+        "stderr": proc.stderr or "",
+        "exit_source": EXIT_SOURCE,
+        "log_source": LOG_SOURCE,
+        "command": [sys.executable, str(script), "--dest", str(dest), "--mode", mode],
+    }
+
+
 def run_r7_integrated(
     *,
     root: Path | None = None,
@@ -561,24 +599,33 @@ def run_r7_integrated(
             verification=pre_ctx,
         )
 
-        produced = produce_r7_point_margin(mode=mode, surface=surface, outcome_spy=outcome_spy)
-        paths = write_produce_artifacts(produced, dest=temp_dest)
-        result_path = Path(paths["demo_result"])
+        if outcome_spy.reads not in (None, 0):
+            raise EvidenceGateRefuse(
+                "outcome loader already read before produce subprocess",
+                refuse_class=RefuseClass.SPY,
+            )
+        surface.note("produce_r7_point_margin")
+        observed = observe_produce_subprocess(repo=repo, dest=temp_dest, mode=mode)
+        exit_code = observed["returncode"]
+        log_text = observed["stdout"]
+        if exit_code != 0:
+            raise EvidenceGateRefuse(
+                "observed produce subprocess exit is not success",
+                refuse_class=RefuseClass.EXIT,
+                detail={"observed_exit": exit_code, "stderr": observed["stderr"]},
+            )
+        produced = load_produce_artifacts(temp_dest)
+        result_path = temp_dest / "demo_result.json"
+        demo_path = temp_dest / "synthetic_demo.json"
         expected = sha256_file(result_path)
         readback_and_rehash(result_path, expected)
-        demo_path = Path(paths["synthetic_demo"])
         readback_and_rehash(demo_path, sha256_file(demo_path))
 
         payload = _payload_from_demo(produced["demo"], produced=produced)
         input_hash = sha256_hex(canonical_json(payload).encode("utf-8"))
-        log_text = (
-            f"R7_CORRECTNESS_V1 produce ok game_id={produced['game_id']} "
-            f"if={produced['if_margin']} q2={produced['q2_margin']} c={produced['c_margin']}\n"
-        )
         output_paths = [result_path.as_posix()]
         output_hashes = {result_path.as_posix(): expected}
         end = utc_now()
-        exit_code = 0
         manifest = _r7_manifest(
             demo=produced["demo"],
             payload=payload,
@@ -674,6 +721,9 @@ def run_r7_integrated(
             "pair": pair,
             "command": EXPECTED_COMMAND,
             "exit": exit_code,
+            "exit_source": observed["exit_source"],
+            "log_source": observed["log_source"],
+            "log_hash": sha256_text(log_text),
             "git_tip": head,
             "git_head": head,
             "head": head,
@@ -723,7 +773,8 @@ def _receipt_md(receipt: dict[str, Any]) -> str:
         f"- franchise: `{receipt['franchise_bind']}`\n"
         f"- r7_config_hash: `{p['r7_config_hash']}`\n"
         f"- pair_hash: `{receipt['pair']['pair_hash']}`\n"
-        f"- exit: `{receipt['exit']}`\n"
+        f"- exit: `{receipt['exit']}` (source `{receipt.get('exit_source')}`)\n"
+        f"- log_hash source: `{receipt.get('log_source')}`\n"
         f"- git_tip: `{receipt['git_tip']}`\n"
         f"- git_head: `{receipt['git_head']}`\n"
         f"- R6 A: `{receipt['r6_a_tip']}`\n"
@@ -738,21 +789,22 @@ def _receipt_md(receipt: dict[str, Any]) -> str:
 
 def main() -> int:
     receipt = run_r7_integrated()
-    exit_code = 0 if receipt.get("ok") and receipt.get("exit") == 0 else 1
+    observed_exit = int(receipt["exit"])
     print(
         json.dumps(
             {
                 "ok": receipt["ok"],
                 "status": receipt["status"],
                 "game_id": receipt["produce"]["game_id"],
-                "exit": exit_code,
+                "exit": observed_exit,
+                "exit_source": receipt.get("exit_source"),
                 "git_tip": receipt["git_tip"],
                 "pair_hash": receipt["pair"]["pair_hash"],
             },
             sort_keys=True,
         )
     )
-    return exit_code
+    return observed_exit
 
 
 if __name__ == "__main__":

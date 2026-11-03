@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
+import sys
 from pathlib import Path
 from typing import Any, Optional
 
@@ -199,3 +201,38 @@ def write_produce_artifacts(result: dict[str, Any], *, dest: Path) -> dict[str, 
         "synthetic_demo": (dest / "synthetic_demo.json").as_posix(),
         "demo_result": (dest / "demo_result.json").as_posix(),
     }
+
+
+def load_produce_artifacts(dest: Path) -> dict[str, Any]:
+    dest = Path(dest)
+    result = json.loads((dest / "demo_result.json").read_text(encoding="utf-8"))
+    demo = json.loads((dest / "synthetic_demo.json").read_text(encoding="utf-8"))
+    result["demo"] = demo
+    return result
+
+
+def produce_only_main(argv: list[str] | None = None) -> int:
+    """Child process for observed produce exit. Parent binds proc.returncode."""
+    parser = argparse.ArgumentParser(prog="run_nfl_r7_produce_only")
+    parser.add_argument("--dest", required=True)
+    parser.add_argument("--mode", default="SYNTHETIC")
+    args = parser.parse_args(argv)
+    try:
+        result = produce_r7_point_margin(mode=args.mode)
+        write_produce_artifacts(result, dest=Path(args.dest))
+        print(
+            json.dumps(
+                {
+                    "ok": True,
+                    "game_id": result["game_id"],
+                    "if_margin": result["if_margin"],
+                    "q2_margin": result["q2_margin"],
+                    "c_margin": result["c_margin"],
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+    except Exception as exc:
+        print(json.dumps({"ok": False, "error": str(exc)}, sort_keys=True), file=sys.stderr)
+        return 1
