@@ -7,6 +7,7 @@ Does not go through the Primary A evidence-manifest gate.
 from __future__ import annotations
 
 import copy
+import json
 from pathlib import Path
 from typing import Any
 
@@ -216,3 +217,114 @@ def test_identity_mutation_refused() -> None:
         consume_literal_law(mutated, root=REPO, outcome_spy=spy)
     assert _refuse_class(exc.value) == RefuseClass.IDENTITY
     assert spy.reads == 0
+
+
+def test_weights_one_one_one_one_never_renormalize() -> None:
+    from src.services.nfl_joint_contract_v1.oracle import law_from_pairs
+
+    with pytest.raises(JointContractRefuse) as exc:
+        law_from_pairs(weights=[1, 1, 1, 1])
+    assert _refuse_class(exc.value) == RefuseClass.PARTITION
+    assert "renormal" in str(exc.value).lower() or "sum" in str(exc.value)
+
+
+def test_consume_refuses_home_win_999() -> None:
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    mutated = copy.deepcopy(adapted)
+    mutated["partitions"]["ml"]["home_win"] = 999
+    with pytest.raises(JointContractRefuse) as exc:
+        consume_literal_law(mutated, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc.value) in {RefuseClass.PARTITION, RefuseClass.HASH_MUTATED}
+    assert spy.reads == 0
+    assert FORBIDDEN_CALL_ATTEMPTS == []
+
+
+def test_consume_refuses_home_score_999() -> None:
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    mutated = copy.deepcopy(adapted)
+    mutated["outcomes"][0]["home"] = 999
+    with pytest.raises(JointContractRefuse) as exc:
+        consume_literal_law(mutated, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc.value) in {RefuseClass.IDENTITY, RefuseClass.HASH_MUTATED}
+    assert spy.reads == 0
+
+
+def test_consume_refuses_production_and_actionable() -> None:
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    mutated = copy.deepcopy(adapted)
+    mutated["production_mode"] = True
+    mutated["channel"] = "PRODUCTION"
+    with pytest.raises(JointContractRefuse) as exc:
+        consume_literal_law(mutated, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc.value) == RefuseClass.CAPABILITY
+    mutated2 = copy.deepcopy(adapted)
+    mutated2["exposure"]["actionable"] = True
+    with pytest.raises(JointContractRefuse) as exc2:
+        consume_literal_law(mutated2, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc2.value) == RefuseClass.ACTIONABLE
+    assert spy.reads == 0
+    assert FORBIDDEN_CALL_ATTEMPTS == []
+
+
+def test_consume_refuses_fake_code_hash() -> None:
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    mutated = copy.deepcopy(adapted)
+    mutated["provenance"]["code_hash"] = "a" * 64
+    with pytest.raises(JointContractRefuse) as exc:
+        consume_literal_law(mutated, root=REPO, outcome_spy=spy)
+    assert _refuse_class(exc.value) == RefuseClass.HASH_MUTATED
+    assert spy.reads == 0
+
+
+def test_consume_sample_positive() -> None:
+    sample = json.loads(
+        (REPO / "data/ops/nfl-joint-contract-v1/ADAPTER_SAMPLE.json").read_text()
+    )
+    for key in (
+        "handoff",
+        "spy_positive_control",
+        "status",
+        "not_integrated_through_evidence_gate",
+        "consumed",
+        "consumer",
+        "accepted",
+        "receipt_sha256",
+    ):
+        sample.pop(key, None)
+    spy = OutcomeReadSpy()
+    consumed = consume_literal_law(sample, root=REPO, outcome_spy=spy)
+    assert consumed["supplied_law_recomputed"] is True
+    assert consumed["partitions"]["ml"]["home_win"] == 0.5
+    assert spy.reads == 0
+
+
+def test_joint_integrated_command(tmp_path: Path) -> None:
+    from src.services.nfl_joint_contract_v1.integrate import run_joint_integrated_command
+    from src.services.nfl_ops_v1_evidence.constants import PROFILE_JOINT, PROFILE_WFIX
+
+    result = run_joint_integrated_command(dest_dir=tmp_path / "int", root=REPO)
+    assert result["ok"] is True
+    assert result["profile"] == PROFILE_JOINT
+    assert result["profile"] != PROFILE_WFIX
+    assert result["not_integrated_through_evidence_gate"] is False
+    assert result["ready_for_review"] is False
+    assert result["input_identities"]["game_id"] == "2026_99_SYN_TST_JNT"
+    assert result["numerical_output"]["tie"] == 0.25
+    assert "point_margin" not in result["numerical_output"]
+    assert result["worker_handoff"]["not_a_pass"] is True
+    assert result["worker_handoff"]["release_kind"] == "PLATFORM_LIMITATION"
+
+
+def test_wfix_profile_not_mislabeled_joint() -> None:
+    from src.services.nfl_ops_v1_evidence.constants import PINNED_GAME_ID, PROFILE_JOINT
+
+    assert PINNED_GAME_ID != "2026_99_SYN_TST_JNT"
+    spy = OutcomeReadSpy()
+    adapted = adapt_literal_law(root=REPO, outcome_spy=spy)
+    assert adapted["identity"]["game_id"] != PINNED_GAME_ID
+    assert adapted["capability"]["bits"] == ["JOINT_LITERAL_LAW"]
+    assert PROFILE_JOINT != "SYNTHETIC_WFIX_AB_CHAIN"

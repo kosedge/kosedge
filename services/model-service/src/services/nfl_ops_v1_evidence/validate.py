@@ -15,9 +15,17 @@ from src.services.nfl_ops_v1_evidence.constants import (
     BASE_DEPLOY_VERCEL,
     CERT,
     CONSUME_PENDING_KEYS,
+    ALLOWED_PROFILES,
     DATA_LABEL,
     EVIDENCE_LABELS,
     EXPECTED_COMMAND,
+    EXPECTED_COMMAND_JOINT,
+    JOINT_AWAY,
+    JOINT_CHAIN_DIGEST,
+    JOINT_GAME_ID,
+    JOINT_HOME,
+    JOINT_N,
+    JOINT_TEAM,
     JOINT_CONTRACT,
     OWNER,
     OWNER_CLEAR,
@@ -42,6 +50,8 @@ from src.services.nfl_ops_v1_evidence.constants import (
     PINNED_WEEK,
     PRE_CONSUME_REQUIRED,
     PROFILE,
+    PROFILE_JOINT,
+    PROFILE_WFIX,
     PROTOCOL,
     REQUIRED_TOP_LEVEL,
     SCHEMA_VERSION,
@@ -121,8 +131,11 @@ def _check_package_identity(manifest: Mapping[str, Any]) -> None:
         )
     if manifest.get("scope_id") != SCOPE_ID:
         _refuse(RefuseClass.WRONG_PROFILE_IDENTITY, f"scope_id {manifest.get('scope_id')!r} != {SCOPE_ID}")
-    if manifest.get("profile") != PROFILE:
-        _refuse(RefuseClass.WRONG_PROFILE_IDENTITY, f"profile {manifest.get('profile')!r} != {PROFILE}")
+    if manifest.get("profile") not in ALLOWED_PROFILES:
+        _refuse(
+            RefuseClass.WRONG_PROFILE_IDENTITY,
+            f"profile {manifest.get('profile')!r} not in {sorted(ALLOWED_PROFILES)}",
+        )
     if manifest.get("owner") != OWNER:
         _refuse(RefuseClass.WRONG_PROFILE_IDENTITY, f"owner {manifest.get('owner')!r} != {OWNER}")
     if type(manifest.get("cert")) is not int or manifest.get("cert") != CERT:
@@ -228,9 +241,27 @@ def _check_hash_bindings(manifest: Mapping[str, Any]) -> None:
             )
 
 
+def _is_joint(manifest: Mapping[str, Any]) -> bool:
+    return manifest.get("profile") == PROFILE_JOINT
+
+
 def _check_identities(manifest: Mapping[str, Any]) -> dict[str, Any]:
     ident = _as_map(manifest.get("input_identities"), "input_identities")
-    if ident.get("game_id") != PINNED_GAME_ID:
+    if _is_joint(manifest):
+        if ident.get("game_id") != JOINT_GAME_ID:
+            _refuse(
+                RefuseClass.WRONG_PROFILE_IDENTITY,
+                f"joint game_id {ident.get('game_id')!r} != {JOINT_GAME_ID} "
+                "(point-margin W-FIX must not be labeled joint)",
+            )
+        if ident.get("team") != JOINT_TEAM or ident.get("away") != JOINT_AWAY or ident.get("home") != JOINT_HOME:
+            _refuse(
+                RefuseClass.WRONG_PROFILE_IDENTITY,
+                "joint home/away/team identity mismatch vs sealed SYNTH_IDENTITY",
+            )
+        if ident.get("season") != PINNED_SEASON or ident.get("week") != PINNED_WEEK:
+            _refuse(RefuseClass.WRONG_PROFILE_IDENTITY, "joint season/week mismatch")
+    elif ident.get("game_id") != PINNED_GAME_ID:
         _refuse(
             RefuseClass.WRONG_PROFILE_IDENTITY,
             f"game_id {ident.get('game_id')!r} != {PINNED_GAME_ID}",
@@ -282,6 +313,13 @@ def _check_cohort(manifest: Mapping[str, Any]) -> None:
     ids = cohort.get("game_ids")
     if not isinstance(ids, list):
         _refuse(RefuseClass.TYPE, "cohort.game_ids must be a list")
+    if _is_joint(manifest):
+        if n != JOINT_N or len(ids) != JOINT_N or ids != [JOINT_GAME_ID]:
+            _refuse(
+                RefuseClass.WRONG_COUNT,
+                f"joint cohort n={n} ids={ids!r} != [{JOINT_GAME_ID}]",
+            )
+        return
     if n != PINNED_N or len(ids) != PINNED_N:
         _refuse(
             RefuseClass.WRONG_COUNT,
@@ -320,10 +358,11 @@ def _check_trace(manifest: Mapping[str, Any], *, stage: str) -> dict[str, Any]:
         "producer_consumer_trace.producer_digest",
     )
     common = require_sha256_hex(manifest.get("common_digest"), "common_digest")
-    if common != PINNED_CHAIN_DIGEST:
+    expected_digest = JOINT_CHAIN_DIGEST if _is_joint(manifest) else PINNED_CHAIN_DIGEST
+    if common != expected_digest:
         _refuse(
             RefuseClass.HASH_MUTATED,
-            f"common_digest {common} != pinned {PINNED_CHAIN_DIGEST}",
+            f"common_digest {common} != pinned {expected_digest}",
         )
     if producer_digest != common:
         _refuse(RefuseClass.PAIRED_ARM, "producer_digest != common_digest")
@@ -383,6 +422,31 @@ def validate_cutoff(cutoff: Mapping[str, Any]) -> None:
 def _check_payload_hashes(payload: Optional[Mapping[str, Any]], manifest: Mapping[str, Any]) -> None:
     if payload is None:
         return
+    if _is_joint(manifest):
+        bits = (_as_map(payload.get("capability"), "capability")).get("bits")
+        if not isinstance(bits, list) or bits != ["JOINT_LITERAL_LAW"]:
+            _refuse(
+                RefuseClass.CAPABILITY,
+                "joint payload capability must be exactly [JOINT_LITERAL_LAW] "
+                "(point-margin is not joint)",
+            )
+        if payload.get("requested_output") not in (None, "LITERAL_JOINT_PARTITIONS"):
+            _refuse(
+                RefuseClass.CAPABILITY,
+                f"unsupported joint requested_output {payload.get('requested_output')!r}",
+            )
+        if "point_margin" in payload and payload.get("forecast"):
+            _refuse(
+                RefuseClass.WRONG_PROFILE_IDENTITY,
+                "point-margin forecast cannot be labeled SYNTHETIC_JOINT_LITERAL_LAW",
+            )
+        declared = require_sha256_hex(manifest.get("common_digest"), "common_digest")
+        if declared != JOINT_CHAIN_DIGEST:
+            _refuse(
+                RefuseClass.HASH_MUTATED,
+                "joint common_digest != pinned joint law digest",
+            )
+        return
     bits = (_as_map(payload.get("capability"), "capability")).get("bits")
     if not isinstance(bits, list) or "POINT_MARGIN" not in bits:
         _refuse(RefuseClass.CAPABILITY, "POINT_MARGIN capability required")
@@ -416,6 +480,32 @@ def _check_payload_hashes(payload: Optional[Mapping[str, Any]], manifest: Mappin
 
 
 def _check_numerical(manifest: Mapping[str, Any]) -> None:
+    if _is_joint(manifest):
+        numerical = _as_map(manifest.get("numerical_output"), "numerical_output")
+        if "point_margin" in numerical:
+            _refuse(
+                RefuseClass.WRONG_PROFILE_IDENTITY,
+                "point-margin numerical cannot be labeled joint",
+            )
+        n = require_int(numerical.get("n"), "numerical_output.n")
+        if n != 4:
+            _refuse(RefuseClass.WRONG_COUNT, f"joint numerical n={n} != 4 outcomes")
+        if numerical.get("game_id") != JOINT_GAME_ID:
+            _refuse(
+                RefuseClass.WRONG_PROFILE_IDENTITY,
+                f"joint numerical game_id {numerical.get('game_id')!r} != {JOINT_GAME_ID}",
+            )
+        for key, expected in (
+            ("home_win", 0.5),
+            ("away_win", 0.25),
+            ("tie", 0.25),
+            ("mean_margin", 1.5),
+            ("mean_total", 44.5),
+        ):
+            require_finite(numerical.get(key), f"numerical_output.{key}")
+            if abs(float(numerical[key]) - expected) > 1e-12:
+                _refuse(RefuseClass.WRONG_COUNT, f"joint {key} != sealed oracle")
+        return
     numerical = _as_map(manifest.get("numerical_output"), "numerical_output")
     n = require_int(numerical.get("n"), "numerical_output.n")
     if n != PINNED_N:
@@ -627,12 +717,13 @@ def _bind_command_exit(
     stage: str,
 ) -> None:
     command = require_str(manifest.get("command"), "command")
-    if command != EXPECTED_COMMAND:
+    expected_cmd = EXPECTED_COMMAND_JOINT if _is_joint(manifest) else EXPECTED_COMMAND
+    if command != expected_cmd:
         _refuse(
             RefuseClass.COMMAND,
-            f"command {command!r} != expected {EXPECTED_COMMAND!r}",
+            f"command {command!r} != expected {expected_cmd!r}",
         )
-    if verification.actual_command != EXPECTED_COMMAND:
+    if verification.actual_command != expected_cmd:
         _refuse(
             RefuseClass.COMMAND,
             f"actual command {verification.actual_command!r} != expected",

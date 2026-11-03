@@ -23,7 +23,10 @@ from src.services.nfl_ops_v1_evidence.spy import (
     assert_zero_forbidden_on_refusal,
 )
 from src.services.nfl_ops_v1_evidence.validate import validate_manifest
-from src.services.nfl_ops_v1_evidence.verify import build_verification_context
+from src.services.nfl_ops_v1_evidence.verify import (
+    build_verification_context,
+    profile_verify_kwargs,
+)
 
 
 def _missing_direct_actuals(*values: Any) -> bool:
@@ -58,6 +61,7 @@ def gate_before_consume(
             payload=chain_payload,
             command=command,
             cwd=cwd,
+            **profile_verify_kwargs(manifest),
         )
         return validate_manifest(
             manifest,
@@ -106,6 +110,7 @@ def gate_before_final_receipt(
             exit_code=exit_code,
             output_paths=output_paths,
             log_text=log_text,
+            **profile_verify_kwargs(manifest),
         )
         return validate_manifest(
             manifest,

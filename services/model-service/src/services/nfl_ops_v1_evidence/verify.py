@@ -18,12 +18,15 @@ from src.services.nfl_ops_v1_evidence.constants import (
     CODE_FILES,
     DATA_LABEL,
     EXPECTED_COMMAND,
+    EXPECTED_COMMAND_JOINT,
     GIT_COMMIT_SHA_LEN,
+    JOINT_CODE_FILES,
     LINEAGE_706_TIP,
     LINEAGE_707_TIP,
     PACKAGE,
     PINNED_CHAIN_DIGEST,
     PROFILE,
+    PROFILE_JOINT,
     UTILITY_700_TIP,
     UTILITY_701_TIP,
 )
@@ -51,9 +54,13 @@ def git_tip(root: Path) -> str:
     return (proc.stdout or "").strip()
 
 
-def config_binding() -> dict[str, Any]:
+def config_binding(
+    *,
+    profile: str = PROFILE,
+    expected_command: str = EXPECTED_COMMAND,
+) -> dict[str, Any]:
     return {
-        "profile": PROFILE,
+        "profile": profile,
         "package": PACKAGE,
         "pinned_chain_digest": PINNED_CHAIN_DIGEST,
         "lineage_707": LINEAGE_707_TIP,
@@ -62,12 +69,28 @@ def config_binding() -> dict[str, Any]:
         "utility_701": UTILITY_701_TIP,
         "cert": CERT,
         "data_label": DATA_LABEL,
-        "expected_command": EXPECTED_COMMAND,
+        "expected_command": expected_command,
     }
 
 
-def code_paths(root: Path) -> list[Path]:
-    return [root / rel for rel in CODE_FILES if (root / rel).is_file()]
+def code_paths(root: Path, rels: Sequence[str] | None = None) -> list[Path]:
+    files = rels or CODE_FILES
+    return [root / rel for rel in files if (root / rel).is_file()]
+
+
+def profile_verify_kwargs(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    profile = manifest.get("profile") or PROFILE
+    if profile == PROFILE_JOINT:
+        return {
+            "profile": PROFILE_JOINT,
+            "expected_command": EXPECTED_COMMAND_JOINT,
+            "code_file_rels": JOINT_CODE_FILES,
+        }
+    return {
+        "profile": PROFILE,
+        "expected_command": EXPECTED_COMMAND,
+        "code_file_rels": CODE_FILES,
+    }
 
 
 def hash_input_payload(payload: Mapping[str, Any]) -> str:
@@ -78,12 +101,20 @@ def hash_history_binding() -> str:
     return sha256_hex(canonical_json(history_none_binding()).encode("utf-8"))
 
 
-def hash_config_binding() -> str:
-    return sha256_hex(canonical_json(config_binding()).encode("utf-8"))
+def hash_config_binding(
+    *,
+    profile: str = PROFILE,
+    expected_command: str = EXPECTED_COMMAND,
+) -> str:
+    return sha256_hex(
+        canonical_json(
+            config_binding(profile=profile, expected_command=expected_command)
+        ).encode("utf-8")
+    )
 
 
-def hash_code_files(root: Path) -> dict[str, Any]:
-    return hash_file_list(root, code_paths(root))
+def hash_code_files(root: Path, rels: Sequence[str] | None = None) -> dict[str, Any]:
+    return hash_file_list(root, code_paths(root, rels))
 
 
 @dataclass(frozen=True)
@@ -113,6 +144,9 @@ def build_verification_context(
     exit_code: Optional[int] = None,
     output_paths: Optional[Sequence[Path | str]] = None,
     log_text: Optional[str] = None,
+    profile: str = PROFILE,
+    expected_command: str = EXPECTED_COMMAND,
+    code_file_rels: Sequence[str] | None = None,
 ) -> VerificationContext:
     """Compute bind targets from live git + on-disk files + supplied payload/bytes."""
     repo = Path(root)
@@ -140,8 +174,10 @@ def build_verification_context(
         source_revision=head,
         actual_input_hash=hash_input_payload(payload),
         actual_history_hash=hash_history_binding(),
-        actual_config_hash=hash_config_binding(),
-        actual_code_hash=hash_code_files(repo)["sha256"],
+        actual_config_hash=hash_config_binding(
+            profile=profile, expected_command=expected_command
+        ),
+        actual_code_hash=hash_code_files(repo, code_file_rels)["sha256"],
         actual_command=command,
         actual_cwd=str(cwd),
         actual_exit=exit_code,

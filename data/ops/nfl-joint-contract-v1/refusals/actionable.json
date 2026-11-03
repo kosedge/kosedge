@@ -1,0 +1,14 @@
+{
+  "actionable": false,
+  "case": "actionable",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "exposure.actionable must be false",
+  "refuse_class": "ACTIONABLE",
+  "self_accept": false,
+  "settled_p": null
+}

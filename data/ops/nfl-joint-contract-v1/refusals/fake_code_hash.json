@@ -1,0 +1,14 @@
+{
+  "actionable": false,
+  "case": "fake_code_hash",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "provenance.code_hash 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' != sealed freeze 2e385e934bc08390a5949f82e40841a776358ef9d09d1d4fd66774706fa92561",
+  "refuse_class": "HASH_MUTATED",
+  "self_accept": false,
+  "settled_p": null
+}

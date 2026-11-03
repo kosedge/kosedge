@@ -1,0 +1,38 @@
+{
+  "authority": "t5266u",
+  "cert": 0,
+  "changed_pins": {
+    "EXPECTED_COMMAND_JOINT": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_joint_contract_v1_integrated.py",
+    "JOINT_CHAIN_DIGEST": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc",
+    "PROFILE_JOINT": "SYNTHETIC_JOINT_LITERAL_LAW",
+    "weight_parser": "abs(sum-1)<=1e-12; no renormalization"
+  },
+  "command_receipt_sha256": "b2c0ee1fedd17679b097d8a7edf3845c0635a1e80acbee935a3c26f1f6be3aac",
+  "file_sha256": {
+    "scripts/nfl/run_nfl_joint_contract_v1_integrated.py": "c99d5887be3d3c4b3f2bfc5af0b71650771e1526a87fb34519cefaa978203bfb",
+    "services/model-service/src/services/nfl_joint_contract_v1/consume.py": "65bc9be001a6782558798acab43de7da361d20ffb4713db7be5a1ac8d7e7177d",
+    "services/model-service/src/services/nfl_joint_contract_v1/integrate.py": "4e1a57917e930dcb16afae403dfef2abb02b8a01e2a4e341737343c92e63d4f5",
+    "services/model-service/src/services/nfl_joint_contract_v1/oracle.py": "b3eb702802e594cf102faddf11d5ff958991387dfc2f91e09f2aa8b851cbfd29",
+    "services/model-service/src/services/nfl_ops_v1_evidence/constants.py": "0c2bd1d6b7f13191f84b8dfba3cfe89ef011b62542e4da4c40fb0944f1d104c1",
+    "services/model-service/src/services/nfl_ops_v1_evidence/gate.py": "1bd9b90fe845d568ff4c962ee9624840b1efa07251b676ba9744cdb6be22c1c9",
+    "services/model-service/src/services/nfl_ops_v1_evidence/validate.py": "6ec1d72043a5fb533eb6833ff7e1870b42334d7dea51694dacb248ed606261a7",
+    "services/model-service/src/services/nfl_ops_v1_evidence/verify.py": "9419a1a12d896cf2df78cffef9739e564d5fbc156189039a569792610d0755a3"
+  },
+  "freeze_parent": "6f4c5b65ad7c7d534045937590b06d79cbc16891",
+  "freeze_preserved": {
+    "code_hash": "2e385e934bc08390a5949f82e40841a776358ef9d09d1d4fd66774706fa92561",
+    "oracle_hash": "5480da107cd39e3a352a4ccb0059a6b3d7593d81b51ec7b0dab51e6a4721a3e0",
+    "receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+    "schema_hash": "d541b593d7f612a1ad151f9701147d699116c0ac523dd2e342fc991b35c4ddf2"
+  },
+  "order": "c1044b1f",
+  "package": "PARTIAL",
+  "pytest": {
+    "exit": 0,
+    "passed": 78
+  },
+  "ready_for_review": false,
+  "self_accept": false,
+  "silent_re_freeze": false,
+  "superseded_close": "c5468e71"
+}

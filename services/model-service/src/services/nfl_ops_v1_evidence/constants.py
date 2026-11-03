@@ -12,13 +12,27 @@ PROTOCOL = "ed10e80f"
 JOINT_CONTRACT = "4f2c9e2b"
 SCOPE_ID = "chief-nflgreen-overnight-ops-20261102-0330"
 OWNER = "Primary A"
-PROFILE = "SYNTHETIC_WFIX_AB_CHAIN"
+PROFILE_WFIX = "SYNTHETIC_WFIX_AB_CHAIN"
+PROFILE_JOINT = "SYNTHETIC_JOINT_LITERAL_LAW"
+PROFILE = PROFILE_WFIX
 CERT = 0
 DATA_LABEL = "SYNTHETIC"
 EXPECTED_COMMAND = (
     "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py"
 )
+EXPECTED_COMMAND_JOINT = (
+    "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_joint_contract_v1_integrated.py"
+)
 GIT_COMMIT_SHA_LEN = 40
+ALLOWED_PROFILES: FrozenSet[str] = frozenset({PROFILE_WFIX, PROFILE_JOINT})
+
+# Explicit joint profile pins — not W-FIX point-margin.
+JOINT_GAME_ID = "2026_99_SYN_TST_JNT"
+JOINT_TEAM = "SYN"
+JOINT_AWAY = "TST"
+JOINT_HOME = "SYN"
+JOINT_N = 1
+JOINT_CHAIN_DIGEST = "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc"
 
 # Files whose on-disk bytes bind code_hash at DIRECT gates.
 CODE_FILES = (
@@ -30,6 +44,17 @@ CODE_FILES = (
     "services/model-service/src/services/nfl_ops_v1_evidence/refuse.py",
     "services/model-service/src/services/nfl_fixture_assembly/produce_chain.py",
     "services/model-service/src/services/nfl_fixture_assembly/consume_chain.py",
+)
+
+JOINT_CODE_FILES = (
+    "services/model-service/src/services/nfl_ops_v1_evidence/gate.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/validate.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/verify.py",
+    "services/model-service/src/services/nfl_ops_v1_evidence/constants.py",
+    "services/model-service/src/services/nfl_joint_contract_v1/adapter.py",
+    "services/model-service/src/services/nfl_joint_contract_v1/consume.py",
+    "services/model-service/src/services/nfl_joint_contract_v1/oracle.py",
+    "services/model-service/src/services/nfl_joint_contract_v1/settlement.py",
 )
 
 # Accepted W-FIX lineage (do not fabricate allow objects).

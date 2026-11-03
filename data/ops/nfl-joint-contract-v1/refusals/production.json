@@ -1,0 +1,14 @@
+{
+  "actionable": false,
+  "case": "production",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "channel='PRODUCTION' is not FIXTURE",
+  "refuse_class": "CAPABILITY",
+  "self_accept": false,
+  "settled_p": null
+}

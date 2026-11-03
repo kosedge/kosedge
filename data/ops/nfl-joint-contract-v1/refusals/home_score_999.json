@@ -1,0 +1,14 @@
+{
+  "actionable": false,
+  "case": "home_score_999",
+  "cert": 0,
+  "detail": {},
+  "ev": null,
+  "fair_odds": null,
+  "ok": false,
+  "ready_for_review": false,
+  "reason": "supplied pairs [(999, 21), (21, 24), (20, 20), (27, 21)] are not the one sealed paired law [(24, 21), (21, 24), (20, 20), (27, 21)]",
+  "refuse_class": "IDENTITY",
+  "self_accept": false,
+  "settled_p": null
+}

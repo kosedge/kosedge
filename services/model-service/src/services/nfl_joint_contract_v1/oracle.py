@@ -24,19 +24,55 @@ from src.services.nfl_joint_contract_v1.refuse import JointContractRefuse, Refus
 Pair = Tuple[int, int]
 
 
-def _finite_weight(value: Any, name: str) -> float:
+def _finite_number(value: Any, name: str, *, nonnegative: bool = False) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise JointContractRefuse(
             f"{name} is not numeric",
             refuse_class=RefuseClass.NONFINITE,
         )
     number = float(value)
-    if math.isnan(number) or not math.isfinite(number) or number < 0:
+    if math.isnan(number) or not math.isfinite(number):
+        raise JointContractRefuse(
+            f"{name} must be finite",
+            refuse_class=RefuseClass.NONFINITE,
+        )
+    if nonnegative and number < 0:
         raise JointContractRefuse(
             f"{name} must be finite nonnegative",
             refuse_class=RefuseClass.NONFINITE,
         )
     return number
+
+
+def _finite_weight(value: Any, name: str) -> float:
+    return _finite_number(value, name, nonnegative=True)
+
+
+def _finite_prob(value: Any, name: str) -> float:
+    number = _finite_number(value, name, nonnegative=True)
+    if number > 1.0 + 1e-12:
+        raise JointContractRefuse(
+            f"{name}={number} is not a probability in [0,1]",
+            refuse_class=RefuseClass.PARTITION,
+        )
+    return number
+
+
+def parse_weights(weights: Sequence[Any]) -> tuple[float, ...]:
+    """Exact 98426: finite nonnegative; abs(sum−1)≤1e-12; never renormalize."""
+    parsed = tuple(_finite_weight(w, f"weight[{i}]") for i, w in enumerate(weights))
+    total = sum(parsed)
+    if abs(total - 1.0) > 1e-12:
+        raise JointContractRefuse(
+            f"weights sum {total} ; abs(sum-1) must be <= 1e-12 (no renormalization)",
+            refuse_class=RefuseClass.PARTITION,
+        )
+    return parsed
+
+
+def normalize_weights(weights: Sequence[Any]) -> tuple[float, ...]:
+    """Compatibility alias. Does not renormalize. Preserves supplied weights."""
+    return parse_weights(weights)
 
 
 def _int_score(value: Any, name: str) -> int:
@@ -73,7 +109,7 @@ def law_from_pairs(
             refuse_class=RefuseClass.PARTITION,
         )
     outcomes: list[dict[str, Any]] = []
-    norm = normalize_weights(raw_weights)
+    preserved = parse_weights(raw_weights)
     for idx, row in enumerate(raw_pairs):
         if not isinstance(row, (list, tuple)) or len(row) != 2:
             raise JointContractRefuse(
@@ -86,7 +122,7 @@ def law_from_pairs(
             {
                 "home": home,
                 "away": away,
-                "weight": norm[idx],
+                "weight": preserved[idx],
                 "margin": home - away,
                 "total": home + away,
             }
@@ -94,7 +130,9 @@ def law_from_pairs(
     return {
         "outcomes": outcomes,
         "n": len(outcomes),
-        "weight_sum": sum(norm),
+        "weight_sum": sum(preserved),
+        "weights": list(preserved),
+        "pairs": [(row["home"], row["away"]) for row in outcomes],
     }
 
 
@@ -109,6 +147,8 @@ def partitions_from_law(
     home_spread: float = ORACLE_HOME_SPREAD,
     total_line: float = ORACLE_TOTAL,
 ) -> dict[str, Any]:
+    spread_line = _finite_number(home_spread, "home_spread")
+    total_line_v = _finite_number(total_line, "total_line")
     law = law_from_pairs(pairs, weights)
     outcomes = law["outcomes"]
     ml = {
@@ -126,10 +166,10 @@ def partitions_from_law(
     mean_total = sum(r["weight"] * r["total"] for r in outcomes)
 
     spread = {
-        "line": float(home_spread),
-        "cover": _mass(outcomes, lambda r: (r["margin"] + home_spread) > 0),
-        "push": _mass(outcomes, lambda r: (r["margin"] + home_spread) == 0),
-        "loss": _mass(outcomes, lambda r: (r["margin"] + home_spread) < 0),
+        "line": spread_line,
+        "cover": _mass(outcomes, lambda r: (r["margin"] + spread_line) > 0),
+        "push": _mass(outcomes, lambda r: (r["margin"] + spread_line) == 0),
+        "loss": _mass(outcomes, lambda r: (r["margin"] + spread_line) < 0),
     }
     if abs((spread["cover"] + spread["push"] + spread["loss"]) - 1.0) > 1e-12:
         raise JointContractRefuse(
@@ -138,10 +178,10 @@ def partitions_from_law(
         )
 
     totals = {
-        "line": float(total_line),
-        "over": _mass(outcomes, lambda r: r["total"] > total_line),
-        "push": _mass(outcomes, lambda r: r["total"] == total_line),
-        "under": _mass(outcomes, lambda r: r["total"] < total_line),
+        "line": total_line_v,
+        "over": _mass(outcomes, lambda r: r["total"] > total_line_v),
+        "push": _mass(outcomes, lambda r: r["total"] == total_line_v),
+        "under": _mass(outcomes, lambda r: r["total"] < total_line_v),
     }
     if abs((totals["over"] + totals["push"] + totals["under"]) - 1.0) > 1e-12:
         raise JointContractRefuse(

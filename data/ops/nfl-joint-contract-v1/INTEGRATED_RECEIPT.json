@@ -1,0 +1,413 @@
+{
+  "accepted": false,
+  "authority": "t5245u",
+  "base": {
+    "kind": "git_commit",
+    "value": "f5e3bb58ccbe5a8892fed2a01f347c2308394a2f"
+  },
+  "cert": 0,
+  "changed_files": [
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/adapter.py",
+      "ref_kind": "file_sha256",
+      "sha256": "f6f04e8618799ce4931ef26672a2a630daa462ff9a9f9282467614c5e99e90c2"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/consume.py",
+      "ref_kind": "file_sha256",
+      "sha256": "65bc9be001a6782558798acab43de7da361d20ffb4713db7be5a1ac8d7e7177d"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/oracle.py",
+      "ref_kind": "file_sha256",
+      "sha256": "b3eb702802e594cf102faddf11d5ff958991387dfc2f91e09f2aa8b851cbfd29"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_joint_contract_v1/settlement.py",
+      "ref_kind": "file_sha256",
+      "sha256": "cbd349e52be3d37f52669c2346b70193ed72f3bc9239961c4236254d2d67804e"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/constants.py",
+      "ref_kind": "file_sha256",
+      "sha256": "0c2bd1d6b7f13191f84b8dfba3cfe89ef011b62542e4da4c40fb0944f1d104c1"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/gate.py",
+      "ref_kind": "file_sha256",
+      "sha256": "1bd9b90fe845d568ff4c962ee9624840b1efa07251b676ba9744cdb6be22c1c9"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/validate.py",
+      "ref_kind": "file_sha256",
+      "sha256": "6ec1d72043a5fb533eb6833ff7e1870b42334d7dea51694dacb248ed606261a7"
+    },
+    {
+      "path": "services/model-service/src/services/nfl_ops_v1_evidence/verify.py",
+      "ref_kind": "file_sha256",
+      "sha256": "9419a1a12d896cf2df78cffef9739e564d5fbc156189039a569792610d0755a3"
+    }
+  ],
+  "code_hash": "eb1caed127d3d02ee1036421e99247cac643d77dc26f39d8f9881324fb76c1d0",
+  "cohort": {
+    "game_ids": [
+      "2026_99_SYN_TST_JNT"
+    ],
+    "id": "2026_99_SYN_TST_JNT",
+    "n": 1
+  },
+  "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_joint_contract_v1_integrated.py",
+  "common_digest": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc",
+  "config_hash": "d03aa8453dbb9f8b2d752af4a1626f9c17cb3282ee489562f6e82eebcf974693",
+  "cwd": "/agent/repos/kosedge",
+  "data_label": "SYNTHETIC",
+  "end_utc": "2026-11-03T04:43:25Z",
+  "evidence_labels": {
+    "chief_review": "NOT_RUN",
+    "consume_fixture_chain": "EXECUTED_HERE",
+    "inherited_real_outcome_tests": "NOT_RUN",
+    "lineage_706": "SOURCE_INSPECTION",
+    "lineage_707": "SOURCE_INSPECTION",
+    "primary_b_worker_handoff": "SOURCE_INSPECTION",
+    "produce_fixture_chain": "EXECUTED_HERE",
+    "ready_for_review": "NOT_RUN",
+    "rehashed_faults": "EXECUTED_HERE",
+    "spy_positive_control": "EXECUTED_HERE",
+    "utility_700": "SOURCE_INSPECTION",
+    "utility_701": "SOURCE_INSPECTION"
+  },
+  "execution": {
+    "consume_invoked_here": true,
+    "import_only": false,
+    "process_id": 7329,
+    "produce_invoked_here": true,
+    "produce_start_utc": "2026-11-03T04:43:25Z",
+    "saved_output_only": false
+  },
+  "exit": 0,
+  "exposure": {
+    "betting_consumable": false,
+    "cacheable": false,
+    "cert": 0,
+    "env_bypass_honored": false,
+    "production_consumable": false,
+    "public_output": false,
+    "subscriber_consumable": false
+  },
+  "failures": [],
+  "forbidden_calls_on_refusal": 0,
+  "handoff": {
+    "accepted": false,
+    "bound": true,
+    "cert": 0,
+    "contract_hash": "4f2c9e2b",
+    "contract_id": "NFL_JOINT_CONTRACT_V1",
+    "field": "worker_handoff",
+    "freeze_receipt_hash": "8af1d54bb3f4c7ec25a99a95e7273f7d9e6f1ff8c4b23e2b04764ea29c32f91c",
+    "mocked_release": false,
+    "not_a_pass": true,
+    "note": "Synthetic literal-law handoff only. Not Primary A evidence-gate integration. Not platform reclaim. PLATFORM_LIMITATION of #712 is a different record.",
+    "package": "NFL_JOINT_CONTRACT_V1_LITERAL_LAW",
+    "ready_for_review": false,
+    "release_kind": "SYNTHETIC_PARTIAL",
+    "schema": "nfl-joint-contract-v1-handoff-v1",
+    "self_accept": false,
+    "state": "QUIESCENT",
+    "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law"
+  },
+  "hash_bindings": {
+    "code": {
+      "alg": "sha256",
+      "sha256": "eb1caed127d3d02ee1036421e99247cac643d77dc26f39d8f9881324fb76c1d0",
+      "source": "gate_and_caller_files"
+    },
+    "config": {
+      "alg": "sha256",
+      "sha256": "d03aa8453dbb9f8b2d752af4a1626f9c17cb3282ee489562f6e82eebcf974693",
+      "source": "pinned_config"
+    },
+    "history": {
+      "alg": "sha256",
+      "sha256": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
+      "source": "none_synthetic"
+    },
+    "input": {
+      "alg": "sha256",
+      "sha256": "3ca6dbc6ee45610428ec8350617daab7f49938e08cf16c62dba51affc9b6598a",
+      "source": "produced_chain_bytes"
+    },
+    "schema": {
+      "alg": "sha256",
+      "sha256": "d6c35c95bb55d1862df1677a1999f726ce01a9b0de7b1e89e23fd95b9e51d07f",
+      "source": "schema_body"
+    }
+  },
+  "head": {
+    "kind": "git_commit",
+    "value": "c50a0f0368c8196978883124d20420e54aa9b690"
+  },
+  "history_hash": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
+  "immutable_input_proof": {
+    "dest": "/tmp/nfl-joint-contract-v1-integrated/joint_adapter.json",
+    "dest_is_temp": true,
+    "pinned_originals_unwritten": true,
+    "research_bytes": "temp-only"
+  },
+  "input_hash": "3ca6dbc6ee45610428ec8350617daab7f49938e08cf16c62dba51affc9b6598a",
+  "input_identities": {
+    "availability": "availability",
+    "away": "TST",
+    "data_label": "SYNTHETIC",
+    "freshness": "OBSERVED",
+    "game_id": "2026_99_SYN_TST_JNT",
+    "home": "SYN",
+    "observation": "OBSERVED",
+    "period": "full_game",
+    "season": 2026,
+    "team": "SYN",
+    "week": 99
+  },
+  "joint_contract": "4f2c9e2b",
+  "limitations": [
+    "CERT=0",
+    "SYNTHETIC_ONLY",
+    "not self-accept",
+    "READY_FOR_REVIEW requires Chief",
+    "Primary B worker_handoff bound from #712 tip 82683cd9 via as_worker_handoff(); PLATFORM_LIMITATION / not_a_pass preserved",
+    "DIRECT gates bind source revision + input/history/config/code to independently supplied runtime/file context; declaration-only hashes are not source proof",
+    "inherited #700/#701 real-outcome tests NOT_RUN",
+    "no real-data fit/calibration/forecast/scoring/outcome join",
+    "SYNTHETIC_JOINT_LITERAL_LAW is not SYNTHETIC_WFIX_AB_CHAIN",
+    "B PLATFORM_LIMITATION / not_a_pass reused; no platform reclaim"
+  ],
+  "log_hash": "9a7415fdd9997fcf148a2b502c1e8c8e54c565939183d7e9eaef851b3716b346",
+  "not_integrated_through_evidence_gate": false,
+  "numerical_output": {
+    "away_win": 0.25,
+    "game_id": "2026_99_SYN_TST_JNT",
+    "home_win": 0.5,
+    "mean_margin": 1.5,
+    "mean_total": 44.5,
+    "n": 4,
+    "tie": 0.25
+  },
+  "ok": true,
+  "output_hashes": {
+    "/tmp/nfl-joint-contract-v1-integrated/joint_adapter.json": "ce72ad72c4f00f6002a0283b5300f82115bfb4fddeb5e030554446eeb5101828"
+  },
+  "output_paths": [
+    "/tmp/nfl-joint-contract-v1-integrated/joint_adapter.json"
+  ],
+  "owner": "Primary A",
+  "owner_clear": "f1fb6735",
+  "package": "NFL_OPS_V1_EVIDENCE_GATE",
+  "positive_control": {
+    "digest_match": true,
+    "ran": true
+  },
+  "producer_consumer_trace": {
+    "consume_invoked_here": true,
+    "consumer": "src.services.nfl_joint_contract_v1.consume.consume_literal_law",
+    "consumer_digest": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc",
+    "consumer_name": "fixture",
+    "produce_invoked_here": true,
+    "producer": "src.services.nfl_joint_contract_v1.adapter.adapt_literal_law",
+    "producer_digest": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc"
+  },
+  "profile": "SYNTHETIC_JOINT_LITERAL_LAW",
+  "protocol": "ed10e80f",
+  "ready_for_review": false,
+  "rehashed_faults": {
+    "evidence_label": "EXECUTED_HERE",
+    "forbidden_calls": 0,
+    "gate_invoked": 1,
+    "instrumentation_control": {
+      "fired": true,
+      "ran": true
+    },
+    "ran": true,
+    "refuse_class": "PARTITION",
+    "refused": true
+  },
+  "review_revision": 0,
+  "schema_hash": "d6c35c95bb55d1862df1677a1999f726ce01a9b0de7b1e89e23fd95b9e51d07f",
+  "schema_version": "nfl-ops-v1-evidence-manifest-v1",
+  "scope_id": "chief-nflgreen-overnight-ops-20261102-0330",
+  "self_accept": false,
+  "spec_hash": "d5b236cdc4d0aeadf71276a10d508f2403471c8bfc66c04b1489985ddd0d85bb",
+  "spy_positive_control": {
+    "evidence_label": "EXECUTED_HERE",
+    "forbidden_call_attempts": 1,
+    "ran": true,
+    "reason": "FIXTURE HARD REFUSE [REFUSE_QUALIFICATION] forbidden call 'socket.getaddrinfo' (zero simulator/network/DB/jobs/outcome)",
+    "refused": true,
+    "spy_fired": true
+  },
+  "start_utc": "2026-11-03T04:43:25Z",
+  "status": "GATED_OK_AWAITING_CHIEF",
+  "task_id": "chief-nflgreen-overnight-ops-20261102-0330-successor-joint-literal-law",
+  "typed_references": [
+    {
+      "kind": "git_commit",
+      "label": "base_deploy_vercel",
+      "value": "f5e3bb58ccbe5a8892fed2a01f347c2308394a2f"
+    },
+    {
+      "kind": "git_commit",
+      "label": "head",
+      "value": "c50a0f0368c8196978883124d20420e54aa9b690"
+    },
+    {
+      "kind": "git_commit",
+      "label": "pr712_primary_b",
+      "value": "82683cd93ec2c231733f34b5c0372cf1d42fa68a"
+    },
+    {
+      "kind": "file_sha256",
+      "path": "data/ops/nfl-ops-v1-worker-release-claim/THIS_WORKER_HANDOFF.json",
+      "value": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981"
+    },
+    {
+      "kind": "file_sha256",
+      "path": "joint_literal_law",
+      "value": "27fd68ed7d99018e98442fa2e1185ad17ae29e53b42933642a6f472c343c85bc"
+    },
+    {
+      "kind": "receipt_id",
+      "path": null,
+      "value": "nfl-joint-contract-v1-integrated-pending"
+    }
+  ],
+  "worker_handoff": {
+    "branch": "cursor/nfl-ops-v1-worker-release-e2c7",
+    "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+    "evidence_label": "SOURCE_INSPECTION",
+    "field": "worker_handoff",
+    "head": "e6cfb87341adc8c4170bc8b53c7f1a030b489a4e",
+    "mocked_release": false,
+    "not_a_pass": true,
+    "platform_capability": "ABSENT",
+    "record": {
+      "active_writer": null,
+      "branch": "cursor/nfl-ops-v1-worker-release-e2c7",
+      "cert": 0,
+      "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981",
+      "dirty": {
+        "changed_paths": [],
+        "clean": true,
+        "preserved": true
+      },
+      "head": "e6cfb87341adc8c4170bc8b53c7f1a030b489a4e",
+      "limits": {
+        "cert": 0,
+        "no_deletion": true,
+        "no_forced_takeover": true,
+        "no_real_data": true,
+        "no_self_kill": true,
+        "self_accept": false,
+        "synthetic_only": true
+      },
+      "log_hashes": [
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SELFCHECK_RECEIPT.json",
+          "sha256": "23257404bdaefa4b96e4e1817ea1269197b99d6fe8197a772b0868305d4348cc"
+        }
+      ],
+      "owner_clear": "f1fb6735",
+      "pending_prompts": [],
+      "protocol": "NFL_OPS_V1",
+      "protocol_hash": "ed10e80f",
+      "release_evidence": {
+        "capability_id": "cursor_cloud_workspace_reclaim",
+        "confirmed_at_utc": null,
+        "detail": "No Cursor Cloud / GitHub / Railway workspace-reclaim API is registered in this worker. Idle / closed / reclaimable stay distinct. Chief verifies actual platform release before reuse.",
+        "evidence_label": "SOURCE_INSPECTION",
+        "kind": "PLATFORM_LIMITATION",
+        "limitation": "PLATFORM_LIMITATION",
+        "mocked": false,
+        "not_a_pass": true,
+        "not_cursor_workspace_reclaim": true,
+        "platform_capability": "ABSENT"
+      },
+      "running_jobs": [],
+      "saved_artifacts": [
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SAMPLE_RECORD.json",
+          "sha256": "43808c2ae3dc32b32d07a923d6890533ff679f0fc922c27d25783e73a3f4ceb7"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SCHEMA.json",
+          "sha256": "2d3d4c175dc5182584cd6f6eaadf9d3e0687eceb757816bd2256156cafb44da2"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/SELFCHECK_RECEIPT.json",
+          "sha256": "23257404bdaefa4b96e4e1817ea1269197b99d6fe8197a772b0868305d4348cc"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/TEST_COMMANDS.json",
+          "sha256": "1ab1e7d57e7ceeb011b1b55d35e03c598fe56bd05e704f3fba5a081f35454e3a"
+        },
+        {
+          "path": "data/ops/nfl-ops-v1-worker-release-claim/WORKER_HANDOFF.json",
+          "sha256": "e540113aba5ebb889f66e92f09a3ae83832d24b6fa4c700505d94297fe92d049"
+        }
+      ],
+      "schema": "nfl-ops-v1-worker-release-claim-v1",
+      "schema_version": 1,
+      "scope_id": "chief-nflgreen-overnight-ops-20261102-0330",
+      "self_accept": false,
+      "state": "QUIESCENT",
+      "state_history": [
+        {
+          "at_utc": "2026-11-03T03:45:33Z",
+          "code": "OPEN",
+          "from": null,
+          "to": "WRITING"
+        },
+        {
+          "at_utc": "2026-11-03T03:45:33Z",
+          "code": "HANDOFF",
+          "from": "WRITING",
+          "to": "HANDOFF_RECORDED"
+        },
+        {
+          "at_utc": "2026-11-03T03:45:33Z",
+          "code": "QUIESCENT",
+          "from": "HANDOFF_RECORDED",
+          "to": "QUIESCENT"
+        }
+      ],
+      "successor": {
+        "id": null,
+        "named": false,
+        "role": null
+      },
+      "synthetic": true,
+      "task": {
+        "id": "chief-nflgreen-overnight-ops-20261102-0330-primary-b",
+        "role": "PRIMARY_B",
+        "title": "worker final-state / release / claim record"
+      },
+      "tests": {
+        "commands": [],
+        "label": "SEE_TEST_COMMANDS_JSON",
+        "passed": null
+      },
+      "untracked": [],
+      "worker": {
+        "alias": "primary-b",
+        "id": "bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7",
+        "kind": "cursor_cloud_heavy",
+        "url": "https://cursor.com/agents/bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7"
+      },
+      "workspace_alias": "cursor-vm-primary-b-bc-3a3acab2"
+    },
+    "release_kind": "PLATFORM_LIMITATION",
+    "schema": "nfl-ops-v1-worker-release-claim-v1",
+    "schema_version": 1,
+    "state": "QUIESCENT",
+    "task_id": "chief-nflgreen-overnight-ops-20261102-0330-primary-b",
+    "worker_id": "bc-3a3acab2-0de1-51eb-80e0-8ac958dfe2c7",
+    "workspace_alias": "cursor-vm-primary-b-bc-3a3acab2"
+  }
+}
