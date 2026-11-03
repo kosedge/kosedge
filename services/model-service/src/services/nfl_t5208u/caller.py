@@ -95,12 +95,52 @@ def produce_q2_margin(
     }
 
 
+def _require_consumed_config(effective_config: Mapping[str, Any]) -> Mapping[str, Any]:
+    meta = effective_config.get("meta")
+    if not isinstance(meta, Mapping) or meta.get("consumed") is not True:
+        raise CallerRefuse("effective_config was not consumed")
+    if meta.get("immutable") is not True:
+        raise CallerRefuse("effective_config is not immutable")
+    if meta.get("ambient_env_reread") is not False:
+        raise CallerRefuse("effective_config allows ambient env reread")
+    helper = effective_config.get("helper")
+    simulator = effective_config.get("simulator")
+    framework = effective_config.get("framework")
+    if not isinstance(helper, Mapping) or not isinstance(simulator, Mapping) or not isinstance(framework, Mapping):
+        raise CallerRefuse("effective_config missing framework/simulator/helper")
+    return effective_config
+
+
+def _framework_overrides(cfg: Mapping[str, Any]) -> dict[str, Any]:
+    fw = cfg["framework"]
+    settings = fw.get("settings") if isinstance(fw.get("settings"), Mapping) else {}
+    return {
+        "priors": {
+            "base_total_points": float(settings.get("prior_total_points", 45.3)),
+            "base_margin_points": float(settings.get("prior_margin_points", 1.5)),
+            "home_field_points": float(settings.get("home_field_points", 1.05)),
+            "base_score_stdev": float(settings.get("base_score_stdev", 9.8)),
+        },
+        "factors": {
+            "rest_travel": {
+                "margin_per_day": float(settings.get("rest_margin_per_day", 0.18)),
+                "total_per_day_abs": float(settings.get("rest_total_per_day_abs", 0.12)),
+            },
+            "base_efficiency": {
+                "margin_weight": float(settings.get("base_eff_margin_weight", 16.0)),
+                "total_weight": float(settings.get("base_eff_total_weight", 10.5)),
+            },
+        },
+    }
+
+
 def call_r6_point_margin(
     packet: Mapping[str, Any],
     history: list[Mapping[str, Any]],
     *,
     mode: str = CHANNEL_SYNTHETIC,
     tree: Path | None = None,
+    effective_config: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     refuse_real_mode(mode, packet)
     binds = validate_before_model(packet, history)
@@ -111,28 +151,46 @@ def call_r6_point_margin(
         if str(if_tree.resolve()) != str(Path(preflight["tree_path"]).resolve()):
             raise CallerRefuse("explicit tree is not the preflighted in-repo IF tree")
 
+    cfg = _require_consumed_config(effective_config) if effective_config is not None else None
+    sims = int(cfg["simulator"]["simulations"]) if cfg is not None else SIMULATIONS
+    blend = int(cfg["simulator"]["market_blend"]) if cfg is not None else MARKET_BLEND
+    weight = float(cfg["helper"]["candidate_weight"]) if cfg is not None else CANDIDATE_WEIGHT
+    c_formula = str(cfg["helper"]["c_formula"]) if cfg is not None else C_FORMULA
+    overrides = _framework_overrides(cfg) if cfg is not None else None
+
     if_packet = contract_packet_for_if(packet)
     _MODEL_SPY["produce_if_mu"] += 1
-    produced = produce_if_mu(if_packet, tree=if_tree)
+    produced = produce_if_mu(if_packet, tree=if_tree, simulations=sims, config_overrides=overrides)
     if_margin = _finite_number(produced.get("if_margin_mu"), name="if_margin")
-    if int(produced.get("market_blend", -1)) != MARKET_BLEND:
-        raise CallerRefuse(f"market_blend {produced.get('market_blend')} != 0")
-    if int(produced.get("simulations", -1)) != SIMULATIONS:
-        raise CallerRefuse(f"simulations {produced.get('simulations')} != {SIMULATIONS}")
+    if int(produced.get("market_blend", -1)) != blend:
+        raise CallerRefuse(f"market_blend {produced.get('market_blend')} != {blend}")
+    if int(produced.get("simulations", -1)) != sims:
+        raise CallerRefuse(f"simulations {produced.get('simulations')} != {sims}")
     seed = int(produced["seed"])
     expected_seed = seed_for(str(produced["game_id"]))
     if seed != expected_seed:
         raise CallerRefuse(f"seed {seed} != seed_for(game_id) {expected_seed}")
 
-    q2_out = produce_q2_margin(packet, history)
+    if cfg is not None and cfg["helper"].get("canonical_state_slots") is True:
+        from src.services.nfl_r7_correctness_v1.q2_canonical import produce_q2_margin_canonical
+
+        _MODEL_SPY["asof_for_targets"] += 1
+        q2_out = produce_q2_margin_canonical(
+            packet,
+            history,
+            lam=float(cfg["helper"]["ridge"]),
+            regress_frac=float(cfg["helper"]["prior_carry"]),
+        )
+    else:
+        q2_out = produce_q2_margin(packet, history)
     q2_margin = q2_out["q2_margin"]
     c_margin = _finite_number(
-        challenger_margin(if_margin, q2_margin, w=CANDIDATE_WEIGHT),
+        challenger_margin(if_margin, q2_margin, w=weight),
         name="c_margin",
     )
-    expected_c = CANDIDATE_WEIGHT * if_margin + CANDIDATE_WEIGHT * q2_margin
+    expected_c = weight * if_margin + weight * q2_margin
     if abs(c_margin - expected_c) > 1e-12:
-        raise CallerRefuse(f"C formula failed: {c_margin} != 0.5*{if_margin}+0.5*{q2_margin}")
+        raise CallerRefuse(f"C formula failed: {c_margin} != {weight}*{if_margin}+{weight}*{q2_margin}")
 
     schema_id_hash = schema_hash(schema_document())
     if binds["seal_utc"] != binds["cutoff_utc"]:
@@ -159,11 +217,12 @@ def call_r6_point_margin(
         "if_margin": if_margin,
         "q2_margin": q2_margin,
         "c_margin": c_margin,
-        "c_formula": C_FORMULA,
-        "candidate_weight": CANDIDATE_WEIGHT,
+        "c_formula": c_formula,
+        "candidate_weight": weight,
         "seed": seed,
-        "simulations": SIMULATIONS,
-        "market_blend": MARKET_BLEND,
+        "simulations": sims,
+        "market_blend": blend,
+        "effective_config_bound": cfg is not None,
         "if_tip": produced.get("if_tip"),
         "if_tree": str(if_tree),
         "if_preflight": preflight,
@@ -194,9 +253,10 @@ def replay_call(
     history: list[Mapping[str, Any]],
     *,
     mode: str = CHANNEL_SYNTHETIC,
+    effective_config: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    first = call_r6_point_margin(packet, history, mode=mode)
-    second = call_r6_point_margin(packet, history, mode=mode)
+    first = call_r6_point_margin(packet, history, mode=mode, effective_config=effective_config)
+    second = call_r6_point_margin(packet, history, mode=mode, effective_config=effective_config)
     for key in ("if_margin", "q2_margin", "c_margin", "seed", "packet_hash", "history_hash"):
         if first[key] != second[key]:
             raise CallerRefuse(f"replay mismatch on {key}: {first[key]} vs {second[key]}")

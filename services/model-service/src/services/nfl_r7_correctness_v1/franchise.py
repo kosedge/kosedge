@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-from typing import Any, Iterator, Iterable, Mapping
+from typing import Any, Iterable, Mapping
 
 from src.services.nfl_r7_correctness_v1.pins import (
     CANONICAL_FRANCHISES,
@@ -94,19 +93,6 @@ def canonical_carry_prior(prev: Mapping[str, float], regress_frac: float = REGRE
     collapsed = collapse_to_canonical_slots(prev)
     rate = float(regress_frac)
     return {key: (1.0 - rate) * value for key, value in collapsed.items()}
-
-
-@contextmanager
-def canonical_q2_carry() -> Iterator[None]:
-    """Wrap frozen q2.carry_prior for one solve. Does not edit q2.py."""
-    import src.services.nfl_t5107u.q2 as q2_mod
-
-    original = q2_mod.carry_prior
-    q2_mod.carry_prior = canonical_carry_prior
-    try:
-        yield
-    finally:
-        q2_mod.carry_prior = original
 
 
 def key_packet_and_history_for_q2(

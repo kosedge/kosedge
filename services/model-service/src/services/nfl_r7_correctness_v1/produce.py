@@ -12,7 +12,6 @@ from typing import Any, Mapping, Optional
 
 from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
 from src.services.nfl_r7_correctness_v1.franchise import (
-    canonical_q2_carry,
     key_packet_and_history_for_q2,
     q2_consumed_franchise_aliases,
 )
@@ -25,6 +24,8 @@ from src.services.nfl_r7_correctness_v1.pins import (
     CODE_FILES,
     EXPECTED_COMMAND,
     FRANCHISE_ALIASES,
+    FROZEN_FRAMEWORK_SETTINGS,
+    FROZEN_SIMULATOR_SETTINGS,
     FW_SHA256,
     GATE_713_TIP,
     IF_TIP,
@@ -77,6 +78,19 @@ NUMERICAL_ENV_KEYS = (
     "SEED_BASE",
     "SEED_MOD",
 )
+NUMERICAL_ENV_PREFIXES = (
+    "NFL_FRAMEWORK_",
+    "NFL_TOTALS_",
+)
+
+
+def ambient_numerical_env_hits(environ_keys: list[str] | tuple[str, ...]) -> tuple[str, ...]:
+    """Name-only denylist. Never reads or returns environment values."""
+    hits: list[str] = []
+    for key in environ_keys:
+        if key in NUMERICAL_ENV_KEYS or key.startswith(NUMERICAL_ENV_PREFIXES):
+            hits.append(key)
+    return tuple(hits)
 
 
 def repo_root() -> Path:
@@ -99,10 +113,11 @@ def _unfreeze(obj: Any) -> Any:
     return obj
 
 
-def refuse_ambient_numerical_env() -> None:
-    present = [key for key in NUMERICAL_ENV_KEYS if os.environ.get(key)]
+def refuse_ambient_numerical_env(environ_keys: list[str] | tuple[str, ...] | None = None) -> None:
+    keys = tuple(os.environ.keys()) if environ_keys is None else tuple(environ_keys)
+    present = ambient_numerical_env_hits(keys)
     if present:
-        raise R7ProduceRefuse(f"ambient numerical env reread refused: {present}")
+        raise R7ProduceRefuse(f"ambient numerical env reread refused: {list(present)}")
 
 
 def consume_effective_config() -> MappingProxyType:
@@ -118,6 +133,7 @@ def consume_effective_config() -> MappingProxyType:
             "fw_sha256": FW_SHA256,
             "if_tip": IF_TIP,
             "observed_fw_sha256": preflight["fw_sha256"],
+            "settings": dict(FROZEN_FRAMEWORK_SETTINGS),
         },
         "simulator": {
             "sim_sha256": SIM_SHA256,
@@ -126,6 +142,7 @@ def consume_effective_config() -> MappingProxyType:
             "seed_base": SEED_BASE,
             "seed_mod": SEED_MOD,
             "observed_sim_sha256": preflight["sim_sha256"],
+            "settings": dict(FROZEN_SIMULATOR_SETTINGS),
         },
         "helper": {
             "c_formula": C_FORMULA,
@@ -227,9 +244,12 @@ def produce_r7_point_margin(
     keyed_packet, keyed_history = key_packet_and_history_for_q2(packet, demo["history"])
     if surface is not None:
         surface.note("call_r6_point_margin")
-    with canonical_q2_carry():
-        result = call_r6_point_margin(keyed_packet, keyed_history, mode=mode)
-        replay = replay_call(keyed_packet, keyed_history, mode=mode)
+    result = call_r6_point_margin(
+        keyed_packet, keyed_history, mode=mode, effective_config=cfg
+    )
+    replay = replay_call(
+        keyed_packet, keyed_history, mode=mode, effective_config=cfg
+    )
     assert_consumed_config_bound(result, cfg)
     digest = r7_config_hash(cfg)
     code = r7_code_hash()

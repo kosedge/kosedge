@@ -25,6 +25,10 @@ class CalendarRefuse(ValueError):
     """Fail-closed ET calendar rest."""
 
 
+class CalendarHold(CalendarRefuse):
+    """Unknown source-availability timestamps — HOLD, not a source-string check."""
+
+
 _ET = ZoneInfo(CALENDAR_TZ)
 _PHYS_REQUIRED = (
     "game_id",
@@ -110,7 +114,37 @@ def _require_phys_row(row: Mapping[str, Any], *, index: int) -> dict[str, Any]:
         "status": str(row["status"]).strip().upper(),
         "kickoff_kind": str(row["kickoff_kind"]).strip().upper(),
         "source": str(row["source"]).strip(),
+        "available_at": row.get("available_at"),
+        "observed_at": row.get("observed_at"),
         "used_actual_not_scheduled": scheduled != actual,
+    }
+
+
+def _availability_stamp(raw: Any, *, name: str) -> datetime | None:
+    text = str(raw or "").strip()
+    if not text or text.upper() in {"UNKNOWN", "NONE", "NULL", "N/A"}:
+        return None
+    return parse_aware_utc(text, name=name)
+
+
+def assert_source_available_before_seal(row: Mapping[str, Any], *, seal: datetime) -> dict[str, str]:
+    """Strict before-seal observed/available timestamps. Unknown → HOLD."""
+    available = _availability_stamp(row.get("available_at"), name="available_at")
+    observed = _availability_stamp(row.get("observed_at"), name="observed_at")
+    if available is None or observed is None:
+        raise CalendarHold(
+            f"source-availability HOLD: unknown timestamps for {row.get('game_id')}"
+        )
+    if available >= seal or observed >= seal:
+        raise CalendarHold(
+            f"source-availability HOLD: timestamps not strictly before seal for {row.get('game_id')}"
+        )
+    if observed < available:
+        raise CalendarRefuse(f"observed_at before available_at for {row.get('game_id')}")
+    return {
+        "available_at": _fmt(available),
+        "observed_at": _fmt(observed),
+        "availability": "BEFORE_SEAL",
     }
 
 
@@ -147,8 +181,8 @@ def last_kickoff_for_franchise(
             raise CalendarRefuse("predecessor not PLAYED")
         if row["kickoff_kind"] != "ACTUAL_KICKOFF":
             raise CalendarRefuse("predecessor kickoff_kind must be ACTUAL_KICKOFF")
-        if not row["source"]:
-            raise CalendarRefuse("predecessor source unavailable")
+        availability = assert_source_available_before_seal(row, seal=before)
+        row = {**row, **availability}
         if latest is not None and row["kickoff_utc"] == latest["kickoff_utc"]:
             if row["game_id"] != latest["game_id"]:
                 raise CalendarRefuse("ambiguous predecessor identity")
@@ -234,6 +268,12 @@ def bind_rest_from_et_calendar(
         "away_prev_kickoff_kind": away_prev["kickoff_kind"],
         "home_prev_source": home_prev["source"],
         "away_prev_source": away_prev["source"],
+        "home_prev_available_at": home_prev["available_at"],
+        "away_prev_available_at": away_prev["available_at"],
+        "home_prev_observed_at": home_prev["observed_at"],
+        "away_prev_observed_at": away_prev["observed_at"],
+        "home_prev_availability": home_prev["availability"],
+        "away_prev_availability": away_prev["availability"],
         "home_prev_used_actual_not_scheduled": home_prev["used_actual_not_scheduled"],
         "away_prev_used_actual_not_scheduled": away_prev["used_actual_not_scheduled"],
         "rest_days_home": float(home_et),

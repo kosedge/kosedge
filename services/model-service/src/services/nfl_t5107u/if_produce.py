@@ -179,7 +179,13 @@ def _cell(packet: Mapping[str, Any], name: str) -> Any:
     return cell
 
 
-def produce_if_mu(packet: Mapping[str, Any], *, tree: Path | None = None) -> dict[str, Any]:
+def produce_if_mu(
+    packet: Mapping[str, Any],
+    *,
+    tree: Path | None = None,
+    simulations: int | None = None,
+    config_overrides: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Run frozen IF @ 6ca03716 on a complete DERIVED_PREGAME packet. Produces μ."""
     from .if_control import REQUIRED_FIELDS, missing_required_fields
 
@@ -205,12 +211,14 @@ def produce_if_mu(packet: Mapping[str, Any], *, tree: Path | None = None) -> dic
     if float(inputs.rest_days_away) != float(kwargs["rest_days_away"]):
         raise IFProduceRefuse(f"{game_id} rest_days_away not bound from packet")
     seed = seed_for(game_id)
+    sims = SIMULATIONS if simulations is None else int(simulations)
     projection = sim.simulate_nfl_game_independent_fair(
         inputs,
-        simulations=SIMULATIONS,
+        simulations=sims,
         seed=seed,
         market_spread_home=None,
         market_total=None,
+        config_overrides=dict(config_overrides) if config_overrides is not None else None,
     )
     block = projection.get("independent_fair") or {}
     if block.get("market_blend") != MARKET_BLEND:
@@ -224,7 +232,7 @@ def produce_if_mu(packet: Mapping[str, Any], *, tree: Path | None = None) -> dic
         "if_total_mu": float(total_mu),
         "if_sigma": float(block.get("sigma") or 0.0),
         "seed": seed,
-        "simulations": SIMULATIONS,
+        "simulations": sims,
         "market_blend": 0,
         "if_tip": IF_TIP,
         "if_forecast_label": projection.get("forecast_label"),

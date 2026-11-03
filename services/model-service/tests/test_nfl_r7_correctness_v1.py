@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -22,16 +23,16 @@ from src.services.nfl_ops_v1_evidence.refuse import EvidenceGateRefuse, RefuseCl
 from src.services.nfl_ops_v1_evidence.gate import gate_before_consume
 from src.services.nfl_ops_v1_evidence.spy import ForbiddenSurfaceSpy, OutcomeReadSpy
 from src.services.nfl_ops_v1_evidence.validate_r7 import dest_is_actually_temp, readback_and_rehash
-from src.services.nfl_r7_correctness_v1.calendar import CalendarRefuse, bind_rest_from_et_calendar
+from src.services.nfl_r7_correctness_v1.calendar import CalendarHold, CalendarRefuse, bind_rest_from_et_calendar
 from src.services.nfl_r7_correctness_v1.consume_b import HANDOFF_SHA256, consume_b_handoff
 from src.services.nfl_r7_correctness_v1.franchise import (
     FranchiseRefuse,
     canonical_carry_prior,
-    canonical_q2_carry,
     franchise_bind,
     franchise_key,
     key_packet_and_history_for_q2,
 )
+from src.services.nfl_r7_correctness_v1.q2_canonical import produce_q2_margin_canonical
 from src.services.nfl_r7_correctness_v1.packets import (
     R7PacketRefuse,
     build_synthetic_r7_demo,
@@ -40,15 +41,24 @@ from src.services.nfl_r7_correctness_v1.packets import (
 )
 from src.services.nfl_r7_correctness_v1.pins import CALENDAR_ID, FW_SHA256, IF_TIP, OPS_REL, SIM_SHA256
 from src.services.nfl_r7_correctness_v1.produce import (
+    NUMERICAL_ENV_PREFIXES,
     R7ProduceRefuse,
+    ambient_numerical_env_hits,
     consume_effective_config,
     produce_r7_point_margin,
+    refuse_ambient_numerical_env,
 )
 from src.services.nfl_t5208u.caller import model_spy_counts, produce_q2_margin, reset_model_spy
 from src.services.nfl_t5208u.if_tree import preflight_if_tree
 from src.services.nfl_t5208u.packets import PacketRefuse, RealModeRefuse, history_games_for_q2
 
 REPO = Path(__file__).resolve().parents[3]
+
+
+def _stamp(kickoff_utc: str, *, hours: int) -> str:
+    text = kickoff_utc[:-1] + "+00:00" if kickoff_utc.endswith("Z") else kickoff_utc
+    dt = datetime.fromisoformat(text).astimezone(timezone.utc)
+    return (dt + timedelta(hours=hours)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _phys(
@@ -74,6 +84,8 @@ def _phys(
         "status": "PLAYED",
         "kickoff_kind": "ACTUAL_KICKOFF",
         "source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
+        "available_at": _stamp(kickoff_utc, hours=4),
+        "observed_at": _stamp(kickoff_utc, hours=5),
     }
     row.update(extra)
     return row
@@ -111,6 +123,8 @@ def test_et_calendar_tnf_differs_from_utc_date_delta() -> None:
     assert rest["predecessor_bound_to"] == "KO_MINUS_60_CUTOFF"
     assert rest["cutoff_utc"] == "2018-10-11T23:20:00Z"
     assert rest["q2_history_used_for_rest"] is False
+    assert rest["home_prev_availability"] == "BEFORE_SEAL"
+    assert rest["home_prev_available_at"] < rest["cutoff_utc"]
 
 
 def test_franchise_relocation_aliases() -> None:
@@ -226,8 +240,7 @@ def test_keyed_q2_differs_from_raw_on_synthetic_slate() -> None:
     demo = build_synthetic_r7_demo()
     raw = produce_q2_margin(demo["packet"], demo["history"])
     keyed_packet, keyed_history = key_packet_and_history_for_q2(demo["packet"], demo["history"])
-    with canonical_q2_carry():
-        keyed = produce_q2_margin(keyed_packet, keyed_history)
+    keyed = produce_q2_margin_canonical(keyed_packet, keyed_history)
     assert raw["q2_margin"] == pytest.approx(2.4320498873107033)
     assert keyed["q2_margin"] == pytest.approx(1.93920745003233)
     assert raw["q2_margin"] != keyed["q2_margin"]
@@ -610,7 +623,36 @@ def test_calendar_refuses_unsupported_and_ambiguous_predecessors() -> None:
         )
 
 
-def test_consumed_effective_config_bound_and_ambient_env_refused(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_calendar_source_availability_unknown_is_hold() -> None:
+    priors = [
+        _phys("SD", "KC", "2018-10-07T17:00:00Z", week=5, game_id="SYNTHETIC_2018_W05_SD_KC"),
+        _phys("STL", "NE", "2018-10-07T20:25:00Z", week=5, game_id="SYNTHETIC_2018_W05_STL_NE"),
+    ]
+    with pytest.raises(CalendarHold, match="source-availability HOLD"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=[
+                {**priors[0], "available_at": "unknown", "observed_at": "unknown"},
+                priors[1],
+            ],
+        )
+    with pytest.raises(CalendarHold, match="not strictly before seal"):
+        bind_rest_from_et_calendar(
+            home_team="LAC",
+            away_team="LAR",
+            kickoff_utc="2018-10-12T00:20:00Z",
+            target_season=2018,
+            physical_schedule=[
+                {**priors[0], "available_at": "2018-10-11T23:20:00Z", "observed_at": "2018-10-11T23:20:00Z"},
+                priors[1],
+            ],
+        )
+
+
+def test_consumed_effective_config_bound_and_ambient_env_refused() -> None:
     cfg = consume_effective_config()
     assert cfg["meta"]["consumed"] is True
     assert cfg["meta"]["ambient_env_reread"] is False
@@ -618,13 +660,38 @@ def test_consumed_effective_config_bound_and_ambient_env_refused(monkeypatch: py
     assert cfg["simulator"]["market_blend"] == 0
     assert cfg["helper"]["c_formula"] == "C=0.5*IF+0.5*Q2"
     assert cfg["helper"]["candidate_weight"] == 0.5
-    monkeypatch.setenv("SIMULATIONS", "1")
+    assert cfg["framework"]["settings"]["prior_total_points"] == 45.3
+    assert cfg["simulator"]["settings"]["pass_rate_weight"] == 3.2
+    assert NUMERICAL_ENV_PREFIXES == ("NFL_FRAMEWORK_", "NFL_TOTALS_")
+    hits = ambient_numerical_env_hits(
+        (
+            "PATH",
+            "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS",
+            "NFL_TOTALS_PASS_RATE_WEIGHT",
+            "HOME",
+            "SIMULATIONS",
+        )
+    )
+    assert hits == (
+        "NFL_FRAMEWORK_PRIOR_TOTAL_POINTS",
+        "NFL_TOTALS_PASS_RATE_WEIGHT",
+        "SIMULATIONS",
+    )
     with pytest.raises(R7ProduceRefuse, match="ambient numerical env"):
-        consume_effective_config()
-    monkeypatch.delenv("SIMULATIONS")
-    monkeypatch.setenv("T5108U_IF_TREE", "/tmp/bypass")
+        refuse_ambient_numerical_env(("NFL_FRAMEWORK_HOME_FIELD_POINTS",))
     with pytest.raises(R7ProduceRefuse, match="ambient numerical env"):
-        consume_effective_config()
+        refuse_ambient_numerical_env(("NFL_TOTALS_MAX_ADJUSTMENT_POINTS",))
+    caller_src = (
+        REPO / "services/model-service/src/services/nfl_t5208u/caller.py"
+    ).read_text(encoding="utf-8")
+    assert "effective_config" in caller_src
+    assert "os.getenv" not in caller_src
+    assert "os.environ" not in caller_src
+    franchise_src = (
+        REPO / "services/model-service/src/services/nfl_r7_correctness_v1/franchise.py"
+    ).read_text(encoding="utf-8")
+    assert "canonical_q2_carry" not in franchise_src
+    assert "q2_mod.carry_prior" not in franchise_src
 
 
 def test_generic_typed_synthetic_input_caller_allows_et_eq_utc() -> None:
@@ -652,5 +719,8 @@ def test_generic_typed_synthetic_input_caller_allows_et_eq_utc() -> None:
     assert produced["effective_config"]["meta"]["consumed"] is True
     assert produced["q2_canonical_state_slots"] is True
     assert produced["c_formula"] == "C=0.5*IF+0.5*Q2"
+    assert produced["r6_point_margin"]["effective_config_bound"] is True
+    assert produced["r6_point_margin"]["simulations"] == 4000
+    assert produced["r6_point_margin"]["q2"].get("parameter_label")
     with pytest.raises(R7PacketRefuse, match="missing"):
         require_typed_synthetic_input({"packet": sunday["packet"]})

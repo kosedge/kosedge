@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 from typing import Any, Mapping
 
 from src.services.nfl_r7_correctness_v1.calendar import bind_rest_from_et_calendar
@@ -109,6 +110,14 @@ def _hist(
     return row
 
 
+def _phys_stamps(kickoff_utc: str) -> tuple[str, str]:
+    text = kickoff_utc[:-1] + "+00:00" if kickoff_utc.endswith("Z") else kickoff_utc
+    ko = datetime.fromisoformat(text).astimezone(timezone.utc)
+    available = (ko + timedelta(hours=4)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    observed = (ko + timedelta(hours=5)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return available, observed
+
+
 def _phys(
     game_id: str,
     season: int,
@@ -118,6 +127,7 @@ def _phys(
     kickoff_utc: str,
 ) -> dict[str, Any]:
     """Physical-schedule row. Kickoff only. No scores / outcomes."""
+    available_at, observed_at = _phys_stamps(kickoff_utc)
     return {
         "channel": CHANNEL_SYNTHETIC,
         "game_id": game_id,
@@ -132,6 +142,8 @@ def _phys(
         "status": "PLAYED",
         "kickoff_kind": "ACTUAL_KICKOFF",
         "source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
+        "available_at": available_at,
+        "observed_at": observed_at,
         "note": "SYNTHETIC_PHYSICAL_SCHEDULE_NON_OUTCOME",
     }
 

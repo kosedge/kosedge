@@ -83,6 +83,7 @@ CODE_FILES = (
     "services/model-service/src/services/nfl_r7_correctness_v1/pins.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/calendar.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/franchise.py",
+    "services/model-service/src/services/nfl_r7_correctness_v1/q2_canonical.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/packets.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/produce.py",
     "services/model-service/src/services/nfl_r7_correctness_v1/consume_b.py",
@@ -91,6 +92,27 @@ CODE_FILES = (
     "services/model-service/src/services/nfl_ops_v1_evidence/profiles.py",
     "services/model-service/src/services/nfl_ops_v1_evidence/validate_r7.py",
 )
+
+# Literal FW/SIM defaults (pin values). Not getenv. Consumed into R6.
+FROZEN_FRAMEWORK_SETTINGS = {
+    "prior_total_points": 45.3,
+    "prior_margin_points": 1.5,
+    "home_field_points": 1.05,
+    "base_score_stdev": 9.8,
+    "rest_margin_per_day": 0.18,
+    "rest_total_per_day_abs": 0.12,
+    "base_eff_margin_weight": 16.0,
+    "base_eff_total_weight": 10.5,
+}
+FROZEN_SIMULATOR_SETTINGS = {
+    "pass_rate_weight": 3.2,
+    "epa_interaction_weight": 3.4,
+    "success_delta_weight": 7.4,
+    "injury_weight": 6.0,
+    "max_adjustment_points": 4.2,
+    "injury_stdev_weight": 1.35,
+    "max_stdev_adjustment": 2.0,
+}
 
 OPS_REL = "data/ops/t5289u-r7-correctness-v1"
 
@@ -107,6 +129,8 @@ __all__ = [
     "C_FORMULA",
     "EXPECTED_COMMAND",
     "FRANCHISE_ALIASES",
+    "FROZEN_FRAMEWORK_SETTINGS",
+    "FROZEN_SIMULATOR_SETTINGS",
     "FW_SHA256",
     "LA_SOURCE_MAP",
     "GATE_713_TIP",
