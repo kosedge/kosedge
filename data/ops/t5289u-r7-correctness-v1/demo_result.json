@@ -24,6 +24,79 @@
   "channel": "SYNTHETIC",
   "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_correctness_v1.py",
   "cutoff_utc": "2018-10-11T23:20:00Z",
+  "effective_config": {
+    "framework": {
+      "fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+      "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+      "observed_fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3"
+    },
+    "helper": {
+      "a_q2": 2.5637441292077354,
+      "b_q2": 1.660624056183471,
+      "c_formula": "C=0.5*IF+0.5*Q2",
+      "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
+      "calendar_tz": "America/New_York",
+      "candidate_weight": 0.5,
+      "canonical_state_slots": true,
+      "franchise_aliases": {
+        "JAC": "JAX",
+        "JAX": "JAX",
+        "LAC": "LAC",
+        "LAR": "LAR",
+        "LV": "LV",
+        "OAK": "LV",
+        "SD": "LAC",
+        "STL": "LAR",
+        "WAS": "WAS",
+        "WSH": "WAS"
+      },
+      "ko_minus_minutes": 60,
+      "la_source_map": {
+        "CHARGERS": "LAC",
+        "LAC": "LAC",
+        "LAR": "LAR",
+        "RAMS": "LAR"
+      },
+      "prior_carry": 0.5,
+      "q2_consumed_franchise_aliases": {
+        "JAC": "JAX",
+        "JAX": "JAX",
+        "LAC": "LAC",
+        "LAR": "LAR",
+        "LV": "LV",
+        "OAK": "LV",
+        "SD": "LAC",
+        "STL": "LAR",
+        "WAS": "WAS",
+        "WSH": "WAS"
+      },
+      "q2_consumes_franchise_keys": true,
+      "ridge": 20.0,
+      "used_production_rest_days_from_schedule": false
+    },
+    "meta": {
+      "ambient_env_reread": false,
+      "consumed": true,
+      "immutable": true,
+      "owner_clear": "86257",
+      "package": "R7_CORRECTNESS_V1",
+      "plan_fingerprint": "b15d6cec143212067b896057a048cd51071981d6ea1b3561c08db89cb6355358",
+      "scope_id": "chief-nflgreen-model-day-20261103-1700"
+    },
+    "r6": {
+      "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
+      "r6_a_tip": "54b08a301cf824c79ee3203180a51e2d832bb6f9",
+      "r6_b_tip": "afb13301b5c7e3b8780a8dd1f85145e91bebef55"
+    },
+    "simulator": {
+      "market_blend": 0,
+      "observed_sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+      "seed_base": 201710,
+      "seed_mod": 1000003,
+      "sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+      "simulations": 4000
+    }
+  },
   "franchise_bind": {
     "away_team_raw": "LAR",
     "franchise_key_away": "LAR",
@@ -35,33 +108,10 @@
   "history_hash": "0d453ec50ce316024f6206d11975d964cd7a38a44a22924dd7ee8d7628796db4",
   "if_margin": 1.389941504602551,
   "if_preflight": {
-    "default_if_trees": [
-      {
-        "exists": false,
-        "path": "/tmp/t5108u-if-6ca03716",
-        "sim_present": false
-      },
-      {
-        "exists": false,
-        "path": "/tmp/t5044u-if-6ca03716",
-        "sim_present": false
-      },
-      {
-        "exists": false,
-        "path": "/tmp/t4910u-if-6ca03716",
-        "sim_present": false
-      }
-    ],
-    "default_if_trees_used": false,
-    "ensure_if_tree_called": false,
-    "framework_path": "/agent/repos/kosedge/services/model-service/src/services/nfl_handicapping_framework.py",
     "fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
     "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
     "sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
-    "simulator_path": "/agent/repos/kosedge/services/model-service/src/services/nfl_simulator.py",
-    "status": "PRESENT_PIN_MATCH",
-    "t5108u_if_tree_env": null,
-    "tree_path": "/agent/repos/kosedge/services/model-service"
+    "status": "PRESENT_PIN_MATCH"
   },
   "implemented_ne_verified": true,
   "kickoff_utc": "2018-10-12T00:20:00Z",
@@ -69,11 +119,11 @@
   "output_kind": "POINT_MARGIN",
   "owner_clear": "86257",
   "package": "R7_CORRECTNESS_V1",
-  "packet_hash": "392c1c99f8f34d15cb148c60f5ff8c3240072373a71a8de4ba5d5843487f623a",
+  "packet_hash": "6a2ff0f42f5d726766093fbaad9694388282adc12e3d02caabeb7da48cb39fcb",
+  "q2_canonical_state_slots": true,
   "q2_consumed_franchise_aliases": {
     "JAC": "JAX",
     "JAX": "JAX",
-    "LA": "LAR",
     "LAC": "LAC",
     "LAR": "LAR",
     "LV": "LV",
@@ -94,7 +144,7 @@
       "code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
       "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
       "history_hash": "0d453ec50ce316024f6206d11975d964cd7a38a44a22924dd7ee8d7628796db4",
-      "packet_hash": "392c1c99f8f34d15cb148c60f5ff8c3240072373a71a8de4ba5d5843487f623a",
+      "packet_hash": "6a2ff0f42f5d726766093fbaad9694388282adc12e3d02caabeb7da48cb39fcb",
       "schema_hash_is_not_an_input_bind": true
     },
     "c_formula": "C=0.5*IF+0.5*Q2",
@@ -153,7 +203,7 @@
     "kickoff_utc": "2018-10-12T00:20:00Z",
     "market_blend": 0,
     "output_kind": "POINT_MARGIN",
-    "packet_hash": "392c1c99f8f34d15cb148c60f5ff8c3240072373a71a8de4ba5d5843487f623a",
+    "packet_hash": "6a2ff0f42f5d726766093fbaad9694388282adc12e3d02caabeb7da48cb39fcb",
     "q2": {
       "a_q2": 2.5637441292077354,
       "b_q2": 1.660624056183471,
@@ -170,19 +220,30 @@
     "seed": 276287,
     "simulations": 4000
   },
-  "r7_code_hash": "a774175a289661cd4b7e7d26de7d5b050baba0c6ee618f03d44bb4dbbdb020dd",
-  "r7_config_hash": "0493b026cd89e03770701578ceb58d7c67c2d6f85a8d04f4bb001f2cdfc92144",
+  "r7_code_hash": "270853ff56e3b02fd11885c75ef53cac12a77358b3ff992573f9bae4d2a5a6d0",
+  "r7_config_hash": "08863125382d782a362af4983942d6a68290a9ee6dc5cc89df92b10a982a4fb4",
   "replay_ok": true,
   "rest_calendar": {
+    "actual_versus_scheduled_proof": true,
     "away_franchise": "LAR",
     "away_prev_et_date": "2018-10-07",
+    "away_prev_game_id": "SYNTHETIC_2018_W05_STL_NE",
+    "away_prev_kickoff_kind": "ACTUAL_KICKOFF",
     "away_prev_kickoff_utc": "2018-10-07T20:25:00Z",
+    "away_prev_source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
+    "away_prev_status": "PLAYED",
+    "away_prev_used_actual_not_scheduled": false,
     "bound_from": "actual_prior_kickoff_et_calendar_date",
     "calendar_id": "REST_ACTUAL_ET_CALENDAR_V1",
     "cutoff_utc": "2018-10-11T23:20:00Z",
     "home_franchise": "LAC",
     "home_prev_et_date": "2018-10-07",
+    "home_prev_game_id": "SYNTHETIC_2018_W05_SD_KC",
+    "home_prev_kickoff_kind": "ACTUAL_KICKOFF",
     "home_prev_kickoff_utc": "2018-10-07T17:00:00Z",
+    "home_prev_source": "SYNTHETIC_PHYSICAL_SCHEDULE_t5289u",
+    "home_prev_status": "PLAYED",
+    "home_prev_used_actual_not_scheduled": false,
     "kickoff_et_date": "2018-10-11",
     "kickoff_utc": "2018-10-12T00:20:00Z",
     "physical_schedule": true,
@@ -190,6 +251,7 @@
     "q2_history_used_for_rest": false,
     "rest_days_away": 4.0,
     "rest_days_home": 4.0,
+    "target_season": 2018,
     "tz": "America/New_York",
     "used_production_rest_days_from_schedule": false,
     "utc_date_delta_away": 5,
