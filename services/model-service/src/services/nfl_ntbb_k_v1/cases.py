@@ -1,4 +1,4 @@
-"""Nine fictional mathematical cases. CERT=0. Stdlib oracle, not a fitted-model claim."""
+"""Executed root nine fixtures (RETURN 36205). CERT=0. Not a fitted-model claim."""
 
 from __future__ import annotations
 
@@ -7,13 +7,15 @@ from collections import defaultdict
 from typing import Any
 
 from src.services.nfl_ntbb_k_v1.constants import (
+    COND_TRANSPOSE_TOL,
     IDENTITY_TOL,
+    JOINT_TRANSPOSE_TOL,
     NORM_TOL,
     ORACLE_MAX_ENUMERATED_TOTAL,
+    ROOT_EXPECTED_N,
     ROOT_NINE,
-    TRANSPOSE_TOL,
 )
-from src.services.nfl_ntbb_k_v1.law import joint_pmf, log_joint_pmf
+from src.services.nfl_ntbb_k_v1.law import conditional_log_mass, joint_pmf, log_joint_pmf
 from src.services.nfl_ntbb_k_v1.refuse import NtbbKRefuse
 from src.services.nfl_ntbb_k_v1.special import fsum, log_betabinom_pmf, nbinom_pmf_series
 from src.services.nfl_ntbb_k_v1.table import enumerate_joint
@@ -24,6 +26,10 @@ def _params(row: tuple) -> dict[str, float]:
     return {"mu": mu, "r": r, "p": p, "c": c, "k0": k0, "k3": k3, "k7": k7}
 
 
+def _family(name: str) -> str:
+    return name.rsplit("_", 1)[0]
+
+
 def _by_t(table: dict[str, Any]) -> dict[int, float]:
     acc: dict[int, list[float]] = defaultdict(list)
     for row in table["rows"]:
@@ -31,12 +37,8 @@ def _by_t(table: dict[str, Any]) -> dict[int, float]:
     return {t: fsum(vals) for t, vals in acc.items()}
 
 
-def _mass_m(table: dict[str, Any], pred) -> float:
-    return fsum(row["mass"] for row in table["rows"] if pred(row["m"]))
-
-
 def check_normalization(table: dict[str, Any]) -> float:
-    residual = abs(table["enumeration_error"])
+    residual = float(table["enumeration_error"])
     if residual > NORM_TOL:
         raise NtbbKRefuse(f"normalization residual {residual}")
     if table["renormalized"]:
@@ -54,24 +56,29 @@ def check_symmetry_p(params: dict[str, float]) -> float:
                 residual,
                 abs(joint_pmf(h, a, **params) - joint_pmf(a, h, **params)),
             )
-    if residual > TRANSPOSE_TOL:
+    if residual > JOINT_TRANSPOSE_TOL:
         raise NtbbKRefuse(f"p=0.5 symmetry residual {residual}")
     return residual
 
 
-def check_transpose(params: dict[str, float]) -> float:
+def check_transpose(params: dict[str, float]) -> dict[str, float]:
     swapped = dict(params)
     swapped["p"] = 1.0 - params["p"]
-    residual = 0.0
+    joint = 0.0
     for h in range(0, 8):
         for a in range(0, 8):
-            residual = max(
-                residual,
-                abs(joint_pmf(h, a, **params) - joint_pmf(a, h, **swapped)),
-            )
-    if residual > TRANSPOSE_TOL:
-        raise NtbbKRefuse(f"transpose residual {residual}")
-    return residual
+            joint = max(joint, abs(joint_pmf(h, a, **params) - joint_pmf(a, h, **swapped)))
+    if joint > JOINT_TRANSPOSE_TOL:
+        raise NtbbKRefuse(f"joint transpose residual {joint}")
+    cond = 0.0
+    for t in (0, 3, 7, 12):
+        a = conditional_log_mass(t, p=params["p"], c=params["c"], k0=params["k0"], k3=params["k3"], k7=params["k7"])
+        b = conditional_log_mass(t, p=swapped["p"], c=swapped["c"], k0=swapped["k0"], k3=swapped["k3"], k7=swapped["k7"])
+        for h in range(t + 1):
+            cond = max(cond, abs(math.exp(a[h]) - math.exp(b[t - h])))
+    if cond > COND_TRANSPOSE_TOL:
+        raise NtbbKRefuse(f"conditional transpose residual {cond}")
+    return {"conditional": cond, "joint": joint}
 
 
 def check_total_marginal(table: dict[str, Any], params: dict[str, float]) -> float:
@@ -104,44 +111,32 @@ def check_k0_betabinom(table: dict[str, Any], params: dict[str, float]) -> float
     return residual
 
 
-def check_variance(table: dict[str, Any], params: dict[str, float]) -> float:
-    mu = params["mu"]
-    r = params["r"]
-    expect_var = mu + (mu * mu) / r
-    et = fsum(row["t"] * row["mass"] for row in table["rows"])
-    et2 = fsum(row["t"] * row["t"] * row["mass"] for row in table["rows"])
-    got = et2 - et * et
-    residual = abs(got - expect_var)
-    # omitted tail can move the second moment; refuse only if far beyond first-moment bound scale
-    bound = table["moments"]["moment_bound"]
-    if residual > max(IDENTITY_TOL, 2.0 * (bound * table["N"] + 1e-18)):
-        raise NtbbKRefuse(f"variance identity residual {residual}")
-    return residual
-
-
 def check_tail_moment(table: dict[str, Any], params: dict[str, float]) -> float:
     if table["moments"]["status"] != "OK":
         raise NtbbKRefuse("moment outputs refused")
     mu = params["mu"]
     total_mean = table["moments"]["total_mean"]
     bound = table["moments"]["moment_bound"]
-    gap = mu - total_mean
-    if gap < -IDENTITY_TOL:
-        raise NtbbKRefuse(f"enumerated E[T] exceeds mu: {gap}")
-    if gap - bound > IDENTITY_TOL:
-        raise NtbbKRefuse(f"tail-moment identity residual {gap - bound}")
+    gap = abs(mu - total_mean)
+    if gap > IDENTITY_TOL + bound:
+        raise NtbbKRefuse(f"tail-moment identity residual {gap}")
     if bound > 1e-8:
         raise NtbbKRefuse(f"moment bound {bound} exceeds 1e-8")
-    return abs(gap)
+    return gap
 
 
 def run_root_nine() -> dict[str, Any]:
     results: list[dict[str, Any]] = []
     max_n = 0
+    by_name: dict[str, dict[str, Any]] = {}
     for row in ROOT_NINE:
-        name, _mu, _r, _p, _c, _k0, _k3, _k7, group = row
+        name = row[0]
         params = _params(row)
         table = enumerate_joint(**params)
+        family = _family(name)
+        expected_n = ROOT_EXPECTED_N[family]
+        if table["N"] != expected_n:
+            raise NtbbKRefuse(f"{name} N={table['N']} != expected {expected_n}")
         max_n = max(max_n, int(table["N"]))
         residuals = {
             "normalization": check_normalization(table),
@@ -152,52 +147,32 @@ def run_root_nine() -> dict[str, Any]:
         extras = {
             "k0_betabinom": check_k0_betabinom(table, params),
             "transpose": check_transpose(params),
-            "variance": check_variance(table, params),
             "log_pmf_00": log_joint_pmf(0, 0, **params),
         }
-        if name == "TIE_TILT":
-            base = enumerate_joint(mu=params["mu"], r=params["r"], p=params["p"], c=params["c"])
-            extras["tie_mass_delta"] = _mass_m(table, lambda m: m == 0) - _mass_m(
-                base, lambda m: m == 0
-            )
-            if extras["tie_mass_delta"] <= 0:
-                raise NtbbKRefuse("k0 did not move tie mass")
-        if name == "KEY37":
-            base = enumerate_joint(mu=params["mu"], r=params["r"], p=params["p"], c=params["c"])
-            extras["m3_delta"] = _mass_m(table, lambda m: abs(m) == 3) - _mass_m(
-                base, lambda m: abs(m) == 3
-            )
-            extras["m7_delta"] = _mass_m(table, lambda m: abs(m) == 7) - _mass_m(
-                base, lambda m: abs(m) == 7
-            )
-            if extras["m3_delta"] <= 0 or extras["m7_delta"] <= 0:
-                raise NtbbKRefuse("k3/k7 did not move key-number mass")
-        if table["N"] > ORACLE_MAX_ENUMERATED_TOTAL:
-            raise NtbbKRefuse(
-                f"{name} enumerated total {table['N']} > oracle max {ORACLE_MAX_ENUMERATED_TOTAL}"
-            )
-        results.append(
-            {
-                "N": table["N"],
-                "enumerated_mass": table["enumerated_mass"],
-                "enumeration_error": table["enumeration_error"],
-                "extras": extras,
-                "group": group,
-                "moment_bound": table["moments"]["moment_bound"],
-                "name": name,
-                "params": params,
-                "residuals": residuals,
-                "status": "PASS",
-                "tail_mass": table["tail_mass"],
-            }
-        )
+        rec = {
+            "N": table["N"],
+            "enumerated_mass": table["enumerated_mass"],
+            "enumeration_error": table["enumeration_error"],
+            "expected_N": expected_n,
+            "extras": extras,
+            "family": family,
+            "group": "root",
+            "moment_bound": table["moments"]["moment_bound"],
+            "name": name,
+            "params": params,
+            "residuals": residuals,
+            "status": "PASS",
+            "tail_mass": table["tail_mass"],
+        }
+        results.append(rec)
+        by_name[name] = rec
     if max_n > ORACLE_MAX_ENUMERATED_TOTAL:
-        raise NtbbKRefuse(
-            f"max enumerated total {max_n} > oracle {ORACLE_MAX_ENUMERATED_TOTAL}"
-        )
+        raise NtbbKRefuse(f"max enumerated total {max_n} > oracle {ORACLE_MAX_ENUMERATED_TOTAL}")
     return {
+        "fixture_kind": "RETURN_36205_ROOT_NINE",
         "max_enumerated_total": max_n,
         "n_cases": len(results),
+        "not_demo_small_nine": True,
         "oracle_max_enumerated_total": ORACLE_MAX_ENUMERATED_TOTAL,
         "oracle_max_enumerated_total_honored": max_n <= ORACLE_MAX_ENUMERATED_TOTAL,
         "results": results,

@@ -14,10 +14,16 @@ from src.services.nfl_ntbb_k_v1.constants import (
     ALEX_PASS_SPEC,
     CERT,
     CHANNEL,
+    CLARIFICATIONS_BYTES,
+    CLARIFICATIONS_COMMIT,
+    CLARIFICATIONS_PATH,
+    CLARIFICATIONS_SHA256,
     CLEAR,
     DATA_LABEL,
+    DESIGN_ID,
     EVIDENCE_ID,
     FAMILY,
+    FUTURE_GRAD_STEP,
     METADATA_14083,
     METADATA_TICKET,
     NO_INSTALL,
@@ -30,6 +36,7 @@ from src.services.nfl_ntbb_k_v1.constants import (
     PIN_LEDGER_92861_SHA256,
     PROFILE,
     QUALIFICATION,
+    RETURN_ID,
     SCIPY_FITTING_ALGORITHM,
     SCIPY_STATUS,
     SPEC_BYTES,
@@ -99,6 +106,30 @@ def verify_spec_blob(repo_root: Path) -> dict[str, Any]:
     }
 
 
+def verify_clarifications_blob(repo_root: Path) -> dict[str, Any]:
+    import subprocess
+
+    proc = subprocess.run(
+        ["git", "-C", str(repo_root), "show", f"{CLARIFICATIONS_COMMIT}:{CLARIFICATIONS_PATH}"],
+        check=False,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        raise NtbbKRefuse(f"git show {CLARIFICATIONS_COMMIT}:{CLARIFICATIONS_PATH} failed")
+    digest = _sha256_bytes(proc.stdout)
+    if digest != CLARIFICATIONS_SHA256:
+        raise NtbbKRefuse(f"clarifications sha256 {digest} != {CLARIFICATIONS_SHA256}")
+    if len(proc.stdout) != CLARIFICATIONS_BYTES:
+        raise NtbbKRefuse(f"clarifications bytes {len(proc.stdout)} != {CLARIFICATIONS_BYTES}")
+    return {
+        "bytes": CLARIFICATIONS_BYTES,
+        "commit": CLARIFICATIONS_COMMIT,
+        "path": CLARIFICATIONS_PATH,
+        "sha256": digest,
+        "sha256_match": True,
+    }
+
+
 def verify_market_partial_preserved(repo_root: Path) -> dict[str, Any]:
     proj = repo_root / "data/ops/nfl_owned_market_v1/codex_staged/JSONL_SELECTED_143_SOURCE_VALUE_PROJECTION.json"
     led92861 = repo_root / "data/ops/nfl_owned_market_v1/CLOCK_LINEAGE_LEDGER_92861.json"
@@ -126,6 +157,7 @@ def verify_market_partial_preserved(repo_root: Path) -> dict[str, Any]:
 
 def build_kernel_document(repo_root: Path) -> dict[str, Any]:
     spec = verify_spec_blob(repo_root)
+    clarifications = verify_clarifications_blob(repo_root)
     market = verify_market_partial_preserved(repo_root)
     nine = run_root_nine()
     demo = enumerate_joint(mu=8.0, r=20.0, p=0.5, c=12.0, k0=0.0, k3=0.0, k7=0.0)
@@ -134,8 +166,10 @@ def build_kernel_document(repo_root: Path) -> dict[str, Any]:
     return {
         "cert": CERT,
         "channel": CHANNEL,
+        "clarifications": clarifications,
         "clocks_143": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
         "data_label": DATA_LABEL,
+        "design": DESIGN_ID,
         "demo_summaries": {"spread": spread, "total": total},
         "evidence_id": EVIDENCE_ID,
         "family": FAMILY,
@@ -153,9 +187,13 @@ def build_kernel_document(repo_root: Path) -> dict[str, Any]:
         "pass_spec": ALEX_PASS_SPEC,
         "profile": PROFILE,
         "qualification": QUALIFICATION,
+        "return_id": RETURN_ID,
+        "future_grad_step": FUTURE_GRAD_STEP,
         "root_nine": {
+            "fixture_kind": nine["fixture_kind"],
             "max_enumerated_total": nine["max_enumerated_total"],
             "n_cases": nine["n_cases"],
+            "not_demo_small_nine": True,
             "oracle_max_enumerated_total": nine["oracle_max_enumerated_total"],
             "results": [
                 {k: v for k, v in row.items() if k != "extras"}
@@ -206,6 +244,8 @@ def produce_kernel(*, repo_root: Path | None = None) -> dict[str, Any]:
         "root_nine_status": doc["root_nine"]["status"],
         "scipy_status": SCIPY_STATUS,
         "spec_sha256_match": doc["spec"]["sha256_match"],
+        "clarifications_sha256_match": doc["clarifications"]["sha256_match"],
+        "return_id": RETURN_ID,
         "ticket": TICKET,
     }
     rec_path = root / OPS_REL / "receipt.json"

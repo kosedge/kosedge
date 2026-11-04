@@ -7,6 +7,7 @@ from typing import Any
 
 from src.services.nfl_ntbb_k_v1.refuse import NtbbKRefuse
 from src.services.nfl_ntbb_k_v1.special import (
+    _finite,
     log_betabinom_pmf,
     log_nbinom_pmf,
     logsumexp,
@@ -57,17 +58,22 @@ def conditional_log_mass(
 ) -> list[float]:
     """log P(H=h | T=t) for h=0..t after key-number tilt / Z_t."""
     tt = _require_score(t, name="t")
-    if not (0.0 < p < 1.0) or c <= 0:
+    p_v = _finite(p, name="p")
+    c_v = _finite(c, name="c")
+    k0_v, k3_v, k7_v = _require_finite_k(k0, k3, k7)
+    if not (0.0 < p_v < 1.0) or c_v <= 0:
         raise NtbbKRefuse("conditional p,c invalid")
-    alpha = p * c
-    beta = (1.0 - p) * c
+    alpha = p_v * c_v
+    beta = (1.0 - p_v) * c_v
+    if not math.isfinite(alpha) or not math.isfinite(beta) or alpha <= 0 or beta <= 0:
+        raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN alpha/beta")
     if tt == 0:
         # Conditional mass is exactly one; tie tilt does not change q(0).
         return [0.0]
     log_unnorm: list[float] = []
     for h in range(tt + 1):
         log_b = log_betabinom_pmf(h, tt, alpha=alpha, beta=beta)
-        z = tilt_z(h, tt, k0=k0, k3=k3, k7=k7)
+        z = tilt_z(h, tt, k0=k0_v, k3=k3_v, k7=k7_v)
         log_unnorm.append(log_b + z)
     log_z = logsumexp(log_unnorm)
     return [x - log_z for x in log_unnorm]
