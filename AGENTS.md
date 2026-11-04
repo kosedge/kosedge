@@ -4,6 +4,12 @@
 
 **Institutional memory (CoS):** Recurring writer assignments **require** prior graded lessons from `data/knowledge/` (or an explicit **`no prior grades`** note). SoT + SOP: `docs/writers/INSTITUTIONAL_MEMORY.md` · CoS note: `docs/writers/COS_INSTITUTIONAL_MEMORY.md`. Do not invent grades; forward-only from 2026-09-03 night lock.
 
+## Bounded NFL experiment isolation
+
+For the bounded **R14 NFL experiment**, always start from a **clean isolated NFL worktree/branch** based on the **frozen R11 baseline**. Do **not** write NFL experiment changes directly onto an unrelated branch such as `feat/cfb-p0-p1-warehouse-spine`.
+
+Before resuming R14, confirm the exact **R11 source baseline** and the intended **simulator surface**. If an existing NFL experiment worktree is available and clean, reuse it; otherwise create a fresh isolated worktree/branch from the frozen R11 source.
+
 ## Production contract (one branch, three platforms)
 
 Daily subscription ships go through **`deploy-vercel` only**. Do not mix branches.
