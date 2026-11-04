@@ -17,6 +17,6 @@ Not a real R7 model arm. Package not closed from B alone.
 - fifth prereq: book price/settlement **not** required for POINT-ERROR; economic/ATS/ROI/CLV residual only
 - fictional chain: **reused, not re-executed** · IF/Q2/C preserved (`1.389941504602551` / `1.93920745003233` / `1.6645744773174405`)
 - scipy: ABSENT (no install)
-- NTBB-K integrate: Cos ACCEPT tip `a807af2298826475d8a207dfb7fcfcf710f00014` **FROZEN** isolated SYNTHETIC kernel SHA `ee800291…9996aa7` · `d0bb6bef` **refused** · `r7_model_arm=false` · package not closed from B · producer→capability/gate = A
-- RETRO_C1: `SYNTHETIC_EXECUTOR_READY_REAL_EXEC_HOLD` · real EXEC HOLD
+- NTBB-K integrate: RETURN 58427 · tip `a807af22` **HELD NOT FINAL** · `d0bb6bef` **refused** · waiting B log-PMF/tail delta under 36205 · `r7_model_arm=false` · package **not accepted** while direct paths open · producer→capability/gate = A
+- RETRO_C1: `SYNTHETIC_EXECUTOR_READY_REAL_EXEC_HOLD` · real EXEC HOLD · package not accepted
 - Cos-host unused · no merge · CERT=0

@@ -161,8 +161,9 @@ def _seed() -> Dict[str, GateProfile]:
             isolated_area=NTBBK_ISOLATED_AREA,
             b_tip="a807af2298826475d8a207dfb7fcfcf710f00014",
             notes=(
-                "Isolated NTBB-K SYNTHETIC kernel frozen at Cos ACCEPT a807af22. "
-                "Not a real R7 model arm. d0bb6bef refused. B clocks not promoted."
+                "RETURN 58427: isolated NTBB-K SYNTHETIC kernel staged from a807af22, "
+                "NOT frozen as final. Waiting B log-PMF/tail proof delta under 36205. "
+                "d0bb6bef refused. Not a real R7 model arm. B clocks not promoted."
             ),
         ),
     }

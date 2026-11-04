@@ -16,8 +16,8 @@ IMPLEMENTED ≠ VERIFIED ≠ ACCEPTED. DRAFT ≠ merge. Real EXEC HOLD.
 - synthetic C `1.6645744773174405` (cal=False) · IF/Q2 pair preserved
 - invalid/absent/REAL/R5/spent: **zero** model/outcome reads
 - strict live-causal `REST_ACTUAL_ET_CALENDAR_V1`: still DATA_HOLD
-- NTBB-K: isolated freeze at Cos ACCEPT `a807af22` · **not** `d0bb6bef` · **not** an R7 model arm
-- package not closed from B alone · producer→capability/gate = A
+- NTBB-K: RETURN 58427 · `a807af22` held **not final** · `d0bb6bef` refused · wait B log-PMF/tail delta · **not** an R7 model arm
+- package **not accepted** while direct paths open · producer→capability/gate = A
 - ready_for_real_exec: **false**
 - N1–N3: NON-BLOCKING → Codex
 

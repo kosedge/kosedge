@@ -4,6 +4,7 @@
   "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_record_date_retro_c1.py",
   "cos_accept": "c14c3bd6",
   "design": "25194",
+  "direct_paths_open": true,
   "history_order": "47316",
   "identity": {
     "eval_2017_reopened": false,
@@ -2368,6 +2369,7 @@
       "surface_notes": 0
     }
   },
+  "kernel_frozen_from_a807af22": false,
   "kernel_frozen_from_d0bb6bef": false,
   "n1_n3_nonblocking": [
     {
@@ -2393,6 +2395,7 @@
   "ok": true,
   "owner_clear": "92861",
   "package": "R7_RECORD_DATE_RETRO_C1",
+  "package_accepted": false,
   "pins": {
     "clarifications": {
       "match": true,
@@ -2420,7 +2423,7 @@
       "sha256": "3394663e41183de255e641ffbfc2e321bb7266fd3e27d984f7f350db6f5e3110"
     }
   },
-  "produced_utc": "2026-11-04T00:25:13Z",
+  "produced_utc": "2026-11-04T00:30:19Z",
   "profile": "RECORDED_DATE_RETRO",
   "ready_for_real_exec": false,
   "real_data_projection_schema": {
@@ -2532,6 +2535,7 @@
     "matched": 496,
     "n": 496
   },
+  "return_58427": "58427",
   "science_hold": true,
   "spy_positive_control": {
     "evidence_label": "EXECUTED_HERE",

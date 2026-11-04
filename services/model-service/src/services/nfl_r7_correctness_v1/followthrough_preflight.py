@@ -83,11 +83,13 @@ BOOTSTRAP_GEN = "PCG64"
 
 PRIOR_MISSING_N = 5
 
-# RETURN 36205 — Cos ACCEPT corrected B tip. Freeze this tip only; not d0bb6bef.
+# RETURN 58427 — do NOT freeze a807af22 as final. Wait B log-PMF/tail delta.
 B_NTBBK_TIP_REFUSED = "d0bb6bef4b44215735369c0208ce19e07a9647a6"
-B_NTBBK_TIP_FROZEN = "a807af2298826475d8a207dfb7fcfcf710f00014"
+B_NTBBK_TIP_HELD = "a807af2298826475d8a207dfb7fcfcf710f00014"
+B_NTBBK_TIP_FROZEN = None
 B_NTBBK_KERNEL_SHA256 = "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7"
 RETURN_NTBBK = "36205"
+RETURN_UNFREEZE = "58427"
 NTBBK_PROFILE_HOOK = "NTBB_K_SYNTHETIC_KERNEL_V1"
 NTBBK_ISOLATED_AREA = "services/model-service/src/services/nfl_ntbb_k_v1"
 NTBBK_ISOLATED_OPS = "data/ops/nfl_ntbb_k_v1"
@@ -706,26 +708,33 @@ def missing_locators(root: Path) -> list[dict[str, Any]]:
 
 
 def ntbb_k_integrate_hooks() -> dict[str, Any]:
-    """Freeze Cos-accepted RETURN 36205 tip only. Not a real R7 model arm."""
+    """RETURN 58427 — a807af22 held, not final. Wait B log-PMF/tail delta."""
     return {
-        "status": "FROZEN_ISOLATED_SYNTHETIC_KERNEL",
+        "status": "WAIT_RETURN58427_LOGPMF_TAIL_DELTA",
         "return_order": RETURN_NTBBK,
+        "return_unfreeze": RETURN_UNFREEZE,
         "refused_tip": B_NTBBK_TIP_REFUSED,
         "refused_tip_short": "d0bb6bef",
+        "held_tip": B_NTBBK_TIP_HELD,
+        "held_tip_short": "a807af22",
         "frozen_tip": B_NTBBK_TIP_FROZEN,
-        "frozen_tip_short": "a807af22",
-        "frozen_as_final": True,
-        "integrated": True,
+        "frozen_as_final": False,
+        "integrated": False,
+        "integrated_final": False,
         "r7_model_arm": False,
         "kernel_files_copied": True,
-        "kernel_sha256_locked": True,
+        "kernel_sha256_locked": False,
         "kernel_sha256": B_NTBBK_KERNEL_SHA256,
+        "kernel_role": "STAGED_NOT_FINAL_FROM_a807af22",
         "profile_id": NTBBK_PROFILE_HOOK,
         "profile_status": "REGISTERED_ISOLATED_NOT_R7_MODEL_ARM",
         "shared_gate_registered": True,
         "isolated_area": NTBBK_ISOLATED_AREA,
         "isolated_ops": NTBBK_ISOLATED_OPS,
+        "package_accepted": False,
         "package_closed_from_b_alone": False,
+        "direct_paths_open": True,
+        "waiting_for": "B direct log-PMF/tail proof delta under 36205",
         "producer_capability_gate": {
             "owner": "A",
             "status": "A_OBLIGATION_NOT_CLOSED_BY_B",
@@ -735,8 +744,10 @@ def ntbb_k_integrate_hooks() -> dict[str, Any]:
         "scipy_fitting": "UNEXECUTED_DEPENDENCY_HELD",
         "b_clocks_promoted": False,
         "note": (
-            "Cos ACCEPT RETURN 36205 tip a807af22 frozen as isolated NTBB-K "
-            "SYNTHETIC kernel. d0bb6bef refused. Not a real R7 model arm. "
+            "RETURN 58427: do not freeze a807af22 as final NTBB-K integrate. "
+            "d0bb6bef remains refused. Isolated module staged, not locked. "
+            "Integrate the corrected B revision once when posted. "
+            "Package not accepted while direct paths open. "
             "Producer→capability/gate remains Worker A."
         ),
     }
@@ -756,6 +767,9 @@ def retro_c1_hold() -> dict[str, Any]:
         "forecasts": False,
         "real_features": False,
         "cert": CERT,
+        "package_accepted": False,
+        "direct_paths_open": True,
+        "return_58427": RETURN_UNFREEZE,
     }
 
 
@@ -860,9 +874,13 @@ def build_candidate(*, root: Path | None = None) -> dict[str, Any]:
         },
         "book_specific_offered_price_settlement": list(ECONOMIC_RESIDUALS),
         "scipy": "ABSENT",
-        "ntbb_k_kernel": "FROZEN_ISOLATED_SYNTHETIC_KERNEL_NOT_R7_MODEL_ARM",
+        "ntbb_k_kernel": "STAGED_NOT_FINAL_WAIT_RETURN58427_LOGPMF_TAIL",
         "ntbb_k_return": RETURN_NTBBK,
-        "ntbb_k_frozen_tip": B_NTBBK_TIP_FROZEN,
+        "ntbb_k_return_unfreeze": RETURN_UNFREEZE,
+        "ntbb_k_held_tip": B_NTBBK_TIP_HELD,
+        "ntbb_k_frozen_tip": None,
+        "package_accepted": False,
+        "direct_paths_open": True,
         "science_hold": True,
         "retro_c1": retro_hold["status"],
     }

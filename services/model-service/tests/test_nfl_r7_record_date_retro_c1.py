@@ -141,17 +141,25 @@ def test_guarded_preflight_synthetic_executor() -> None:
     assert receipt["invalid_paths"]["spent_retry"]["refused"] is True
     assert receipt["ntbb_k_integrated"] is False
     assert receipt["kernel_frozen_from_d0bb6bef"] is False
+    assert receipt["kernel_frozen_from_a807af22"] is False
+    assert receipt["package_accepted"] is False
+    assert receipt["direct_paths_open"] is True
     schema = receipt["real_data_projection_schema"]
     assert schema["authorized_now"] is False
     assert schema["scores_opened"] is False
     assert "ROOT_CLAIM" in schema["executable_command_when_root_authorizes"]
 
 
-def test_ntbbk_freeze_corrected_tip_not_d0bb6bef() -> None:
+def test_ntbbk_a807af22_held_not_final() -> None:
     bound = consume_ntbb_k(root=REPO)
-    assert bound["frozen_tip"].startswith("a807af22")
+    assert bound["held_tip"].startswith("a807af22")
+    assert bound["frozen_tip"] is None
+    assert bound["frozen_as_final"] is False
     assert bound["refused_tip"].startswith("d0bb6bef")
     assert bound["r7_model_arm"] is False
+    assert bound["package_accepted"] is False
+    assert bound["direct_paths_open"] is True
+    assert bound["return_unfreeze"] == "58427"
     assert bound["package_closed_from_b_alone"] is False
     assert bound["b_clocks_promoted"] is False
     assert bound["kernel_sha256"] == "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7"

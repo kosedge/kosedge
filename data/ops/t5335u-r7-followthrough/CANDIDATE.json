@@ -366,7 +366,7 @@
       {
         "path": "services/model-service/src/services/nfl_ops_v1_evidence/profiles.py",
         "present": true,
-        "sha256": "b537c253b9361d43fc491f7ff59bb911516cdc9cb193265c3eb04324384becff"
+        "sha256": "e73f3656a0d1c49b7a2616e0317f5759914b5d8d099e893b97e58aacf02778ad"
       },
       {
         "path": "services/model-service/src/services/nfl_ops_v1_evidence/validate_r7.py",
@@ -376,7 +376,7 @@
       {
         "path": "services/model-service/src/services/nfl_r7_correctness_v1/followthrough_preflight.py",
         "present": true,
-        "sha256": "5033684708f5c204612c533fcad3c47b621ea59bf880f357e1a6d50649a60b64"
+        "sha256": "27b7d03d7ad4bf222b545d58304f86baea48287f47d7b912b16665f794dba3d8"
       },
       {
         "path": "scripts/nfl/run_nfl_r7_followthrough_preflight.py",
@@ -21207,16 +21207,21 @@
   ],
   "ntbb_k_integrate": {
     "b_clocks_promoted": false,
-    "frozen_as_final": true,
-    "frozen_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
-    "frozen_tip_short": "a807af22",
-    "integrated": true,
+    "direct_paths_open": true,
+    "frozen_as_final": false,
+    "frozen_tip": null,
+    "held_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
+    "held_tip_short": "a807af22",
+    "integrated": false,
+    "integrated_final": false,
     "isolated_area": "services/model-service/src/services/nfl_ntbb_k_v1",
     "isolated_ops": "data/ops/nfl_ntbb_k_v1",
     "kernel_files_copied": true,
+    "kernel_role": "STAGED_NOT_FINAL_FROM_a807af22",
     "kernel_sha256": "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7",
-    "kernel_sha256_locked": true,
-    "note": "Cos ACCEPT RETURN 36205 tip a807af22 frozen as isolated NTBB-K SYNTHETIC kernel. d0bb6bef refused. Not a real R7 model arm. Producer\u2192capability/gate remains Worker A.",
+    "kernel_sha256_locked": false,
+    "note": "RETURN 58427: do not freeze a807af22 as final NTBB-K integrate. d0bb6bef remains refused. Isolated module staged, not locked. Integrate the corrected B revision once when posted. Package not accepted while direct paths open. Producer\u2192capability/gate remains Worker A.",
+    "package_accepted": false,
     "package_closed_from_b_alone": false,
     "producer_capability_gate": {
       "owner": "A",
@@ -21230,9 +21235,11 @@
     "refused_tip": "d0bb6bef4b44215735369c0208ce19e07a9647a6",
     "refused_tip_short": "d0bb6bef",
     "return_order": "36205",
+    "return_unfreeze": "58427",
     "scipy_fitting": "UNEXECUTED_DEPENDENCY_HELD",
     "shared_gate_registered": true,
-    "status": "FROZEN_ISOLATED_SYNTHETIC_KERNEL"
+    "status": "WAIT_RETURN58427_LOGPMF_TAIL_DELTA",
+    "waiting_for": "B direct log-PMF/tail proof delta under 36205"
   },
   "opt_in": true,
   "owner_clear": "92861",
@@ -30746,7 +30753,7 @@
     }
   ],
   "prior_packaging_revision": "df041d6f",
-  "produced_utc": "2026-11-04T00:25:13Z",
+  "produced_utc": "2026-11-04T00:30:19Z",
   "projection_commit": "e290ff3b306d7c6c47b2d11a183c520992b90f59",
   "projection_request": {
     "actual_clock_provenance_resolved": false,
@@ -30780,7 +30787,7 @@
     ],
     "reason": "staged R7_METADATA_PROJECTION consumed; absent cloud metadata resolved; actual/scheduled/availability remain unknown; frozen median-spread market-point digest still absent for POINT-ERROR bind"
   },
-  "r7_code_hash": "f9ee1d6e9122febeb78a715cb1906352b9a87f6ad1f5841944ac1316b351815b",
+  "r7_code_hash": "270c3dacc48e2f546f7697a0cad2ba05c436c4109dbc02f5d5de5b6e2f95f08a",
   "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
   "readiness": "NOT_READY",
   "ready_for_real_exec": false,
@@ -30810,9 +30817,13 @@
         "status": "RESIDUAL_NOT_MISSING_FOR_POINT_ERROR"
       }
     ],
-    "ntbb_k_frozen_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
-    "ntbb_k_kernel": "FROZEN_ISOLATED_SYNTHETIC_KERNEL_NOT_R7_MODEL_ARM",
+    "direct_paths_open": true,
+    "ntbb_k_frozen_tip": null,
+    "ntbb_k_held_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
+    "ntbb_k_kernel": "STAGED_NOT_FINAL_WAIT_RETURN58427_LOGPMF_TAIL",
     "ntbb_k_return": "36205",
+    "ntbb_k_return_unfreeze": "58427",
+    "package_accepted": false,
     "retro_c1": "SYNTHETIC_EXECUTOR_READY_REAL_EXEC_HOLD",
     "science_hold": true,
     "scipy": "ABSENT",
@@ -30823,11 +30834,14 @@
   },
   "retro_c1_hold": {
     "cert": 0,
+    "direct_paths_open": true,
     "forecasts": false,
     "implemented": true,
     "package": "R7_RECORD_DATE_RETRO_C1",
+    "package_accepted": false,
     "real_exec": false,
     "real_features": false,
+    "return_58427": "58427",
     "spec_id": "7cb4fcef",
     "spec_sha_prefix": "3394663e",
     "started": true,
@@ -30860,7 +30874,7 @@
     "simulations": 4000,
     "tz": "America/New_York"
   },
-  "runtime_source_revision": "e290ff3b306d7c6c47b2d11a183c520992b90f59",
+  "runtime_source_revision": "00817da61d0fdf65f3122573c44a91bf9b25ec53",
   "same96_ids": [
     "2020_02_CIN_CLE",
     "2020_03_MIA_JAX",
