@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 from typing import Any, Iterable, Sequence
 
+from src.services.nfl_ntbb_k_v1.constants import LOG_PMF_DOMAIN_TOL
 from src.services.nfl_ntbb_k_v1.refuse import NtbbKRefuse
 
 
@@ -61,7 +62,29 @@ def nbinom_success_p(*, r: float, mu: float) -> tuple[float, float]:
         raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN p")
     if p + q == p or p + q == q:
         raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN p+q")
+    _refuse_cancelled_log_p(n=rr, p=p, q=q, mu=mm, kind="r,mu")
     return p, q
+
+
+def _refuse_cancelled_log_p(*, n: float, p: float, q: float, mu: float | None, kind: str) -> None:
+    """Refuse domains where float64 p-then-log is not the NB law to 1e-8.
+
+    Stable comparator is n*log1p(-q), or -n*log1p(mu/n) when mu is the pair.
+    Documented unsupported-domain refusal. No fabricated corrected probability.
+    """
+    try:
+        naive = n * math.log(p)
+        stable = n * math.log1p(-q)
+        if mu is not None and n > 0:
+            stable = -n * math.log1p(mu / n)
+    except ValueError as exc:
+        raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN logp") from exc
+    if not math.isfinite(naive) or not math.isfinite(stable):
+        raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN logp nonfinite")
+    if abs(naive - stable) > LOG_PMF_DOMAIN_TOL:
+        raise NtbbKRefuse(
+            f"UNSUPPORTED_NUMERIC_DOMAIN {kind} r*log(p) disagrees with log1p"
+        )
 
 
 def log_nbinom_pmf_np(t: int, *, n: float, p: float, q: float) -> float:
@@ -72,6 +95,7 @@ def log_nbinom_pmf_np(t: int, *, n: float, p: float, q: float) -> float:
     qq = _finite(q, name="q")
     if nn <= 0 or not (0.0 < pp < 1.0) or not (0.0 < qq < 1.0):
         raise NtbbKRefuse("nbinom npq invalid")
+    _refuse_cancelled_log_p(n=nn, p=pp, q=qq, mu=None, kind="npq")
     try:
         value = (
             math.lgamma(t + nn)
@@ -112,8 +136,10 @@ def nbinom_pmf_series(*, r: float, mu: float, t_max: int) -> list[float]:
 def remaining_series_tail(*, n_success: float, p: float, q: float, cutoff: int) -> dict[str, Any]:
     """P(X>cutoff) via remaining-series bound. Not 1−CDF.
 
-    Ratio at index t is (t+n)/(t+1)*q. Geometric remainder is valid only
-    after demonstrating a ratio bound ρ<1 over remaining terms.
+    Ratio at index t is (t+n)/(t+1)*q. For n>=1 ratios decrease toward q
+    so ρ is an upper envelope. For n<1 ratios increase toward q; the
+    certified envelope is max(q, ρ) in the initial and remaining bounds.
+    Geometric remainder is valid only after demonstrating that envelope <1.
     """
     if isinstance(cutoff, bool) or not isinstance(cutoff, int) or cutoff < -1:
         raise NtbbKRefuse("tail cutoff must be int >= -1")
@@ -125,13 +151,25 @@ def remaining_series_tail(*, n_success: float, p: float, q: float, cutoff: int) 
     rho = ((cutoff + 1 + nn) / (cutoff + 2)) * qq
     if not math.isfinite(rho) or rho <= 0:
         raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN tail ratio")
-    if rho >= 1.0:
-        return {"estimate": None, "lower": 0.0, "rho": rho, "upper": None}
+    # For n<1 successive ratios increase toward q; rho is then a lower
+    # envelope, not an upper. max(q, rho) is the geometric bound in both
+    # regimes. n>=1 keeps max(q, rho) == rho (ordinary cases unchanged).
+    rho_bound = max(qq, rho)
+    if not math.isfinite(rho_bound) or rho_bound <= 0:
+        raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN tail ratio bound")
+    if rho_bound >= 1.0:
+        return {
+            "estimate": None,
+            "lower": 0.0,
+            "rho": rho,
+            "rho_bound": rho_bound,
+            "upper": None,
+        }
     log_first = log_nbinom_pmf_np(cutoff + 1, n=nn, p=pp, q=qq)
     first = math.exp(log_first)
     if not math.isfinite(first):
         raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN tail first term")
-    upper = first / (1.0 - rho)
+    upper = first / (1.0 - rho_bound)
     extra_limit = 4096
     acc: list[float] = []
     log_term = log_first
@@ -148,14 +186,18 @@ def remaining_series_tail(*, n_success: float, p: float, q: float, cutoff: int) 
     lower = math.fsum(acc)
     last_t = cutoff + len(acc)
     rho_last = ((last_t + 1 + nn) / (last_t + 2)) * qq
-    if not (0.0 < rho_last < 1.0):
+    rho_last_bound = max(qq, rho_last)
+    if not (0.0 < rho_last_bound < 1.0):
         raise NtbbKRefuse("NUMERICAL_TAIL_LIMIT remaining ratio >= 1")
-    rem = math.exp(log_nbinom_pmf_np(last_t + 1, n=nn, p=pp, q=qq)) / (1.0 - rho_last)
+    rem = math.exp(log_nbinom_pmf_np(last_t + 1, n=nn, p=pp, q=qq)) / (
+        1.0 - rho_last_bound
+    )
     estimate = lower + rem
     return {
         "estimate": min(1.0, estimate),
         "lower": min(1.0, lower),
         "rho": rho,
+        "rho_bound": rho_bound,
         "upper": min(1.0, max(upper, lower + rem)),
     }
 
@@ -173,6 +215,34 @@ def nbinom_sf(*, r: float, mu: float, n: int) -> float:
     return float(tail["estimate"])
 
 
+def _certify_log_rising(x: float, k: int, *, name: str) -> None:
+    """Refuse lgamma(x+k)-lgamma(x) when it is not the rising factorial.
+
+    Ordinary small x keeps the existing lgamma path (bit-identical). Large
+    concentration loses increments; recurrence disagrees. No fabricated value.
+    """
+    if k == 0:
+        return
+    if k < 0:
+        raise NtbbKRefuse(f"{name} rising k negative")
+    xv = _finite(x, name=name)
+    if xv <= 0:
+        raise NtbbKRefuse(f"{name} rising base must be > 0")
+    if xv + 1.0 == xv:
+        raise NtbbKRefuse(f"UNSUPPORTED_NUMERIC_DOMAIN {name} increment lost")
+    rec = math.fsum(math.log(xv + i) for i in range(k))
+    try:
+        lg = math.lgamma(xv + k) - math.lgamma(xv)
+    except ValueError as exc:
+        raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN lgamma rising") from exc
+    if not math.isfinite(lg) or not math.isfinite(rec):
+        raise NtbbKRefuse("UNSUPPORTED_NUMERIC_DOMAIN rising nonfinite")
+    if abs(lg - rec) > LOG_PMF_DOMAIN_TOL:
+        raise NtbbKRefuse(
+            f"UNSUPPORTED_NUMERIC_DOMAIN {name} lgamma rising disagrees with recurrence"
+        )
+
+
 def log_betabinom_pmf(h: int, t: int, *, alpha: float, beta: float) -> float:
     if any(isinstance(x, bool) or not isinstance(x, int) for x in (h, t)):
         raise NtbbKRefuse("betabinom h,t must be int")
@@ -182,6 +252,9 @@ def log_betabinom_pmf(h: int, t: int, *, alpha: float, beta: float) -> float:
     b = _finite(beta, name="beta")
     if a <= 0 or b <= 0:
         raise NtbbKRefuse("alpha,beta must be > 0")
+    _certify_log_rising(a, h, name="alpha")
+    _certify_log_rising(b, t - h, name="beta")
+    _certify_log_rising(a + b, t, name="alpha+beta")
     return log_choose(t, h) + log_beta(h + a, t - h + b) - log_beta(a, b)
 
 

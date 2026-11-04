@@ -19,7 +19,9 @@ from src.services.nfl_ntbb_k_v1.constants import (
     FUTURE_GRAD_STEP,
     ORACLE_MAX_ENUMERATED_TOTAL,
     PIN_JSONL_143_PROJECTION_SHA256,
+    ADDITIVE_ID,
     RETURN_ID,
+    UNDER_RETURN_ID,
     ROOT_EXPECTED_N,
     ROOT_NINE,
     SCIPY_FITTING_ALGORITHM,
@@ -33,7 +35,12 @@ from src.services.nfl_ntbb_k_v1.produce import (
     verify_spec_blob,
 )
 from src.services.nfl_ntbb_k_v1.refuse import NtbbKRefuse
-from src.services.nfl_ntbb_k_v1.special import nbinom_success_p
+from src.services.nfl_ntbb_k_v1.special import (
+    log_betabinom_pmf,
+    log_nbinom_pmf,
+    nbinom_success_p,
+    remaining_series_tail,
+)
 from src.services.nfl_ntbb_k_v1.table import (
     choose_tail_n,
     enumerate_joint,
@@ -67,7 +74,9 @@ def test_clarifications_sha256_match() -> None:
 
 
 def test_root_nine_are_executed_root_fixtures_not_demo_small() -> None:
-    assert RETURN_ID == "36205"
+    assert RETURN_ID == "58427"
+    assert UNDER_RETURN_ID == "36205"
+    assert ADDITIVE_ID == "80649"
     assert len(ROOT_NINE) == 9
     names = [row[0] for row in ROOT_NINE]
     assert names == [
@@ -138,20 +147,60 @@ def test_conditional_log_mass_refuses_nan_and_bool_before_t0_shortcut() -> None:
 def test_extreme_r_refuse_accept_matrix() -> None:
     """Direct controls. Extreme r must not accept a silently different law."""
     common = {"mu": 44.0, "p": 0.5, "c": 12.0}
-    # p=r/(r+mu) may still be representable; enumerate_joint must independently refuse.
-    p16, q16 = nbinom_success_p(r=1e16, mu=44.0)
-    assert 0.0 < q16 < 1.0
-    p12, q12 = nbinom_success_p(r=1e12, mu=44.0)
-    assert 0.0 < q12 < 1.0
-    with pytest.raises(NtbbKRefuse, match="mass\\+tail"):
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        nbinom_success_p(r=1e16, mu=44.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        nbinom_success_p(r=1e12, mu=44.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        log_nbinom_pmf(0, r=1e16, mu=44.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        log_nbinom_pmf(0, r=1e12, mu=44.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
         enumerate_joint(r=1e16, **common)
-    with pytest.raises(NtbbKRefuse, match="mass\\+tail"):
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
         enumerate_joint(r=1e12, **common)
     accepted = enumerate_joint(r=20.0, **common)
     assert accepted["moments"]["status"] == "OK"
     assert accepted["N"] == 175
     assert abs(accepted["moments"]["total_mean"] - 44.0) <= 1e-8 + accepted["moments"]["moment_bound"]
     assert accepted["enumeration_error"] <= 1e-10
+
+
+def test_log_joint_pmf_extreme_refuse_ordinary_unchanged() -> None:
+    """Shared log-PMF entrypoint. Extremes refuse; ordinary pins stay bit-identical."""
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        log_joint_pmf(0, 0, mu=44.0, r=1e12, p=0.5, c=12.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        log_joint_pmf(0, 0, mu=44.0, r=1e16, p=0.5, c=12.0)
+    assert log_joint_pmf(0, 0, mu=44.0, r=20.0, p=0.5, c=12.0) == -23.263016196113618
+    assert log_joint_pmf(0, 0, mu=36.0, r=12.0, p=0.35, c=6.0) == -16.635532333438686
+    assert log_joint_pmf(0, 0, mu=52.0, r=30.0, p=0.7, c=25.0) == -30.16565596806293
+
+
+def test_remaining_series_n_lt_1_uses_max_q_rho() -> None:
+    """n=0.5, p=q=0.5, cutoff=0: rho is not an upper envelope."""
+    from src.services.nfl_ntbb_k_v1.special import log_nbinom_pmf_np
+
+    true_tail = 1.0 - math.sqrt(0.5)
+    first = math.exp(log_nbinom_pmf_np(1, n=0.5, p=0.5, q=0.5))
+    rho = (0 + 1 + 0.5) / (0 + 2) * 0.5
+    assert rho == pytest.approx(0.375)
+    invalid = first / (1.0 - rho)
+    assert invalid == pytest.approx(0.282842712474619, abs=1e-15)
+    assert invalid < true_tail
+    tail = remaining_series_tail(n_success=0.5, p=0.5, q=0.5, cutoff=0)
+    assert tail["rho"] == pytest.approx(0.375)
+    assert tail["rho_bound"] == pytest.approx(0.5)
+    assert tail["upper"] == pytest.approx(first / (1.0 - 0.5), abs=1e-15)
+    assert tail["upper"] >= true_tail
+    assert true_tail == pytest.approx(0.2928932188134524, abs=1e-15)
+    mb = moment_bound(mu=0.5, r=0.5, n=20)
+    p, _q = nbinom_success_p(r=0.5, mu=0.5)
+    assert mb["same_mean"] is False
+    assert mb["same_probability"] is True
+    assert mb["p"] == p == pytest.approx(0.5)
+    assert mb["r_plus_1"] == 1.5
+    assert mb["tail"]["rho_bound"] == mb["tail"]["rho"]
 
 
 def test_event_interval_clips_to_unit() -> None:
@@ -205,7 +254,9 @@ def test_produce_atomic_and_market_clocks_unverified(tmp_path: Path) -> None:
     out = produce_kernel(repo_root=_repo_root())
     doc = out["document"]
     assert doc["kernel_implemented"] is True
-    assert doc["return_id"] == "36205"
+    assert doc["return_id"] == "58427"
+    assert doc["under_return_id"] == "36205"
+    assert doc["additive_id"] == "80649"
     assert doc["design"] == "25194"
     assert doc["future_grad_step"] == FUTURE_GRAD_STEP == 5e-6
     assert doc["scipy_status"] == SCIPY_STATUS
@@ -234,3 +285,27 @@ def test_no_scipy_dependency_held() -> None:
 def test_future_grad_step_not_promoted() -> None:
     assert FUTURE_GRAD_STEP == 5e-6
     assert math.isfinite(FUTURE_GRAD_STEP)
+
+
+def test_betabinom_large_c_refuse_ordinary_unchanged() -> None:
+    """ADDITIVE 80649: shared BB/conditional. No fabricated corrected probs."""
+    ordinary = conditional_log_mass(2, p=0.3, c=12.0, k0=0.0, k3=0.0, k7=0.0)
+    probs = [math.exp(x) for x in ordinary]
+    mean = sum(h * pr for h, pr in enumerate(probs))
+    assert mean == pytest.approx(0.6, abs=1e-15)
+    assert probs == pytest.approx(
+        [0.5061538461538465, 0.3876923076923073, 0.10615384615384624], abs=1e-15
+    )
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        conditional_log_mass(2, p=0.3, c=1e12, k0=0.0, k3=0.0, k7=0.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        conditional_log_mass(2, p=0.3, c=1e16, k0=0.0, k3=0.0, k7=0.0)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        log_betabinom_pmf(1, 2, alpha=0.3 * 1e16, beta=0.7 * 1e16)
+    with pytest.raises(NtbbKRefuse, match="UNSUPPORTED_NUMERIC_DOMAIN"):
+        log_joint_pmf(1, 1, mu=44.0, r=20.0, p=0.3, c=1e16)
+    # ordinary root conditionals still evaluate
+    root = conditional_log_mass(2, p=0.5, c=12.0, k0=0.0, k3=0.0, k7=0.0)
+    assert [math.exp(x) for x in root] == pytest.approx(
+        [0.2692307692307691, 0.4615384615384619, 0.2692307692307691], abs=1e-15
+    )

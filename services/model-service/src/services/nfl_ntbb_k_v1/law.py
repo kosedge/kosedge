@@ -5,9 +5,11 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from src.services.nfl_ntbb_k_v1.constants import LOG_PMF_DOMAIN_TOL
 from src.services.nfl_ntbb_k_v1.refuse import NtbbKRefuse
 from src.services.nfl_ntbb_k_v1.special import (
     _finite,
+    fsum,
     log_betabinom_pmf,
     log_nbinom_pmf,
     logsumexp,
@@ -76,7 +78,15 @@ def conditional_log_mass(
         z = tilt_z(h, tt, k0=k0_v, k3=k3_v, k7=k7_v)
         log_unnorm.append(log_b + z)
     log_z = logsumexp(log_unnorm)
-    return [x - log_z for x in log_unnorm]
+    out = [x - log_z for x in log_unnorm]
+    if k0_v == 0.0 and k3_v == 0.0 and k7_v == 0.0:
+        mean = fsum(h * math.exp(log_h) for h, log_h in enumerate(out))
+        expect = tt * p_v
+        if abs(mean - expect) > LOG_PMF_DOMAIN_TOL:
+            raise NtbbKRefuse(
+                f"UNSUPPORTED_NUMERIC_DOMAIN betabinom mean {mean} != t*p {expect}"
+            )
+    return out
 
 
 def log_joint_pmf(
