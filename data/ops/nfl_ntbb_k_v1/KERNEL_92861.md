@@ -23,7 +23,7 @@ Not a new pool. Numeric/direct-boundary only. A integrates later.
 | clocks 143 | **SOURCE_VALUE_MATCH ≠ verified** (EVIDENCE 03972 / 92861 ledger unchanged) |
 | owned_completion_claimed | false |
 
-Machine: `KERNEL_SYNTHETIC_92861.json` sha256 `ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7`.
+Machine: `KERNEL_SYNTHETIC_92861.json` sha256 `bc71269fd3191ad08f8f4283dd2325c8da49bb3a2d1dfc5f64836ea08c4a341e` (Cos ACCEPT `12c41587`; `ee800291` was `a807af22`, SUPERSEDED).
 
 ## Nine-fixture N (executed)
 
@@ -55,10 +55,9 @@ normalization / enumeration_error **4.22e-15** · total marginal **2.78e-17** ·
 
 `conditional_log_mass(0, p=0.5, c=True, k0=NaN, k3=0, k7=0)` **REFUSE** before t=0 shortcut.
 
-## What remains for A
+## A integrate (12c41587)
 
-- Integrate this corrected tip; do not treat B-alone as whole-package close
-- Register isolated `NTBB_K_SYNTHETIC_KERNEL_V1` on shared evidence gate if A chooses
-- Do not treat B 143 SOURCE_VALUE_MATCH as verified clocks
+- Isolated `NTBB_K_SYNTHETIC_KERNEL_V1` registered · producer→capability/gate ran once
+- 143 clocks remain SOURCE_VALUE_MATCH ≠ verified
 - SciPy fitting algorithm stays dependency-held
-- No science EXEC / no real 2014–19 fit
+- Package **not** closed from B alone · CERT=0 · no science EXEC

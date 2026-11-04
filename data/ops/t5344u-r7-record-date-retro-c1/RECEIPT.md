@@ -20,7 +20,7 @@ IMPLEMENTED ≠ VERIFIED ≠ ACCEPTED. DRAFT ≠ merge. Real EXEC HOLD.
 - CLI `--claim/--context` parses; REAL HOLD without Root grant
 - invalid/absent/REAL/R5/spent: **zero** model/outcome reads
 - strict live-causal `REST_ACTUAL_ET_CALENDAR_V1`: still DATA_HOLD
-- NTBB-K: RETURN 58427 · `a807af22` held **not final** · `d0bb6bef` refused · wait B log-PMF/tail delta · **not** an R7 model arm
+- NTBB-K: Cos ACCEPT `12c41587` integrated once · `a807af22` SUPERSEDED · `d0bb6bef` refused · **not** an R7 model arm · package not closed from B alone
 - package **not accepted** while direct paths open · producer→capability/gate = A
 - ready_for_real_exec: **false**
 - N1–N3: NON-BLOCKING → Codex

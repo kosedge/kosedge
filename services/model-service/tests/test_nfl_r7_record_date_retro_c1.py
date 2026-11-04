@@ -144,10 +144,12 @@ def test_guarded_preflight_synthetic_executor() -> None:
     assert receipt["invalid_paths"]["real_request"]["model_called"] is False
     assert receipt["invalid_paths"]["r5_reuse"]["refused"] is True
     assert receipt["invalid_paths"]["spent_retry"]["refused"] is True
-    assert receipt["ntbb_k_integrated"] is False
+    assert receipt["ntbb_k_integrated"] is True
     assert receipt["kernel_frozen_from_d0bb6bef"] is False
     assert receipt["kernel_frozen_from_a807af22"] is False
+    assert receipt["kernel_integrated_from_12c41587"] is True
     assert receipt["package_accepted"] is False
+    assert receipt["package_closed_from_b_alone"] is False
     assert receipt["direct_paths_open"] is True
     schema = receipt["real_data_projection_schema"]
     assert schema["authorized_now"] is False
@@ -155,19 +157,25 @@ def test_guarded_preflight_synthetic_executor() -> None:
     assert "ROOT_CLAIM" in schema["executable_command_when_root_authorizes"]
 
 
-def test_ntbbk_a807af22_held_not_final() -> None:
+def test_ntbbk_12c41587_integrated_once_not_package_close() -> None:
     bound = consume_ntbb_k(root=REPO)
-    assert bound["held_tip"].startswith("a807af22")
-    assert bound["frozen_tip"] is None
+    assert bound["integrated_tip"].startswith("12c41587")
+    assert bound["superseded_tip"].startswith("a807af22")
+    assert bound["held_tip"] is None
+    assert bound["frozen_tip"].startswith("12c41587")
     assert bound["frozen_as_final"] is False
     assert bound["refused_tip"].startswith("d0bb6bef")
     assert bound["r7_model_arm"] is False
     assert bound["package_accepted"] is False
     assert bound["direct_paths_open"] is True
     assert bound["return_unfreeze"] == "58427"
+    assert bound["additive_id"] == "80649"
     assert bound["package_closed_from_b_alone"] is False
     assert bound["b_clocks_promoted"] is False
-    assert bound["kernel_sha256"] == "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7"
+    assert bound["kernel_rewritten"] is False
+    assert bound["produce_kernel_called"] is False
+    assert bound["producer"]["n_by_family"] == {"MU44_R20": 175, "MU36_R12": 183, "MU52_R30": 174}
+    assert bound["kernel_sha256"] == "bc71269fd3191ad08f8f4283dd2325c8da49bb3a2d1dfc5f64836ea08c4a341e"
 
 
 def test_golden_bootstrap_pooled_not_unweighted() -> None:

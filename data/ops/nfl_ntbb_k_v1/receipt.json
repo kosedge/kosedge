@@ -1,19 +1,21 @@
 {
+  "additive_id": "80649",
   "cert": 0,
   "clarifications_sha256_match": true,
   "clear": "92861",
   "clocks_143": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
   "fitting_algorithm": "UNEXECUTED_DEPENDENCY_HELD",
   "kernel_implemented": true,
-  "kernel_sha256": "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7",
+  "kernel_sha256": "bc71269fd3191ad08f8f4283dd2325c8da49bb3a2d1dfc5f64836ea08c4a341e",
   "max_enumerated_total": 183,
   "metadata_14083": "14083",
   "oracle_max_enumerated_total": 183,
   "owned_completion_claimed": false,
   "path": "data/ops/nfl_ntbb_k_v1/KERNEL_SYNTHETIC_92861.json",
-  "return_id": "36205",
+  "return_id": "58427",
   "root_nine_status": "PASS",
   "scipy_status": "ABSENT_NOT_EVALUABLE",
   "spec_sha256_match": true,
-  "ticket": "t5343u"
+  "ticket": "t5343u",
+  "under_return_id": "36205"
 }

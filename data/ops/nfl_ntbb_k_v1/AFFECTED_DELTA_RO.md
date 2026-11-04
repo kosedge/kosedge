@@ -17,7 +17,17 @@ No market-ledger rewrite. No whole-package close from B.
 | `tests/test_nfl_ntbb_k_v1.py` | +7 direct/root/clarification controls |
 | `data/ops/nfl_ntbb_k_v1/` | regenerated kernel + RETURN 36205 receipts |
 
-Unchanged hashes: 92861 `6879ed43…` · 143 `bf5fd92e…` · 81759 `ce188c64…` · risk1 `ca253545…`.
+## vs a807af22 (SUPERSEDED held tip)
+
+| path | delta |
+|---|---|
+| `special.py` | log-PMF domain refuse · NB-tail `max(q,ρ)` · BB rising-factorial refuse |
+| `law.py` | untilted betabinom mean check |
+| `constants.py` | RETURN 58427 / UNDER 36205 / ADDITIVE 80649 · `LOG_PMF_DOMAIN_TOL` |
+| `produce.py` | stamps under/additive ids |
+| kernel SHA | `ee800291…` → `bc71269f…` |
+
+Unchanged hashes: 92861 `6879ed43…` · 143 `bf5fd92e…` · 81759 `ce188c64…` · risk1 `ca253545…`. CSV44 not promoted.
 
 Prior maxN 61 / μ 4–12 cases are **DEMO_SMALL_NINE**, not the executed root fixtures.
 

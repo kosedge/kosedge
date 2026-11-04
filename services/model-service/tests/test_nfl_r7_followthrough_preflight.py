@@ -7,8 +7,9 @@ from pathlib import Path
 import pytest
 
 from src.services.nfl_r7_correctness_v1.followthrough_preflight import (
-    B_NTBBK_TIP_HELD,
+    B_NTBBK_TIP_INTEGRATED,
     B_NTBBK_TIP_REFUSED,
+    B_NTBBK_TIP_SUPERSEDED,
     EXACT_496,
     N_2020,
     N_2021,
@@ -129,28 +130,35 @@ def test_fifth_prerequisite_point_error_not_book_prices() -> None:
     assert consumed == ["CONSUMED_VIA_STAGED_PROJECTION"] * 5
 
 
-def test_ntbbk_hooks_a807af22_not_final_wait_58427() -> None:
+def test_ntbbk_hooks_12c41587_integrated_once() -> None:
     hooks = ntbb_k_integrate_hooks()
-    assert hooks["status"] == "WAIT_RETURN58427_LOGPMF_TAIL_DELTA"
+    assert hooks["status"] == "INTEGRATED_ONCE_12C41587"
     assert hooks["return_order"] == RETURN_NTBBK
     assert hooks["return_unfreeze"] == "58427"
+    assert hooks["additive_id"] == "80649"
     assert hooks["refused_tip"] == B_NTBBK_TIP_REFUSED
-    assert hooks["held_tip"] == B_NTBBK_TIP_HELD
-    assert hooks["frozen_tip"] is None
+    assert hooks["superseded_tip"] == B_NTBBK_TIP_SUPERSEDED
+    assert hooks["held_tip"] is None
+    assert hooks["integrated_tip"] == B_NTBBK_TIP_INTEGRATED
+    assert hooks["frozen_tip"] == B_NTBBK_TIP_INTEGRATED
     assert hooks["frozen_as_final"] is False
-    assert hooks["integrated"] is False
+    assert hooks["integrated"] is True
+    assert hooks["integrated_once"] is True
     assert hooks["package_accepted"] is False
     assert hooks["direct_paths_open"] is True
     assert hooks["r7_model_arm"] is False
     assert hooks["package_closed_from_b_alone"] is False
     assert hooks["b_clocks_promoted"] is False
+    assert hooks["kernel_sha256_locked"] is True
     assert hooks["producer_capability_gate"]["owner"] == "A"
+    assert hooks["producer_capability_gate"]["status"] == "INTEGRATED_ONCE_PRODUCER_GATE"
     hold = retro_c1_hold()
     assert hold["implemented"] is True
     assert hold["real_exec"] is False
     assert hold["package_accepted"] is False
     cand = build_candidate(root=REPO)
-    assert cand["ntbb_k_integrate"]["held_tip"].startswith("a807af22")
+    assert cand["ntbb_k_integrate"]["integrated_tip"].startswith("12c41587")
+    assert cand["ntbb_k_integrate"]["superseded_tip"].startswith("a807af22")
     assert cand["ntbb_k_integrate"]["frozen_as_final"] is False
     assert cand["ntbb_k_integrate"]["r7_model_arm"] is False
     assert cand["kernel_implemented"] is False

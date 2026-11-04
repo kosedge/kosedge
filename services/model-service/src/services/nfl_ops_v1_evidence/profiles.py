@@ -157,13 +157,15 @@ def _seed() -> Dict[str, GateProfile]:
             scope_id=R7_SCOPE_ID,
             status=STATUS_REGISTERED,
             registered_by=WORKER_A_ID,
-            handoff_sha256=None,
+            handoff_sha256="bc71269fd3191ad08f8f4283dd2325c8da49bb3a2d1dfc5f64836ea08c4a341e",
             isolated_area=NTBBK_ISOLATED_AREA,
-            b_tip="a807af2298826475d8a207dfb7fcfcf710f00014",
+            b_tip="12c4158707304d1640158bfe59171237be8aca2c",
+            cos_accept="12c4158707304d1640158bfe59171237be8aca2c",
             notes=(
-                "RETURN 58427: isolated NTBB-K SYNTHETIC kernel staged from a807af22, "
-                "NOT frozen as final. Waiting B log-PMF/tail proof delta under 36205. "
-                "d0bb6bef refused. Not a real R7 model arm. B clocks not promoted."
+                "Cos ACCEPT 12c41587: isolated NTBB-K SYNTHETIC kernel integrated once "
+                "(RETURN 58427 + ADDITIVE 80649). a807af22 SUPERSEDED. d0bb6bef refused. "
+                "Not a real R7 model arm. B 143 clocks not promoted. Package not closed "
+                "from B alone."
             ),
         ),
     }

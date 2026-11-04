@@ -36,7 +36,9 @@ from src.services.nfl_ntbb_k_v1.constants import (
     PIN_LEDGER_92861_SHA256,
     PROFILE,
     QUALIFICATION,
+    ADDITIVE_ID,
     RETURN_ID,
+    UNDER_RETURN_ID,
     SCIPY_FITTING_ALGORITHM,
     SCIPY_STATUS,
     SPEC_BYTES,
@@ -188,6 +190,8 @@ def build_kernel_document(repo_root: Path) -> dict[str, Any]:
         "profile": PROFILE,
         "qualification": QUALIFICATION,
         "return_id": RETURN_ID,
+        "under_return_id": UNDER_RETURN_ID,
+        "additive_id": ADDITIVE_ID,
         "future_grad_step": FUTURE_GRAD_STEP,
         "root_nine": {
             "fixture_kind": nine["fixture_kind"],
@@ -246,6 +250,8 @@ def produce_kernel(*, repo_root: Path | None = None) -> dict[str, Any]:
         "spec_sha256_match": doc["spec"]["sha256_match"],
         "clarifications_sha256_match": doc["clarifications"]["sha256_match"],
         "return_id": RETURN_ID,
+        "under_return_id": UNDER_RETURN_ID,
+        "additive_id": ADDITIVE_ID,
         "ticket": TICKET,
     }
     rec_path = root / OPS_REL / "receipt.json"

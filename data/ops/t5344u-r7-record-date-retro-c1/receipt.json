@@ -2371,6 +2371,7 @@
   },
   "kernel_frozen_from_a807af22": false,
   "kernel_frozen_from_d0bb6bef": false,
+  "kernel_integrated_from_12c41587": true,
   "n1_n3_nonblocking": [
     {
       "blocking": false,
@@ -2391,11 +2392,12 @@
       "to": "Codex"
     }
   ],
-  "ntbb_k_integrated": false,
+  "ntbb_k_integrated": true,
   "ok": true,
   "owner_clear": "92861",
   "package": "R7_RECORD_DATE_RETRO_C1",
   "package_accepted": false,
+  "package_closed_from_b_alone": false,
   "pins": {
     "clarifications": {
       "match": true,

@@ -1,4 +1,5 @@
 {
+  "additive_id": "80649",
   "cert": 0,
   "channel": "SYNTHETIC",
   "clarifications": {
@@ -80,7 +81,7 @@
   "pass_spec": "4f8c5827",
   "profile": "NTBB_K_SYNTHETIC_KERNEL_V1",
   "qualification": "UNQUALIFIED",
-  "return_id": "36205",
+  "return_id": "58427",
   "root_nine": {
     "fixture_kind": "RETURN_36205_ROOT_NINE",
     "max_enumerated_total": 183,
@@ -414,6 +415,7 @@
     "sha256_match": true
   },
   "ticket": "t5343u",
+  "under_return_id": "36205",
   "use_label": "RESEARCH_ONLY",
   "worker": "B"
 }

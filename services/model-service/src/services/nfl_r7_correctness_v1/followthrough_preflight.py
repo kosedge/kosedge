@@ -1,12 +1,11 @@
 """t5335u/t5344u R7 followthrough metadata preflight. CERT=0.
 
-Manifest + identity/readiness only. Does not implement NTBB-K.
-Does not open score-bearing labels or run real science.
-METADATA 14083 consumes staged R7_METADATA_PROJECTION only.
+Manifest + identity/readiness only. Does not open score-bearing labels
+or run real science. METADATA 14083 consumes staged R7_METADATA_PROJECTION only.
 
-NTBB-K integrate hooks are prepared but NOT locked. RETURN 36205:
-B tip d0bb6bef is under numeric RETURN — do not freeze/integrate as final.
-Producer→capability/gate remains Worker A. R7_RECORD_DATE_RETRO_C1 HOLD.
+NTBB-K: Cos ACCEPT 12c41587 integrated once (RETURN 58427 + ADDITIVE 80649).
+a807af22 SUPERSEDED. d0bb6bef refused. Not an R7 model arm. Not a package
+close from B alone. Producer→capability/gate is Worker A. RETRO_C1 continues.
 """
 
 from __future__ import annotations
@@ -83,13 +82,15 @@ BOOTSTRAP_GEN = "PCG64"
 
 PRIOR_MISSING_N = 5
 
-# RETURN 58427 — do NOT freeze a807af22 as final. Wait B log-PMF/tail delta.
+# Cos ACCEPT 12c41587 — integrate once. a807af22 SUPERSEDED. d0bb6bef refused.
 B_NTBBK_TIP_REFUSED = "d0bb6bef4b44215735369c0208ce19e07a9647a6"
-B_NTBBK_TIP_HELD = "a807af2298826475d8a207dfb7fcfcf710f00014"
-B_NTBBK_TIP_FROZEN = None
-B_NTBBK_KERNEL_SHA256 = "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7"
+B_NTBBK_TIP_SUPERSEDED = "a807af2298826475d8a207dfb7fcfcf710f00014"
+B_NTBBK_TIP_INTEGRATED = "12c4158707304d1640158bfe59171237be8aca2c"
+B_NTBBK_TIP_FROZEN = B_NTBBK_TIP_INTEGRATED
+B_NTBBK_KERNEL_SHA256 = "bc71269fd3191ad08f8f4283dd2325c8da49bb3a2d1dfc5f64836ea08c4a341e"
 RETURN_NTBBK = "36205"
 RETURN_UNFREEZE = "58427"
+ADDITIVE_NTBBK = "80649"
 NTBBK_PROFILE_HOOK = "NTBB_K_SYNTHETIC_KERNEL_V1"
 NTBBK_ISOLATED_AREA = "services/model-service/src/services/nfl_ntbb_k_v1"
 NTBBK_ISOLATED_OPS = "data/ops/nfl_ntbb_k_v1"
@@ -708,24 +709,29 @@ def missing_locators(root: Path) -> list[dict[str, Any]]:
 
 
 def ntbb_k_integrate_hooks() -> dict[str, Any]:
-    """RETURN 58427 — a807af22 held, not final. Wait B log-PMF/tail delta."""
+    """Cos ACCEPT 12c41587 integrated once. Not a package close from B alone."""
     return {
-        "status": "WAIT_RETURN58427_LOGPMF_TAIL_DELTA",
+        "status": "INTEGRATED_ONCE_12C41587",
         "return_order": RETURN_NTBBK,
         "return_unfreeze": RETURN_UNFREEZE,
+        "additive_id": ADDITIVE_NTBBK,
         "refused_tip": B_NTBBK_TIP_REFUSED,
         "refused_tip_short": "d0bb6bef",
-        "held_tip": B_NTBBK_TIP_HELD,
-        "held_tip_short": "a807af22",
+        "superseded_tip": B_NTBBK_TIP_SUPERSEDED,
+        "superseded_tip_short": "a807af22",
+        "held_tip": None,
+        "integrated_tip": B_NTBBK_TIP_INTEGRATED,
+        "integrated_tip_short": "12c41587",
         "frozen_tip": B_NTBBK_TIP_FROZEN,
         "frozen_as_final": False,
-        "integrated": False,
+        "integrated": True,
+        "integrated_once": True,
         "integrated_final": False,
         "r7_model_arm": False,
         "kernel_files_copied": True,
-        "kernel_sha256_locked": False,
+        "kernel_sha256_locked": True,
         "kernel_sha256": B_NTBBK_KERNEL_SHA256,
-        "kernel_role": "STAGED_NOT_FINAL_FROM_a807af22",
+        "kernel_role": "INTEGRATED_FROM_12C41587",
         "profile_id": NTBBK_PROFILE_HOOK,
         "profile_status": "REGISTERED_ISOLATED_NOT_R7_MODEL_ARM",
         "shared_gate_registered": True,
@@ -734,21 +740,21 @@ def ntbb_k_integrate_hooks() -> dict[str, Any]:
         "package_accepted": False,
         "package_closed_from_b_alone": False,
         "direct_paths_open": True,
-        "waiting_for": "B direct log-PMF/tail proof delta under 36205",
+        "waiting_for": "package accept + Root GO + remaining 69538 prereqs",
         "producer_capability_gate": {
             "owner": "A",
-            "status": "A_OBLIGATION_NOT_CLOSED_BY_B",
-            "reexecuted_this_turn": False,
+            "status": "INTEGRATED_ONCE_PRODUCER_GATE",
+            "reexecuted_this_turn": True,
             "real_science": False,
+            "produce_kernel_rewrote": False,
         },
         "scipy_fitting": "UNEXECUTED_DEPENDENCY_HELD",
         "b_clocks_promoted": False,
         "note": (
-            "RETURN 58427: do not freeze a807af22 as final NTBB-K integrate. "
-            "d0bb6bef remains refused. Isolated module staged, not locked. "
-            "Integrate the corrected B revision once when posted. "
-            "Package not accepted while direct paths open. "
-            "Producer→capability/gate remains Worker A."
+            "Cos ACCEPT 12c41587 integrated once (RETURN 58427 + ADDITIVE 80649). "
+            "a807af22 SUPERSEDED. d0bb6bef refused. Isolated producer→capability/gate "
+            "ran without rewriting the kernel. 143 clocks not promoted. "
+            "Not an R7 model arm. Package not closed from B alone. CERT=0."
         ),
     }
 
@@ -874,11 +880,14 @@ def build_candidate(*, root: Path | None = None) -> dict[str, Any]:
         },
         "book_specific_offered_price_settlement": list(ECONOMIC_RESIDUALS),
         "scipy": "ABSENT",
-        "ntbb_k_kernel": "STAGED_NOT_FINAL_WAIT_RETURN58427_LOGPMF_TAIL",
+        "ntbb_k_kernel": "INTEGRATED_FROM_12C41587",
         "ntbb_k_return": RETURN_NTBBK,
         "ntbb_k_return_unfreeze": RETURN_UNFREEZE,
-        "ntbb_k_held_tip": B_NTBBK_TIP_HELD,
-        "ntbb_k_frozen_tip": None,
+        "ntbb_k_additive": ADDITIVE_NTBBK,
+        "ntbb_k_held_tip": None,
+        "ntbb_k_superseded_tip": B_NTBBK_TIP_SUPERSEDED,
+        "ntbb_k_integrated_tip": B_NTBBK_TIP_INTEGRATED,
+        "ntbb_k_frozen_tip": B_NTBBK_TIP_FROZEN,
         "package_accepted": False,
         "direct_paths_open": True,
         "science_hold": True,
