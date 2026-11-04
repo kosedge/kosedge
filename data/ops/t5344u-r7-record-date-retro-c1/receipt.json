@@ -2357,14 +2357,14 @@
     "real_request": {
       "model_called": false,
       "outcome_reads": 0,
-      "reason": "model REAL reader unconditionally HOLD \u2014 no Root-approved grant/context",
+      "reason": "model REAL refused NOW \u2014 approved registry empty",
       "refused": true,
       "surface_notes": 0
     },
     "spent_retry": {
       "model_called": false,
       "outcome_reads": 0,
-      "reason": "spent claim cannot retry SYNTHETIC_fc3e92f90f8f_14551_1793752764107",
+      "reason": "spent claim cannot retry SYNTHETIC_347b9394dd3d_16071_1793754851564",
       "refused": true,
       "surface_notes": 0
     }
@@ -2425,7 +2425,7 @@
       "sha256": "3394663e41183de255e641ffbfc2e321bb7266fd3e27d984f7f350db6f5e3110"
     }
   },
-  "produced_utc": "2026-11-04T00:39:24Z",
+  "produced_utc": "2026-11-04T01:14:11Z",
   "profile": "RECORDED_DATE_RETRO",
   "ready_for_real_exec": false,
   "real_data_projection_schema": {
@@ -2539,6 +2539,7 @@
   },
   "return_58427": "58427",
   "return_69538": "69538",
+  "return_91750": "91750",
   "science_hold": true,
   "spy_positive_control": {
     "evidence_label": "EXECUTED_HERE",

@@ -45,16 +45,21 @@ def test_gate_verifies_12c41587_without_rewrite() -> None:
     }
     assert bound["refusal_consumer"]["ordinary_log_joint_00"] == -23.263016196113618
     assert bound["refusal_consumer"]["nb_tail_max_q_rho"]["rho_bound"] == 0.5
-    assert bound["capability"]["real_denied"] is True
-    assert bound["capability"]["scipy_present"] is False
-    assert bound["capability"]["b_clocks_promoted"] is False
-    assert bound["capability"]["csv44_present"] is False
+    assert bound["capability"]["consumed"] is True
+    assert bound["capability"]["from_producer"] is True
+    assert bound["capability"]["hand_built"] is False
+    assert bound["capability"]["self_reported_integrated_proof"] is False
     assert bound["capability"]["clocks_143"] == "SOURCE_VALUE_MATCH_NOT_VERIFIED"
+    assert bound["self_reported_integrated_proof"] is False
+    assert bound["consumer_invoked"] is True
+    assert bound["shared_gate_invoked"] is True
+    assert bound["shared_gate_ok"] is True
+    assert bound["csv44_role"] in {"ABSENT", "EVIDENCE_ONLY_NOT_PROMOTED"}
 
 
 def test_consume_is_the_gate() -> None:
     bound = consume_ntbb_k(root=REPO)
-    assert bound["producer_capability_gate"]["status"] == "INTEGRATED_ONCE_PRODUCER_GATE"
+    assert bound["producer_capability_gate"]["status"] == "JOINT_CONSUMER_SHARED_GATE"
     profile = get_profile(PROFILE_NTBB_K_SYNTHETIC)
     assert profile.b_tip == B_NTBBK_TIP_INTEGRATED
     assert profile.status == "REGISTERED"

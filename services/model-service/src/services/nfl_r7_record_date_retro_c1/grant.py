@@ -15,6 +15,8 @@ from src.services.nfl_r7_record_date_retro_c1.refuse import RetroHold, RetroRefu
 
 # No Root-approved digest has been posted. Do not invent one.
 ROOT_APPROVED_AUTH_DIGEST: str | None = None
+# Empty until Root posts digest + role-bound readers. Not a fabricated GO.
+APPROVED_REAL_READERS: dict[str, Any] = {}
 
 REQUIRED_GRANT_KEYS = (
     "schema_id",
@@ -56,10 +58,18 @@ def load_authorization_document(path: Path) -> dict[str, Any]:
     }
 
 
-def refuse_real_without_root_grant(*, grant: dict[str, Any] | None = None) -> None:
+def refuse_real_without_root_grant(*, grant: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    """Refuse NOW because the approved registry is empty. Not a forever stub."""
+    if ROOT_APPROVED_AUTH_DIGEST is None:
+        raise RetroHold(
+            "REAL mode DENIED — approved auth-digest registry empty "
+            "(no fabricated GO)"
+        )
     if grant is None or not grant.get("digest_matches_root"):
         raise RetroHold(
-            "REAL mode DENIED — absent Root-approved exact authorization-document "
-            "digest + matching context (no fabricated GO)"
+            "REAL mode DENIED — Root-pinned authorization-document "
+            "digest + matching context mismatch (no fabricated GO)"
         )
-    raise RetroHold("REAL mode DENIED — digest loaded but GO not granted this machine")
+    if not APPROVED_REAL_READERS:
+        raise RetroHold("REAL mode DENIED — approved role-bound reader registry empty")
+    return grant

@@ -108,8 +108,16 @@ class AuthorityRegistry:
         if reader_role not in READER_ROLES:
             raise RetroRefuse(f"unknown reader_role {reader_role!r}")
         if requested_class == INPUT_REAL:
+            from src.services.nfl_r7_record_date_retro_c1.grant import (
+                APPROVED_REAL_READERS,
+                ROOT_APPROVED_AUTH_DIGEST,
+            )
+            if ROOT_APPROVED_AUTH_DIGEST is None or not APPROVED_REAL_READERS:
+                raise RetroHold(
+                    f"{reader_role} REAL refused NOW — approved registry empty"
+                )
             raise RetroHold(
-                f"{reader_role} REAL reader unconditionally HOLD — no Root-approved grant/context"
+                f"{reader_role} REAL refused NOW — GO not granted this machine"
             )
         if not claim_id or not context_hash_expected:
             raise RetroRefuse(f"{reader_role} refused: absent claim/context")

@@ -176,6 +176,9 @@ def test_ntbbk_12c41587_integrated_once_not_package_close() -> None:
     assert bound["produce_kernel_called"] is False
     assert bound["producer"]["n_by_family"] == {"MU44_R20": 175, "MU36_R12": 183, "MU52_R30": 174}
     assert bound["kernel_sha256"] == "bc71269fd3191ad08f8f4283dd2325c8da49bb3a2d1dfc5f64836ea08c4a341e"
+    assert bound["self_reported_integrated_proof"] is False
+    assert bound["consumer_invoked"] is True
+    assert bound["shared_gate_invoked"] is True
 
 
 def test_golden_bootstrap_pooled_not_unweighted() -> None:
@@ -319,3 +322,73 @@ def test_second_writer_fresh_process(tmp_path: Path) -> None:
     second = subprocess.run([sys.executable, "-c", script], cwd=str(REPO), env=env, capture_output=True, text=True)
     assert second.returncode != 0
     assert "exclusive" in (second.stderr + second.stdout)
+
+
+def test_g1_labels_denied_before_seal_and_absent_from_bytes(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.adapters import LABEL_KEYS, LabelVault
+    from src.services.nfl_r7_record_date_retro_c1.engine import run_synthetic_engine
+    from src.services.nfl_r7_record_date_retro_c1.fixtures import SYNTHETIC_LABELS
+    from src.services.nfl_ops_v1_evidence.spy import OutcomeReadSpy
+
+    vault = LabelVault(SYNTHETIC_LABELS)
+    with pytest.raises(RetroRefuse, match="denied before forecast seal"):
+        vault.read(["SYNTHETIC_2018_W06_LAC_LAR"])
+    spy = OutcomeReadSpy(fn=lambda: {"probe": {"y_margin": 0.0}})
+    spy()
+    assert spy.reads == 1
+    receipt = run_synthetic_engine(root=REPO, dest=tmp_path)
+    assert receipt["outcome_reads"] >= 1
+    assert receipt["label_vault_reads"] >= 1
+    assert receipt["labels_before_seal"] is False
+    raw = (tmp_path / "custody").glob("*.forecasts.json")
+    body = next(raw).read_text(encoding="utf-8")
+    for key in LABEL_KEYS:
+        assert f'"{key}"' not in body
+    w06 = next(row for row in receipt["forecasts"] if row["game_id"] == "SYNTHETIC_2018_W06_LAC_LAR")
+    assert "y_margin" not in w06
+    assert abs(float(w06["c_margin"]) - 1.6704285183921606) < 1e-12
+
+
+def test_g1_outcome_identity_mutation_refused(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import run_synthetic_engine
+
+    with pytest.raises(RetroRefuse, match="identity"):
+        run_synthetic_engine(
+            root=REPO,
+            dest=tmp_path,
+            labels={"SYNTHETIC_MUTATED_ID": 3.0},
+        )
+
+
+def test_g3_design_metrics_and_ci_percentiles(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import run_synthetic_engine
+    from src.services.nfl_r7_record_date_retro_c1.metrics import design_25194_metrics, paired_abs_loss_diff
+    from src.services.nfl_r7_record_date_retro_c1.fixtures import SYNTHETIC_ARCHIVE
+
+    receipt = run_synthetic_engine(root=REPO, dest=tmp_path)
+    metrics = receipt["metrics"]
+    assert metrics["primary"]["name"] == "mean_abs_R7C_minus_abs_R5C"
+    assert metrics["declared_not_calculated"] is False
+    assert metrics["if_q2_c"]["c_margin"]["n"] == 2
+    assert metrics["paired_abs_loss"]["old437"]["c_minus_r5"]["n"] == 1
+    assert metrics["paired_abs_loss"]["new59"]["c_minus_r5"]["n"] == 1
+    assert metrics["c_minus_market_same96"]["n"] == 1
+    assert receipt["bootstrap"]["interval"] == "2.5/97.5"
+    assert "p025" in receipt["bootstrap"] and "p975" in receipt["bootstrap"]
+    assert receipt["sensitivity"]["seed"] == 20261104
+    assert receipt["sensitivity"]["favorable_interval_chosen"] is False
+    recomputed = design_25194_metrics(receipt["scoring"], archive=SYNTHETIC_ARCHIVE)
+    assert recomputed["primary"]["mean"] == metrics["primary"]["mean"]
+    row = receipt["scoring"][0]
+    manual = paired_abs_loss_diff([row], left="c_margin", right="r5_c")
+    assert manual["n"] in {0, 1}
+
+
+def test_g2_real_empty_registry_not_relabeled() -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import run_real_engine
+    from src.services.nfl_r7_record_date_retro_c1.grant import APPROVED_REAL_READERS, ROOT_APPROVED_AUTH_DIGEST
+
+    assert ROOT_APPROVED_AUTH_DIGEST is None
+    assert APPROVED_REAL_READERS == {}
+    with pytest.raises(RetroHold, match="approved auth-digest registry empty"):
+        run_real_engine(grant_path=None, claim_id="ROOT_CLAIM", context_hash="a" * 64)

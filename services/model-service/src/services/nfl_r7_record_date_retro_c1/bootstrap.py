@@ -8,7 +8,12 @@ from __future__ import annotations
 
 from typing import Any, Iterable, Mapping, Sequence
 
-from src.services.nfl_r7_record_date_retro_c1.pins import BOOTSTRAP_B, BOOTSTRAP_GEN, BOOTSTRAP_SEED
+from src.services.nfl_r7_record_date_retro_c1.pins import (
+    BOOTSTRAP_B,
+    BOOTSTRAP_GEN,
+    BOOTSTRAP_SEED,
+    SENSITIVITY_SEED,
+)
 from src.services.nfl_r7_record_date_retro_c1.refuse import RetroRefuse
 
 GOLDEN_WEEK_A = {"signed": -9.0, "n_games": 1}
@@ -65,19 +70,25 @@ def assert_golden_two_block() -> dict[str, Any]:
     }
 
 
-def week_blocks_from_rows(rows: Iterable[Mapping[str, Any]]) -> list[dict[str, Any]]:
+def week_blocks_from_rows(
+    rows: Iterable[Mapping[str, Any]],
+    *,
+    value_key: str = "paired_abs_loss",
+) -> list[dict[str, Any]]:
     grouped: dict[tuple[int, int], list[float]] = {}
     for row in rows:
         key = (int(row["season"]), int(row["week"]))
-        grouped.setdefault(key, []).append(float(row["signed_c_minus_y"]))
+        if value_key not in row:
+            raise RetroRefuse(f"bootstrap row missing {value_key}")
+        grouped.setdefault(key, []).append(float(row[value_key]))
     blocks = []
-    for (season, week), signed in sorted(grouped.items()):
+    for (season, week), values in sorted(grouped.items()):
         blocks.append(
             {
                 "season": season,
                 "week": week,
-                "n_games": len(signed),
-                "signed": sum(signed) / float(len(signed)),
+                "n_games": len(values),
+                "signed": sum(values) / float(len(values)),
             }
         )
     return blocks
@@ -88,11 +99,12 @@ def season_stratified_pooled_bootstrap(
     *,
     B: int = BOOTSTRAP_B,
     seed: int = BOOTSTRAP_SEED,
+    value_key: str = "paired_abs_loss",
 ) -> dict[str, Any]:
-    """Resample week-blocks within season; pool game-weighted. Real computation."""
+    """Season-week cluster resample; pool game-weighted. CI = 2.5th/97.5th."""
     import numpy as np
 
-    blocks = week_blocks_from_rows(rows)
+    blocks = week_blocks_from_rows(rows, value_key=value_key)
     if not blocks:
         raise RetroRefuse("bootstrap has no week blocks")
     by_season: dict[int, list[dict[str, Any]]] = {}
@@ -112,11 +124,51 @@ def season_stratified_pooled_bootstrap(
         "seed": int(seed),
         "gen": BOOTSTRAP_GEN,
         "n_weeks": len(blocks),
+        "n_clusters": len(blocks),
+        "season_coverage": sorted(by_season),
         "mean": float(arr.mean()),
-        "p05": float(np.quantile(arr, 0.05)),
-        "p95": float(np.quantile(arr, 0.95)),
+        "p025": float(np.quantile(arr, 0.025)),
+        "p975": float(np.quantile(arr, 0.975)),
+        "interval": "2.5/97.5",
         "observed_pooled": pooled_game_weighted(blocks),
         "observed_unweighted": unweighted_week_mean(blocks),
+        "statistic": value_key,
+        "run": True,
+        "scientific_claim": False,
+    }
+
+
+def game_sensitivity_bootstrap(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    B: int = BOOTSTRAP_B,
+    seed: int = SENSITIVITY_SEED,
+    value_key: str = "paired_abs_loss",
+) -> dict[str, Any]:
+    """Game-level resample. CI = 2.5th/97.5th. Never pick the favorable interval."""
+    import numpy as np
+
+    if not rows:
+        raise RetroRefuse("sensitivity has no rows")
+    stats = [float(row[value_key]) for row in rows]
+    rng = np.random.Generator(np.random.PCG64(int(seed)))
+    draws: list[float] = []
+    n = len(stats)
+    for _ in range(int(B)):
+        idx = rng.integers(0, n, size=n)
+        draws.append(sum(stats[int(i)] for i in idx) / float(n))
+    arr = np.asarray(draws, dtype=float)
+    return {
+        "B": int(B),
+        "seed": int(seed),
+        "gen": BOOTSTRAP_GEN,
+        "n_games": n,
+        "mean": float(arr.mean()),
+        "p025": float(np.quantile(arr, 0.025)),
+        "p975": float(np.quantile(arr, 0.975)),
+        "interval": "2.5/97.5",
+        "favorable_interval_chosen": False,
+        "statistic": value_key,
         "run": True,
         "scientific_claim": False,
     }

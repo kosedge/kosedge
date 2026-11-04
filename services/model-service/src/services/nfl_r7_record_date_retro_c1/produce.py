@@ -387,6 +387,7 @@ def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
         "direct_paths_open": True,
         "return_58427": "58427",
         "return_69538": "69538",
+        "return_91750": "91750",
         "science_hold": True,
         "produced_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "command": EXPECTED_COMMAND,

@@ -117,7 +117,8 @@
       "produce_kernel_rewrote": false,
       "real_science": false,
       "reexecuted_this_turn": true,
-      "status": "INTEGRATED_ONCE_PRODUCER_GATE"
+      "self_reported_integrated_proof": false,
+      "status": "JOINT_CONSUMER_SHARED_GATE"
     },
     "profile_id": "NTBB_K_SYNTHETIC_KERNEL_V1",
     "profile_status": "REGISTERED_ISOLATED_NOT_R7_MODEL_ARM",
@@ -128,7 +129,7 @@
     "return_unfreeze": "58427",
     "scipy_fitting": "UNEXECUTED_DEPENDENCY_HELD",
     "shared_gate_registered": true,
-    "status": "INTEGRATED_ONCE_12C41587",
+    "status": "JOINT_CONSUMER_SHARED_GATE",
     "superseded_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
     "superseded_tip_short": "a807af22",
     "waiting_for": "package accept + Root GO + remaining 69538 prereqs"
@@ -202,7 +203,7 @@
     "status": "SYNTHETIC_EXECUTOR_READY_REAL_EXEC_HOLD",
     "strict_actual_kickoff_live_causal": "DATA_HOLD"
   },
-  "runtime_source_revision": "5c0ac48af1512a25938c51692ec9cf8915a63a5a",
+  "runtime_source_revision": "a42ea28c7dfed5efad5459e7df3e9a4274042ac0",
   "spec_sha256": "2f3c215d7680dd5aa33a0a77690ece4ef70a0a8dbbebaac880750dd776ec66d7",
   "status": "PREFLIGHT_CLOUD_METADATA_CONSUMED_ACTUAL_CLOCK_UNKNOWN",
   "timestamp_role": {

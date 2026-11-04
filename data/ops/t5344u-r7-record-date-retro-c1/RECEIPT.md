@@ -20,7 +20,8 @@ IMPLEMENTED ≠ VERIFIED ≠ ACCEPTED. DRAFT ≠ merge. Real EXEC HOLD.
 - CLI `--claim/--context` parses; REAL HOLD without Root grant
 - invalid/absent/REAL/R5/spent: **zero** model/outcome reads
 - strict live-causal `REST_ACTUAL_ET_CALENDAR_V1`: still DATA_HOLD
-- NTBB-K: Cos ACCEPT `12c41587` integrated once · `a807af22` SUPERSEDED · `d0bb6bef` refused · **not** an R7 model arm · package not closed from B alone
+- RETURN 91750: G1 label vault after seal · G2 shared data-injected engine · G3 DESIGN 25194 metrics/CI · G4 joint consumer + shared evidence gate
+- NTBB-K: Cos ACCEPT `12c41587` · fresh producer → `consume_joint_*` → `gate_before_*` · no `integrated:true` proof · **not** an R7 model arm · package not closed from B alone
 - package **not accepted** while direct paths open · producer→capability/gate = A
 - ready_for_real_exec: **false**
 - N1–N3: NON-BLOCKING → Codex

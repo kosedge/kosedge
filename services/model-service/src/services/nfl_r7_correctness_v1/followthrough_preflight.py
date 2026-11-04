@@ -711,7 +711,7 @@ def missing_locators(root: Path) -> list[dict[str, Any]]:
 def ntbb_k_integrate_hooks() -> dict[str, Any]:
     """Cos ACCEPT 12c41587 integrated once. Not a package close from B alone."""
     return {
-        "status": "INTEGRATED_ONCE_12C41587",
+        "status": "JOINT_CONSUMER_SHARED_GATE",
         "return_order": RETURN_NTBBK,
         "return_unfreeze": RETURN_UNFREEZE,
         "additive_id": ADDITIVE_NTBBK,
@@ -743,10 +743,11 @@ def ntbb_k_integrate_hooks() -> dict[str, Any]:
         "waiting_for": "package accept + Root GO + remaining 69538 prereqs",
         "producer_capability_gate": {
             "owner": "A",
-            "status": "INTEGRATED_ONCE_PRODUCER_GATE",
+            "status": "JOINT_CONSUMER_SHARED_GATE",
             "reexecuted_this_turn": True,
             "real_science": False,
             "produce_kernel_rewrote": False,
+            "self_reported_integrated_proof": False,
         },
         "scipy_fitting": "UNEXECUTED_DEPENDENCY_HELD",
         "b_clocks_promoted": False,

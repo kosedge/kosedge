@@ -725,6 +725,16 @@ def validate_manifest(
     if not isinstance(manifest, Mapping):
         _refuse(RefuseClass.TYPE, "manifest must be an object")
     raw = dict(manifest)
+    if raw.get("profile") == "NTBB_K_SYNTHETIC_KERNEL_V1":
+        from src.services.nfl_ops_v1_evidence.validate_ntbbk import validate_ntbbk_manifest
+
+        ctx = _require_verification(verification)
+        return validate_ntbbk_manifest(
+            raw,
+            stage=stage,
+            chain_payload=chain_payload,
+            verification=ctx,
+        )
     _check_extra(raw)
     if stage == STAGE_PRE_CONSUME:
         _required_present(raw, PRE_CONSUME_REQUIRED, stage=stage)

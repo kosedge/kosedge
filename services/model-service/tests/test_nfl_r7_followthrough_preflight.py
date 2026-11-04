@@ -132,7 +132,7 @@ def test_fifth_prerequisite_point_error_not_book_prices() -> None:
 
 def test_ntbbk_hooks_12c41587_integrated_once() -> None:
     hooks = ntbb_k_integrate_hooks()
-    assert hooks["status"] == "INTEGRATED_ONCE_12C41587"
+    assert hooks["status"] == "JOINT_CONSUMER_SHARED_GATE"
     assert hooks["return_order"] == RETURN_NTBBK
     assert hooks["return_unfreeze"] == "58427"
     assert hooks["additive_id"] == "80649"
@@ -151,7 +151,7 @@ def test_ntbbk_hooks_12c41587_integrated_once() -> None:
     assert hooks["b_clocks_promoted"] is False
     assert hooks["kernel_sha256_locked"] is True
     assert hooks["producer_capability_gate"]["owner"] == "A"
-    assert hooks["producer_capability_gate"]["status"] == "INTEGRATED_ONCE_PRODUCER_GATE"
+    assert hooks["producer_capability_gate"]["status"] == "JOINT_CONSUMER_SHARED_GATE"
     hold = retro_c1_hold()
     assert hold["implemented"] is True
     assert hold["real_exec"] is False

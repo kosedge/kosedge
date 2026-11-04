@@ -94,6 +94,31 @@ SYNTHETIC_COHORT: list[dict[str, Any]] = [SYNTHETIC_TARGET_W03, SYNTHETIC_TARGET
 SYNTHETIC_COHORT_IDS = [row["game_id"] for row in SYNTHETIC_COHORT]
 REAL496_CANNOT_SHRINK = 496
 
+# Labels are NOT part of the forecast target27. Vault-only after seal.
+SYNTHETIC_LABELS: dict[str, float] = {
+    "SYNTHETIC_2018_W03_LAC_LAR": -1.0,
+    "SYNTHETIC_2018_W06_LAC_LAR": 3.0,
+}
+
+# Fictional archived/control/market — not real R5/market transfer.
+SYNTHETIC_ARCHIVE: dict[str, Any] = {
+    "channel": CHANNEL,
+    "real_artifact": False,
+    "r5_c": {
+        "SYNTHETIC_2018_W03_LAC_LAR": 0.0,
+        "SYNTHETIC_2018_W06_LAC_LAR": 2.0,
+    },
+    "market_point": {
+        "SYNTHETIC_2018_W03_LAC_LAR": -0.5,
+    },
+    "slices": {
+        "full": list(SYNTHETIC_COHORT_IDS),
+        "old437": ["SYNTHETIC_2018_W03_LAC_LAR"],
+        "new59": ["SYNTHETIC_2018_W06_LAC_LAR"],
+        "same96": ["SYNTHETIC_2018_W03_LAC_LAR"],
+    },
+}
+
 SYNTHETIC_HISTORY: list[dict[str, Any]] = [
     {"game_id": "SYNTHETIC_2017_W14_BUF_NE", "season": 2017, "week": 14, "season_type": "REG",
      "home_team": "NE", "away_team": "BUF",
