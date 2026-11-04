@@ -1,0 +1,210 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "cert": 0,
+  "package": "nfl_owned_market_v1",
+  "profile": "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1",
+  "profile_role": "FICTIONAL_ECONOMIC",
+  "properties": {
+    "batch_id": {
+      "pattern": "^SYNTHETIC_",
+      "type": "string"
+    },
+    "cert": {
+      "const": 0
+    },
+    "channel": {
+      "const": "SYNTHETIC"
+    },
+    "data_label": {
+      "const": "SYNTHETIC"
+    },
+    "envelope": {
+      "type": "object"
+    },
+    "package": {
+      "const": "nfl_owned_market_v1"
+    },
+    "profile": {
+      "const": "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1"
+    },
+    "profile_role": {
+      "const": "FICTIONAL_ECONOMIC"
+    },
+    "roi": {
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "synthetic-market-economic-events-v1-risk1"
+    },
+    "settlements": {
+      "type": "array"
+    },
+    "source_byte_hash": {
+      "not": {
+        "const": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "tickets": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "available_at": {
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+            "type": "string"
+          },
+          "away_score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "close_line": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "close_price": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "event_type": {
+            "enum": [
+              "ATS_GRADE",
+              "LINE_CLV",
+              "MISSING_DATA_REFUSE",
+              "RISK1_SETTLEMENT",
+              "ROI_ROLLUP"
+            ]
+          },
+          "home_score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "juice": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "juice_status": {
+            "enum": [
+              "stamped",
+              "DATA_GAP",
+              "excluded_void"
+            ]
+          },
+          "line": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "market": {
+            "enum": [
+              "ml",
+              "spread",
+              "total"
+            ]
+          },
+          "observed_at": {
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
+            "type": "string"
+          },
+          "open_line": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "open_price": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "settlement_status": {
+            "enum": [
+              "final",
+              "void"
+            ]
+          },
+          "side": {
+            "enum": [
+              "away",
+              "home",
+              "over",
+              "under"
+            ]
+          },
+          "source": {
+            "const": "SYNTHETIC_RISK1_TICKET"
+          },
+          "source_byte_hash": {
+            "not": {
+              "const": "0000000000000000000000000000000000000000000000000000000000000000"
+            },
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "ticket_id": {
+            "pattern": "^SYNTHETIC_TKT_",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "event_type",
+          "market",
+          "side",
+          "line",
+          "juice",
+          "juice_status",
+          "open_line",
+          "close_line",
+          "open_price",
+          "close_price",
+          "home_score",
+          "away_score",
+          "settlement_status",
+          "available_at",
+          "observed_at",
+          "source",
+          "source_byte_hash"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "timing": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile",
+    "profile_role",
+    "package",
+    "cert",
+    "data_label",
+    "channel",
+    "batch_id",
+    "envelope",
+    "timing",
+    "tickets",
+    "settlements",
+    "roi",
+    "source_byte_hash"
+  ],
+  "schema_version": "synthetic-market-economic-events-v1-risk1",
+  "title": "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1",
+  "type": "object"
+}

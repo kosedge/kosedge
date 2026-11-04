@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "cert": 0,
+  "package": "nfl_owned_market_v1",
+  "profile": "OWNED_MARKET_TRACE_V1",
+  "profile_role": "OWNED_READINESS",
+  "properties": {
+    "cert": {
+      "const": 0
+    },
+    "channel": {
+      "const": "OWNED_READINESS"
+    },
+    "data_label": {
+      "enum": [
+        "OWNED_SOURCE_UNAVAILABLE",
+        "OWNED_SOURCE_BOUND",
+        "OWNED_IDENTITIES_PROJECTED"
+      ]
+    },
+    "owned_completion_claimed": {
+      "const": false
+    },
+    "package": {
+      "const": "nfl_owned_market_v1"
+    },
+    "probe": {
+      "type": "object"
+    },
+    "profile": {
+      "const": "OWNED_MARKET_TRACE_V1"
+    },
+    "profile_role": {
+      "const": "OWNED_READINESS"
+    },
+    "projection": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "schema_version": {
+      "const": "owned-market-trace-v1-readiness"
+    },
+    "scientific_hold": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "source_byte_hash": {
+      "not": {
+        "const": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "unavailable": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile",
+    "profile_role",
+    "package",
+    "cert",
+    "channel",
+    "data_label",
+    "owned_completion_claimed",
+    "probe",
+    "projection",
+    "unavailable",
+    "scientific_hold",
+    "source_byte_hash"
+  ],
+  "schema_version": "owned-market-trace-v1-readiness",
+  "title": "OWNED_MARKET_TRACE_V1",
+  "type": "object"
+}

@@ -1,0 +1,643 @@
+{
+  "codex_staging": {
+    "evidence_limit": "Envelope metadata association is not full value/export lineage; does not verify all143JSONL clocks.",
+    "original_metadata_sha256": "1e5705f74b7e5a477f31660bf83ca84617827965f257802c51437f1037283ebc",
+    "transformation": "Source paths reduced to repo-style raw/ locators; no timestamp/event/book fields changed. Metadata only, no quote lines/prices/outcomes."
+  },
+  "purpose": "Metadata-only trace of three historical response envelopes. No quote lines/prices or outcomes copied. Association by timestamp/event/book, not full value-level export lineage proof.",
+  "sources": [
+    {
+      "endpoint": "historical/sports/americanfootball_nfl/odds",
+      "matching_events_metadata": [
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2020-12-27T17:49:43Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:43Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2020-12-27T17:49:37Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:37Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2020-12-27T21:05:00Z",
+          "id": "ac642e38e2f5d021f3dfe57a05393ce7"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2020-12-27T17:49:43Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:43Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2020-12-27T17:49:37Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:37Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2020-12-27T21:25:00Z",
+          "id": "03cb40686270443048a95e248a45e133"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2020-12-27T17:49:43Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:43Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2020-12-27T17:49:37Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:37Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2020-12-27T21:05:00Z",
+          "id": "5f052a29ff245a4da36b0ea824060cea"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2020-12-27T17:49:43Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:43Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2020-12-27T17:49:37Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:37Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2020-12-27T21:25:00Z",
+          "id": "a8dfe2f941d80e50536285e79ea8a145"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2020-12-27T17:49:43Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:43Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2020-12-27T17:49:37Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2020-12-27T17:49:37Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2020-12-28T01:20:00Z",
+          "id": "6d35bb24f76281197576e7d4c1378a47"
+        }
+      ],
+      "matching_raw_events_n": 5,
+      "next_timestamp": "2020-12-27T18:05:00Z",
+      "path": "raw/odds/americanfootball_nfl/historical/2020/2020-12-27_odds_pre7d_2020-12-27T180000Z.json",
+      "payload_timestamp": "2020-12-27T17:55:00Z",
+      "previous_timestamp": "2020-12-27T17:45:00Z",
+      "pulled_at": "2026-08-18T10:24:29.036983+00:00",
+      "request_date": "2020-12-27T18:00:00Z",
+      "selected_csv_book_quote_n": 10,
+      "selected_event_ids_n": 5,
+      "sha256": "e00efc0b6b346e8bba3113e4a470d0a5a187cb7b3a9aa16e6bd91518183cca5a"
+    },
+    {
+      "endpoint": "historical/sports/americanfootball_nfl/odds",
+      "matching_events_metadata": [
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2021-12-26T17:50:33Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:33Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2021-12-26T17:50:25Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:25Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2021-12-26T21:25:00Z",
+          "id": "5e31034719c7dd4479ec6499f3fb4573"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2021-12-26T17:50:33Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:33Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2021-12-26T17:50:25Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:25Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2021-12-26T21:05:00Z",
+          "id": "58fa747ec0fa29328b7b65126ef6185f"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2021-12-26T17:50:33Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:33Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2021-12-26T17:50:25Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:25Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2021-12-27T01:20:00Z",
+          "id": "cf8be60dc4f840c8980cb301e1a529be"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2021-12-26T17:50:33Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:33Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2021-12-26T17:50:25Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2021-12-26T17:50:25Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2021-12-26T21:25:00Z",
+          "id": "965735cdaa7f35e609f9f9bf470a9007"
+        }
+      ],
+      "matching_raw_events_n": 4,
+      "next_timestamp": "2021-12-26T18:05:00Z",
+      "path": "raw/odds/americanfootball_nfl/historical/2021/2021-12-26_odds_pre7d_2021-12-26T180000Z.json",
+      "payload_timestamp": "2021-12-26T17:55:00Z",
+      "previous_timestamp": "2021-12-26T17:45:00Z",
+      "pulled_at": "2026-08-18T10:25:01.006699+00:00",
+      "request_date": "2021-12-26T18:00:00Z",
+      "selected_csv_book_quote_n": 8,
+      "selected_event_ids_n": 4,
+      "sha256": "15bd8556cedf5a8250787ed265fc36971fafe96c723ccebf58c17d8761072f6b"
+    },
+    {
+      "endpoint": "historical/sports/americanfootball_nfl/odds",
+      "matching_events_metadata": [
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T21:25:00Z",
+          "id": "14a8edc98fc58e8f6ae30aaed7b5c1fc"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": []
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "a84b431e86647a9698859ae4b1cb62f2"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T21:25:00Z",
+          "id": "11511284da753651fefdfbc08cf51e2c"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "469d0b84d522b6ba7c7089fc73a81e53"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "fd20bf64bde9c41529eff98f34e8360b"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T21:25:00Z",
+          "id": "db65d83c1b4b4d7eed4a953ee05ff059"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T21:25:00Z",
+          "id": "0e9f9370d138d4fdef46aadd8dbf72ec"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": []
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T21:25:00Z",
+          "id": "04dbadcea53d7d51ef5ede96914a6890"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T21:25:00Z",
+          "id": "672e109ed4d235a5502ce414277db27e"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T01:15:00Z",
+          "id": "9305c8a793951a42dea4d5c5a49cefd1"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "b158083c5706ac3c2648b3c8173a90e0"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            },
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "d5e256835005a9281ae0ad53e623375e"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "89eb172ec451fa98fcff7b2313f501e4"
+        },
+        {
+          "books_metadata": [
+            {
+              "key": "draftkings",
+              "last_update": "2022-01-08T21:19:09Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:09Z"
+                }
+              ]
+            },
+            {
+              "key": "fanduel",
+              "last_update": "2022-01-08T21:19:07Z",
+              "market_last_updates": [
+                {
+                  "key": "spreads",
+                  "last_update": "2022-01-08T21:19:07Z"
+                }
+              ]
+            }
+          ],
+          "commence_time": "2022-01-09T18:00:00Z",
+          "id": "e9402c475672bebad4b15cb8a82a286b"
+        }
+      ],
+      "matching_raw_events_n": 14,
+      "next_timestamp": "2022-01-08T21:35:00Z",
+      "path": "raw/odds/americanfootball_nfl/historical/2022/2022-01-08_odds_pre7d_2022-01-08T213000Z.json",
+      "payload_timestamp": "2022-01-08T21:25:00Z",
+      "previous_timestamp": "2022-01-08T21:15:00Z",
+      "pulled_at": "2026-08-18T10:25:07.407367+00:00",
+      "request_date": "2022-01-08T21:30:00Z",
+      "selected_csv_book_quote_n": 26,
+      "selected_event_ids_n": 14,
+      "sha256": "f6834112cdd013f63f72c0e49c0f6ece9a539bd78f7bde4710db0fa4b30170a1"
+    }
+  ]
+}

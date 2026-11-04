@@ -1,0 +1,65 @@
+# Actual original source locators — DELTA 58426
+
+CERT=0. Worker B on THIS Cursor host. Cos DISK-1 HELD. No Cos staging.
+Invented destinations (`owned_2020_21_selected_187.json`, `missingness_400.json`,
+`clock_provenance.json`) are **not** the source. This file names the originals.
+
+History restore: `git show 7834cbc79226e44fa3bd625e1eb526e9a800a128:<path>`
+(not on `main`, not on tip `9ce485e9`).
+
+## Original locators (Cos-verified)
+
+| id | original object | field | restore | sha256 |
+|---|---|---|---|---|
+| admissible_quotes_b1 | `7834cbc7:data/ops/nfl-t5119u-r2-owned-coverage/t5136u_B1/ADMISSIBLE_QUOTES_B1.jsonl` | jsonl rows | **RESTORED_FROM_HISTORY** | `b4a3a4dbb8c5404d095b8095ec4018b96ceae532a50600d6d7f29f9d8fe950e6` MATCH |
+| market_arm_freeze | `7834cbc7:data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json` | `reg496.n=496` (`identity_sha256=6429f859…`) · `intersection.n=96` · `missing_n=400` · `games[].quotes` n=187 | **RESTORED_FROM_HISTORY** | `12a8752979149f2c533b389c6dc7803856a1632b965ad12210de409f56963c98` |
+
+`b1_universe` on the freeze pins the same ADMISSIBLE path+sha256.
+
+## Identity projection (before quote-value exposure)
+
+| object | n | seasons | values copied |
+|---|---|---|---|
+| selected-187 | 187 (`82` / `105`) | 2020 / 2021 only | **none** (no line/price/spread/home_margin) |
+| missingness-400 | 400 game_ids (`199` / `201`) | 2020 / 2021 | causes **not invented** |
+
+Source of 187: `MARKET_ARM_FREEZE.json#intersection.games[].quotes` = `two_book_n=91` + `one_book_n=5`.
+No 2022/23 values used. Raw ADMISSIBLE file was **not** copied onto this tip (avoids 2022/23 value exposure).
+
+## Remaining blocker — clock
+
+**Not invented.** Original freeze already states:
+
+- locator: `7834cbc7:data/ops/nfl-t5155u-r5-phase1/MARKET_ARM_FREEZE.json#limitations`
+- `publication_timestamp_status=unverified`
+- `observation_timestamp_status=unverified`
+- original quote objects also carry field names `captured_at`, `cutoff_utc`, `kickoff_utc` — **not** promoted to verified clock provenance
+
+`owned_completion_claimed=false`. Codex 187-row metadata not requested (187 recovered from freeze after restore).
+
+## CONTINUE 69537 (t5320u)
+
+Clock/source-value lineage still **HOLD** on freeze `#limitations`. See `CLOCK_SOURCE_HOLD_CONTINUE69537.md`.
+
+## EVIDENCE 70648 (t5324u)
+
+Staged three-envelope metadata MATCH `496be81d…`. 44 CSV associations evidenced at request/snapshot/book-update/download fields only.
+Does **not** close freeze `#limitations`. 143 JSONL unknowns preserved. See `CLOCK_LINEAGE_LEDGER_70648.md`.
+
+## IDENTITY 81759 (t5329u)
+
+Provider identities MATCH `f03041ad…`. **23/23** events and **44/44** associations proven to freeze `game_id` via exact full-name + kickoff + REG season (namespaces differ; overlap 0 expected).
+freeze `#limitations` still unverified. 143 JSONL unknown preserved. See `CLOCK_LINEAGE_LEDGER_81759.md`.
+
+## CLEAR 92861 (t5335u)
+
+143 JSONL attempted from already-owned selected freeze+ADMISSIBLE only.
+Staged projection `JSONL_SELECTED_143_SOURCE_VALUE_PROJECTION.json` sha `bf5fd92e…` MATCH
+(143/143 pairs+values; clock_semantics_verified=false). Line/price uniquely bound
+143/143 with source hashes. Envelope clocks request/provider/book-update/download/availability
+= **NOT_EVALUABLE** (0/143). Raw snapshot JSONL `source_file_sha256` NOT_EVALUABLE (0/3 files
+on this host). claimed `captured_at` **not** promoted to verified publication/observation.
+187=44+143 and 496=96+400 exact. `owned_completion_claimed=false`.
+NTBB-K SYNTHETIC kernel is isolated under `data/ops/nfl_ntbb_k_v1/` (METADATA 14083).
+This market ledger is unchanged: 143 remains SOURCE_VALUE_MATCH ≠ verified clocks.
+See `CLOCK_LINEAGE_LEDGER_92861.md` / `TRACE_CLEAR92861_B.md`.
