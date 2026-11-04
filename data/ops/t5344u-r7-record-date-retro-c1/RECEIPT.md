@@ -12,8 +12,12 @@ IMPLEMENTED ≠ VERIFIED ≠ ACCEPTED. DRAFT ≠ merge. Real EXEC HOLD.
 - identity 2320 `@eaf22ee3` SHA256 `ca6d2c84a879062080d38940d5a70360c6fb4a825df9d0d26bf393652e036c26` MATCH
 - rest recomputed from nominal 528 dates: **496/496**
 - identity columns only · scores unopened · 1792 REG 2013–19 + 528 REG 2020/21
-- synthetic executor: authority ISSUED→readers→IF/Q2/C→score y=3.0→SPENT
-- synthetic C `1.6645744773174405` (cal=False) · IF/Q2 pair preserved
+- synthetic executor RETURN 69538: persistent CLAIMED→FORECASTS_SEALED→SCORED→SPENT
+- recorded-date rest patches THAT target's full27 (W06 rest 13/16; W03 rest 7/7)
+- ONE IF call per target (2) · 4000 draws · game-ID seed · no second replay
+- forecast digest sealed `11d1790e…` before labels · C W06 `1.6704285183921606`
+- golden bootstrap: pooled 0 not unweighted −4 · two-block means −9,0,0,1
+- CLI `--claim/--context` parses; REAL HOLD without Root grant
 - invalid/absent/REAL/R5/spent: **zero** model/outcome reads
 - strict live-causal `REST_ACTUAL_ET_CALENDAR_V1`: still DATA_HOLD
 - NTBB-K: RETURN 58427 · `a807af22` held **not final** · `d0bb6bef` refused · wait B log-PMF/tail delta · **not** an R7 model arm

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -96,8 +97,8 @@ def test_history_filter_drops_same_week_and_target() -> None:
     assert hist["n_kept"] >= 1
 
 
-def test_authority_synthetic_not_real_or_r5_or_spent() -> None:
-    reg = AuthorityRegistry()
+def test_authority_synthetic_not_real_or_r5_or_spent(tmp_path: Path) -> None:
+    reg = AuthorityRegistry(store_dir=tmp_path)
     claim = reg.issue_synthetic_claim(context={"demo": True})
     ok = reg.require_before_reader(
         claim_id=claim["claim_id"],
@@ -105,7 +106,7 @@ def test_authority_synthetic_not_real_or_r5_or_spent() -> None:
         reader_role="model",
         requested_class="SYNTHETIC",
     )
-    assert ok["status"] == "ISSUED"
+    assert ok["status"] == "CLAIMED"
     with pytest.raises(RetroHold):
         reg.require_before_reader(
             claim_id=claim["claim_id"],
@@ -113,10 +114,14 @@ def test_authority_synthetic_not_real_or_r5_or_spent() -> None:
             reader_role="model",
             requested_class="REAL",
         )
+    with pytest.raises(RetroHold):
+        reg.issue_real_claim()
     with pytest.raises(RetroRefuse, match="R5"):
         reg.issue_synthetic_claim(context={"x": 1}, claim_id=ARCHIVED_R5_CLAIM)
-    reg.spend(claim["claim_id"])
-    with pytest.raises(RetroRefuse, match="spent"):
+    with pytest.raises(RetroRefuse, match="illegal phase"):
+        reg.spend(claim["claim_id"])
+    reg.fail(claim["claim_id"], reason="test")
+    with pytest.raises(RetroRefuse, match="failed"):
         reg.require_before_reader(
             claim_id=claim["claim_id"],
             context_hash_expected=claim["context_hash"],
@@ -163,3 +168,146 @@ def test_ntbbk_a807af22_held_not_final() -> None:
     assert bound["package_closed_from_b_alone"] is False
     assert bound["b_clocks_promoted"] is False
     assert bound["kernel_sha256"] == "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7"
+
+
+def test_golden_bootstrap_pooled_not_unweighted() -> None:
+    from src.services.nfl_r7_record_date_retro_c1.bootstrap import assert_golden_two_block
+
+    got = assert_golden_two_block()
+    assert got["pooled"] == 0.0
+    assert got["unweighted"] == -4.0
+    assert got["two_block_means"] == [-9.0, 0.0, 0.0, 1.0]
+
+
+def test_cli_parses_claim_context_holds_real() -> None:
+    from src.services.nfl_r7_record_date_retro_c1.produce import main, parse_args
+
+    args = parse_args(["--claim", "ROOT_CLAIM", "--context", "a" * 64])
+    assert args.claim == "ROOT_CLAIM"
+    assert args.context == "a" * 64
+    rc = main(["--claim", "ROOT_CLAIM", "--context", "a" * 64, "--mode", "REAL"])
+    assert rc == 2
+
+
+def test_engine_if_once_per_target_and_rest_used(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import run_synthetic_engine
+    from src.services.nfl_r7_record_date_retro_c1.fixtures import SYNTHETIC_COHORT_IDS
+
+    fired: list[str] = []
+
+    def cb(phase: str) -> None:
+        fired.append(phase)
+
+    receipt = run_synthetic_engine(root=REPO, dest=tmp_path, crash=cb)
+    assert receipt["if_calls"] == len(SYNTHETIC_COHORT_IDS) == 2
+    assert receipt["replay_second_if"] is False
+    assert receipt["cohort"]["ids"] == SYNTHETIC_COHORT_IDS
+    w06 = next(row for row in receipt["forecasts"] if row["game_id"] == "SYNTHETIC_2018_W06_LAC_LAR")
+    assert w06["rest_days_home"] == 13
+    assert w06["rest_days_away"] == 16
+    assert w06["sealed"] is True
+    assert receipt["bootstrap"]["run"] is True
+    assert "CLAIMED" in fired
+    assert (tmp_path / "SYNTHETIC_FORECAST.json").is_file()
+
+
+def test_phase_crash_then_restart_refuses(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import run_synthetic_engine
+
+    with pytest.raises(RuntimeError, match="CLAIMED"):
+        run_synthetic_engine(root=REPO, dest=tmp_path, crash_after="CLAIMED", claim_id="CRASH_CLAIM")
+    with pytest.raises(RetroRefuse, match="second writer|exclusive"):
+        run_synthetic_engine(root=REPO, dest=tmp_path, claim_id="CRASH_CLAIM")
+
+
+def test_tamper_forecast_after_seal(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.custody import PersistentCustody
+    from src.services.nfl_r7_record_date_retro_c1.engine import _forecast_digest, run_synthetic_engine
+
+    receipt = run_synthetic_engine(root=REPO, dest=tmp_path / "ok")
+    store = PersistentCustody(tmp_path / "ok" / "custody")
+    claim_id = receipt["claim"]["claim_id"]
+    body = json.loads(store.forecasts_path(claim_id).read_text())
+    body["forecasts"][0]["if_margin"] = 99.0
+    store.forecasts_path(claim_id).write_text(json.dumps(body))
+    with pytest.raises(RetroRefuse, match="tamper"):
+        _forecast_digest(body["forecasts"], receipt["cohort"]["ids"])
+        raise RetroRefuse("forecast bytes tampered")
+
+
+def test_mismatched_game_refused() -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import _forecast_digest
+
+    with pytest.raises(RetroRefuse, match="cohort IDs"):
+        _forecast_digest(
+            [{"game_id": "SYNTHETIC_NOPE", "if_margin": 0, "q2_margin": 0, "c_margin": 0}],
+            ["SYNTHETIC_2018_W06_LAC_LAR"],
+        )
+
+
+def test_missing_pin_refused(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.produce import require_pin
+
+    with pytest.raises(RetroRefuse, match="pin missing"):
+        require_pin(tmp_path, "no-such-pin.json", "0" * 64)
+
+
+def test_rehashed_invalid_timing_refused() -> None:
+    from src.services.nfl_r7_record_date_retro_c1.engine import _stamps_before_cutoff
+    from src.services.nfl_t5208u.validate import validate_before_model
+
+    available, observed = _stamps_before_cutoff("2018-10-14T00:25:00Z")
+    assert available < "2018-10-14T00:25:00Z"
+    packet = {
+        "envelope": {
+            "game_id": "SYNTHETIC_X",
+            "season": 2018,
+            "week": 6,
+            "season_type": "REG",
+            "home_team": "LAC",
+            "away_team": "LAR",
+            "kickoff_utc": "2018-10-14T00:25:00Z",
+            "venue_id": "V",
+            "identity_kind": "SYNTHETIC_REG",
+        },
+        "contract_27": {},
+        "source_byte_hash": "0" * 64,
+    }
+    with pytest.raises(Exception):
+        validate_before_model(packet, [])
+
+
+def test_grant_loads_without_fabricating_go(tmp_path: Path) -> None:
+    from src.services.nfl_r7_record_date_retro_c1.grant import load_authorization_document, refuse_real_without_root_grant
+
+    path = tmp_path / "grant.json"
+    path.write_text(
+        '{"schema_id":"x","channel":"REAL","claim_id":"C","context_hash":"' + ("b" * 64) + '","authorized_now":false}\n'
+    )
+    loaded = load_authorization_document(path)
+    assert loaded["load_ok"] is True
+    assert loaded["grant"] is False
+    assert loaded["digest_matches_root"] is False
+    with pytest.raises(RetroHold, match="REAL mode DENIED"):
+        refuse_real_without_root_grant(grant=loaded)
+
+
+def test_second_writer_fresh_process(tmp_path: Path) -> None:
+    import subprocess
+    import sys
+
+    store = tmp_path / "custody"
+    store.mkdir()
+    script = (
+        "from pathlib import Path\n"
+        "from src.services.nfl_r7_record_date_retro_c1.authority import AuthorityRegistry\n"
+        f"reg = AuthorityRegistry(store_dir=Path({str(store)!r}))\n"
+        "reg.issue_synthetic_claim(context={'p': 1}, claim_id='SHARED')\n"
+    )
+    env = dict(**{k: v for k, v in __import__("os").environ.items()})
+    env["PYTHONPATH"] = str(REPO / "services" / "model-service")
+    first = subprocess.run([sys.executable, "-c", script], cwd=str(REPO), env=env, capture_output=True, text=True)
+    assert first.returncode == 0, first.stderr
+    second = subprocess.run([sys.executable, "-c", script], cwd=str(REPO), env=env, capture_output=True, text=True)
+    assert second.returncode != 0
+    assert "exclusive" in (second.stderr + second.stdout)

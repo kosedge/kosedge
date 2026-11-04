@@ -59,6 +59,21 @@ POSTPONE_SCHEDULE: list[dict[str, Any]] = [
      "home": "DEN", "away": "LAC", "recorded_game_date": "2018-09-30"},
 ]
 
+SYNTHETIC_TARGET_W03 = {
+    "game_id": "SYNTHETIC_2018_W03_LAC_LAR",
+    "season": 2018,
+    "week": 3,
+    "season_type": "REG",
+    "home": "LAR",
+    "away": "LAC",
+    "recorded_game_date": "2018-09-23",
+    "nominal_kickoff_utc": "2018-09-23T20:25:00Z",
+    "channel": CHANNEL,
+    "real_mode_usable": False,
+    "y_margin": -1.0,
+    "y_source": "SYNTHETIC_LABEL_NOT_REAL_OUTCOME",
+}
+
 SYNTHETIC_TARGET = {
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
     "season": 2018,
@@ -74,20 +89,35 @@ SYNTHETIC_TARGET = {
     "y_source": "SYNTHETIC_LABEL_NOT_REAL_OUTCOME",
 }
 
+# Explicit SYNTHETIC profile cohort. Must not be treated as a shrunk real496.
+SYNTHETIC_COHORT: list[dict[str, Any]] = [SYNTHETIC_TARGET_W03, SYNTHETIC_TARGET]
+SYNTHETIC_COHORT_IDS = [row["game_id"] for row in SYNTHETIC_COHORT]
+REAL496_CANNOT_SHRINK = 496
+
 SYNTHETIC_HISTORY: list[dict[str, Any]] = [
-    {"game_id": "SYNTHETIC_2017_W14_BUF_NE", "season": 2017, "week": 14, "home_team": "NE", "away_team": "BUF",
+    {"game_id": "SYNTHETIC_2017_W14_BUF_NE", "season": 2017, "week": 14, "season_type": "REG",
+     "home_team": "NE", "away_team": "BUF",
      "kickoff_utc": "2017-12-10T18:00:00Z", "home_score": 28, "away_score": 10, "channel": CHANNEL},
-    {"game_id": "SYNTHETIC_2018_W01_LAC_MIA", "season": 2018, "week": 1, "home_team": "LAC", "away_team": "MIA",
+    {"game_id": "SYNTHETIC_2018_W01_LAC_MIA", "season": 2018, "week": 1, "season_type": "REG",
+     "home_team": "LAC", "away_team": "MIA",
      "kickoff_utc": "2018-09-09T17:00:00Z", "home_score": 27, "away_score": 20, "channel": CHANNEL},
-    {"game_id": "SYNTHETIC_2018_W02_KC_LAC", "season": 2018, "week": 2, "home_team": "LAC", "away_team": "KC",
+    {"game_id": "SYNTHETIC_2018_W02_KC_LAC", "season": 2018, "week": 2, "season_type": "REG",
+     "home_team": "LAC", "away_team": "KC",
      "kickoff_utc": "2018-09-16T20:05:00Z", "home_score": 31, "away_score": 28, "channel": CHANNEL},
-    {"game_id": "SYNTHETIC_2018_W04_LAC_SF", "season": 2018, "week": 4, "home_team": "LAC", "away_team": "SF",
+    {"game_id": "SYNTHETIC_2018_W02_LAR_NE", "season": 2018, "week": 2, "season_type": "REG",
+     "home_team": "NE", "away_team": "LAR",
+     "kickoff_utc": "2018-09-16T17:00:00Z", "home_score": 27, "away_score": 13, "channel": CHANNEL},
+    {"game_id": "SYNTHETIC_2018_W04_LAC_SF", "season": 2018, "week": 4, "season_type": "REG",
+     "home_team": "LAC", "away_team": "SF",
      "kickoff_utc": "2018-09-30T20:05:00Z", "home_score": 29, "away_score": 27, "channel": CHANNEL},
-    {"game_id": "SYNTHETIC_2018_W04_LAR_MIN", "season": 2018, "week": 4, "home_team": "LAR", "away_team": "MIN",
+    {"game_id": "SYNTHETIC_2018_W04_LAR_MIN", "season": 2018, "week": 4, "season_type": "REG",
+     "home_team": "LAR", "away_team": "MIN",
      "kickoff_utc": "2018-09-28T00:20:00Z", "home_score": 38, "away_score": 31, "channel": CHANNEL},
-    {"game_id": "SYNTHETIC_2018_W06_SAMEWEEK_LAC_DEN", "season": 2018, "week": 6, "home_team": "DEN", "away_team": "LAC",
+    {"game_id": "SYNTHETIC_2018_W06_SAMEWEEK_LAC_DEN", "season": 2018, "week": 6, "season_type": "REG",
+     "home_team": "DEN", "away_team": "LAC",
      "kickoff_utc": "2018-10-14T17:00:00Z", "home_score": 17, "away_score": 20, "channel": CHANNEL},
-    {"game_id": "SYNTHETIC_2018_W06_LAC_LAR", "season": 2018, "week": 6, "home_team": "LAC", "away_team": "LAR",
+    {"game_id": "SYNTHETIC_2018_W06_LAC_LAR", "season": 2018, "week": 6, "season_type": "REG",
+     "home_team": "LAC", "away_team": "LAR",
      "kickoff_utc": "2018-10-14T00:25:00Z", "home_score": 23, "away_score": 20, "channel": CHANNEL},
 ]
 
@@ -102,3 +132,7 @@ def synthetic_schedule() -> list[dict[str, Any]]:
 
 def synthetic_history() -> list[dict[str, Any]]:
     return [dict(row) for row in SYNTHETIC_HISTORY]
+
+
+def synthetic_cohort() -> list[dict[str, Any]]:
+    return [dict(row) for row in SYNTHETIC_COHORT]

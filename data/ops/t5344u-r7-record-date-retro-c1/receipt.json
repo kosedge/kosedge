@@ -2357,14 +2357,14 @@
     "real_request": {
       "model_called": false,
       "outcome_reads": 0,
-      "reason": "model real read refused \u2014 no matching real GO/context (ENV-independent)",
+      "reason": "model REAL reader unconditionally HOLD \u2014 no Root-approved grant/context",
       "refused": true,
       "surface_notes": 0
     },
     "spent_retry": {
       "model_called": false,
       "outcome_reads": 0,
-      "reason": "model refused: spent claim cannot retry SYNTHETIC_RETRO_C1_dfa4cd8834b216e3",
+      "reason": "spent claim cannot retry SYNTHETIC_fc3e92f90f8f_14551_1793752764107",
       "refused": true,
       "surface_notes": 0
     }
@@ -2423,7 +2423,7 @@
       "sha256": "3394663e41183de255e641ffbfc2e321bb7266fd3e27d984f7f350db6f5e3110"
     }
   },
-  "produced_utc": "2026-11-04T00:30:19Z",
+  "produced_utc": "2026-11-04T00:39:24Z",
   "profile": "RECORDED_DATE_RETRO",
   "ready_for_real_exec": false,
   "real_data_projection_schema": {
@@ -2536,6 +2536,7 @@
     "n": 496
   },
   "return_58427": "58427",
+  "return_69538": "69538",
   "science_hold": true,
   "spy_positive_control": {
     "evidence_label": "EXECUTED_HERE",
@@ -2549,13 +2550,17 @@
   "strict_live_status": "DATA_HOLD",
   "strict_live_unchanged": true,
   "synthetic_executor": {
-    "abs_c_minus_y": 1.3354255226825595,
-    "c_margin": 1.6645744773174405,
+    "abs_c_minus_y": 1.3295714816078394,
+    "bootstrap_run": true,
+    "c_margin": 1.6704285183921606,
     "claim_status": "SPENT",
+    "cohort_n": 2,
+    "forecast_digest": "11d1790ec9c464b8e23b0ca36b92c82673f297e00497937f377a8bd5e61022ca",
     "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
-    "if_margin": 1.389941504602551,
+    "if_calls": 2,
+    "if_margin": 0.8551680892693543,
     "model_called": true,
     "ok": true,
-    "q2_margin": 1.93920745003233
+    "q2_margin": 2.485688947514967
   }
 }

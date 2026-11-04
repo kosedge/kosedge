@@ -18,19 +18,14 @@ from src.services.nfl_ops_v1_evidence.spy import (
     assert_zero_forbidden_on_refusal,
     run_spy_positive_control,
 )
+import argparse
+import sys
+
 from src.services.nfl_r7_correctness_v1.calendar import bind_rest_from_et_calendar
-from src.services.nfl_r7_correctness_v1.packets import build_typed_synthetic_input
-from src.services.nfl_r7_correctness_v1.produce import produce_r7_point_margin, repo_root, write_json
+from src.services.nfl_r7_correctness_v1.produce import repo_root, write_json
 from src.services.nfl_r7_record_date_retro_c1.authority import AuthorityRegistry
-from src.services.nfl_r7_record_date_retro_c1.fixtures import (
-    ALIAS_SCHEDULE,
-    POSTPONE_SCHEDULE,
-    SYNTHETIC_TARGET,
-    TIE_SCHEDULE,
-    synthetic_history,
-    synthetic_schedule,
-)
-from src.services.nfl_r7_record_date_retro_c1.history_filter import filter_history_for_target
+from src.services.nfl_r7_record_date_retro_c1.engine import run_real_engine, run_synthetic_engine
+from src.services.nfl_r7_record_date_retro_c1.fixtures import SYNTHETIC_TARGET
 from src.services.nfl_r7_record_date_retro_c1.identity import bind_identity_pointers
 from src.services.nfl_r7_record_date_retro_c1.pins import (
     ARCHIVED_R5_SHA256,
@@ -248,6 +243,10 @@ def _score_synthetic(c_margin: float, y_margin: float) -> dict[str, Any]:
     }
 
 
+def run_synthetic_executor(*, root: Path, dest: Path) -> dict[str, Any]:
+    return run_synthetic_engine(root=root, dest=dest)
+
+
 def run_invalid_path(
     *,
     registry: AuthorityRegistry,
@@ -275,125 +274,6 @@ def run_invalid_path(
             "surface_notes": surface.count,
             "model_called": False,
         }
-
-
-def run_synthetic_executor(*, root: Path, dest: Path) -> dict[str, Any]:
-    outcome_spy = OutcomeReadSpy()
-    surface = ForbiddenSurfaceSpy()
-    registry = AuthorityRegistry()
-    context = {
-        "package": PACKAGE,
-        "profile": PROFILE,
-        "channel": "SYNTHETIC",
-        "spec_sha256": SPEC_SHA256,
-        "identity_sha256": IDENTITY_SHA256,
-    }
-    claim = registry.issue_synthetic_claim(context=context)
-    try:
-        registry.require_before_reader(
-            claim_id=claim["claim_id"],
-            context_hash_expected=claim["context_hash"],
-            reader_role="feature",
-            requested_class="SYNTHETIC",
-        )
-        registry.require_before_reader(
-            claim_id=claim["claim_id"],
-            context_hash_expected=claim["context_hash"],
-            reader_role="history",
-            requested_class="SYNTHETIC",
-        )
-        rest_proj = project_recorded_date_rest(target=SYNTHETIC_TARGET, schedule=synthetic_schedule())
-        hist = filter_history_for_target(
-            synthetic_history(),
-            target_season=int(SYNTHETIC_TARGET["season"]),
-            target_week=int(SYNTHETIC_TARGET["week"]),
-            target_game_id=str(SYNTHETIC_TARGET["game_id"]),
-            nominal_kickoff_utc=str(SYNTHETIC_TARGET["nominal_kickoff_utc"]),
-        )
-        if hist["n_kept"] < 1:
-            raise RetroRefuse("synthetic history filter emptied the fixture")
-        registry.require_before_reader(
-            claim_id=claim["claim_id"],
-            context_hash_expected=claim["context_hash"],
-            reader_role="model",
-            requested_class="SYNTHETIC",
-        )
-        demo = build_typed_synthetic_input()
-        filtered_default = filter_history_for_target(
-            demo["history"],
-            target_season=int(demo["packet"]["envelope"]["season"]),
-            target_week=int(demo["packet"]["envelope"]["week"]),
-            target_game_id=str(demo["packet"]["envelope"]["game_id"]),
-            nominal_kickoff_utc=str(demo["packet"]["envelope"]["kickoff_utc"]),
-        )
-        demo["history"] = filtered_default["rows"]
-        surface.note("produce_r7_point_margin")
-        produced = produce_r7_point_margin(
-            mode="SYNTHETIC",
-            synthetic_input=demo,
-            surface=surface,
-            outcome_spy=outcome_spy,
-        )
-        registry.require_before_reader(
-            claim_id=claim["claim_id"],
-            context_hash_expected=claim["context_hash"],
-            reader_role="outcome",
-            requested_class="SYNTHETIC",
-        )
-        scored = _score_synthetic(float(produced["c_margin"]), float(SYNTHETIC_TARGET["y_margin"]))
-        forecast = {
-            "game_id": produced["game_id"],
-            "if_margin": produced["if_margin"],
-            "q2_margin": produced["q2_margin"],
-            "c_margin": produced["c_margin"],
-            "immutable": True,
-            "channel": "SYNTHETIC",
-            "apply_linear_totals_calibration": produced.get("apply_linear_totals_calibration"),
-        }
-        spent = registry.spend(claim["claim_id"])
-        receipt = {
-            "ok": True,
-            "cert": CERT,
-            "package": PACKAGE,
-            "profile": PROFILE,
-            "owner_clear": OWNER_CLEAR,
-            "design": DESIGN,
-            "history_order": HISTORY_ORDER,
-            "cos_accept": COS_ACCEPT,
-            "channel": "SYNTHETIC",
-            "ready_for_real_exec": False,
-            "science_hold": True,
-            "strict_live_profile": STRICT_LIVE_PROFILE,
-            "strict_live_status": STRICT_LIVE_STATUS,
-            "calendar_id": CALENDAR_ID,
-            "claim": spent,
-            "recorded_date_rest": rest_proj,
-            "history_filter": {k: hist[k] for k in hist if k != "rows"},
-            "forecast": forecast,
-            "scoring": scored,
-            "metrics": {
-                "n": 1,
-                "primary_abs_c_minus_y": scored["abs_c_minus_y"],
-                "bootstrap_run": False,
-                "declared_B": BOOTSTRAP_B,
-                "declared_seed": BOOTSTRAP_SEED,
-            },
-            "model_called": True,
-            "outcome_reads": outcome_spy.reads,
-            "surface_notes": surface.count,
-            "env_grant": False,
-        }
-        dest.mkdir(parents=True, exist_ok=True)
-        write_json(dest / "SYNTHETIC_FORECAST.json", forecast)
-        write_json(dest / "receipt.json", receipt)
-        return receipt
-    except Exception as exc:
-        if claim["claim_id"] in (registry.get(claim["claim_id"]) or {}) or registry.get(claim["claim_id"]):
-            try:
-                registry.fail(claim["claim_id"], reason=str(exc))
-            except RetroRefuse:
-                pass
-        raise
 
 
 def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
@@ -427,7 +307,8 @@ def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
     if not live_unchanged:
         raise RetroRefuse("strict actual-kickoff profile no longer refuses missing actual_kickoff_utc")
 
-    registry = AuthorityRegistry()
+    inv_store = dest / "custody_invalid"
+    registry = AuthorityRegistry(store_dir=inv_store)
     outcome_spy = OutcomeReadSpy()
     surface = ForbiddenSurfaceSpy()
     invalids = {
@@ -449,26 +330,14 @@ def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
 
     spy_ctrl = run_spy_positive_control()
     synthetic = run_synthetic_executor(root=repo, dest=dest / "synthetic_chain")
-
-    # spent claim cannot retry
+    w06 = next(row for row in synthetic["forecasts"] if row["game_id"] == SYNTHETIC_TARGET["game_id"])
+    w06_score = next(row for row in synthetic["scoring"] if row["game_id"] == SYNTHETIC_TARGET["game_id"])
     spent_retry = run_invalid_path(
-        registry=AuthorityRegistry(),
+        registry=AuthorityRegistry(store_dir=dest / "synthetic_chain" / "custody"),
         outcome_spy=OutcomeReadSpy(),
         surface=ForbiddenSurfaceSpy(),
         claim_id=synthetic["claim"]["claim_id"],
-        context_hash=synthetic["claim"]["context_hash"],
-        requested_class="SYNTHETIC",
-    )
-    # The claim lives on the executor registry, not this fresh one — prove on the same registry via a local replay.
-    replay_reg = AuthorityRegistry()
-    replay_claim = replay_reg.issue_synthetic_claim(context={"replay": True})
-    replay_reg.spend(replay_claim["claim_id"])
-    spent_retry = run_invalid_path(
-        registry=replay_reg,
-        outcome_spy=OutcomeReadSpy(),
-        surface=ForbiddenSurfaceSpy(),
-        claim_id=replay_claim["claim_id"],
-        context_hash=replay_claim["context_hash"],
+        context_hash=synthetic["context_hash"],
         requested_class="SYNTHETIC",
     )
 
@@ -495,13 +364,17 @@ def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
         "spy_positive_control": spy_ctrl,
         "synthetic_executor": {
             "ok": synthetic["ok"],
-            "game_id": synthetic["forecast"]["game_id"],
-            "if_margin": synthetic["forecast"]["if_margin"],
-            "q2_margin": synthetic["forecast"]["q2_margin"],
-            "c_margin": synthetic["forecast"]["c_margin"],
+            "game_id": w06["game_id"],
+            "if_margin": w06["if_margin"],
+            "q2_margin": w06["q2_margin"],
+            "c_margin": w06["c_margin"],
             "model_called": True,
             "claim_status": synthetic["claim"]["status"],
-            "abs_c_minus_y": synthetic["scoring"]["abs_c_minus_y"],
+            "abs_c_minus_y": w06_score["abs_c_minus_y"],
+            "cohort_n": synthetic["cohort"]["n"],
+            "if_calls": synthetic["if_calls"],
+            "forecast_digest": synthetic["forecast_digest"],
+            "bootstrap_run": synthetic["bootstrap"]["run"],
         },
         "real_data_projection_schema": schema,
         "n1_n3_nonblocking": n1_n3_nonblocking(),
@@ -511,6 +384,7 @@ def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
         "package_accepted": False,
         "direct_paths_open": True,
         "return_58427": "58427",
+        "return_69538": "69538",
         "science_hold": True,
         "produced_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "command": EXPECTED_COMMAND,
@@ -537,7 +411,25 @@ def run_preflight(*, root: Path | None = None) -> dict[str, Any]:
     return receipt
 
 
-def main() -> int:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="R7_RECORD_DATE_RETRO_C1 guarded executor")
+    parser.add_argument("--claim", default=None, help="Root claim id (REAL path; HOLD without grant)")
+    parser.add_argument("--context", default=None, help="Root context hash (REAL path; HOLD without grant)")
+    parser.add_argument("--grant", default=None, help="Authorization-document path (validate only; no fabricated GO)")
+    parser.add_argument("--mode", default="SYNTHETIC", choices=("SYNTHETIC", "REAL"))
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv if argv is not None else sys.argv[1:])
+    if args.mode == "REAL" or args.claim or args.context or args.grant:
+        try:
+            grant_path = Path(args.grant) if args.grant else None
+            run_real_engine(grant_path=grant_path, claim_id=args.claim, context_hash=args.context)
+        except (RetroHold, RetroRefuse) as exc:
+            print(json.dumps({"ok": False, "mode": "REAL", "hold": True, "reason": str(exc)}, sort_keys=True))
+            return 2
+        return 2
     receipt = run_preflight()
     print(
         json.dumps(
@@ -549,6 +441,7 @@ def main() -> int:
                 "rest_matched": receipt["rest_recomputed_496"]["matched"],
                 "synthetic_c": receipt["synthetic_executor"]["c_margin"],
                 "command": receipt["command"],
+                "future_command": FUTURE_REAL_COMMAND,
             },
             sort_keys=True,
         )

@@ -1,17 +1,25 @@
-"""Approved authority registry + atomic claim/context. CERT=0.
+"""Approved authority + persistent exclusive claim. CERT=0.
 
-ENV flags never grant real access. Synthetic claims cannot license real input.
-Spent/failed claims cannot reset/rebind/retry. Archived R5 claim cannot reuse.
+ENV flags never grant. REAL issue + every REAL reader unconditionally HOLD
+until a Root-approved grant digest exists (none posted).
 """
 
 from __future__ import annotations
 
-import hashlib
-import json
 import os
-from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Mapping
 
+from src.services.nfl_r7_record_date_retro_c1.context import context_hash
+from src.services.nfl_r7_record_date_retro_c1.custody import (
+    PHASE_CLAIMED,
+    PHASE_FAILED,
+    PHASE_FORECASTS_SEALED,
+    PHASE_SCORED,
+    PHASE_SPENT,
+    PersistentCustody,
+)
+from src.services.nfl_r7_record_date_retro_c1.grant import refuse_real_without_root_grant
 from src.services.nfl_r7_record_date_retro_c1.pins import (
     ARCHIVED_R5_CLAIM,
     CERT,
@@ -23,9 +31,6 @@ from src.services.nfl_r7_record_date_retro_c1.pins import (
 )
 from src.services.nfl_r7_record_date_retro_c1.refuse import RetroHold, RetroRefuse
 
-STATUS_ISSUED = "ISSUED"
-STATUS_SPENT = "SPENT"
-STATUS_FAILED = "FAILED"
 INPUT_SYNTHETIC = "SYNTHETIC"
 INPUT_REAL = "REAL"
 READER_ROLES = frozenset({"feature", "history", "outcome", "model"})
@@ -41,31 +46,27 @@ ENV_GRANT_NAMES = (
     "RETRO_C1_REAL",
 )
 
-
-def _utc_now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def context_hash(payload: Mapping[str, Any]) -> str:
-    blob = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(blob).hexdigest()
+# Back-compat aliases for existing tests.
+STATUS_ISSUED = PHASE_CLAIMED
+STATUS_SPENT = PHASE_SPENT
+STATUS_FAILED = PHASE_FAILED
 
 
 def env_grant_hits(environ_keys: list[str] | tuple[str, ...] | None = None) -> tuple[str, ...]:
-    """Name-only. Never reads values. Hits do not grant."""
     keys = list(environ_keys) if environ_keys is not None else list(os.environ.keys())
     return tuple(key for key in keys if key in ENV_GRANT_NAMES or key.endswith("_ENABLE") or key.endswith("_REAL_GO"))
 
 
 class AuthorityRegistry:
-    def __init__(self) -> None:
-        self._claims: dict[str, dict[str, Any]] = {}
+    def __init__(self, store_dir: Path | None = None) -> None:
+        if store_dir is None:
+            raise RetroRefuse("persistent custody store_dir is required (in-memory registry refused)")
+        self.custody = PersistentCustody(Path(store_dir))
         self.env_hits = env_grant_hits()
         self.env_grants = False
 
     def get(self, claim_id: str) -> dict[str, Any] | None:
-        row = self._claims.get(claim_id)
-        return dict(row) if row else None
+        return self.custody.load(claim_id)
 
     def issue_synthetic_claim(
         self,
@@ -73,33 +74,28 @@ class AuthorityRegistry:
         context: Mapping[str, Any],
         claim_id: str | None = None,
     ) -> dict[str, Any]:
-        cid = str(claim_id or f"SYNTHETIC_RETRO_C1_{context_hash(context)[:16]}")
+        digest = context_hash(context) if "context_hash" not in context else str(context["context_hash"])
+        cid = str(claim_id or f"SYNTHETIC_RETRO_C1_{digest[:16]}")
         if cid == ARCHIVED_R5_CLAIM:
             raise RetroRefuse("archived R5 consumed claim cannot be issued or reused")
-        if cid in self._claims:
-            raise RetroRefuse(f"claim already exists and cannot rebind: {cid}")
-        digest = context_hash(context)
-        row = {
-            "claim_id": cid,
-            "context_hash": digest,
-            "input_class": INPUT_SYNTHETIC,
-            "status": STATUS_ISSUED,
-            "phase": "SYNTHETIC_FIXTURE",
-            "package": PACKAGE,
-            "profile": PROFILE,
-            "cert": CERT,
-            "cos_accept": COS_ACCEPT,
-            "issued_by": WORKER_A_ID,
-            "issued_utc": _utc_now(),
-            "real_go_present": False,
-            "env_grant": False,
-            "channel": CHANNEL_SYNTHETIC,
-        }
-        self._claims[cid] = row
-        return dict(row)
+        return self.custody.issue(
+            cid,
+            {
+                "context_hash": digest,
+                "input_class": INPUT_SYNTHETIC,
+                "package": PACKAGE,
+                "profile": PROFILE,
+                "cert": CERT,
+                "cos_accept": COS_ACCEPT,
+                "issued_by": WORKER_A_ID,
+                "real_go_present": False,
+                "env_grant": False,
+                "channel": CHANNEL_SYNTHETIC,
+            },
+        )
 
     def issue_real_claim(self, *args: Any, **kwargs: Any) -> None:
-        raise RetroHold("real GO/claim mint refused — no placeholder GO; DATA_HOLD")
+        refuse_real_without_root_grant(grant=kwargs.get("grant"))
 
     def require_before_reader(
         self,
@@ -113,46 +109,28 @@ class AuthorityRegistry:
             raise RetroRefuse(f"unknown reader_role {reader_role!r}")
         if requested_class == INPUT_REAL:
             raise RetroHold(
-                f"{reader_role} real read refused — no matching real GO/context (ENV-independent)"
+                f"{reader_role} REAL reader unconditionally HOLD — no Root-approved grant/context"
             )
         if not claim_id or not context_hash_expected:
             raise RetroRefuse(f"{reader_role} refused: absent claim/context")
         if claim_id == ARCHIVED_R5_CLAIM:
             raise RetroRefuse("archived R5 consumed claim cannot license this reader")
-        row = self._claims.get(claim_id)
-        if row is None:
-            raise RetroRefuse(f"{reader_role} refused: claim not in registry")
-        if row["status"] == STATUS_SPENT:
-            raise RetroRefuse(f"{reader_role} refused: spent claim cannot retry {claim_id}")
-        if row["status"] == STATUS_FAILED:
-            raise RetroRefuse(f"{reader_role} refused: failed claim cannot reset {claim_id}")
-        if row["status"] != STATUS_ISSUED:
-            raise RetroRefuse(f"{reader_role} refused: claim status {row['status']}")
+        row = self.custody.refuse_if_terminal_or_foreign(claim_id)
         if row["context_hash"] != context_hash_expected:
             raise RetroRefuse(f"{reader_role} refused: context hash mismatch")
         if row["input_class"] != INPUT_SYNTHETIC:
             raise RetroRefuse(f"{reader_role} refused: claim input_class is not SYNTHETIC")
         if requested_class != INPUT_SYNTHETIC:
             raise RetroRefuse(f"{reader_role} refused: synthetic claim cannot license {requested_class}")
+        phase = row["phase"]
+        if reader_role == "outcome" and phase not in {PHASE_FORECASTS_SEALED, PHASE_SCORED}:
+            raise RetroRefuse(f"outcome unread until FORECASTS_SEALED, phase={phase}")
+        if reader_role in {"feature", "history", "model"} and phase != PHASE_CLAIMED:
+            raise RetroRefuse(f"{reader_role} only during CLAIMED, phase={phase}")
         return dict(row)
 
     def spend(self, claim_id: str) -> dict[str, Any]:
-        row = self._claims.get(claim_id)
-        if row is None:
-            raise RetroRefuse("cannot spend unknown claim")
-        if row["status"] != STATUS_ISSUED:
-            raise RetroRefuse(f"cannot spend claim status={row['status']}")
-        row["status"] = STATUS_SPENT
-        row["spent_utc"] = _utc_now()
-        return dict(row)
+        return self.custody.spend(claim_id)
 
     def fail(self, claim_id: str, *, reason: str) -> dict[str, Any]:
-        row = self._claims.get(claim_id)
-        if row is None:
-            raise RetroRefuse("cannot fail unknown claim")
-        if row["status"] == STATUS_SPENT:
-            raise RetroRefuse("spent claim cannot be rebound to FAILED")
-        row["status"] = STATUS_FAILED
-        row["failed_utc"] = _utc_now()
-        row["fail_reason"] = reason
-        return dict(row)
+        return self.custody.fail(claim_id, reason=reason)
