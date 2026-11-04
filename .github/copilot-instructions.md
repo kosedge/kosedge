@@ -15,6 +15,7 @@ This document provides essential guidance for AI coding agents working within th
 - **Running the Application**: Use `npm run dev` to start the development server. Ensure that the backend service is also running for full functionality.
 - **Testing**: Implement tests in the `model-service` directory. Use pytest for Python tests and Jest for JavaScript tests.
 - **Debugging**: Utilize console logs and the built-in debugging tools in VS Code. For backend issues, check FastAPI logs.
+- **Cloud Agent Startup Recovery**: If Copilot cloud agent says it paused changes and cannot start, click **Show your changes**, then either commit legitimate work (preferred for research/audit artifacts) or stash temporary edits. Do not retry startup until `git status` is clean.
 
 ## Project-Specific Conventions
 
