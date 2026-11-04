@@ -22,13 +22,15 @@
   },
   "cert": 0,
   "counts": {
+    "contract_27": 27,
     "exact496": 496,
     "n_2020": 240,
     "n_2021": 256,
     "new59": 59,
     "old437": 437,
     "same96": 96,
-    "same96_ids_present": false,
+    "same96_ids_present": true,
+    "schedule_reg_records": 528,
     "sum_240_256": 496,
     "sum_437_59": 496
   },
@@ -52,19 +54,145 @@
     "q2_margin": 1.93920745003233,
     "r7_code_hash": "b2b97615a19f931ac22b9a2f281236e3a16b9f7e308989d002d7595cae8262e2",
     "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
+    "reexecuted_this_turn": false,
+    "reused_from": "data/ops/t5335u-r7-followthrough/receipt.json",
     "surface_notes": 0
   },
+  "fifth_prerequisite": {
+    "book_specific_blocks": [
+      "historical_economic",
+      "ATS",
+      "ROI",
+      "CLV"
+    ],
+    "book_specific_offered_price_required": false,
+    "book_specific_settlement_required": false,
+    "forecast_authorization": false,
+    "market_point_bind": {
+      "digest_found": false,
+      "invented_prices": false,
+      "locator": "frozen median-spread market-point digest for same96 POINT-ERROR",
+      "method": "existing_freeze_or_digest_only",
+      "opener_close_label_invented": false,
+      "sha256_pin": null,
+      "source": "no existing frozen median-spread digest on this checkout; not invented",
+      "status": "ABSENT"
+    },
+    "price_or_line_included": false,
+    "same96_b1_times_bound": true,
+    "same96_ids_bound": true,
+    "same96_n": 96,
+    "scope": "POINT_ERROR_VS_FROZEN_MEDIAN_SPREAD_MARKET_REFERENCE_SAME96",
+    "score_access": false
+  },
   "kernel_implemented": false,
-  "missing_n": 5,
+  "metadata_authority": "t5344u",
+  "metadata_order": "14083",
+  "missing_n": 1,
+  "missing_n_delta": -4,
+  "missing_n_prior": 5,
+  "ntbb_k_integrate": {
+    "b_clocks_promoted": false,
+    "frozen_as_final": true,
+    "frozen_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
+    "frozen_tip_short": "a807af22",
+    "integrated": true,
+    "isolated_area": "services/model-service/src/services/nfl_ntbb_k_v1",
+    "isolated_ops": "data/ops/nfl_ntbb_k_v1",
+    "kernel_files_copied": true,
+    "kernel_sha256": "ee80029149e410da7c3add0f74f2e8b1c3568c96a4542d820bbf4c9369996aa7",
+    "kernel_sha256_locked": true,
+    "note": "Cos ACCEPT RETURN 36205 tip a807af22 frozen as isolated NTBB-K SYNTHETIC kernel. d0bb6bef refused. Not a real R7 model arm. Producer\u2192capability/gate remains Worker A.",
+    "package_closed_from_b_alone": false,
+    "producer_capability_gate": {
+      "owner": "A",
+      "real_science": false,
+      "reexecuted_this_turn": false,
+      "status": "A_OBLIGATION_NOT_CLOSED_BY_B"
+    },
+    "profile_id": "NTBB_K_SYNTHETIC_KERNEL_V1",
+    "profile_status": "REGISTERED_ISOLATED_NOT_R7_MODEL_ARM",
+    "r7_model_arm": false,
+    "refused_tip": "d0bb6bef4b44215735369c0208ce19e07a9647a6",
+    "refused_tip_short": "d0bb6bef",
+    "return_order": "36205",
+    "scipy_fitting": "UNEXECUTED_DEPENDENCY_HELD",
+    "shared_gate_registered": true,
+    "status": "FROZEN_ISOLATED_SYNTHETIC_KERNEL"
+  },
   "ok": true,
   "owner_clear": "92861",
   "package": "R7_FOLLOWTHROUGH_PREFLIGHT",
   "packaging_revision": null,
-  "r7_code_hash": "b2b97615a19f931ac22b9a2f281236e3a16b9f7e308989d002d7595cae8262e2",
+  "projection_sha256": "9306a1b5ea74e71de652e4e27761f5814c349ecd1415a3507336d31f8703bbc9",
+  "r7_code_hash": "f9ee1d6e9122febeb78a715cb1906352b9a87f6ad1f5841944ac1316b351815b",
   "r7_config_hash": "f1c664d044000410a3cc5fbe97724935669c0fd84e56507e6d82fd49431cd4b8",
   "readiness": "NOT_READY",
   "ready_for_review": false,
-  "runtime_source_revision": "2a2c91c9b839da2246a01596b203318295581914",
+  "residuals": {
+    "actual_clock_provenance": {
+      "actual_clock_proof": false,
+      "actual_kickoff_utc": "UNKNOWN",
+      "available_at": "UNKNOWN",
+      "contemporaneous_availability_proof": false,
+      "fabricated_upgrade": false,
+      "live_gate_bypass": false,
+      "observed_at": "UNKNOWN",
+      "scheduled_kickoff_utc": "UNKNOWN"
+    },
+    "book_specific_offered_price_settlement": [
+      {
+        "blocks": [
+          "historical_economic",
+          "ATS",
+          "ROI",
+          "CLV"
+        ],
+        "locator": "same96 book-specific offered price/settlement",
+        "required_for_point_error": false,
+        "role": "historical economic / ATS / ROI / CLV only",
+        "sha256_pin": null,
+        "status": "RESIDUAL_NOT_MISSING_FOR_POINT_ERROR"
+      }
+    ],
+    "ntbb_k_frozen_tip": "a807af2298826475d8a207dfb7fcfcf710f00014",
+    "ntbb_k_kernel": "FROZEN_ISOLATED_SYNTHETIC_KERNEL_NOT_R7_MODEL_ARM",
+    "ntbb_k_return": "36205",
+    "retro_c1": "SYNTHETIC_EXECUTOR_READY_REAL_EXEC_HOLD",
+    "science_hold": true,
+    "scipy": "ABSENT",
+    "strict_rest": {
+      "blocked": true,
+      "reason": "actual_kickoff_utc unknown; PBP game_date/start_time_raw is recorded historical metadata \u2260 certified actual UTC kickoff/publication/availability; raw_field_named_pregame_cutoff_utc is not a seal and must not be silently treated as KO\u221260 except the independent same96 equality check vs B1 kickoff_utc"
+    }
+  },
+  "retro_c1_hold": {
+    "cert": 0,
+    "forecasts": false,
+    "implemented": true,
+    "package": "R7_RECORD_DATE_RETRO_C1",
+    "real_exec": false,
+    "real_features": false,
+    "spec_id": "7cb4fcef",
+    "spec_sha_prefix": "3394663e",
+    "started": true,
+    "status": "SYNTHETIC_EXECUTOR_READY_REAL_EXEC_HOLD",
+    "strict_actual_kickoff_live_causal": "DATA_HOLD"
+  },
+  "runtime_source_revision": "e290ff3b306d7c6c47b2d11a183c520992b90f59",
   "spec_sha256": "2f3c215d7680dd5aa33a0a77690ece4ef70a0a8dbbebaac880750dd776ec66d7",
-  "status": "PREFLIGHT_NOT_READY_AWAITING_CLOUD_FILES"
+  "status": "PREFLIGHT_CLOUD_METADATA_CONSUMED_ACTUAL_CLOCK_UNKNOWN",
+  "timestamp_role": {
+    "actual_ko_minus_60_computed": false,
+    "independent_recompute": true,
+    "matrix_named_pregame_cutoff_equals_B1_kickoff": 96,
+    "matrix_named_pregame_cutoff_equals_B1_true_cutoff": 0,
+    "matrix_named_pregame_cutoff_equals_actual_ko_minus_60": 0,
+    "meaning_generalized_beyond_same96": false,
+    "n_same96": 96,
+    "note": "On the independent 96, R4 matrix pregame_cutoff_utc equals B1 kickoff_utc and equals B1 true cutoff on 0. All 496 have one consistent raw value each. Do not feed that field as a seal or silently subtract 60. 0 == actual KO\u221260 is the recorded audit result; actual KO was not computed here.",
+    "role": "RECORDED_MATRIX_FIELD_NOT_SEAL_NOT_KO60",
+    "silently_subtracted_60": false,
+    "used_as_seal": false
+  }
 }

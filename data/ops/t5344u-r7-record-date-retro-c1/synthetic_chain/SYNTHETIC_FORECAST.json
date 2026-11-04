@@ -1,0 +1,9 @@
+{
+  "apply_linear_totals_calibration": false,
+  "c_margin": 1.6645744773174405,
+  "channel": "SYNTHETIC",
+  "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+  "if_margin": 1.389941504602551,
+  "immutable": true,
+  "q2_margin": 1.93920745003233
+}

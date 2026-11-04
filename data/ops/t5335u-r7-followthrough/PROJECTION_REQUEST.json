@@ -1,31 +1,38 @@
 {
+  "consumed_projection_sha256": "9306a1b5ea74e71de652e4e27761f5814c349ecd1415a3507336d31f8703bbc9",
   "counts": {
+    "contract_27": 27,
     "exact496": 496,
     "n_2020": 240,
     "n_2021": 256,
     "new59": 59,
     "old437": 437,
     "same96": 96,
-    "same96_ids_present": false,
+    "same96_ids_present": true,
+    "schedule_reg_records": 528,
     "sum_240_256": 496,
     "sum_437_59": 496
   },
   "request": {
+    "actual_clock_provenance_resolved": false,
+    "cloud_metadata_resolved": true,
     "do_not_include": [
       "home_score",
       "away_score",
       "actual_margin",
       "labels",
-      "outcomes"
+      "outcomes",
+      "reconstructed_feature_values",
+      "forecasts",
+      "target_scores",
+      "economics",
+      "invented_prices",
+      "invented_opener_close_label"
     ],
     "locators": [
-      "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json",
-      "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG_MATRIX.csv",
-      "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
-      "data/ops/nfl-forecast-builder-t5107u/FORECAST_FREEZE_t5112u.json",
-      "same96 market offered-line/price/timing/rule evidence"
+      "frozen median-spread market-point digest for same96 POINT-ERROR"
     ],
-    "needed": true,
+    "needed": false,
     "permitted_fields": [
       "game_id",
       "season",
@@ -33,17 +40,11 @@
       "season_type",
       "home_team",
       "away_team",
-      "actual_kickoff_utc",
-      "scheduled_kickoff_utc",
-      "status",
-      "kickoff_kind",
-      "predecessor_game_id",
-      "rest_days_home",
-      "rest_days_away",
-      "available_at",
-      "observed_at"
+      "frozen_median_spread_market_point",
+      "existing_freeze_digest"
     ],
-    "reason": "working-tree cloud files absent; per-target actual kickoff/played/rest stay UNKNOWN"
+    "reason": "staged R7_METADATA_PROJECTION consumed; absent cloud metadata resolved; actual/scheduled/availability remain unknown; frozen median-spread market-point digest still absent for POINT-ERROR bind"
   },
+  "schema_delta": "nfl-t5344u-r7-metadata-14083-v1",
   "schema_id": "nfl-t5335u-r7-followthrough-preflight-v1"
 }

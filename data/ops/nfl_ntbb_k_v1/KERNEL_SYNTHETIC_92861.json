@@ -1,0 +1,419 @@
+{
+  "cert": 0,
+  "channel": "SYNTHETIC",
+  "clarifications": {
+    "bytes": 3237,
+    "commit": "cc5ce256abc3ef92475db32f92e6b17c87d6ea44",
+    "path": "research/nfl_followthrough_20261103/NTBB_K_V1_NUMERICAL_CLARIFICATIONS.md",
+    "sha256": "dd2fa8d041b652324c07b77aea2f2b589146213342a414b98e8bcc629d5bc3e8",
+    "sha256_match": true
+  },
+  "clocks_143": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
+  "data_label": "SYNTHETIC",
+  "demo_summaries": {
+    "spread": {
+      "d": "-3",
+      "intervals": {
+        "loss": [
+          0.764540601595658,
+          0.7645406015965812
+        ],
+        "push": [
+          0.07667582629620387,
+          0.07667582629712717
+        ],
+        "win": [
+          0.1587835721072187,
+          0.15878357210814198
+        ]
+      },
+      "loss": 0.764540601595658,
+      "push": 0.07667582629620387,
+      "side": "home",
+      "win": 0.1587835721072187
+    },
+    "total": {
+      "L": "44.5",
+      "intervals": {
+        "over": [
+          4.8102790251170705e-12,
+          5.733575393808365e-12
+        ],
+        "push": [
+          0.0,
+          9.232963686912942e-13
+        ],
+        "under": [
+          0.9999999999942711,
+          0.9999999999951944
+        ]
+      },
+      "over": 4.8102790251170705e-12,
+      "push": 0.0,
+      "under": 0.9999999999942711
+    }
+  },
+  "design": "25194",
+  "evidence_id": "03972",
+  "family": "NTBB-K",
+  "fitting_algorithm": "UNEXECUTED_DEPENDENCY_HELD",
+  "future_grad_step": 5e-06,
+  "historical_economic_calculation": false,
+  "kernel_implemented": true,
+  "market_partial_preserved": {
+    "clock_semantics_verified_any": false,
+    "clocks_status": "SOURCE_VALUE_MATCH_NOT_VERIFIED",
+    "preserved": true,
+    "sha256": {
+      "jsonl_143": "bf5fd92e61f3f0bac9f964e7b57b7ac4996ba166c68bb853888c9fcdb0e9e2d7",
+      "ledger_81759": "ce188c64f6d52c98ca76301455bf2654d30a6a59029cc5d7845944d7087bc5d7",
+      "ledger_92861": "6879ed43cc9e4ad7bef0a124bc0514ea7d1adb9af1775101e0bbcd6aad6d5e75"
+    }
+  },
+  "metadata_14083": "14083",
+  "metadata_ticket": "t5344u",
+  "no_install": true,
+  "oracle_max_enumerated_total": 183,
+  "owned_completion_claimed": false,
+  "owner": "92a6ca83",
+  "package": "nfl_ntbb_k_v1",
+  "pass_spec": "4f8c5827",
+  "profile": "NTBB_K_SYNTHETIC_KERNEL_V1",
+  "qualification": "UNQUALIFIED",
+  "return_id": "36205",
+  "root_nine": {
+    "fixture_kind": "RETURN_36205_ROOT_NINE",
+    "max_enumerated_total": 183,
+    "n_cases": 9,
+    "not_demo_small_nine": true,
+    "oracle_max_enumerated_total": 183,
+    "results": [
+      {
+        "N": 175,
+        "enumerated_mass": 0.999999999999188,
+        "enumeration_error": 1.2212453270876722e-15,
+        "expected_N": 175,
+        "extras": {
+          "k0_betabinom": 7.26415455565288e-17,
+          "transpose": {
+            "conditional": 8.326672684688674e-17,
+            "joint": 2.202285662861181e-20
+          }
+        },
+        "family": "MU44_R20",
+        "group": "root",
+        "moment_bound": 1.461060822927808e-10,
+        "name": "MU44_R20_K0",
+        "params": {
+          "c": 12.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 44.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 1.2212453270876722e-15,
+          "symmetry": 4.743384504624082e-20,
+          "tail_moment": 1.453130948902981e-10,
+          "total_marginal": 2.0816681711721685e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.1082054309073e-13
+      },
+      {
+        "N": 175,
+        "enumerated_mass": 0.9999999999991882,
+        "enumeration_error": 9.992007221626409e-16,
+        "expected_N": 175,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": {
+            "conditional": 7.632783294297951e-17,
+            "joint": 2.879912020664621e-20
+          }
+        },
+        "family": "MU44_R20",
+        "group": "root",
+        "moment_bound": 1.461060822927808e-10,
+        "name": "MU44_R20_KPOS",
+        "params": {
+          "c": 12.0,
+          "k0": 0.4,
+          "k3": 0.7,
+          "k7": 0.6,
+          "mu": 44.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 9.992007221626409e-16,
+          "symmetry": 2.879912020664621e-20,
+          "tail_moment": 1.453059894629405e-10,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.1082054309073e-13
+      },
+      {
+        "N": 175,
+        "enumerated_mass": 0.9999999999991881,
+        "enumeration_error": 1.1102230246251565e-15,
+        "expected_N": 175,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": {
+            "conditional": 9.020562075079397e-17,
+            "joint": 3.1763735522036263e-21
+          }
+        },
+        "family": "MU44_R20",
+        "group": "root",
+        "moment_bound": 1.461060822927808e-10,
+        "name": "MU44_R20_KNEG",
+        "params": {
+          "c": 12.0,
+          "k0": -0.5,
+          "k3": -0.7,
+          "k7": -0.6,
+          "mu": 44.0,
+          "p": 0.5,
+          "r": 20.0
+        },
+        "residuals": {
+          "normalization": 1.1102230246251565e-15,
+          "symmetry": 6.098637220230962e-20,
+          "tail_moment": 1.453059894629405e-10,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.1082054309073e-13
+      },
+      {
+        "N": 183,
+        "enumerated_mass": 0.999999999999139,
+        "enumeration_error": 3.1086244689504383e-15,
+        "expected_N": 183,
+        "extras": {
+          "k0_betabinom": 4.0440741033709315e-17,
+          "transpose": {
+            "conditional": 1.6653345369377348e-16,
+            "joint": 3.2526065174565133e-19
+          }
+        },
+        "family": "MU36_R12",
+        "group": "root",
+        "moment_bound": 1.6310172409642147e-10,
+        "name": "MU36_R12_K0",
+        "params": {
+          "c": 6.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 36.0,
+          "p": 0.35,
+          "r": 12.0
+        },
+        "residuals": {
+          "normalization": 3.1086244689504383e-15,
+          "symmetry": 0.0,
+          "tail_moment": 1.6217427400988527e-10,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.640738081004497e-13
+      },
+      {
+        "N": 183,
+        "enumerated_mass": 0.999999999999139,
+        "enumeration_error": 3.1086244689504383e-15,
+        "expected_N": 183,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": {
+            "conditional": 2.220446049250313e-16,
+            "joint": 4.87890977618477e-19
+          }
+        },
+        "family": "MU36_R12",
+        "group": "root",
+        "moment_bound": 1.6310172409642147e-10,
+        "name": "MU36_R12_KPOS",
+        "params": {
+          "c": 6.0,
+          "k0": 0.4,
+          "k3": 0.7,
+          "k7": 0.6,
+          "mu": 36.0,
+          "p": 0.35,
+          "r": 12.0
+        },
+        "residuals": {
+          "normalization": 3.1086244689504383e-15,
+          "symmetry": 0.0,
+          "tail_moment": 1.6217427400988527e-10,
+          "total_marginal": 2.7755575615628914e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.640738081004497e-13
+      },
+      {
+        "N": 183,
+        "enumerated_mass": 0.999999999999139,
+        "enumeration_error": 3.1086244689504383e-15,
+        "expected_N": 183,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": {
+            "conditional": 1.942890293094024e-16,
+            "joint": 3.7947076036992655e-19
+          }
+        },
+        "family": "MU36_R12",
+        "group": "root",
+        "moment_bound": 1.6310172409642147e-10,
+        "name": "MU36_R12_KNEG",
+        "params": {
+          "c": 6.0,
+          "k0": -0.5,
+          "k3": -0.7,
+          "k7": -0.6,
+          "mu": 36.0,
+          "p": 0.35,
+          "r": 12.0
+        },
+        "residuals": {
+          "normalization": 3.1086244689504383e-15,
+          "symmetry": 0.0,
+          "tail_moment": 1.6217427400988527e-10,
+          "total_marginal": 2.0816681711721685e-17
+        },
+        "status": "PASS",
+        "tail_mass": 8.640738081004497e-13
+      },
+      {
+        "N": 174,
+        "enumerated_mass": 0.9999999999990324,
+        "enumeration_error": 4.218847493575595e-15,
+        "expected_N": 174,
+        "extras": {
+          "k0_betabinom": 1.4354836763708079e-16,
+          "transpose": {
+            "conditional": 1.1102230246251565e-16,
+            "joint": 9.529120656610879e-22
+          }
+        },
+        "family": "MU52_R30",
+        "group": "root",
+        "moment_bound": 1.7391222941396842e-10,
+        "name": "MU52_R30_K0",
+        "params": {
+          "c": 25.0,
+          "k0": 0.0,
+          "k3": 0.0,
+          "k7": 0.0,
+          "mu": 52.0,
+          "p": 0.7,
+          "r": 30.0
+        },
+        "residuals": {
+          "normalization": 4.218847493575595e-15,
+          "symmetry": 0.0,
+          "tail_moment": 1.7254109252462513e-10,
+          "total_marginal": 1.3877787807814457e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.71811808835908e-13
+      },
+      {
+        "N": 174,
+        "enumerated_mass": 0.9999999999990324,
+        "enumeration_error": 4.218847493575595e-15,
+        "expected_N": 174,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": {
+            "conditional": 1.1102230246251565e-16,
+            "joint": 3.970466940254533e-22
+          }
+        },
+        "family": "MU52_R30",
+        "group": "root",
+        "moment_bound": 1.7391222941396842e-10,
+        "name": "MU52_R30_KPOS",
+        "params": {
+          "c": 25.0,
+          "k0": 0.4,
+          "k3": 0.7,
+          "k7": 0.6,
+          "mu": 52.0,
+          "p": 0.7,
+          "r": 30.0
+        },
+        "residuals": {
+          "normalization": 4.218847493575595e-15,
+          "symmetry": 0.0,
+          "tail_moment": 1.7254109252462513e-10,
+          "total_marginal": 1.0408340855860843e-17
+        },
+        "status": "PASS",
+        "tail_mass": 9.71811808835908e-13
+      },
+      {
+        "N": 174,
+        "enumerated_mass": 0.9999999999990324,
+        "enumeration_error": 4.218847493575595e-15,
+        "expected_N": 174,
+        "extras": {
+          "k0_betabinom": 0.0,
+          "transpose": {
+            "conditional": 5.551115123125783e-17,
+            "joint": 6.88214269644119e-22
+          }
+        },
+        "family": "MU52_R30",
+        "group": "root",
+        "moment_bound": 1.7391222941396842e-10,
+        "name": "MU52_R30_KNEG",
+        "params": {
+          "c": 25.0,
+          "k0": -0.5,
+          "k3": -0.7,
+          "k7": -0.6,
+          "mu": 52.0,
+          "p": 0.7,
+          "r": 30.0
+        },
+        "residuals": {
+          "normalization": 4.218847493575595e-15,
+          "symmetry": 0.0,
+          "tail_moment": 1.7254109252462513e-10,
+          "total_marginal": 6.938893903907228e-18
+        },
+        "status": "PASS",
+        "tail_mass": 9.71811808835908e-13
+      }
+    ],
+    "status": "PASS"
+  },
+  "scientific_hold": [
+    "no outcomes",
+    "no forecast",
+    "no fit",
+    "no historical ATS/ROI",
+    "SciPy fitting algorithm unexecuted / dependency-held",
+    "143 clocks remain SOURCE_VALUE_MATCH not verified"
+  ],
+  "scipy_status": "ABSENT_NOT_EVALUABLE",
+  "spec": {
+    "bytes": 11064,
+    "commit": "2a2c91c9b839da2246a01596b203318295581914",
+    "path": "research/nfl_followthrough_20261103/NTBB_K_V1_SPEC.md",
+    "sha256": "2f3c215d7680dd5aa33a0a77690ece4ef70a0a8dbbebaac880750dd776ec66d7",
+    "sha256_match": true
+  },
+  "ticket": "t5343u",
+  "use_label": "RESEARCH_ONLY",
+  "worker": "B"
+}

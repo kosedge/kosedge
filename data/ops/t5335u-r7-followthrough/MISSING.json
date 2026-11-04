@@ -1,40 +1,20 @@
 {
   "missing": [
     {
-      "count_blocked": 496,
-      "locator": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG.json",
-      "role": "FEATURE_RECON_REG496 artifact",
-      "sha256_pin": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
-      "working_tree": "ABSENT"
-    },
-    {
-      "count_blocked": 496,
-      "locator": "data/ops/nfl-t5146u-r4-last-played-dev/DEV_RECON_LAST_PLAYED_2020_2021_REG_MATRIX.csv",
-      "role": "feature matrix",
-      "sha256_pin": "a3b9d8ecb94902078ddcb89206a5a1ff16d5f1a3b4e8080186238d6578c52409",
-      "working_tree": "ABSENT"
-    },
-    {
-      "count_blocked": 496,
-      "locator": "data/ops/nfl-forecast-builder-t5107u/inputs/schedule_results_2020_2023.csv",
-      "role": "schedule / actual-versus-scheduled (UNOPENED \u2014 may carry results)",
-      "sha256_pin": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
-      "working_tree": "ABSENT"
-    },
-    {
-      "count_blocked": 496,
-      "locator": "data/ops/nfl-forecast-builder-t5107u/FORECAST_FREEZE_t5112u.json",
-      "role": "old IF freeze working-tree copy",
-      "sha256_pin": "9e704b980b6ce33acc883725823c39766ea19f8a86a7a781ac2a02d95344a732",
-      "working_tree": "ABSENT"
-    },
-    {
+      "blocks": "POINT_ERROR_market_reference_bind",
       "count_blocked": 96,
-      "locator": "same96 market offered-line/price/timing/rule evidence",
-      "role": "exact96 market comparison (Worker B owned historically)",
+      "does_not_block": [
+        "cloud_metadata_identities",
+        "same96_ids_and_b1_times"
+      ],
+      "invented_opener_close_label": false,
+      "invented_prices": false,
+      "locator": "frozen median-spread market-point digest for same96 POINT-ERROR",
+      "role": "bind same96 archived market point by existing freeze/digest; not book prices; not invented opener/close",
       "sha256_pin": null,
-      "working_tree": "ABSENT"
+      "working_tree": "ABSENT",
+      "working_tree_present": false
     }
   ],
-  "n": 5
+  "n": 1
 }

@@ -1,0 +1,17 @@
+{
+  "missing": [
+    {
+      "locator": "frozen median-spread market-point digest for same96 POINT-ERROR",
+      "sha256_pin": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+      "source": "spec-named pin; not invented prices",
+      "working_tree": "ABSENT"
+    },
+    {
+      "locator": "archived R5 comparison artifact",
+      "role": "reference only \u2014 never regenerate",
+      "sha256_pin": "df24500e4366240ca6aa7d1aedab0c8415a8bea17dbfe969d6e9fac96e77a5a0",
+      "working_tree": "ABSENT"
+    }
+  ],
+  "n": 2
+}

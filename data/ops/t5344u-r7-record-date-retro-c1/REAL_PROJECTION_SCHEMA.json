@@ -1,0 +1,97 @@
+{
+  "allowed_history_identities": 2320,
+  "authorized_now": false,
+  "cert": 0,
+  "executable_command_now": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_record_date_retro_c1.py",
+  "executable_command_when_root_authorizes": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_r7_record_date_retro_c1.py --claim <ROOT_CLAIM> --context <ROOT_CONTEXT_HASH>",
+  "future_pass": {
+    "bootstrap_B": 10000,
+    "bootstrap_gen": "PCG64",
+    "bootstrap_seed": 20261103,
+    "if_draws_per_target": 4000,
+    "requires": "distinct Root GO/context AFTER final pins + independent preflight",
+    "sensitivity_seed": 20261104,
+    "unique_targets": 496
+  },
+  "history_2013_19": 1792,
+  "history_filter": {
+    "nominal_ko_minus_minutes": 60,
+    "prior_assigned_week_only": true,
+    "same_assigned_week_scored_history": false
+  },
+  "identity_columns_only": [
+    "season",
+    "week",
+    "home",
+    "away",
+    "game_id",
+    "season_type"
+  ],
+  "new59": 59,
+  "old437": 437,
+  "raw_source_pins": {
+    "archived_r5_reference": {
+      "regenerate": false,
+      "sha256": "df24500e4366240ca6aa7d1aedab0c8415a8bea17dbfe969d6e9fac96e77a5a0",
+      "status": "REFERENCE_ONLY"
+    },
+    "frozen_median_spread_market_point": {
+      "sha256": "072e99e0c984fbd5ef87a2b419344c89148952a06b9185f52556147caeae70df",
+      "status": "SPEC_NAMED_PIN",
+      "working_tree": "ABSENT"
+    },
+    "games": {
+      "columns": [
+        "season",
+        "week",
+        "home",
+        "away",
+        "nominal_kickoff"
+      ],
+      "sha256": "4fe1cdd7f2eb616103ee6107e6a5cb0d5280f8006be420b606af0995351abef8",
+      "status": "UNOPENED"
+    },
+    "identity_pointers_2320": {
+      "sha256": "ca6d2c84a879062080d38940d5a70360c6fb4a825df9d0d26bf393652e036c26",
+      "status": "BOUND"
+    },
+    "nominal_528": {
+      "sha256": "0d072469faa78898419e4cf8a3042ca5bdf2e673636c84aa581d9db4d1392306",
+      "status": "BOUND"
+    },
+    "outcomes": {
+      "reason": "label-read not authorized",
+      "sha256": "50bda875daa8bf1aadd56dd0a3bc19f1bb52dafe42b6a9c921a5816c7d7dc081",
+      "status": "UNOPENED"
+    },
+    "r4_matrix": {
+      "opened": false,
+      "sha256": "a3b9d8ecb94902078ddcb89206a5a1ff16d5f1a3b4e8080186238d6578c52409",
+      "status": "ABSENT_WORKING_TREE"
+    },
+    "r4_recon_json": {
+      "opened": false,
+      "sha256": "282f979b52890c7ed943eeb9c0836dd7f50b9a925cf3e82fdfc856834646402c",
+      "status": "ABSENT_WORKING_TREE"
+    },
+    "rest_meta_496": {
+      "sha256": "96f3ffb3408120c6e7bf2bddef6eac8f5b97a012ce63f2cf3b163af9773f5466",
+      "status": "BOUND"
+    },
+    "same96_identity": {
+      "sha256": "558fbfe5de0344925e389650c28b8c0c42546cd98013c0a55968f67de6e7242e",
+      "status": "SPEC_NAMED_PIN",
+      "working_tree": "ABSENT"
+    },
+    "schedule_results_2020_2023": {
+      "no_target_scores": true,
+      "sha256": "0853342304d269b55033d3474acda853ce00bdb10590f44b09ae569115148479",
+      "status": "METADATA_ONLY"
+    }
+  },
+  "reg_2020_21": 528,
+  "same96": 96,
+  "schema_id": "r7-record-date-retro-c1-real-projection-v1",
+  "scores_opened": false,
+  "targets": 496
+}

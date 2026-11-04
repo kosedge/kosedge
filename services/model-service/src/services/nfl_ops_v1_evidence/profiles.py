@@ -36,6 +36,10 @@ WORKER_B_ROLE = "Worker B"
 PROFILE_R7 = "R7_CORRECTNESS_V1"
 PROFILE_OWNED_MARKET_TRACE = "OWNED_MARKET_TRACE_V1"
 PROFILE_SYNTHETIC_MARKET_EVENTS = "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1"
+PROFILE_RECORDED_DATE_RETRO = "RECORDED_DATE_RETRO"
+RETRO_ISOLATED_AREA = "services/model-service/src/services/nfl_r7_record_date_retro_c1"
+PROFILE_NTBB_K_SYNTHETIC = "NTBB_K_SYNTHETIC_KERNEL_V1"
+NTBBK_ISOLATED_AREA = "services/model-service/src/services/nfl_ntbb_k_v1"
 
 R7_AUTHORITY = "t5289u"
 R7_OWNER_CLEAR = "86257"
@@ -129,6 +133,37 @@ def _seed() -> Dict[str, GateProfile]:
             handoff_sha256=None,
             isolated_area=B_ISOLATED_AREA,
             notes="Worker B isolated. A registers only after B handoff.",
+        ),
+        PROFILE_RECORDED_DATE_RETRO: GateProfile(
+            profile_id=PROFILE_RECORDED_DATE_RETRO,
+            owner=WORKER_A_ROLE,
+            authority="t5344u",
+            owner_clear="92861",
+            scope_id=R7_SCOPE_ID,
+            status=STATUS_ACTIVE,
+            registered_by=WORKER_A_ID,
+            handoff_sha256=None,
+            isolated_area=RETRO_ISOLATED_AREA,
+            notes=(
+                "Isolated RECORDED_DATE_RETRO metadata + synthetic executor. "
+                "NOT_EXECUTABLE for real data. Strict live-causal remains DATA_HOLD."
+            ),
+        ),
+        PROFILE_NTBB_K_SYNTHETIC: GateProfile(
+            profile_id=PROFILE_NTBB_K_SYNTHETIC,
+            owner=WORKER_B_ROLE,
+            authority="t5344u",
+            owner_clear="92861",
+            scope_id=R7_SCOPE_ID,
+            status=STATUS_REGISTERED,
+            registered_by=WORKER_A_ID,
+            handoff_sha256=None,
+            isolated_area=NTBBK_ISOLATED_AREA,
+            b_tip="a807af2298826475d8a207dfb7fcfcf710f00014",
+            notes=(
+                "Isolated NTBB-K SYNTHETIC kernel frozen at Cos ACCEPT a807af22. "
+                "Not a real R7 model arm. d0bb6bef refused. B clocks not promoted."
+            ),
         ),
     }
 
