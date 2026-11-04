@@ -1,0 +1,91 @@
+{
+  "authority": "t5256u",
+  "task": "PRIMARY_A_DIRECT_GATE_BIND",
+  "parent_tip": "6d57f33a309014a0181184b59d6da7946112af4e",
+  "package_close_superseded": "d468000e",
+  "cert": 0,
+  "ready_for_review": false,
+  "self_accept": false,
+  "joint_claim": "NOT_INTEGRATED_THROUGH_THIS_GATE",
+  "b_handoff_preserved": {
+    "release_kind": "PLATFORM_LIMITATION",
+    "not_a_pass": true,
+    "content_hash": "b8aa6100f29ddad29c73c2a1624beb657407303bd28b7384c9d94dc55def2981"
+  },
+  "pytest": {
+    "command": "cd services/model-service && PYTHONPATH=. python3 -m pytest tests/test_nfl_ops_v1_evidence_manifest_gate.py -q --tb=short",
+    "exit": 0,
+    "passed": 53
+  },
+  "integrated_command": {
+    "command": "PYTHONPATH=services/model-service python3 scripts/nfl/run_nfl_ops_v1_evidence_gate.py /tmp/nfl-ops-v1-evidence-t5256u",
+    "command_sha256": "1bbaac314a04b5d4d0cba597a48f150ea59487c92fde11e035e35c4e19f507e8",
+    "exit": 0,
+    "status": "GATED_OK_AWAITING_CHIEF",
+    "digest": "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124"
+  },
+  "hashes": {
+    "input_hash": {
+      "old": "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124",
+      "new": "27f32649050578108720b2ff26eacebadb92c7324f1930661c88b8f1ce6e6124",
+      "changed": false
+    },
+    "history_hash": {
+      "old": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
+      "new": "2a3eaf7eb1935dd8d66d4d2d415df8f8cd5e7a400d2e5fe9ac952d5c6cdff01c",
+      "changed": false
+    },
+    "config_hash": {
+      "old": "826fc1b1d1af3b1fc8fb3feb7398b7a8894c6952b3e6fc695b093b603e234499",
+      "new": "526145d32714c343d272d3865b0c45db19d5bf4ab9498db16e5b722e45203c3a",
+      "changed": true,
+      "why": "canonical config_binding now includes expected_command"
+    },
+    "code_hash": {
+      "old": "9066cf3256f6d36d90d2f2cf8b8306ba71b8db6b86e82df4d3496554c50e86f9",
+      "new": "f744c16674c18debedd6beb0911626708cb15d14c9d152e5ad3024fb971ee8a4",
+      "changed": true,
+      "why": "CODE_FILES now includes verify.py/constants.py/refuse.py; gate/validate/run rewritten"
+    },
+    "log_hash": {
+      "old": "1f37b77a876bd37d0dfa96fa6c50e36c2605352fc9191057184a9d980b3ebdf3",
+      "new": "6ff5adcae2fe5934f46f772396acda4fd3705b06621247c9860ef8a69cb6569e",
+      "changed": true
+    },
+    "command_sha256": {
+      "old": "1bbaac314a04b5d4d0cba597a48f150ea59487c92fde11e035e35c4e19f507e8",
+      "new": "1bbaac314a04b5d4d0cba597a48f150ea59487c92fde11e035e35c4e19f507e8",
+      "changed": false
+    }
+  },
+  "file_sha256": {
+    "services/model-service/src/services/nfl_ops_v1_evidence/gate.py": "dfd0b0d86ebcaed2e8d29d403a518dba796d2fe80ee77cb3be09f5605ebd6492",
+    "services/model-service/src/services/nfl_ops_v1_evidence/validate.py": "7f60470b98dfa3b7333f4a1cd0a35b6d56c6d2a0441cc8068bc42beb632613b1",
+    "services/model-service/src/services/nfl_ops_v1_evidence/run.py": "c8f225a82c2a3f8413567254c38d3bc4ad14860d6e27b50278e3e8c54dbec115",
+    "services/model-service/src/services/nfl_ops_v1_evidence/verify.py": "1ed769a84335662ae88e68e2609f3a9b98a1746a8ae85acc98315065718f547e",
+    "services/model-service/src/services/nfl_ops_v1_evidence/constants.py": "bb6287bff713d3e56316f42e2681b2fb83c7b46f091646d45f839b0758d4edc9",
+    "services/model-service/src/services/nfl_ops_v1_evidence/refuse.py": "9bca4b091b51b89db1fece092a7489a295ff39970bae17e7659e8c80bad744e0",
+    "scripts/nfl/run_nfl_ops_v1_evidence_gate.py": "548ec3b595a7267e42fdb0fe3dad41cf282d12f13b3c6e6be16b3bdbaafc6343",
+    "services/model-service/tests/test_nfl_ops_v1_evidence_manifest_gate.py": "4f4640649636ae99b14cd568d2b4cc22bccadabde31cd9e456163925f76f2f08"
+  },
+  "output_sha256": {
+    "SAMPLE_MANIFEST.json": "a3431752b9fdd29283a279a284d7386ebeb092747668c91039e0b2923a9e3951",
+    "RECEIPT.json": "08e0583a5e28a9dd19330173b9ea9c65492a1f78bde4b95fea9d9aa7b82bfae3",
+    "produced_chain.json": "4288d08d6aa6f3b4cd47cc0c11558d54825904436637e7e47542fcd984dd83da"
+  },
+  "probe_cases_now_refused": [
+    "validate_manifest without verification context",
+    "gate_before_* missing root/command/cwd/payload",
+    "arbitrary synchronized 64-hex input/history/config/code",
+    "arbitrary output byte hashes",
+    "exit 17",
+    "head=not-a-commit",
+    "stale 40-hex head != live git HEAD"
+  ],
+  "rehashed_faults": {
+    "gate_invoked": 1,
+    "instrumentation_control_fired": true,
+    "forbidden_calls": 0,
+    "refuse_class": "HASH_MUTATED"
+  }
+}

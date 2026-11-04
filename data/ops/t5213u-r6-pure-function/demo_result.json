@@ -1,0 +1,81 @@
+{
+  "binds": {
+    "code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
+    "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
+    "history_hash": "d194de4508a30a2baa09c2c7d96f8ee26d74bd0b22587430d4d936de4fd897e8",
+    "packet_hash": "ee71ffc65200e8ebbd59d9447bbede20b9cbab015af7deb5748bfc35b62efee8",
+    "schema_hash_is_not_an_input_bind": true
+  },
+  "c_formula": "C=0.5*IF+0.5*Q2",
+  "c_margin": 1.057434322158721,
+  "candidate_weight": 0.5,
+  "cert": 0,
+  "channel": "SYNTHETIC",
+  "code_hash": "906ec8d395a5f17276b85abcea62af3729961842411138f9b1b70b42c3634b4a",
+  "config_hash": "01d61811a922f75701b080a57d00f6e0feea7e87cbe016c9e4d26903183cee29",
+  "cutoff_utc": "2018-10-14T16:00:00Z",
+  "envelope": {
+    "away_team": "NE",
+    "game_id": "SYNTHETIC_2018_W05_KC_NE",
+    "home_team": "KC",
+    "identity_kind": "SYNTHETIC_REG",
+    "kickoff_utc": "2018-10-14T17:00:00Z",
+    "season": 2018,
+    "season_type": "REG",
+    "venue_id": "SYNTHETIC_VENUE_ARROWHEAD",
+    "week": 5
+  },
+  "game_id": "SYNTHETIC_2018_W05_KC_NE",
+  "history_hash": "d194de4508a30a2baa09c2c7d96f8ee26d74bd0b22587430d4d936de4fd897e8",
+  "if_margin": 0.8675824382397918,
+  "if_preflight": {
+    "default_if_trees": [
+      {
+        "exists": false,
+        "path": "/tmp/t5108u-if-6ca03716",
+        "sim_present": false
+      },
+      {
+        "exists": false,
+        "path": "/tmp/t5044u-if-6ca03716",
+        "sim_present": false
+      },
+      {
+        "exists": false,
+        "path": "/tmp/t4910u-if-6ca03716",
+        "sim_present": false
+      }
+    ],
+    "default_if_trees_used": false,
+    "ensure_if_tree_called": false,
+    "framework_path": "/workspace/services/model-service/src/services/nfl_handicapping_framework.py",
+    "fw_sha256": "a0051cc423bd733c3342272fdb297ea8f22cf2a4569fe0f9ca0ec47eda04d0e3",
+    "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+    "sim_sha256": "52d9e90927c9bc9d48314659d2735b9647974f20c2f15944855727e0cfd86385",
+    "simulator_path": "/workspace/services/model-service/src/services/nfl_simulator.py",
+    "status": "PRESENT_PIN_MATCH",
+    "t5108u_if_tree_env": null,
+    "tree_path": "/workspace/services/model-service"
+  },
+  "if_tip": "6ca03716fe52930332d5ffba302c312a651980cc",
+  "if_tree": "/workspace/services/model-service",
+  "kickoff_utc": "2018-10-14T17:00:00Z",
+  "market_blend": 0,
+  "output_kind": "POINT_MARGIN",
+  "packet_hash": "ee71ffc65200e8ebbd59d9447bbede20b9cbab015af7deb5748bfc35b62efee8",
+  "q2": {
+    "a_q2": 2.5637441292077354,
+    "b_q2": 1.660624056183471,
+    "fit_policy": "TRANSFER_FROZEN_DEV_2013_2016",
+    "n_asof_games": 4,
+    "parameter_label": "FROZEN_Q2PB_DEV_2013_2016_TRANSFER",
+    "rating_diff": -0.7927489176301794,
+    "refit_performed": false
+  },
+  "q2_margin": 1.2472862060776504,
+  "schema_hash": "ce3747cc7d5368dfbb60ebfa4fff87ae52890afd60ba3b596bc5baa5849e50d8",
+  "schema_id": "nfl-t5208u-r6-caller-v1",
+  "seal_utc": "2018-10-14T16:00:00Z",
+  "seed": 282632,
+  "simulations": 4000
+}

@@ -1,0 +1,20 @@
+{
+  "missing": [
+    {
+      "blocks": "POINT_ERROR_market_reference_bind",
+      "count_blocked": 96,
+      "does_not_block": [
+        "cloud_metadata_identities",
+        "same96_ids_and_b1_times"
+      ],
+      "invented_opener_close_label": false,
+      "invented_prices": false,
+      "locator": "frozen median-spread market-point digest for same96 POINT-ERROR",
+      "role": "bind same96 archived market point by existing freeze/digest; not book prices; not invented opener/close",
+      "sha256_pin": null,
+      "working_tree": "ABSENT",
+      "working_tree_present": false
+    }
+  ],
+  "n": 1
+}

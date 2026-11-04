@@ -1,0 +1,337 @@
+{
+  "bootstrap": {
+    "B": 10000,
+    "gen": "PCG64",
+    "interval": "2.5/97.5",
+    "mean": 1.2150447408179126,
+    "n_clusters": 2,
+    "n_weeks": 2,
+    "observed_pooled": 1.2149562023458387,
+    "observed_unweighted": 1.2149562023458387,
+    "p025": 0.32957148160783944,
+    "p975": 2.100340923083838,
+    "run": true,
+    "scientific_claim": false,
+    "season_coverage": [
+      2018
+    ],
+    "seed": 20261103,
+    "statistic": "paired_abs_loss"
+  },
+  "calendar_id": "REST_RECORDED_GAME_DATE_RETRO_V1",
+  "cert": 0,
+  "channel": "SYNTHETIC",
+  "claim": {
+    "cert": 0,
+    "channel": "SYNTHETIC",
+    "claim_id": "SYNTHETIC_347b9394dd3d_16071_1793754851564",
+    "context_hash": "347b9394dd3d84c80b80ee37ed56fb8e9cfefc3acd8a25d2faa2439b7e267591",
+    "cos_accept": "c14c3bd6",
+    "env_grant": false,
+    "forecast_digest": "11d1790ec9c464b8e23b0ca36b92c82673f297e00497937f377a8bd5e61022ca",
+    "forecasts_sealed_utc": "2026-11-04T01:14:11Z",
+    "input_class": "SYNTHETIC",
+    "issued_by": "bc-54a966a5-24bf-5d5d-a63c-50f75ad0abb8",
+    "issued_utc": "2026-11-04T01:14:11Z",
+    "n_forecasts": 2,
+    "package": "R7_RECORD_DATE_RETRO_C1",
+    "phase": "SPENT",
+    "profile": "RECORDED_DATE_RETRO",
+    "real_go_present": false,
+    "scored_utc": "2026-11-04T01:14:11Z",
+    "spent_utc": "2026-11-04T01:14:11Z",
+    "status": "SPENT"
+  },
+  "cohort": {
+    "ids": [
+      "SYNTHETIC_2018_W03_LAC_LAR",
+      "SYNTHETIC_2018_W06_LAC_LAR"
+    ],
+    "n": 2,
+    "real496_cannot_shrink": true
+  },
+  "context_hash": "347b9394dd3d84c80b80ee37ed56fb8e9cfefc3acd8a25d2faa2439b7e267591",
+  "data_injected": true,
+  "env_grant": false,
+  "forecast_digest": "11d1790ec9c464b8e23b0ca36b92c82673f297e00497937f377a8bd5e61022ca",
+  "forecasts": [
+    {
+      "apply_linear_totals_calibration": false,
+      "c_margin": 2.100340923083838,
+      "channel": "SYNTHETIC",
+      "forecast_digest": "11d1790ec9c464b8e23b0ca36b92c82673f297e00497937f377a8bd5e61022ca",
+      "game_id": "SYNTHETIC_2018_W03_LAC_LAR",
+      "history_n_kept": 4,
+      "if_margin": 1.6369377236767924,
+      "immutable_label": true,
+      "q2_margin": 2.563744122490883,
+      "recorded_date_rest": {
+        "asymmetric": false,
+        "away": {
+          "calendar_days": 7,
+          "predecessor_game_id": "SYNTHETIC_2018_W02_KC_LAC",
+          "recorded_predecessor_date": "2018-09-16"
+        },
+        "away_franchise": "LAC",
+        "calendar_id": "REST_RECORDED_GAME_DATE_RETRO_V1",
+        "claimed_actual_clock": false,
+        "game_id": "SYNTHETIC_2018_W03_LAC_LAR",
+        "home": {
+          "calendar_days": 7,
+          "predecessor_game_id": "SYNTHETIC_2018_W02_LAR_NE",
+          "recorded_predecessor_date": "2018-09-16"
+        },
+        "home_franchise": "LAR",
+        "recorded_target_date": "2018-09-23",
+        "season": 2018,
+        "status": "RECORDED_DATE_METADATA_ONLY_NOT_ACTUAL_CLOCK_GO",
+        "used_actual_kickoff": false,
+        "used_default_seven": false,
+        "used_utc_hours": false
+      },
+      "rest_days_away": 7,
+      "rest_days_home": 7,
+      "sealed": true,
+      "season": 2018,
+      "seed": 528598,
+      "simulations": 4000,
+      "week": 3
+    },
+    {
+      "apply_linear_totals_calibration": false,
+      "c_margin": 1.6704285183921606,
+      "channel": "SYNTHETIC",
+      "forecast_digest": "11d1790ec9c464b8e23b0ca36b92c82673f297e00497937f377a8bd5e61022ca",
+      "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+      "history_n_kept": 6,
+      "if_margin": 0.8551680892693543,
+      "immutable_label": true,
+      "q2_margin": 2.485688947514967,
+      "recorded_date_rest": {
+        "asymmetric": true,
+        "away": {
+          "calendar_days": 16,
+          "predecessor_game_id": "SYNTHETIC_2018_W04_LAR_MIN",
+          "recorded_predecessor_date": "2018-09-27"
+        },
+        "away_franchise": "LAR",
+        "calendar_id": "REST_RECORDED_GAME_DATE_RETRO_V1",
+        "claimed_actual_clock": false,
+        "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+        "home": {
+          "calendar_days": 13,
+          "predecessor_game_id": "SYNTHETIC_2018_W04_LAC_SF",
+          "recorded_predecessor_date": "2018-09-30"
+        },
+        "home_franchise": "LAC",
+        "recorded_target_date": "2018-10-13",
+        "season": 2018,
+        "status": "RECORDED_DATE_METADATA_ONLY_NOT_ACTUAL_CLOCK_GO",
+        "used_actual_kickoff": false,
+        "used_default_seven": false,
+        "used_utc_hours": false
+      },
+      "rest_days_away": 16,
+      "rest_days_home": 13,
+      "sealed": true,
+      "season": 2018,
+      "seed": 276287,
+      "simulations": 4000,
+      "week": 6
+    }
+  ],
+  "golden_bootstrap": {
+    "ok": true,
+    "pooled": 0.0,
+    "two_block_means": [
+      -9.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "unweighted": -4.0
+  },
+  "if_calls": 2,
+  "label_vault_reads": 1,
+  "labels_before_seal": false,
+  "metrics": {
+    "c_minus_market_same96": {
+      "failures": 0,
+      "mean": 2.600340923083838,
+      "n": 1
+    },
+    "counts": {
+      "full": 2,
+      "new59": 1,
+      "old437": 1,
+      "same96": 1
+    },
+    "declared_not_calculated": false,
+    "failures": {
+      "full": 0,
+      "new59": 0,
+      "old437": 0,
+      "same96": 0
+    },
+    "if_q2_c": {
+      "c_margin": {
+        "bias": 0.8853847207379992,
+        "failures": 0,
+        "mae": 2.2149562023458387,
+        "n": 2,
+        "rmse": 2.3853589000455684
+      },
+      "if_margin": {
+        "bias": 0.24605290647307343,
+        "failures": 0,
+        "mae": 2.3908848172037187,
+        "n": 2,
+        "rmse": 2.40351248008391
+      },
+      "q2_margin": {
+        "bias": 1.524716535002925,
+        "failures": 0,
+        "mae": 2.0390275874879578,
+        "n": 2,
+        "rmse": 2.5460545977351483
+      }
+    },
+    "paired_abs_loss": {
+      "full": {
+        "c_minus_if": {
+          "failures": 0,
+          "mean": -0.17592861485788025,
+          "n": 2
+        },
+        "c_minus_r5": {
+          "failures": 0,
+          "mean": 1.2149562023458387,
+          "n": 2
+        }
+      },
+      "new59": {
+        "c_minus_if": {
+          "failures": 0,
+          "mean": -0.815260429122806,
+          "n": 1
+        },
+        "c_minus_r5": {
+          "failures": 0,
+          "mean": 0.32957148160783944,
+          "n": 1
+        }
+      },
+      "old437": {
+        "c_minus_if": {
+          "failures": 0,
+          "mean": 0.46340319940704555,
+          "n": 1
+        },
+        "c_minus_r5": {
+          "failures": 0,
+          "mean": 2.100340923083838,
+          "n": 1
+        }
+      },
+      "same96": {
+        "c_minus_if": {
+          "failures": 0,
+          "mean": 0.46340319940704555,
+          "n": 1
+        },
+        "c_minus_r5": {
+          "failures": 0,
+          "mean": 2.100340923083838,
+          "n": 1
+        }
+      }
+    },
+    "per_season": {
+      "2018": {
+        "c_margin": {
+          "bias": 0.8853847207379992,
+          "failures": 0,
+          "mae": 2.2149562023458387,
+          "n": 2,
+          "rmse": 2.3853589000455684
+        },
+        "if_margin": {
+          "bias": 0.24605290647307343,
+          "failures": 0,
+          "mae": 2.3908848172037187,
+          "n": 2,
+          "rmse": 2.40351248008391
+        },
+        "q2_margin": {
+          "bias": 1.524716535002925,
+          "failures": 0,
+          "mae": 2.0390275874879578,
+          "n": 2,
+          "rmse": 2.5460545977351483
+        }
+      }
+    },
+    "primary": {
+      "failures": 0,
+      "mean": 1.2149562023458387,
+      "n": 2,
+      "name": "mean_abs_R7C_minus_abs_R5C",
+      "spec": "DESIGN_25194"
+    },
+    "scientific_claim": false
+  },
+  "model_called": true,
+  "ok": true,
+  "outcome_reads": 1,
+  "package": "R7_RECORD_DATE_RETRO_C1",
+  "profile": "RECORDED_DATE_RETRO",
+  "ready_for_real_exec": false,
+  "replay_second_if": false,
+  "science_hold": true,
+  "scientific_claim": false,
+  "scoring": [
+    {
+      "abs_c_minus_y": 3.100340923083838,
+      "c_margin": 2.100340923083838,
+      "game_id": "SYNTHETIC_2018_W03_LAC_LAR",
+      "if_margin": 1.6369377236767924,
+      "q2_margin": 2.563744122490883,
+      "real_outcomes_joined": false,
+      "season": 2018,
+      "signed_c_minus_y": 3.100340923083838,
+      "week": 3,
+      "y_margin": -1.0,
+      "y_source": "SYNTHETIC_LABEL_NOT_REAL_OUTCOME"
+    },
+    {
+      "abs_c_minus_y": 1.3295714816078394,
+      "c_margin": 1.6704285183921606,
+      "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+      "if_margin": 0.8551680892693543,
+      "q2_margin": 2.485688947514967,
+      "real_outcomes_joined": false,
+      "season": 2018,
+      "signed_c_minus_y": -1.3295714816078394,
+      "week": 6,
+      "y_margin": 3.0,
+      "y_source": "SYNTHETIC_LABEL_NOT_REAL_OUTCOME"
+    }
+  ],
+  "sensitivity": {
+    "B": 10000,
+    "favorable_interval_chosen": false,
+    "gen": "PCG64",
+    "interval": "2.5/97.5",
+    "mean": 1.207696047635787,
+    "n_games": 2,
+    "p025": 0.32957148160783944,
+    "p975": 2.100340923083838,
+    "run": true,
+    "scientific_claim": false,
+    "seed": 20261104,
+    "statistic": "paired_abs_loss"
+  },
+  "strict_live_profile": "REST_ACTUAL_ET_CALENDAR_V1",
+  "strict_live_status": "DATA_HOLD",
+  "surface_notes": 2
+}

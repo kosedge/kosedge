@@ -1,0 +1,14 @@
+{
+  "accepted": false,
+  "cert": 0,
+  "game_id": "SYNTHETIC_2018_W06_LAC_LAR",
+  "gate_hash": "c526971cf1dde3c1b850e5d8c71167d649a8fab8e9960999381dc41f633d4fac",
+  "ok": true,
+  "package": "R7_CORRECTNESS_V1",
+  "pair_hash": "18b8d030deec15a6528ff24598a68e182378323bc5541b934471980d32740419",
+  "paired": true,
+  "produce_hash": "8f10735bbbeef780e23aee7164c47ca3de9c534811e4cafb263e54dd65dc5f66",
+  "profile": "R7_CORRECTNESS_V1",
+  "ready_for_review": false,
+  "schema_id": "nfl-t5289u-r7-correctness-v1"
+}

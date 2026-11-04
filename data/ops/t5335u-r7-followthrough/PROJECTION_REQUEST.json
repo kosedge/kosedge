@@ -1,0 +1,50 @@
+{
+  "consumed_projection_sha256": "9306a1b5ea74e71de652e4e27761f5814c349ecd1415a3507336d31f8703bbc9",
+  "counts": {
+    "contract_27": 27,
+    "exact496": 496,
+    "n_2020": 240,
+    "n_2021": 256,
+    "new59": 59,
+    "old437": 437,
+    "same96": 96,
+    "same96_ids_present": true,
+    "schedule_reg_records": 528,
+    "sum_240_256": 496,
+    "sum_437_59": 496
+  },
+  "request": {
+    "actual_clock_provenance_resolved": false,
+    "cloud_metadata_resolved": true,
+    "do_not_include": [
+      "home_score",
+      "away_score",
+      "actual_margin",
+      "labels",
+      "outcomes",
+      "reconstructed_feature_values",
+      "forecasts",
+      "target_scores",
+      "economics",
+      "invented_prices",
+      "invented_opener_close_label"
+    ],
+    "locators": [
+      "frozen median-spread market-point digest for same96 POINT-ERROR"
+    ],
+    "needed": false,
+    "permitted_fields": [
+      "game_id",
+      "season",
+      "week",
+      "season_type",
+      "home_team",
+      "away_team",
+      "frozen_median_spread_market_point",
+      "existing_freeze_digest"
+    ],
+    "reason": "staged R7_METADATA_PROJECTION consumed; absent cloud metadata resolved; actual/scheduled/availability remain unknown; frozen median-spread market-point digest still absent for POINT-ERROR bind"
+  },
+  "schema_delta": "nfl-t5344u-r7-metadata-14083-v1",
+  "schema_id": "nfl-t5335u-r7-followthrough-preflight-v1"
+}

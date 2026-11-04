@@ -1,0 +1,11 @@
+{
+  "b_tip": "f6566c9271ae16e53f67d08555814c4df94fe751",
+  "copied_validators": false,
+  "cos_accept": "5c86d228",
+  "handoff_sha256": "5b7ee2e4fb849e1bcaf7d09f888d2e61ff6f9993550727f66b66d0126545b553",
+  "ok": true,
+  "status": {
+    "OWNED_MARKET_TRACE_V1": "REGISTERED",
+    "SYNTHETIC_MARKET_ECONOMIC_EVENTS_V1": "REGISTERED"
+  }
+}
